@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Satker;
+use App\Models\LogAktivitas;
 use Illuminate\Http\Request;
 
 class SatkerController extends Controller
@@ -28,6 +29,11 @@ class SatkerController extends Controller
 
         Satker::create($request->all());
 
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => "Menambahkan Satker Baru: {$request->nama_satker}"
+        ]);
+
         return redirect()->route('admin.satkers.index')->with('success', 'Satker created successfully.');
     }
 
@@ -45,12 +51,23 @@ class SatkerController extends Controller
 
         $satker->update($request->all());
 
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => "Memperbarui data Satker: {$satker->nama_satker}"
+        ]);
+
         return redirect()->route('admin.satkers.index')->with('success', 'Satker updated successfully.');
     }
 
     public function destroy(Satker $satker)
     {
         $satker->delete();
+
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => "Menghapus Satker: {$satker->nama_satker}"
+        ]);
+
         return redirect()->route('admin.satkers.index')->with('success', 'Satker deleted successfully.');
     }
 }

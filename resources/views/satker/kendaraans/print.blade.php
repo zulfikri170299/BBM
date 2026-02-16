@@ -20,14 +20,15 @@
 
         /* === CARD DESIGN === */
         .card {
-            width: 350px;
-            background: linear-gradient(145deg, #0f172a 0%, #1e293b 60%, #334155 100%);
+            width: 550px;
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4);
             color: #fff;
             position: relative;
         }
+
+        /* Shared pseudo-elements layout */
         .card::before {
             content: '';
             position: absolute;
@@ -35,7 +36,6 @@
             right: -60px;
             width: 160px;
             height: 160px;
-            background: radial-gradient(circle, rgba(99,102,241,0.3) 0%, transparent 70%);
             border-radius: 50%;
         }
         .card::after {
@@ -45,48 +45,94 @@
             left: -40px;
             width: 120px;
             height: 120px;
-            background: radial-gradient(circle, rgba(59,130,246,0.2) 0%, transparent 70%);
             border-radius: 50%;
         }
 
+        /* === CARD VARIANTS === */
+        
+        /* RED THEME (Pertamax, Pertalite) */
+        .card-red {
+            background: linear-gradient(135deg, #d50000 0%, #7f0000 60%, #000000 100%);
+        }
+        .card-red::before { background: radial-gradient(circle, rgba(255, 50, 50, 0.5) 0%, transparent 70%); }
+        .card-red::after { background: radial-gradient(circle, rgba(220, 0, 0, 0.4) 0%, transparent 70%); }
+
+        /* YELLOW THEME (Dex, Solar) */
+        .card-yellow {
+            background: linear-gradient(135deg, #f59e0b 0%, #b45309 60%, #000000 100%);
+        }
+        .card-yellow::before { background: radial-gradient(circle, rgba(251, 191, 36, 0.5) 0%, transparent 70%); }
+        .card-yellow::after { background: radial-gradient(circle, rgba(245, 158, 11, 0.4) 0%, transparent 70%); }
+
+        /* === INTERNAL CARD STYLES === */
         .card-header {
-            padding: 24px 24px 0;
+            padding: 20px 24px 0;
             position: relative;
             z-index: 1;
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
         }
         .card-header .header-info {
             flex: 1;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .card-header .label {
-            font-size: 10px;
+            font-size: 32px; /* Diperbesar sesuai permintaan */
             text-transform: uppercase;
-            letter-spacing: 3px;
-            color: rgba(255,255,255,0.5);
-            font-weight: 600;
-        }
-        .card-header .title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-top: 4px;
+            letter-spacing: 1px;
             color: #fff;
+            font-weight: 800;
+            line-height: 1.1;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
         .card-header .satker-name {
-            font-size: 11px;
-            color: rgba(255,255,255,0.6);
+            font-size: 20px;
+            color: rgba(255,255,255,0.95);
             margin-top: 2px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
         }
-        .card-header .header-logo {
-            flex-shrink: 0;
-            width: 52px;
-            height: 52px;
-            margin-left: 12px;
+        
+        .card-footer .footer-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: flex-end;
         }
-        .card-header .header-logo img {
+
+        .side-id-section {
+            display: none;
+        }
+
+        .side-id-text {
+            font-size: 11px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.7);
+            letter-spacing: 0.5px;
+            text-align: center;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
             width: 100%;
-            height: 100%;
+        }
+        
+        .card-header .header-logo-left, 
+        .card-header .header-logo-right {
+            flex-shrink: 0;
+            width: 60px;
+            display: flex;
+            align-items: center;
+        }
+        .card-header .header-logo-left { justify-content: flex-start; }
+        .card-header .header-logo-right { justify-content: flex-end; }
+
+        .card-header img {
+            width: 55px;
+            height: 55px;
             object-fit: contain;
             filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
         }
@@ -140,14 +186,45 @@
             margin-top: 1px;
         }
 
+        .website-link-text {
+            font-size: 24px;
+            font-weight: 800;
+            color: #fff;
+            margin-top: 15px;
+            letter-spacing: 1px;
+            display: block;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
         .card-footer {
-            padding: 16px 24px;
+            padding: 10px 24px 14px;
             background: rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px; /* Perkecil padding/gap sesuai permintaan */
+        }
+
+        .footer-top-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: relative;
-            z-index: 1;
+            width: 100%;
+        }
+
+        .footer-bottom-row {
+            text-align: center;
+            width: 100%;
+        }
+
+        .footer-website-link {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e90ff; /* Mengubah warna menjadi biru */
+            letter-spacing: 1.2px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+            text-transform: lowercase;
         }
         .bbm-badge {
             display: inline-flex;
@@ -232,14 +309,23 @@
 </head>
 <body>
 
-    <div class="card" id="kartu-bbm">
+    @php
+        $cardTheme = match($kendaraan->jenis_bbm) {
+            'Pertamina Dex', 'Dexlite', 'Solar' => 'yellow',
+            default => 'red', // Pertamax, Pertalite defaults to Red
+        };
+    @endphp
+
+    <div class="card card-{{ $cardTheme }}" id="kartu-bbm">
         <div class="card-header">
+            <div class="header-logo-left">
+                <img src="{{ asset('Lambang_Polda_NTB.png') }}" alt="Logo Polda NTB">
+            </div>
             <div class="header-info">
                 <div class="label">Kartu Kendali BBM</div>
-                <div class="title">{{ $kendaraan->no_polisi }}</div>
                 <div class="satker-name">{{ $kendaraan->satker->nama_satker }}</div>
             </div>
-            <div class="header-logo">
+            <div class="header-logo-right">
                 <img src="{{ asset('rolog.png') }}" alt="Logo Logistik">
             </div>
         </div>
@@ -255,12 +341,10 @@
                 <div class="info-item">
                     <div class="info-label">Jenis Kendaraan</div>
                     <div class="info-value">{{ $kendaraan->jenis_kendaraan }}</div>
+                    <div class="website-link-text">{{ $kendaraan->no_polisi }}</div>
                 </div>
-
-                <div class="info-item">
-                    <div class="info-label">Saldo</div>
-                    <div class="info-value">{{ number_format($kendaraan->saldo, 1, ',', '.') }} Liter</div>
-                </div>
+            </div>
+            <div class="side-id-section">
             </div>
         </div>
 
@@ -274,11 +358,18 @@
                     default => 'pertalite',
                 };
             @endphp
-            <div class="bbm-badge bbm-{{ $bbmClass }}">
-                <span class="bbm-dot dot-{{ $bbmClass }}"></span>
-                {{ $kendaraan->jenis_bbm }}
+            <div class="footer-top-row">
+                <div class="bbm-badge bbm-{{ $bbmClass }}">
+                    <span class="bbm-dot dot-{{ $bbmClass }}"></span>
+                    {{ $kendaraan->jenis_bbm }}
+                </div>
+                <div class="footer-right">
+                    <img src="{{ asset('assets/images/mypertamina.png') }}" alt="MyPertamina" style="height: 18px; opacity: 0.8;">
+                </div>
             </div>
-            <div class="date">Dicetak: {{ date('d/m/Y H:i') }}</div>
+            <div class="footer-bottom-row">
+                <div class="footer-website-link">spbp-poldantb.com</div>
+            </div>
         </div>
     </div>
 

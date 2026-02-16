@@ -12,9 +12,7 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                    <!-- Link Dashboard Utama dihapus agar tidak duplikat dengan link spesifik role -->
 
                     @if(auth()->user()->role === 'super_admin')
                         <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
@@ -26,8 +24,11 @@
                         <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
                             {{ __('Users') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('admin.reports.index')" :active="request()->routeIs('admin.reports.*')">
-                            {{ __('Reports') }}
+                        <x-nav-link :href="route('admin.ba.index')" :active="request()->routeIs('admin.ba.*')">
+                            {{ __('Berita Acara') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.stok.index')" :active="request()->routeIs('admin.stok.*')">
+                            {{ __('Stok BBM') }}
                         </x-nav-link>
                     @endif
 
@@ -78,6 +79,10 @@
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
+                        </x-dropdown-link>
+
+                        <x-dropdown-link :href="route('profile.edit') . '#update-password'">
+                            {{ __('Ganti Password') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->

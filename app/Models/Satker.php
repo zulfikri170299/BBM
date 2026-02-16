@@ -9,5 +9,15 @@ class Satker extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $guarded = [];
+
+    public function kendaraans()
+    {
+        return $this->hasMany(Kendaraan::class);
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }

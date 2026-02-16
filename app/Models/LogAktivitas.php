@@ -9,5 +9,6 @@ class LogAktivitas extends Model
 {
     use HasFactory;
 
+    protected $table = 'log_aktivitas';
     protected $guarded = ['id'];
 }

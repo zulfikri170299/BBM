@@ -1,0 +1,182 @@
+<x-app-layout>
+    <div class="p-6 lg:p-8 space-y-6">
+        <!-- Page Header -->
+        <div>
+            <h1 class="text-3xl font-bold text-slate-900">Riwayat Pengisian BBM</h1>
+            <p class="mt-1 text-slate-500">Histori pengisian BBM kendaraan {{ auth()->user()->satker->nama_satker ?? '' }}.</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm p-5">
+                <div class="flex items-center gap-4">
+                    <div class="p-3 bg-blue-100 text-blue-600 rounded-xl">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400 font-medium">Total Transaksi</p>
+                        <p class="text-2xl font-bold text-slate-800">{{ number_format($stats['total_transaksi']) }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm p-5">
+                <div class="flex items-center gap-4">
+                    <div class="p-3 bg-emerald-100 text-emerald-600 rounded-xl">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400 font-medium">Total Pengisian</p>
+                        <p class="text-2xl font-bold text-slate-800">{{ number_format($stats['total_liter'], 0, ',', '.') }} <span class="text-sm font-medium text-slate-400">Liter</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter -->
+        <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm p-5">
+            <form method="GET" action="{{ route('satker.riwayat.index') }}" class="flex flex-wrap gap-4 items-end">
+                <div class="flex-1 min-w-[150px]">
+                    <label class="block text-xs font-semibold text-slate-500 mb-1.5">Dari Tanggal</label>
+                    <input type="date" name="dari" value="{{ request('dari') }}" class="w-full px-3 py-2 border-2 border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
+                </div>
+                <div class="flex-1 min-w-[150px]">
+                    <label class="block text-xs font-semibold text-slate-500 mb-1.5">Sampai Tanggal</label>
+                    <input type="date" name="sampai" value="{{ request('sampai') }}" class="w-full px-3 py-2 border-2 border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
+                </div>
+                <div class="flex-1 min-w-[180px]">
+                    <label class="block text-xs font-semibold text-slate-500 mb-1.5">Kendaraan</label>
+                    <select name="kendaraan_id" class="w-full px-3 py-2 border-2 border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
+                        <option value="">Semua Kendaraan</option>
+                        @foreach($kendaraans as $k)
+                            <option value="{{ $k->id }}" {{ request('kendaraan_id') == $k->id ? 'selected' : '' }}>{{ $k->no_polisi }} — {{ $k->jenis_kendaraan }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="flex gap-2">
+                    <button type="submit" class="px-5 py-2 bg-indigo-600 text-white rounded-xl font-semibold text-sm hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all">
+                        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        Filter
+                    </button>
+                    <a href="{{ route('satker.riwayat.index') }}" class="px-4 py-2 bg-slate-100 text-slate-600 rounded-xl font-semibold text-sm hover:bg-slate-200 transition-colors">Reset</a>
+                    <a href="{{ route('satker.riwayat.print', request()->all()) }}" target="_blank" class="px-4 py-2 bg-red-100 text-red-600 rounded-xl font-semibold text-sm hover:bg-red-200 transition-colors flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                        Cetak PDF
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Table Card -->
+        <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
+                <div class="p-2 bg-indigo-100 text-indigo-600 rounded-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-slate-800">Daftar Pengisian BBM</h3>
+                    <p class="text-xs text-slate-400">{{ $transaksis->total() }} transaksi ditemukan</p>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="min-w-full">
+                    <thead>
+                        <tr class="bg-slate-50/70">
+                            <th class="px-6 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider w-12">No</th>
+                            <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Tanggal / Waktu</th>
+                            <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Jenis Kendaraan</th>
+                            <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Nopol</th>
+                            <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Jenis BBM</th>
+                            <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Nama Driver</th>
+                            <th class="px-6 py-3.5 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Jumlah Liter</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        @forelse($transaksis as $trx)
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="px-6 py-4 text-center">
+                                <span class="text-sm font-semibold text-slate-500">{{ $loop->iteration + ($transaksis->currentPage() - 1) * $transaksis->perPage() }}</span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div>
+                                    <span class="text-sm font-semibold text-slate-800">{{ \Carbon\Carbon::parse($trx->tanggal)->setTimezone('Asia/Makassar')->format('d M Y') }}</span>
+                                    <span class="block text-xs text-slate-400">{{ \Carbon\Carbon::parse($trx->tanggal)->setTimezone('Asia/Makassar')->format('H:i') }} WITA</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="text-sm text-slate-700">{{ $trx->kendaraan->jenis_kendaraan ?? '-' }}</span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="text-sm font-bold text-slate-800">{{ $trx->kendaraan->no_polisi ?? '-' }}</span>
+                            </td>
+                            <td class="px-6 py-4">
+                                @php
+                                    $bbmColors = [
+                                        'Pertalite' => 'bg-green-100 text-green-700',
+                                        'Pertamax' => 'bg-blue-100 text-blue-700',
+                                        'Solar' => 'bg-amber-100 text-amber-700',
+                                        'Dexlite' => 'bg-purple-100 text-purple-700',
+                                    ];
+                                    $color = $bbmColors[$trx->kendaraan->jenis_bbm ?? ''] ?? 'bg-slate-100 text-slate-700';
+                                @endphp
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold {{ $color }}">
+                                    {{ $trx->kendaraan->jenis_bbm ?? '-' }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="text-sm font-medium text-slate-700">{{ $trx->nama_driver ?? ($trx->personel->nama ?? '-') }}</span>
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <span class="text-sm font-bold text-emerald-600">{{ number_format($trx->liter, 0, ',', '.') }} L</span>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="7" class="px-6 py-12 text-center">
+                                <div class="flex flex-col items-center">
+                                    <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+                                        <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    </div>
+                                    <p class="text-slate-500 font-medium">Belum ada riwayat pengisian BBM</p>
+                                    <p class="text-sm text-slate-400 mt-1">Transaksi akan muncul setelah kendaraan melakukan pengisian BBM</p>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            @if($transaksis->hasPages())
+            <div class="px-6 py-4 border-t border-slate-100">
+                {{ $transaksis->links() }}
+            </div>
+            @endif
+        </div>
+
+        <!-- Summary Card -->
+        <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm overflow-hidden p-6 mt-6">
+            <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                Total Pengisian BBM
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                @foreach($summaryBbm as $jenis => $total)
+                    @php
+                        $bbmColors = [
+                            'Pertalite' => 'bg-green-50 border-green-100 text-green-700',
+                            'Pertamax' => 'bg-blue-50 border-blue-100 text-blue-700',
+                            'Solar' => 'bg-amber-50 border-amber-100 text-amber-700',
+                            'Dexlite' => 'bg-purple-50 border-purple-100 text-purple-700',
+                        ];
+                        $style = $bbmColors[$jenis] ?? 'bg-slate-50 border-slate-100 text-slate-700';
+                    @endphp
+                    <div class="p-4 rounded-xl border {{ $style }}">
+                        <p class="text-xs font-semibold opacity-70 mb-1 uppercase tracking-wider">{{ $jenis }}</p>
+                        <p class="text-xl font-bold">{{ number_format($total, 0, ',', '.') }} <span class="text-sm font-medium opacity-70">L</span></p>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+</x-app-layout>

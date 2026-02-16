@@ -6,9 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Kendaraan;
 use App\Models\TransaksiBbm;
 use App\Models\Personel;
+use App\Models\LogAktivitas;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class TransaksiController extends Controller
 {
@@ -19,58 +18,147 @@ class TransaksiController extends Controller
 
     public function check(Request $request)
     {
-        $request->validate([
-            'barcode' => 'required|string|exists:kendaraans,barcode',
-        ]);
+        $mode = $request->input('mode', 'barcode');
 
-        $kendaraan = Kendaraan::with('satker')->where('barcode', $request->barcode)->firstOrFail();
+        if ($mode === 'nopol') {
+            $request->validate([
+                'nopol' => 'required|string',
+            ]);
 
-        return view('petugas.transaksi.create', compact('kendaraan'));
+            $kendaraan = Kendaraan::with('satker')
+                ->where('no_polisi', 'like', '%' . trim($request->nopol) . '%')
+                ->first();
+
+            if (!$kendaraan) {
+                return back()->withErrors(['nopol' => 'Kendaraan dengan nopol "' . $request->nopol . '" tidak ditemukan.']);
+            }
+
+            // Cek apakah Admin Satker aktif
+            $satkerAdminActive = \App\Models\User::where('satker_id', $kendaraan->satker_id)
+                ->where('role', 'admin_satker')
+                ->where('is_active', true)
+                ->exists();
+            
+            if (!$satkerAdminActive) {
+                return back()->withErrors(['nopol' => 'Akun Satker Anda sedang dinonaktifkan. Silakan hubungi Super Admin.']);
+            }
+        } elseif ($mode === 'nrp') {
+            $request->validate([
+                'nrp' => 'required|string',
+            ]);
+
+            $personel = Personel::with(['satker', 'user'])
+                ->where('nrp', 'like', '%' . trim($request->nrp) . '%')
+                ->first();
+
+            if (!$personel) {
+                return back()->withErrors(['nrp' => 'Personel dengan NRP "' . $request->nrp . '" tidak ditemukan.']);
+            }
+
+            // Cek apakah Akun User Personel aktif
+            if ($personel->user_id && (!$personel->user || !($personel->user->is_active ?? false))) {
+                return back()->withErrors(['nrp' => 'Akun Anda sedang dinonaktifkan. Silakan hubungi Super Admin.']);
+            }
+
+            return view('petugas.transaksi.create', compact('personel'));
+        } else {
+            $request->validate([
+                'barcode' => 'required|string',
+            ]);
+
+            $kendaraan = Kendaraan::with('satker')
+                ->where('barcode', $request->barcode)
+                ->first();
+
+            if ($kendaraan) {
+                // Cek apakah Admin Satker aktif
+                $satkerAdminActive = \App\Models\User::where('satker_id', $kendaraan->satker_id)
+                    ->where('role', 'admin_satker')
+                    ->where('is_active', true)
+                    ->exists();
+                
+                if (!$satkerAdminActive) {
+                    return back()->withErrors(['barcode' => 'Akun Satker Anda sedang dinonaktifkan. Silakan hubungi Super Admin.']);
+                }
+                
+                return view('petugas.transaksi.create', compact('kendaraan'));
+            }
+
+            // Jika kendaraan tidak ditemukan, cari di personel
+            $personel = Personel::with(['satker', 'user'])
+                ->where('barcode', $request->barcode)
+                ->first();
+
+            if ($personel) {
+                // Cek apakah Akun User Personel aktif
+                if ($personel->user_id && (!$personel->user || !($personel->user->is_active ?? false))) {
+                    return back()->withErrors(['barcode' => 'Akun Anda sedang dinonaktifkan. Silakan hubungi Super Admin.']);
+                }
+
+                return view('petugas.transaksi.create', compact('personel'));
+            }
+
+            return back()->withErrors(['barcode' => 'Barcode "' . $request->barcode . '" tidak ditemukan.']);
+        }
     }
 
     public function process(Request $request)
     {
         $request->validate([
-            'kendaraan_id' => 'required|exists:kendaraans,id',
+            'kendaraan_id' => 'nullable|exists:kendaraans,id',
+            'personel_id' => 'nullable|exists:personels,id',
             'liter' => 'required|numeric|min:0.1',
+            'nama_driver' => 'required|string|max:255',
             'pin' => 'required|numeric',
         ]);
 
-        $kendaraan = Kendaraan::findOrFail($request->kendaraan_id);
-
-        // Verify PIN
-        if ($request->pin !== $kendaraan->pin) {
-            return back()->withErrors(['pin' => 'PIN Salah!'])->withInput();
+        if (!$request->kendaraan_id && !$request->personel_id) {
+            return redirect()->route('petugas.transaksi.index')->withErrors(['error' => 'Data tidak valid.']);
         }
 
-        // Calculate total price (Simplified logic: Assuming fixed prices for now or input)
-        // In a real app, prices should be managed in DB.
+        if ($request->kendaraan_id) {
+            $target = Kendaraan::findOrFail($request->kendaraan_id);
+        } else {
+            $target = Personel::findOrFail($request->personel_id);
+        }
+
+        // Verifikasi PIN
+        if ($request->pin !== $target->pin) {
+            return redirect()->route('petugas.transaksi.index')->withErrors(['pin' => 'PIN Salah!']);
+        }
+
+        // Cek saldo liter (sudah dibulatkan di tampilan, pesan harus bulat)
+        if ($target->saldo < $request->liter) {
+            return redirect()->route('petugas.transaksi.index')->with('error', 'Saldo tidak mencukupi! Saldo tersisa: ' . number_format($target->saldo, 0, ',', '.') . ' Liter');
+        }
+
+        // Harga BBM per liter
         $prices = [
-            'Pertalite' => 10000,
             'Pertamax' => 12950,
-            'Solar' => 6800,
-            'Dexlite' => 14550,
+            'Pertamina Dex' => 13900,
         ];
-        
-        $hargaPerLiter = $prices[$kendaraan->jenis_bbm] ?? 0;
+
+        $hargaPerLiter = $prices[$target->jenis_bbm] ?? 0;
         $totalHarga = $hargaPerLiter * $request->liter;
 
-        // Check Balance
-        if ($kendaraan->saldo < $totalHarga) {
-            return back()->with('error', 'Saldo tidak mencukupi! Saldo: Rp ' . number_format($kendaraan->saldo) . ', Total: Rp ' . number_format($totalHarga));
-        }
+        // Potong saldo
+        $target->decrement('saldo', $request->liter);
 
-        // Deduct Balance
-        $kendaraan->decrement('saldo', $totalHarga);
-
-        // Record Transaction
+        // Catat transaksi
         $transaksi = TransaksiBbm::create([
-            'kendaraan_id' => $kendaraan->id,
+            'kendaraan_id' => $request->kendaraan_id,
+            'personel_id' => $request->personel_id,
             'petugas_id' => auth()->id(),
+            'nama_driver' => $request->nama_driver,
             'tanggal' => now(),
             'liter' => $request->liter,
             'harga_per_liter' => $hargaPerLiter,
             'total' => $totalHarga,
+        ]);
+
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => "Memproses pengisian BBM: {$request->liter} L untuk " . ($request->kendaraan_id ? "Kendaraan ({$target->no_polisi})" : "Personel ({$target->nama})")
         ]);
 
         return redirect()->route('petugas.transaksi.print', $transaksi);
@@ -78,15 +166,8 @@ class TransaksiController extends Controller
 
     public function print(TransaksiBbm $transaksi)
     {
-        // Allow access if user is petugas who created it OR admin/superadmin (optional, but for now strict)
-        if ($transaksi->petugas_id !== auth()->id()) {
-            abort(403);
-        }
+        $transaksi->load('kendaraan.satker', 'personel.satker', 'petugas');
 
-        $pdf = Pdf::loadView('petugas.transaksi.print', compact('transaksi'));
-        // Set paper size for thermal printer (e.g., 58mm or 80mm width)
-        $pdf->setPaper([0, 0, 226.77, 500], 'portrait'); // ~80mm width
-
-        return $pdf->stream('struk-bbm-' . $transaksi->id . '.pdf');
+        return view('petugas.transaksi.print', compact('transaksi'));
     }
 }

@@ -9,7 +9,16 @@ class Personel extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'satker_id',
+        'user_id',
+        'nama',
+        'nrp',
+        'saldo',
+        'jenis_bbm',
+        'pin',
+        'barcode',
+    ];
 
     public function satker()
     {
@@ -19,5 +28,23 @@ class Personel extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public static function generateUniquePin()
+    {
+        do {
+            $pin = sprintf("%06d", mt_rand(0, 999999));
+        } while (self::where('pin', $pin)->exists());
+
+        return $pin;
+    }
+    public function sentTransfers()
+    {
+        return $this->hasMany(RiwayatTransferAntarPersonel::class, 'sender_id');
+    }
+
+    public function receivedTransfers()
+    {
+        return $this->hasMany(RiwayatTransferAntarPersonel::class, 'receiver_id');
     }
 }

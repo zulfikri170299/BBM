@@ -1,4 +1,4 @@
-<header class="bg-white shadow-sm border-b border-slate-200 z-10">
+<header class="bg-white shadow-sm border-b border-slate-200 z-40 relative">
     <div class="flex items-center justify-between px-6 py-4">
         <div class="flex items-center">
             <button @click="sidebarOpen = true" class="text-slate-500 focus:outline-none lg:hidden">
@@ -6,22 +6,89 @@
                     <path d="M4 6H20M4 12H20M4 18H11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </button>
-            <div class="relative ml-4 lg:ml-0">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                    <svg class="w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="none">
-                        <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </span>
-                <input class="w-32 sm:w-64 pl-10 pr-4 py-2 text-sm text-slate-700 bg-slate-100 border border-transparent rounded-lg focus:outline-none focus:bg-white focus:border-indigo-500 transition duration-200" type="text" placeholder="Search...">
-            </div>
+
         </div>
 
         <div class="flex items-center space-x-4">
-            <!-- Notifications (Placeholder) -->
-             <button class="relative p-2 text-slate-400 hover:text-slate-600 transition duration-150">
-                <span class="absolute top-2 right-2 h-2 w-2 rounded-full bg-red-500 border border-white"></span>
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-            </button>
+            <!-- Notifications (Functional) -->
+            <div x-data="{ 
+                notificationsOpen: false, 
+                unreadCount: {{ auth()->user()->unreadNotifications->count() }},
+                markAsRead(id) {
+                    fetch(`/notifications/${id}/read`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        }
+                    }).then(response => {
+                        if (response.ok) {
+                            this.unreadCount = Math.max(0, this.unreadCount - 1);
+                            const el = document.getElementById(`notification-${id}`);
+                            if (el) el.remove();
+                            if (this.unreadCount === 0) {
+                                // optional: show empty message
+                            }
+                        }
+                    });
+                }
+            }" class="relative">
+                <button @click="notificationsOpen = !notificationsOpen" class="relative p-2 text-slate-400 hover:text-indigo-600 transition duration-150 focus:outline-none">
+                    <template x-if="unreadCount > 0">
+                        <span class="absolute top-2 right-2 h-4 w-4 rounded-full bg-red-500 border-2 border-white text-[10px] text-white flex items-center justify-center font-bold" x-text="unreadCount"></span>
+                    </template>
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                </button>
+
+                <div x-show="notificationsOpen" @click.away="notificationsOpen = false" 
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 scale-95"
+                    x-transition:enter-end="opacity-100 scale-100"
+                    class="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-2xl z-[100] ring-1 ring-black ring-opacity-5 overflow-hidden" 
+                    style="display: none;">
+                    
+                    <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h3 class="font-bold text-slate-800">Notifikasi</h3>
+                        <span class="px-2 py-0.5 bg-indigo-100 text-indigo-700 text-[10px] font-bold rounded-full" x-text="unreadCount + ' Baru'"></span>
+                    </div>
+
+                    <div class="max-h-96 overflow-y-auto">
+                        @forelse(auth()->user()->unreadNotifications as $notification)
+                            <div id="notification-{{ $notification->id }}" class="p-4 border-b border-slate-50 hover:bg-slate-50 transition-colors group relative">
+                                <div class="flex gap-3">
+                                    <div class="shrink-0 w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-sm font-bold text-slate-800">{{ $notification->data['title'] }}</p>
+                                        <p class="text-xs text-slate-500 mt-1 leading-relaxed">{{ $notification->data['message'] }}</p>
+                                        <div class="flex justify-between items-center mt-2">
+                                            <span class="text-[10px] font-medium text-slate-400">{{ $notification->created_at->diffForHumans() }}</span>
+                                            <button @click="markAsRead('{{ $notification->id }}')" class="text-[10px] font-bold text-indigo-600 hover:text-indigo-800 bg-indigo-50 px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                                                Tandai Dibaca
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="p-8 text-center">
+                                <div class="w-16 h-16 bg-slate-100 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-3">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                                </div>
+                                <p class="text-sm font-medium text-slate-500">Tidak ada notifikasi baru</p>
+                            </div>
+                        @endforelse
+                    </div>
+
+                    @if(auth()->user()->unreadNotifications->count() > 0)
+                    <div class="p-3 bg-slate-50 border-t border-slate-100 text-center">
+                        <a href="#" class="text-xs font-bold text-indigo-600 hover:text-indigo-800">Lihat Semua Riwayat</a>
+                    </div>
+                    @endif
+                </div>
+            </div>
 
             <!-- Profile Dropdown -->
             <div x-data="{ open: false }" class="relative">

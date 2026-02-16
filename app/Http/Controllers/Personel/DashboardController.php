@@ -37,6 +37,8 @@ class DashboardController extends Controller
         // Satker Vehicles
         $kendaraans = Kendaraan::where('satker_id', $user->satker_id)->get();
 
+        $kendaraans = Kendaraan::where('satker_id', $user->satker_id)->get();
+
         return view('personel.dashboard', compact('saldo', 'transactions', 'kendaraans'));
     }
 }
