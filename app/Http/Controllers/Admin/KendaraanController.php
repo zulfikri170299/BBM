@@ -453,10 +453,9 @@ class KendaraanController extends Controller
                 ->whereYear('created_at', $tahun)
                 ->sum('jumlah');
 
-            // Total BBM = Sisa bulan lalu + Top Up bulan ini - Transfer bulan ini
-            $totalBbm = $sisaBulanLalu + $topupBulanIni - $transferBulanIni;
-            if ($totalBbm < 0) $totalBbm = 0;
-
+            // Total BBM = Sisa bulan lalu + Top Up bulan ini (Sesuai pola Satker: Transfer tidak langsung mengurangi Total BBM di sini)
+            $totalBbm = $sisaBulanLalu + $topupBulanIni;
+            
             // Pemakaian per hari bulan ini
             $dailyUsage = [];
             $totalPemakaian = 0;
@@ -469,6 +468,9 @@ class KendaraanController extends Controller
                 $totalPemakaian += $usage;
             }
 
+            // Total Pemakaian = Total Harian + Transfer (Transfer dianggap pemakaian)
+            $totalPemakaian += $transferBulanIni;
+
             // Sisa BBM = Total BBM - Total Pemakaian
             $sisaBbm = $totalBbm - $totalPemakaian;
 
@@ -480,6 +482,7 @@ class KendaraanController extends Controller
                 'sisa_bulan_lalu' => round($sisaBulanLalu, 0),
                 'topup_bulan_ini' => round($topupBulanIni, 0),
                 'total_bbm' => round($totalBbm, 0),
+                'transfer_bulan_ini' => round($transferBulanIni, 0), 
                 'has_transfer' => $transferBulanIni > 0,
                 'daily_usage' => $dailyUsage,
                 'total_pemakaian' => round($totalPemakaian, 0),
@@ -494,6 +497,7 @@ class KendaraanController extends Controller
                     'sisa_bulan_lalu' => 0,
                     'topup_bulan_ini' => 0,
                     'total_bbm' => 0,
+                    'transfer_bulan_ini' => 0,
                     'total_pemakaian' => 0,
                     'sisa_bbm' => 0,
                 ];
@@ -501,6 +505,7 @@ class KendaraanController extends Controller
             $summaryByBbm[$bbm]['sisa_bulan_lalu'] += $row['sisa_bulan_lalu'];
             $summaryByBbm[$bbm]['topup_bulan_ini'] += $row['topup_bulan_ini'];
             $summaryByBbm[$bbm]['total_bbm'] += $row['total_bbm'];
+            $summaryByBbm[$bbm]['transfer_bulan_ini'] += $row['transfer_bulan_ini'];
             $summaryByBbm[$bbm]['total_pemakaian'] += $row['total_pemakaian'];
             $summaryByBbm[$bbm]['sisa_bbm'] += $row['sisa_bbm'];
         }
