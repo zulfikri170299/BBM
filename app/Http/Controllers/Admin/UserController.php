@@ -280,4 +280,22 @@ class UserController extends Controller
 
         return back()->with('success', "{$count} akun berhasil diperbarui statusnya.");
     }
+
+    public function resetPassword(User $user)
+    {
+        // Hindari mereset password sesama Super Admin
+        if ($user->role === 'super_admin') {
+            return back()->with('error', 'Akun Super Admin tidak dapat di-reset passwordnya.');
+        }
+
+        $user->password = bcrypt('password123');
+        $user->save();
+
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => "Mereset Password Akun: {$user->name} ({$user->role})"
+        ]);
+
+        return back()->with('success', "Password untuk akun {$user->name} telah berhasil di-reset menjadi 'password123'.");
+    }
 }

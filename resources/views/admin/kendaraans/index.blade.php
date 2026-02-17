@@ -7,40 +7,84 @@
                 <p class="mt-1 text-slate-500">Semua kendaraan dari seluruh Satuan Kerja.</p>
             </div>
             <div class="flex gap-3">
-                <button @click="$dispatch('open-import')" class="inline-flex items-center justify-center w-10 h-10 bg-blue-600 text-white rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-500/30 transition-all duration-200 hover:-translate-y-0.5 group relative" title="Import Excel">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path></svg>
+                <button @click="$dispatch('open-import')"
+                    class="inline-flex items-center justify-center w-10 h-10 bg-blue-600 text-white rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-500/30 transition-all duration-200 hover:-translate-y-0.5 group relative"
+                    title="Import Excel">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10">
+                        </path>
+                    </svg>
                     <!-- Tooltip -->
-                    <span class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Import Excel</span>
+                    <span
+                        class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Import
+                        Excel</span>
                 </button>
-                <button @click="$dispatch('open-topup-select')" class="inline-flex items-center justify-center w-10 h-10 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 transition-all duration-200 hover:-translate-y-0.5 group relative" title="Top Up Saldo">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>
+                <button @click="$dispatch('open-topup-select')"
+                    class="inline-flex items-center justify-center w-10 h-10 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 transition-all duration-200 hover:-translate-y-0.5 group relative"
+                    title="Top Up Saldo">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a1 1 0 11-2 0 1 1 0 012 0z">
+                        </path>
+                    </svg>
                     <!-- Tooltip -->
-                    <span class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Top Up Saldo</span>
+                    <span
+                        class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Top
+                        Up Saldo</span>
                 </button>
-                <a href="{{ route('admin.kendaraans.export') }}" class="inline-flex items-center justify-center w-10 h-10 bg-amber-500 text-white rounded-xl hover:bg-amber-600 shadow-lg shadow-amber-500/30 transition-all duration-200 hover:-translate-y-0.5 group relative" title="Export Excel">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                <a href="{{ route('admin.kendaraans.export') }}"
+                    class="inline-flex items-center justify-center w-10 h-10 bg-amber-500 text-white rounded-xl hover:bg-amber-600 shadow-lg shadow-amber-500/30 transition-all duration-200 hover:-translate-y-0.5 group relative"
+                    title="Export Excel">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
                     <!-- Tooltip -->
-                    <span class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Export Excel</span>
+                    <span
+                        class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Export
+                        Excel</span>
                 </a>
-                <button @click="$dispatch('open-monthly-report')" class="inline-flex items-center justify-center w-10 h-10 bg-rose-600 text-white rounded-xl hover:bg-rose-700 shadow-lg shadow-rose-500/30 transition-all duration-200 hover:-translate-y-0.5 group relative" title="Laporan Bulanan">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <button @click="$dispatch('open-monthly-report')"
+                    class="inline-flex items-center justify-center w-10 h-10 bg-rose-600 text-white rounded-xl hover:bg-rose-700 shadow-lg shadow-rose-500/30 transition-all duration-200 hover:-translate-y-0.5 group relative"
+                    title="Laporan Bulanan">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                        </path>
+                    </svg>
                     <!-- Tooltip -->
-                    <span class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Laporan Bulanan Satker</span>
+                    <span
+                        class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Laporan
+                        Bulanan Satker</span>
                 </button>
-                <a href="{{ route('admin.kendaraans.create') }}" class="inline-flex items-center justify-center w-10 h-10 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all duration-200 hover:-translate-y-0.5 group relative" title="Tambah Kendaraan">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                <a href="{{ route('admin.kendaraans.create') }}"
+                    class="inline-flex items-center justify-center w-10 h-10 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all duration-200 hover:-translate-y-0.5 group relative"
+                    title="Tambah Kendaraan">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
                     <!-- Tooltip -->
-                    <span class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Tambah Kendaraan</span>
+                    <span
+                        class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Tambah
+                        Kendaraan</span>
                 </a>
 
                 <!-- Filter Satker Dropdown (Icon Only) -->
                 <div class="relative" x-data="{ open: false }">
                     <form action="{{ route('admin.kendaraans.index') }}" method="GET">
                         <input type="hidden" name="satker_id" id="satker_id" value="{{ request('satker_id') }}">
-                        <button type="button" @click="open = !open" @click.away="open = false" class="inline-flex items-center justify-center w-10 h-10 bg-white text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 hover:text-indigo-600 hover:border-indigo-200 shadow-sm transition-all duration-200 group relative" :class="{'bg-indigo-50 border-indigo-200 text-indigo-600': '{{ request('satker_id') }}' }">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                        <button type="button" @click="open = !open" @click.away="open = false"
+                            class="inline-flex items-center justify-center w-10 h-10 bg-white text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 hover:text-indigo-600 hover:border-indigo-200 shadow-sm transition-all duration-200 group relative"
+                            :class="{'bg-indigo-50 border-indigo-200 text-indigo-600': '{{ request('satker_id') }}' }">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z">
+                                </path>
+                            </svg>
                             <!-- Tooltip -->
-                            <span class="absolute -bottom-8 right-0 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
+                            <span
+                                class="absolute -bottom-8 right-0 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
                                 @php
                                     $selectedSatker = $satkers->firstWhere('id', request('satker_id'));
                                     echo $selectedSatker ? 'Filter: ' . $selectedSatker->nama_satker : 'Filter Satker';
@@ -48,36 +92,44 @@
                             </span>
                         </button>
 
-                        <div x-show="open" 
-                             x-transition:enter="transition ease-out duration-100"
-                             x-transition:enter-start="transform opacity-0 scale-95"
-                             x-transition:enter-end="transform opacity-100 scale-100"
-                             x-transition:leave="transition ease-in duration-75"
-                             x-transition:leave-start="transform opacity-100 scale-100"
-                             x-transition:leave-end="transform opacity-0 scale-95"
-                             class="absolute right-0 z-20 w-64 mt-2 bg-white rounded-xl shadow-xl border border-slate-100 py-1 max-h-60 overflow-auto focus:outline-none"
-                             style="display: none;">
-                            
-                            <div class="px-3 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider bg-slate-50/50">
+                        <div x-show="open" x-transition:enter="transition ease-out duration-100"
+                            x-transition:enter-start="transform opacity-0 scale-95"
+                            x-transition:enter-end="transform opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="transform opacity-100 scale-100"
+                            x-transition:leave-end="transform opacity-0 scale-95"
+                            class="absolute right-0 z-20 w-64 mt-2 bg-white rounded-xl shadow-xl border border-slate-100 py-1 max-h-60 overflow-auto focus:outline-none"
+                            style="display: none;">
+
+                            <div
+                                class="px-3 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider bg-slate-50/50">
                                 Pilih Satuan Kerja
                             </div>
-                            
-                            <button type="button" 
-                                    @click="document.getElementById('satker_id').value = ''; $el.closest('form').submit();"
-                                    class="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 hover:text-indigo-600 flex items-center justify-between group transition-colors border-b border-slate-50">
+
+                            <button type="button"
+                                @click="document.getElementById('satker_id').value = ''; $el.closest('form').submit();"
+                                class="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 hover:text-indigo-600 flex items-center justify-between group transition-colors border-b border-slate-50">
                                 <span class="font-medium">Semua Satker</span>
                                 @if(!request('satker_id'))
-                                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg>
                                 @endif
                             </button>
 
                             @foreach($satkers as $satker)
-                                <button type="button" 
-                                        @click="document.getElementById('satker_id').value = '{{ $satker->id }}'; $el.closest('form').submit();"
-                                        class="w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-indigo-600 flex items-center justify-between group transition-colors">
+                                <button type="button"
+                                    @click="document.getElementById('satker_id').value = '{{ $satker->id }}'; $el.closest('form').submit();"
+                                    class="w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-indigo-600 flex items-center justify-between group transition-colors">
                                     <span class="truncate">{{ $satker->nama_satker }}</span>
                                     @if(request('satker_id') == $satker->id)
-                                        <svg class="w-4 h-4 text-indigo-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <svg class="w-4 h-4 text-indigo-600 shrink-0" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7"></path>
+                                        </svg>
                                     @endif
                                 </button>
                             @endforeach
@@ -90,25 +142,41 @@
 
         <!-- Success Alert -->
         @if(session('success'))
-            <div class="flex items-center gap-3 p-4 bg-emerald-50 border border-emerald-200 rounded-xl" x-data="{ show: true }" x-show="show" x-transition>
+            <div class="flex items-center gap-3 p-4 bg-emerald-50 border border-emerald-200 rounded-xl"
+                x-data="{ show: true }" x-show="show" x-transition>
                 <div class="flex-shrink-0 p-1.5 bg-emerald-100 rounded-full">
-                    <svg class="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                    <svg class="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clip-rule="evenodd"></path>
+                    </svg>
                 </div>
                 <p class="text-sm font-medium text-emerald-700 flex-1">{{ session('success') }}</p>
                 <button @click="show = false" class="text-emerald-400 hover:text-emerald-600 transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
                 </button>
             </div>
         @endif
 
         @if(session('error'))
-            <div class="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-xl" x-data="{ show: true }" x-show="show" x-transition>
+            <div class="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-xl" x-data="{ show: true }"
+                x-show="show" x-transition>
                 <div class="flex-shrink-0 p-1.5 bg-red-100 rounded-full">
-                    <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                    <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                            clip-rule="evenodd"></path>
+                    </svg>
                 </div>
                 <p class="text-sm font-medium text-red-700 flex-1">{{ session('error') }}</p>
                 <button @click="show = false" class="text-red-400 hover:text-red-600 transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
                 </button>
             </div>
         @endif
@@ -116,7 +184,11 @@
         @if($errors->any())
             <div class="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-xl">
                 <div class="flex-shrink-0 p-1.5 bg-red-100 rounded-full">
-                    <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                    <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                            clip-rule="evenodd"></path>
+                    </svg>
                 </div>
                 <div class="flex-1">
                     @foreach($errors->all() as $error)
@@ -132,7 +204,13 @@
             <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="p-2 bg-blue-100 text-blue-600 rounded-lg">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1"></path></svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1">
+                            </path>
+                        </svg>
                     </div>
                     <div>
                         <h3 class="font-semibold text-slate-800">Daftar Kendaraan</h3>
@@ -146,92 +224,144 @@
                 <table class="min-w-full">
                     <thead>
                         <tr class="bg-slate-50/70">
-                            <th class="px-6 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider w-12">No</th>
-                            <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Satker</th>
-                            <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Kode</th>
-                            <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Jenis Kendaraan</th>
-                            <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Nopol</th>
-                            <th class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Jenis BBM</th>
-                            <th class="px-6 py-3.5 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Saldo</th>
-                            <th class="px-6 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">PIN</th>
-                            <th class="px-6 py-3.5 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Aksi</th>
+                            <th
+                                class="px-6 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider w-12">
+                                No</th>
+                            <th
+                                class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                Satker</th>
+                            <th
+                                class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                Kode</th>
+                            <th
+                                class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                Jenis Kendaraan</th>
+                            <th
+                                class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                Nopol</th>
+                            <th
+                                class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                Jenis BBM</th>
+                            <th
+                                class="px-6 py-3.5 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                Saldo</th>
+                            <th
+                                class="px-6 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                PIN</th>
+                            <th
+                                class="px-6 py-3.5 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
                         @forelse($kendaraans as $kendaraan)
-                        <tr class="hover:bg-slate-50/50 transition-colors">
-                            <td class="px-6 py-4 text-center">
-                                <span class="text-sm font-semibold text-slate-500">{{ $loop->iteration + ($kendaraans->currentPage() - 1) * $kendaraans->perPage() }}</span>
-                            </td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-sm">
-                                        {{ strtoupper(substr($kendaraan->satker->nama_satker ?? '-', 0, 2)) }}
+                            <tr class="hover:bg-slate-50/50 transition-colors">
+                                <td class="px-6 py-4 text-center">
+                                    <span
+                                        class="text-sm font-semibold text-slate-500">{{ $loop->iteration + ($kendaraans->currentPage() - 1) * $kendaraans->perPage() }}</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-sm">
+                                            {{ strtoupper(substr($kendaraan->satker->nama_satker ?? '-', 0, 2)) }}
+                                        </div>
+                                        <span
+                                            class="text-sm font-medium text-slate-700">{{ $kendaraan->satker->nama_satker ?? '-' }}</span>
                                     </div>
-                                    <span class="text-sm font-medium text-slate-700">{{ $kendaraan->satker->nama_satker ?? '-' }}</span>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <code class="px-2 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-mono font-bold">{{ $kendaraan->kode_kendaraan ?? '-' }}</code>
-                            </td>
-                            <td class="px-6 py-4">
-                                <span class="text-sm font-semibold text-slate-800">{{ $kendaraan->jenis_kendaraan }}</span>
-                            </td>
-                            <td class="px-6 py-4">
-                                <span class="text-sm font-bold text-slate-800">{{ $kendaraan->no_polisi }}</span>
-                            </td>
-                            <td class="px-6 py-4">
-                                @php
-                                    $bbmColors = [
-                                        'Pertamax' => 'bg-blue-100 text-blue-700',
-                                        'Pertamina Dex' => 'bg-emerald-100 text-emerald-700',
-                                    ];
-                                    $color = $bbmColors[$kendaraan->jenis_bbm] ?? 'bg-slate-100 text-slate-700';
-                                @endphp
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold {{ $color }}">
-                                    {{ $kendaraan->jenis_bbm }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-right">
-                                <span class="text-sm font-bold {{ $kendaraan->saldo < 10 ? 'text-red-600' : 'text-slate-800' }}">
-                                    {{ number_format($kendaraan->saldo, 0, ',', '.') }} Liter
-                                </span>
-                                @if($kendaraan->saldo < 10)
-                                    <span class="block text-xs text-red-500 font-medium mt-0.5">Saldo rendah</span>
-                                @endif
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <code class="px-2.5 py-1 bg-amber-50 text-amber-700 rounded-lg text-xs font-mono font-bold tracking-widest">{{ $kendaraan->pin }}</code>
-                            </td>
-                            <td class="px-6 py-4 text-right">
-                                <div class="flex items-center justify-end gap-1.5">
-                                    <a href="{{ route('admin.kendaraans.print', $kendaraan) }}" target="_blank" class="inline-flex items-center p-2 bg-slate-100 hover:bg-indigo-100 text-slate-500 hover:text-indigo-600 rounded-lg transition-colors" title="Print Kartu Kendaraan">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-                                    </a>
-                                    <a href="{{ route('admin.kendaraans.edit', $kendaraan) }}" class="inline-flex items-center p-2 bg-slate-100 hover:bg-amber-100 text-slate-500 hover:text-amber-600 rounded-lg transition-colors" title="Edit">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                                    </a>
-                                    <form action="{{ route('admin.kendaraans.destroy', $kendaraan) }}" method="POST" class="inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" onclick="return confirm('Yakin ingin menghapus kendaraan ini?')" class="inline-flex items-center p-2 bg-slate-100 hover:bg-red-100 text-slate-500 hover:text-red-600 rounded-lg transition-colors" title="Hapus">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <code
+                                        class="px-2 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-mono font-bold">{{ $kendaraan->kode_kendaraan ?? '-' }}</code>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span
+                                        class="text-sm font-semibold text-slate-800">{{ $kendaraan->jenis_kendaraan }}</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="text-sm font-bold text-slate-800">{{ $kendaraan->no_polisi }}</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    @php
+                                        $bbmColors = [
+                                            'Pertamax' => 'bg-blue-100 text-blue-700',
+                                            'Pertamina Dex' => 'bg-emerald-100 text-emerald-700',
+                                        ];
+                                        $color = $bbmColors[$kendaraan->jenis_bbm] ?? 'bg-slate-100 text-slate-700';
+                                    @endphp
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold {{ $color }}">
+                                        {{ $kendaraan->jenis_bbm }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <span
+                                        class="text-sm font-bold {{ $kendaraan->saldo < 10 ? 'text-red-600' : 'text-slate-800' }}">
+                                        {{ number_format($kendaraan->saldo, 0, ',', '.') }} Liter
+                                    </span>
+                                    @if($kendaraan->saldo < 10)
+                                        <span class="block text-xs text-red-500 font-medium mt-0.5">Saldo rendah</span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <code
+                                        class="px-2.5 py-1 bg-amber-50 text-amber-700 rounded-lg text-xs font-mono font-bold tracking-widest">{{ $kendaraan->pin }}</code>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <div class="flex items-center justify-end gap-1.5">
+                                        <a href="{{ route('admin.kendaraans.print', $kendaraan) }}" target="_blank"
+                                            class="inline-flex items-center p-2 bg-slate-100 hover:bg-indigo-100 text-slate-500 hover:text-indigo-600 rounded-lg transition-colors"
+                                            title="Print Kartu Kendaraan">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
+                                                </path>
+                                            </svg>
+                                        </a>
+                                        <a href="{{ route('admin.kendaraans.edit', $kendaraan) }}"
+                                            class="inline-flex items-center p-2 bg-slate-100 hover:bg-amber-100 text-slate-500 hover:text-amber-600 rounded-lg transition-colors"
+                                            title="Edit">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                                </path>
+                                            </svg>
+                                        </a>
+                                        <form action="{{ route('admin.kendaraans.destroy', $kendaraan) }}" method="POST"
+                                            class="inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" data-confirm="Yakin ingin menghapus kendaraan ini?"
+                                                data-confirm-type="error"
+                                                class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
+                                                title="Hapus Kendaraan">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                    </path>
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
                         @empty
-                        <tr>
-                            <td colspan="9" class="px-6 py-12 text-center">
-                                <div class="flex flex-col items-center">
-                                    <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-                                        <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            <tr>
+                                <td colspan="9" class="px-6 py-12 text-center">
+                                    <div class="flex flex-col items-center">
+                                        <div
+                                            class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+                                            <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                        <p class="text-slate-500 font-medium">Belum ada kendaraan terdaftar</p>
                                     </div>
-                                    <p class="text-slate-500 font-medium">Belum ada kendaraan terdaftar</p>
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -239,9 +369,9 @@
 
             <!-- Pagination -->
             @if($kendaraans->hasPages())
-            <div class="px-6 py-4 border-t border-slate-100">
-                {{ $kendaraans->links() }}
-            </div>
+                <div class="px-6 py-4 border-t border-slate-100">
+                    {{ $kendaraans->links() }}
+                </div>
             @endif
         </div>
     </div>
@@ -258,12 +388,12 @@
             selectedSatkerId: '',
             adminStocks: [
                 @foreach($adminStocks as $s)
-                { jenis_bbm: '{{ $s->jenis_bbm }}', saldo: {{ $s->saldo }} },
+                    { jenis_bbm: '{{ $s->jenis_bbm }}', saldo: {{ $s->saldo }} },
                 @endforeach
             ],
             allKendaraans: [
                 @foreach($allKendaraans as $k)
-                { id: {{ $k->id }}, satker_id: {{ $k->satker_id }}, nopol: '{{ $k->no_polisi }}', jenis_bbm: '{{ $k->jenis_bbm }}', saldo: '{{ number_format($k->saldo, 0, ',', '.') }}', saldoRaw: {{ $k->saldo }} },
+                    { id: {{ $k->id }}, satker_id: {{ $k->satker_id }}, nopol: '{{ $k->no_polisi }}', jenis_bbm: '{{ $k->jenis_bbm }}', saldo: '{{ number_format($k->saldo, 0, ',', '.') }}', saldoRaw: {{ $k->saldo }} },
                 @endforeach
             ],
             get currentAdminStock() {
@@ -316,28 +446,44 @@
             }
         }"
         @open-topup.window="topupId = $event.detail.id; topupNopol = $event.detail.nopol; topupSaldo = $event.detail.saldo; jumlah = ''; topupPassword = ''; selectMode = false; showTopup = true"
-        @open-topup-select.window="topupId = null; topupNopol = ''; topupSaldo = ''; jumlah = ''; topupPassword = ''; selectMode = true; showTopup = true"
-    >
+        @open-topup-select.window="topupId = null; topupNopol = ''; topupSaldo = ''; jumlah = ''; topupPassword = ''; selectMode = true; showTopup = true">
         <!-- Backdrop -->
-        <div x-show="showTopup" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50" @click="showTopup = false"></div>
+        <div x-show="showTopup" x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50"
+            @click="showTopup = false"></div>
 
         <!-- Modal -->
-        <div x-show="showTopup" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95 translate-y-4" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-95 translate-y-4" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showTopup = false">
+        <div x-show="showTopup" x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+            x-transition:leave-end="opacity-0 scale-95 translate-y-4"
+            class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showTopup = false">
             <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden" @click.stop>
                 <!-- Modal Header -->
                 <div class="px-6 py-5 bg-gradient-to-r from-emerald-500 to-green-600">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <div class="p-2 bg-white/20 rounded-xl">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
                             </div>
                             <div>
                                 <h3 class="text-lg font-bold text-white">Top Up Saldo</h3>
                                 <p class="text-sm text-emerald-100" x-text="topupNopol || 'Pilih kendaraan'"></p>
                             </div>
                         </div>
-                        <button @click="showTopup = false" class="p-1 text-white/70 hover:text-white rounded-lg hover:bg-white/10 transition">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        <button @click="showTopup = false"
+                            class="p-1 text-white/70 hover:text-white rounded-lg hover:bg-white/10 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
                         </button>
                     </div>
                 </div>
@@ -352,7 +498,8 @@
                     <div x-show="selectMode" class="space-y-4">
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">1. Pilih Satuan Kerja</label>
-                            <select x-model="selectedSatkerId" @change="topupId = null; topupNopol = '';" class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all">
+                            <select x-model="selectedSatkerId" @change="topupId = null; topupNopol = '';"
+                                class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all">
                                 <option value="">-- Pilih Satker --</option>
                                 @foreach($satkers as $s)
                                     <option value="{{ $s->id }}">{{ $s->nama_satker }}</option>
@@ -362,9 +509,11 @@
 
                         <div x-show="selectedSatkerId">
                             <label class="block text-sm font-semibold text-slate-700 mb-2">2. Pilih Kendaraan</label>
-                            <select @change="selectKendaraan($event.target.value)" class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all">
+                            <select @change="selectKendaraan($event.target.value)"
+                                class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all">
                                 <option value="">-- Pilih Kendaraan --</option>
-                                <template x-for="k in allKendaraans.filter(x => x.satker_id == selectedSatkerId)" :key="k.id">
+                                <template x-for="k in allKendaraans.filter(x => x.satker_id == selectedSatkerId)"
+                                    :key="k.id">
                                     <option :value="k.id" x-text="k.nopol + ' (' + k.saldo + ' L)'"></option>
                                 </template>
                             </select>
@@ -372,9 +521,13 @@
                     </div>
 
                     <!-- Current Saldo -->
-                    <div x-show="topupId" class="flex items-center gap-3 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <div x-show="topupId"
+                        class="flex items-center gap-3 p-4 bg-slate-50 rounded-xl border border-slate-200">
                         <div class="p-2 bg-blue-100 text-blue-600 rounded-lg">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
                         </div>
                         <div>
                             <p class="text-xs text-slate-500 font-medium">Saldo Saat Ini</p>
@@ -383,21 +536,30 @@
                     </div>
 
                     <!-- Admin Stock Info -->
-                    <div x-show="topupId" class="flex items-center gap-3 p-4 bg-amber-50 rounded-xl border border-amber-200">
+                    <div x-show="topupId"
+                        class="flex items-center gap-3 p-4 bg-amber-50 rounded-xl border border-amber-200">
                         <div class="p-2 bg-amber-100 text-amber-600 rounded-lg">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                                </path>
+                            </svg>
                         </div>
                         <div>
                             <p class="text-xs text-amber-600 font-bold uppercase">Stok Pusat (Tersedia)</p>
-                            <p class="text-lg font-black text-amber-700"><span x-text="number_format(currentAdminStock, 0, ',', '.')"></span> Liter</p>
+                            <p class="text-lg font-black text-amber-700"><span
+                                    x-text="number_format(currentAdminStock, 0, ',', '.')"></span> Liter</p>
                         </div>
                     </div>
 
                     <!-- Jumlah Input -->
                     <div x-show="topupId">
-                        <label for="jumlah" class="block text-sm font-semibold text-slate-700 mb-2">Jumlah Top Up (Liter)</label>
+                        <label for="jumlah" class="block text-sm font-semibold text-slate-700 mb-2">Jumlah Top Up
+                            (Liter)</label>
                         <div class="relative">
-                            <input type="number" name="jumlah" id="jumlah" x-model="jumlah" step="0.1" min="0.1" max="10000" required placeholder="Masukkan jumlah liter" class="w-full px-4 py-3 pr-16 bg-white border-2 border-slate-200 rounded-xl text-lg font-semibold text-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal">
+                            <input type="number" name="jumlah" id="jumlah" x-model="jumlah" step="0.1" min="0.1"
+                                max="10000" required placeholder="Masukkan jumlah liter"
+                                class="w-full px-4 py-3 pr-16 bg-white border-2 border-slate-200 rounded-xl text-lg font-semibold text-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal">
                             <div class="absolute inset-y-0 right-0 flex items-center pr-4">
                                 <span class="text-sm font-bold text-slate-400">Liter</span>
                             </div>
@@ -408,32 +570,60 @@
                     <div x-show="topupId" class="mt-4">
                         <p class="text-xs text-slate-400 font-medium mb-2">Pilihan Cepat</p>
                         <div class="grid grid-cols-4 gap-2">
-                            <button type="button" @click="jumlah = 5" class="py-2 text-sm font-semibold rounded-lg border-2 transition-all" :class="jumlah == 5 ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50'">5 L</button>
-                            <button type="button" @click="jumlah = 10" class="py-2 text-sm font-semibold rounded-lg border-2 transition-all" :class="jumlah == 10 ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50'">10 L</button>
-                            <button type="button" @click="jumlah = 20" class="py-2 text-sm font-semibold rounded-lg border-2 transition-all" :class="jumlah == 20 ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50'">20 L</button>
-                            <button type="button" @click="jumlah = 50" class="py-2 text-sm font-semibold rounded-lg border-2 transition-all" :class="jumlah == 50 ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50'">50 L</button>
+                            <button type="button" @click="jumlah = 5"
+                                class="py-2 text-sm font-semibold rounded-lg border-2 transition-all"
+                                :class="jumlah == 5 ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50'">5
+                                L</button>
+                            <button type="button" @click="jumlah = 10"
+                                class="py-2 text-sm font-semibold rounded-lg border-2 transition-all"
+                                :class="jumlah == 10 ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50'">10
+                                L</button>
+                            <button type="button" @click="jumlah = 20"
+                                class="py-2 text-sm font-semibold rounded-lg border-2 transition-all"
+                                :class="jumlah == 20 ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50'">20
+                                L</button>
+                            <button type="button" @click="jumlah = 50"
+                                class="py-2 text-sm font-semibold rounded-lg border-2 transition-all"
+                                :class="jumlah == 50 ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50'">50
+                                L</button>
                         </div>
-                        <p x-show="jumlah > currentAdminStock" class="mt-2 text-xs font-bold text-red-600 flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        <p x-show="jumlah > currentAdminStock"
+                            class="mt-2 text-xs font-bold text-red-600 flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                                </path>
+                            </svg>
                             Jumlah melebihi stok pusat!
                         </p>
                     </div>
 
                     <!-- Password Top Up -->
                     <div x-show="topupId">
-                        <label for="topup_password" class="block text-sm font-semibold text-slate-700 mb-2">Password Top Up</label>
+                        <label for="topup_password" class="block text-sm font-semibold text-slate-700 mb-2">Password Top
+                            Up</label>
                         <div class="relative">
-                            <input type="password" name="topup_password" id="topup_password" x-model="topupPassword" required placeholder="Masukkan password keamanan" class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal" autocomplete="off">
+                            <input type="password" name="topup_password" id="topup_password" x-model="topupPassword"
+                                required placeholder="Masukkan password keamanan"
+                                class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal"
+                                autocomplete="off">
                         </div>
-                        <p class="mt-1.5 text-xs text-slate-400">Masukkan PIN/Password khusus untuk konfirmasi transaksi.</p>
+                        <p class="mt-1.5 text-xs text-slate-400">Masukkan PIN/Password khusus untuk konfirmasi
+                            transaksi.</p>
                     </div>
 
                     <!-- Submit Buttons -->
                     <div class="flex gap-3 pt-2">
-                        <button type="button" @click="reset()" class="flex-1 px-4 py-3 bg-slate-100 text-slate-600 font-semibold rounded-xl hover:bg-slate-200 transition-colors">Batal</button>
-                        
-                        <button type="submit" class="flex-1 px-4 py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white font-bold rounded-xl hover:from-emerald-600 hover:to-green-700 shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2" :disabled="!canSubmitManual">
-                            <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                        <button type="button" @click="reset()"
+                            class="flex-1 px-4 py-3 bg-slate-100 text-slate-600 font-semibold rounded-xl hover:bg-slate-200 transition-colors">Batal</button>
+
+                        <button type="submit"
+                            class="flex-1 px-4 py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white font-bold rounded-xl hover:from-emerald-600 hover:to-green-700 shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                            :disabled="!canSubmitManual">
+                            <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
                             Top Up Sekarang
                         </button>
                     </div>
@@ -445,37 +635,59 @@
     <!-- Import Excel Modal -->
     <div x-data="{ showImport: false }" @open-import.window="showImport = true">
         <!-- Backdrop -->
-        <div x-show="showImport" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50" @click="showImport = false"></div>
+        <div x-show="showImport" x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50"
+            @click="showImport = false"></div>
 
         <!-- Modal -->
-        <div x-show="showImport" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95 translate-y-4" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-95 translate-y-4" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showImport = false">
+        <div x-show="showImport" x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+            x-transition:leave-end="opacity-0 scale-95 translate-y-4"
+            class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showImport = false">
             <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden" @click.stop>
                 <!-- Modal Header -->
                 <div class="px-6 py-5 bg-gradient-to-r from-blue-500 to-indigo-600">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <div class="p-2 bg-white/20 rounded-xl">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path></svg>
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10">
+                                    </path>
+                                </svg>
                             </div>
                             <div>
                                 <h3 class="text-lg font-bold text-white">Import Top Up Saldo</h3>
                                 <p class="text-sm text-blue-100">Upload file Excel (.xlsx, .xls, .csv)</p>
                             </div>
                         </div>
-                        <button @click="showImport = false" class="p-1 text-white/70 hover:text-white rounded-lg hover:bg-white/10 transition">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        <button @click="showImport = false"
+                            class="p-1 text-white/70 hover:text-white rounded-lg hover:bg-white/10 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
                         </button>
                     </div>
                 </div>
 
                 <!-- Modal Body -->
-                <form action="{{ route('admin.kendaraans.import-topup') }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-5">
+                <form action="{{ route('admin.kendaraans.import-topup') }}" method="POST" enctype="multipart/form-data"
+                    class="p-6 space-y-5">
                     @csrf
 
                     <!-- Info -->
                     <div class="flex items-start gap-3 p-4 bg-blue-50 rounded-xl border border-blue-200">
                         <div class="p-1.5 bg-blue-100 text-blue-600 rounded-lg mt-0.5">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
                         </div>
                         <div class="text-xs text-blue-700">
                             <p class="font-semibold mb-1">Format file Excel (header di baris ke-2):</p>
@@ -493,46 +705,65 @@
 
                     <!-- Mass Import Admin Stock Info -->
                     <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4">
-                        <p class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-3 flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                        <p
+                            class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                                </path>
+                            </svg>
                             Stok Pusat Tersedia
                         </p>
                         <div class="grid grid-cols-2 gap-3">
                             @foreach($adminStocks as $as)
-                            <div class="bg-white p-2 rounded-lg border border-indigo-100">
-                                <p class="text-[9px] font-bold text-slate-400 uppercase">{{ $as->jenis_bbm }}</p>
-                                <p class="text-sm font-black text-indigo-700">{{ number_format($as->saldo, 0, ',', '.') }} L</p>
-                            </div>
+                                <div class="bg-white p-2 rounded-lg border border-indigo-100">
+                                    <p class="text-[9px] font-bold text-slate-400 uppercase">{{ $as->jenis_bbm }}</p>
+                                    <p class="text-sm font-black text-indigo-700">
+                                        {{ number_format($as->saldo, 0, ',', '.') }} L</p>
+                                </div>
                             @endforeach
                         </div>
                     </div>
 
                     <!-- Download Template -->
-                    <a href="{{ route('admin.kendaraans.download-template') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-800 transition">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <a href="{{ route('admin.kendaraans.download-template') }}"
+                        class="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-800 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                            </path>
+                        </svg>
                         Download Template Excel
                     </a>
 
                     <!-- File Input -->
                     <div>
                         <label for="file" class="block text-sm font-semibold text-slate-700 mb-2">Pilih File</label>
-                        <input type="file" name="file" id="file" accept=".xlsx,.xls,.csv" required class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-slate-800 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                        <input type="file" name="file" id="file" accept=".xlsx,.xls,.csv" required
+                            class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-slate-800 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                         <p class="mt-1.5 text-xs text-slate-400">Maksimal 2MB. Format: .xlsx, .xls, .csv</p>
                     </div>
 
                     <!-- Password Top Up -->
                     <div>
-                        <label for="import_topup_password" class="block text-sm font-semibold text-slate-700 mb-2">Password Top Up</label>
+                        <label for="import_topup_password"
+                            class="block text-sm font-semibold text-slate-700 mb-2">Password Top Up</label>
                         <div class="relative">
-                            <input type="password" name="topup_password" id="import_topup_password" required placeholder="Masukkan password keamanan" class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal" autocomplete="off">
+                            <input type="password" name="topup_password" id="import_topup_password" required
+                                placeholder="Masukkan password keamanan"
+                                class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal"
+                                autocomplete="off">
                         </div>
-                        <p class="mt-1.5 text-xs text-slate-400">Masukkan PIN/Password khusus untuk konfirmasi import.</p>
+                        <p class="mt-1.5 text-xs text-slate-400">Masukkan PIN/Password khusus untuk konfirmasi import.
+                        </p>
                     </div>
 
                     <!-- Submit -->
                     <div class="flex gap-3 pt-2">
-                        <button type="button" @click="showImport = false" class="flex-1 px-4 py-3 bg-slate-100 text-slate-600 font-semibold rounded-xl hover:bg-slate-200 transition-colors">Batal</button>
-                        <button type="submit" class="flex-1 px-4 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-xl hover:from-blue-600 hover:to-indigo-700 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 transition-all hover:-translate-y-0.5">
+                        <button type="button" @click="showImport = false"
+                            class="flex-1 px-4 py-3 bg-slate-100 text-slate-600 font-semibold rounded-xl hover:bg-slate-200 transition-colors">Batal</button>
+                        <button type="submit"
+                            class="flex-1 px-4 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-xl hover:from-blue-600 hover:to-indigo-700 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 transition-all hover:-translate-y-0.5">
                             📥 Import Sekarang
                         </button>
                     </div>
@@ -542,27 +773,46 @@
     </div>
 
     <!-- Monthly Report Modal -->
-    <div x-data="{ showMonthlyReport: false, satkerId: '', bulan: '{{ now()->month }}', tahun: '{{ now()->year }}' }" @open-monthly-report.window="showMonthlyReport = true">
+    <div x-data="{ showMonthlyReport: false, satkerId: '', bulan: '{{ now()->month }}', tahun: '{{ now()->year }}' }"
+        @open-monthly-report.window="showMonthlyReport = true">
         <!-- Backdrop -->
-        <div x-show="showMonthlyReport" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50" @click="showMonthlyReport = false"></div>
+        <div x-show="showMonthlyReport" x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50"
+            @click="showMonthlyReport = false"></div>
 
         <!-- Modal -->
-        <div x-show="showMonthlyReport" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95 translate-y-4" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-95 translate-y-4" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showMonthlyReport = false">
+        <div x-show="showMonthlyReport" x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+            x-transition:leave-end="opacity-0 scale-95 translate-y-4"
+            class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showMonthlyReport = false">
             <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden" @click.stop>
                 <!-- Modal Header -->
                 <div class="px-6 py-5 bg-gradient-to-r from-rose-500 to-rose-600">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <div class="p-2 bg-white/20 rounded-xl">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                    </path>
+                                </svg>
                             </div>
                             <div>
                                 <h3 class="text-lg font-bold text-white">Laporan Bulanan Satker</h3>
                                 <p class="text-sm text-rose-100">Pilih Satker dan Periode Laporan</p>
                             </div>
                         </div>
-                        <button @click="showMonthlyReport = false" class="p-1 text-white/70 hover:text-white rounded-lg hover:bg-white/10 transition">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        <button @click="showMonthlyReport = false"
+                            class="p-1 text-white/70 hover:text-white rounded-lg hover:bg-white/10 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
                         </button>
                     </div>
                 </div>
@@ -571,7 +821,8 @@
                 <form action="{{ route('admin.kendaraans.laporan-bulanan') }}" method="GET" class="p-6 space-y-4">
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2">1. Pilih Satuan Kerja</label>
-                        <select name="satker_id" x-model="satkerId" required class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all">
+                        <select name="satker_id" x-model="satkerId" required
+                            class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all">
                             <option value="">-- Pilih Satker --</option>
                             @foreach($satkers as $s)
                                 <option value="{{ $s->id }}">{{ $s->nama_satker }}</option>
@@ -582,15 +833,18 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">2. Pilih Bulan</label>
-                            <select name="bulan" x-model="bulan" class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all">
+                            <select name="bulan" x-model="bulan"
+                                class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all">
                                 @for($m = 1; $m <= 12; $m++)
-                                    <option value="{{ $m }}">{{ \Carbon\Carbon::create(null, $m, 1)->translatedFormat('F') }}</option>
+                                    <option value="{{ $m }}">
+                                        {{ \Carbon\Carbon::create(null, $m, 1)->translatedFormat('F') }}</option>
                                 @endfor
                             </select>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">3. Pilih Tahun</label>
-                            <select name="tahun" x-model="tahun" class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all">
+                            <select name="tahun" x-model="tahun"
+                                class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all">
                                 @for($y = now()->year; $y >= now()->year - 5; $y--)
                                     <option value="{{ $y }}">{{ $y }}</option>
                                 @endfor
@@ -600,8 +854,11 @@
 
                     <!-- Submit -->
                     <div class="flex gap-3 pt-2">
-                        <button type="button" @click="showMonthlyReport = false" class="flex-1 px-4 py-3 bg-slate-100 text-slate-600 font-semibold rounded-xl hover:bg-slate-200 transition-colors">Batal</button>
-                        <button type="submit" class="flex-1 px-4 py-3 bg-gradient-to-r from-rose-500 to-rose-600 text-white font-bold rounded-xl hover:from-rose-600 hover:to-rose-700 shadow-lg shadow-rose-500/30 hover:shadow-rose-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed" :disabled="!satkerId">
+                        <button type="button" @click="showMonthlyReport = false"
+                            class="flex-1 px-4 py-3 bg-slate-100 text-slate-600 font-semibold rounded-xl hover:bg-slate-200 transition-colors">Batal</button>
+                        <button type="submit"
+                            class="flex-1 px-4 py-3 bg-gradient-to-r from-rose-500 to-rose-600 text-white font-bold rounded-xl hover:from-rose-600 hover:to-rose-700 shadow-lg shadow-rose-500/30 hover:shadow-rose-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                            :disabled="!satkerId">
                             Buka Laporan
                         </button>
                     </div>

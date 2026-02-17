@@ -9,7 +9,7 @@
                     BIRO LOGISTIK
                 </h1>
             </div>
-            <p class="text-slate-400 text-sm font-medium tracking-wide">Polda NTB</p>
+            <p class="text-slate-400 text-sm font-medium tracking-wide">Layanan Sistem BBM Berbasis Digital</p>
         </div>
 
         <!-- Session Status -->
