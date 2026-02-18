@@ -12,7 +12,13 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Outfit', ...defaultTheme.fontFamily.sans],
+                inter: ['Inter', ...defaultTheme.fontFamily.sans],
+            },
+            colors: {
+                primary: '#4338ca', // Indigo from app layout, kept just in case
+                secondary: '#64748B',
+                dark: '#0f172a',
             },
         },
     },
