@@ -13,14 +13,32 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Styles & Scripts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#4338ca',
+                        secondary: '#64748B',
+                        dark: '#0f172a',
+                    },
+                },
+            },
+        }
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts" data-turbo-track="reload"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" data-turbo-track="reload"></script>
     <meta name="turbo-visit-control" content="reload">
     @stack('head')
 
-    <!-- Tailwind config moved to tailwind.config.js -->
     <style>
         body {
             /* body { font-family: 'Outfit', sans-serif; } - Handled by font-sans class */
@@ -42,7 +60,8 @@
 </head>
 
 <body class="font-sans antialiased bg-slate-50 text-slate-900">
-    <div x-data="{ sidebarOpen: Alpine.$persist(false).as('sidebar-state') }" class="flex h-screen bg-slate-50 overflow-hidden">
+    <div x-data="{ sidebarOpen: Alpine.$persist(false).as('sidebar-state') }"
+        class="flex h-screen bg-slate-50 overflow-hidden">
         @include('layouts.sidebar')
 
         <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden transition-opacity duration-500">
@@ -114,8 +133,10 @@
     @stack('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // GeoLocation Logic
-            if ("geolocation" in navigator) {
+            // GeoLocation Logic — hanya minta izin sekali per hari
+            const lastLocationUpdate = localStorage.getItem('lastLocationUpdate');
+            const oneDayMs = 24 * 60 * 60 * 1000;
+            if ("geolocation" in navigator && (!lastLocationUpdate || (Date.now() - parseInt(lastLocationUpdate)) > oneDayMs)) {
                 navigator.geolocation.getCurrentPosition(function (position) {
                     fetch("{{ route('profile.location.update') }}", {
                         method: "POST",
@@ -127,6 +148,8 @@
                             latitude: position.coords.latitude,
                             longitude: position.coords.longitude
                         })
+                    }).then(function() {
+                        localStorage.setItem('lastLocationUpdate', Date.now().toString());
                     });
                 });
             }
@@ -229,10 +252,10 @@
             });
 
             // Sidebar Active State Handler for Turbo Permanent
-            document.addEventListener('turbo:load', function() {
+            document.addEventListener('turbo:load', function () {
                 const currentPath = window.location.pathname;
                 const sidebarLinks = document.querySelectorAll('#sidebar nav a');
-                
+
                 sidebarLinks.forEach(link => {
                     const href = link.getAttribute('href');
                     const url = new URL(href);
