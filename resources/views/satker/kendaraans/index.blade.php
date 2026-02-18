@@ -144,7 +144,7 @@
                             </td>
                                 <td class="px-6 py-4 text-center">
                                     <div class="flex items-center justify-center gap-2">
-                                        <a href="{{ route('satker.kendaraans.print', $kendaraan) }}" target="_blank" class="p-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-600 hover:text-indigo-700 rounded-lg transition-colors group" title="Print Barcode">
+                                        <a href="{{ route('satker.kendaraans.print', $kendaraan) }}" target="_blank" rel="nofollow" class="p-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-600 hover:text-indigo-700 rounded-lg transition-colors group" title="Print Barcode">
                                             <img src="{{ asset('assets/images/qr-icon.png') }}" class="w-5 h-5 opacity-80 group-hover:opacity-100 transition-opacity" alt="QR Icon">
                                         </a>
                                         @if(\App\Models\Setting::where('key', 'satker_can_edit_kendaraan')->value('value') ?? 1)
