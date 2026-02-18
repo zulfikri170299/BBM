@@ -59,4 +59,22 @@ class PersonelController extends Controller
 
         return back()->with('success', "PIN Personel {$personel->nama} berhasil di-reset. PIN Baru: {$newPin}");
     }
+
+    public function bulkDelete(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:personels,id',
+        ]);
+
+        $count = Personel::whereIn('id', $request->ids)->count();
+        Personel::whereIn('id', $request->ids)->delete();
+
+        \App\Models\LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => "Menghapus {$count} Personel secara massal"
+        ]);
+
+        return back()->with('success', "{$count} personel berhasil dihapus.");
+    }
 }

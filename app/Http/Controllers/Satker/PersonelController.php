@@ -164,6 +164,37 @@ class PersonelController extends Controller
         return view('satker.personels.card', compact('personel'));
     }
 
+    public function bulkDelete(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:personels,id',
+        ]);
+
+        $satkerId = auth()->user()->satker_id;
+        $skipped = Personel::where('satker_id', $satkerId)
+            ->whereIn('id', $request->ids)
+            ->where('saldo', '>', 0)
+            ->count();
+
+        $deleted = Personel::where('satker_id', $satkerId)
+            ->whereIn('id', $request->ids)
+            ->where('saldo', '<=', 0)
+            ->delete();
+
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => "Menghapus {$deleted} personel secara massal",
+        ]);
+
+        $msg = "{$deleted} personel berhasil dihapus.";
+        if ($skipped > 0) {
+            $msg .= " {$skipped} personel dilewati karena masih memiliki saldo.";
+        }
+
+        return redirect()->route('satker.personels.index')->with('success', $msg);
+    }
+
     public function downloadTemplate()
     {
         // Simple CSV generation matching user's format (Header at Row 3)

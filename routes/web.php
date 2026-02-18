@@ -51,13 +51,16 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     Route::post('/topup', [\App\Http\Controllers\Admin\AdminController::class, 'processTopup'])->name('topup.process');
     Route::get('/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
     Route::post('/reports', [\App\Http\Controllers\Admin\ReportController::class, 'generate'])->name('reports.generate');
+    Route::post('/satkers/bulk-delete', [\App\Http\Controllers\Admin\SatkerController::class, 'bulkDelete'])->name('satkers.bulk-delete');
     Route::resource('satkers', \App\Http\Controllers\Admin\SatkerController::class);
     Route::get('/users/monitoring', [\App\Http\Controllers\Admin\UserController::class, 'monitoring'])->name('users.monitoring');
     Route::get('/users/{user}/logs', [\App\Http\Controllers\Admin\UserController::class, 'activityLogs'])->name('users.logs');
     Route::post('/users/{user}/toggle', [\App\Http\Controllers\Admin\UserController::class, 'toggleStatus'])->name('users.toggle');
     Route::post('/users/{user}/reset-password', [\App\Http\Controllers\Admin\UserController::class, 'resetPassword'])->name('users.reset-password');
     Route::post('/users/bulk-status', [\App\Http\Controllers\Admin\UserController::class, 'bulkStatus'])->name('users.bulk-status');
+    Route::post('/users/bulk-delete', [\App\Http\Controllers\Admin\UserController::class, 'bulkDelete'])->name('users.bulk-delete');
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+    Route::post('/personels/bulk-delete', [\App\Http\Controllers\Admin\PersonelController::class, 'bulkDelete'])->name('personels.bulk-delete');
     Route::resource('personels', \App\Http\Controllers\Admin\PersonelController::class)->only(['index', 'destroy']);
     Route::post('/personels/{personel}/reset-pin', [\App\Http\Controllers\Admin\PersonelController::class, 'resetPin'])->name('personels.reset-pin');
     Route::get('/personels/{personel}/print', [\App\Http\Controllers\Admin\PersonelController::class, 'print'])->name('personels.print');
@@ -71,12 +74,14 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     Route::post('/kendaraans/send-otp', [\App\Http\Controllers\Admin\KendaraanController::class, 'sendOtp'])->name('kendaraans.send-otp');
     Route::post('/kendaraans/import-topup', [\App\Http\Controllers\Admin\KendaraanController::class, 'importTopup'])->name('kendaraans.import-topup');
     Route::get('/kendaraans/download-template', [\App\Http\Controllers\Admin\KendaraanController::class, 'downloadTemplate'])->name('kendaraans.download-template');
+    Route::get('/kendaraans/download-format', [\App\Http\Controllers\Admin\KendaraanController::class, 'downloadFormat'])->name('kendaraans.download-format');
     Route::get('/kendaraans/laporan-bulanan/export', [\App\Http\Controllers\Admin\KendaraanController::class, 'exportLaporanBulanan'])->name('kendaraans.laporan-bulanan.export');
     Route::get('/kendaraans/laporan-bulanan/print', [\App\Http\Controllers\Admin\KendaraanController::class, 'printLaporanBulanan'])->name('kendaraans.laporan-bulanan.print');
     Route::get('/kendaraans/laporan-bulanan', [\App\Http\Controllers\Admin\KendaraanController::class, 'laporanBulanan'])->name('kendaraans.laporan-bulanan');
     Route::get('/kendaraans/{kendaraan}/edit', [\App\Http\Controllers\Admin\KendaraanController::class, 'edit'])->name('kendaraans.edit');
     Route::put('/kendaraans/{kendaraan}', [\App\Http\Controllers\Admin\KendaraanController::class, 'update'])->name('kendaraans.update');
     Route::delete('/kendaraans/{kendaraan}', [\App\Http\Controllers\Admin\KendaraanController::class, 'destroy'])->name('kendaraans.destroy');
+    Route::post('/kendaraans/bulk-delete', [\App\Http\Controllers\Admin\KendaraanController::class, 'bulkDelete'])->name('kendaraans.bulk-delete');
     // Laporan Topup & Riwayat
     Route::get('/riwayat/print', [\App\Http\Controllers\Admin\RiwayatController::class, 'print'])->name('riwayat.print');
     Route::get('/riwayat', [\App\Http\Controllers\Admin\RiwayatController::class, 'index'])->name('riwayat.index');
@@ -113,6 +118,7 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
 
 Route::middleware(['auth', 'role:admin_satker'])->prefix('satker')->name('satker.')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Satker\DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/kendaraans/bulk-delete', [\App\Http\Controllers\Satker\KendaraanController::class, 'bulkDelete'])->name('kendaraans.bulk-delete');
     Route::post('/kendaraans/transfer', [\App\Http\Controllers\Satker\KendaraanController::class, 'storeTransfer'])->name('kendaraans.transfer');
     Route::get('/kendaraans/laporan-bulanan/export', [\App\Http\Controllers\Satker\KendaraanController::class, 'exportLaporanBulanan'])->name('kendaraans.laporan-bulanan.export');
     Route::get('/kendaraans/{kendaraan}/edit', [\App\Http\Controllers\Satker\KendaraanController::class, 'edit'])->name('kendaraans.edit');
@@ -122,9 +128,13 @@ Route::middleware(['auth', 'role:admin_satker'])->prefix('satker')->name('satker
     Route::get('/kendaraans/laporan-transfer/print', [\App\Http\Controllers\Satker\KendaraanController::class, 'printLaporanTransfer'])->name('kendaraans.laporan-transfer.print');
     Route::get('/kendaraans/laporan-transfer', [\App\Http\Controllers\Satker\KendaraanController::class, 'laporanTransfer'])->name('kendaraans.laporan-transfer');
     Route::get('/kendaraans/{kendaraan}/print', [\App\Http\Controllers\Satker\KendaraanController::class, 'print'])->name('kendaraans.print');
+    Route::post('/kendaraans/import', [\App\Http\Controllers\Satker\KendaraanController::class, 'importKendaraan'])->name('kendaraans.import');
+    Route::post('/kendaraans/preview-import', [\App\Http\Controllers\Satker\KendaraanController::class, 'previewImport'])->name('kendaraans.preview-import');
+    Route::get('/kendaraans/download-template', [\App\Http\Controllers\Satker\KendaraanController::class, 'downloadTemplate'])->name('kendaraans.download-template');
     Route::resource('kendaraans', \App\Http\Controllers\Satker\KendaraanController::class)->except(['edit', 'update']);
     
     // Personel Routes
+    Route::post('/personels/bulk-delete', [\App\Http\Controllers\Satker\PersonelController::class, 'bulkDelete'])->name('personels.bulk-delete');
     Route::post('/personels/import', [\App\Http\Controllers\Satker\PersonelController::class, 'import'])->name('personels.import');
     Route::get('/personels/download-template', [\App\Http\Controllers\Satker\PersonelController::class, 'downloadTemplate'])->name('personels.download-template');
     Route::get('/personels/{personel}/print', [\App\Http\Controllers\Satker\PersonelController::class, 'print'])->name('personels.print');

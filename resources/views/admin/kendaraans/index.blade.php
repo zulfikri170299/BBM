@@ -37,7 +37,8 @@
                         class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Top
                         Up Saldo</span>
                 </button>
-                <a href="{{ route('admin.kendaraans.export') }}" target="_blank" rel="nofollow"
+                <a href="{{ route('admin.kendaraans.export', ['satker_id' => request('satker_id')]) }}" target="_blank"
+                    rel="nofollow"
                     class="inline-flex items-center justify-center w-10 h-10 bg-amber-500 text-white rounded-xl hover:bg-amber-600 shadow-lg shadow-amber-500/30 transition-all duration-200 hover:-translate-y-0.5 group relative"
                     title="Export Excel">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -221,16 +222,39 @@
                         <p class="text-xs text-slate-400">{{ $kendaraans->total() }} kendaraan dari seluruh satker</p>
                     </div>
                 </div>
+
+                <!-- Bulk Actions -->
+                <div id="bulkActions" class="hidden flex items-center gap-3">
+                    <span
+                        class="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100">
+                        <span id="selectedCount">0</span> DIPILIH
+                    </span>
+                    <button type="button" id="bulkDeleteBtn"
+                        class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-xs font-bold hover:bg-rose-700 transition shadow-sm">
+                        <svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                            </path>
+                        </svg>
+                        Hapus Terpilih
+                    </button>
+                </div>
             </div>
+
+            <form id="bulkDeleteForm" action="{{ route('admin.kendaraans.bulk-delete') }}" method="POST" class="hidden">
+                @csrf
+                <div id="bulkIdsContainer"></div>
+            </form>
 
             <!-- Table -->
             <div class="overflow-x-auto">
                 <table class="min-w-full">
                     <thead>
                         <tr class="bg-slate-50/70">
-                            <th
-                                class="px-6 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider w-12">
-                                No</th>
+                            <th class="w-10 px-6 py-3.5">
+                                <input type="checkbox" id="checkAll"
+                                    class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
+                            </th>
                             <th
                                 class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                 Satker</th>
@@ -260,9 +284,9 @@
                     <tbody class="divide-y divide-slate-100">
                         @forelse($kendaraans as $kendaraan)
                             <tr class="hover:bg-slate-50/50 transition-colors">
-                                <td class="px-6 py-4 text-center">
-                                    <span
-                                        class="text-sm font-semibold text-slate-500">{{ $loop->iteration + ($kendaraans->currentPage() - 1) * $kendaraans->perPage() }}</span>
+                                <td class="px-6 py-4">
+                                    <input type="checkbox" value="{{ $kendaraan->id }}"
+                                        class="item-checkbox rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
@@ -313,7 +337,8 @@
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex items-center justify-end gap-1.5">
-                                        <a href="{{ route('admin.kendaraans.print', $kendaraan) }}" target="_blank" rel="nofollow"
+                                        <a href="{{ route('admin.kendaraans.print', $kendaraan) }}" target="_blank"
+                                            rel="nofollow"
                                             class="inline-flex items-center p-2 bg-slate-100 hover:bg-indigo-100 text-slate-500 hover:text-indigo-600 rounded-lg transition-colors"
                                             title="Print Kartu Kendaraan">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -366,7 +391,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="9" class="px-6 py-12 text-center">
+                                <td colspan="10" class="px-6 py-12 text-center">
                                     <div class="flex flex-col items-center">
                                         <div
                                             class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
@@ -482,21 +507,24 @@
             x-transition:leave="transition ease-in duration-200"
             x-transition:leave-start="opacity-100 scale-100 translate-y-0"
             x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-            class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showTopup = false">
-            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden" @click.stop>
+            class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4" @click.self="showTopup = false">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden"
+                @click.stop>
                 <!-- Modal Header -->
-                <div class="px-6 py-5 bg-gradient-to-r from-emerald-500 to-green-600">
+                <div class="px-4 sm:px-6 py-4 sm:py-5 bg-gradient-to-r from-emerald-500 to-green-600 shrink-0">
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="p-2 bg-white/20 rounded-xl">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="flex items-center gap-2 sm:gap-3">
+                            <div class="p-1.5 sm:p-2 bg-white/20 rounded-xl">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-white">Top Up Saldo</h3>
-                                <p class="text-sm text-emerald-100" x-text="topupNopol || 'Pilih kendaraan'"></p>
+                                <h3 class="text-base sm:text-lg font-bold text-white">Top Up Saldo</h3>
+                                <p class="text-xs sm:text-sm text-emerald-100" x-text="topupNopol || 'Pilih kendaraan'">
+                                </p>
                             </div>
                         </div>
                         <button @click="showTopup = false"
@@ -510,7 +538,8 @@
                 </div>
 
                 <!-- Modal Body -->
-                <form :action="'/admin/kendaraans/' + topupId + '/topup'" method="POST" class="p-6 space-y-5">
+                <form :action="'/admin/kendaraans/' + topupId + '/topup'" method="POST"
+                    class="p-4 sm:p-6 space-y-4 sm:space-y-5 overflow-y-auto flex-1">
                     @csrf
                     <!-- Hidden Inputs -->
                     <input type="hidden" name="kendaraan_id" :value="topupId">
@@ -518,9 +547,10 @@
                     <!-- Select Satker & Kendaraan (only when opened from header button) -->
                     <div x-show="selectMode" class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">1. Pilih Satuan Kerja</label>
+                            <label class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 sm:mb-2">1. Pilih
+                                Satuan Kerja</label>
                             <select x-model="selectedSatkerId" @change="topupId = null; topupNopol = '';"
-                                class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all">
+                                class="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all">
                                 <option value="">-- Pilih Satker --</option>
                                 @foreach($satkers as $s)
                                     <option value="{{ $s->id }}">{{ $s->nama_satker }}</option>
@@ -529,9 +559,10 @@
                         </div>
 
                         <div x-show="selectedSatkerId">
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">2. Pilih Kendaraan</label>
+                            <label class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 sm:mb-2">2. Pilih
+                                Kendaraan</label>
                             <select @change="selectKendaraan($event.target.value)"
-                                class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all">
+                                class="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all">
                                 <option value="">-- Pilih Kendaraan --</option>
                                 <template x-for="k in allKendaraans.filter(x => x.satker_id == selectedSatkerId)"
                                     :key="k.id">
@@ -543,74 +574,78 @@
 
                     <!-- Current Saldo -->
                     <div x-show="topupId"
-                        class="flex items-center gap-3 p-4 bg-slate-50 rounded-xl border border-slate-200">
-                        <div class="p-2 bg-blue-100 text-blue-600 rounded-lg">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <div class="p-1.5 sm:p-2 bg-blue-100 text-blue-600 rounded-lg shrink-0">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
                         <div>
-                            <p class="text-xs text-slate-500 font-medium">Saldo Saat Ini</p>
-                            <p class="text-lg font-bold text-slate-800"><span x-text="topupSaldo"></span> Liter</p>
+                            <p class="text-[10px] sm:text-xs text-slate-500 font-medium">Saldo Saat Ini</p>
+                            <p class="text-base sm:text-lg font-bold text-slate-800"><span x-text="topupSaldo"></span>
+                                Liter</p>
                         </div>
                     </div>
 
                     <!-- Admin Stock Info -->
                     <div x-show="topupId"
-                        class="flex items-center gap-3 p-4 bg-amber-50 rounded-xl border border-amber-200">
-                        <div class="p-2 bg-amber-100 text-amber-600 rounded-lg">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-amber-50 rounded-xl border border-amber-200">
+                        <div class="p-1.5 sm:p-2 bg-amber-100 text-amber-600 rounded-lg shrink-0">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
                                 </path>
                             </svg>
                         </div>
                         <div>
-                            <p class="text-xs text-amber-600 font-bold uppercase">Stok Pusat (Tersedia)</p>
-                            <p class="text-lg font-black text-amber-700"><span
+                            <p class="text-[10px] sm:text-xs text-amber-600 font-bold uppercase">Stok Pusat (Tersedia)
+                            </p>
+                            <p class="text-base sm:text-lg font-black text-amber-700"><span
                                     x-text="number_format(currentAdminStock, 0, ',', '.')"></span> Liter</p>
                         </div>
                     </div>
 
                     <!-- Jumlah Input -->
                     <div x-show="topupId">
-                        <label for="jumlah" class="block text-sm font-semibold text-slate-700 mb-2">Jumlah Top Up
+                        <label for="jumlah"
+                            class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 sm:mb-2">Jumlah Top Up
                             (Liter)</label>
                         <div class="relative">
                             <input type="number" name="jumlah" id="jumlah" x-model="jumlah" step="0.1" min="0.1"
                                 max="10000" required placeholder="Masukkan jumlah liter"
-                                class="w-full px-4 py-3 pr-16 bg-white border-2 border-slate-200 rounded-xl text-lg font-semibold text-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal">
-                            <div class="absolute inset-y-0 right-0 flex items-center pr-4">
-                                <span class="text-sm font-bold text-slate-400">Liter</span>
+                                class="w-full px-3 sm:px-4 py-2.5 sm:py-3 pr-14 sm:pr-16 bg-white border-2 border-slate-200 rounded-xl text-base sm:text-lg font-semibold text-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal">
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 sm:pr-4">
+                                <span class="text-xs sm:text-sm font-bold text-slate-400">Liter</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Quick Amount Buttons -->
-                    <div x-show="topupId" class="mt-4">
-                        <p class="text-xs text-slate-400 font-medium mb-2">Pilihan Cepat</p>
-                        <div class="grid grid-cols-4 gap-2">
+                    <div x-show="topupId" class="mt-2 sm:mt-4">
+                        <p class="text-[10px] sm:text-xs text-slate-400 font-medium mb-1.5 sm:mb-2">Pilihan Cepat</p>
+                        <div class="grid grid-cols-4 gap-1.5 sm:gap-2">
                             <button type="button" @click="jumlah = 5"
-                                class="py-2 text-sm font-semibold rounded-lg border-2 transition-all"
+                                class="py-1.5 sm:py-2 text-xs sm:text-sm font-semibold rounded-lg border-2 transition-all"
                                 :class="jumlah == 5 ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50'">5
                                 L</button>
                             <button type="button" @click="jumlah = 10"
-                                class="py-2 text-sm font-semibold rounded-lg border-2 transition-all"
+                                class="py-1.5 sm:py-2 text-xs sm:text-sm font-semibold rounded-lg border-2 transition-all"
                                 :class="jumlah == 10 ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50'">10
                                 L</button>
                             <button type="button" @click="jumlah = 20"
-                                class="py-2 text-sm font-semibold rounded-lg border-2 transition-all"
+                                class="py-1.5 sm:py-2 text-xs sm:text-sm font-semibold rounded-lg border-2 transition-all"
                                 :class="jumlah == 20 ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50'">20
                                 L</button>
                             <button type="button" @click="jumlah = 50"
-                                class="py-2 text-sm font-semibold rounded-lg border-2 transition-all"
+                                class="py-1.5 sm:py-2 text-xs sm:text-sm font-semibold rounded-lg border-2 transition-all"
                                 :class="jumlah == 50 ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50'">50
                                 L</button>
                         </div>
                         <p x-show="jumlah > currentAdminStock"
-                            class="mt-2 text-xs font-bold text-red-600 flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            class="mt-1.5 sm:mt-2 text-[10px] sm:text-xs font-bold text-red-600 flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
                                 </path>
@@ -621,27 +656,29 @@
 
                     <!-- Password Top Up -->
                     <div x-show="topupId">
-                        <label for="topup_password" class="block text-sm font-semibold text-slate-700 mb-2">Password Top
+                        <label for="topup_password"
+                            class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 sm:mb-2">Password Top
                             Up</label>
                         <div class="relative">
                             <input type="password" name="topup_password" id="topup_password" x-model="topupPassword"
                                 required placeholder="Masukkan password keamanan"
-                                class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal"
+                                class="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal"
                                 autocomplete="off">
                         </div>
-                        <p class="mt-1.5 text-xs text-slate-400">Masukkan PIN/Password khusus untuk konfirmasi
+                        <p class="mt-1 sm:mt-1.5 text-[10px] sm:text-xs text-slate-400">Masukkan PIN/Password khusus
+                            untuk konfirmasi
                             transaksi.</p>
                     </div>
 
                     <!-- Submit Buttons -->
-                    <div class="flex gap-3 pt-2">
+                    <div class="flex gap-2 sm:gap-3 pt-1 sm:pt-2">
                         <button type="button" @click="reset()"
-                            class="flex-1 px-4 py-3 bg-slate-100 text-slate-600 font-semibold rounded-xl hover:bg-slate-200 transition-colors">Batal</button>
+                            class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-100 text-slate-600 text-sm font-semibold rounded-xl hover:bg-slate-200 transition-colors">Batal</button>
 
                         <button type="submit"
-                            class="flex-1 px-4 py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white font-bold rounded-xl hover:from-emerald-600 hover:to-green-700 shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                            class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white text-sm font-bold rounded-xl hover:from-emerald-600 hover:to-green-700 shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1 sm:gap-2"
                             :disabled="!canSubmitManual">
-                            <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                             </svg>
@@ -654,8 +691,8 @@
     </div>
 
     <!-- Import Excel Modal -->
-    <!-- Import Excel Modal -->
-    <div x-cloak x-data="{ showImport: false }" @open-import.window="showImport = true" @turbo:before-cache.window="showImport = false">
+    <div x-cloak x-data="{ showImport: false }" @open-import.window="showImport = true"
+        @turbo:before-cache.window="showImport = false">
         <!-- Backdrop -->
         <div x-show="showImport" style="display: none;" x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
@@ -670,22 +707,24 @@
             x-transition:leave="transition ease-in duration-200"
             x-transition:leave-start="opacity-100 scale-100 translate-y-0"
             x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-            class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showImport = false">
-            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden" @click.stop>
+            class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4" @click.self="showImport = false">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden"
+                @click.stop>
                 <!-- Modal Header -->
-                <div class="px-6 py-5 bg-gradient-to-r from-blue-500 to-indigo-600">
+                <div class="px-4 sm:px-6 py-4 sm:py-5 bg-gradient-to-r from-blue-500 to-indigo-600 shrink-0">
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="p-2 bg-white/20 rounded-xl">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="flex items-center gap-2 sm:gap-3">
+                            <div class="p-1.5 sm:p-2 bg-white/20 rounded-xl">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10">
                                     </path>
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-white">Import Top Up Saldo</h3>
-                                <p class="text-sm text-blue-100">Upload file Excel (.xlsx, .xls, .csv)</p>
+                                <h3 class="text-base sm:text-lg font-bold text-white">Import Top Up Saldo</h3>
+                                <p class="text-xs sm:text-sm text-blue-100">Upload file Excel (.xlsx, .xls, .csv)</p>
                             </div>
                         </div>
                         <button @click="showImport = false"
@@ -698,20 +737,22 @@
                     </div>
                 </div>
 
-                <!-- Modal Body -->
+                <!-- Modal Body (Scrollable) -->
                 <form action="{{ route('admin.kendaraans.import-topup') }}" method="POST" enctype="multipart/form-data"
-                    class="p-6 space-y-5">
+                    data-turbo="false" class="p-4 sm:p-6 space-y-4 sm:space-y-5 overflow-y-auto flex-1">
                     @csrf
 
                     <!-- Info -->
-                    <div class="flex items-start gap-3 p-4 bg-blue-50 rounded-xl border border-blue-200">
-                        <div class="p-1.5 bg-blue-100 text-blue-600 rounded-lg mt-0.5">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div
+                        class="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 bg-blue-50 rounded-xl border border-blue-200">
+                        <div class="p-1 sm:p-1.5 bg-blue-100 text-blue-600 rounded-lg mt-0.5 shrink-0">
+                            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
-                        <div class="text-xs text-blue-700">
+                        <div class="text-[10px] sm:text-xs text-blue-700">
                             <p class="font-semibold mb-1">Format file Excel (header di baris ke-2):</p>
                             <ul class="list-disc list-inside space-y-0.5">
                                 <li>Kolom <strong>NO</strong> — Nomor urut</li>
@@ -726,9 +767,9 @@
                     </div>
 
                     <!-- Mass Import Admin Stock Info -->
-                    <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4">
+                    <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-3 sm:p-4">
                         <p
-                            class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                            class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-2 sm:mb-3 flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
@@ -736,7 +777,7 @@
                             </svg>
                             Stok Pusat Tersedia
                         </p>
-                        <div class="grid grid-cols-2 gap-3">
+                        <div class="grid grid-cols-2 gap-2 sm:gap-3">
                             @foreach($adminStocks as $as)
                                 <div class="bg-white p-2 rounded-lg border border-indigo-100">
                                     <p class="text-[9px] font-bold text-slate-400 uppercase">{{ $as->jenis_bbm }}</p>
@@ -748,45 +789,49 @@
                         </div>
                     </div>
 
-                    <!-- Download Template -->
-                    <a href="{{ route('admin.kendaraans.download-template') }}"
-                        class="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-800 transition">
+                    <!-- Download Format -->
+                    <a href="{{ route('admin.kendaraans.download-format') }}"
+                        class="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-blue-600 hover:text-blue-800 transition">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                             </path>
                         </svg>
-                        Download Template Excel
+                        Download Format Excel (Data Kendaraan)
                     </a>
 
                     <!-- File Input -->
                     <div>
-                        <label for="file" class="block text-sm font-semibold text-slate-700 mb-2">Pilih File</label>
+                        <label for="file"
+                            class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 sm:mb-2">Pilih
+                            File</label>
                         <input type="file" name="file" id="file" accept=".xlsx,.xls,.csv" required
-                            class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-slate-800 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                        <p class="mt-1.5 text-xs text-slate-400">Maksimal 2MB. Format: .xlsx, .xls, .csv</p>
+                            class="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-slate-200 rounded-xl text-xs sm:text-sm text-slate-800 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all file:mr-3 sm:file:mr-4 file:py-1 file:px-2 sm:file:px-3 file:rounded-lg file:border-0 file:text-xs sm:file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                        <p class="mt-1 sm:mt-1.5 text-[10px] sm:text-xs text-slate-400">Maksimal 2MB. Format: .xlsx,
+                            .xls, .csv</p>
                     </div>
 
                     <!-- Password Top Up -->
                     <div>
                         <label for="import_topup_password"
-                            class="block text-sm font-semibold text-slate-700 mb-2">Password Top Up</label>
+                            class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 sm:mb-2">Password Top
+                            Up</label>
                         <div class="relative">
                             <input type="password" name="topup_password" id="import_topup_password" required
                                 placeholder="Masukkan password keamanan"
-                                class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal"
+                                class="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal"
                                 autocomplete="off">
                         </div>
-                        <p class="mt-1.5 text-xs text-slate-400">Masukkan PIN/Password khusus untuk konfirmasi import.
-                        </p>
+                        <p class="mt-1 sm:mt-1.5 text-[10px] sm:text-xs text-slate-400">Masukkan PIN/Password khusus
+                            untuk konfirmasi import.</p>
                     </div>
 
                     <!-- Submit -->
-                    <div class="flex gap-3 pt-2">
+                    <div class="flex gap-2 sm:gap-3 pt-1 sm:pt-2">
                         <button type="button" @click="showImport = false"
-                            class="flex-1 px-4 py-3 bg-slate-100 text-slate-600 font-semibold rounded-xl hover:bg-slate-200 transition-colors">Batal</button>
+                            class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-100 text-slate-600 text-sm font-semibold rounded-xl hover:bg-slate-200 transition-colors">Batal</button>
                         <button type="submit"
-                            class="flex-1 px-4 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-xl hover:from-blue-600 hover:to-indigo-700 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 transition-all hover:-translate-y-0.5">
+                            class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-sm font-bold rounded-xl hover:from-blue-600 hover:to-indigo-700 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 transition-all hover:-translate-y-0.5">
                             📥 Import Sekarang
                         </button>
                     </div>
@@ -797,9 +842,9 @@
 
     <!-- Monthly Report Modal -->
     <!-- Monthly Report Modal -->
-    <div x-cloak x-data="{ showMonthlyReport: false, satkerId: '', bulan: '{{ now()->month }}', tahun: '{{ now()->year }}' }"
-        @open-monthly-report.window="showMonthlyReport = true"
-        @turbo:before-cache.window="showMonthlyReport = false">
+    <div x-cloak
+        x-data="{ showMonthlyReport: false, satkerId: '', bulan: '{{ now()->month }}', tahun: '{{ now()->year }}' }"
+        @open-monthly-report.window="showMonthlyReport = true" @turbo:before-cache.window="showMonthlyReport = false">
         <!-- Backdrop -->
         <div x-show="showMonthlyReport" style="display: none;" x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
@@ -892,4 +937,61 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script>
+            const checkAll = document.getElementById('checkAll');
+            const itemCheckboxes = document.querySelectorAll('.item-checkbox');
+            const bulkActions = document.getElementById('bulkActions');
+            const selectedCountLabel = document.getElementById('selectedCount');
+
+            function updateBulkUI() {
+                const checkedCount = document.querySelectorAll('.item-checkbox:checked').length;
+                selectedCountLabel.innerText = checkedCount;
+                if (checkedCount > 0) {
+                    bulkActions.classList.remove('hidden');
+                    bulkActions.classList.add('flex');
+                } else {
+                    bulkActions.classList.add('hidden');
+                    bulkActions.classList.remove('flex');
+                }
+            }
+
+            checkAll.addEventListener('change', () => {
+                itemCheckboxes.forEach(cb => { cb.checked = checkAll.checked; });
+                updateBulkUI();
+            });
+
+            itemCheckboxes.forEach(cb => { cb.addEventListener('change', updateBulkUI); });
+
+            document.getElementById('bulkDeleteBtn').addEventListener('click', function () {
+                const selected = document.querySelectorAll('.item-checkbox:checked');
+                if (selected.length === 0) return;
+
+                Swal.fire({
+                    title: 'Hapus Data Massal',
+                    text: `Apakah Anda yakin ingin menghapus ${selected.length} kendaraan yang terpilih? Tindakan ini tidak dapat dibatalkan.`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#e11d48',
+                    cancelButtonColor: '#64748b',
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const container = document.getElementById('bulkIdsContainer');
+                        container.innerHTML = '';
+                        selected.forEach(cb => {
+                            const input = document.createElement('input');
+                            input.type = 'hidden';
+                            input.name = 'ids[]';
+                            input.value = cb.value;
+                            container.appendChild(input);
+                        });
+                        document.getElementById('bulkDeleteForm').submit();
+                    }
+                });
+            });
+        </script>
+    @endpush
 </x-app-layout>

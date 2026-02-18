@@ -14,13 +14,23 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class KendaraanExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize, WithStyles
 {
     private $row = 0;
+    private $satkerId;
+
+    public function __construct($satkerId = null)
+    {
+        $this->satkerId = $satkerId;
+    }
 
     /**
     * @return \Illuminate\Support\Collection
     */
     public function collection()
     {
-        return Kendaraan::with('satker')->get();
+        $query = Kendaraan::with('satker');
+        if ($this->satkerId) {
+            $query->where('satker_id', $this->satkerId);
+        }
+        return $query->get();
     }
 
     public function headings(): array

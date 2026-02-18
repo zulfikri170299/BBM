@@ -130,9 +130,39 @@
                     @endif
 
                     <div class="overflow-x-auto">
+
+                        <!-- Bulk Actions Bar -->
+                        <div id="bulkActionsBar"
+                            class="hidden px-4 sm:px-6 py-3 bg-indigo-50 border-b border-indigo-100 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm font-semibold text-indigo-800"><span id="selectedCount">0</span>
+                                    data dipilih</span>
+                            </div>
+                            <button type="button" onclick="bulkDeletePersonel()"
+                                class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-bold rounded-lg shadow transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                    </path>
+                                </svg>
+                                Hapus Terpilih
+                            </button>
+                        </div>
+
+                        <!-- Hidden form for bulk delete -->
+                        <form id="bulkDeleteForm" action="{{ route('satker.personels.bulk-delete') }}" method="POST"
+                            class="hidden">
+                            @csrf
+                            <div id="bulkDeleteInputs"></div>
+                        </form>
+
                         <table class="min-w-full divide-y divide-slate-200">
                             <thead>
                                 <tr class="bg-slate-50/50">
+                                    <th class="px-4 py-4 text-center w-10">
+                                        <input type="checkbox" id="checkAll"
+                                            class="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500 cursor-pointer">
+                                    </th>
                                     <th
                                         class="px-6 py-4 text-center text-[10px] font-bold text-slate-500 uppercase tracking-widest w-12">
                                         No</th>
@@ -153,6 +183,10 @@
                             <tbody class="bg-white divide-y divide-slate-100">
                                 @foreach($personels as $personel)
                                     <tr class="hover:bg-slate-50/80 transition-colors group">
+                                        <td class="px-4 py-4 text-center">
+                                            <input type="checkbox" name="item_ids[]" value="{{ $personel->id }}"
+                                                class="item-checkbox w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500 cursor-pointer">
+                                        </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-center">
                                             <span
                                                 class="text-xs font-bold text-slate-400">{{ $loop->iteration + ($personels->currentPage() - 1) * $personels->perPage() }}</span>
@@ -166,9 +200,11 @@
                                                 <div>
                                                     <p
                                                         class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
-                                                        {{ $personel->nama }}</p>
+                                                        {{ $personel->nama }}
+                                                    </p>
                                                     <p class="text-[11px] font-medium text-slate-500 mt-0.5">NRP:
-                                                        {{ $personel->nrp }}</p>
+                                                        {{ $personel->nrp }}
+                                                    </p>
                                                 </div>
                                             </div>
                                         </td>
@@ -266,3 +302,57 @@
         </div>
     </div>
 </x-app-layout>
+
+<script>
+    // Bulk Delete Checkboxes
+    const checkAll = document.getElementById('checkAll');
+    const itemCheckboxes = document.querySelectorAll('.item-checkbox');
+    const bulkActionsBar = document.getElementById('bulkActionsBar');
+    const selectedCountEl = document.getElementById('selectedCount');
+
+    function updateBulkUI() {
+        const checked = document.querySelectorAll('.item-checkbox:checked');
+        selectedCountEl.textContent = checked.length;
+        bulkActionsBar.classList.toggle('hidden', checked.length === 0);
+        checkAll.checked = checked.length === itemCheckboxes.length && itemCheckboxes.length > 0;
+        checkAll.indeterminate = checked.length > 0 && checked.length < itemCheckboxes.length;
+    }
+
+    if (checkAll) {
+        checkAll.addEventListener('change', function () {
+            itemCheckboxes.forEach(cb => cb.checked = this.checked);
+            updateBulkUI();
+        });
+    }
+
+    itemCheckboxes.forEach(cb => cb.addEventListener('change', updateBulkUI));
+
+    function bulkDeletePersonel() {
+        const checked = document.querySelectorAll('.item-checkbox:checked');
+        if (checked.length === 0) return;
+
+        Swal.fire({
+            title: 'Hapus ' + checked.length + ' Personel?',
+            text: 'Data yang dihapus tidak dapat dikembalikan! Personel dengan saldo tersisa akan dilewati.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const inputsDiv = document.getElementById('bulkDeleteInputs');
+                inputsDiv.innerHTML = '';
+                checked.forEach(cb => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'ids[]';
+                    input.value = cb.value;
+                    inputsDiv.appendChild(input);
+                });
+                document.getElementById('bulkDeleteForm').submit();
+            }
+        });
+    }
+</script>

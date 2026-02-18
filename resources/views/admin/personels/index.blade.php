@@ -113,13 +113,33 @@
 
 
 
+                    <!-- Bulk Actions -->
+                    <div id="bulkActions" class="hidden items-center gap-3 mb-4 p-3 bg-indigo-50 border border-indigo-100 rounded-xl">
+                        <span class="text-xs font-bold text-indigo-600 bg-white px-3 py-1.5 rounded-lg border border-indigo-100">
+                            <span id="selectedCount">0</span> DIPILIH
+                        </span>
+                        <button type="button" id="bulkDeleteBtn"
+                            class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-xs font-bold hover:bg-rose-700 transition shadow-sm">
+                            <svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                            Hapus Terpilih
+                        </button>
+                    </div>
+
+                    <form id="bulkDeleteForm" action="{{ route('admin.personels.bulk-delete') }}" method="POST" class="hidden">
+                        @csrf
+                        <div id="bulkIdsContainer"></div>
+                    </form>
+
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-slate-200">
                             <thead>
                                 <tr class="bg-slate-50/50">
-                                    <th
-                                        class="px-6 py-4 text-center text-[10px] font-bold text-slate-500 uppercase tracking-widest w-12">
-                                        No</th>
+                                    <th class="w-10 px-6 py-4">
+                                        <input type="checkbox" id="checkAll"
+                                            class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
+                                    </th>
                                     <th
                                         class="px-6 py-4 text-left text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                                         Data Personel</th>
@@ -137,9 +157,9 @@
                             <tbody class="bg-white divide-y divide-slate-100">
                                 @foreach($personels as $personel)
                                     <tr class="hover:bg-slate-50/80 transition-colors group">
-                                        <td class="px-6 py-4 whitespace-nowrap text-center">
-                                            <span
-                                                class="text-xs font-bold text-slate-400">{{ $loop->iteration + ($personels->currentPage() - 1) * $personels->perPage() }}</span>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <input type="checkbox" value="{{ $personel->id }}"
+                                                class="item-checkbox rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex items-center gap-3">
@@ -239,4 +259,61 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        const checkAll = document.getElementById('checkAll');
+        const itemCheckboxes = document.querySelectorAll('.item-checkbox');
+        const bulkActions = document.getElementById('bulkActions');
+        const selectedCountLabel = document.getElementById('selectedCount');
+
+        function updateBulkUI() {
+            const checkedCount = document.querySelectorAll('.item-checkbox:checked').length;
+            selectedCountLabel.innerText = checkedCount;
+            if (checkedCount > 0) {
+                bulkActions.classList.remove('hidden');
+                bulkActions.classList.add('flex');
+            } else {
+                bulkActions.classList.add('hidden');
+                bulkActions.classList.remove('flex');
+            }
+        }
+
+        checkAll.addEventListener('change', () => {
+            itemCheckboxes.forEach(cb => { cb.checked = checkAll.checked; });
+            updateBulkUI();
+        });
+
+        itemCheckboxes.forEach(cb => { cb.addEventListener('change', updateBulkUI); });
+
+        document.getElementById('bulkDeleteBtn').addEventListener('click', function() {
+            const selected = document.querySelectorAll('.item-checkbox:checked');
+            if (selected.length === 0) return;
+
+            Swal.fire({
+                title: 'Hapus Data Massal',
+                text: `Apakah Anda yakin ingin menghapus ${selected.length} personel yang terpilih? Tindakan ini tidak dapat dibatalkan.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e11d48',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const container = document.getElementById('bulkIdsContainer');
+                    container.innerHTML = '';
+                    selected.forEach(cb => {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'ids[]';
+                        input.value = cb.value;
+                        container.appendChild(input);
+                    });
+                    document.getElementById('bulkDeleteForm').submit();
+                }
+            });
+        });
+    </script>
+    @endpush
 </x-app-layout>

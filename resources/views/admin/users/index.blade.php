@@ -126,6 +126,15 @@
                             class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 transition shadow-sm">Aktifkan</button>
                         <button type="button" onclick="submitBulk('inactive')"
                             class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-xs font-bold hover:bg-rose-700 transition shadow-sm">Nonaktifkan</button>
+                        <button type="button" onclick="submitBulkDelete()"
+                            class="px-3 py-1.5 bg-slate-800 text-white rounded-lg text-xs font-bold hover:bg-slate-900 transition shadow-sm">
+                            <svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                </path>
+                            </svg>
+                            Hapus Terpilih
+                        </button>
                     </div>
                 </div>
             </div>
@@ -134,6 +143,11 @@
                 @csrf
                 <input type="hidden" name="status" id="bulkStatusInput">
                 <div id="bulkIdsContainer"></div>
+            </form>
+
+            <form id="bulkDeleteForm" action="{{ route('admin.users.bulk-delete') }}" method="POST" class="hidden">
+                @csrf
+                <div id="bulkDeleteIdsContainer"></div>
             </form>
 
             <div class="overflow-x-auto">
@@ -372,6 +386,45 @@
 
                         bulkStatusInput.value = status;
                         bulkForm.submit();
+                    }
+                });
+            }
+            function submitBulkDelete() {
+                const selected = document.querySelectorAll('.user-checkbox:checked');
+
+                if (selected.length === 0) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Ops!',
+                        text: 'Pilih setidaknya satu user.',
+                        confirmButtonColor: '#4338ca',
+                    });
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'Hapus Data Massal',
+                    text: `Apakah Anda yakin ingin menghapus ${selected.length} user yang terpilih? Tindakan ini tidak dapat dibatalkan.`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#e11d48',
+                    cancelButtonColor: '#64748b',
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const container = document.getElementById('bulkDeleteIdsContainer');
+                        container.innerHTML = '';
+
+                        selected.forEach(cb => {
+                            const input = document.createElement('input');
+                            input.type = 'hidden';
+                            input.name = 'ids[]';
+                            input.value = cb.value;
+                            container.appendChild(input);
+                        });
+
+                        document.getElementById('bulkDeleteForm').submit();
                     }
                 });
             }

@@ -20,6 +20,7 @@ use App\Models\LogAktivitas;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 
+
 class KendaraanController extends Controller
 {
     public function index(Request $request)
@@ -260,9 +261,10 @@ class KendaraanController extends Controller
         );
     }
 
-    public function export()
+    public function export(Request $request)
     {
-        return Excel::download(new KendaraanExport, 'data_kendaraan_' . date('Y-m-d_H-i') . '.xlsx');
+        $satkerId = $request->input('satker_id');
+        return Excel::download(new KendaraanExport($satkerId), 'data_kendaraan_' . date('Y-m-d_H-i') . '.xlsx');
     }
 
     public function downloadTemplate()
@@ -307,6 +309,51 @@ class KendaraanController extends Controller
         ])->deleteFileAfterSend(true);
     }
 
+    public function downloadFormat()
+    {
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Header di Row 2 (Row 1 kosong sesuai format import)
+        $headers = ['NO', 'SATKER', 'KODE KENDARAAN', 'JENIS KENDARAAN', 'NOPOL', 'JENIS BBM', 'JUMLAH LITER'];
+        $columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+        foreach ($headers as $i => $header) {
+            $sheet->setCellValue($columns[$i] . '2', $header);
+        }
+
+        // Bold header
+        $sheet->getStyle('A2:G2')->getFont()->setBold(true);
+
+        // Isi data kendaraan (tanpa saldo & pin)
+        $kendaraans = Kendaraan::with('satker')->orderBy('satker_id')->get();
+        $row = 3;
+        $no = 1;
+        foreach ($kendaraans as $k) {
+            $sheet->setCellValue('A' . $row, $no);
+            $sheet->setCellValue('B' . $row, $k->satker->nama_satker ?? '-');
+            $sheet->setCellValue('C' . $row, $k->kode_kendaraan ?? '-');
+            $sheet->setCellValue('D' . $row, $k->jenis_kendaraan);
+            $sheet->setCellValue('E' . $row, $k->no_polisi);
+            $sheet->setCellValue('F' . $row, $k->jenis_bbm);
+            // Kolom G (JUMLAH LITER) dikosongkan agar diisi user
+            $row++;
+            $no++;
+        }
+
+        // Auto-size columns
+        foreach ($columns as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $fileName = 'format_topup_saldo_' . date('Y-m-d') . '.xlsx';
+        $tempFile = tempnam(sys_get_temp_dir(), 'format');
+        $writer->save($tempFile);
+
+        return response()->download($tempFile, $fileName, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ])->deleteFileAfterSend(true);
+    }
 
     public function edit(Kendaraan $kendaraan)
     {
@@ -347,6 +394,24 @@ class KendaraanController extends Controller
         ]);
 
         return redirect()->route('admin.kendaraans.index')->with('success', 'Kendaraan berhasil dihapus.');
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:kendaraans,id',
+        ]);
+
+        $count = Kendaraan::whereIn('id', $request->ids)->count();
+        Kendaraan::whereIn('id', $request->ids)->delete();
+
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => "Menghapus {$count} Kendaraan secara massal"
+        ]);
+
+        return back()->with('success', "{$count} kendaraan berhasil dihapus.");
     }
 
     public function resetPin(Kendaraan $kendaraan)

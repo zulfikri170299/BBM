@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'SIMAK BBM') }}</title>
+    <title>{{ config('app.name', 'SPBP Rolog Polda NTB') }}</title>
+    <link rel="icon" href="{{ asset('rolog.png') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -148,7 +149,7 @@
                             latitude: position.coords.latitude,
                             longitude: position.coords.longitude
                         })
-                    }).then(function() {
+                    }).then(function () {
                         localStorage.setItem('lastLocationUpdate', Date.now().toString());
                     });
                 });

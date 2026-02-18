@@ -9,6 +9,8 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\LaporanBulananExport;
+use App\Exports\KendaraanTemplateExport;
+use App\Imports\KendaraanImport;
 use App\Models\LogAktivitas;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -406,4 +408,107 @@ class KendaraanController extends Controller
 
         return redirect()->route('satker.kendaraans.index')->with('success', 'Data kendaraan berhasil diperbarui.');
     }
+
+    public function previewImport(Request $request)
+    {
+        $canImport = \App\Models\Setting::where('key', 'satker_can_import_kendaraan')->value('value') ?? '1';
+        if ($canImport == '0') {
+            return response()->json(['error' => 'Fitur import kendaraan saat ini dinonaktifkan oleh Administrator.'], 403);
+        }
+
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048',
+        ]);
+
+        $satkerId = auth()->user()->satker_id;
+        $import = new KendaraanImport($satkerId, 'preview');
+
+        try {
+            Excel::import($import, $request->file('file'));
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Gagal membaca file: ' . $e->getMessage()], 422);
+        }
+
+        return response()->json([
+            'duplicates' => $import->duplicates,
+            'errors' => $import->errors,
+        ]);
+    }
+
+    public function importKendaraan(Request $request)
+    {
+        $canImport = \App\Models\Setting::where('key', 'satker_can_import_kendaraan')->value('value') ?? '1';
+        if ($canImport == '0') {
+            return back()->with('error', 'Fitur import kendaraan saat ini dinonaktifkan oleh Administrator.');
+        }
+
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048',
+            'duplicate_action' => 'nullable|in:skip,update',
+        ], [
+            'file.required' => 'File Excel harus dipilih.',
+            'file.mimes' => 'File harus berformat .xlsx, .xls, atau .csv.',
+            'file.max' => 'Ukuran file maksimal 2MB.',
+        ]);
+
+        $satkerId = auth()->user()->satker_id;
+        $duplicateAction = $request->input('duplicate_action', 'skip');
+        $import = new KendaraanImport($satkerId, $duplicateAction);
+
+        try {
+            Excel::import($import, $request->file('file'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal membaca file Excel: ' . $e->getMessage());
+        }
+
+        $messages = [];
+        if ($import->successCount > 0) {
+            $messages[] = "{$import->successCount} kendaraan baru ditambahkan";
+        }
+        if ($import->updatedCount > 0) {
+            $messages[] = "{$import->updatedCount} data diperbarui";
+        }
+        if ($import->skippedCount > 0) {
+            $messages[] = "{$import->skippedCount} data duplikat dilewati";
+        }
+
+        if (count($import->errors) > 0) {
+            $errorMessages = implode(' | ', array_slice($import->errors, 0, 5));
+            if ($import->successCount > 0 || $import->updatedCount > 0) {
+                $message = implode(', ', $messages) . ". Ada " . count($import->errors) . " baris gagal: {$errorMessages}";
+                return back()->with('success', $message);
+            } else {
+                return back()->with('error', 'Import gagal. ' . $errorMessages);
+            }
+        }
+
+        $message = implode(', ', $messages) . '.';
+        return back()->with('success', $message ?: 'Tidak ada data baru untuk diimport.');
+    }
+
+    public function downloadTemplate()
+    {
+        return Excel::download(new KendaraanTemplateExport(), 'template-import-kendaraan.xlsx');
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:kendaraans,id',
+        ]);
+
+        $satkerId = auth()->user()->satker_id;
+        $deleted = Kendaraan::where('satker_id', $satkerId)
+            ->whereIn('id', $request->ids)
+            ->delete();
+
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => "Menghapus {$deleted} kendaraan secara massal",
+        ]);
+
+        return redirect()->route('satker.kendaraans.index')->with('success', "{$deleted} kendaraan berhasil dihapus.");
+    }
 }
+

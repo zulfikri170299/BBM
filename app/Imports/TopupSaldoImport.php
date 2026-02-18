@@ -39,6 +39,12 @@ class TopupSaldoImport implements ToCollection, WithHeadingRow, WithStartRow
         foreach ($rows as $index => $row) {
             $rowNum = $index + 3; // data mulai dari row 3
 
+            // DEBUG: Log actual keys untuk troubleshooting
+            if ($index === 0) {
+                \Log::info('TopupSaldoImport KEYS: ' . json_encode($row->keys()->toArray()));
+                \Log::info('TopupSaldoImport ROW DATA: ' . json_encode($row->toArray()));
+            }
+
             // Ambil nopol dari kolom NOPOL atau no_polisi
             $nopol = $row['nopol'] ?? $row['no_polisi'] ?? $row['no polisi'] ?? null;
             // Ambil kode dari kolom KODE KENDARAAN

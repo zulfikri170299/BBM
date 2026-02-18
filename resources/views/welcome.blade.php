@@ -4,7 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'BIRO LOGISTIK') }}</title>
+    <title>{{ config('app.name', 'SPBP Rolog Polda NTB') }}</title>
+    <link rel="icon" href="{{ asset('rolog.png') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

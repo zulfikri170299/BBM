@@ -281,6 +281,26 @@ class UserController extends Controller
         return back()->with('success', "{$count} akun berhasil diperbarui statusnya.");
     }
 
+    public function bulkDelete(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:users,id',
+        ]);
+
+        // Jangan hapus akun sendiri
+        $ids = array_diff($request->ids, [auth()->id()]);
+        $count = User::whereIn('id', $ids)->count();
+        User::whereIn('id', $ids)->delete();
+
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => "Menghapus {$count} User secara massal"
+        ]);
+
+        return back()->with('success', "{$count} user berhasil dihapus.");
+    }
+
     public function resetPassword(User $user)
     {
         // Hindari mereset password sesama Super Admin

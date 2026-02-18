@@ -70,4 +70,22 @@ class SatkerController extends Controller
 
         return redirect()->route('admin.satkers.index')->with('success', 'Satker deleted successfully.');
     }
+
+    public function bulkDelete(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:satkers,id',
+        ]);
+
+        $count = Satker::whereIn('id', $request->ids)->count();
+        Satker::whereIn('id', $request->ids)->delete();
+
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => "Menghapus {$count} Satker secara massal"
+        ]);
+
+        return back()->with('success', "{$count} satker berhasil dihapus.");
+    }
 }
