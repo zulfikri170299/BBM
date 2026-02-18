@@ -1,3 +1,4 @@
+@props(['maxWidth' => 'max-w-[440px]'])
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -31,9 +32,13 @@
         /* body { font-family: 'Outfit', sans-serif; } - Handled by font-sans class */
 
         .login-gradient {
-            background: linear-gradient(135deg, rgba(66, 0, 0, 0.95) 0%, rgba(128, 0, 0, 0.9) 100%), url('/bg-login.jpg');
+            background-color: #0f172a;
+            background-image:
+                linear-gradient(135deg, rgba(15, 23, 42, 0.4) 0%, rgba(15, 23, 42, 0.3) 100%),
+                url('/polda.jpg');
             background-size: cover;
             background-position: center;
+            background-attachment: fixed;
             position: relative;
         }
 
@@ -41,8 +46,10 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(1px);
             pointer-events: none;
+            z-index: 1;
         }
 
         /* Custom Scrollbar */
@@ -63,10 +70,10 @@
 
 <body class="font-sans antialiased text-slate-200">
     <div class="min-h-screen flex items-center justify-center p-4 login-gradient">
-        <div class="w-full max-w-[440px] relative z-20">
+        <div class="w-full {{ $maxWidth }} relative z-20">
             {{ $slot }}
 
-            <p class="text-center text-xs text-slate-500 mt-8 font-medium">
+            <p class="text-center text-xs text-slate-400 mt-8 font-medium">
                 &copy; {{ date('Y') }} BIRO LOGISTIK. Polda Nusa Tenggara Barat.
             </p>
         </div>
