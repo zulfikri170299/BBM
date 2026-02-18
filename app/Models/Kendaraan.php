@@ -15,4 +15,13 @@ class Kendaraan extends Model
     {
         return $this->belongsTo(Satker::class);
     }
+
+    public static function generateUniquePin()
+    {
+        do {
+            $pin = sprintf("%06d", mt_rand(0, 999999));
+        } while (self::where('pin', $pin)->exists());
+
+        return $pin;
+    }
 }

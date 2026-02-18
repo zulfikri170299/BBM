@@ -59,6 +59,7 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     Route::post('/users/bulk-status', [\App\Http\Controllers\Admin\UserController::class, 'bulkStatus'])->name('users.bulk-status');
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
     Route::resource('personels', \App\Http\Controllers\Admin\PersonelController::class)->only(['index', 'destroy']);
+    Route::post('/personels/{personel}/reset-pin', [\App\Http\Controllers\Admin\PersonelController::class, 'resetPin'])->name('personels.reset-pin');
     Route::get('/personels/{personel}/print', [\App\Http\Controllers\Admin\PersonelController::class, 'print'])->name('personels.print');
     Route::get('/kendaraans/export', [\App\Http\Controllers\Admin\KendaraanController::class, 'export'])->name('kendaraans.export');
     Route::get('/kendaraans', [\App\Http\Controllers\Admin\KendaraanController::class, 'index'])->name('kendaraans.index');
@@ -66,6 +67,7 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     Route::post('/kendaraans', [\App\Http\Controllers\Admin\KendaraanController::class, 'store'])->name('kendaraans.store');
     Route::get('/kendaraans/{kendaraan}/print', [\App\Http\Controllers\Admin\KendaraanController::class, 'print'])->name('kendaraans.print');
     Route::post('/kendaraans/{kendaraan}/topup', [\App\Http\Controllers\Admin\KendaraanController::class, 'topup'])->name('kendaraans.topup');
+    Route::post('/kendaraans/{kendaraan}/reset-pin', [\App\Http\Controllers\Admin\KendaraanController::class, 'resetPin'])->name('kendaraans.reset-pin');
     Route::post('/kendaraans/send-otp', [\App\Http\Controllers\Admin\KendaraanController::class, 'sendOtp'])->name('kendaraans.send-otp');
     Route::post('/kendaraans/import-topup', [\App\Http\Controllers\Admin\KendaraanController::class, 'importTopup'])->name('kendaraans.import-topup');
     Route::get('/kendaraans/download-template', [\App\Http\Controllers\Admin\KendaraanController::class, 'downloadTemplate'])->name('kendaraans.download-template');

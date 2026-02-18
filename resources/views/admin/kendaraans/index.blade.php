@@ -318,8 +318,23 @@
                                                 </path>
                                             </svg>
                                         </a>
+                                        <form action="{{ route('admin.kendaraans.reset-pin', $kendaraan) }}" method="POST"
+                                            class="inline">
+                                            @csrf
+                                            <button type="submit"
+                                                data-confirm="Reset PIN kendaraan {{ $kendaraan->no_polisi }}? PIN baru akan di-generate secara acak."
+                                                data-confirm-type="warning"
+                                                class="inline-flex items-center p-2 bg-slate-100 hover:bg-amber-100 text-slate-500 hover:text-amber-600 rounded-lg transition-colors"
+                                                title="Reset PIN">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z">
+                                                    </path>
+                                                </svg>
+                                            </button>
+                                        </form>
                                         <a href="{{ route('admin.kendaraans.edit', $kendaraan) }}"
-                                            class="inline-flex items-center p-2 bg-slate-100 hover:bg-amber-100 text-slate-500 hover:text-amber-600 rounded-lg transition-colors"
+                                            class="inline-flex items-center p-2 bg-slate-100 hover:bg-indigo-100 text-slate-500 hover:text-indigo-600 rounded-lg transition-colors"
                                             title="Edit">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -719,7 +734,8 @@
                                 <div class="bg-white p-2 rounded-lg border border-indigo-100">
                                     <p class="text-[9px] font-bold text-slate-400 uppercase">{{ $as->jenis_bbm }}</p>
                                     <p class="text-sm font-black text-indigo-700">
-                                        {{ number_format($as->saldo, 0, ',', '.') }} L</p>
+                                        {{ number_format($as->saldo, 0, ',', '.') }} L
+                                    </p>
                                 </div>
                             @endforeach
                         </div>
@@ -837,7 +853,8 @@
                                 class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all">
                                 @for($m = 1; $m <= 12; $m++)
                                     <option value="{{ $m }}">
-                                        {{ \Carbon\Carbon::create(null, $m, 1)->translatedFormat('F') }}</option>
+                                        {{ \Carbon\Carbon::create(null, $m, 1)->translatedFormat('F') }}
+                                    </option>
                                 @endfor
                             </select>
                         </div>

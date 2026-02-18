@@ -14,7 +14,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
     <!-- Tailwind config moved to tailwind.config.js -->
     <style>
         /* body { font-family: 'Outfit', sans-serif; } - Handled by font-sans class */
