@@ -42,4 +42,21 @@ class PersonelController extends Controller
         $personel->delete();
         return redirect()->route('admin.personels.index')->with('success', 'Personel berhasil dihapus.');
     }
+
+    public function resetPin(Personel $personel)
+    {
+        if (auth()->user()->role !== 'super_admin') {
+            return back()->with('error', 'Hanya Super Admin yang dapat mereset PIN.');
+        }
+
+        $newPin = Personel::generateUniquePin();
+        $personel->update(['pin' => $newPin]);
+
+        \App\Models\LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => "Reset PIN Personel (Super Admin): {$personel->nama} (NRP: {$personel->nrp})"
+        ]);
+
+        return back()->with('success', "PIN Personel {$personel->nama} berhasil di-reset. PIN Baru: {$newPin}");
+    }
 }

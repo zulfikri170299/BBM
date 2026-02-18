@@ -349,6 +349,23 @@ class KendaraanController extends Controller
         return redirect()->route('admin.kendaraans.index')->with('success', 'Kendaraan berhasil dihapus.');
     }
 
+    public function resetPin(Kendaraan $kendaraan)
+    {
+        if (auth()->user()->role !== 'super_admin') {
+            return back()->with('error', 'Hanya Super Admin yang dapat mereset PIN.');
+        }
+
+        $newPin = Kendaraan::generateUniquePin();
+        $kendaraan->update(['pin' => $newPin]);
+
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => "Reset PIN Kendaraan (Super Admin): {$kendaraan->no_polisi}"
+        ]);
+
+        return back()->with('success', "PIN Kendaraan {$kendaraan->no_polisi} berhasil di-reset. PIN Baru: {$newPin}");
+    }
+
     public function laporanBulanan(Request $request)
     {
         $request->validate([
