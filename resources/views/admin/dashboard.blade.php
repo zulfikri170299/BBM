@@ -490,35 +490,7 @@
             };
             var chart = new ApexCharts(document.querySelector("#transactionChart"), options);
             chart.render();
-            var markers = [];
 
-            users.forEach(function(user) {
-                if(user.last_latitude && user.last_longitude) {
-                    var marker = L.marker([user.last_latitude, user.last_longitude]).addTo(map);
-                    
-                    var lastActive = new Date(user.last_activity_at).toLocaleString('id-ID');
-                    var roleLabel = user.role.replace('_', ' ').toUpperCase();
-
-                    var popupContent = `
-                        <div class="p-2 min-w-[150px]">
-                            <h4 class="font-bold text-slate-800 text-sm mb-1">${user.name}</h4>
-                            <p class="text-xs text-indigo-600 font-bold mb-1">${roleLabel}</p>
-                            <p class="text-[10px] text-slate-500 flex items-center gap-1">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                ${lastActive}
-                            </p>
-                        </div>
-                    `;
-                    
-                    marker.bindPopup(popupContent);
-                    markers.push(marker);
-                }
-            });
-
-            if (markers.length > 0) {
-                var group = new L.featureGroup(markers);
-                map.fitBounds(group.getBounds().pad(0.1));
-            }
         });
     </script>
     @endpush

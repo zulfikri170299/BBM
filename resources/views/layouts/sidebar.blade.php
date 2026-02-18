@@ -1,10 +1,20 @@
 <div x-cloak :class="sidebarOpen ? 'block' : 'hidden'" @click="sidebarOpen = false"
     class="fixed inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden"></div>
 
-<div x-cloak :class="sidebarOpen ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'" x-data="{ 
-        reportsOpen: {{ (request()->routeIs('admin.laporan-topup.*') || request()->routeIs('admin.laporan-harian.*') || request()->routeIs('admin.riwayat.*') || request()->routeIs('admin.ba.*')) ? 'true' : 'false' }} 
+<div x-cloak x-data="{ 
+        reportsOpen: {{ (request()->routeIs('admin.laporan-topup.*') || request()->routeIs('admin.laporan-harian.*') || request()->routeIs('admin.riwayat.*') || request()->routeIs('admin.ba.*')) ? 'true' : 'false' }},
+        init() {
+            this.$el.scrollTop = localStorage.getItem('sidebarScroll') || 0;
+            this.$el.addEventListener('scroll', () => {
+                localStorage.setItem('sidebarScroll', this.$el.scrollTop);
+            });
+        }
     }"
-    class="fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto transition duration-300 transform bg-slate-900 text-white lg:translate-x-0 lg:static lg:inset-0">
+    }"
+    id="sidebar" data-turbo-permanent
+    class="fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto transform bg-slate-900 text-white lg:translate-x-0 lg:static lg:inset-0"
+    :class="{ 'transition duration-300': pageLoaded, 'translate-x-0 ease-out': sidebarOpen, '-translate-x-full ease-in': !sidebarOpen }"
+    style="@media (min-width: 1024px) { display: block !important; }">
     <div class="flex items-center justify-center mt-8">
         <div class="flex items-center">
             <img src="{{ asset('rolog.png') }}" alt="Logo" class="w-10 h-10 object-contain">

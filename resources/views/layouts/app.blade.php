@@ -15,8 +15,10 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts" data-turbo-track="reload"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" data-turbo-track="reload"></script>
+    <meta name="turbo-visit-control" content="reload">
+    @stack('head')
 
     <!-- Tailwind config moved to tailwind.config.js -->
     <style>
@@ -40,10 +42,10 @@
 </head>
 
 <body class="font-sans antialiased bg-slate-50 text-slate-900">
-    <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-slate-50 overflow-hidden">
+    <div x-data="{ sidebarOpen: Alpine.$persist(false).as('sidebar-state') }" class="flex h-screen bg-slate-50 overflow-hidden">
         @include('layouts.sidebar')
 
-        <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+        <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden transition-opacity duration-500">
             @include('layouts.header')
 
             <!-- Global Notification (Moved outside main for better visibility) -->
@@ -224,6 +226,29 @@
                         }
                     });
                 }
+            });
+
+            // Sidebar Active State Handler for Turbo Permanent
+            document.addEventListener('turbo:load', function() {
+                const currentPath = window.location.pathname;
+                const sidebarLinks = document.querySelectorAll('#sidebar nav a');
+                
+                sidebarLinks.forEach(link => {
+                    const href = link.getAttribute('href');
+                    const url = new URL(href);
+                    const path = url.pathname;
+
+                    // Remove existing active classes
+                    link.classList.remove('bg-indigo-600', 'shadow-lg', 'shadow-indigo-500/30');
+                    link.classList.add('hover:bg-slate-800');
+
+                    // Add active classes if path matches
+                    // Logic: Exact match or starts with (for nested routes)
+                    if (currentPath === path || (path !== '/' && currentPath.startsWith(path))) {
+                        link.classList.remove('hover:bg-slate-800');
+                        link.classList.add('bg-indigo-600', 'shadow-lg', 'shadow-indigo-500/30');
+                    }
+                });
             });
         });
     </script>

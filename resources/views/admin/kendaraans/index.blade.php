@@ -1,4 +1,8 @@
 <x-app-layout>
+    @push('head')
+        <meta name="turbo-cache-control" content="no-cache">
+    @endpush
+
     <div class="p-6 lg:p-8 space-y-6">
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -392,7 +396,8 @@
     </div>
 
     <!-- Top Up Modal -->
-    <div x-data="{
+    <!-- Top Up Modal -->
+    <div x-cloak x-data="{
             showTopup: false,
             topupId: null,
             topupNopol: '',
@@ -461,16 +466,17 @@
             }
         }"
         @open-topup.window="topupId = $event.detail.id; topupNopol = $event.detail.nopol; topupSaldo = $event.detail.saldo; jumlah = ''; topupPassword = ''; selectMode = false; showTopup = true"
-        @open-topup-select.window="topupId = null; topupNopol = ''; topupSaldo = ''; jumlah = ''; topupPassword = ''; selectMode = true; showTopup = true">
+        @open-topup-select.window="topupId = null; topupNopol = ''; topupSaldo = ''; jumlah = ''; topupPassword = ''; selectMode = true; showTopup = true"
+        @turbo:before-cache.window="showTopup = false">
         <!-- Backdrop -->
-        <div x-show="showTopup" x-transition:enter="transition ease-out duration-200"
+        <div x-show="showTopup" style="display: none;" x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
             x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50"
             @click="showTopup = false"></div>
 
         <!-- Modal -->
-        <div x-show="showTopup" x-transition:enter="transition ease-out duration-300"
+        <div x-show="showTopup" style="display: none;" x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0 scale-95 translate-y-4"
             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
             x-transition:leave="transition ease-in duration-200"
@@ -648,16 +654,17 @@
     </div>
 
     <!-- Import Excel Modal -->
-    <div x-data="{ showImport: false }" @open-import.window="showImport = true">
+    <!-- Import Excel Modal -->
+    <div x-cloak x-data="{ showImport: false }" @open-import.window="showImport = true" @turbo:before-cache.window="showImport = false">
         <!-- Backdrop -->
-        <div x-show="showImport" x-transition:enter="transition ease-out duration-200"
+        <div x-show="showImport" style="display: none;" x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
             x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50"
             @click="showImport = false"></div>
 
         <!-- Modal -->
-        <div x-show="showImport" x-transition:enter="transition ease-out duration-300"
+        <div x-show="showImport" style="display: none;" x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0 scale-95 translate-y-4"
             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
             x-transition:leave="transition ease-in duration-200"
@@ -789,17 +796,19 @@
     </div>
 
     <!-- Monthly Report Modal -->
-    <div x-data="{ showMonthlyReport: false, satkerId: '', bulan: '{{ now()->month }}', tahun: '{{ now()->year }}' }"
-        @open-monthly-report.window="showMonthlyReport = true">
+    <!-- Monthly Report Modal -->
+    <div x-cloak x-data="{ showMonthlyReport: false, satkerId: '', bulan: '{{ now()->month }}', tahun: '{{ now()->year }}' }"
+        @open-monthly-report.window="showMonthlyReport = true"
+        @turbo:before-cache.window="showMonthlyReport = false">
         <!-- Backdrop -->
-        <div x-show="showMonthlyReport" x-transition:enter="transition ease-out duration-200"
+        <div x-show="showMonthlyReport" style="display: none;" x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
             x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50"
             @click="showMonthlyReport = false"></div>
 
         <!-- Modal -->
-        <div x-show="showMonthlyReport" x-transition:enter="transition ease-out duration-300"
+        <div x-show="showMonthlyReport" style="display: none;" x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0 scale-95 translate-y-4"
             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
             x-transition:leave="transition ease-in duration-200"
