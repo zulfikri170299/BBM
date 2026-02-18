@@ -14,22 +14,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Outfit', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Tailwind config moved to tailwind.config.js -->
     <style>
-        body {
-            font-family: 'Outfit', sans-serif;
-        }
+        /* body { font-family: 'Outfit', sans-serif; } - Handled by font-sans class */
 
         .login-gradient {
             background: linear-gradient(135deg, rgba(66, 0, 0, 0.95) 0%, rgba(128, 0, 0, 0.9) 100%), url('/bg-login.jpg');

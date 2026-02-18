@@ -10,31 +10,16 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
         
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        fontFamily: {
-                            sans: ['Inter', 'sans-serif'],
-                        },
-                        colors: {
-                            primary: '#DC2626',
-                            secondary: '#7F1D1D',
-                        }
-                    }
-                }
-            }
-        </script>
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
         <style>
-            body { font-family: 'Inter', sans-serif; }
+            /* body { font-family: 'Inter', sans-serif; } - Moved to Tailwind config */
             .bg-grid-pattern {
                 background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
                 background-size: 40px 40px;
             }
         </style>
     </head>
-    <body class="antialiased text-white bg-gradient-to-br from-red-900 via-red-950 to-slate-950 min-h-screen">
+    <body class="font-inter antialiased text-white bg-gradient-to-br from-red-900 via-red-950 to-slate-950 min-h-screen">
         <div class="relative min-h-screen flex flex-col overflow-hidden">
             <!-- Background Decoration -->
             <div class="absolute inset-0 z-0 bg-grid-pattern opacity-30 pointer-events-none"></div>
