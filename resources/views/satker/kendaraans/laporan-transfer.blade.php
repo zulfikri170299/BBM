@@ -7,7 +7,7 @@
                 <p class="mt-1 text-slate-500">Riwayat transfer saldo kendaraan ke personel.</p>
             </div>
             <div class="flex gap-2">
-                <a href="{{ route('satker.kendaraans.laporan-transfer.print', request()->query()) }}" target="_blank" class="inline-flex items-center px-4 py-2.5 bg-red-600 text-white rounded-xl font-semibold text-sm hover:bg-red-700 shadow-lg shadow-red-500/25 transition-all duration-200 hover:-translate-y-0.5">
+                <a href="{{ route('satker.kendaraans.laporan-transfer.print', request()->query()) }}" target="_blank" rel="nofollow" class="inline-flex items-center px-4 py-2.5 bg-red-600 text-white rounded-xl font-semibold text-sm hover:bg-red-700 shadow-lg shadow-red-500/25 transition-all duration-200 hover:-translate-y-0.5">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
                     Cetak PDF
                 </a>

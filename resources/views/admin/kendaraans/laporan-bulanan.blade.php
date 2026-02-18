@@ -14,7 +14,7 @@
             </div>
             <div class="flex gap-2">
                 <a href="{{ route('admin.kendaraans.laporan-bulanan.export', ['satker_id' => $satkerId, 'bulan' => $bulan, 'tahun' => $tahun]) }}"
-                    target="_blank"
+                    target="_blank" rel="nofollow"
                     class="inline-flex items-center px-4 py-2 bg-emerald-600 text-white rounded-lg font-semibold text-sm hover:bg-emerald-700 shadow transition-all">
                     <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -24,7 +24,7 @@
                     Export Excel
                 </a>
                 <a href="{{ route('admin.kendaraans.laporan-bulanan.print', ['satker_id' => $satkerId, 'bulan' => $bulan, 'tahun' => $tahun]) }}"
-                    target="_blank"
+                    target="_blank" rel="nofollow"
                     class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg font-semibold text-sm hover:bg-red-700 shadow transition-all">
                     <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

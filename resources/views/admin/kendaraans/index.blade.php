@@ -33,7 +33,7 @@
                         class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Top
                         Up Saldo</span>
                 </button>
-                <a href="{{ route('admin.kendaraans.export') }}"
+                <a href="{{ route('admin.kendaraans.export') }}" target="_blank" rel="nofollow"
                     class="inline-flex items-center justify-center w-10 h-10 bg-amber-500 text-white rounded-xl hover:bg-amber-600 shadow-lg shadow-amber-500/30 transition-all duration-200 hover:-translate-y-0.5 group relative"
                     title="Export Excel">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -309,7 +309,7 @@
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex items-center justify-end gap-1.5">
-                                        <a href="{{ route('admin.kendaraans.print', $kendaraan) }}" target="_blank"
+                                        <a href="{{ route('admin.kendaraans.print', $kendaraan) }}" target="_blank" rel="nofollow"
                                             class="inline-flex items-center p-2 bg-slate-100 hover:bg-indigo-100 text-slate-500 hover:text-indigo-600 rounded-lg transition-colors"
                                             title="Print Kartu Kendaraan">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
