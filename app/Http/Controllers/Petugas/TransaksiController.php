@@ -18,6 +18,7 @@ class TransaksiController extends Controller
 
     public function check(Request $request)
     {
+        die('DEBUG: MASUK CONTROLLER - TEST 1');
         try {
             $mode = $request->input('mode', 'barcode');
 
