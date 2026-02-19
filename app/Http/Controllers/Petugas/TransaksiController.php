@@ -18,59 +18,22 @@ class TransaksiController extends Controller
 
     public function check(Request $request)
     {
-        $mode = $request->input('mode', 'barcode');
+        try {
+            $mode = $request->input('mode', 'barcode');
 
-        if ($mode === 'nopol') {
-            $request->validate([
-                'nopol' => 'required|string',
-            ]);
+            if ($mode === 'nopol') {
+                $request->validate([
+                    'nopol' => 'required|string',
+                ]);
 
-            $kendaraan = Kendaraan::with('satker')
-                ->where('no_polisi', 'like', '%' . trim($request->nopol) . '%')
-                ->first();
+                $kendaraan = Kendaraan::with('satker')
+                    ->where('no_polisi', 'like', '%' . trim($request->nopol) . '%')
+                    ->first();
 
-            if (!$kendaraan) {
-                return back()->withErrors(['nopol' => 'Kendaraan dengan nopol "' . $request->nopol . '" tidak ditemukan.']);
-            }
+                if (!$kendaraan) {
+                    return back()->withErrors(['nopol' => 'Kendaraan dengan nopol "' . $request->nopol . '" tidak ditemukan.']);
+                }
 
-            // Cek apakah Admin Satker aktif
-            $satkerAdminActive = \App\Models\User::where('satker_id', $kendaraan->satker_id)
-                ->where('role', 'admin_satker')
-                ->where('is_active', true)
-                ->exists();
-            
-            if (!$satkerAdminActive) {
-                return back()->withErrors(['nopol' => 'Akun Satker Anda sedang dinonaktifkan. Silakan hubungi Super Admin.']);
-            }
-        } elseif ($mode === 'nrp') {
-            $request->validate([
-                'nrp' => 'required|string',
-            ]);
-
-            $personel = Personel::with(['satker', 'user'])
-                ->where('nrp', 'like', '%' . trim($request->nrp) . '%')
-                ->first();
-
-            if (!$personel) {
-                return back()->withErrors(['nrp' => 'Personel dengan NRP "' . $request->nrp . '" tidak ditemukan.']);
-            }
-
-            // Cek apakah Akun User Personel aktif
-            if ($personel->user_id && (!$personel->user || !($personel->user->is_active ?? false))) {
-                return back()->withErrors(['nrp' => 'Akun Anda sedang dinonaktifkan. Silakan hubungi Super Admin.']);
-            }
-
-            return view('petugas.transaksi.create', compact('personel'));
-        } else {
-            $request->validate([
-                'barcode' => 'required|string',
-            ]);
-
-            $kendaraan = Kendaraan::with('satker')
-                ->where('barcode', $request->barcode)
-                ->first();
-
-            if ($kendaraan) {
                 // Cek apakah Admin Satker aktif
                 $satkerAdminActive = \App\Models\User::where('satker_id', $kendaraan->satker_id)
                     ->where('role', 'admin_satker')
@@ -78,27 +41,89 @@ class TransaksiController extends Controller
                     ->exists();
                 
                 if (!$satkerAdminActive) {
-                    return back()->withErrors(['barcode' => 'Akun Satker Anda sedang dinonaktifkan. Silakan hubungi Super Admin.']);
+                    return back()->withErrors(['nopol' => 'Akun Satker Anda sedang dinonaktifkan. Silakan hubungi Super Admin.']);
                 }
-                
-                return view('petugas.transaksi.create', compact('kendaraan'));
-            }
 
-            // Jika kendaraan tidak ditemukan, cari di personel
-            $personel = Personel::with(['satker', 'user'])
-                ->where('barcode', $request->barcode)
-                ->first();
+                // Fix White Screen: Pastikan data satker ada
+                if (!$kendaraan->satker) {
+                    return back()->withErrors(['nopol' => 'Data Satker untuk kendaraan ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
+                }
+            } elseif ($mode === 'nrp') {
+                $request->validate([
+                    'nrp' => 'required|string',
+                ]);
 
-            if ($personel) {
+                $personel = Personel::with(['satker', 'user'])
+                    ->where('nrp', 'like', '%' . trim($request->nrp) . '%')
+                    ->first();
+
+                if (!$personel) {
+                    return back()->withErrors(['nrp' => 'Personel dengan NRP "' . $request->nrp . '" tidak ditemukan.']);
+                }
+
                 // Cek apakah Akun User Personel aktif
                 if ($personel->user_id && (!$personel->user || !($personel->user->is_active ?? false))) {
-                    return back()->withErrors(['barcode' => 'Akun Anda sedang dinonaktifkan. Silakan hubungi Super Admin.']);
+                    return back()->withErrors(['nrp' => 'Akun Anda sedang dinonaktifkan. Silakan hubungi Super Admin.']);
+                }
+
+                // Fix White Screen: Pastikan data satker ada
+                if (!$personel->satker) {
+                    return back()->withErrors(['nrp' => 'Data Satker untuk personel ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
                 }
 
                 return view('petugas.transaksi.create', compact('personel'));
-            }
+            } else {
+                $request->validate([
+                    'barcode' => 'required|string',
+                ]);
 
-            return back()->withErrors(['barcode' => 'Barcode "' . $request->barcode . '" tidak ditemukan.']);
+                $kendaraan = Kendaraan::with('satker')
+                    ->where('barcode', $request->barcode)
+                    ->first();
+
+                if ($kendaraan) {
+                    // Cek apakah Admin Satker aktif
+                    $satkerAdminActive = \App\Models\User::where('satker_id', $kendaraan->satker_id)
+                        ->where('role', 'admin_satker')
+                        ->where('is_active', true)
+                        ->exists();
+                    
+                    
+                    if (!$satkerAdminActive) {
+                        return back()->withErrors(['barcode' => 'Akun Satker Anda sedang dinonaktifkan. Silakan hubungi Super Admin.']);
+                    }
+                    
+                    // Fix White Screen: Pastikan data satker ada
+                    if (!$kendaraan->satker) {
+                        return back()->withErrors(['barcode' => 'Data Satker untuk kendaraan ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
+                    }
+                    
+                    return view('petugas.transaksi.create', compact('kendaraan'));
+                }
+
+                // Jika kendaraan tidak ditemukan, cari di personel
+                $personel = Personel::with(['satker', 'user'])
+                    ->where('barcode', $request->barcode)
+                    ->first();
+
+                if ($personel) {
+                    // Cek apakah Akun User Personel aktif
+                    if ($personel->user_id && (!$personel->user || !($personel->user->is_active ?? false))) {
+                        return back()->withErrors(['barcode' => 'Akun Anda sedang dinonaktifkan. Silakan hubungi Super Admin.']);
+                    }
+
+                    // Fix White Screen: Pastikan data satker ada
+                    if (!$personel->satker) {
+                        return back()->withErrors(['barcode' => 'Data Satker untuk personel ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
+                    }
+
+                    return view('petugas.transaksi.create', compact('personel'));
+                }
+
+                return back()->withErrors(['barcode' => 'Barcode "' . $request->barcode . '" tidak ditemukan.']);
+            }
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'System Error: ' . $e->getMessage() . ' at Line: ' . $e->getLine()]);
         }
     }
 
