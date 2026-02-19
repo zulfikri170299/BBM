@@ -275,9 +275,11 @@
                                             rel="nofollow"
                                             class="p-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-600 hover:text-indigo-700 rounded-lg transition-colors group"
                                             title="Print Barcode">
-                                            <img src="{{ asset('assets/images/qr-icon.png') }}"
-                                                class="w-5 h-5 opacity-80 group-hover:opacity-100 transition-opacity"
-                                                alt="QR Icon">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
+                                                </path>
+                                            </svg>
                                         </a>
                                         @if(\App\Models\Setting::where('key', 'satker_can_edit_kendaraan')->value('value') ?? 1)
                                             <a href="{{ route('satker.kendaraans.edit', $kendaraan) }}"
@@ -326,8 +328,8 @@
         </div>
 
         <!-- Transfer Modal -->
-        <div x-show="showTransferModal" x-cloak class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title"
-            role="dialog" aria-modal="true">
+        <div x-show="showTransferModal" x-cloak style="display: none;" class="fixed inset-0 z-50 overflow-y-auto"
+            aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <div class="flex items-center justify-center min-h-screen px-4 py-6">
                 <!-- Backdrop -->
                 <div x-show="showTransferModal" x-transition:enter="ease-out duration-300"
@@ -513,7 +515,7 @@
             </div>
         </div>
         <!-- Monthly Report Modal -->
-        <div x-show="showMonthlyReportModal" x-cloak class="fixed inset-0 z-50 overflow-y-auto"
+        <div x-show="showMonthlyReportModal" x-cloak style="display: none;" class="fixed inset-0 z-50 overflow-y-auto"
             aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <div class="flex items-center justify-center min-h-screen px-4 py-6">
                 <!-- Backdrop -->
@@ -603,7 +605,7 @@
 
         <!-- Import Kendaraan Modal -->
         @if((\App\Models\Setting::where('key', 'satker_can_import_kendaraan')->value('value') ?? '1') == '1')
-            <div x-show="showImportModal" x-cloak class="fixed inset-0 z-50 overflow-y-auto"
+            <div x-show="showImportModal" x-cloak style="display: none;" class="fixed inset-0 z-50 overflow-y-auto"
                 aria-labelledby="import-modal-title" role="dialog" aria-modal="true">
                 <div class="flex items-center justify-center min-h-screen px-4 py-6">
                     <!-- Backdrop -->

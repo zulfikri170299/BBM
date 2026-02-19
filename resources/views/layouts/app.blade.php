@@ -41,6 +41,10 @@
     @stack('head')
 
     <style>
+        [x-cloak] {
+            display: none !important;
+        }
+
         body {
             /* body { font-family: 'Outfit', sans-serif; } - Handled by font-sans class */
         }

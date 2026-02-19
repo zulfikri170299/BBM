@@ -1,11 +1,12 @@
 {{-- Mobile Overlay --}}
-<div x-cloak x-show="sidebarOpen" @click="sidebarOpen = false" x-transition:enter="transition ease-out duration-300"
-    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-    x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
-    x-transition:leave-end="opacity-0" class="fixed inset-0 z-20 bg-black/60 backdrop-blur-sm lg:hidden"></div>
+<div x-cloak x-show="sidebarOpen" style="display: none;" @click="sidebarOpen = false"
+    x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
+    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+    class="fixed inset-0 z-20 bg-black/60 backdrop-blur-sm lg:hidden"></div>
 
 {{-- Sidebar --}}
-<div x-cloak x-data="{ 
+<div x-data="{ 
         reportsOpen: {{ (request()->routeIs('admin.laporan-topup.*') || request()->routeIs('admin.laporan-harian.*') || request()->routeIs('admin.riwayat.*') || request()->routeIs('admin.ba.*')) ? 'true' : 'false' }},
         satkerReportsOpen: {{ (request()->routeIs('satker.riwayat.*') || request()->routeIs('satker.kendaraans.laporan-bulanan.*') || request()->routeIs('satker.kendaraans.laporan-transfer.*')) ? 'true' : 'false' }},
         init() {
@@ -165,7 +166,7 @@
                     </svg>
                 </button>
 
-                <div x-show="reportsOpen" x-collapse x-cloak class="pl-10 pr-2 space-y-1">
+                <div x-show="reportsOpen" x-collapse style="display: none;" class="pl-10 pr-2 space-y-1">
                     <a href="{{ route('admin.laporan-topup.index') }}"
                         @click.stop="setTimeout(() => sidebarOpen = false, 150)"
                         class="block py-1.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-topup.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
@@ -241,22 +242,25 @@
                         </svg>
                         <span class="ml-3 font-medium">Laporan</span>
                     </div>
-                    <svg class="w-4 h-4 transition-transform duration-200 shrink-0" :class="satkerReportsOpen ? 'rotate-180' : ''"
-                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 transition-transform duration-200 shrink-0"
+                        :class="satkerReportsOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
 
-                <div x-show="satkerReportsOpen" x-collapse x-cloak class="pl-10 pr-2 space-y-1">
+                <div x-show="satkerReportsOpen" x-collapse style="display: none;" class="pl-10 pr-2 space-y-1">
                     <a href="{{ route('satker.riwayat.index') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
                         class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.riwayat.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
                         Riwayat BBM
                     </a>
-                    <a href="{{ route('satker.kendaraans.laporan-bulanan') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+                    <a href="{{ route('satker.kendaraans.laporan-bulanan') }}"
+                        @click.stop="setTimeout(() => sidebarOpen = false, 150)"
                         class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.kendaraans.laporan-bulanan.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
                         Laporan Bulanan
                     </a>
-                    <a href="{{ route('satker.kendaraans.laporan-transfer') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+                    <a href="{{ route('satker.kendaraans.laporan-transfer') }}"
+                        @click.stop="setTimeout(() => sidebarOpen = false, 150)"
                         class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.kendaraans.laporan-transfer.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
                         Laporan Transfer
                     </a>
