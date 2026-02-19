@@ -50,12 +50,7 @@ class TransaksiController extends Controller
                     return back()->withErrors(['nopol' => 'Data Satker untuk kendaraan ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
                 }
 
-                // DEBUG CHECKPOINT 2
-                dd([
-                    'STATUS' => 'LOGIC SUCCESS (NOPOL)',
-                    'KENDARAAN' => $kendaraan->toArray(),
-                    'SATKER' => $kendaraan->satker->toArray()
-                ]);
+                return response(view('petugas.transaksi.create', compact('kendaraan'))->render());
 
             } elseif ($mode === 'nrp') {
                 $request->validate([
@@ -80,11 +75,7 @@ class TransaksiController extends Controller
                     return back()->withErrors(['nrp' => 'Data Satker untuk personel ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
                 }
 
-                if (!$personel->satker) {
-                    return back()->withErrors(['nrp' => 'Data Satker untuk personel ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
-                }
-
-                return view('petugas.transaksi.create', compact('personel'));
+                return response(view('petugas.transaksi.create', compact('personel'))->render());
             } else {
                 $request->validate([
                     'barcode' => 'required|string',
@@ -111,9 +102,7 @@ class TransaksiController extends Controller
                         return back()->withErrors(['barcode' => 'Data Satker untuk kendaraan ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
                     }
                     
-                if (!$kendaraan->satker) {
-                    return back()->withErrors(['barcode' => 'Data Satker untuk kendaraan ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
-                }
+
                 
                 return response(view('petugas.transaksi.create', compact('kendaraan'))->render());
                 }
@@ -134,11 +123,7 @@ class TransaksiController extends Controller
                         return back()->withErrors(['barcode' => 'Data Satker untuk personel ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
                     }
 
-                if (!$personel->satker) {
-                    return back()->withErrors(['barcode' => 'Data Satker untuk personel ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
-                }
-
-                return view('petugas.transaksi.create', compact('personel'));
+                return response(view('petugas.transaksi.create', compact('personel'))->render());
                 }
 
                 return back()->withErrors(['barcode' => 'Barcode "' . $request->barcode . '" tidak ditemukan.']);
