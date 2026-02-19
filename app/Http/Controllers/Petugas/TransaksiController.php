@@ -18,7 +18,6 @@ class TransaksiController extends Controller
 
     public function check(Request $request)
     {
-        // die('DEBUG: MASUK CONTROLLER - TEST 1'); <--- REMOVED
         try {
             $mode = $request->input('mode', 'barcode');
 
@@ -85,14 +84,7 @@ class TransaksiController extends Controller
                     return back()->withErrors(['nrp' => 'Data Satker untuk personel ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
                 }
 
-                // DEBUG CHECKPOINT 2
-                dd([
-                    'STATUS' => 'LOGIC SUCCESS (NRP)',
-                    'PERSONEL' => $personel->toArray(),
-                    'SATKER' => $personel->satker->toArray()
-                ]);
-
-                return response(view('petugas.transaksi.create', compact('personel'))->render());
+                return view('petugas.transaksi.create', compact('personel'));
             } else {
                 $request->validate([
                     'barcode' => 'required|string',
@@ -123,14 +115,7 @@ class TransaksiController extends Controller
                     return back()->withErrors(['barcode' => 'Data Satker untuk kendaraan ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
                 }
                 
-                // DEBUG CHECKPOINT 2
-                dd([
-                    'STATUS' => 'LOGIC SUCCESS (BARCODE KENDARAAN)',
-                    'KENDARAAN' => $kendaraan->toArray(),
-                    'SATKER' => $kendaraan->satker->toArray()
-                ]);
-
-                return response(view('petugas.transaksi.create', compact('kendaraan'))->render());
+                return view('petugas.transaksi.create', compact('kendaraan'));
                 }
 
                 // Jika kendaraan tidak ditemukan, cari di personel
@@ -153,20 +138,13 @@ class TransaksiController extends Controller
                     return back()->withErrors(['barcode' => 'Data Satker untuk personel ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
                 }
 
-                // DEBUG CHECKPOINT 2
-                dd([
-                    'STATUS' => 'LOGIC SUCCESS (BARCODE PERSONEL)',
-                    'PERSONEL' => $personel->toArray(),
-                    'SATKER' => $personel->satker->toArray()
-                ]);
-
-                return response(view('petugas.transaksi.create', compact('personel'))->render());
+                return view('petugas.transaksi.create', compact('personel'));
                 }
 
                 return back()->withErrors(['barcode' => 'Barcode "' . $request->barcode . '" tidak ditemukan.']);
             }
         } catch (\Throwable $e) {
-            return back()->withErrors(['error' => 'System Error: ' . $e->getMessage() . ' at Line: ' . $e->getLine()]);
+            die('SYSTEM ERROR (VIEW RENDERING): ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
         }
     }
 
