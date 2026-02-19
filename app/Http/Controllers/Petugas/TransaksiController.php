@@ -71,7 +71,11 @@ class TransaksiController extends Controller
                     return back()->withErrors(['nrp' => 'Data Satker untuk personel ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
                 }
 
-                return view('petugas.transaksi.create', compact('personel'));
+                if (!$personel->satker) {
+                return back()->withErrors(['nrp' => 'Data Satker untuk personel ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
+            }
+
+            return response(view('petugas.transaksi.create', compact('personel'))->render());
             } else {
                 $request->validate([
                     'barcode' => 'required|string',
@@ -98,7 +102,11 @@ class TransaksiController extends Controller
                         return back()->withErrors(['barcode' => 'Data Satker untuk kendaraan ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
                     }
                     
-                    return view('petugas.transaksi.create', compact('kendaraan'));
+                    if (!$kendaraan->satker) {
+                    return back()->withErrors(['barcode' => 'Data Satker untuk kendaraan ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
+                }
+                
+                return response(view('petugas.transaksi.create', compact('kendaraan'))->render());
                 }
 
                 // Jika kendaraan tidak ditemukan, cari di personel
@@ -117,7 +125,11 @@ class TransaksiController extends Controller
                         return back()->withErrors(['barcode' => 'Data Satker untuk personel ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
                     }
 
-                    return view('petugas.transaksi.create', compact('personel'));
+                    if (!$personel->satker) {
+                    return back()->withErrors(['barcode' => 'Data Satker untuk personel ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
+                }
+
+                return response(view('petugas.transaksi.create', compact('personel'))->render());
                 }
 
                 return back()->withErrors(['barcode' => 'Barcode "' . $request->barcode . '" tidak ditemukan.']);
