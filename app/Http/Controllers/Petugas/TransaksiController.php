@@ -115,7 +115,7 @@ class TransaksiController extends Controller
                     return back()->withErrors(['barcode' => 'Data Satker untuk kendaraan ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
                 }
                 
-                return view('petugas.transaksi.create', compact('kendaraan'));
+                return response(view('petugas.transaksi.create', compact('kendaraan'))->render());
                 }
 
                 // Jika kendaraan tidak ditemukan, cari di personel
