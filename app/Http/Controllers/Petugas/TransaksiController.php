@@ -18,7 +18,7 @@ class TransaksiController extends Controller
 
     public function check(Request $request)
     {
-        die('DEBUG: MASUK CONTROLLER - TEST 1');
+        // die('DEBUG: MASUK CONTROLLER - TEST 1'); <--- REMOVED
         try {
             $mode = $request->input('mode', 'barcode');
 
@@ -46,9 +46,18 @@ class TransaksiController extends Controller
                 }
 
                 // Fix White Screen: Pastikan data satker ada
+                // Fix White Screen: Pastikan data satker ada
                 if (!$kendaraan->satker) {
                     return back()->withErrors(['nopol' => 'Data Satker untuk kendaraan ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
                 }
+
+                // DEBUG CHECKPOINT 2
+                dd([
+                    'STATUS' => 'LOGIC SUCCESS (NOPOL)',
+                    'KENDARAAN' => $kendaraan->toArray(),
+                    'SATKER' => $kendaraan->satker->toArray()
+                ]);
+
             } elseif ($mode === 'nrp') {
                 $request->validate([
                     'nrp' => 'required|string',
@@ -73,10 +82,17 @@ class TransaksiController extends Controller
                 }
 
                 if (!$personel->satker) {
-                return back()->withErrors(['nrp' => 'Data Satker untuk personel ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
-            }
+                    return back()->withErrors(['nrp' => 'Data Satker untuk personel ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
+                }
 
-            return response(view('petugas.transaksi.create', compact('personel'))->render());
+                // DEBUG CHECKPOINT 2
+                dd([
+                    'STATUS' => 'LOGIC SUCCESS (NRP)',
+                    'PERSONEL' => $personel->toArray(),
+                    'SATKER' => $personel->satker->toArray()
+                ]);
+
+                return response(view('petugas.transaksi.create', compact('personel'))->render());
             } else {
                 $request->validate([
                     'barcode' => 'required|string',
@@ -103,10 +119,17 @@ class TransaksiController extends Controller
                         return back()->withErrors(['barcode' => 'Data Satker untuk kendaraan ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
                     }
                     
-                    if (!$kendaraan->satker) {
+                if (!$kendaraan->satker) {
                     return back()->withErrors(['barcode' => 'Data Satker untuk kendaraan ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
                 }
                 
+                // DEBUG CHECKPOINT 2
+                dd([
+                    'STATUS' => 'LOGIC SUCCESS (BARCODE KENDARAAN)',
+                    'KENDARAAN' => $kendaraan->toArray(),
+                    'SATKER' => $kendaraan->satker->toArray()
+                ]);
+
                 return response(view('petugas.transaksi.create', compact('kendaraan'))->render());
                 }
 
@@ -126,9 +149,16 @@ class TransaksiController extends Controller
                         return back()->withErrors(['barcode' => 'Data Satker untuk personel ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
                     }
 
-                    if (!$personel->satker) {
+                if (!$personel->satker) {
                     return back()->withErrors(['barcode' => 'Data Satker untuk personel ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
                 }
+
+                // DEBUG CHECKPOINT 2
+                dd([
+                    'STATUS' => 'LOGIC SUCCESS (BARCODE PERSONEL)',
+                    'PERSONEL' => $personel->toArray(),
+                    'SATKER' => $personel->satker->toArray()
+                ]);
 
                 return response(view('petugas.transaksi.create', compact('personel'))->render());
                 }
