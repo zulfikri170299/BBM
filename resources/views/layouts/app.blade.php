@@ -65,7 +65,7 @@
 </head>
 
 <body class="font-sans antialiased bg-slate-50 text-slate-900">
-    <div x-data="{ sidebarOpen: Alpine.$persist(false).as('sidebar-state') }"
+    <div x-data="{ sidebarOpen: false }" @sidebar-close.window="sidebarOpen = false"
         class="flex h-screen bg-slate-50 overflow-hidden">
         @include('layouts.sidebar')
 
@@ -256,27 +256,54 @@
                 }
             });
 
-            // Sidebar Active State Handler for Turbo Permanent
+            // Sidebar Active State Handler for Turbo Permanent & Mobile Close
             document.addEventListener('turbo:load', function () {
+                // Force close sidebar on mobile for ANY turbo visit
+                if (window.innerWidth < 1024) {
+                    window.dispatchEvent(new CustomEvent('sidebar-close'));
+                }
+
                 const currentPath = window.location.pathname;
                 const sidebarLinks = document.querySelectorAll('#sidebar nav a');
 
                 sidebarLinks.forEach(link => {
+                    // Logic highlighting active link (tetap sama)
                     const href = link.getAttribute('href');
-                    const url = new URL(href);
-                    const path = url.pathname;
+                    if (!href) return;
 
-                    // Remove existing active classes
-                    link.classList.remove('bg-indigo-600', 'shadow-lg', 'shadow-indigo-500/30');
-                    link.classList.add('hover:bg-slate-800');
+                    try {
+                        const url = new URL(href);
+                        const path = url.pathname;
 
-                    // Add active classes if path matches
-                    // Logic: Exact match or starts with (for nested routes)
-                    if (currentPath === path || (path !== '/' && currentPath.startsWith(path))) {
-                        link.classList.remove('hover:bg-slate-800');
-                        link.classList.add('bg-indigo-600', 'shadow-lg', 'shadow-indigo-500/30');
+                        // Remove existing active classes
+                        link.classList.remove('bg-indigo-600', 'shadow-lg', 'shadow-indigo-500/30');
+                        link.classList.add('hover:bg-slate-800');
+
+                        // Add active classes if path matches
+                        if (currentPath === path || (path !== '/' && currentPath.startsWith(path))) {
+                            link.classList.remove('hover:bg-slate-800');
+                            link.classList.add('bg-indigo-600', 'shadow-lg', 'shadow-indigo-500/30');
+                        }
+                    } catch (e) {
+                        // ignore invalid URLs
                     }
                 });
+            });
+
+            // Agresif: Tutup sidebar saat link APAPUN diklik di mobile
+            document.addEventListener('click', function (e) {
+                const link = e.target.closest('a');
+                if (link && window.innerWidth < 1024) {
+                    // Cek apakah link bukan toggle sidebar (cegah konflik)
+                    if (!link.closest('[x-data]')) {
+                        window.dispatchEvent(new CustomEvent('sidebar-close'));
+                    } else {
+                        // Kalau link ada di dalam sidebar, pasti tutup
+                        if (document.getElementById('sidebar').contains(link)) {
+                            window.dispatchEvent(new CustomEvent('sidebar-close'));
+                        }
+                    }
+                }
             });
         });
     </script>

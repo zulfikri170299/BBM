@@ -10,13 +10,17 @@
         reportsOpen: {{ (request()->routeIs('admin.laporan-topup.*') || request()->routeIs('admin.laporan-harian.*') || request()->routeIs('admin.riwayat.*') || request()->routeIs('admin.ba.*')) ? 'true' : 'false' }},
         satkerReportsOpen: {{ (request()->routeIs('satker.riwayat.*') || request()->routeIs('satker.kendaraans.laporan-bulanan.*') || request()->routeIs('satker.kendaraans.laporan-transfer.*')) ? 'true' : 'false' }},
         init() {
+            // Force sidebar closed on mobile every page load
+            if (window.innerWidth < 1024) {
+                this.$dispatch('sidebar-close');
+            }
             this.$el.scrollTop = localStorage.getItem('sidebarScroll') || 0;
             this.$el.addEventListener('scroll', () => {
                 localStorage.setItem('sidebarScroll', this.$el.scrollTop);
             });
         }
-    }" id="sidebar" data-turbo-permanent
-    class="fixed inset-y-0 left-0 z-30 w-72 lg:w-64 overflow-y-auto transform bg-slate-900 text-white lg:translate-x-0 lg:static lg:inset-0 transition-transform duration-300 ease-in-out"
+    }" id="sidebar"
+    class="fixed inset-y-0 left-0 z-30 w-72 lg:w-64 overflow-y-auto transform bg-slate-900 text-white -translate-x-full lg:translate-x-0 lg:static lg:inset-0 transition-transform duration-300 ease-in-out"
     :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
     style="@media (min-width: 1024px) { display: block !important; }">
 
@@ -43,7 +47,7 @@
         @if(auth()->user()->role === 'super_admin')
             <p class="px-4 py-1 mt-1 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Administration</p>
 
-            <a href="{{ route('admin.dashboard') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+            <a href="{{ route('admin.dashboard') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.dashboard') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -53,7 +57,7 @@
                 <span class="ml-3 font-medium">Dashboard</span>
             </a>
 
-            <a href="{{ route('admin.stok.index') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+            <a href="{{ route('admin.stok.index') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.stok.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -63,7 +67,7 @@
                 <span class="ml-3 font-medium">Stok BBM</span>
             </a>
 
-            <a href="{{ route('admin.kendaraans.index') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+            <a href="{{ route('admin.kendaraans.index') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.kendaraans.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -75,7 +79,7 @@
                 <span class="ml-3 font-medium">Kendaraan</span>
             </a>
 
-            <a href="{{ route('admin.personels.index') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+            <a href="{{ route('admin.personels.index') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.personels.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -85,7 +89,7 @@
                 <span class="ml-3 font-medium">Personel</span>
             </a>
 
-            <a href="{{ route('admin.users.index') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+            <a href="{{ route('admin.users.index') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.users.index') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -95,7 +99,7 @@
                 <span class="ml-3 font-medium">Users</span>
             </a>
 
-            <a href="{{ route('admin.users.monitoring') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+            <a href="{{ route('admin.users.monitoring') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.users.monitoring') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -107,7 +111,7 @@
                 <span class="ml-3 font-medium">Monitoring User</span>
             </a>
 
-            <a href="{{ route('admin.satkers.index') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+            <a href="{{ route('admin.satkers.index') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.satkers.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -117,7 +121,7 @@
                 <span class="ml-3 font-medium">Satkers</span>
             </a>
 
-            <a href="{{ route('admin.satisfaction.index') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+            <a href="{{ route('admin.satisfaction.index') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.satisfaction.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -126,7 +130,7 @@
                 <span class="ml-3 font-medium">Indeks Kepuasan</span>
             </a>
 
-            <a href="{{ route('admin.settings.index') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+            <a href="{{ route('admin.settings.index') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.settings.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -138,7 +142,7 @@
                 <span class="ml-3 font-medium">Pengaturan</span>
             </a>
 
-            <a href="{{ route('admin.broadcast.index') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+            <a href="{{ route('admin.broadcast.index') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.broadcast.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -168,20 +172,18 @@
 
                 <div x-show="reportsOpen" x-collapse style="display: none;" class="pl-10 pr-2 space-y-1">
                     <a href="{{ route('admin.laporan-topup.index') }}"
-                        @click.stop="setTimeout(() => sidebarOpen = false, 150)"
                         class="block py-1.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-topup.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
                         Laporan Top Up
                     </a>
                     <a href="{{ route('admin.laporan-harian.index') }}"
-                        @click.stop="setTimeout(() => sidebarOpen = false, 150)"
                         class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-harian.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
                         Laporan Harian
                     </a>
-                    <a href="{{ route('admin.riwayat.index') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+                    <a href="{{ route('admin.riwayat.index') }}"
                         class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.riwayat.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
                         Riwayat BBM
                     </a>
-                    <a href="{{ route('admin.ba.index') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+                    <a href="{{ route('admin.ba.index') }}"
                         class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.ba.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
                         Berita Acara
                     </a>
@@ -192,7 +194,7 @@
         @if(auth()->user()->role === 'admin_satker')
             <p class="px-4 py-2 mt-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Satker Management</p>
 
-            <a href="{{ route('satker.dashboard') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+            <a href="{{ route('satker.dashboard') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('satker.dashboard') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -202,7 +204,7 @@
                 <span class="ml-3 font-medium">Dashboard</span>
             </a>
 
-            <a href="{{ route('satisfaction.create') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+            <a href="{{ route('satisfaction.create') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('satisfaction.create') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -211,7 +213,7 @@
                 <span class="ml-3 font-medium">Indeks Kepuasan</span>
             </a>
 
-            <a href="{{ route('satker.kendaraans.index') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+            <a href="{{ route('satker.kendaraans.index') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('satker.kendaraans.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -220,7 +222,7 @@
                 <span class="ml-3 font-medium">Kendaraan</span>
             </a>
 
-            <a href="{{ route('satker.personels.index') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+            <a href="{{ route('satker.personels.index') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('satker.personels.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -250,17 +252,15 @@
                 </button>
 
                 <div x-show="satkerReportsOpen" x-collapse style="display: none;" class="pl-10 pr-2 space-y-1">
-                    <a href="{{ route('satker.riwayat.index') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+                    <a href="{{ route('satker.riwayat.index') }}"
                         class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.riwayat.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
                         Riwayat BBM
                     </a>
                     <a href="{{ route('satker.kendaraans.laporan-bulanan') }}"
-                        @click.stop="setTimeout(() => sidebarOpen = false, 150)"
                         class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.kendaraans.laporan-bulanan.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
                         Laporan Bulanan
                     </a>
                     <a href="{{ route('satker.kendaraans.laporan-transfer') }}"
-                        @click.stop="setTimeout(() => sidebarOpen = false, 150)"
                         class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.kendaraans.laporan-transfer.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
                         Laporan Transfer
                     </a>
@@ -272,7 +272,7 @@
         @if(auth()->user()->role === 'petugas_bbm')
             <p class="px-4 py-1 mt-1 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Petugas Area</p>
 
-            <a href="{{ route('petugas.dashboard') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+            <a href="{{ route('petugas.dashboard') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('petugas.dashboard') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -284,7 +284,7 @@
                 <span class="ml-3 font-medium">Scan Barcode</span>
             </a>
 
-            <a href="{{ route('petugas.meter.index') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+            <a href="{{ route('petugas.meter.index') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('petugas.meter.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -294,7 +294,7 @@
                 <span class="ml-3 font-medium">Input Meter Pompa</span>
             </a>
 
-            <a href="{{ route('petugas.rekapan.index') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+            <a href="{{ route('petugas.rekapan.index') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('petugas.rekapan.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -306,7 +306,7 @@
         @endif
 
         @if(auth()->user()->role === 'personel')
-            <a href="{{ route('personel.dashboard') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+            <a href="{{ route('personel.dashboard') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('personel.dashboard') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -316,7 +316,7 @@
                 <span class="ml-3 font-medium">Dashboard</span>
             </a>
 
-            <a href="{{ route('personel.transfer.index') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+            <a href="{{ route('personel.transfer.index') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('personel.transfer.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -325,7 +325,7 @@
                 <span class="ml-3 font-medium">Transfer Saldo</span>
             </a>
 
-            <a href="{{ route('satisfaction.create') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+            <a href="{{ route('satisfaction.create') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('satisfaction.create') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -336,7 +336,7 @@
         @endif
 
         <p class="px-4 py-1 mt-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Komunikasi</p>
-        <a href="{{ route('chat.index') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+        <a href="{{ route('chat.index') }}"
             class="relative flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('chat.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
             <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
