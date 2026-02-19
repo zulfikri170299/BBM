@@ -134,7 +134,7 @@ class TransaksiController extends Controller
 
                 return back()->withErrors(['barcode' => 'Barcode "' . $request->barcode . '" tidak ditemukan.']);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return back()->withErrors(['error' => 'System Error: ' . $e->getMessage() . ' at Line: ' . $e->getLine()]);
         }
     }
