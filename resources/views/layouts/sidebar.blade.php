@@ -7,6 +7,7 @@
 {{-- Sidebar --}}
 <div x-cloak x-data="{ 
         reportsOpen: {{ (request()->routeIs('admin.laporan-topup.*') || request()->routeIs('admin.laporan-harian.*') || request()->routeIs('admin.riwayat.*') || request()->routeIs('admin.ba.*')) ? 'true' : 'false' }},
+        satkerReportsOpen: {{ (request()->routeIs('satker.riwayat.*') || request()->routeIs('satker.kendaraans.laporan-bulanan.*') || request()->routeIs('satker.kendaraans.laporan-transfer.*')) ? 'true' : 'false' }},
         init() {
             this.$el.scrollTop = localStorage.getItem('sidebarScroll') || 0;
             this.$el.addEventListener('scroll', () => {
@@ -228,14 +229,39 @@
                 <span class="ml-3 font-medium">Personel</span>
             </a>
 
-            <a href="{{ route('satker.riwayat.index') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
-                class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('satker.riwayat.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
-                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <span class="ml-3 font-medium">Riwayat BBM</span>
-            </a>
+            {{-- Reports Dropdown (Satker) --}}
+            <div class="space-y-1">
+                <button @click="satkerReportsOpen = !satkerReportsOpen"
+                    class="w-full flex items-center justify-between px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 hover:bg-slate-800 focus:outline-none active:scale-[0.98]">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                            </path>
+                        </svg>
+                        <span class="ml-3 font-medium">Laporan</span>
+                    </div>
+                    <svg class="w-4 h-4 transition-transform duration-200 shrink-0" :class="satkerReportsOpen ? 'rotate-180' : ''"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <div x-show="satkerReportsOpen" x-collapse x-cloak class="pl-10 pr-2 space-y-1">
+                    <a href="{{ route('satker.riwayat.index') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+                        class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.riwayat.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                        Riwayat BBM
+                    </a>
+                    <a href="{{ route('satker.kendaraans.laporan-bulanan') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+                        class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.kendaraans.laporan-bulanan.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                        Laporan Bulanan
+                    </a>
+                    <a href="{{ route('satker.kendaraans.laporan-transfer') }}" @click.stop="setTimeout(() => sidebarOpen = false, 150)"
+                        class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.kendaraans.laporan-transfer.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                        Laporan Transfer
+                    </a>
+                </div>
+            </div>
 
         @endif
 
