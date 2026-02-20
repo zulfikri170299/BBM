@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'whatsapp' => [
+        'token' => env('WHATSAPP_TOKEN'),
+        'group_target' => env('WHATSAPP_GROUP_TARGET'),
+    ],
+
 ];

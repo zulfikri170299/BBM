@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\Notification;
 
 class BroadcastController extends Controller
 {
+    protected $whatsapp;
+
+    public function __construct(\App\Services\WhatsAppService $whatsapp)
+    {
+        $this->whatsapp = $whatsapp;
+    }
+
     public function index()
     {
         return view('admin.broadcast.index');
@@ -20,6 +27,7 @@ class BroadcastController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'message' => 'required|string',
+            'send_to_whatsapp' => 'nullable|boolean',
         ]);
 
         $users = User::all();
@@ -44,6 +52,16 @@ class BroadcastController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.broadcast.index')->with('success', 'Pesan siaran berhasil dikirim ke semua pengguna dan diteruskan ke chat (Personel & Satker).');
+        // Kirim ke WhatsApp jika dicentang
+        if ($request->has('send_to_whatsapp')) {
+            $target = config('services.whatsapp.group_target');
+            if ($target) {
+                // Format pesan WhatsApp (Plain text with asterisks for bold)
+                $waMessage = "*[SIARAN]*\n\n*{$request->title}*\n\n{$request->message}";
+                $this->whatsapp->sendMessage($target, $waMessage);
+            }
+        }
+
+        return redirect()->route('admin.broadcast.index')->with('success', 'Pesan siaran berhasil dikirim ke semua pengguna, internal chat, dan WhatsApp Group.');
     }
 }
