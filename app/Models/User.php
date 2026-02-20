@@ -31,6 +31,7 @@ class User extends Authenticatable
         'last_latitude',
         'last_longitude',
         'is_active',
+        'profile_photo_path',
     ];
 
     /**
@@ -89,5 +90,12 @@ class User extends Authenticatable
     public function receivedChats()
     {
         return $this->hasMany(Chat::class, 'receiver_id');
+    }
+
+    public function getProfilePhotoUrlAttribute()
+    {
+        return $this->profile_photo_path
+            ? asset('storage/' . $this->profile_photo_path)
+            : 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF';
     }
 }

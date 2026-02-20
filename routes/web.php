@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile/topup-password', [ProfileController::class, 'updateTopupPassword'])->name('profile.topup-password.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/profile/location', [ProfileController::class, 'updateLocation'])->name('profile.location.update');
+    Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo.update');
 
     Route::post('/notifications/{id}/read', function ($id) {
         auth()->user()->notifications()->findOrFail($id)->markAsRead();

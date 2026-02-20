@@ -105,4 +105,32 @@ class ProfileController extends Controller
 
         return response()->json(['status' => 'success']);
     }
+
+    /**
+     * Update the user's profile photo.
+     */
+    public function updatePhoto(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'photo' => ['required', 'image', 'max:1024'], // 1MB Max
+        ]);
+
+        $user = $request->user();
+
+        if ($request->file('photo')) {
+            if ($user->profile_photo_path) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->profile_photo_path);
+            }
+
+            $path = $request->file('photo')->store('profile-photos', 'public');
+            $user->update(['profile_photo_path' => $path]);
+            
+            LogAktivitas::create([
+                'user_id' => $user->id,
+                'aktivitas' => 'Memperbarui foto profil'
+            ]);
+        }
+
+        return back()->with('status', 'photo-updated');
+    }
 }

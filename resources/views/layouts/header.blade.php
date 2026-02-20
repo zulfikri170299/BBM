@@ -14,7 +14,7 @@
 
             {{-- Page Title (Mobile) --}}
             <div class="lg:hidden">
-                <h1 class="text-sm font-bold text-slate-800">SIMAK BBM</h1>
+                <h1 class="text-sm font-bold text-slate-800">BIRO LOGISTIK</h1>
             </div>
         </div>
 
@@ -81,9 +81,11 @@
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-sm font-bold text-slate-800 truncate">
-                                            {{ $notification->data['title'] }}</p>
+                                            {{ $notification->data['title'] }}
+                                        </p>
                                         <p class="text-xs text-slate-500 mt-1 leading-relaxed line-clamp-2">
-                                            {{ $notification->data['message'] }}</p>
+                                            {{ $notification->data['message'] }}
+                                        </p>
                                         <div class="flex justify-between items-center mt-2">
                                             <span
                                                 class="text-[10px] font-medium text-slate-400">{{ $notification->created_at->diffForHumans() }}</span>
@@ -129,8 +131,7 @@
                             class="text-xs text-slate-500 uppercase">{{ str_replace('_', ' ', Auth::user()->role) }}</span>
                     </div>
                     <img class="object-cover w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 border-indigo-100 shadow-sm"
-                        src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=4338ca&color=fff"
-                        alt="Avatar">
+                        src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}">
                 </button>
 
                 <div x-show="open" @click.away="open = false" x-transition:enter="transition ease-out duration-200"
