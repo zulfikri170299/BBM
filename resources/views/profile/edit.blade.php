@@ -60,7 +60,7 @@
                             </svg>
                             Keamanan Password
                         </a>
-                        @if(Auth::user()->role !== 'admin_satker')
+                        @if(!in_array(Auth::user()->role, ['admin_satker', 'personel']))
                             <a href="#update-topup-password"
                                 class="flex items-center gap-3 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50 rounded-xl transition-colors">
                                 <svg class="w-4 h-4 sm:w-5 sm:h-5 text-red-500" fill="none" stroke="currentColor"
@@ -141,7 +141,7 @@
                 </div>
 
                 <!-- Update Top Up Password -->
-                @if(Auth::user()->role !== 'admin_satker')
+                @if(!in_array(Auth::user()->role, ['admin_satker', 'personel']))
                     <div id="update-topup-password"
                         class="bg-white rounded-2xl border border-slate-200/70 shadow-sm overflow-hidden scroll-mt-6">
                         <div class="p-4 sm:p-6 lg:p-8">
