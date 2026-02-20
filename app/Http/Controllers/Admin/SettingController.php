@@ -61,8 +61,25 @@ class SettingController extends Controller
         }
 
         $waService = new \App\Services\WhatsAppService($token);
+        
+        // 1. Try to get existing list
         $result = $waService->getGroups();
 
+        // 2. If no data found, try to sync once
+        if ($result['status'] && empty($result['data']['data'] ?? [])) {
+            $waService->syncGroups();
+            // Try fetch again after short delay or just tell user to wait
+            $result = $waService->getGroups();
+        }
+
+        return response()->json($result);
+    }
+
+    public function syncGroups(Request $request)
+    {
+        $token = $request->token;
+        $waService = new \App\Services\WhatsAppService($token);
+        $result = $waService->syncGroups();
         return response()->json($result);
     }
 }

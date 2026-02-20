@@ -126,15 +126,16 @@
                                 });
                                 const result = await response.json();
                                 if (result.status) {
-                                    this.groups = result.data.data; // Fonnte returns {status: true, data: [...]}
+                                    this.groups = (result.data && result.data.data) ? result.data.data : []; 
                                     if (this.groups.length === 0) {
-                                        this.error = 'Tidak ada grup ditemukan pada akun ini.';
+                                        this.error = 'Koneksi Berhasil, tapi tidak ada grup ditemukan. Pastikan akun WA Anda sudah bergabung di minimal satu grup.';
                                     }
                                 } else {
-                                    this.error = 'Gagal mengambil grup: ' + (result.reason || 'Cek Token Anda');
+                                    const reason = result.reason || (result.response && result.response.reason) || 'Token tidak valid atau Device tidak terhubung.';
+                                    this.error = 'Gagal: ' + reason;
                                 }
                             } catch (e) {
-                                this.error = 'Terjadi kesalahan jaringan.';
+                                this.error = 'Terjadi kesalahan jaringan atau server.';
                             } finally {
                                 this.loading = false;
                             }
@@ -159,11 +160,11 @@
                                         class="block text-xs font-bold text-slate-700 mb-2 uppercase tracking-tighter">Fonnte
                                         API Token</label>
                                     <div class="flex gap-2">
-                                        <input type="password" name="whatsapp_token" x-model="waToken"
+                                        <input type="text" name="whatsapp_token" x-model="waToken"
                                             placeholder="Masukkan Token API Fonnte"
-                                            class="flex-1 px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:ring-emerald-500 focus:border-emerald-500 transition-all">
+                                            class="flex-1 px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:ring-emerald-500 focus:border-emerald-500 transition-all font-mono">
                                         <button type="button" @click="fetchGroups()" :disabled="loading"
-                                            class="px-4 py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 disabled:opacity-50 transition-all flex items-center gap-2">
+                                            class="px-4 py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 disabled:opacity-50 transition-all flex items-center gap-2 shrink-0">
                                             <svg x-show="loading" class="animate-spin h-3 w-3 text-white"
                                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
@@ -172,11 +173,11 @@
                                                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                                                 </path>
                                             </svg>
-                                            <span x-text="loading ? 'Loading...' : 'Ambil Daftar Grup'"></span>
+                                            <span x-text="loading ? 'Menghubungkan...' : 'Tarik Grup'"></span>
                                         </button>
                                     </div>
-                                    <p class="mt-2 text-[10px] text-slate-500 italic">*Dapatkan token di
-                                        dashboard.fonnte.com</p>
+                                    <p class="mt-2 text-[10px] text-slate-500 italic">*Pastikan status di dashboard
+                                        Fonnte adalah **Connected**.</p>
                                 </div>
 
                                 <div>
@@ -195,8 +196,11 @@
                                     </select>
                                     <p class="mt-2 text-xs text-rose-500 font-medium" x-show="error" x-text="error"
                                         x-cloak></p>
-                                    <p class="mt-2 text-[10px] text-slate-500" x-show="!error && waGroup">Current ID:
-                                        <span class="font-mono bg-slate-100 px-1 rounded" x-text="waGroup"></span></p>
+                                    <p class="mt-2 text-[10px] text-emerald-600 font-bold"
+                                        x-show="!error && groups.length > 0">
+                                        Berhasil terhubung! <span class="font-normal text-slate-500">Pilih grup & klik
+                                            Simpan Perubahan.</span>
+                                    </p>
                                 </div>
                             </div>
                         </div>
