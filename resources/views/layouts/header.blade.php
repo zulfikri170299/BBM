@@ -14,7 +14,8 @@
 
             {{-- Page Title (Mobile) --}}
             <div class="lg:hidden">
-                <h1 class="text-sm font-bold text-slate-800">BIRO LOGISTIK</h1>
+                <h1 class="text-sm font-bold text-slate-800">
+                    {{ auth()->user()->satker->nama_satker ?? 'BIRO LOGISTIK' }}</h1>
             </div>
         </div>
 
