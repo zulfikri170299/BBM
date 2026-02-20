@@ -426,73 +426,110 @@
         <!-- Top Up Modal -->
         <!-- Top Up Modal -->
         <div x-cloak x-data="{
-                        showTopup: false,
-                        topupId: null,
-                        topupNopol: '',
-                        topupSaldo: '',
-                        jumlah: '',
-                        topupPassword: '',
-                        selectMode: false,
-                        selectedSatkerId: '',
-                        adminStocks: [
-                            @foreach($adminStocks as $s)
-                                { jenis_bbm: '{{ $s->jenis_bbm }}', saldo: {{ $s->saldo }} },
-                            @endforeach
-                        ],
-                        allKendaraans: [
-                            @foreach($allKendaraans as $k)
-                                { id: {{ $k->id }}, satker_id: {{ $k->satker_id }}, nopol: '{{ $k->no_polisi }}', jenis_bbm: '{{ $k->jenis_bbm }}', saldo: '{{ number_format($k->saldo, 0, ',', '.') }}', saldoRaw: {{ $k->saldo }} },
-                            @endforeach
-                        ],
-                        get currentAdminStock() {
-                            if (!this.topupId) return 0;
-                            const k = this.allKendaraans.find(x => x.id == this.topupId);
-                            if (!k) return 0;
-                            const s = this.adminStocks.find(x => x.jenis_bbm == k.jenis_bbm);
-                            return s ? s.saldo : 0;
-                        },
-                        get canSubmitManual() {
-                            return this.topupId && this.jumlah && this.jumlah > 0 && this.jumlah <= this.currentAdminStock && this.topupPassword;
-                        },
-                        selectKendaraan(id) {
-                            const k = this.allKendaraans.find(x => x.id == id);
-                            if (k) {
+                            showTopup: false,
+                            topupId: null,
+                            topupNopol: '',
+                            topupSaldo: '',
+                            jumlah: '',
+                            topupPassword: '',
+                            selectMode: false,
+                            selectedSatkerId: '',
+                            // Satker Search
+                            satkerSearch: '',
+                            satkerOpen: false,
+                            satkerLabel: '',
+                            satkers: {{ json_encode($satkers->map(fn($s) => ['id' => $s->id, 'nama' => $s->nama_satker])) }},
+                            get filteredSatkers() {
+                                if (!this.satkerSearch) return this.satkers;
+                                return this.satkers.filter(s => s.nama.toLowerCase().includes(this.satkerSearch.toLowerCase()));
+                            },
+                            selectSatker(s) {
+                                this.selectedSatkerId = s.id;
+                                this.satkerLabel = s.nama;
+                                this.satkerOpen = false;
+                                this.satkerSearch = '';
+                                this.topupId = null;
+                                this.topupNopol = '';
+                                this.kendaraanLabel = '';
+                            },
+                            // Kendaraan Search
+                            kendaraanSearch: '',
+                            kendaraanOpen: false,
+                            kendaraanLabel: '',
+                            get filteredKendaraans() {
+                                let list = this.allKendaraans.filter(x => x.satker_id == this.selectedSatkerId);
+                                if (!this.kendaraanSearch) return list;
+                                return list.filter(k => k.nopol.toLowerCase().includes(this.kendaraanSearch.toLowerCase()));
+                            },
+                            selectKendaraanManual(k) {
                                 this.topupId = k.id;
                                 this.topupNopol = k.nopol;
                                 this.topupSaldo = k.saldo;
+                                this.kendaraanLabel = k.nopol + ' (' + k.saldo + ' L)';
+                                this.kendaraanOpen = false;
+                                this.kendaraanSearch = '';
+                            },
+                            adminStocks: [
+                                @foreach($adminStocks as $s)
+                                    { jenis_bbm: '{{ $s->jenis_bbm }}', saldo: {{ $s->saldo }} },
+                                @endforeach
+                            ],
+                            allKendaraans: [
+                                @foreach($allKendaraans as $k)
+                                    { id: {{ $k->id }}, satker_id: {{ $k->satker_id }}, nopol: '{{ $k->no_polisi }}', jenis_bbm: '{{ $k->jenis_bbm }}', saldo: '{{ number_format($k->saldo, 0, ',', '.') }}', saldoRaw: {{ $k->saldo }} },
+                                @endforeach
+                            ],
+                            get currentAdminStock() {
+                                if (!this.topupId) return 0;
+                                const k = this.allKendaraans.find(x => x.id == this.topupId);
+                                if (!k) return 0;
+                                const s = this.adminStocks.find(x => x.jenis_bbm == k.jenis_bbm);
+                                return s ? s.saldo : 0;
+                            },
+                            get canSubmitManual() {
+                                return this.topupId && this.jumlah && this.jumlah > 0 && this.jumlah <= this.currentAdminStock && this.topupPassword;
+                            },
+                            selectKendaraan(id) {
+                                const k = this.allKendaraans.find(x => x.id == id);
+                                if (k) {
+                                    this.topupId = k.id;
+                                    this.topupNopol = k.nopol;
+                                    this.topupSaldo = k.saldo;
+                                }
+                            },
+                            reset() {
+                                this.showTopup = false;
+                                setTimeout(() => {
+                                    this.jumlah = '';
+                                    this.topupPassword = '';
+                                    this.topupId = null;
+                                    this.selectedSatkerId = '';
+                                    this.satkerLabel = '';
+                                    this.kendaraanLabel = '';
+                                }, 300);
+                            },
+                            number_format(number, decimals, dec_point, thousands_sep) {
+                                number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+                                var n = !isFinite(+number) ? 0 : +number,
+                                    prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+                                    sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+                                    dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+                                    s = '',
+                                    toFixedFix = function(n, prec) {
+                                        var k = Math.pow(10, prec);
+                                        return '' + Math.round(n * k) / k;
+                                    };
+                                s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+                                if (s[0].length > 3) {
+                                    s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+                                }
+                                if ((s[1] || '').length < prec) {
+                                    s[1] = s[1] || '';
+                                    s[1] += new Array(prec - s[1].length + 1).join('0');
+                                }
+                                return s.join(dec);
                             }
-                        },
-                        reset() {
-                            this.showTopup = false;
-                            setTimeout(() => {
-                                this.jumlah = '';
-                                this.topupPassword = '';
-                                this.topupId = null;
-                                this.selectedSatkerId = '';
-                            }, 300);
-                        },
-                        number_format(number, decimals, dec_point, thousands_sep) {
-                            number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
-                            var n = !isFinite(+number) ? 0 : +number,
-                                prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
-                                sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
-                                dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
-                                s = '',
-                                toFixedFix = function(n, prec) {
-                                    var k = Math.pow(10, prec);
-                                    return '' + Math.round(n * k) / k;
-                                };
-                            s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
-                            if (s[0].length > 3) {
-                                s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
-                            }
-                            if ((s[1] || '').length < prec) {
-                                s[1] = s[1] || '';
-                                s[1] += new Array(prec - s[1].length + 1).join('0');
-                            }
-                            return s.join(dec);
-                        }
-                    }"
+                        }"
             @open-topup.window="topupId = $event.detail.id; topupNopol = $event.detail.nopol; topupSaldo = $event.detail.saldo; jumlah = ''; topupPassword = ''; selectMode = false; showTopup = true"
             @open-topup-select.window="topupId = null; topupNopol = ''; topupSaldo = ''; jumlah = ''; topupPassword = ''; selectMode = true; showTopup = true"
             @turbo:before-cache.window="showTopup = false">
@@ -552,26 +589,105 @@
                             <div>
                                 <label class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 sm:mb-2">1. Pilih
                                     Satuan Kerja</label>
-                                <select x-model="selectedSatkerId" @change="topupId = null; topupNopol = '';"
-                                    class="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all">
-                                    <option value="">-- Pilih Satker --</option>
-                                    @foreach($satkers as $s)
-                                        <option value="{{ $s->id }}">{{ $s->nama_satker }}</option>
-                                    @endforeach
-                                </select>
+                                <div class="relative" @click.outside="satkerOpen = false">
+                                    <div @click="satkerOpen = !satkerOpen; $nextTick(() => { if(satkerOpen) $refs.satkerInput.focus() })"
+                                        class="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 flex items-center justify-between cursor-pointer transition-all"
+                                        :class="satkerOpen ? 'border-emerald-500 ring-4 ring-emerald-500/10' : ''">
+                                        <span x-text="satkerLabel || '-- Pilih Satker --'"
+                                            :class="satkerLabel ? 'text-slate-800' : 'text-slate-400'"></span>
+                                        <svg class="w-4 h-4 text-slate-400 transition-transform"
+                                            :class="satkerOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                    <div x-show="satkerOpen" x-transition.opacity.duration.150ms
+                                        class="absolute z-50 mt-1 w-full bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden"
+                                        style="display:none;">
+                                        <div class="p-2 border-b border-slate-100">
+                                            <div class="relative">
+                                                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
+                                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                                </svg>
+                                                <input x-ref="satkerInput" x-model="satkerSearch" type="text"
+                                                    placeholder="Cari Satker..."
+                                                    class="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                            </div>
+                                        </div>
+                                        <div class="max-h-48 overflow-y-auto">
+                                            <template x-for="s in filteredSatkers" :key="s.id">
+                                                <div @click="selectSatker(s)"
+                                                    class="px-4 py-2.5 text-xs sm:text-sm text-slate-700 hover:bg-emerald-50 cursor-pointer flex items-center justify-between transition-colors"
+                                                    :class="selectedSatkerId == s.id ? 'bg-emerald-50 text-emerald-700 font-semibold' : ''">
+                                                    <span x-text="s.nama"></span>
+                                                    <svg x-show="selectedSatkerId == s.id" class="w-4 h-4 text-emerald-500"
+                                                        fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd"
+                                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                            clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </template>
+                                            <div x-show="filteredSatkers.length === 0"
+                                                class="px-4 py-3 text-sm text-slate-400 text-center">Tidak ditemukan</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div x-show="selectedSatkerId">
                                 <label class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 sm:mb-2">2. Pilih
                                     Kendaraan</label>
-                                <select @change="selectKendaraan($event.target.value)"
-                                    class="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all">
-                                    <option value="">-- Pilih Kendaraan --</option>
-                                    <template x-for="k in allKendaraans.filter(x => x.satker_id == selectedSatkerId)"
-                                        :key="k.id">
-                                        <option :value="k.id" x-text="k.nopol + ' (' + k.saldo + ' L)'"></option>
-                                    </template>
-                                </select>
+                                <div class="relative" @click.outside="kendaraanOpen = false">
+                                    <div @click="kendaraanOpen = !kendaraanOpen; $nextTick(() => { if(kendaraanOpen) $refs.kendaraanInputManual.focus() })"
+                                        class="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 flex items-center justify-between cursor-pointer transition-all"
+                                        :class="kendaraanOpen ? 'border-emerald-500 ring-4 ring-emerald-500/10' : ''">
+                                        <span x-text="kendaraanLabel || '-- Pilih Kendaraan --'"
+                                            :class="kendaraanLabel ? 'text-slate-800' : 'text-slate-400'"></span>
+                                        <svg class="w-4 h-4 text-slate-400 transition-transform"
+                                            :class="kendaraanOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                    <div x-show="kendaraanOpen" x-transition.opacity.duration.150ms
+                                        class="absolute z-50 mt-1 w-full bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden"
+                                        style="display:none;">
+                                        <div class="p-2 border-b border-slate-100">
+                                            <div class="relative">
+                                                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
+                                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                                </svg>
+                                                <input x-ref="kendaraanInputManual" x-model="kendaraanSearch" type="text"
+                                                    placeholder="Cari nopol..."
+                                                    class="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                            </div>
+                                        </div>
+                                        <div class="max-h-48 overflow-y-auto">
+                                            <template x-for="k in filteredKendaraans" :key="k.id">
+                                                <div @click="selectKendaraanManual(k)"
+                                                    class="px-4 py-2.5 text-xs sm:text-sm text-slate-700 hover:bg-emerald-50 cursor-pointer flex items-center justify-between transition-colors"
+                                                    :class="topupId == k.id ? 'bg-emerald-50 text-emerald-700 font-semibold' : ''">
+                                                    <span x-text="k.nopol + ' (' + k.saldo + ' L)'"></span>
+                                                    <svg x-show="topupId == k.id" class="w-4 h-4 text-emerald-500"
+                                                        fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd"
+                                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                            clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </template>
+                                            <div x-show="filteredKendaraans.length === 0"
+                                                class="px-4 py-3 text-sm text-slate-400 text-center">Tidak ditemukan</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
