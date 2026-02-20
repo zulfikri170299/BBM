@@ -63,7 +63,28 @@
                             <p class="text-xs sm:text-sm text-slate-500 mt-1">Kirim saldo ke rekan satu Satker.</p>
                         </div>
 
-                        <div class="p-4 sm:p-6">
+                        <div class="p-4 sm:p-6" x-data="{
+                            receiverSearch: '',
+                            receiverOpen: false,
+                            receiverSelected: '',
+                            receiverLabel: '',
+                            receivers: [
+                                @foreach($personels as $p)
+                                    { id: {{ $p->id }}, nama: '{{ addslashes($p->nama) }}', nrp: '{{ addslashes($p->nrp) }}' },
+                                @endforeach
+                            ],
+                            get filteredReceivers() {
+                                if (!this.receiverSearch) return this.receivers;
+                                const q = this.receiverSearch.toLowerCase();
+                                return this.receivers.filter(r => r.nama.toLowerCase().includes(q) || r.nrp.toLowerCase().includes(q));
+                            },
+                            selectReceiver(r) {
+                                this.receiverSelected = r.id;
+                                this.receiverLabel = r.nama + ' (' + r.nrp + ')';
+                                this.receiverOpen = false;
+                                this.receiverSearch = '';
+                            }
+                        }">
                             <form method="post" action="{{ route('personel.transfer.store') }}"
                                 class="space-y-4 sm:space-y-5">
                                 @csrf
@@ -71,22 +92,40 @@
                                 <div>
                                     <x-input-label for="receiver_id" :value="__('Penerima')"
                                         class="text-xs sm:text-sm text-slate-700" />
-                                    <div class="relative mt-1">
-                                        <select id="receiver_id" name="receiver_id"
-                                            class="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 text-xs sm:text-sm shadow-sm transition-all duration-200">
-                                            <option value="">-- Pilih Rekan --</option>
-                                            @foreach($personels as $p)
-                                                <option value="{{ $p->id }}">{{ $p->nama }} ({{ $p->nrp }})</option>
-                                            @endforeach
-                                        </select>
+                                    <input type="hidden" name="receiver_id" :value="receiverSelected" required>
+                                    <div class="relative mt-1" @click.outside="receiverOpen = false">
+                                        <div @click="receiverOpen = !receiverOpen; $nextTick(() => { if(receiverOpen) $refs.receiverInput.focus() })"
+                                            class="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl border border-slate-300 text-xs sm:text-sm shadow-sm transition-all duration-200 cursor-pointer flex items-center justify-between bg-white"
+                                            :class="receiverOpen ? 'ring-2 ring-indigo-500 border-indigo-500' : ''">
+                                            <span x-text="receiverLabel || '-- Pilih Rekan --'" :class="receiverLabel ? 'text-slate-800' : 'text-slate-400'" class="truncate"></span>
+                                            <svg class="w-4 h-4 text-slate-400 transition-transform shrink-0" :class="receiverOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                        </div>
                                         <div
-                                            class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                                            class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400"
+                                            x-show="!receiverOpen">
                                             <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
                                                 </path>
                                             </svg>
+                                        </div>
+                                        <div x-show="receiverOpen" x-transition.opacity.duration.150ms class="absolute z-50 mt-1 w-full bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden" style="display:none;">
+                                            <div class="p-2 border-b border-slate-100">
+                                                <div class="relative">
+                                                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                                    <input x-ref="receiverInput" x-model="receiverSearch" type="text" placeholder="Cari nama / NRP..." class="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                                </div>
+                                            </div>
+                                            <div class="max-h-48 overflow-y-auto">
+                                                <template x-for="r in filteredReceivers" :key="r.id">
+                                                    <div @click="selectReceiver(r)" class="px-4 py-2.5 text-xs sm:text-sm text-slate-700 hover:bg-indigo-50 cursor-pointer flex items-center justify-between transition-colors" :class="receiverSelected === r.id ? 'bg-indigo-50 text-indigo-700 font-semibold' : ''">
+                                                        <span x-text="r.nama + ' (' + r.nrp + ')'"></span>
+                                                        <svg x-show="receiverSelected === r.id" class="w-4 h-4 text-indigo-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                                    </div>
+                                                </template>
+                                                <div x-show="filteredReceivers.length === 0" class="px-4 py-3 text-sm text-slate-400 text-center">Tidak ditemukan</div>
+                                            </div>
                                         </div>
                                     </div>
                                     <p class="mt-1.5 text-[10px] sm:text-xs text-slate-500 flex items-center">

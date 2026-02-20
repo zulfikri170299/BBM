@@ -4,7 +4,42 @@
         showMonthlyReportModal: false,
         showImportModal: false,
         selectedBbm: '',
-        personels: {{ json_encode($personels) }}
+        personels: {{ json_encode($personels) }},
+        // Searchable Kendaraan
+        kendaraanSearch: '',
+        kendaraanOpen: false,
+        kendaraanSelected: null,
+        kendaraanLabel: '',
+        kendaraans: {{ json_encode($availableKendaraans->map(fn($k) => ['id' => $k->id, 'no_polisi' => $k->no_polisi, 'jenis_bbm' => $k->jenis_bbm, 'saldo' => $k->saldo])) }},
+        get filteredKendaraans() {
+            if (!this.kendaraanSearch) return this.kendaraans;
+            const q = this.kendaraanSearch.toLowerCase();
+            return this.kendaraans.filter(k => k.no_polisi.toLowerCase().includes(q) || k.jenis_bbm.toLowerCase().includes(q));
+        },
+        selectKendaraan(k) {
+            this.kendaraanSelected = k.id;
+            this.kendaraanLabel = k.no_polisi + ' • ' + k.jenis_bbm + ' • ' + Number(k.saldo).toLocaleString('id-ID') + ' L';
+            this.selectedBbm = k.jenis_bbm;
+            this.kendaraanOpen = false;
+            this.kendaraanSearch = '';
+        },
+        // Searchable Personel
+        personelSearch: '',
+        personelOpen: false,
+        personelSelected: null,
+        personelLabel: '',
+        get filteredPersonels() {
+            let list = this.personels.filter(p => !this.selectedBbm || !p.jenis_bbm || p.jenis_bbm === this.selectedBbm);
+            if (!this.personelSearch) return list;
+            const q = this.personelSearch.toLowerCase();
+            return list.filter(p => p.nama.toLowerCase().includes(q) || (p.jenis_bbm && p.jenis_bbm.toLowerCase().includes(q)));
+        },
+        selectPersonel(p) {
+            this.personelSelected = p.id;
+            this.personelLabel = p.nama + ' • ' + (p.jenis_bbm ? p.jenis_bbm : 'Belum set BBM');
+            this.personelOpen = false;
+            this.personelSearch = '';
+        }
     }">
         <!-- Page Header -->
         <div class="flex flex-col gap-3 sm:gap-4">
@@ -379,10 +414,9 @@
                         <!-- Form Body -->
                         <div class="px-4 sm:px-6 py-4 sm:py-5 space-y-4 sm:space-y-5 overflow-y-auto flex-1">
 
-                            <!-- Sumber Kendaraan -->
+                            <!-- Sumber Kendaraan (Searchable) -->
                             <div>
-                                <label for="kendaraan_id"
-                                    class="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
+                                <label class="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
                                     <span
                                         class="flex items-center justify-center w-6 h-6 rounded-lg bg-blue-100 text-blue-600">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -396,16 +430,58 @@
                                     </span>
                                     Sumber Dana
                                 </label>
-                                <select name="kendaraan_id" id="kendaraan_id" required
-                                    @change="selectedBbm = $event.target.selectedOptions[0].dataset.bbm"
-                                    class="block w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all appearance-none cursor-pointer">
-                                    <option value="" data-bbm="">— Pilih Kendaraan —</option>
-                                    @foreach($availableKendaraans as $k)
-                                        <option value="{{ $k->id }}" data-bbm="{{ $k->jenis_bbm }}">{{ $k->no_polisi }} •
-                                            {{ $k->jenis_bbm }} • {{ number_format($k->saldo, 0, ',', '.') }} L
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <input type="hidden" name="kendaraan_id" :value="kendaraanSelected" required>
+                                <div class="relative" @click.outside="kendaraanOpen = false">
+                                    <div @click="kendaraanOpen = !kendaraanOpen; $nextTick(() => { if(kendaraanOpen) $refs.kendaraanInput.focus() })"
+                                        class="block w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm cursor-pointer flex items-center justify-between transition-all"
+                                        :class="kendaraanOpen ? 'ring-2 ring-emerald-500 border-emerald-500' : ''">
+                                        <span x-text="kendaraanLabel || '— Pilih Kendaraan —'"
+                                            :class="kendaraanLabel ? 'text-slate-800' : 'text-slate-400'"></span>
+                                        <svg class="w-4 h-4 text-slate-400 transition-transform"
+                                            :class="kendaraanOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                    <div x-show="kendaraanOpen" x-transition.opacity.duration.150ms
+                                        class="absolute z-50 mt-1 w-full bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden"
+                                        style="display:none;">
+                                        <div class="p-2 border-b border-slate-100">
+                                            <div class="relative">
+                                                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
+                                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                                </svg>
+                                                <input x-ref="kendaraanInput" x-model="kendaraanSearch" type="text"
+                                                    placeholder="Cari kendaraan..."
+                                                    class="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                            </div>
+                                        </div>
+                                        <div class="max-h-48 overflow-y-auto">
+                                            <template x-for="k in filteredKendaraans" :key="k.id">
+                                                <div @click="selectKendaraan(k)"
+                                                    class="px-4 py-2.5 text-sm text-slate-700 hover:bg-emerald-50 cursor-pointer flex items-center justify-between transition-colors"
+                                                    :class="kendaraanSelected === k.id ? 'bg-emerald-50 text-emerald-700 font-semibold' : ''">
+                                                    <span
+                                                        x-text="k.no_polisi + ' • ' + k.jenis_bbm + ' • ' + Number(k.saldo).toLocaleString('id-ID') + ' L'"></span>
+                                                    <svg x-show="kendaraanSelected === k.id"
+                                                        class="w-4 h-4 text-emerald-500" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd"
+                                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                            clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </template>
+                                            <div x-show="filteredKendaraans.length === 0"
+                                                class="px-4 py-3 text-sm text-slate-400 text-center">Tidak ditemukan
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Arrow Divider -->
@@ -420,10 +496,9 @@
                                 </div>
                             </div>
 
-                            <!-- Tujuan Personel -->
+                            <!-- Tujuan Personel (Searchable) -->
                             <div>
-                                <label for="personel_id"
-                                    class="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
+                                <label class="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
                                     <span
                                         class="flex items-center justify-center w-6 h-6 rounded-lg bg-purple-100 text-purple-600">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -434,16 +509,58 @@
                                     </span>
                                     Tujuan Personel
                                 </label>
-                                <select name="personel_id" id="personel_id" required
-                                    class="block w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all appearance-none cursor-pointer">
-                                    <option value="">— Pilih Personel —</option>
-                                    <template
-                                        x-for="personel in personels.filter(p => !selectedBbm || !p.jenis_bbm || p.jenis_bbm === selectedBbm)">
-                                        <option :value="personel.id"
-                                            x-text="personel.nama + ' • ' + (personel.jenis_bbm ? personel.jenis_bbm : 'Belum set BBM')">
-                                        </option>
-                                    </template>
-                                </select>
+                                <input type="hidden" name="personel_id" :value="personelSelected" required>
+                                <div class="relative" @click.outside="personelOpen = false">
+                                    <div @click="personelOpen = !personelOpen; $nextTick(() => { if(personelOpen) $refs.personelInput.focus() })"
+                                        class="block w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm cursor-pointer flex items-center justify-between transition-all"
+                                        :class="personelOpen ? 'ring-2 ring-emerald-500 border-emerald-500' : ''">
+                                        <span x-text="personelLabel || '— Pilih Personel —'"
+                                            :class="personelLabel ? 'text-slate-800' : 'text-slate-400'"></span>
+                                        <svg class="w-4 h-4 text-slate-400 transition-transform"
+                                            :class="personelOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                    <div x-show="personelOpen" x-transition.opacity.duration.150ms
+                                        class="absolute z-50 mt-1 w-full bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden"
+                                        style="display:none;">
+                                        <div class="p-2 border-b border-slate-100">
+                                            <div class="relative">
+                                                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
+                                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                                </svg>
+                                                <input x-ref="personelInput" x-model="personelSearch" type="text"
+                                                    placeholder="Cari personel..."
+                                                    class="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                            </div>
+                                        </div>
+                                        <div class="max-h-48 overflow-y-auto">
+                                            <template x-for="p in filteredPersonels" :key="p.id">
+                                                <div @click="selectPersonel(p)"
+                                                    class="px-4 py-2.5 text-sm text-slate-700 hover:bg-emerald-50 cursor-pointer flex items-center justify-between transition-colors"
+                                                    :class="personelSelected === p.id ? 'bg-emerald-50 text-emerald-700 font-semibold' : ''">
+                                                    <span
+                                                        x-text="p.nama + ' • ' + (p.jenis_bbm ? p.jenis_bbm : 'Belum set BBM')"></span>
+                                                    <svg x-show="personelSelected === p.id"
+                                                        class="w-4 h-4 text-emerald-500" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd"
+                                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                            clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </template>
+                                            <div x-show="filteredPersonels.length === 0"
+                                                class="px-4 py-3 text-sm text-slate-400 text-center">Tidak ditemukan
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="h-px bg-slate-100"></div>
