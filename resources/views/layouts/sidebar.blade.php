@@ -29,8 +29,9 @@
         <div class="flex items-center gap-3">
             <img src="{{ asset('rolog.png') }}" alt="Logo" class="w-9 h-9 object-contain">
             <div>
-                <span class="text-base font-bold text-white leading-tight block">BIRO LOGISTIK</span>
-                <span class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">Polda NTB</span>
+                <span
+                    class="text-base font-bold text-white leading-tight block">{{ auth()->user()->satker->nama_satker ?? 'BIRO LOGISTIK' }}</span>
+                <span class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">SIM BBM - Polda NTB</span>
             </div>
         </div>
         {{-- Close Button (Mobile Only) --}}

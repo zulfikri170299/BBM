@@ -426,110 +426,110 @@
         <!-- Top Up Modal -->
         <!-- Top Up Modal -->
         <div x-cloak x-data="{
-                                showTopup: false,
-                                topupId: null,
-                                topupNopol: '',
-                                topupSaldo: '',
-                                jumlah: '',
-                                topupPassword: '',
-                                selectMode: false,
-                                selectedSatkerId: '',
-                                // Satker Search
-                                satkerSearch: '',
-                                satkerOpen: false,
-                                satkerLabel: '',
-                                satkers: {{ json_encode($satkers->map(fn($s) => ['id' => $s->id, 'nama' => $s->nama_satker])) }},
-                                get filteredSatkers() {
-                                    if (!this.satkerSearch) return this.satkers;
-                                    return this.satkers.filter(s => s.nama.toLowerCase().includes(this.satkerSearch.toLowerCase()));
-                                },
-                                selectSatker(s) {
-                                    this.selectedSatkerId = s.id;
-                                    this.satkerLabel = s.nama;
-                                    this.satkerOpen = false;
-                                    this.satkerSearch = '';
-                                    this.topupId = null;
-                                    this.topupNopol = '';
-                                    this.kendaraanLabel = '';
-                                },
-                                // Kendaraan Search
-                                kendaraanSearch: '',
-                                kendaraanOpen: false,
-                                kendaraanLabel: '',
-                                get filteredKendaraans() {
-                                    let list = this.allKendaraans.filter(x => x.satker_id == this.selectedSatkerId);
-                                    if (!this.kendaraanSearch) return list;
-                                    return list.filter(k => k.nopol.toLowerCase().includes(this.kendaraanSearch.toLowerCase()));
-                                },
-                                selectKendaraanManual(k) {
-                                    this.topupId = k.id;
-                                    this.topupNopol = k.nopol;
-                                    this.topupSaldo = k.saldo;
-                                    this.kendaraanLabel = k.nopol + ' (' + k.saldo + ' L)';
-                                    this.kendaraanOpen = false;
-                                    this.kendaraanSearch = '';
-                                },
-                                adminStocks: [
-                                    @foreach($adminStocks as $s)
-                                        { jenis_bbm: '{{ $s->jenis_bbm }}', saldo: {{ $s->saldo }} },
-                                    @endforeach
-                                ],
-                                allKendaraans: [
-                                    @foreach($allKendaraans as $k)
-                                        { id: {{ $k->id }}, satker_id: {{ $k->satker_id }}, nopol: '{{ $k->no_polisi }}', jenis_bbm: '{{ $k->jenis_bbm }}', saldo: '{{ number_format($k->saldo, 0, ',', '.') }}', saldoRaw: {{ $k->saldo }} },
-                                    @endforeach
-                                ],
-                                get currentAdminStock() {
-                                    if (!this.topupId) return 0;
-                                    const k = this.allKendaraans.find(x => x.id == this.topupId);
-                                    if (!k) return 0;
-                                    const s = this.adminStocks.find(x => x.jenis_bbm == k.jenis_bbm);
-                                    return s ? s.saldo : 0;
-                                },
-                                get canSubmitManual() {
-                                    return this.topupId && this.jumlah && this.jumlah > 0 && this.jumlah <= this.currentAdminStock && this.topupPassword;
-                                },
-                                selectKendaraan(id) {
-                                    const k = this.allKendaraans.find(x => x.id == id);
-                                    if (k) {
-                                        this.topupId = k.id;
-                                        this.topupNopol = k.nopol;
-                                        this.topupSaldo = k.saldo;
-                                    }
-                                },
-                                reset() {
-                                    this.showTopup = false;
-                                    setTimeout(() => {
-                                        this.jumlah = '';
-                                        this.topupPassword = '';
+                                    showTopup: false,
+                                    topupId: null,
+                                    topupNopol: '',
+                                    topupSaldo: '',
+                                    jumlah: '',
+                                    topupPassword: '',
+                                    selectMode: false,
+                                    selectedSatkerId: '',
+                                    // Satker Search
+                                    satkerSearch: '',
+                                    satkerOpen: false,
+                                    satkerLabel: '',
+                                    satkers: {{ json_encode($satkers->map(fn($s) => ['id' => $s->id, 'nama' => $s->nama_satker])) }},
+                                    get filteredSatkers() {
+                                        if (!this.satkerSearch) return this.satkers;
+                                        return this.satkers.filter(s => s.nama.toLowerCase().includes(this.satkerSearch.toLowerCase()));
+                                    },
+                                    selectSatker(s) {
+                                        this.selectedSatkerId = s.id;
+                                        this.satkerLabel = s.nama;
+                                        this.satkerOpen = false;
+                                        this.satkerSearch = '';
                                         this.topupId = null;
-                                        this.selectedSatkerId = '';
-                                        this.satkerLabel = '';
+                                        this.topupNopol = '';
                                         this.kendaraanLabel = '';
-                                    }, 300);
-                                },
-                                number_format(number, decimals, dec_point, thousands_sep) {
-                                    number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
-                                    var n = !isFinite(+number) ? 0 : +number,
-                                        prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
-                                        sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
-                                        dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
-                                        s = '',
-                                        toFixedFix = function(n, prec) {
-                                            var k = Math.pow(10, prec);
-                                            return '' + Math.round(n * k) / k;
-                                        };
-                                    s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
-                                    if (s[0].length > 3) {
-                                        s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+                                    },
+                                    // Kendaraan Search
+                                    kendaraanSearch: '',
+                                    kendaraanOpen: false,
+                                    kendaraanLabel: '',
+                                    get filteredKendaraans() {
+                                        let list = this.allKendaraans.filter(x => x.satker_id == this.selectedSatkerId);
+                                        if (!this.kendaraanSearch) return list;
+                                        return list.filter(k => k.nopol.toLowerCase().includes(this.kendaraanSearch.toLowerCase()));
+                                    },
+                                    selectKendaraanManual(k) {
+                                        this.topupId = k.id;
+                                        this.topupNopol = k.satker_nama + ' - ' + k.nopol;
+                                        this.topupSaldo = k.saldo;
+                                        this.kendaraanLabel = k.nopol + ' (' + k.saldo + ' L)';
+                                        this.kendaraanOpen = false;
+                                        this.kendaraanSearch = '';
+                                    },
+                                    adminStocks: [
+                                        @foreach($adminStocks as $s)
+                                            { jenis_bbm: '{{ $s->jenis_bbm }}', saldo: {{ $s->saldo }} },
+                                        @endforeach
+                                    ],
+                                    allKendaraans: [
+                                        @foreach($allKendaraans as $k)
+                                            { id: {{ $k->id }}, satker_id: {{ $k->satker_id }}, satker_nama: '{{ $k->satker->nama_satker ?? '-' }}', nopol: '{{ $k->no_polisi }}', jenis_bbm: '{{ $k->jenis_bbm }}', saldo: '{{ number_format($k->saldo, 0, ',', '.') }}', saldoRaw: {{ $k->saldo }} },
+                                        @endforeach
+                                    ],
+                                    get currentAdminStock() {
+                                        if (!this.topupId) return 0;
+                                        const k = this.allKendaraans.find(x => x.id == this.topupId);
+                                        if (!k) return 0;
+                                        const s = this.adminStocks.find(x => x.jenis_bbm == k.jenis_bbm);
+                                        return s ? s.saldo : 0;
+                                    },
+                                    get canSubmitManual() {
+                                        return this.topupId && this.jumlah && this.jumlah > 0 && this.jumlah <= this.currentAdminStock && this.topupPassword;
+                                    },
+                                    selectKendaraan(id) {
+                                        const k = this.allKendaraans.find(x => x.id == id);
+                                        if (k) {
+                                            this.topupId = k.id;
+                                            this.topupNopol = k.satker_nama + ' - ' + k.nopol;
+                                            this.topupSaldo = k.saldo;
+                                        }
+                                    },
+                                    reset() {
+                                        this.showTopup = false;
+                                        setTimeout(() => {
+                                            this.jumlah = '';
+                                            this.topupPassword = '';
+                                            this.topupId = null;
+                                            this.selectedSatkerId = '';
+                                            this.satkerLabel = '';
+                                            this.kendaraanLabel = '';
+                                        }, 300);
+                                    },
+                                    number_format(number, decimals, dec_point, thousands_sep) {
+                                        number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+                                        var n = !isFinite(+number) ? 0 : +number,
+                                            prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+                                            sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+                                            dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+                                            s = '',
+                                            toFixedFix = function(n, prec) {
+                                                var k = Math.pow(10, prec);
+                                                return '' + Math.round(n * k) / k;
+                                            };
+                                        s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+                                        if (s[0].length > 3) {
+                                            s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+                                        }
+                                        if ((s[1] || '').length < prec) {
+                                            s[1] = s[1] || '';
+                                            s[1] += new Array(prec - s[1].length + 1).join('0');
+                                        }
+                                        return s.join(dec);
                                     }
-                                    if ((s[1] || '').length < prec) {
-                                        s[1] = s[1] || '';
-                                        s[1] += new Array(prec - s[1].length + 1).join('0');
-                                    }
-                                    return s.join(dec);
-                                }
-                            }"
+                                }"
             @open-topup.window="topupId = $event.detail.id; topupNopol = $event.detail.nopol; topupSaldo = $event.detail.saldo; jumlah = ''; topupPassword = ''; selectMode = false; showTopup = true"
             @open-topup-select.window="topupId = null; topupNopol = ''; topupSaldo = ''; jumlah = ''; topupPassword = ''; selectMode = true; showTopup = true"
             @turbo:before-cache.window="showTopup = false">
