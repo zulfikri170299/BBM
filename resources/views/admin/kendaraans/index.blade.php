@@ -548,7 +548,7 @@
                 x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                 x-transition:leave-end="opacity-0 scale-95 translate-y-4"
                 class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4" @click.self="showTopup = false">
-                <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden"
+                <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[95vh] flex flex-col overflow-hidden"
                     @click.stop>
                     <!-- Modal Header -->
                     <div class="px-4 sm:px-6 py-4 sm:py-5 bg-gradient-to-r from-emerald-500 to-green-600 shrink-0">
@@ -577,18 +577,16 @@
                         </div>
                     </div>
 
-                    <!-- Modal Body -->
-                    <form :action="'/admin/kendaraans/' + topupId + '/topup'" method="POST"
-                        class="p-4 sm:p-6 space-y-4 sm:space-y-5 overflow-y-auto flex-1">
-                        @csrf
-                        <!-- Hidden Inputs -->
-                        <input type="hidden" name="kendaraan_id" :value="topupId">
+                        <!-- Form Body -->
+                        <div class="p-4 sm:p-6 space-y-6 overflow-y-auto flex-1 bg-slate-50/30">
+                            @csrf
+                            <!-- Hidden Inputs -->
+                            <input type="hidden" name="kendaraan_id" :value="topupId">
 
-                        <!-- Select Satker & Kendaraan (only when opened from header button) -->
-                        <div x-show="selectMode" class="space-y-4">
-                            <div>
-                                <label class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 sm:mb-2">1. Pilih
-                                    Satuan Kerja</label>
+                            <!-- Section 1: Pemilihan -->
+                            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                                <div x-show="selectMode">
+                                    <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-2 uppercase tracking-wider">1. Pilih Satuan Kerja</label>
                                 <div class="relative" @click.outside="satkerOpen = false">
                                     <div @click="satkerOpen = !satkerOpen; $nextTick(() => { if(satkerOpen) $refs.satkerInput.focus() })"
                                         class="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 flex items-center justify-between cursor-pointer transition-all"
@@ -636,11 +634,9 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div x-show="selectedSatkerId">
-                                <label class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 sm:mb-2">2. Pilih
-                                    Kendaraan</label>
+                                <div x-show="selectMode && selectedSatkerId">
+                                    <label class="block text-xs sm:text-sm font-bold text-slate-700 mb-2 uppercase tracking-wider">2. Pilih Kendaraan</label>
                                 <div class="relative" @click.outside="kendaraanOpen = false">
                                     <div @click="kendaraanOpen = !kendaraanOpen; $nextTick(() => { if(kendaraanOpen) $refs.kendaraanInputManual.focus() })"
                                         class="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 flex items-center justify-between cursor-pointer transition-all"
@@ -689,77 +685,66 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- Current Saldo -->
-                        <div x-show="topupId"
-                            class="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-slate-50 rounded-xl border border-slate-200">
-                            <div class="p-1.5 sm:p-2 bg-blue-100 text-blue-600 rounded-lg shrink-0">
-                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-[10px] sm:text-xs text-slate-500 font-medium">Saldo Saat Ini</p>
-                                <p class="text-base sm:text-lg font-bold text-slate-800"><span x-text="topupSaldo"></span>
-                                    Liter</p>
-                            </div>
-                        </div>
-
-                        <!-- Admin Stock Info -->
-                        <div x-show="topupId"
-                            class="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-amber-50 rounded-xl border border-amber-200">
-                            <div class="p-1.5 sm:p-2 bg-amber-100 text-amber-600 rounded-lg shrink-0">
-                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
-                                    </path>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-[10px] sm:text-xs text-amber-600 font-bold uppercase">Stok Pusat (Tersedia)
-                                </p>
-                                <p class="text-base sm:text-lg font-black text-amber-700"><span
-                                        x-text="number_format(currentAdminStock, 0, ',', '.')"></span> Liter</p>
-                            </div>
-                        </div>
-
-                        <!-- Jumlah Input -->
-                        <div x-show="topupId">
-                            <label for="jumlah"
-                                class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 sm:mb-2">Jumlah Top Up
-                                (Liter)</label>
-                            <div class="relative">
-                                <input type="number" name="jumlah" id="jumlah" x-model="jumlah" step="0.1" min="0.1"
-                                    max="10000" required placeholder="Masukkan jumlah liter"
-                                    class="w-full px-3 sm:px-4 py-2.5 sm:py-3 pr-14 sm:pr-16 bg-white border-2 border-slate-200 rounded-xl text-base sm:text-lg font-semibold text-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal">
-                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 sm:pr-4">
-                                    <span class="text-xs sm:text-sm font-bold text-slate-400">Liter</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Quick Amount Buttons -->
-                        <div x-show="topupId" class="mt-2 sm:mt-4">
-                            <p class="text-[10px] sm:text-xs text-slate-400 font-medium mb-1.5 sm:mb-2">Pilihan Cepat</p>
-                            <div class="grid grid-cols-4 gap-1.5 sm:gap-2">
-                                <button type="button" @click="jumlah = 5"
-                                    class="py-1.5 sm:py-2 text-xs sm:text-sm font-semibold rounded-lg border-2 transition-all"
-                                    :class="jumlah == 5 ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50'">5
-                                    L</button>
-                                <button type="button" @click="jumlah = 10"
-                                    class="py-1.5 sm:py-2 text-xs sm:text-sm font-semibold rounded-lg border-2 transition-all"
-                                    :class="jumlah == 10 ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50'">10
-                                    L</button>
-                                <button type="button" @click="jumlah = 20"
-                                    class="py-1.5 sm:py-2 text-xs sm:text-sm font-semibold rounded-lg border-2 transition-all"
-                                    :class="jumlah == 20 ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50'">20
-                                    L</button>
-                                <button type="button" @click="jumlah = 50"
-                                    class="py-1.5 sm:py-2 text-xs sm:text-sm font-semibold rounded-lg border-2 transition-all"
-                                    :class="jumlah == 50 ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-emerald-50'">50
-                                    L</button>
+                        <!-- Section 2: Informasi Saldo & Stok -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" x-show="topupId" x-transition>
+                            <!-- Current Saldo -->
+                            <div class="flex items-center gap-3 p-4 bg-blue-50/50 rounded-xl border border-blue-100">
+                                <div class="p-2 bg-blue-100 text-blue-600 rounded-lg">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <div class="truncate">
+                                    <p class="text-[10px] text-blue-600 font-bold uppercase tracking-tight">Saldo Saat Ini</p>
+                                    <p class="text-lg font-black text-blue-700 truncate"><span x-text="topupSaldo"></span> L</p>
+                                </div>
+                            </div>
+
+                            <!-- Admin Stock Info -->
+                            <div class="flex items-center gap-3 p-4 bg-amber-50 rounded-xl border border-amber-200">
+                                <div class="p-2 bg-amber-100 text-amber-600 rounded-lg">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                    </svg>
+                                </div>
+                                <div class="truncate">
+                                    <p class="text-[10px] text-amber-600 font-bold uppercase tracking-tight">Stok Pusat</p>
+                                    <p class="text-lg font-black text-amber-700 truncate"><span x-text="number_format(currentAdminStock, 0, ',', '.')"></span> L</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Input Nominal -->
+                        <div class="bg-white p-4 sm:p-6 rounded-xl border border-slate-200 shadow-sm space-y-4" x-show="topupId" x-transition>
+                            <div>
+                                <label for="jumlah" class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wider text-center">Jumlah Top Up</label>
+                                <div class="relative max-w-[200px] mx-auto">
+                                    <input type="number" name="jumlah" id="jumlah" x-model="jumlah" step="0.1" min="0.1" max="10000" required placeholder="0.0"
+                                        class="w-full px-4 py-4 pr-16 bg-slate-50 border-2 border-slate-200 rounded-2xl text-2xl font-black text-slate-800 text-center focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:text-slate-200">
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-4">
+                                        <span class="text-xs font-bold text-slate-400">LITER</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Amount Buttons -->
+                            <div class="grid grid-cols-4 gap-2">
+                                <template x-for="q in [5, 10, 15, 20, 25, 30, 40, 50]">
+                                    <button type="button" @click="jumlah = q"
+                                        class="py-2 text-xs font-bold rounded-xl border-2 transition-all hover:scale-105 active:scale-95"
+                                        :class="jumlah == q ? 'border-emerald-500 bg-emerald-50 text-emerald-700 ring-2 ring-emerald-200' : 'border-slate-100 bg-white text-slate-500 hover:border-emerald-200 hover:bg-emerald-50/50'"
+                                        x-text="q + ' L'"></button>
+                                </template>
+                            </div>
+
+                            <div class="pt-2">
+                                <label for="topupPassword" class="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-widest text-center">PIN Keamanan Admin</label>
+                                <input type="password" id="topupPassword" name="topupPassword" x-model="topupPassword" required placeholder="••••••"
+                                    class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl text-center text-lg font-bold tracking-[0.5em] focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:tracking-normal placeholder:font-normal placeholder:text-slate-200" autocomplete="off">
                             </div>
                             <p x-show="jumlah > currentAdminStock"
                                 class="mt-1.5 sm:mt-2 text-[10px] sm:text-xs font-bold text-red-600 flex items-center gap-1">
@@ -772,36 +757,18 @@
                                 Jumlah melebihi stok pusat!
                             </p>
                         </div>
-
-                        <!-- Password Top Up -->
-                        <div x-show="topupId">
-                            <label for="topup_password"
-                                class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 sm:mb-2">Password Top
-                                Up</label>
-                            <div class="relative">
-                                <input type="password" name="topup_password" id="topup_password" x-model="topupPassword"
-                                    required placeholder="Masukkan password keamanan"
-                                    class="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal"
-                                    autocomplete="off">
-                            </div>
-                            <p class="mt-1 sm:mt-1.5 text-[10px] sm:text-xs text-slate-400">Masukkan PIN/Password khusus
-                                untuk konfirmasi
-                                transaksi.</p>
                         </div>
 
                         <!-- Submit Buttons -->
-                        <div class="flex gap-2 sm:gap-3 pt-1 sm:pt-2">
+                        <div
+                            class="px-4 sm:px-6 py-4 bg-white border-t border-slate-100 flex gap-3 shrink-0">
                             <button type="button" @click="reset()"
-                                class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-100 text-slate-600 text-sm font-semibold rounded-xl hover:bg-slate-200 transition-colors">Batal</button>
-
+                                class="flex-1 px-4 py-3 bg-slate-100 text-slate-600 font-bold rounded-xl hover:bg-slate-200 transition-all active:scale-95 text-sm uppercase tracking-wider">Batal</button>
                             <button type="submit"
-                                class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white text-sm font-bold rounded-xl hover:from-emerald-600 hover:to-green-700 shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1 sm:gap-2"
+                                class="flex-[2] px-4 py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white font-black rounded-xl hover:from-emerald-600 hover:to-green-700 shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/40 transition-all hover:-translate-y-0.5 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:grayscale text-sm uppercase tracking-widest flex items-center justify-center gap-2"
                                 :disabled="!canSubmitManual">
-                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                </svg>
-                                Top Up Sekarang
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                                <span>Simpan Top Up</span>
                             </button>
                         </div>
                     </form>
