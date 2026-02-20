@@ -106,13 +106,13 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     // Settings
     Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
     Route::post('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
-    Route::post('/settings/whatsapp/fetch-groups', [\App\Http\Controllers\Admin\SettingController::class, 'fetchGroups'])->name('settings.whatsapp.fetch-groups');
-    Route::post('/settings/whatsapp/sync-groups', [\App\Http\Controllers\Admin\SettingController::class, 'syncGroups'])->name('settings.whatsapp.sync-groups');
+
 
     // Stok BBM
     Route::get('/stok/print', [\App\Http\Controllers\Admin\StokController::class, 'print'])->name('stok.print');
     Route::get('/stok', [\App\Http\Controllers\Admin\StokController::class, 'index'])->name('stok.index');
     Route::post('/stok', [\App\Http\Controllers\Admin\StokController::class, 'store'])->name('stok.store');
+
 
     // Broadcast Messages
     Route::get('/broadcast', [\App\Http\Controllers\Admin\BroadcastController::class, 'index'])->name('broadcast.index');

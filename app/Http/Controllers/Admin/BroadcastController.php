@@ -10,11 +10,9 @@ use Illuminate\Support\Facades\Notification;
 
 class BroadcastController extends Controller
 {
-    protected $whatsapp;
-
-    public function __construct(\App\Services\WhatsAppService $whatsapp)
+    public function __construct()
     {
-        $this->whatsapp = $whatsapp;
+        // Internal broadcast only
     }
 
     public function index()
@@ -27,7 +25,6 @@ class BroadcastController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'message' => 'required|string',
-            'send_to_whatsapp' => 'nullable|boolean',
         ]);
 
         $users = User::all();
@@ -52,16 +49,8 @@ class BroadcastController extends Controller
             ]);
         }
 
-        // Kirim ke WhatsApp jika dicentang
-        if ($request->has('send_to_whatsapp')) {
-            $target = \App\Models\Setting::where('key', 'whatsapp_group_target')->first()->value ?? config('services.whatsapp.group_target');
-            if ($target) {
-                // Format pesan WhatsApp (Plain text with asterisks for bold)
-                $waMessage = "*[SIARAN]*\n\n*{$request->title}*\n\n{$request->message}";
-                $this->whatsapp->sendMessage($target, $waMessage);
-            }
-        }
 
-        return redirect()->route('admin.broadcast.index')->with('success', 'Pesan siaran berhasil dikirim ke semua pengguna, internal chat, dan WhatsApp Group.');
+
+        return redirect()->route('admin.broadcast.index')->with('success', 'Pesan siaran berhasil dikirim ke semua pengguna melalui notifikasi sistem dan internal chat.');
     }
 }

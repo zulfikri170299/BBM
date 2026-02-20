@@ -19,13 +19,9 @@ class SettingController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->except(['_token', 'whatsapp_fetch_token']);
+        $data = $request->except(['_token']);
 
         foreach ($data as $key => $value) {
-            // Trim token if it's the whatsapp_token
-            if ($key === 'whatsapp_token') {
-                $value = trim($value);
-            }
             Setting::updateOrCreate(
                 ['key' => $key],
                 ['value' => $value ?? '']
@@ -57,33 +53,5 @@ class SettingController extends Controller
         return redirect()->route('admin.settings.index')->with('success', 'Pengaturan berhasil disimpan.');
     }
 
-    public function fetchGroups(Request $request)
-    {
-        $token = $request->token;
-        if (!$token) {
-            return response()->json(['status' => false, 'reason' => 'Token required'], 400);
-        }
 
-        $waService = new \App\Services\WhatsAppService($token);
-        
-        // 1. Try to get existing list
-        $result = $waService->getGroups();
-
-        // 2. If no data found, try to sync once
-        if ($result['status'] && empty($result['data']['data'] ?? [])) {
-            $waService->syncGroups();
-            // Try fetch again after short delay or just tell user to wait
-            $result = $waService->getGroups();
-        }
-
-        return response()->json($result);
-    }
-
-    public function syncGroups(Request $request)
-    {
-        $token = $request->token;
-        $waService = new \App\Services\WhatsAppService($token);
-        $result = $waService->syncGroups();
-        return response()->json($result);
-    }
 }

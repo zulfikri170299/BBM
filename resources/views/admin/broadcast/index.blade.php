@@ -55,29 +55,7 @@
                             semua akun pengguna.</p>
                     </div>
 
-                    <div
-                        class="p-4 bg-emerald-50 rounded-xl border border-emerald-100 flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="p-2 bg-emerald-100 text-emerald-600 rounded-lg">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z">
-                                    </path>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-sm font-bold text-emerald-800">Kirim ke WhatsApp Group</p>
-                                <p class="text-[10px] text-emerald-600 font-medium">Pesan akan diteruskan ke group WA
-                                    yang terkonfigurasi.</p>
-                            </div>
-                        </div>
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" name="send_to_whatsapp" value="1" class="sr-only peer">
-                            <div
-                                class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500">
-                            </div>
-                        </label>
-                    </div>
+
 
                     <div class="flex justify-end pt-2">
                         <button type="submit"
