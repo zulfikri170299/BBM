@@ -22,6 +22,10 @@ class SettingController extends Controller
         $data = $request->except(['_token', 'whatsapp_fetch_token']);
 
         foreach ($data as $key => $value) {
+            // Trim token if it's the whatsapp_token
+            if ($key === 'whatsapp_token') {
+                $value = trim($value);
+            }
             Setting::updateOrCreate(
                 ['key' => $key],
                 ['value' => $value ?? '']

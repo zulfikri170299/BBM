@@ -28,9 +28,12 @@ class WhatsAppService
 
         try {
             // First try to get existing groups
+            // Sending token in BOTH header and body for maximum compatibility
             $response = Http::withHeaders([
                 'Authorization' => $this->token,
-            ])->asForm()->post('https://api.fonnte.com/get-whatsapp-group');
+            ])->asForm()->post('https://api.fonnte.com/get-whatsapp-group', [
+                'token' => $this->token
+            ]);
 
             $result = $response->json();
 
@@ -60,7 +63,9 @@ class WhatsAppService
             // This API tells Fonnte to scan WhatsApp for new groups
             $response = Http::withHeaders([
                 'Authorization' => $this->token,
-            ])->asForm()->post('https://api.fonnte.com/fetch-group');
+            ])->asForm()->post('https://api.fonnte.com/fetch-group', [
+                'token' => $this->token
+            ]);
 
             $result = $response->json();
             Log::info('WhatsApp syncGroups response', ['status' => $response->status(), 'body' => $result]);
@@ -90,6 +95,7 @@ class WhatsAppService
             $response = Http::withHeaders([
                 'Authorization' => $this->token,
             ])->asForm()->post($this->baseUrl, [
+                'token' => $this->token,
                 'target' => $target,
                 'message' => $message,
                 'delay' => '2',
