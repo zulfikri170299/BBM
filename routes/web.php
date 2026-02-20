@@ -86,6 +86,9 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     Route::put('/kendaraans/{kendaraan}', [\App\Http\Controllers\Admin\KendaraanController::class, 'update'])->name('kendaraans.update');
     Route::delete('/kendaraans/{kendaraan}', [\App\Http\Controllers\Admin\KendaraanController::class, 'destroy'])->name('kendaraans.destroy');
     Route::post('/kendaraans/bulk-delete', [\App\Http\Controllers\Admin\KendaraanController::class, 'bulkDelete'])->name('kendaraans.bulk-delete');
+    Route::post('/kendaraans/preview-import-kendaraan', [\App\Http\Controllers\Admin\KendaraanController::class, 'previewImportKendaraan'])->name('kendaraans.preview-import-kendaraan');
+    Route::post('/kendaraans/import-kendaraan', [\App\Http\Controllers\Admin\KendaraanController::class, 'importKendaraan'])->name('kendaraans.import-kendaraan');
+    Route::get('/kendaraans/download-import-template', [\App\Http\Controllers\Admin\KendaraanController::class, 'downloadImportKendaraanTemplate'])->name('kendaraans.download-import-template');
     // Laporan Topup & Riwayat
     Route::get('/riwayat/print', [\App\Http\Controllers\Admin\RiwayatController::class, 'print'])->name('riwayat.print');
     Route::get('/riwayat', [\App\Http\Controllers\Admin\RiwayatController::class, 'index'])->name('riwayat.index');

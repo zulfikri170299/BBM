@@ -2,7 +2,6 @@
     <div class="p-3 sm:p-6 lg:p-8 space-y-4 sm:space-y-6" x-data="{ 
         showTransferModal: false, 
         showMonthlyReportModal: false,
-        showImportModal: false,
         selectedBbm: '',
         personels: {{ json_encode($personels) }},
         // Searchable Kendaraan
@@ -98,7 +97,7 @@
                     </a>
                 @endif
                 @if((\App\Models\Setting::where('key', 'satker_can_import_kendaraan')->value('value') ?? '1') == '1')
-                    <button @click="showImportModal = true"
+                    <button @click="$dispatch('open-import-kendaraan')"
                         class="inline-flex items-center justify-center w-10 h-10 bg-blue-600 text-white rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-500/30 transition-all duration-200 hover:-translate-y-0.5 group relative"
                         title="Import Excel">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -720,274 +719,632 @@
             </div>
         </div>
 
-        <!-- Import Kendaraan Modal -->
+        <!-- Import Kendaraan Modal (Multi-Step) -->
         @if((\App\Models\Setting::where('key', 'satker_can_import_kendaraan')->value('value') ?? '1') == '1')
-            <div x-show="showImportModal" x-cloak style="display: none;" class="fixed inset-0 z-50 overflow-y-auto"
-                aria-labelledby="import-modal-title" role="dialog" aria-modal="true">
-                <div class="flex items-center justify-center min-h-screen px-4 py-6">
-                    <!-- Backdrop -->
-                    <div x-show="showImportModal" x-transition:enter="ease-out duration-300"
-                        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                        x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
-                        x-transition:leave-end="opacity-0"
-                        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
-                        @click="showImportModal = false"></div>
+            <div x-cloak x-data="importKendaraanModal()" @open-import-kendaraan.window="openModal()"
+                @turbo:before-cache.window="showModal = false">
+                <!-- Backdrop -->
+                <div x-show="showModal" style="display: none;" x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                    x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
+                    x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50"
+                    @click="closeModal()"></div>
 
-                    <!-- Modal Panel -->
-                    <div x-show="showImportModal" x-transition:enter="ease-out duration-300"
-                        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                        x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
-                        x-transition:leave-end="opacity-0 scale-95"
-                        class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto max-h-[90vh] flex flex-col overflow-hidden">
-                        <form id="importKendaraanForm" action="{{ route('satker.kendaraans.import') }}" method="POST"
-                            enctype="multipart/form-data" data-turbo="false">
-                            @csrf
-                            <input type="hidden" name="duplicate_action" id="duplicateActionInput" value="skip">
-
-                            <!-- Header with Gradient -->
-                            <div
-                                class="bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600 px-4 sm:px-6 py-4 sm:py-5 shrink-0">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-3">
-                                        <div class="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
-                                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10">
-                                                </path>
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <h3 class="text-base sm:text-lg font-bold text-white" id="import-modal-title">
-                                                Import Data Kendaraan</h3>
-                                            <p class="text-blue-100 text-[10px] sm:text-xs">Upload file Excel (.xlsx, .xls)
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <button type="button" @click="showImportModal = false"
-                                        class="p-1.5 hover:bg-white/20 rounded-lg transition-colors">
-                                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor"
+                <!-- Modal -->
+                <div x-show="showModal" style="display: none;" x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+                    x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                    x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                    x-transition:leave-end="opacity-0 scale-95 translate-y-4"
+                    class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4" @click.self="closeModal()">
+                    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden"
+                        @click.stop>
+                        <!-- Modal Header -->
+                        <div class="px-4 sm:px-6 py-4 sm:py-5 bg-gradient-to-r from-violet-500 to-indigo-600 shrink-0">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2 sm:gap-3">
+                                    <div class="p-1.5 sm:p-2 bg-white/20 rounded-xl">
+                                        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M6 18L18 6M6 6l12 12"></path>
+                                                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                            </path>
                                         </svg>
-                                    </button>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-base sm:text-lg font-bold text-white">Import Data Kendaraan</h3>
+                                        <p class="text-xs sm:text-sm text-violet-100">Upload file Excel untuk menambah data
+                                            kendaraan</p>
+                                    </div>
+                                </div>
+                                <button @click="closeModal()"
+                                    class="p-1 text-white/70 hover:text-white rounded-lg hover:bg-white/10 transition">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <!-- Step Indicator -->
+                            <div class="flex items-center gap-2 mt-3">
+                                <div class="flex items-center gap-1.5">
+                                    <div :class="step >= 1 ? 'bg-white text-violet-600' : 'bg-white/30 text-white'"
+                                        class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors">
+                                        1</div>
+                                    <span class="text-xs text-white/80 hidden sm:inline">Upload</span>
+                                </div>
+                                <div :class="step >= 2 ? 'bg-white/60' : 'bg-white/20'"
+                                    class="flex-1 h-0.5 rounded transition-colors"></div>
+                                <div class="flex items-center gap-1.5">
+                                    <div :class="step >= 2 ? 'bg-white text-violet-600' : 'bg-white/30 text-white'"
+                                        class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors">
+                                        2</div>
+                                    <span class="text-xs text-white/80 hidden sm:inline">Preview</span>
+                                </div>
+                                <div :class="step >= 3 ? 'bg-white/60' : 'bg-white/20'"
+                                    class="flex-1 h-0.5 rounded transition-colors"></div>
+                                <div class="flex items-center gap-1.5">
+                                    <div :class="step >= 3 ? 'bg-white text-violet-600' : 'bg-white/30 text-white'"
+                                        class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors">
+                                        3</div>
+                                    <span class="text-xs text-white/80 hidden sm:inline">Confirm</span>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Form Body -->
-                            <div class="px-4 sm:px-6 py-4 sm:py-5 space-y-4 sm:space-y-5 overflow-y-auto flex-1">
+                        <!-- Modal Body (Scrollable) -->
+                        <div class="p-4 sm:p-6 overflow-y-auto flex-1">
 
-                                <!-- Download Template -->
+                            <!-- STEP 1: Upload File -->
+                            <div x-show="step === 1" x-transition>
+                                <!-- Info -->
                                 <div
-                                    class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-3 sm:p-4">
-                                    <div class="flex items-start gap-3">
-                                        <div class="p-1.5 bg-blue-100 rounded-lg shrink-0 mt-0.5">
-                                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                                </path>
-                                            </svg>
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <p class="text-xs sm:text-sm font-semibold text-blue-800">Download Template</p>
-                                            <p class="text-[10px] sm:text-xs text-blue-600 mt-0.5">Unduh format template
-                                                Excel sebelum melakukan import data</p>
-                                            <a href="{{ route('satker.kendaraans.download-template') }}"
-                                                class="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-lg hover:bg-blue-700 transition-colors shadow-sm">
-                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4">
-                                                    </path>
-                                                </svg>
-                                                Download Template
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- File Upload -->
-                                <div>
-                                    <label
-                                        class="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-700 mb-2">
-                                        <span
-                                            class="flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-indigo-100 text-indigo-600">
-                                            <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                                </path>
-                                            </svg>
-                                        </span>
-                                        Pilih File Excel
-                                    </label>
-                                    <div class="relative">
-                                        <input type="file" name="file" id="importFileInput" accept=".xlsx,.xls,.csv"
-                                            required
-                                            class="block w-full text-xs sm:text-sm text-slate-500 file:mr-3 sm:file:mr-4 file:py-2 file:px-3 sm:file:px-4 file:rounded-lg file:border-0 file:text-xs sm:file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer border border-slate-200 rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    </div>
-                                    <p class="mt-1.5 text-[10px] sm:text-xs text-slate-400">Format: .xlsx, .xls, .csv |
-                                        Maks: 2MB</p>
-                                </div>
-
-                                <!-- Instructions -->
-                                <div class="bg-amber-50 border border-amber-200 rounded-xl p-3">
-                                    <div class="flex items-start gap-2">
-                                        <svg class="w-4 h-4 text-amber-500 shrink-0 mt-0.5" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
+                                    class="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 bg-violet-50 rounded-xl border border-violet-200 mb-4">
+                                    <div class="p-1 sm:p-1.5 bg-violet-100 text-violet-600 rounded-lg mt-0.5 shrink-0">
+                                        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
-                                        <div class="text-[10px] sm:text-xs text-amber-700">
-                                            <p class="font-semibold mb-1">Petunjuk:</p>
-                                            <ul class="space-y-0.5 list-disc list-inside">
-                                                <li>Kolom wajib: <b>NO POLISI</b>, <b>JENIS KENDARAAN</b>, <b>JENIS BBM</b>
-                                                </li>
-                                                <li>Jenis BBM: <b>Pertamax</b> atau <b>Pertamina Dex</b></li>
-                                                <li>Kode, Barcode, PIN diisi otomatis</li>
-                                                <li>Data duplikat akan dikonfirmasi terlebih dahulu</li>
-                                            </ul>
+                                    </div>
+                                    <div class="text-[10px] sm:text-xs text-violet-700">
+                                        <p class="font-semibold mb-1">Format file Excel:</p>
+                                        <ul class="list-disc list-inside space-y-0.5">
+                                            <li>Kolom <strong>NOPOL</strong> — Nomor polisi kendaraan</li>
+                                            <li>Kolom <strong>JENIS KENDARAAN</strong> — Tipe kendaraan</li>
+                                            <li>Kolom <strong>JENIS BBM</strong> — Pertamax / Pertamina Dex</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Download Template -->
+                                <a href="{{ route('satker.kendaraans.download-template') }}"
+                                    class="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-violet-600 hover:text-violet-800 transition mb-4">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                        </path>
+                                    </svg>
+                                    Download Template Excel
+                                </a>
+
+                                <!-- Drag & Drop Area -->
+                                <div class="relative border-2 border-dashed rounded-xl p-6 sm:p-8 text-center transition-all"
+                                    :class="isDragging ? 'border-violet-400 bg-violet-50 scale-[1.02]' : (selectedFile ? 'border-emerald-300 bg-emerald-50' : 'border-slate-300 hover:border-violet-400 hover:bg-violet-50/50')"
+                                    @dragover.prevent="isDragging = true" @dragleave.prevent="isDragging = false"
+                                    @drop.prevent="handleDrop($event)">
+                                    <input type="file" x-ref="fileInput" accept=".xlsx,.xls,.csv" class="hidden"
+                                        @change="handleFileSelect($event)">
+
+                                    <template x-if="!selectedFile">
+                                        <div>
+                                            <div
+                                                class="mx-auto w-12 h-12 sm:w-14 sm:h-14 bg-violet-100 rounded-2xl flex items-center justify-center mb-3">
+                                                <svg class="w-6 h-6 sm:w-7 sm:h-7 text-violet-500" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                                                    </path>
+                                                </svg>
+                                            </div>
+                                            <p class="text-sm font-semibold text-slate-700 mb-1">Drag & drop file Excel di
+                                                sini
+                                            </p>
+                                            <p class="text-xs text-slate-400 mb-3">atau</p>
+                                            <button @click="$refs.fileInput.click()" type="button"
+                                                class="px-4 py-2 bg-violet-600 text-white text-xs sm:text-sm font-semibold rounded-lg hover:bg-violet-700 transition shadow-md shadow-violet-500/20">
+                                                Pilih File
+                                            </button>
+                                            <p class="mt-3 text-[10px] sm:text-xs text-slate-400">Maksimal 2MB. Format:
+                                                .xlsx,
+                                                .xls, .csv</p>
+                                        </div>
+                                    </template>
+
+                                    <template x-if="selectedFile">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center shrink-0">
+                                                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="text-left flex-1 min-w-0">
+                                                <p class="text-sm font-semibold text-slate-800 truncate"
+                                                    x-text="selectedFile.name"></p>
+                                                <p class="text-xs text-slate-400"
+                                                    x-text="formatFileSize(selectedFile.size)">
+                                                </p>
+                                            </div>
+                                            <button @click="clearFile()" type="button"
+                                                class="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M6 18L18 6M6 6l12 12"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </template>
+                                </div>
+
+                                <!-- Error Message -->
+                                <div x-show="uploadError" x-transition
+                                    class="mt-3 p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-600"
+                                    x-text="uploadError"></div>
+                            </div>
+
+                            <!-- STEP 2: Preview Result -->
+                            <div x-show="step === 2" x-transition>
+                                <!-- Loading -->
+                                <div x-show="isLoading" class="flex flex-col items-center justify-center py-8">
+                                    <div
+                                        class="w-10 h-10 border-4 border-violet-200 border-t-violet-600 rounded-full animate-spin mb-3">
+                                    </div>
+                                    <p class="text-sm text-slate-500">Menganalisis file...</p>
+                                </div>
+
+                                <div x-show="!isLoading && previewData">
+                                    <!-- Summary Cards -->
+                                    <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-4">
+                                        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-center">
+                                            <p class="text-lg sm:text-2xl font-black text-emerald-600"
+                                                x-text="previewData?.new_count || 0"></p>
+                                            <p
+                                                class="text-[10px] sm:text-xs font-semibold text-emerald-500 uppercase tracking-wider">
+                                                Data Baru</p>
+                                        </div>
+                                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-center">
+                                            <p class="text-lg sm:text-2xl font-black text-amber-600"
+                                                x-text="previewData?.duplicate_count || 0"></p>
+                                            <p
+                                                class="text-[10px] sm:text-xs font-semibold text-amber-500 uppercase tracking-wider">
+                                                Duplikat</p>
+                                        </div>
+                                        <div class="bg-red-50 border border-red-200 rounded-xl p-3 text-center">
+                                            <p class="text-lg sm:text-2xl font-black text-red-600"
+                                                x-text="previewData?.error_count || 0"></p>
+                                            <p
+                                                class="text-[10px] sm:text-xs font-semibold text-red-500 uppercase tracking-wider">
+                                                Error</p>
                                         </div>
                                     </div>
+
+                                    <!-- New Entries Table -->
+                                    <template x-if="previewData?.new_entries?.length > 0">
+                                        <div class="mb-4">
+                                            <h4
+                                                class="text-xs sm:text-sm font-bold text-emerald-700 mb-2 flex items-center gap-1.5">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                                </svg>
+                                                Data Baru
+                                            </h4>
+                                            <div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
+                                                <div class="overflow-x-auto">
+                                                    <table class="w-full text-xs">
+                                                        <thead class="bg-slate-50">
+                                                            <tr>
+                                                                <th
+                                                                    class="px-3 py-2 text-left font-semibold text-slate-600">
+                                                                    Nopol</th>
+                                                                <th
+                                                                    class="px-3 py-2 text-left font-semibold text-slate-600">
+                                                                    Jenis Kendaraan</th>
+                                                                <th
+                                                                    class="px-3 py-2 text-left font-semibold text-slate-600">
+                                                                    Jenis BBM</th>
+                                                                <th
+                                                                    class="px-3 py-2 text-left font-semibold text-slate-600">
+                                                                    Satker</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody class="divide-y divide-slate-100">
+                                                            <template x-for="entry in previewData.new_entries.slice(0, 10)"
+                                                                :key="entry.row">
+                                                                <tr class="hover:bg-emerald-50/50">
+                                                                    <td class="px-3 py-2 font-mono font-semibold"
+                                                                        x-text="entry.no_polisi"></td>
+                                                                    <td class="px-3 py-2" x-text="entry.jenis_kendaraan">
+                                                                    </td>
+                                                                    <td class="px-3 py-2" x-text="entry.jenis_bbm"></td>
+                                                                    <td class="px-3 py-2" x-text="entry.satker"></td>
+                                                                </tr>
+                                                            </template>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <template x-if="previewData.new_entries.length > 10">
+                                                    <div class="px-3 py-2 bg-slate-50 text-xs text-slate-500 text-center">
+                                                        <span
+                                                            x-text="'... dan ' + (previewData.new_entries.length - 10) + ' data lainnya'"></span>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                    <!-- Duplicates Table -->
+                                    <template x-if="previewData?.duplicates?.length > 0">
+                                        <div class="mb-4">
+                                            <h4
+                                                class="text-xs sm:text-sm font-bold text-amber-700 mb-2 flex items-center gap-1.5">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z">
+                                                    </path>
+                                                </svg>
+                                                Data Duplikat
+                                            </h4>
+                                            <div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
+                                                <div class="overflow-x-auto">
+                                                    <table class="w-full text-xs">
+                                                        <thead class="bg-slate-50">
+                                                            <tr>
+                                                                <th
+                                                                    class="px-3 py-2 text-left font-semibold text-slate-600">
+                                                                    Nopol</th>
+                                                                <th
+                                                                    class="px-3 py-2 text-left font-semibold text-slate-600">
+                                                                    Field</th>
+                                                                <th
+                                                                    class="px-3 py-2 text-left font-semibold text-slate-600">
+                                                                    Data Lama</th>
+                                                                <th
+                                                                    class="px-3 py-2 text-left font-semibold text-slate-600">
+                                                                    Data Baru</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody class="divide-y divide-slate-100">
+                                                            <template x-for="dup in previewData.duplicates.slice(0, 10)"
+                                                                :key="dup.row">
+                                                                <template x-if="dup.has_changes">
+                                                                    <template x-for="(change, ci) in dup.changes" :key="ci">
+                                                                        <tr class="hover:bg-amber-50/50">
+                                                                            <td class="px-3 py-2 font-mono font-semibold"
+                                                                                x-text="ci === 0 ? dup.no_polisi : ''"></td>
+                                                                            <td class="px-3 py-2 font-semibold"
+                                                                                x-text="change.field"></td>
+                                                                            <td class="px-3 py-2 text-red-500 line-through"
+                                                                                x-text="change.old"></td>
+                                                                            <td class="px-3 py-2 text-emerald-600 font-semibold"
+                                                                                x-text="change.new"></td>
+                                                                        </tr>
+                                                                    </template>
+                                                                </template>
+                                                            </template>
+                                                            <template
+                                                                x-for="dup in previewData.duplicates.filter(d => !d.has_changes).slice(0, 5)"
+                                                                :key="'nochange-'+dup.row">
+                                                                <tr class="hover:bg-slate-50">
+                                                                    <td class="px-3 py-2 font-mono font-semibold"
+                                                                        x-text="dup.no_polisi"></td>
+                                                                    <td colspan="3" class="px-3 py-2 text-slate-400 italic">
+                                                                        Tidak ada perubahan</td>
+                                                                </tr>
+                                                            </template>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <template x-if="previewData.duplicates.length > 10">
+                                                    <div class="px-3 py-2 bg-slate-50 text-xs text-slate-500 text-center">
+                                                        <span
+                                                            x-text="'... dan ' + (previewData.duplicates.length - 10) + ' duplikat lainnya'"></span>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                    <!-- Errors List -->
+                                    <template x-if="previewData?.errors?.length > 0">
+                                        <div class="mb-4">
+                                            <h4
+                                                class="text-xs sm:text-sm font-bold text-red-700 mb-2 flex items-center gap-1.5">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                    </path>
+                                                </svg>
+                                                Error Validasi
+                                            </h4>
+                                            <div
+                                                class="bg-red-50 border border-red-200 rounded-xl p-3 space-y-1 max-h-32 overflow-y-auto">
+                                                <template x-for="(err, i) in previewData.errors.slice(0, 10)" :key="i">
+                                                    <p class="text-xs text-red-600" x-text="err"></p>
+                                                </template>
+                                                <template x-if="previewData.errors.length > 10">
+                                                    <p class="text-xs text-red-400 italic"
+                                                        x-text="'... dan ' + (previewData.errors.length - 10) + ' error lainnya'">
+                                                    </p>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </template>
                                 </div>
                             </div>
 
-                            <!-- Footer -->
-                            <div
-                                class="px-4 sm:px-6 py-3 sm:py-4 bg-slate-50/80 border-t border-slate-100 flex flex-row-reverse gap-2 sm:gap-3 shrink-0">
-                                <button type="submit" id="importSubmitBtn"
-                                    class="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-xs sm:text-sm font-bold rounded-xl hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-lg shadow-blue-500/25 transition-all duration-200 hover:-translate-y-0.5">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
-                                        </path>
-                                    </svg>
-                                    Import Sekarang
+                            <!-- STEP 3: Confirm & Select Duplicate Action -->
+                            <div x-show="step === 3" x-transition>
+                                <div class="space-y-4">
+                                    <!-- Summary -->
+                                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                                        <p class="text-sm font-semibold text-slate-700 mb-2">Ringkasan Import:</p>
+                                        <ul class="text-xs text-slate-600 space-y-1">
+                                            <li class="flex items-center gap-2">
+                                                <span class="w-2 h-2 bg-emerald-500 rounded-full"></span>
+                                                <span
+                                                    x-text="(previewData?.new_count || 0) + ' kendaraan baru akan ditambahkan'"></span>
+                                            </li>
+                                            <li class="flex items-center gap-2" x-show="previewData?.duplicate_count > 0">
+                                                <span class="w-2 h-2 bg-amber-500 rounded-full"></span>
+                                                <span
+                                                    x-text="(previewData?.duplicate_count || 0) + ' kendaraan duplikat ditemukan'"></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Duplicate Action Selection -->
+                                    <template x-if="previewData?.duplicate_count > 0">
+                                        <div>
+                                            <p class="text-xs sm:text-sm font-bold text-slate-700 mb-3">Apa yang ingin
+                                                dilakukan
+                                                dengan data duplikat?</p>
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                <button @click="duplicateAction = 'skip'" type="button"
+                                                    :class="duplicateAction === 'skip' ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-500/20' : 'border-slate-200 hover:border-slate-300'"
+                                                    class="p-3 sm:p-4 border-2 rounded-xl text-left transition-all">
+                                                    <div class="flex items-center gap-2 mb-1">
+                                                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
+                                                        </svg>
+                                                        <span class="text-sm font-bold text-slate-800">Lewati (Skip)</span>
+                                                    </div>
+                                                    <p class="text-xs text-slate-500">Data duplikat tidak diubah, hanya data
+                                                        baru yang ditambahkan.</p>
+                                                </button>
+                                                <button @click="duplicateAction = 'update'" type="button"
+                                                    :class="duplicateAction === 'update' ? 'border-amber-500 bg-amber-50 ring-2 ring-amber-500/20' : 'border-slate-200 hover:border-slate-300'"
+                                                    class="p-3 sm:p-4 border-2 rounded-xl text-left transition-all">
+                                                    <div class="flex items-center gap-2 mb-1">
+                                                        <svg class="w-5 h-5 text-amber-500" fill="none"
+                                                            stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                                                            </path>
+                                                        </svg>
+                                                        <span class="text-sm font-bold text-slate-800">Perbarui
+                                                            (Update)</span>
+                                                    </div>
+                                                    <p class="text-xs text-slate-500">Data duplikat akan diperbarui dengan
+                                                        data
+                                                        dari file Excel.</p>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal Footer -->
+                        <div class="px-4 sm:px-6 py-3 sm:py-4 bg-slate-50 border-t border-slate-200 shrink-0">
+                            <div class="flex gap-2 sm:gap-3">
+                                <button @click="step > 1 ? step-- : closeModal()" type="button"
+                                    class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-100 text-slate-600 text-sm font-semibold rounded-xl hover:bg-slate-200 transition-colors"
+                                    x-text="step > 1 ? 'Kembali' : 'Batal'"></button>
+
+                                <!-- Step 1: Preview Button -->
+                                <button x-show="step === 1" @click="previewImport()" type="button"
+                                    :disabled="!selectedFile || isLoading"
+                                    class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-violet-500 to-indigo-600 text-white text-sm font-bold rounded-xl hover:from-violet-600 hover:to-indigo-700 shadow-lg shadow-violet-500/30 hover:shadow-violet-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                                    <span x-show="!isLoading">🔍 Preview Import</span>
+                                    <span x-show="isLoading">⏳ Menganalisis...</span>
                                 </button>
-                                <button type="button" @click="showImportModal = false"
-                                    class="inline-flex items-center px-4 sm:px-5 py-2 sm:py-2.5 bg-white text-slate-600 text-xs sm:text-sm font-semibold rounded-xl border border-slate-200 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-300 transition-all duration-200">
-                                    Batal
+
+                                <!-- Step 2: Next Button -->
+                                <button x-show="step === 2" @click="step = 3" type="button"
+                                    :disabled="!previewData || (previewData.new_count === 0 && previewData.duplicate_count === 0)"
+                                    class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-violet-500 to-indigo-600 text-white text-sm font-bold rounded-xl hover:from-violet-600 hover:to-indigo-700 shadow-lg shadow-violet-500/30 hover:shadow-violet-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                                    Lanjutkan ➡️
+                                </button>
+
+                                <!-- Step 3: Confirm Import -->
+                                <button x-show="step === 3" @click="confirmImport()" type="button"
+                                    :disabled="isImporting || (previewData?.duplicate_count > 0 && !duplicateAction)"
+                                    class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-sm font-bold rounded-xl hover:from-emerald-600 hover:to-teal-700 shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                                    <span x-show="!isImporting">✅ Import Sekarang</span>
+                                    <span x-show="isImporting">⏳ Memproses...</span>
                                 </button>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        @endif
-    </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const form = document.getElementById('importKendaraanForm');
-            if (!form) return;
+            <script>
+                function importKendaraanModal() {
+                    return {
+                        showModal: false,
+                        step: 1,
+                        selectedFile: null,
+                        isDragging: false,
+                        isLoading: false,
+                        isImporting: false,
+                        uploadError: '',
+                        previewData: null,
+                        duplicateAction: 'skip',
 
-            form.addEventListener('submit', function (e) {
-                e.preventDefault();
+                        openModal() {
+                            this.showModal = true;
+                            this.resetState();
+                        },
 
-                const fileInput = document.getElementById('importFileInput');
-                if (!fileInput.files.length) {
-                    Swal.fire({ icon: 'warning', title: 'File Kosong', text: 'Silakan pilih file Excel terlebih dahulu.' });
-                    return;
-                }
+                        closeModal() {
+                            this.showModal = false;
+                            this.resetState();
+                        },
 
-                const submitBtn = document.getElementById('importSubmitBtn');
-                const originalBtnHTML = submitBtn.innerHTML;
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Memeriksa...';
+                        resetState() {
+                            this.step = 1;
+                            this.selectedFile = null;
+                            this.isDragging = false;
+                            this.isLoading = false;
+                            this.isImporting = false;
+                            this.uploadError = '';
+                            this.previewData = null;
+                            this.duplicateAction = 'skip';
+                        },
 
-                // Step 1: Preview for duplicates
-                const formData = new FormData();
-                formData.append('file', fileInput.files[0]);
-                formData.append('_token', '{{ csrf_token() }}');
-
-                fetch('{{ route("satker.kendaraans.preview-import") }}', {
-                    method: 'POST',
-                    body: formData,
-                    headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }
-                })
-                    .then(res => {
-                        if (res.status === 403) return res.json().then(d => { throw new Error(d.error || 'Fitur dinonaktifkan'); });
-                        if (!res.ok) return res.json().then(d => { throw new Error(d.error || d.message || 'Gagal memproses file'); });
-                        return res.json();
-                    })
-                    .then(data => {
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = originalBtnHTML;
-
-                        if (data.duplicates && data.duplicates.length > 0) {
-                            // Show duplicate confirmation popup
-                            let tableHTML = `
-                        <div style="max-height:300px;overflow-y:auto;margin-top:10px;">
-                            <table style="width:100%;border-collapse:collapse;font-size:12px;">
-                                <thead>
-                                    <tr style="background:#f1f5f9;">
-                                        <th style="padding:8px;border:1px solid #e2e8f0;text-align:left;">No Polisi</th>
-                                        <th style="padding:8px;border:1px solid #e2e8f0;text-align:left;">Data Lama</th>
-                                        <th style="padding:8px;border:1px solid #e2e8f0;text-align:left;">Data Baru</th>
-                                    </tr>
-                                </thead>
-                                <tbody>`;
-
-                            data.duplicates.forEach(d => {
-                                tableHTML += `
-                            <tr>
-                                <td style="padding:6px 8px;border:1px solid #e2e8f0;font-weight:600;">${d.no_polisi}</td>
-                                <td style="padding:6px 8px;border:1px solid #e2e8f0;">
-                                    <span style="color:#64748b;">${d.old_jenis_kendaraan}</span><br>
-                                    <span style="font-size:10px;color:#94a3b8;">${d.old_jenis_bbm}</span>
-                                </td>
-                                <td style="padding:6px 8px;border:1px solid #e2e8f0;">
-                                    <span style="color:#2563eb;font-weight:500;">${d.new_jenis_kendaraan}</span><br>
-                                    <span style="font-size:10px;color:#3b82f6;">${d.new_jenis_bbm}</span>
-                                </td>
-                            </tr>`;
-                            });
-
-                            tableHTML += '</tbody></table></div>';
-
-                            let errInfo = '';
-                            if (data.errors && data.errors.length > 0) {
-                                errInfo = `<div style="margin-top:10px;padding:8px;background:#fef2f2;border-radius:8px;font-size:11px;color:#dc2626;text-align:left;">⚠️ ${data.errors.length} baris juga ada masalah validasi</div>`;
+                        handleDrop(e) {
+                            this.isDragging = false;
+                            const files = e.dataTransfer.files;
+                            if (files.length > 0) {
+                                this.validateAndSetFile(files[0]);
                             }
+                        },
 
-                            Swal.fire({
-                                icon: 'question',
-                                title: 'Data Duplikat Ditemukan!',
-                                html: `<p style="font-size:13px;color:#64748b;margin-bottom:8px;">Ditemukan <b>${data.duplicates.length}</b> data kendaraan yang sudah ada di database:</p>` + tableHTML + errInfo,
-                                showDenyButton: true,
-                                showCancelButton: true,
-                                confirmButtonText: '🔄 Gunakan Data Baru',
-                                denyButtonText: '📋 Gunakan Data Lama',
-                                cancelButtonText: 'Batal',
-                                confirmButtonColor: '#2563eb',
-                                denyButtonColor: '#64748b',
-                                width: '520px',
-                                customClass: { popup: 'swal-import-popup' }
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    document.getElementById('duplicateActionInput').value = 'update';
-                                    form.submit();
-                                } else if (result.isDenied) {
-                                    document.getElementById('duplicateActionInput').value = 'skip';
-                                    form.submit();
+                        handleFileSelect(e) {
+                            if (e.target.files.length > 0) {
+                                this.validateAndSetFile(e.target.files[0]);
+                            }
+                        },
+
+                        validateAndSetFile(file) {
+                            this.uploadError = '';
+                            const allowedExt = ['.xlsx', '.xls', '.csv'];
+                            const ext = '.' + file.name.split('.').pop().toLowerCase();
+
+                            if (!allowedExt.includes(ext)) {
+                                this.uploadError = 'Format file tidak didukung. Gunakan .xlsx, .xls, atau .csv';
+                                return;
+                            }
+                            if (file.size > 2 * 1024 * 1024) {
+                                this.uploadError = 'Ukuran file melebihi batas 2MB.';
+                                return;
+                            }
+                            this.selectedFile = file;
+                        },
+
+                        clearFile() {
+                            this.selectedFile = null;
+                            this.uploadError = '';
+                            if (this.$refs.fileInput) this.$refs.fileInput.value = '';
+                        },
+
+                        formatFileSize(bytes) {
+                            if (bytes < 1024) return bytes + ' B';
+                            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+                            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+                        },
+
+                        async previewImport() {
+                            if (!this.selectedFile) return;
+                            this.isLoading = true;
+                            this.uploadError = '';
+                            this.step = 2;
+
+                            const formData = new FormData();
+                            formData.append('file', this.selectedFile);
+
+                            try {
+                                const resp = await fetch('{{ route("satker.kendaraans.preview-import") }}', {
+                                    method: 'POST',
+                                    headers: {
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                        'Accept': 'application/json',
+                                    },
+                                    body: formData
+                                });
+
+                                if (!resp.ok) {
+                                    const errData = await resp.json().catch(() => null);
+                                    throw new Error(errData?.message || 'Gagal menganalisis file. Periksa format dan coba lagi.');
                                 }
-                            });
-                        } else {
-                            // No duplicates, submit directly
-                            document.getElementById('duplicateActionInput').value = 'skip';
+
+                                this.previewData = await resp.json();
+                            } catch (err) {
+                                this.uploadError = err.message;
+                                this.step = 1;
+                            } finally {
+                                this.isLoading = false;
+                            }
+                        },
+
+                        confirmImport() {
+                            if (!this.selectedFile) return;
+                            this.isImporting = true;
+
+                            const formData = new FormData();
+                            formData.append('file', this.selectedFile);
+                            formData.append('duplicate_action', this.previewData?.duplicate_count > 0 ? this.duplicateAction : 'skip');
+                            formData.append('_token', '{{ csrf_token() }}');
+
+                            // Create a hidden form and submit traditionally (for redirect)
+                            const form = document.createElement('form');
+                            form.method = 'POST';
+                            form.action = '{{ route("satker.kendaraans.import") }}';
+                            form.enctype = 'multipart/form-data';
+                            form.style.display = 'none';
+                            form.setAttribute('data-turbo', 'false');
+
+                            // CSRF
+                            const csrfInput = document.createElement('input');
+                            csrfInput.type = 'hidden';
+                            csrfInput.name = '_token';
+                            csrfInput.value = '{{ csrf_token() }}';
+                            form.appendChild(csrfInput);
+
+                            // Duplicate action
+                            const actionInput = document.createElement('input');
+                            actionInput.type = 'hidden';
+                            actionInput.name = 'duplicate_action';
+                            actionInput.value = this.previewData?.duplicate_count > 0 ? this.duplicateAction : 'skip';
+                            form.appendChild(actionInput);
+
+                            // File - use DataTransfer to attach file
+                            const fileInput = document.createElement('input');
+                            fileInput.type = 'file';
+                            fileInput.name = 'file';
+                            const dt = new DataTransfer();
+                            dt.items.add(this.selectedFile);
+                            fileInput.files = dt.files;
+                            form.appendChild(fileInput);
+
+                            document.body.appendChild(form);
                             form.submit();
                         }
-                    })
-                    .catch(err => {
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = originalBtnHTML;
-                        Swal.fire({ icon: 'error', title: 'Error', text: err.message });
-                    });
-            });
-        });
-    </script>
+                    }
+                }
+            </script>
+        @endif
+    </div>
 
     <script>
         // Bulk Delete Checkboxes

@@ -7,6 +7,7 @@ use App\Models\Kendaraan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\LaporanBulananExport;
 use App\Exports\KendaraanTemplateExport;
@@ -413,7 +414,7 @@ class KendaraanController extends Controller
     {
         $canImport = \App\Models\Setting::where('key', 'satker_can_import_kendaraan')->value('value') ?? '1';
         if ($canImport == '0') {
-            return response()->json(['error' => 'Fitur import kendaraan saat ini dinonaktifkan oleh Administrator.'], 403);
+            return response()->json(['success' => false, 'message' => 'Fitur import kendaraan saat ini dinonaktifkan oleh Administrator.'], 403);
         }
 
         $request->validate([
@@ -421,18 +422,112 @@ class KendaraanController extends Controller
         ]);
 
         $satkerId = auth()->user()->satker_id;
-        $import = new KendaraanImport($satkerId, 'preview');
+        $satkerName = auth()->user()->satker->nama_satker ?? '-';
 
         try {
-            Excel::import($import, $request->file('file'));
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Gagal membaca file: ' . $e->getMessage()], 422);
-        }
+            $filePath = $request->file('file')->getRealPath();
+            $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($filePath);
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load($filePath);
+            $sheet = $spreadsheet->getActiveSheet();
+            $highestRow = $sheet->getHighestRow();
+            $highestCol = $sheet->getHighestColumn();
 
-        return response()->json([
-            'duplicates' => $import->duplicates,
-            'errors' => $import->errors,
-        ]);
+            // Auto-detect header row: find the row with the most recognized column headers (min 2)
+            $headerRow = null;
+            $colMap = [];
+            for ($r = 1; $r <= min(5, $highestRow); $r++) {
+                $tempMap = [];
+                foreach (range('A', $highestCol) as $col) {
+                    $val = strtolower(trim((string) $sheet->getCell($col . $r)->getValue()));
+                    if (in_array($val, ['nopol', 'no polisi', 'no_polisi', 'nomor polisi'])) {
+                        $tempMap['nopol'] = $col;
+                    } elseif (in_array($val, ['jenis kendaraan', 'jenis_kendaraan', 'tipe', 'tipe kendaraan', 'tipe_kendaraan'])) {
+                        $tempMap['jenis_kendaraan'] = $col;
+                    } elseif (in_array($val, ['jenis bbm', 'jenis_bbm', 'bbm', 'bahan bakar'])) {
+                        $tempMap['jenis_bbm'] = $col;
+                    } elseif (in_array($val, ['satker', 'satuan kerja', 'satuan_kerja', 'nama_satker'])) {
+                        $tempMap['satker'] = $col;
+                    }
+                }
+                if (count($tempMap) >= 2 && count($tempMap) > count($colMap)) {
+                    $headerRow = $r;
+                    $colMap = $tempMap;
+                }
+            }
+
+            if (!$headerRow) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Header tidak ditemukan. Pastikan file memiliki kolom "NO POLISI" dan "JENIS KENDARAAN" di salah satu baris pertama.',
+                ], 422);
+            }
+
+            Log::info('Satker Import Preview: headerRow=' . $headerRow . ', colMap=' . json_encode($colMap) . ', totalRows=' . $highestRow);
+
+            $newEntries = [];
+            $duplicates = [];
+            $errors = [];
+            $successCount = 0;
+
+            for ($r = $headerRow + 1; $r <= $highestRow; $r++) {
+                $nopol = isset($colMap['nopol']) ? trim((string) $sheet->getCell($colMap['nopol'] . $r)->getValue()) : '';
+                $jenisKendaraan = isset($colMap['jenis_kendaraan']) ? trim((string) $sheet->getCell($colMap['jenis_kendaraan'] . $r)->getValue()) : '';
+                $jenisBbm = isset($colMap['jenis_bbm']) ? trim((string) $sheet->getCell($colMap['jenis_bbm'] . $r)->getValue()) : '';
+
+                // Skip empty rows
+                if (empty($nopol) && empty($jenisKendaraan) && empty($jenisBbm)) {
+                    continue;
+                }
+
+                if (empty($nopol)) { $errors[] = "Baris {$r}: NOPOL kosong."; continue; }
+                if (empty($jenisKendaraan)) { $errors[] = "Baris {$r}: JENIS KENDARAAN kosong."; continue; }
+                if (empty($jenisBbm)) { $errors[] = "Baris {$r}: JENIS BBM kosong."; continue; }
+
+                // Normalize BBM
+                $bbmLower = strtolower($jenisBbm);
+                if ($bbmLower === 'pertamax') { $jenisBbm = 'Pertamax'; }
+                elseif (in_array($bbmLower, ['pertamina dex', 'pertaminadex', 'dex'])) { $jenisBbm = 'Pertamina Dex'; }
+                else { $errors[] = "Baris {$r}: Jenis BBM '{$jenisBbm}' tidak valid (Pertamax/Pertamina Dex)."; continue; }
+
+                // Check duplicate
+                $existing = Kendaraan::where('no_polisi', $nopol)->first();
+                if ($existing) {
+                    $changes = [];
+                    if ($existing->jenis_kendaraan !== $jenisKendaraan) {
+                        $changes[] = ['field' => 'Jenis Kendaraan', 'old' => $existing->jenis_kendaraan, 'new' => $jenisKendaraan];
+                    }
+                    if ($existing->jenis_bbm !== $jenisBbm) {
+                        $changes[] = ['field' => 'Jenis BBM', 'old' => $existing->jenis_bbm, 'new' => $jenisBbm];
+                    }
+                    $duplicates[] = [
+                        'row' => $r, 'no_polisi' => $nopol, 'changes' => $changes, 'has_changes' => count($changes) > 0,
+                    ];
+                } else {
+                    $newEntries[] = [
+                        'row' => $r, 'no_polisi' => $nopol, 'jenis_kendaraan' => $jenisKendaraan,
+                        'jenis_bbm' => $jenisBbm, 'satker' => $satkerName,
+                    ];
+                    $successCount++;
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'new_count' => $successCount,
+                'duplicate_count' => count($duplicates),
+                'error_count' => count($errors),
+                'new_entries' => $newEntries,
+                'duplicates' => $duplicates,
+                'errors' => $errors,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Satker Import Preview Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memproses file: ' . $e->getMessage(),
+            ], 422);
+        }
     }
 
     public function importKendaraan(Request $request)
@@ -444,46 +539,143 @@ class KendaraanController extends Controller
 
         $request->validate([
             'file' => 'required|mimes:xlsx,xls,csv|max:2048',
-            'duplicate_action' => 'nullable|in:skip,update',
+            'duplicate_action' => 'required|in:skip,update',
         ], [
             'file.required' => 'File Excel harus dipilih.',
             'file.mimes' => 'File harus berformat .xlsx, .xls, atau .csv.',
             'file.max' => 'Ukuran file maksimal 2MB.',
+            'duplicate_action.required' => 'Pilih aksi untuk data duplikat.',
         ]);
 
         $satkerId = auth()->user()->satker_id;
         $duplicateAction = $request->input('duplicate_action', 'skip');
-        $import = new KendaraanImport($satkerId, $duplicateAction);
 
         try {
-            Excel::import($import, $request->file('file'));
-        } catch (\Exception $e) {
-            return back()->with('error', 'Gagal membaca file Excel: ' . $e->getMessage());
-        }
+            $filePath = $request->file('file')->getRealPath();
+            $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($filePath);
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load($filePath);
+            $sheet = $spreadsheet->getActiveSheet();
+            $highestRow = $sheet->getHighestRow();
+            $highestCol = $sheet->getHighestColumn();
 
-        $messages = [];
-        if ($import->successCount > 0) {
-            $messages[] = "{$import->successCount} kendaraan baru ditambahkan";
-        }
-        if ($import->updatedCount > 0) {
-            $messages[] = "{$import->updatedCount} data diperbarui";
-        }
-        if ($import->skippedCount > 0) {
-            $messages[] = "{$import->skippedCount} data duplikat dilewati";
-        }
-
-        if (count($import->errors) > 0) {
-            $errorMessages = implode(' | ', array_slice($import->errors, 0, 5));
-            if ($import->successCount > 0 || $import->updatedCount > 0) {
-                $message = implode(', ', $messages) . ". Ada " . count($import->errors) . " baris gagal: {$errorMessages}";
-                return back()->with('success', $message);
-            } else {
-                return back()->with('error', 'Import gagal. ' . $errorMessages);
+            // Auto-detect header row: find the row with the most recognized column headers (min 2)
+            $headerRow = null;
+            $colMap = [];
+            for ($r = 1; $r <= min(5, $highestRow); $r++) {
+                $tempMap = [];
+                foreach (range('A', $highestCol) as $col) {
+                    $val = strtolower(trim((string) $sheet->getCell($col . $r)->getValue()));
+                    if (in_array($val, ['nopol', 'no polisi', 'no_polisi', 'nomor polisi'])) {
+                        $tempMap['nopol'] = $col;
+                    } elseif (in_array($val, ['jenis kendaraan', 'jenis_kendaraan', 'tipe', 'tipe kendaraan', 'tipe_kendaraan'])) {
+                        $tempMap['jenis_kendaraan'] = $col;
+                    } elseif (in_array($val, ['jenis bbm', 'jenis_bbm', 'bbm', 'bahan bakar'])) {
+                        $tempMap['jenis_bbm'] = $col;
+                    } elseif (in_array($val, ['satker', 'satuan kerja', 'satuan_kerja', 'nama_satker'])) {
+                        $tempMap['satker'] = $col;
+                    }
+                }
+                if (count($tempMap) >= 2 && count($tempMap) > count($colMap)) {
+                    $headerRow = $r;
+                    $colMap = $tempMap;
+                }
             }
-        }
 
-        $message = implode(', ', $messages) . '.';
-        return back()->with('success', $message ?: 'Tidak ada data baru untuk diimport.');
+            if (!$headerRow) {
+                return redirect()->route('satker.kendaraans.index')->with('error', 'Header tidak ditemukan. Pastikan file memiliki kolom "NO POLISI" dan "JENIS KENDARAAN".');
+            }
+
+            Log::info('Satker Import Kendaraan: headerRow=' . $headerRow . ', colMap=' . json_encode($colMap) . ', totalRows=' . $highestRow . ', duplicateAction=' . $duplicateAction);
+
+            $successCount = 0;
+            $updatedCount = 0;
+            $skippedCount = 0;
+            $errors = [];
+
+            for ($r = $headerRow + 1; $r <= $highestRow; $r++) {
+                $nopol = isset($colMap['nopol']) ? trim((string) $sheet->getCell($colMap['nopol'] . $r)->getValue()) : '';
+                $jenisKendaraan = isset($colMap['jenis_kendaraan']) ? trim((string) $sheet->getCell($colMap['jenis_kendaraan'] . $r)->getValue()) : '';
+                $jenisBbm = isset($colMap['jenis_bbm']) ? trim((string) $sheet->getCell($colMap['jenis_bbm'] . $r)->getValue()) : '';
+
+                // Skip empty rows
+                if (empty($nopol) && empty($jenisKendaraan) && empty($jenisBbm)) {
+                    continue;
+                }
+
+                if (empty($nopol)) { $errors[] = "Baris {$r}: NOPOL kosong."; continue; }
+                if (empty($jenisKendaraan)) { $errors[] = "Baris {$r}: JENIS KENDARAAN kosong."; continue; }
+                if (empty($jenisBbm)) { $errors[] = "Baris {$r}: JENIS BBM kosong."; continue; }
+
+                // Normalize BBM
+                $bbmLower = strtolower($jenisBbm);
+                if ($bbmLower === 'pertamax') { $jenisBbm = 'Pertamax'; }
+                elseif (in_array($bbmLower, ['pertamina dex', 'pertaminadex', 'dex'])) { $jenisBbm = 'Pertamina Dex'; }
+                else { $errors[] = "Baris {$r}: Jenis BBM '{$jenisBbm}' tidak valid."; continue; }
+
+                // Check duplicate
+                $existing = Kendaraan::where('no_polisi', $nopol)->first();
+                if ($existing) {
+                    if ($duplicateAction === 'update') {
+                        $existing->update([
+                            'jenis_kendaraan' => $jenisKendaraan,
+                            'jenis_bbm' => $jenisBbm,
+                            'satker_id' => $satkerId,
+                        ]);
+                        $updatedCount++;
+                    } else {
+                        $skippedCount++;
+                    }
+                } else {
+                    // Auto-generate barcode, pin, kode
+                    $barcode = strtoupper(Str::random(10));
+                    while (Kendaraan::where('barcode', $barcode)->exists()) {
+                        $barcode = strtoupper(Str::random(10));
+                    }
+                    $pin = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+                    $lastId = Kendaraan::max('id') ?? 0;
+                    $kodeKendaraan = 'KND-' . str_pad($lastId + 1, 5, '0', STR_PAD_LEFT);
+
+                    Kendaraan::create([
+                        'satker_id' => $satkerId,
+                        'kode_kendaraan' => $kodeKendaraan,
+                        'no_polisi' => $nopol,
+                        'jenis_kendaraan' => $jenisKendaraan,
+                        'jenis_bbm' => $jenisBbm,
+                        'barcode' => $barcode,
+                        'pin' => $pin,
+                        'saldo' => 0,
+                    ]);
+                    $successCount++;
+                }
+            }
+
+            LogAktivitas::create([
+                'user_id' => auth()->id(),
+                'aktivitas' => "Import Kendaraan: {$successCount} baru, {$updatedCount} diperbarui, {$skippedCount} dilewati",
+            ]);
+
+            $messages = [];
+            if ($successCount > 0) $messages[] = "{$successCount} kendaraan baru ditambahkan";
+            if ($updatedCount > 0) $messages[] = "{$updatedCount} data diperbarui";
+            if ($skippedCount > 0) $messages[] = "{$skippedCount} data duplikat dilewati";
+
+            if (count($errors) > 0) {
+                $errorMessages = implode(' | ', array_slice($errors, 0, 5));
+                if ($successCount > 0 || $updatedCount > 0) {
+                    $message = implode(', ', $messages) . ". Ada " . count($errors) . " baris gagal: {$errorMessages}";
+                    return redirect()->route('satker.kendaraans.index')->with('success', $message);
+                } else {
+                    return redirect()->route('satker.kendaraans.index')->with('error', 'Import gagal. ' . $errorMessages);
+                }
+            }
+
+            $message = implode(', ', $messages) . '.';
+            return redirect()->route('satker.kendaraans.index')->with('success', $message ?: 'Tidak ada data baru untuk diimport.');
+        } catch (\Exception $e) {
+            Log::error('Satker Import Kendaraan Error: ' . $e->getMessage());
+            return redirect()->route('satker.kendaraans.index')->with('error', 'Gagal import: ' . $e->getMessage());
+        }
     }
 
     public function downloadTemplate()
