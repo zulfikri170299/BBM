@@ -61,8 +61,11 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     Route::post('/users/bulk-status', [\App\Http\Controllers\Admin\UserController::class, 'bulkStatus'])->name('users.bulk-status');
     Route::post('/users/bulk-delete', [\App\Http\Controllers\Admin\UserController::class, 'bulkDelete'])->name('users.bulk-delete');
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+    Route::get('/personels/export', [\App\Http\Controllers\Admin\PersonelController::class, 'export'])->name('personels.export');
+    Route::post('/personels/import', [\App\Http\Controllers\Admin\PersonelController::class, 'import'])->name('personels.import');
+    Route::get('/personels/download-template', [\App\Http\Controllers\Admin\PersonelController::class, 'downloadTemplate'])->name('personels.download-template');
     Route::post('/personels/bulk-delete', [\App\Http\Controllers\Admin\PersonelController::class, 'bulkDelete'])->name('personels.bulk-delete');
-    Route::resource('personels', \App\Http\Controllers\Admin\PersonelController::class)->only(['index', 'destroy']);
+    Route::resource('personels', \App\Http\Controllers\Admin\PersonelController::class);
     Route::post('/personels/{personel}/reset-pin', [\App\Http\Controllers\Admin\PersonelController::class, 'resetPin'])->name('personels.reset-pin');
     Route::get('/personels/{personel}/print', [\App\Http\Controllers\Admin\PersonelController::class, 'print'])->name('personels.print');
     Route::get('/kendaraans/export', [\App\Http\Controllers\Admin\KendaraanController::class, 'export'])->name('kendaraans.export');

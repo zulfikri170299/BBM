@@ -66,13 +66,13 @@
     <div class="p-6 lg:p-8 space-y-8">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-slate-900">Manajemen Stok BBM</h1>
-                <p class="mt-1 text-slate-500">Kelola stok bahan bakar pusat sebelum dibagikan ke Satker.</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">Manajemen Stok BBM</h1>
+                <p class="mt-1 text-sm text-slate-500">Kelola stok bahan bakar pusat sebelum dibagikan ke Satker.</p>
             </div>
         </div>
 
         <!-- Current Stock Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="grid grid-cols-2 sm:grid-cols-2 gap-3 sm:gap-4">
             @foreach($stocks as $stock)
                 @php
                     $bbmStyle = [
@@ -80,13 +80,13 @@
                         'Pertamina Dex' => 'from-rose-500 to-red-600',
                     ];
                 @endphp
-                <div class="bg-gradient-to-br {{ $bbmStyle[$stock->jenis_bbm] ?? 'from-slate-500 to-slate-600' }} p-5 rounded-2xl text-white shadow-lg relative overflow-hidden group">
+                <div class="bg-gradient-to-br {{ $bbmStyle[$stock->jenis_bbm] ?? 'from-slate-500 to-slate-600' }} p-4 sm:p-5 rounded-2xl text-white shadow-lg relative overflow-hidden group">
                     <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
                     <div class="relative z-10">
-                        <p class="text-[10px] font-bold uppercase tracking-widest opacity-80">{{ $stock->jenis_bbm }}</p>
-                        <div class="flex items-baseline gap-1 mt-2">
-                            <span class="text-3xl font-black">{{ number_format($stock->saldo, 0, ',', '.') }}</span>
-                            <span class="text-sm font-bold opacity-70">Liter</span>
+                        <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest opacity-80">{{ $stock->jenis_bbm }}</p>
+                        <div class="flex items-baseline gap-1 mt-1 sm:mt-2">
+                            <span class="text-2xl sm:text-3xl font-black">{{ number_format($stock->saldo, 0, ',', '.') }}</span>
+                            <span class="text-[10px] sm:text-sm font-bold opacity-70">Liter</span>
                         </div>
                     </div>
                 </div>
@@ -97,13 +97,13 @@
             <!-- Add Stock Form -->
             <div class="lg:col-span-1">
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden sticky top-8">
-                    <div class="p-6 border-b border-slate-100 bg-slate-50/50">
-                        <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <div class="p-4 sm:p-6 border-b border-slate-100 bg-slate-50/50">
+                        <h3 class="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
                             <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                             Tambah Stok Baru
                         </h3>
                     </div>
-                    <form action="{{ route('admin.stok.store') }}" method="POST" class="p-6 space-y-4" autocomplete="off">
+                    <form action="{{ route('admin.stok.store') }}" method="POST" class="p-4 sm:p-6 space-y-4" autocomplete="off">
                         @csrf
                         <!-- Browser Auto-fill Hack -->
                         <input type="text" style="display:none" autocomplete="username">
@@ -158,27 +158,27 @@
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-slate-50 border-b border-slate-100">
-                                    <th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tanggal</th>
-                                    <th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Jenis BBM</th>
-                                    <th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Jumlah</th>
-                                    <th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tipe</th>
-                                    <th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Keterangan</th>
+                                    <th class="px-2 py-4 sm:px-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tanggal</th>
+                                    <th class="px-2 py-4 sm:px-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Jenis BBM</th>
+                                    <th class="px-2 py-4 sm:px-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Jumlah</th>
+                                    <th class="px-2 py-4 sm:px-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tipe</th>
+                                    <th class="px-2 py-4 sm:px-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Keterangan</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100">
                                 @forelse($history as $item)
                                     <tr class="hover:bg-slate-50 transition-colors">
-                                        <td class="px-6 py-4">
-                                            <p class="text-sm font-semibold text-slate-700">{{ $item->created_at->format('d/m/Y') }}</p>
-                                            <p class="text-[10px] text-slate-400">{{ $item->created_at->format('H:i') }} WIB</p>
+                                        <td class="px-2 py-3 sm:px-6 sm:py-4">
+                                            <p class="text-xs sm:text-sm font-semibold text-slate-700">{{ $item->created_at->format('d/m/Y') }}</p>
+                                            <p class="text-[9px] sm:text-[10px] text-slate-400">{{ $item->created_at->format('H:i') }} WIB</p>
                                         </td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-3 py-1 rounded-full text-[10px] font-bold text-white bg-gradient-to-r {{ $bbmStyle[$item->jenis_bbm] ?? 'from-slate-500 to-slate-600' }}">
+                                        <td class="px-2 py-3 sm:px-6 sm:py-4 text-center">
+                                            <span class="px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[8px] sm:text-[10px] font-bold text-white bg-gradient-to-r {{ $bbmStyle[$item->jenis_bbm] ?? 'from-slate-500 to-slate-600' }} whitespace-nowrap">
                                                 {{ $item->jenis_bbm }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4">
-                                            <p class="text-sm font-bold {{ $item->tipe === 'masuk' ? 'text-emerald-600' : 'text-rose-600' }}">
+                                        <td class="px-2 py-3 sm:px-6 sm:py-4">
+                                            <p class="text-xs sm:text-sm font-bold {{ $item->tipe === 'masuk' ? 'text-emerald-600' : 'text-rose-600' }}">
                                                 {{ $item->tipe === 'masuk' ? '+' : '-' }} {{ number_format($item->jumlah, 0, ',', '.') }} L
                                             </p>
                                         </td>

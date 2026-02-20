@@ -6,9 +6,11 @@
 
                     <!-- Header & Filter -->
                     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
-                        <div>
-                            <h2 class="text-2xl font-bold text-slate-800 leading-tight">Data Personel</h2>
-                            <p class="text-slate-500 text-sm mt-1">Kelola data personel dan saldo BBM.</p>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <div>
+                                <h2 class="text-2xl font-bold text-slate-800 leading-tight">Data Personel</h2>
+                                <p class="text-slate-500 text-sm mt-1">Kelola data personel dan saldo BBM.</p>
+                            </div>
                         </div>
 
                         <form action="{{ route('admin.personels.index') }}" method="GET"
@@ -101,6 +103,24 @@
                                     Reset
                                 </a>
                             @endif
+
+                            <div class="flex items-center gap-2 ml-auto lg:ml-0 border-l lg:border-l-0 pl-3 lg:pl-0 border-slate-200">
+                                <a href="{{ route('admin.personels.create') }}" 
+                                   class="inline-flex items-center p-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition shadow-sm"
+                                   title="Tambah Personel">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                                </a>
+                                <button type="button" @click="$dispatch('open-import-modal')" 
+                                        class="inline-flex items-center p-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition shadow-sm"
+                                        title="Import Excel">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                                </button>
+                                <a href="{{ route('admin.personels.export', request()->all()) }}" 
+                                   class="inline-flex items-center p-2.5 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition shadow-sm"
+                                   title="Export Excel">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                </a>
+                            </div>
                         </form>
                     </div>
 
@@ -202,6 +222,15 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right">
                                             <div class="flex justify-end items-center gap-2">
+                                                <a href="{{ route('admin.personels.edit', $personel) }}"
+                                                    class="inline-flex items-center p-2 bg-slate-100 hover:bg-indigo-100 text-slate-500 hover:text-indigo-600 rounded-lg transition-colors"
+                                                    title="Edit Personel">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                                        </path>
+                                                    </svg>
+                                                </a>
                                                 <a href="{{ route('admin.personels.print', $personel) }}" target="_blank"
                                                     class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white rounded-lg text-xs font-bold transition-all duration-200">
                                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
@@ -255,6 +284,72 @@
                     <div class="mt-4">
                         {{ $personels->links() }}
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div x-data="{ show: false }" 
+         @open-import-modal.window="show = true"
+         x-show="show" 
+         class="fixed inset-0 z-50 overflow-y-auto" 
+         style="display: none;">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div x-show="show" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm"></div>
+            </div>
+
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+            <div x-show="show" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-slate-100">
+                <div class="bg-white p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-900">Import Data Personel</h3>
+                                <p class="text-xs text-slate-500">Unggah file Excel untuk menambah personel massal</p>
+                            </div>
+                        </div>
+                        <button @click="show = false" class="text-slate-400 hover:text-slate-600 transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+
+                    <form action="{{ route('admin.personels.import') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                        @csrf
+                        <div class="p-4 border-2 border-dashed border-slate-200 rounded-xl bg-slate-50/50 hover:bg-slate-50 transition-colors group">
+                            <input type="file" name="file" class="hidden" id="fileInput" @change="fileName = $event.target.files[0].name" x-data="{ fileName: '' }">
+                            <label for="fileInput" class="cursor-pointer flex flex-col items-center justify-center gap-2">
+                                <svg class="w-8 h-8 text-slate-400 group-hover:text-emerald-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                <span class="text-sm font-medium text-slate-600" x-text="fileName || 'Pilih file Excel (.xlsx, .xls, .csv)'"></span>
+                            </label>
+                        </div>
+
+                        <div class="bg-indigo-50 rounded-xl p-4 flex items-start gap-3">
+                            <svg class="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <div>
+                                <h4 class="text-xs font-bold text-indigo-900">Petunjuk Import</h4>
+                                <ul class="text-[10px] text-indigo-700 mt-1 list-disc list-inside space-y-0.5">
+                                    <li>Gunakan template yang disediakan</li>
+                                    <li>Data satker akan dicari berdasarkan kolom SATKER</li>
+                                    <li>NRP akan digunakan sebagai username & password</li>
+                                </ul>
+                                <a href="{{ route('admin.personels.download-template') }}" class="inline-flex items-center text-[10px] font-bold text-indigo-600 mt-2 hover:text-indigo-800 transition-colors">
+                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                    Unduh Template CSV
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end gap-3 mt-6">
+                            <button type="button" @click="show = false" class="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-100 rounded-lg transition-colors">Batal</button>
+                            <button type="submit" class="px-4 py-2 bg-emerald-600 text-white text-sm font-bold rounded-lg hover:bg-emerald-700 transition shadow-sm">Mulai Import</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
