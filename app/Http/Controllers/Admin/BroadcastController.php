@@ -54,7 +54,7 @@ class BroadcastController extends Controller
 
         // Kirim ke WhatsApp jika dicentang
         if ($request->has('send_to_whatsapp')) {
-            $target = config('services.whatsapp.group_target');
+            $target = \App\Models\Setting::where('key', 'whatsapp_group_target')->first()->value ?? config('services.whatsapp.group_target');
             if ($target) {
                 // Format pesan WhatsApp (Plain text with asterisks for bold)
                 $waMessage = "*[SIARAN]*\n\n*{$request->title}*\n\n{$request->message}";

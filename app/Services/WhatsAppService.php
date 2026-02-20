@@ -10,9 +10,37 @@ class WhatsAppService
     protected $token;
     protected $baseUrl = 'https://api.fonnte.com/send';
 
-    public function __construct()
+    public function __construct($token = null)
     {
-        $this->token = config('services.whatsapp.token');
+        $this->token = $token ?: (\App\Models\Setting::where('key', 'whatsapp_token')->first()->value ?? config('services.whatsapp.token'));
+    }
+
+    /**
+     * Get available groups from Fonnte
+     *
+     * @return array
+     */
+    public function getGroups()
+    {
+        if (empty($this->token)) {
+            return ['status' => false, 'reason' => 'Token not configured'];
+        }
+
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => $this->token,
+            ])->asForm()->post('https://api.fonnte.com/fetch-groups');
+
+            $result = $response->json();
+
+            if ($response->successful()) {
+                return ['status' => true, 'data' => $result];
+            }
+
+            return ['status' => false, 'response' => $result];
+        } catch (\Exception $e) {
+            return ['status' => false, 'reason' => $e->getMessage()];
+        }
     }
 
     /**

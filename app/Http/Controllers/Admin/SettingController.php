@@ -19,12 +19,12 @@ class SettingController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->except('_token');
+        $data = $request->except(['_token', 'whatsapp_fetch_token']);
 
         foreach ($data as $key => $value) {
             Setting::updateOrCreate(
                 ['key' => $key],
-                ['value' => $value]
+                ['value' => $value ?? '']
             );
         }
 
@@ -51,5 +51,18 @@ class SettingController extends Controller
         ]);
 
         return redirect()->route('admin.settings.index')->with('success', 'Pengaturan berhasil disimpan.');
+    }
+
+    public function fetchGroups(Request $request)
+    {
+        $token = $request->token;
+        if (!$token) {
+            return response()->json(['status' => false, 'reason' => 'Token required'], 400);
+        }
+
+        $waService = new \App\Services\WhatsAppService($token);
+        $result = $waService->getGroups();
+
+        return response()->json($result);
     }
 }
