@@ -809,10 +809,11 @@
                                         </svg>
                                     </div>
                                     <div class="text-[10px] sm:text-xs text-violet-700">
-                                        <p class="font-semibold mb-1">Format file Excel:</p>
+                                        <p class="font-semibold mb-1">Format file Excel (header di baris ke-1):</p>
                                         <ul class="list-disc list-inside space-y-0.5">
-                                            <li>Kolom <strong>NOPOL</strong> — Nomor polisi kendaraan</li>
+                                            <li>Kolom <strong>NO</strong> — Nomor urut</li>
                                             <li>Kolom <strong>JENIS KENDARAAN</strong> — Tipe kendaraan</li>
+                                            <li>Kolom <strong>NOPOL</strong> — Nomor polisi kendaraan</li>
                                             <li>Kolom <strong>JENIS BBM</strong> — Pertamax / Pertamina Dex</li>
                                         </ul>
                                     </div>
@@ -1189,160 +1190,160 @@
             </div>
 
             <script>
-                function importKendaraanModal() {
-                    return {
-                        showModal: false,
-                        step: 1,
-                        selectedFile: null,
-                        isDragging: false,
-                        isLoading: false,
-                        isImporting: false,
-                        uploadError: '',
-                        previewData: null,
-                        duplicateAction: 'skip',
+                 function importKendaraanModal() {
+                        return {
+                            showModal: false,
+                            step: 1,
+                            selectedFile: null,
+                            isDragging: false,
+                            isLoading: false,
+                            isImporting: false,
+                            uploadError: '',
+                            previewData: null,
+                            duplicateAction: 'skip',
 
-                        openModal() {
-                            this.showModal = true;
-                            this.resetState();
-                        },
+                            openModal() {
+                                this.showModal = true;
+                                this.resetState();
+                            },
 
-                        closeModal() {
-                            this.showModal = false;
-                            this.resetState();
-                        },
+                            closeModal() {
+                                this.showModal = false;
+                                this.resetState();
+                            },
 
-                        resetState() {
-                            this.step = 1;
-                            this.selectedFile = null;
-                            this.isDragging = false;
-                            this.isLoading = false;
-                            this.isImporting = false;
-                            this.uploadError = '';
-                            this.previewData = null;
-                            this.duplicateAction = 'skip';
-                        },
-
-                        handleDrop(e) {
-                            this.isDragging = false;
-                            const files = e.dataTransfer.files;
-                            if (files.length > 0) {
-                                this.validateAndSetFile(files[0]);
-                            }
-                        },
-
-                        handleFileSelect(e) {
-                            if (e.target.files.length > 0) {
-                                this.validateAndSetFile(e.target.files[0]);
-                            }
-                        },
-
-                        validateAndSetFile(file) {
-                            this.uploadError = '';
-                            const allowedExt = ['.xlsx', '.xls', '.csv'];
-                            const ext = '.' + file.name.split('.').pop().toLowerCase();
-
-                            if (!allowedExt.includes(ext)) {
-                                this.uploadError = 'Format file tidak didukung. Gunakan .xlsx, .xls, atau .csv';
-                                return;
-                            }
-                            if (file.size > 2 * 1024 * 1024) {
-                                this.uploadError = 'Ukuran file melebihi batas 2MB.';
-                                return;
-                            }
-                            this.selectedFile = file;
-                        },
-
-                        clearFile() {
-                            this.selectedFile = null;
-                            this.uploadError = '';
-                            if (this.$refs.fileInput) this.$refs.fileInput.value = '';
-                        },
-
-                        formatFileSize(bytes) {
-                            if (bytes < 1024) return bytes + ' B';
-                            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-                            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-                        },
-
-                        async previewImport() {
-                            if (!this.selectedFile) return;
-                            this.isLoading = true;
-                            this.uploadError = '';
-                            this.step = 2;
-
-                            const formData = new FormData();
-                            formData.append('file', this.selectedFile);
-
-                            try {
-                                const resp = await fetch('{{ route("satker.kendaraans.preview-import") }}', {
-                                    method: 'POST',
-                                    headers: {
-                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                        'Accept': 'application/json',
-                                    },
-                                    body: formData
-                                });
-
-                                if (!resp.ok) {
-                                    const errData = await resp.json().catch(() => null);
-                                    throw new Error(errData?.message || 'Gagal menganalisis file. Periksa format dan coba lagi.');
-                                }
-
-                                this.previewData = await resp.json();
-                            } catch (err) {
-                                this.uploadError = err.message;
+                            resetState() {
                                 this.step = 1;
-                            } finally {
+                                this.selectedFile = null;
+                                this.isDragging = false;
                                 this.isLoading = false;
+                                this.isImporting = false;
+                                this.uploadError = '';
+                                this.previewData = null;
+                                this.duplicateAction = 'skip';
+                            },
+
+                            handleDrop(e) {
+                                this.isDragging = false;
+                                const files = e.dataTransfer.files;
+                                if (files.length > 0) {
+                                    this.validateAndSetFile(files[0]);
+                                }
+                            },
+
+                            handleFileSelect(e) {
+                                if (e.target.files.length > 0) {
+                                    this.validateAndSetFile(e.target.files[0]);
+                                }
+                            },
+
+                            validateAndSetFile(file) {
+                                this.uploadError = '';
+                                const allowedExt = ['.xlsx', '.xls', '.csv'];
+                                const ext = '.' + file.name.split('.').pop().toLowerCase();
+
+                                if (!allowedExt.includes(ext)) {
+                                    this.uploadError = 'Format file tidak didukung. Gunakan .xlsx, .xls, atau .csv';
+                                    return;
+                                }
+                                if (file.size > 2 * 1024 * 1024) {
+                                    this.uploadError = 'Ukuran file melebihi batas 2MB.';
+                                    return;
+                                }
+                                this.selectedFile = file;
+                            },
+
+                            clearFile() {
+                                this.selectedFile = null;
+                                this.uploadError = '';
+                                if (this.$refs.fileInput) this.$refs.fileInput.value = '';
+                            },
+
+                            formatFileSize(bytes) {
+                                if (bytes < 1024) return bytes + ' B';
+                                if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+                                return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+                            },
+
+                            async previewImport() {
+                                if (!this.selectedFile) return;
+                                this.isLoading = true;
+                                this.uploadError = '';
+                                this.step = 2;
+
+                                const formData = new FormData();
+                                formData.append('file', this.selectedFile);
+
+                                try {
+                                    const resp = await fetch('{{ route("satker.kendaraans.preview-import") }}', {
+                                        method: 'POST',
+                                        headers: {
+                                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                            'Accept': 'application/json',
+                                        },
+                                        body: formData
+                                    });
+
+                                    if (!resp.ok) {
+                                        const errData = await resp.json().catch(() => null);
+                                        throw new Error(errData?.message || 'Gagal menganalisis file. Periksa format dan coba lagi.');
+                                    }
+
+                                    this.previewData = await resp.json();
+                                } catch (err) {
+                                    this.uploadError = err.message;
+                                    this.step = 1;
+                                } finally {
+                                    this.isLoading = false;
+                                }
+                            },
+
+                            confirmImport() {
+                                if (!this.selectedFile) return;
+                                this.isImporting = true;
+
+                                const formData = new FormData();
+                                formData.append('file', this.selectedFile);
+                                formData.append('duplicate_action', this.previewData?.duplicate_count > 0 ? this.duplicateAction : 'skip');
+                                formData.append('_token', '{{ csrf_token() }}');
+
+                                // Create a hidden form and submit traditionally (for redirect)
+                                const form = document.createElement('form');
+                                form.method = 'POST';
+                                form.action = '{{ route("satker.kendaraans.import") }}';
+                                form.enctype = 'multipart/form-data';
+                                form.style.display = 'none';
+                                form.setAttribute('data-turbo', 'false');
+
+                                // CSRF
+                                const csrfInput = document.createElement('input');
+                                csrfInput.type = 'hidden';
+                                csrfInput.name = '_token';
+                                csrfInput.value = '{{ csrf_token() }}';
+                                form.appendChild(csrfInput);
+
+                                // Duplicate action
+                                const actionInput = document.createElement('input');
+                                actionInput.type = 'hidden';
+                                actionInput.name = 'duplicate_action';
+                                actionInput.value = this.previewData?.duplicate_count > 0 ? this.duplicateAction : 'skip';
+                                form.appendChild(actionInput);
+
+                                // File - use DataTransfer to attach file
+                                const fileInput = document.createElement('input');
+                                fileInput.type = 'file';
+                                fileInput.name = 'file';
+                                const dt = new DataTransfer();
+                                dt.items.add(this.selectedFile);
+                                fileInput.files = dt.files;
+                                form.appendChild(fileInput);
+
+                                document.body.appendChild(form);
+                                form.submit();
                             }
-                        },
-
-                        confirmImport() {
-                            if (!this.selectedFile) return;
-                            this.isImporting = true;
-
-                            const formData = new FormData();
-                            formData.append('file', this.selectedFile);
-                            formData.append('duplicate_action', this.previewData?.duplicate_count > 0 ? this.duplicateAction : 'skip');
-                            formData.append('_token', '{{ csrf_token() }}');
-
-                            // Create a hidden form and submit traditionally (for redirect)
-                            const form = document.createElement('form');
-                            form.method = 'POST';
-                            form.action = '{{ route("satker.kendaraans.import") }}';
-                            form.enctype = 'multipart/form-data';
-                            form.style.display = 'none';
-                            form.setAttribute('data-turbo', 'false');
-
-                            // CSRF
-                            const csrfInput = document.createElement('input');
-                            csrfInput.type = 'hidden';
-                            csrfInput.name = '_token';
-                            csrfInput.value = '{{ csrf_token() }}';
-                            form.appendChild(csrfInput);
-
-                            // Duplicate action
-                            const actionInput = document.createElement('input');
-                            actionInput.type = 'hidden';
-                            actionInput.name = 'duplicate_action';
-                            actionInput.value = this.previewData?.duplicate_count > 0 ? this.duplicateAction : 'skip';
-                            form.appendChild(actionInput);
-
-                            // File - use DataTransfer to attach file
-                            const fileInput = document.createElement('input');
-                            fileInput.type = 'file';
-                            fileInput.name = 'file';
-                            const dt = new DataTransfer();
-                            dt.items.add(this.selectedFile);
-                            fileInput.files = dt.files;
-                            form.appendChild(fileInput);
-
-                            document.body.appendChild(form);
-                            form.submit();
                         }
                     }
-                }
-            </script>
+                </script>
         @endif
     </div>
 

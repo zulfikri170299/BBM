@@ -17,8 +17,8 @@ class KendaraanTemplateExport implements FromArray, WithHeadings, ShouldAutoSize
     {
         return [
             'NO',
-            'NO POLISI',
             'JENIS KENDARAAN',
+            'NOPOL',
             'JENIS BBM',
         ];
     }
@@ -27,9 +27,9 @@ class KendaraanTemplateExport implements FromArray, WithHeadings, ShouldAutoSize
     {
         // Example data rows to guide user
         return [
-            [1, 'DR 1234 AB', 'Mobil Patrol', 'Pertamax'],
-            [2, 'DR 5678 CD', 'Motor Dinas', 'Pertamax'],
-            [3, 'DR 9012 EF', 'Bus Dinas', 'Pertamina Dex'],
+            [1, 'Mobil Patrol', 'DR 1234 AB', 'Pertamax'],
+            [2, 'Motor Dinas', 'DR 5678 CD', 'Pertamax'],
+            [3, 'Bus Dinas', 'DR 9012 EF', 'Pertamina Dex'],
         ];
     }
 
@@ -75,8 +75,8 @@ class KendaraanTemplateExport implements FromArray, WithHeadings, ShouldAutoSize
         // Add note in row 6
         $sheet->setCellValue('A6', 'PETUNJUK PENGISIAN:');
         $sheet->setCellValue('A7', '1. Kolom NO bisa diisi urutan angka (opsional, tidak akan diproses)');
-        $sheet->setCellValue('A8', '2. Kolom NO POLISI wajib diisi dan harus unik (belum terdaftar)');
-        $sheet->setCellValue('A9', '3. Kolom JENIS KENDARAAN wajib diisi (contoh: Mobil Patrol, Motor Dinas, dsb)');
+        $sheet->setCellValue('A8', '2. Kolom JENIS KENDARAAN wajib diisi (contoh: Mobil Patrol, Motor Dinas, dsb)');
+        $sheet->setCellValue('A9', '3. Kolom NOPOL wajib diisi dan harus unik (belum terdaftar)');
         $sheet->setCellValue('A10', '4. Kolom JENIS BBM wajib diisi: "Pertamax" atau "Pertamina Dex"');
         $sheet->setCellValue('A11', '5. Hapus baris contoh (baris 2-4) sebelum mengisi data');
 
@@ -89,8 +89,8 @@ class KendaraanTemplateExport implements FromArray, WithHeadings, ShouldAutoSize
 
         // Auto-set column width
         $sheet->getColumnDimension('A')->setWidth(6);
-        $sheet->getColumnDimension('B')->setWidth(20);
-        $sheet->getColumnDimension('C')->setWidth(25);
+        $sheet->getColumnDimension('B')->setWidth(25);
+        $sheet->getColumnDimension('C')->setWidth(20);
         $sheet->getColumnDimension('D')->setWidth(18);
 
         // Set row height for header

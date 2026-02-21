@@ -433,34 +433,34 @@ class KendaraanController extends Controller
             $highestRow = $sheet->getHighestRow();
             $highestCol = $sheet->getHighestColumn();
 
-            // Auto-detect header row: find the row with the most recognized column headers (min 2)
-            $headerRow = null;
-            $colMap = [];
             for ($r = 1; $r <= min(5, $highestRow); $r++) {
-                $tempMap = [];
                 foreach (range('A', $highestCol) as $col) {
                     $val = strtolower(trim((string) $sheet->getCell($col . $r)->getValue()));
                     if (in_array($val, ['nopol', 'no polisi', 'no_polisi', 'nomor polisi'])) {
-                        $tempMap['nopol'] = $col;
-                    } elseif (in_array($val, ['jenis kendaraan', 'jenis_kendaraan', 'tipe', 'tipe kendaraan', 'tipe_kendaraan'])) {
-                        $tempMap['jenis_kendaraan'] = $col;
-                    } elseif (in_array($val, ['jenis bbm', 'jenis_bbm', 'bbm', 'bahan bakar'])) {
-                        $tempMap['jenis_bbm'] = $col;
-                    } elseif (in_array($val, ['satker', 'satuan kerja', 'satuan_kerja', 'nama_satker'])) {
-                        $tempMap['satker'] = $col;
+                        $headerRow = $r;
+                        break 2;
                     }
-                }
-                if (count($tempMap) >= 2 && count($tempMap) > count($colMap)) {
-                    $headerRow = $r;
-                    $colMap = $tempMap;
                 }
             }
 
             if (!$headerRow) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Header tidak ditemukan. Pastikan file memiliki kolom "NO POLISI" dan "JENIS KENDARAAN" di salah satu baris pertama.',
+                    'message' => 'Header NOPOL tidak ditemukan. Pastikan file memiliki kolom "NOPOL".',
                 ], 422);
+            }
+
+            // Build column map from header row
+            $colMap = [];
+            foreach (range('A', $highestCol) as $col) {
+                $val = strtolower(trim((string) $sheet->getCell($col . $headerRow)->getValue()));
+                if (in_array($val, ['nopol', 'no polisi', 'no_polisi', 'nomor polisi'])) {
+                    $colMap['nopol'] = $col;
+                } elseif (in_array($val, ['jenis kendaraan', 'jenis_kendaraan', 'jenis', 'tipe', 'tipe kendaraan', 'tipe_kendaraan'])) {
+                    $colMap['jenis_kendaraan'] = $col;
+                } elseif (in_array($val, ['jenis bbm', 'jenis_bbm', 'bbm', 'bahan bakar'])) {
+                    $colMap['jenis_bbm'] = $col;
+                }
             }
 
             Log::info('Satker Import Preview: headerRow=' . $headerRow . ', colMap=' . json_encode($colMap) . ', totalRows=' . $highestRow);
@@ -559,31 +559,33 @@ class KendaraanController extends Controller
             $highestRow = $sheet->getHighestRow();
             $highestCol = $sheet->getHighestColumn();
 
-            // Auto-detect header row: find the row with the most recognized column headers (min 2)
+            // Auto-detect header row
             $headerRow = null;
-            $colMap = [];
             for ($r = 1; $r <= min(5, $highestRow); $r++) {
-                $tempMap = [];
                 foreach (range('A', $highestCol) as $col) {
                     $val = strtolower(trim((string) $sheet->getCell($col . $r)->getValue()));
                     if (in_array($val, ['nopol', 'no polisi', 'no_polisi', 'nomor polisi'])) {
-                        $tempMap['nopol'] = $col;
-                    } elseif (in_array($val, ['jenis kendaraan', 'jenis_kendaraan', 'tipe', 'tipe kendaraan', 'tipe_kendaraan'])) {
-                        $tempMap['jenis_kendaraan'] = $col;
-                    } elseif (in_array($val, ['jenis bbm', 'jenis_bbm', 'bbm', 'bahan bakar'])) {
-                        $tempMap['jenis_bbm'] = $col;
-                    } elseif (in_array($val, ['satker', 'satuan kerja', 'satuan_kerja', 'nama_satker'])) {
-                        $tempMap['satker'] = $col;
+                        $headerRow = $r;
+                        break 2;
                     }
-                }
-                if (count($tempMap) >= 2 && count($tempMap) > count($colMap)) {
-                    $headerRow = $r;
-                    $colMap = $tempMap;
                 }
             }
 
             if (!$headerRow) {
-                return redirect()->route('satker.kendaraans.index')->with('error', 'Header tidak ditemukan. Pastikan file memiliki kolom "NO POLISI" dan "JENIS KENDARAAN".');
+                return redirect()->route('satker.kendaraans.index')->with('error', 'Header NOPOL tidak ditemukan dalam file.');
+            }
+
+            // Build column map
+            $colMap = [];
+            foreach (range('A', $highestCol) as $col) {
+                $val = strtolower(trim((string) $sheet->getCell($col . $headerRow)->getValue()));
+                if (in_array($val, ['nopol', 'no polisi', 'no_polisi', 'nomor polisi'])) {
+                    $colMap['nopol'] = $col;
+                } elseif (in_array($val, ['jenis kendaraan', 'jenis_kendaraan', 'jenis', 'tipe', 'tipe kendaraan', 'tipe_kendaraan'])) {
+                    $colMap['jenis_kendaraan'] = $col;
+                } elseif (in_array($val, ['jenis bbm', 'jenis_bbm', 'bbm', 'bahan bakar'])) {
+                    $colMap['jenis_bbm'] = $col;
+                }
             }
 
             Log::info('Satker Import Kendaraan: headerRow=' . $headerRow . ', colMap=' . json_encode($colMap) . ', totalRows=' . $highestRow . ', duplicateAction=' . $duplicateAction);
