@@ -62,6 +62,7 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     Route::post('/users/bulk-delete', [\App\Http\Controllers\Admin\UserController::class, 'bulkDelete'])->name('users.bulk-delete');
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
     Route::get('/personels/export', [\App\Http\Controllers\Admin\PersonelController::class, 'export'])->name('personels.export');
+    Route::post('/personels/preview-import', [\App\Http\Controllers\Admin\PersonelController::class, 'previewImport'])->name('personels.preview-import');
     Route::post('/personels/import', [\App\Http\Controllers\Admin\PersonelController::class, 'import'])->name('personels.import');
     Route::get('/personels/download-template', [\App\Http\Controllers\Admin\PersonelController::class, 'downloadTemplate'])->name('personels.download-template');
     Route::post('/personels/bulk-delete', [\App\Http\Controllers\Admin\PersonelController::class, 'bulkDelete'])->name('personels.bulk-delete');
@@ -140,10 +141,13 @@ Route::middleware(['auth', 'role:admin_satker'])->prefix('satker')->name('satker
     Route::post('/kendaraans/import', [\App\Http\Controllers\Satker\KendaraanController::class, 'importKendaraan'])->name('kendaraans.import');
     Route::post('/kendaraans/preview-import', [\App\Http\Controllers\Satker\KendaraanController::class, 'previewImport'])->name('kendaraans.preview-import');
     Route::get('/kendaraans/download-template', [\App\Http\Controllers\Satker\KendaraanController::class, 'downloadTemplate'])->name('kendaraans.download-template');
+    Route::get('/kendaraans/export', [\App\Http\Controllers\Satker\KendaraanController::class, 'export'])->name('kendaraans.export');
     Route::resource('kendaraans', \App\Http\Controllers\Satker\KendaraanController::class)->except(['edit', 'update']);
     
     // Personel Routes
+    Route::get('/personels/export', [\App\Http\Controllers\Satker\PersonelController::class, 'export'])->name('personels.export');
     Route::post('/personels/bulk-delete', [\App\Http\Controllers\Satker\PersonelController::class, 'bulkDelete'])->name('personels.bulk-delete');
+    Route::post('/personels/preview-import', [\App\Http\Controllers\Satker\PersonelController::class, 'previewImport'])->name('personels.preview-import');
     Route::post('/personels/import', [\App\Http\Controllers\Satker\PersonelController::class, 'import'])->name('personels.import');
     Route::get('/personels/download-template', [\App\Http\Controllers\Satker\PersonelController::class, 'downloadTemplate'])->name('personels.download-template');
     Route::get('/personels/{personel}/print', [\App\Http\Controllers\Satker\PersonelController::class, 'print'])->name('personels.print');

@@ -680,6 +680,20 @@ class KendaraanController extends Controller
         }
     }
 
+    public function export()
+    {
+        $user = auth()->user();
+        $satkerName = $user->satker->nama_satker ?? 'Satker';
+        $fileName = 'daftar-kendaraan-' . preg_replace('/[^A-Za-z0-9\-]/', '_', $satkerName) . '-' . date('Y-m-d') . '.xlsx';
+
+        LogAktivitas::create([
+            'user_id' => $user->id,
+            'aktivitas' => "Melakukan Export Data Kendaraan Satker: {$satkerName}"
+        ]);
+
+        return Excel::download(new \App\Exports\SatkerKendaraanExport($user->satker_id), $fileName);
+    }
+
     public function downloadTemplate()
     {
         return Excel::download(new KendaraanTemplateExport(), 'template-import-kendaraan.xlsx');

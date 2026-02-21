@@ -110,43 +110,200 @@ class PersonelController extends Controller
         return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\PersonelExport($satkerId), 'data_personel.xlsx');
     }
 
-    public function import(Request $request)
+    public function previewImport(Request $request)
     {
         $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv',
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048',
+        ], [
+            'file.required' => 'File Excel harus dipilih.',
+            'file.mimes' => 'File harus berformat .xlsx, .xls, atau .csv.',
+            'file.max' => 'Ukuran file maksimal 2MB.',
         ]);
 
         try {
-            $import = new \App\Imports\PersonelImport;
-            \Maatwebsite\Excel\Facades\Excel::import($import, $request->file('file'));
-            
-            $message = "Import selesai. {$import->imported} data berhasil ditambahkan.";
-            
-            if (count($import->skipped) > 0) {
-                return back()->with('warning', $message . " Beberapa data dilewati karena sudah terdaftar atau Satker tidak ditemukan.");
+            $filePath = $request->file('file')->getRealPath();
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($filePath);
+            $sheet = $spreadsheet->getActiveSheet();
+            $highestRow = $sheet->getHighestRow();
+            $highestCol = $sheet->getHighestColumn();
+
+            // Auto-detect header row
+            $headerRow = null;
+            for ($r = 1; $r <= min(5, $highestRow); $r++) {
+                foreach (range('A', $highestCol) as $col) {
+                    $val = strtolower(trim((string) $sheet->getCell($col . $r)->getValue()));
+                    if (in_array($val, ['nrp', 'nrp/nip', 'nrp_nip', 'nip'])) {
+                        $headerRow = $r;
+                        break 2;
+                    }
+                }
             }
 
-            return back()->with('success', $message);
+            if (!$headerRow) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Header NRP tidak ditemukan dalam file.',
+                ], 422);
+            }
+
+            // Build column map
+            $colMap = [];
+            foreach (range('A', $highestCol) as $col) {
+                $val = strtolower(trim((string) $sheet->getCell($col . $headerRow)->getValue()));
+                if (in_array($val, ['nrp', 'nrp/nip', 'nrp_nip', 'nip'])) {
+                    $colMap['nrp'] = $col;
+                } elseif (in_array($val, ['nama', 'nama lengkap', 'nama_lengkap', 'personel'])) {
+                    $colMap['nama'] = $col;
+                } elseif (in_array($val, ['satker', 'satuan kerja', 'satuan_kerja', 'nama_satker'])) {
+                    $colMap['satker'] = $col;
+                }
+            }
+
+            $newEntries = [];
+            $duplicates = [];
+            $errors = [];
+            $successCount = 0;
+
+            for ($r = $headerRow + 1; $r <= $highestRow; $r++) {
+                $nrp = isset($colMap['nrp']) ? trim((string) $sheet->getCell($colMap['nrp'] . $r)->getValue()) : '';
+                $nama = isset($colMap['nama']) ? trim((string) $sheet->getCell($colMap['nama'] . $r)->getValue()) : '';
+                $namaSatker = isset($colMap['satker']) ? trim((string) $sheet->getCell($colMap['satker'] . $r)->getValue()) : '';
+                $jenisBbm = 'Pertamax'; // Default
+
+                if (empty($nrp) && empty($nama)) continue;
+
+                if (empty($nrp)) { $errors[] = "Baris {$r}: NRP kosong."; continue; }
+                if (empty($nama)) { $errors[] = "Baris {$r}: Nama kosong."; continue; }
+                if (empty($namaSatker)) { $errors[] = "Baris {$r}: Satker kosong."; continue; }
+
+                // Find Satker
+                $satker = \App\Models\Satker::where('nama_satker', 'like', "%{$namaSatker}%")->first();
+                if (!$satker) { $errors[] = "Baris {$r}: Satker '{$namaSatker}' tidak ditemukan."; continue; }
+
+                // Find Satker
+                $existing = Personel::where('nrp', $nrp)->first();
+                if ($existing) {
+                    $changes = [];
+                    if ($existing->nama !== $nama) {
+                        $changes[] = ['field' => 'Nama', 'old' => $existing->nama, 'new' => $nama];
+                    }
+                    if ($existing->satker_id != $satker->id) {
+                        $changes[] = ['field' => 'Satker', 'old' => $existing->satker->nama_satker ?? '-', 'new' => $satker->nama_satker];
+                    }
+                    $duplicates[] = [
+                        'row' => $r, 'nrp' => $nrp, 'nama' => $nama, 'satker_name' => $satker->nama_satker,
+                        'changes' => $changes, 'has_changes' => count($changes) > 0
+                    ];
+                } else {
+                    $newEntries[] = [
+                        'row' => $r, 'nrp' => $nrp, 'nama' => $nama, 'satker_id' => $satker->id, 
+                        'satker_name' => $satker->nama_satker, 'jenis_bbm' => $jenisBbm
+                    ];
+                    $successCount++;
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'new_count' => $successCount,
+                'duplicate_count' => count($duplicates),
+                'error_count' => count($errors),
+                'new_entries' => $newEntries,
+                'duplicates' => $duplicates,
+                'errors' => $errors,
+            ]);
         } catch (\Exception $e) {
-            return back()->with('error', 'Gagal import data: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memproses file: ' . $e->getMessage(),
+            ], 422);
+        }
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048',
+            'duplicate_action' => 'required|in:skip,update',
+        ]);
+
+        $duplicateAction = $request->input('duplicate_action', 'skip');
+
+        try {
+            $filePath = $request->file('file')->getRealPath();
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($filePath);
+            $sheet = $spreadsheet->getActiveSheet();
+            $highestRow = $sheet->getHighestRow();
+            $highestCol = $sheet->getHighestColumn();
+
+            // Use same detection as fallback
+            $headerRow = 1;
+            for ($r = 1; $r <= min(5, $highestRow); $r++) {
+                foreach (range('A', $highestCol) as $col) {
+                    $val = strtolower(trim((string) $sheet->getCell($col . $r)->getValue()));
+                    if (in_array($val, ['nrp', 'nrp/nip', 'nrp_nip', 'nip'])) { $headerRow = $r; break 2; }
+                }
+            }
+
+            $colMap = [];
+            foreach (range('A', $highestCol) as $col) {
+                $val = strtolower(trim((string) $sheet->getCell($col . $headerRow)->getValue()));
+                if (in_array($val, ['nrp', 'nrp/nip', 'nrp_nip', 'nip'])) { $colMap['nrp'] = $col; }
+                elseif (in_array($val, ['nama', 'nama lengkap', 'nama_lengkap', 'personel'])) { $colMap['nama'] = $col; }
+                elseif (in_array($val, ['satker', 'satuan kerja', 'satuan_kerja', 'nama_satker'])) { $colMap['satker'] = $col; }
+            }
+
+            $successCount = 0; $updatedCount = 0; $skippedCount = 0;
+
+            for ($r = $headerRow + 1; $r <= $highestRow; $r++) {
+                $nrp = isset($colMap['nrp']) ? trim((string) $sheet->getCell($colMap['nrp'] . $r)->getValue()) : '';
+                $nama = isset($colMap['nama']) ? trim((string) $sheet->getCell($colMap['nama'] . $r)->getValue()) : '';
+                $namaSatker = isset($colMap['satker']) ? trim((string) $sheet->getCell($colMap['satker'] . $r)->getValue()) : '';
+                $jenisBbm = 'Pertamax'; // Default
+
+                if (empty($nrp) || empty($nama) || empty($namaSatker)) continue;
+
+                $satker = \App\Models\Satker::where('nama_satker', 'like', "%{$namaSatker}%")->first();
+                if (!$satker) continue;
+
+
+
+                $existing = Personel::where('nrp', $nrp)->first();
+                if ($existing) {
+                    if ($duplicateAction === 'skip') { $skippedCount++; continue; }
+                    
+                    $existing->update([
+                        'nama' => $nama, 'satker_id' => $satker->id, 'jenis_bbm' => $jenisBbm
+                    ]);
+                    // Update user account too
+                    if ($existing->user) { $existing->user->update(['name' => $nama, 'satker_id' => $satker->id]); }
+                    $updatedCount++;
+                } else {
+                    $user = \App\Models\User::updateOrCreate(['username' => $nrp], [
+                        'name' => $nama, 'email' => $nrp, 'password' => \Illuminate\Support\Facades\Hash::make($nrp),
+                        'role' => 'personel', 'satker_id' => $satker->id,
+                    ]);
+                    Personel::create([
+                        'nrp' => $nrp, 'nama' => $nama, 'satker_id' => $satker->id, 'user_id' => $user->id,
+                        'jenis_bbm' => $jenisBbm, 'pin' => Personel::generateUniquePin(), 'barcode' => $nrp
+                    ]);
+                    $successCount++;
+                }
+            }
+
+            $msg = "Import berhasil. {$successCount} data baru ditambahkan.";
+            if ($updatedCount > 0) $msg .= " {$updatedCount} data diperbarui.";
+            if ($skippedCount > 0) $msg .= " {$skippedCount} data duplikat dilewati.";
+
+            return back()->with('success', $msg);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal import: ' . $e->getMessage());
         }
     }
 
     public function downloadTemplate()
     {
-        $headers = [
-            'Content-Type' => 'text/csv', 
-            'Content-Disposition' => 'attachment; filename="template_personel.csv"',
-        ];
-        
-        $callback = function() {
-            $handle = fopen('php://output', 'w');
-            fputcsv($handle, ['NO', 'SATKER', 'NAMA', 'NRP/NIP'], ';'); // Baris 1 Header dengan ;
-            fputcsv($handle, ['1', 'CONTOH SATKER', 'Fulan bin Fulan', '12345678'], ';');
-            fclose($handle);
-        };
-
-        return response()->stream($callback, 200, $headers);
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\PersonelTemplateExport(true), 'template_import_personel.xlsx');
     }
     public function print(Personel $personel)
     {

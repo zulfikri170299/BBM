@@ -35,8 +35,7 @@ class PersonelImport implements ToCollection, WithHeadingRow, WithCustomCsvSetti
             $nama = $row->get('nama');
             $nrp = $row->get('nrp_nip') ?? $row->get('nrpnip') ?? $row->get('nrp');
             $namaSatker = $row->get('satker');
-            $jenisBbm = $row->get('jenis_bbm') ?? 'Pertamax';
-            $saldo = $row->get('saldo_liter') ?? $row->get('saldo') ?? 0;
+            $jenisBbm = 'Pertamax'; // Default value as it's removed from import
             
             if (!$nama || !$nrp) {
                 continue;
@@ -75,7 +74,6 @@ class PersonelImport implements ToCollection, WithHeadingRow, WithCustomCsvSetti
                 $existingPersonel->update([
                     'nama' => $nama,
                     'jenis_bbm' => $jenisBbm,
-                    'saldo' => $saldo,
                 ]);
                 $this->imported++;
                 continue;
@@ -107,7 +105,6 @@ class PersonelImport implements ToCollection, WithHeadingRow, WithCustomCsvSetti
                 'user_id' => $user->id,
                 'nama' => $nama,
                 'jenis_bbm' => $jenisBbm,
-                'saldo' => $saldo,
                 'pin' => $pin,
                 'barcode' => $barcode,
             ]);

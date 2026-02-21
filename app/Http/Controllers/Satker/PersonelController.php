@@ -125,33 +125,185 @@ class PersonelController extends Controller
         return redirect()->route('satker.personels.index')->with('success', 'Personel berhasil dihapus.');
     }
 
+    public function previewImport(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048',
+        ], [
+            'file.required' => 'File Excel harus dipilih.',
+            'file.mimes' => 'File harus berformat .xlsx, .xls, atau .csv.',
+            'file.max' => 'Ukuran file maksimal 2MB.',
+        ]);
+
+        $satkerId = auth()->user()->satker_id;
+
+        try {
+            $filePath = $request->file('file')->getRealPath();
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($filePath);
+            $sheet = $spreadsheet->getActiveSheet();
+            $highestRow = $sheet->getHighestRow();
+            $highestCol = $sheet->getHighestColumn();
+
+            // Auto-detect header row
+            $headerRow = null;
+            for ($r = 1; $r <= min(5, $highestRow); $r++) {
+                foreach (range('A', $highestCol) as $col) {
+                    $val = strtolower(trim((string) $sheet->getCell($col . $r)->getValue()));
+                    if (in_array($val, ['nrp', 'nrp/nip', 'nrp_nip', 'nip'])) {
+                        $headerRow = $r;
+                        break 2;
+                    }
+                }
+            }
+
+            if (!$headerRow) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Header NRP tidak ditemukan dalam file.',
+                ], 422);
+            }
+
+            // Build column map
+            $colMap = [];
+            foreach (range('A', $highestCol) as $col) {
+                $val = strtolower(trim((string) $sheet->getCell($col . $headerRow)->getValue()));
+                if (in_array($val, ['nrp', 'nrp/nip', 'nrp_nip', 'nip'])) {
+                    $colMap['nrp'] = $col;
+                } elseif (in_array($val, ['nama', 'nama lengkap', 'nama_lengkap', 'personel'])) {
+                    $colMap['nama'] = $col;
+                } elseif (in_array($val, ['satker', 'satuan kerja', 'satuan_kerja', 'nama_satker'])) {
+                    $colMap['satker'] = $col;
+                }
+            }
+
+            $newEntries = [];
+            $duplicates = [];
+            $errors = [];
+            $successCount = 0;
+
+            for ($r = $headerRow + 1; $r <= $highestRow; $r++) {
+                $nrp = isset($colMap['nrp']) ? trim((string) $sheet->getCell($colMap['nrp'] . $r)->getValue()) : '';
+                $nama = isset($colMap['nama']) ? trim((string) $sheet->getCell($colMap['nama'] . $r)->getValue()) : '';
+                $namaSatker = isset($colMap['satker']) ? trim((string) $sheet->getCell($colMap['satker'] . $r)->getValue()) : '';
+                $jenisBbm = 'Pertamax'; // Default
+
+                if (empty($nrp) && empty($nama)) continue;
+
+                if (empty($nrp)) { $errors[] = "Baris {$r}: NRP kosong."; continue; }
+                if (empty($nama)) { $errors[] = "Baris {$r}: Nama kosong."; continue; }
+
+                // Satker tidak perlu dari Excel - otomatis dari user yang login
+                $currentUserSatkerName = auth()->user()->satker->nama_satker ?? '';
+
+                // Check duplicate
+                $existing = Personel::where('nrp', $nrp)->first();
+                if ($existing) {
+                    $changes = [];
+                    if ($existing->nama !== $nama) {
+                        $changes[] = ['field' => 'Nama', 'old' => $existing->nama, 'new' => $nama];
+                    }
+                    $duplicates[] = [
+                        'row' => $r, 'nrp' => $nrp, 'nama' => $nama, 'satker_name' => $currentUserSatkerName,
+                        'changes' => $changes, 'has_changes' => count($changes) > 0
+                    ];
+                } else {
+                    $newEntries[] = [
+                        'row' => $r, 'nrp' => $nrp, 'nama' => $nama, 'satker_id' => $satkerId,
+                        'satker_name' => $currentUserSatkerName
+                    ];
+                    $successCount++;
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'new_count' => $successCount,
+                'duplicate_count' => count($duplicates),
+                'error_count' => count($errors),
+                'new_entries' => $newEntries,
+                'duplicates' => $duplicates,
+                'errors' => $errors,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memproses file: ' . $e->getMessage(),
+            ], 422);
+        }
+    }
+
     public function import(Request $request)
     {
         $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv',
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048',
+            'duplicate_action' => 'required|in:skip,update',
         ]);
 
+        $duplicateAction = $request->input('duplicate_action', 'skip');
+        $satkerId = auth()->user()->satker_id;
+
         try {
-            $import = new \App\Imports\PersonelImport;
-            \Maatwebsite\Excel\Facades\Excel::import($import, $request->file('file'));
-            
-            $message = "Import selesai. {$import->imported} data berhasil ditambahkan.";
-            
-            if (count($import->skipped) > 0) {
-                $countSkipped = count($import->skipped);
-                $details = array_map(function($item) {
-                    return "{$item['nama']} ({$item['nrp']})";
-                }, $import->skipped);
-                
-                $detailsString = implode(', ', $details);
-                $message .= " {$countSkipped} data dilewati karena NRP sudah terdaftar: {$detailsString}.";
-                
-                return back()->with('warning', $message);
+            $filePath = $request->file('file')->getRealPath();
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($filePath);
+            $sheet = $spreadsheet->getActiveSheet();
+            $highestRow = $sheet->getHighestRow();
+            $highestCol = $sheet->getHighestColumn();
+
+            // Use same detection as fallback
+            $headerRow = 1;
+            for ($r = 1; $r <= min(5, $highestRow); $r++) {
+                foreach (range('A', $highestCol) as $col) {
+                    $val = strtolower(trim((string) $sheet->getCell($col . $r)->getValue()));
+                    if (in_array($val, ['nrp', 'nrp/nip', 'nrp_nip', 'nip'])) { $headerRow = $r; break 2; }
+                }
             }
 
-            return back()->with('success', $message);
+            $colMap = [];
+            foreach (range('A', $highestCol) as $col) {
+                $val = strtolower(trim((string) $sheet->getCell($col . $headerRow)->getValue()));
+                if (in_array($val, ['nrp', 'nrp/nip', 'nrp_nip', 'nip'])) { $colMap['nrp'] = $col; }
+                elseif (in_array($val, ['nama', 'nama lengkap', 'nama_lengkap', 'personel'])) { $colMap['nama'] = $col; }
+                elseif (in_array($val, ['satker', 'satuan kerja', 'satuan_kerja', 'nama_satker'])) { $colMap['satker'] = $col; }
+            }
+
+            $successCount = 0; $updatedCount = 0; $skippedCount = 0;
+
+            for ($r = $headerRow + 1; $r <= $highestRow; $r++) {
+                $nrp = isset($colMap['nrp']) ? trim((string) $sheet->getCell($colMap['nrp'] . $r)->getValue()) : '';
+                $nama = isset($colMap['nama']) ? trim((string) $sheet->getCell($colMap['nama'] . $r)->getValue()) : '';
+                $jenisBbm = 'Pertamax'; // Default value
+
+                if (empty($nrp) || empty($nama)) continue;
+
+                $existing = Personel::where('nrp', $nrp)->first();
+                if ($existing) {
+                    if ($duplicateAction === 'skip') { $skippedCount++; continue; }
+                    
+                    $existing->update([
+                        'nama' => $nama, 'satker_id' => $satkerId
+                    ]);
+                    if ($existing->user) { $existing->user->update(['name' => $nama, 'satker_id' => $satkerId]); }
+                    $updatedCount++;
+                } else {
+                    $user = \App\Models\User::updateOrCreate(['username' => $nrp], [
+                        'name' => $nama, 'email' => $nrp, 'password' => \Illuminate\Support\Facades\Hash::make($nrp),
+                        'role' => 'personel', 'satker_id' => $satkerId,
+                    ]);
+                    Personel::create([
+                        'nrp' => $nrp, 'nama' => $nama, 'satker_id' => $satkerId, 'user_id' => $user->id,
+                        'jenis_bbm' => $jenisBbm, 'pin' => Personel::generateUniquePin(), 'barcode' => $nrp
+                    ]);
+                    $successCount++;
+                }
+            }
+
+            $msg = "Import berhasil. {$successCount} data baru ditambahkan.";
+            if ($updatedCount > 0) $msg .= " {$updatedCount} data diperbarui.";
+            if ($skippedCount > 0) $msg .= " {$skippedCount} data duplikat dilewati.";
+
+            return back()->with('success', $msg);
         } catch (\Exception $e) {
-            return back()->with('error', 'Gagal import data: ' . $e->getMessage());
+            return back()->with('error', 'Gagal import: ' . $e->getMessage());
         }
     }
 
@@ -197,28 +349,15 @@ class PersonelController extends Controller
 
     public function downloadTemplate()
     {
-        // Simple CSV generation matching user's format (Header at Row 3)
-        $headers = [
-            'Content-Type' => 'text/csv', 
-            'Content-Disposition' => 'attachment; filename="template_personel_custom.csv"',
-        ];
-        
-        $callback = function() {
-            $handle = fopen('php://output', 'w');
-            
-            // Row 1 & 2 Empty
-            fputcsv($handle, ['', '', '', '']);
-            fputcsv($handle, ['', '', '', '']);
-            
-            // Row 3 Header
-            fputcsv($handle, ['NO', 'SATKER', 'NAMA', 'NRP/NIP']);
-            
-            // Example Data
-            fputcsv($handle, ['1', 'CONTOH SATKER', 'Fulan bin Fulan', '12345678']);
-            
-            fclose($handle);
-        };
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\PersonelTemplateExport(false), 'template_import_personel.xlsx');
+    }
 
-        return response()->stream($callback, 200, $headers);
+    public function export()
+    {
+        $satkerId = auth()->user()->satker_id;
+        $satkerName = auth()->user()->satker->nama ?? 'Satker';
+        $filename = 'data_personel_' . strtolower(str_replace(' ', '_', $satkerName)) . '_' . date('Ymd_His') . '.xlsx';
+        
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\SatkerPersonelExport($satkerId), $filename);
     }
 }

@@ -49,6 +49,18 @@
                 </p>
             </div>
             <div class="flex gap-2 sm:gap-3">
+                <a href="{{ route('satker.kendaraans.export') }}"
+                    class="inline-flex items-center justify-center w-10 h-10 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 transition-all duration-200 hover:-translate-y-0.5 group relative"
+                    title="Export Excel">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                        </path>
+                    </svg>
+                    <span
+                        class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Export
+                        Excel</span>
+                </a>
                 <button @click="showMonthlyReportModal = true"
                     class="inline-flex items-center justify-center w-10 h-10 bg-rose-600 text-white rounded-xl hover:bg-rose-700 shadow-lg shadow-rose-500/30 transition-all duration-200 hover:-translate-y-0.5 group relative"
                     title="Laporan Bulanan">
@@ -1190,160 +1202,160 @@
             </div>
 
             <script>
-                 function importKendaraanModal() {
-                        return {
-                            showModal: false,
-                            step: 1,
-                            selectedFile: null,
-                            isDragging: false,
-                            isLoading: false,
-                            isImporting: false,
-                            uploadError: '',
-                            previewData: null,
-                            duplicateAction: 'skip',
+                function importKendaraanModal() {
+                    return {
+                        showModal: false,
+                        step: 1,
+                        selectedFile: null,
+                        isDragging: false,
+                        isLoading: false,
+                        isImporting: false,
+                        uploadError: '',
+                        previewData: null,
+                        duplicateAction: 'skip',
 
-                            openModal() {
-                                this.showModal = true;
-                                this.resetState();
-                            },
+                        openModal() {
+                            this.showModal = true;
+                            this.resetState();
+                        },
 
-                            closeModal() {
-                                this.showModal = false;
-                                this.resetState();
-                            },
+                        closeModal() {
+                            this.showModal = false;
+                            this.resetState();
+                        },
 
-                            resetState() {
-                                this.step = 1;
-                                this.selectedFile = null;
-                                this.isDragging = false;
-                                this.isLoading = false;
-                                this.isImporting = false;
-                                this.uploadError = '';
-                                this.previewData = null;
-                                this.duplicateAction = 'skip';
-                            },
+                        resetState() {
+                            this.step = 1;
+                            this.selectedFile = null;
+                            this.isDragging = false;
+                            this.isLoading = false;
+                            this.isImporting = false;
+                            this.uploadError = '';
+                            this.previewData = null;
+                            this.duplicateAction = 'skip';
+                        },
 
-                            handleDrop(e) {
-                                this.isDragging = false;
-                                const files = e.dataTransfer.files;
-                                if (files.length > 0) {
-                                    this.validateAndSetFile(files[0]);
-                                }
-                            },
-
-                            handleFileSelect(e) {
-                                if (e.target.files.length > 0) {
-                                    this.validateAndSetFile(e.target.files[0]);
-                                }
-                            },
-
-                            validateAndSetFile(file) {
-                                this.uploadError = '';
-                                const allowedExt = ['.xlsx', '.xls', '.csv'];
-                                const ext = '.' + file.name.split('.').pop().toLowerCase();
-
-                                if (!allowedExt.includes(ext)) {
-                                    this.uploadError = 'Format file tidak didukung. Gunakan .xlsx, .xls, atau .csv';
-                                    return;
-                                }
-                                if (file.size > 2 * 1024 * 1024) {
-                                    this.uploadError = 'Ukuran file melebihi batas 2MB.';
-                                    return;
-                                }
-                                this.selectedFile = file;
-                            },
-
-                            clearFile() {
-                                this.selectedFile = null;
-                                this.uploadError = '';
-                                if (this.$refs.fileInput) this.$refs.fileInput.value = '';
-                            },
-
-                            formatFileSize(bytes) {
-                                if (bytes < 1024) return bytes + ' B';
-                                if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-                                return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-                            },
-
-                            async previewImport() {
-                                if (!this.selectedFile) return;
-                                this.isLoading = true;
-                                this.uploadError = '';
-                                this.step = 2;
-
-                                const formData = new FormData();
-                                formData.append('file', this.selectedFile);
-
-                                try {
-                                    const resp = await fetch('{{ route("satker.kendaraans.preview-import") }}', {
-                                        method: 'POST',
-                                        headers: {
-                                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                            'Accept': 'application/json',
-                                        },
-                                        body: formData
-                                    });
-
-                                    if (!resp.ok) {
-                                        const errData = await resp.json().catch(() => null);
-                                        throw new Error(errData?.message || 'Gagal menganalisis file. Periksa format dan coba lagi.');
-                                    }
-
-                                    this.previewData = await resp.json();
-                                } catch (err) {
-                                    this.uploadError = err.message;
-                                    this.step = 1;
-                                } finally {
-                                    this.isLoading = false;
-                                }
-                            },
-
-                            confirmImport() {
-                                if (!this.selectedFile) return;
-                                this.isImporting = true;
-
-                                const formData = new FormData();
-                                formData.append('file', this.selectedFile);
-                                formData.append('duplicate_action', this.previewData?.duplicate_count > 0 ? this.duplicateAction : 'skip');
-                                formData.append('_token', '{{ csrf_token() }}');
-
-                                // Create a hidden form and submit traditionally (for redirect)
-                                const form = document.createElement('form');
-                                form.method = 'POST';
-                                form.action = '{{ route("satker.kendaraans.import") }}';
-                                form.enctype = 'multipart/form-data';
-                                form.style.display = 'none';
-                                form.setAttribute('data-turbo', 'false');
-
-                                // CSRF
-                                const csrfInput = document.createElement('input');
-                                csrfInput.type = 'hidden';
-                                csrfInput.name = '_token';
-                                csrfInput.value = '{{ csrf_token() }}';
-                                form.appendChild(csrfInput);
-
-                                // Duplicate action
-                                const actionInput = document.createElement('input');
-                                actionInput.type = 'hidden';
-                                actionInput.name = 'duplicate_action';
-                                actionInput.value = this.previewData?.duplicate_count > 0 ? this.duplicateAction : 'skip';
-                                form.appendChild(actionInput);
-
-                                // File - use DataTransfer to attach file
-                                const fileInput = document.createElement('input');
-                                fileInput.type = 'file';
-                                fileInput.name = 'file';
-                                const dt = new DataTransfer();
-                                dt.items.add(this.selectedFile);
-                                fileInput.files = dt.files;
-                                form.appendChild(fileInput);
-
-                                document.body.appendChild(form);
-                                form.submit();
+                        handleDrop(e) {
+                            this.isDragging = false;
+                            const files = e.dataTransfer.files;
+                            if (files.length > 0) {
+                                this.validateAndSetFile(files[0]);
                             }
+                        },
+
+                        handleFileSelect(e) {
+                            if (e.target.files.length > 0) {
+                                this.validateAndSetFile(e.target.files[0]);
+                            }
+                        },
+
+                        validateAndSetFile(file) {
+                            this.uploadError = '';
+                            const allowedExt = ['.xlsx', '.xls', '.csv'];
+                            const ext = '.' + file.name.split('.').pop().toLowerCase();
+
+                            if (!allowedExt.includes(ext)) {
+                                this.uploadError = 'Format file tidak didukung. Gunakan .xlsx, .xls, atau .csv';
+                                return;
+                            }
+                            if (file.size > 2 * 1024 * 1024) {
+                                this.uploadError = 'Ukuran file melebihi batas 2MB.';
+                                return;
+                            }
+                            this.selectedFile = file;
+                        },
+
+                        clearFile() {
+                            this.selectedFile = null;
+                            this.uploadError = '';
+                            if (this.$refs.fileInput) this.$refs.fileInput.value = '';
+                        },
+
+                        formatFileSize(bytes) {
+                            if (bytes < 1024) return bytes + ' B';
+                            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+                            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+                        },
+
+                        async previewImport() {
+                            if (!this.selectedFile) return;
+                            this.isLoading = true;
+                            this.uploadError = '';
+                            this.step = 2;
+
+                            const formData = new FormData();
+                            formData.append('file', this.selectedFile);
+
+                            try {
+                                const resp = await fetch('{{ route("satker.kendaraans.preview-import") }}', {
+                                    method: 'POST',
+                                    headers: {
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                        'Accept': 'application/json',
+                                    },
+                                    body: formData
+                                });
+
+                                if (!resp.ok) {
+                                    const errData = await resp.json().catch(() => null);
+                                    throw new Error(errData?.message || 'Gagal menganalisis file. Periksa format dan coba lagi.');
+                                }
+
+                                this.previewData = await resp.json();
+                            } catch (err) {
+                                this.uploadError = err.message;
+                                this.step = 1;
+                            } finally {
+                                this.isLoading = false;
+                            }
+                        },
+
+                        confirmImport() {
+                            if (!this.selectedFile) return;
+                            this.isImporting = true;
+
+                            const formData = new FormData();
+                            formData.append('file', this.selectedFile);
+                            formData.append('duplicate_action', this.previewData?.duplicate_count > 0 ? this.duplicateAction : 'skip');
+                            formData.append('_token', '{{ csrf_token() }}');
+
+                            // Create a hidden form and submit traditionally (for redirect)
+                            const form = document.createElement('form');
+                            form.method = 'POST';
+                            form.action = '{{ route("satker.kendaraans.import") }}';
+                            form.enctype = 'multipart/form-data';
+                            form.style.display = 'none';
+                            form.setAttribute('data-turbo', 'false');
+
+                            // CSRF
+                            const csrfInput = document.createElement('input');
+                            csrfInput.type = 'hidden';
+                            csrfInput.name = '_token';
+                            csrfInput.value = '{{ csrf_token() }}';
+                            form.appendChild(csrfInput);
+
+                            // Duplicate action
+                            const actionInput = document.createElement('input');
+                            actionInput.type = 'hidden';
+                            actionInput.name = 'duplicate_action';
+                            actionInput.value = this.previewData?.duplicate_count > 0 ? this.duplicateAction : 'skip';
+                            form.appendChild(actionInput);
+
+                            // File - use DataTransfer to attach file
+                            const fileInput = document.createElement('input');
+                            fileInput.type = 'file';
+                            fileInput.name = 'file';
+                            const dt = new DataTransfer();
+                            dt.items.add(this.selectedFile);
+                            fileInput.files = dt.files;
+                            form.appendChild(fileInput);
+
+                            document.body.appendChild(form);
+                            form.submit();
                         }
                     }
-                </script>
+                }
+            </script>
         @endif
     </div>
 
