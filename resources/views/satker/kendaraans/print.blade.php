@@ -546,7 +546,7 @@
                 </div>
             </div>
             <div class="footer-bottom-row">
-                <div class="footer-website-link">spbp-poldantb.com</div>
+                <div class="footer-website-link">{{ request()->getHost() }}</div>
             </div>
         </div>
     </div>

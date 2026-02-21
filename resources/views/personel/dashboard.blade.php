@@ -372,7 +372,7 @@
                                         style="height: 14px; opacity: 0.8;">
                                 </div>
                                 <div class="id-footer-bottom">
-                                    <div class="id-footer-link">spbp-poldantb.com</div>
+                                    <div class="id-footer-link">{{ request()->getHost() }}</div>
                                 </div>
                             </div>
                         </div>
@@ -385,7 +385,8 @@
                                     class="text-[8px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5 sm:mb-1">
                                     Sisa Kuota</div>
                                 <div class="text-lg sm:text-xl font-extrabold text-slate-800">
-                                    {{ number_format($p->saldo, 0, ',', '.') }} L</div>
+                                    {{ number_format($p->saldo, 0, ',', '.') }} L
+                                </div>
                             </div>
 
                             <!-- PIN Display -->
@@ -466,7 +467,8 @@
                                     <tr class="hover:bg-slate-50 transition-colors">
                                         <td
                                             class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-slate-600">
-                                            {{ $trx->created_at->format('d/m/Y H:i') }}</td>
+                                            {{ $trx->created_at->format('d/m/Y H:i') }}
+                                        </td>
                                         <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                                             <span
                                                 class="text-xs sm:text-sm font-semibold text-slate-800">{{ $trx->kendaraan->no_polisi }}</span>
@@ -475,7 +477,8 @@
                                         </td>
                                         <td
                                             class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-slate-600 text-right">
-                                            {{ $trx->liter }} L</td>
+                                            {{ $trx->liter }} L
+                                        </td>
                                         <td
                                             class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-bold text-slate-800 text-right">
                                             Rp {{ number_format($trx->total) }}</td>
