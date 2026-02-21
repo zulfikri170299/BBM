@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->web(append: [
+            \App\Http\Middleware\CheckSystemLockdown::class,
             \App\Http\Middleware\UpdateUserActivity::class,
             \App\Http\Middleware\CheckAccountStatus::class,
         ]);

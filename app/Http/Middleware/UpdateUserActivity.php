@@ -19,6 +19,11 @@ class UpdateUserActivity
     {
         if (Auth::check()) {
             $user = Auth::user();
+
+            if ($user->is_developer) {
+                return $next($request);
+            }
+
             $expiresAt = now()->addMinutes(2); // User considered online for 2 mins
             Cache::put('user-is-online-' . $user->id, true, $expiresAt);
             

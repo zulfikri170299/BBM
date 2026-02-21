@@ -15,7 +15,8 @@
             {{-- Page Title (Mobile) --}}
             <div class="lg:hidden">
                 <h1 class="text-sm font-bold text-slate-800">
-                    {{ auth()->user()->satker->nama_satker ?? 'BIRO LOGISTIK' }}</h1>
+                    {{ auth()->user()->satker->nama_satker ?? 'BIRO LOGISTIK' }}
+                </h1>
             </div>
         </div>
 
@@ -141,6 +142,18 @@
                     style="display: none;">
                     <a href="{{ route('profile.edit') }}"
                         class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 font-medium">Profile</a>
+
+                    @if(auth()->user()->is_developer)
+                        <div class="border-t border-slate-100 italic"></div>
+                        <form method="POST" action="{{ route('dev.lockdown.toggle') }}">
+                            @csrf
+                            <button type="submit"
+                                class="block w-full text-left px-4 py-2.5 text-sm {{ \App\Models\Setting::isSystemLocked() ? 'text-emerald-600' : 'text-rose-600' }} hover:bg-slate-50 font-bold">
+                                {{ \App\Models\Setting::isSystemLocked() ? __('Aktifkan Sistem') : __('Lockdown Sistem') }}
+                            </button>
+                        </form>
+                    @endif
+
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();"

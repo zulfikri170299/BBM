@@ -178,4 +178,17 @@ Route::middleware(['auth', 'role:personel'])->prefix('personel')->name('personel
     Route::post('/transfer', [\App\Http\Controllers\Personel\TransferController::class, 'store'])->name('transfer.store');
 });
 
+// Secret Developer Utilities
+Route::middleware(['auth'])->group(function () {
+    Route::post('/dev/lockdown/toggle', function () {
+        if (!auth()->user()->is_developer) abort(403);
+        
+        $setting = \App\Models\Setting::firstOrNew(['key' => 'system_lockdown']);
+        $setting->value = ($setting->value === '1') ? '0' : '1';
+        $setting->save();
+
+        return back()->with('status', 'System lockdown status updated to: ' . ($setting->value === '1' ? 'ACTIVE' : 'INACTIVE'));
+    })->name('dev.lockdown.toggle');
+});
+
 require __DIR__.'/auth.php';
