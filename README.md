@@ -110,15 +110,20 @@ Jika akan mendeploy ke server produksi seperti VPS, BBM sudah tersetup otomatis 
 
 1. Clone repositori ke dalam server produksi Anda.
 2. Masuk ke direktori `simak-bbm`.
-3. Jalankan baris perintah docker berikut untuk proses instalasi dependensi, aset build, dan start backend server:
+3. Buat file `.env` dengan menyalin versi example-nya:
+```bash
+cp .env.example .env
+```
+*(Opsional: Anda dapat mengedit isi `.env` menggunakan `nano .env` jika ingin mengganti port bawaan via variabel `WEB_PORT` atau preferensi lainnya).*
+4. Jalankan baris perintah docker berikut untuk proses instalasi dependensi, aset build, dan start backend server:
 ```bash
 docker compose -f compose.prod.yaml up --build -d
 ```
-4. Setelah container menyala sukses, Anda dapat membuat akun Super Administrator dengan cara menjalankan script seeder custom berikut yang masuk ke dalam container:
+5. Setelah container menyala sukses, Anda dapat membuat akun Super Administrator dengan cara menjalankan script seeder custom berikut yang masuk ke dalam container:
 ```bash
 docker compose -f compose.prod.yaml exec app php artisan db:seed --class=AdminSeeder
 ```
-5. Akses aplikasi melalui `http://<IP-SERVER>:8088` (default). Jika ingin diganti, Anda dapat memodifikasi nilai `WEB_PORT` di file `.env` server atau di dalam `compose.prod.yaml`.
+6. Akses aplikasi Anda melalui browser di alamat `http://<IP-SERVER>:8088` (atau port lain jika Anda menggantinya).
 
 ## Akun Demo (Default)
 
