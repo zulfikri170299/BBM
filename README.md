@@ -104,6 +104,22 @@ Akan muncul pesan Server running on `http://127.0.0.1:8000`. Buka alamat tersebu
 
 > **Catatan:** Jika Anda tidak memiliki Node.js, tampilan mungkin berantakan. Pastikan `npm run build` dijalankan setidaknya sekali jika deploy ke server non-dev.
 
+## Menjalankan dengan Docker (Produksi)
+
+Jika akan mendeploy ke server produksi seperti VPS, BBM sudah tersetup otomatis dengan container (PHP FPM, Nginx, SQLite).
+
+1. Clone repositori ke dalam server produksi Anda.
+2. Masuk ke direktori `simak-bbm`.
+3. Jalankan baris perintah docker berikut untuk proses instalasi dependensi, aset build, dan start backend server:
+```bash
+docker compose -f compose.prod.yaml up --build -d
+```
+4. Setelah container menyala sukses, Anda dapat membuat akun Super Administrator dengan cara menjalankan script seeder custom berikut yang masuk ke dalam container:
+```bash
+docker compose -f compose.prod.yaml exec app php artisan db:seed --class=AdminSeeder
+```
+5. Akses aplikasi melalui `http://<IP-SERVER>:8088` (default). Jika ingin diganti, Anda dapat memodifikasi nilai `WEB_PORT` di file `.env` server atau di dalam `compose.prod.yaml`.
+
 ## Akun Demo (Default)
 
 Gunakan akun berikut untuk login pertama kali (Password semua akun: `password`):
