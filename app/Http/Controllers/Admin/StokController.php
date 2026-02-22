@@ -12,10 +12,13 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class StokController extends Controller
 {
-    public function index()
+    use \App\Traits\PaginatesTables;
+
+    public function index(Request $request)
     {
         $stocks = AdminBbmStock::all();
-        $history = RiwayatStokAdmin::with('user')->latest()->paginate(20);
+        $perPage = $this->getPerPage($request, 20);
+        $history = RiwayatStokAdmin::with('user')->latest()->paginate($perPage)->withQueryString();
         return view('admin.stok.index', compact('stocks', 'history'));
     }
 

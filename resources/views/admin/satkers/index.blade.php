@@ -54,21 +54,24 @@
                     </div>
                 </div>
 
-                <!-- Bulk Actions -->
-                <div id="bulkActions" class="hidden flex items-center gap-3">
-                    <span
-                        class="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100">
-                        <span id="selectedCount">0</span> DIPILIH
-                    </span>
-                    <button type="button" id="bulkDeleteBtn"
-                        class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-xs font-bold hover:bg-rose-700 transition shadow-sm">
-                        <svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                            </path>
-                        </svg>
-                        Hapus Terpilih
-                    </button>
+                <div class="flex items-center gap-4">
+
+                    <!-- Bulk Actions -->
+                    <div id="bulkActions" class="hidden flex items-center gap-3">
+                        <span
+                            class="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100">
+                            <span id="selectedCount">0</span> DIPILIH
+                        </span>
+                        <button type="button" id="bulkDeleteBtn"
+                            class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-xs font-bold hover:bg-rose-700 transition shadow-sm">
+                            <svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                </path>
+                            </svg>
+                            Hapus Terpilih
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -81,6 +84,20 @@
             <div class="overflow-x-auto">
                 <table class="min-w-full">
                     <thead>
+                        <tr class="bg-slate-50/50 border-b border-slate-100">
+                            <th colspan="4" class="px-6 py-3">
+                                <div class="flex items-center justify-between">
+                                    <form action="{{ route('admin.satkers.index') }}" method="GET"
+                                        class="flex items-center">
+                                        <x-per-page :current="request('per_page', 15)" />
+                                    </form>
+                                    <div class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
+                                        Menampilkan {{ $satkers->firstItem() ?? 0 }}-{{ $satkers->lastItem() ?? 0 }}
+                                        dari {{ $satkers->total() }} data
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
                         <tr class="bg-slate-50/70">
                             <th class="w-10 px-6 py-3.5">
                                 <input type="checkbox" id="checkAll"
@@ -142,6 +159,8 @@
                                             class="inline">
                                             @csrf
                                             @method('DELETE')
+                                            <input type="hidden" name="satker_id" id="satker_id"
+                                                value="{{ request('satker_id') }}">
                                             <button type="submit" data-confirm="Yakin ingin menghapus satker ini?"
                                                 data-confirm-type="error"
                                                 class="inline-flex items-center px-3 py-1.5 bg-slate-100 hover:bg-red-100 text-slate-600 hover:text-red-700 rounded-lg text-xs font-semibold transition-colors">
@@ -171,7 +190,8 @@
                                             </svg>
                                         </div>
                                         <p class="text-slate-500 font-medium">Belum ada Satker terdaftar</p>
-                                        <p class="text-sm text-slate-400 mt-1">Klik tombol "Tambah Satker" untuk menambah
+                                        <p class="text-sm text-slate-400 mt-1">Klik tombol "Tambah Satker" untuk
+                                            menambah
                                             data.</p>
                                     </div>
                                 </td>

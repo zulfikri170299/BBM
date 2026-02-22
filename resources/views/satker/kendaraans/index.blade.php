@@ -191,15 +191,6 @@
         <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm overflow-hidden">
             <div class="px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100 flex items-center justify-between">
                 <div class="flex items-center gap-2 sm:gap-3">
-                    <div class="p-1.5 sm:p-2 bg-blue-100 text-blue-600 rounded-lg">
-                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1">
-                            </path>
-                        </svg>
-                    </div>
                     <div>
                         <h3 class="text-sm sm:text-base font-semibold text-slate-800">Daftar Kendaraan</h3>
                         <p class="text-[10px] sm:text-xs text-slate-400">{{ $kendaraans->total() }} kendaraan terdaftar
@@ -236,6 +227,44 @@
             <div class="overflow-x-auto">
                 <table class="min-w-full">
                     <thead>
+                        <tr class="bg-slate-50/50 border-b border-slate-100">
+                            <th colspan="9" class="px-6 py-3">
+                                <div class="flex items-center justify-between">
+                                    <form action="{{ route('satker.kendaraans.index') }}" method="GET"
+                                        class="flex items-center gap-3">
+                                        <x-per-page :current="request('per_page', 10)" />
+
+                                        <div class="relative">
+                                            <span
+                                                class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-slate-400">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z">
+                                                    </path>
+                                                </svg>
+                                            </span>
+                                            <input type="text" name="search" value="{{ request('search') }}"
+                                                placeholder="Cari nopol, kode..."
+                                                class="block w-48 pl-8 pr-3 py-1.5 border border-slate-200 rounded-lg text-xs placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                                        </div>
+
+                                        @if(request('search'))
+                                            <a href="{{ route('satker.kendaraans.index') }}"
+                                                class="text-xs font-medium text-slate-400 hover:text-indigo-600 transition-colors">
+                                                Reset
+                                            </a>
+                                        @endif
+                                    </form>
+                                    <div class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
+                                        Menampilkan
+                                        {{ $kendaraans->firstItem() ?? 0 }}-{{ $kendaraans->lastItem() ?? 0 }} dari
+                                        {{ $kendaraans->total() }} data
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
                         <tr class="bg-slate-50/70">
                             <th class="px-4 py-3.5 text-center w-10">
                                 <input type="checkbox" id="checkAll"

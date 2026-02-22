@@ -84,6 +84,7 @@
                     </select>
                 </div>
 
+
                 <div class="flex items-center gap-2">
                     <button type="submit"
                         class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold text-sm hover:bg-indigo-700 transition shadow-md">
@@ -153,6 +154,26 @@
             <div class="overflow-x-auto">
                 <table class="min-w-full">
                     <thead>
+                        <tr class="bg-slate-50/50 border-b border-slate-100">
+                            <th colspan="6" class="px-6 py-3">
+                                <div class="flex items-center justify-between">
+                                    <form action="{{ route('admin.users.index') }}" method="GET"
+                                        class="flex items-center">
+                                        @if(request('search'))
+                                            <input type="hidden" name="search" value="{{ request('search') }}">
+                                        @endif
+                                        @if(request('satker_id'))
+                                            <input type="hidden" name="satker_id" value="{{ request('satker_id') }}">
+                                        @endif
+                                        <x-per-page :current="request('per_page', 15)" />
+                                    </form>
+                                    <div class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
+                                        Menampilkan {{ $users->firstItem() ?? 0 }}-{{ $users->lastItem() ?? 0 }} dari
+                                        {{ $users->total() }} data
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
                         <tr class="bg-slate-50/30">
                             <th class="w-10 px-6 py-3.5">
                                 <input type="checkbox" id="checkAll"

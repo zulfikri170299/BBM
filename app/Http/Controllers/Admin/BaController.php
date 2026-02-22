@@ -12,11 +12,17 @@ use PhpOffice\PhpWord\TemplateProcessor;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 
+use App\Traits\PaginatesTables;
+
 class BaController extends Controller
 {
-    public function index()
+    use PaginatesTables;
+
+    public function index(Request $request)
     {
-        $logs = BaLog::with('satker')->latest()->paginate(15);
+        $query = BaLog::with('satker');
+        $perPage = $this->getPerPage($request);
+        $logs = $query->latest()->paginate($perPage)->withQueryString();
         $settings = Setting::all()->pluck('value', 'key');
         return view('admin.ba.index', compact('logs', 'settings'));
     }

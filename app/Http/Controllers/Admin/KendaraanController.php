@@ -21,8 +21,12 @@ use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 
+use App\Traits\PaginatesTables;
+
 class KendaraanController extends Controller
 {
+    use PaginatesTables;
+
     public function index(Request $request)
     {
         $query = Kendaraan::with('satker')->latest();
@@ -31,7 +35,17 @@ class KendaraanController extends Controller
             $query->where('satker_id', $request->satker_id);
         }
 
-        $kendaraans = $query->paginate(15)->withQueryString();
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('no_polisi', 'like', "%{$search}%")
+                    ->orWhere('kode_kendaraan', 'like', "%{$search}%")
+                    ->orWhere('jenis_kendaraan', 'like', "%{$search}%");
+            });
+        }
+
+        $perPage = $this->getPerPage($request);
+        $kendaraans = $query->paginate($perPage)->withQueryString();
         $satkers = Satker::orderBy('nama_satker')->get();
         $allKendaraans = Kendaraan::select('id', 'satker_id', 'no_polisi', 'jenis_kendaraan', 'jenis_bbm', 'saldo')->get();
         $adminStocks = \App\Models\AdminBbmStock::all();

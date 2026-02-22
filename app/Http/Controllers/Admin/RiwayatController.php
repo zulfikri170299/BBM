@@ -8,8 +8,12 @@ use App\Models\Satker;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 
+use App\Traits\PaginatesTables;
+
 class RiwayatController extends Controller
 {
+    use PaginatesTables;
+
     public function index(Request $request)
     {
         $query = TransaksiBbm::with(['kendaraan.satker', 'personel', 'petugas']);
@@ -37,7 +41,8 @@ class RiwayatController extends Controller
             });
         }
 
-        $transaksis = $query->latest('tanggal')->paginate(15)->withQueryString();
+        $perPage = $this->getPerPage($request);
+        $transaksis = $query->latest()->paginate($perPage)->withQueryString();
 
         $satkers = Satker::orderBy('nama_satker')->get();
 

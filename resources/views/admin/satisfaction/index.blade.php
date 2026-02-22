@@ -65,12 +65,26 @@
 
         <!-- Table -->
         <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm overflow-hidden">
-            <div class="p-6 border-b border-slate-100">
+            <div class="p-6 border-b border-slate-100 flex items-center justify-between">
                 <h3 class="text-lg font-bold text-slate-800">Riwayat Penilaian</h3>
             </div>
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-slate-100">
                     <thead class="bg-slate-50">
+                        <tr class="border-b border-slate-100">
+                            <th colspan="5" class="px-6 py-3">
+                                <div class="flex items-center justify-between">
+                                    <form action="{{ route('admin.satisfaction.index') }}" method="GET"
+                                        class="flex items-center">
+                                        <x-per-page :current="request('per_page', 15)" />
+                                    </form>
+                                    <div class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
+                                        Menampilkan {{ $ratings->firstItem() ?? 0 }}-{{ $ratings->lastItem() ?? 0 }}
+                                        dari {{ $ratings->total() }} data
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
                         <tr>
                             <th
                                 class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">

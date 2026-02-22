@@ -295,6 +295,22 @@
 
                         <table class="min-w-full divide-y divide-slate-200">
                             <thead>
+                                <tr class="bg-slate-50/50 border-b border-slate-100">
+                                    <th colspan="6" class="px-6 py-3">
+                                        <div class="flex items-center justify-between">
+                                            <form action="{{ route('satker.personels.index') }}" method="GET"
+                                                class="flex items-center">
+                                                <x-per-page :current="request('per_page', 10)" />
+                                            </form>
+                                            <div
+                                                class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
+                                                Menampilkan
+                                                {{ $personels->firstItem() ?? 0 }}-{{ $personels->lastItem() ?? 0 }}
+                                                dari {{ $personels->total() }} data
+                                            </div>
+                                        </div>
+                                    </th>
+                                </tr>
                                 <tr class="bg-slate-50/50">
                                     <th class="px-4 py-4 text-center w-10">
                                         <input type="checkbox" id="checkAll"

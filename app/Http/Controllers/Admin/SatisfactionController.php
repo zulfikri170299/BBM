@@ -6,13 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Models\SatisfactionIndex;
 use Illuminate\Http\Request;
 
+use App\Traits\PaginatesTables;
+
 class SatisfactionController extends Controller
 {
-    public function index()
+    use PaginatesTables;
+
+    public function index(Request $request)
     {
+        $perPage = $this->getPerPage($request);
         $ratings = SatisfactionIndex::with('user.satker', 'user.personel')
             ->latest()
-            ->paginate(15);
+            ->paginate($perPage)
+            ->withQueryString();
 
         $stats = [
             'total' => SatisfactionIndex::count(),

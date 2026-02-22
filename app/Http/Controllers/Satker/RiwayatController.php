@@ -7,8 +7,12 @@ use App\Models\TransaksiBbm;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 
+use App\Traits\PaginatesTables;
+
 class RiwayatController extends Controller
 {
+    use PaginatesTables;
+
     public function index(Request $request)
     {
         $satker = auth()->user()->satker;
@@ -30,7 +34,7 @@ class RiwayatController extends Controller
             $query->where('kendaraan_id', $request->kendaraan_id);
         }
 
-        $transaksis = $query->latest('tanggal')->paginate(15)->withQueryString();
+        $transaksis = $query->latest('tanggal')->paginate($this->getPerPage($request))->withQueryString();
 
         $kendaraans = \App\Models\Kendaraan::where('satker_id', $satker->id)
             ->orderBy('no_polisi')

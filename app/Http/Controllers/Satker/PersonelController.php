@@ -8,9 +8,13 @@ use App\Models\LogAktivitas;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
+use App\Traits\PaginatesTables;
+
 class PersonelController extends Controller
 {
-    public function index()
+    use PaginatesTables;
+
+    public function index(Request $request)
     {
         $personels = Personel::where('satker_id', auth()->user()->satker_id)
             ->when(request('search'), function ($query) {
@@ -20,7 +24,7 @@ class PersonelController extends Controller
                 });
             })
             ->latest()
-            ->paginate(10);
+            ->paginate($this->getPerPage($request));
         
         return view('satker.personels.index', compact('personels'));
     }

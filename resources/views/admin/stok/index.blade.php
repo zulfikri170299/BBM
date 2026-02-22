@@ -147,8 +147,10 @@
             <!-- History Table -->
             <div class="lg:col-span-2">
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                    <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
-                        <h3 class="text-lg font-bold text-slate-800">Riwayat Perubahan Stok</h3>
+                    <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div class="flex items-center gap-3">
+                            <h3 class="text-lg font-bold text-slate-800">Riwayat Perubahan Stok</h3>
+                        </div>
                         <a href="{{ route('admin.stok.print') }}" target="_blank" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl shadow-lg shadow-rose-500/30 transition-all flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
                             Cetak PDF
@@ -157,6 +159,18 @@
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
+                                <tr class="bg-slate-50 border-b border-slate-100">
+                                    <th colspan="5" class="px-6 py-3">
+                                        <div class="flex items-center justify-between">
+                                            <form action="{{ route('admin.stok.index') }}" method="GET" class="flex items-center">
+                                                <x-per-page :current="request('per_page', 20)" />
+                                            </form>
+                                            <div class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
+                                                Menampilkan {{ $history->firstItem() ?? 0 }}-{{ $history->lastItem() ?? 0 }} dari {{ $history->total() }} data
+                                            </div>
+                                        </div>
+                                    </th>
+                                </tr>
                                 <tr class="bg-slate-50 border-b border-slate-100">
                                     <th class="px-2 py-4 sm:px-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tanggal</th>
                                     <th class="px-2 py-4 sm:px-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Jenis BBM</th>

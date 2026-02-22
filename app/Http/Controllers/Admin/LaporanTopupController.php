@@ -8,8 +8,12 @@ use App\Models\Satker;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 
+use App\Traits\PaginatesTables;
+
 class LaporanTopupController extends Controller
 {
+    use PaginatesTables;
+
     public function index(Request $request)
     {
         $query = RiwayatTopup::with(['kendaraan.satker', 'user'])->orderBy('riwayat_topups.created_at', 'desc');
@@ -35,7 +39,8 @@ class LaporanTopupController extends Controller
             ->groupBy('jenis_bbm')
             ->pluck('total', 'jenis_bbm');
 
-        $riwayats = $query->paginate(20);
+        $perPage = $this->getPerPage($request);
+        $riwayats = $query->latest()->paginate($perPage)->withQueryString();
         $satkers = Satker::orderBy('nama_satker')->get();
 
         return view('admin.laporan_topup.index', compact('riwayats', 'satkers', 'summary'));

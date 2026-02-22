@@ -15,15 +15,31 @@ use App\Imports\KendaraanImport;
 use App\Models\LogAktivitas;
 use Barryvdh\DomPDF\Facade\Pdf;
 
+use App\Traits\PaginatesTables;
+
 class KendaraanController extends Controller
 {
-    public function index()
+    use PaginatesTables;
+
+    public function index(Request $request)
     {
         $satkerId = auth()->user()->satker_id;
-        $kendaraans = Kendaraan::where('satker_id', $satkerId)->latest()->paginate(10);
+        $search = $request->input('search');
+
+        $query = Kendaraan::where('satker_id', $satkerId);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('no_polisi', 'like', "%{$search}%")
+                    ->orWhere('kode_kendaraan', 'like', "%{$search}%")
+                    ->orWhere('jenis_kendaraan', 'like', "%{$search}%");
+            });
+        }
+
+        $kendaraans = $query->latest()->paginate($this->getPerPage($request))->withQueryString();
         $personels = \App\Models\Personel::where('satker_id', $satkerId)->get();
         $availableKendaraans = Kendaraan::where('satker_id', $satkerId)->get();
-        
+
         return view('satker.kendaraans.index', compact('kendaraans', 'personels', 'availableKendaraans'));
     }
 
@@ -89,7 +105,8 @@ class KendaraanController extends Controller
             $query->whereDate('created_at', '<=', $request->end_date);
         }
 
-        $riwayats = $query->latest()->paginate(15)->appends($request->query());
+        $perPage = $this->getPerPage($request);
+        $riwayats = $query->latest()->paginate($perPage)->withQueryString();
 
         // Summary total per jenis BBM (from all filtered, not just current page)
         $summaryQuery = \App\Models\RiwayatTransferSaldoPersonel::where('riwayat_transfer_saldo_personels.satker_id', $satkerId)

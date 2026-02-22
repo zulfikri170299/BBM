@@ -172,6 +172,21 @@
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-slate-200">
                             <thead>
+                                <tr class="bg-slate-50/50 border-b border-slate-100">
+                                    <th colspan="5" class="px-6 py-3">
+                                        <div class="flex items-center justify-between">
+                                            <form action="{{ route('admin.personels.index') }}" method="GET" class="flex items-center">
+                                                @if(request('satker_id'))
+                                                    <input type="hidden" name="satker_id" value="{{ request('satker_id') }}">
+                                                @endif
+                                                <x-per-page :current="request('per_page', 15)" />
+                                            </form>
+                                            <div class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
+                                                Menampilkan {{ $personels->firstItem() ?? 0 }}-{{ $personels->lastItem() ?? 0 }} dari {{ $personels->total() }} data
+                                            </div>
+                                        </div>
+                                    </th>
+                                </tr>
                                 <tr class="bg-slate-50/50">
                                     <th class="w-10 px-6 py-4">
                                         <input type="checkbox" id="checkAll"

@@ -9,8 +9,12 @@ use App\Models\LogAktivitas;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
+use App\Traits\PaginatesTables;
+
 class UserController extends Controller
 {
+    use PaginatesTables;
+
     public function index(Request $request)
     {
         $query = User::with('satker');
@@ -30,7 +34,8 @@ class UserController extends Controller
             });
         }
 
-        $users = $query->latest()->paginate(15)->withQueryString();
+        $perPage = $this->getPerPage($request);
+        $users = $query->latest()->paginate($perPage)->withQueryString();
         $satkers = Satker::orderBy('nama_satker', 'asc')->get();
         return view('admin.users.index', compact('users', 'satkers'));
     }
@@ -133,7 +138,8 @@ class UserController extends Controller
             $query->whereDate('last_activity_at', $request->tanggal);
         }
 
-        $users = $query->orderByDesc('last_activity_at')->paginate(15)->withQueryString();
+        $perPage = $this->getPerPage($request);
+        $users = $query->orderByDesc('last_activity_at')->paginate($perPage)->withQueryString();
         $satkers = Satker::orderBy('nama_satker')->get();
             
         return view('admin.users.monitoring', compact('users', 'satkers'));

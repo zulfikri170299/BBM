@@ -7,11 +7,16 @@ use App\Models\Satker;
 use App\Models\LogAktivitas;
 use Illuminate\Http\Request;
 
+use App\Traits\PaginatesTables;
+
 class SatkerController extends Controller
 {
-    public function index()
+    use PaginatesTables;
+
+    public function index(Request $request)
     {
-        $satkers = Satker::latest()->paginate(10);
+        $perPage = $this->getPerPage($request);
+        $satkers = Satker::latest()->paginate($perPage)->withQueryString();
         return view('admin.satkers.index', compact('satkers'));
     }
 

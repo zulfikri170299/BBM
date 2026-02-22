@@ -76,6 +76,21 @@
                     <div class="overflow-x-auto bg-white rounded-xl shadow-sm border border-gray-100">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
+                                <tr class="border-b border-slate-100">
+                                    <th colspan="7" class="px-6 py-3">
+                                        <div class="flex items-center justify-between">
+                                            <form action="{{ route('admin.ba.index') }}" method="GET"
+                                                class="flex items-center">
+                                                <x-per-page :current="request('per_page', 15)" />
+                                            </form>
+                                            <div
+                                                class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
+                                                Menampilkan {{ $logs->firstItem() ?? 0 }}-{{ $logs->lastItem() ?? 0 }}
+                                                dari {{ $logs->total() }} data
+                                            </div>
+                                        </div>
+                                    </th>
+                                </tr>
                                 <tr>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">

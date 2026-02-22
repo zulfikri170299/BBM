@@ -6,8 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Personel;
 use Illuminate\Http\Request;
 
+use App\Traits\PaginatesTables;
+
 class PersonelController extends Controller
 {
+    use PaginatesTables;
+
     public function index(Request $request)
     {
         $query = Personel::with('satker')->latest();
@@ -26,7 +30,8 @@ class PersonelController extends Controller
             $query->where('satker_id', $request->satker_id);
         }
 
-        $personels = $query->paginate(10)->withQueryString();
+        $perPage = $this->getPerPage($request);
+        $personels = $query->latest()->paginate($perPage)->withQueryString();
         $satkers = \App\Models\Satker::orderBy('nama_satker')->get();
         
         return view('admin.personels.index', compact('personels', 'satkers'));
