@@ -1,0 +1,13 @@
+/vendor
+/node_modules
+/public/build
+/public/hot
+/storage/*.key
+.phpunit.cache
+/.fleet
+/.idea
+/.vscode
+.env
+/.git
+/database/database.sqlite
+/temp_web_ppa_reference
