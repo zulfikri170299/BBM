@@ -9,7 +9,17 @@ class TransaksiBbm extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'satker_id',
+        'kendaraan_id',
+        'personel_id',
+        'petugas_id',
+        'nama_driver',
+        'tanggal',
+        'liter',
+        'harga_per_liter',
+        'total',
+    ];
 
     public function kendaraan()
     {
@@ -19,6 +29,11 @@ class TransaksiBbm extends Model
     public function petugas()
     {
         return $this->belongsTo(User::class, 'petugas_id');
+    }
+
+    public function satker()
+    {
+        return $this->belongsTo(Satker::class);
     }
 
     public function personel()

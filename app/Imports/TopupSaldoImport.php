@@ -106,9 +106,11 @@ class TopupSaldoImport implements ToCollection, WithHeadingRow, WithStartRow
 
             // Log Riwayat Topup
             RiwayatTopup::create([
+                'satker_id' => $kendaraan->satker_id,
                 'kendaraan_id' => $kendaraan->id,
                 'user_id' => auth()->id(),
                 'jumlah' => $jumlah,
+                'tipe' => 'masuk',
                 'metode' => 'IMPORT',
             ]);
 

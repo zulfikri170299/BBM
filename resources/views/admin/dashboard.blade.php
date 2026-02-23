@@ -3,9 +3,8 @@
         <!-- Page Title -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4">
             <div>
-                <h1 class="text-xl sm:text-3xl font-bold text-slate-900">Super Admin Overview</h1>
-                <p class="mt-1 text-xs sm:text-base text-slate-500">Selamat datang, {{ Auth::user()->name }}. Berikut
-                    ringkasan sistem.</p>
+                <h1 class="text-xl sm:text-3xl font-bold text-slate-900">Dashboard</h1>
+
             </div>
             <div class="flex items-center gap-3">
             </div>

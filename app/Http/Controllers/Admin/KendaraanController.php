@@ -178,11 +178,11 @@ class KendaraanController extends Controller
 
             // 5. Catat Riwayat Topup
             RiwayatTopup::create([
+                'satker_id' => $kendaraan->satker_id,
                 'kendaraan_id' => $kendaraan->id,
                 'user_id' => $user->id,
                 'jumlah' => $request->jumlah,
-                'saldo_sebelum' => $oldSaldo,
-                'saldo_sesudah' => $kendaraan->saldo,
+                'tipe' => 'masuk',
                 'metode' => 'manual',
                 'status' => 'success',
             ]);
@@ -445,6 +445,74 @@ class KendaraanController extends Controller
         return back()->with('success', "PIN Kendaraan {$kendaraan->no_polisi} berhasil di-reset. PIN Baru: {$newPin}");
     }
 
+    public function transfer(Request $request)
+    {
+        $request->validate([
+            'kendaraan_id' => 'required|exists:kendaraans,id',
+            'satker_id' => 'required|exists:satkers,id',
+        ]);
+
+        $kendaraan = Kendaraan::findOrFail($request->kendaraan_id);
+        $oldSatkerId = $kendaraan->satker_id;
+        $newSatkerId = $request->satker_id;
+
+        if ($oldSatkerId == $newSatkerId) {
+            return back()->with('error', 'Kendaraan sudah berada di Satker tersebut.');
+        }
+
+        $newSatker = Satker::findOrFail($newSatkerId);
+        $oldSatker = Satker::findOrFail($oldSatkerId);
+
+        try {
+            DB::beginTransaction();
+
+            $saldoDipindah = $kendaraan->saldo;
+
+            // 1. Catat Pengurangan Saldo di Satker Lama (jika saldo > 0)
+            if ($saldoDipindah > 0) {
+                RiwayatTopup::create([
+                    'satker_id' => $oldSatkerId,
+                    'kendaraan_id' => $kendaraan->id,
+                    'user_id' => auth()->id(),
+                    'jumlah' => $saldoDipindah,
+                    'tipe' => 'keluar',
+                    'metode' => 'TRANSFER',
+                ]);
+
+                // 2. Catat Penambahan Saldo di Satker Baru
+                RiwayatTopup::create([
+                    'satker_id' => $newSatkerId,
+                    'kendaraan_id' => $kendaraan->id,
+                    'user_id' => auth()->id(),
+                    'jumlah' => $saldoDipindah,
+                    'tipe' => 'masuk',
+                    'metode' => 'TRANSFER',
+                ]);
+            }
+
+            // 3. Update Satker dan Reset PIN
+            $newPin = Kendaraan::generateUniquePin();
+            $kendaraan->update([
+                'satker_id' => $newSatkerId,
+                'pin' => $newPin,
+            ]);
+
+            LogAktivitas::create([
+                'user_id' => auth()->id(),
+                'aktivitas' => "Memindahkan Kendaraan {$kendaraan->no_polisi} dari {$oldSatker->nama_satker} ke {$newSatker->nama_satker}. PIN baru digenerate."
+            ]);
+
+            DB::commit();
+
+            return back()->with('success', "Kendaraan {$kendaraan->no_polisi} berhasil dipindahkan ke {$newSatker->nama_satker}. PIN baru: {$newPin}");
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error("Transfer Error: " . $e->getMessage());
+            return back()->with('error', 'Gagal memindahkan kendaraan: ' . $e->getMessage());
+        }
+    }
+
     public function laporanBulanan(Request $request)
     {
         $request->validate([
@@ -502,7 +570,23 @@ class KendaraanController extends Controller
 
     private function buildLaporanBulananData($satkerId, $bulan, $tahun)
     {
-        $kendaraans = \App\Models\Kendaraan::where('satker_id', $satkerId)->orderBy('jenis_bbm')->orderBy('no_polisi')->get();
+        // Ambil kendaraan yang saat ini di Satker ini ATAU pernah punya aktifitas di Satker ini pada bulan tsb
+        $kendaraansInSatker = \App\Models\Kendaraan::where('satker_id', $satkerId)->pluck('id')->toArray();
+        $kendaraansWithActivity = \App\Models\TransaksiBbm::where('satker_id', $satkerId)
+            ->whereMonth('tanggal', $bulan)
+            ->whereYear('tanggal', $tahun)
+            ->distinct()
+            ->pluck('kendaraan_id')
+            ->toArray();
+        $kendaraansWithTopup = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
+            ->whereMonth('created_at', $bulan)
+            ->whereYear('created_at', $tahun)
+            ->distinct()
+            ->pluck('kendaraan_id')
+            ->toArray();
+        
+        $allRelevantIds = array_unique(array_merge($kendaraansInSatker, $kendaraansWithActivity, $kendaraansWithTopup));
+        $kendaraans = \App\Models\Kendaraan::whereIn('id', $allRelevantIds)->orderBy('jenis_bbm')->orderBy('no_polisi')->get();
 
         $startDate = \Carbon\Carbon::create($tahun, $bulan, 1)->startOfMonth();
         $endDate = $startDate->copy()->endOfMonth();
@@ -518,24 +602,47 @@ class KendaraanController extends Controller
         $summaryByBbm = [];
 
         foreach ($kendaraans as $kendaraan) {
-            // Top Up bulan ini
-            $topupBulanIni = \App\Models\RiwayatTopup::where('kendaraan_id', $kendaraan->id)
+            // Top Up bulan ini (Masuk - Keluar di Satker ini)
+            $topupMasuk = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
+                ->where('kendaraan_id', $kendaraan->id)
+                ->where('tipe', 'masuk')
+                ->whereMonth('created_at', $bulan)
+                ->whereYear('created_at', $tahun)
+                ->sum('jumlah');
+            
+            $topupKeluar = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
+                ->where('kendaraan_id', $kendaraan->id)
+                ->where('tipe', 'keluar')
                 ->whereMonth('created_at', $bulan)
                 ->whereYear('created_at', $tahun)
                 ->sum('jumlah');
 
-            // Total top up sampai akhir bulan lalu
-            $totalTopupSampaiSebelumnya = \App\Models\RiwayatTopup::where('kendaraan_id', $kendaraan->id)
+            $topupBulanIni = $topupMasuk - $topupKeluar;
+
+            // Total top up sampai akhir bulan lalu di Satker ini
+            $totalTopupSampaiSebelumnyaMasuk = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
+                ->where('kendaraan_id', $kendaraan->id)
+                ->where('tipe', 'masuk')
                 ->where('created_at', '<=', $prevMonthEnd)
                 ->sum('jumlah');
+            
+            $totalTopupSampaiSebelumnyaKeluar = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
+                ->where('kendaraan_id', $kendaraan->id)
+                ->where('tipe', 'keluar')
+                ->where('created_at', '<=', $prevMonthEnd)
+                ->sum('jumlah');
+            
+            $totalTopupSampaiSebelumnya = $totalTopupSampaiSebelumnyaMasuk - $totalTopupSampaiSebelumnyaKeluar;
 
-            // Total pemakaian (transaksi) sampai akhir bulan lalu
-            $totalPemakaianSampaiSebelumnya = \App\Models\TransaksiBbm::where('kendaraan_id', $kendaraan->id)
+            // Total pemakaian (transaksi) sampai akhir bulan lalu di Satker ini
+            $totalPemakaianSampaiSebelumnya = \App\Models\TransaksiBbm::where('satker_id', $satkerId)
+                ->where('kendaraan_id', $kendaraan->id)
                 ->where('tanggal', '<=', $prevMonthEnd)
                 ->sum('liter');
 
-            // Total transfer keluar sampai akhir bulan lalu
-            $totalTransferKeluarSebelumnya = \App\Models\RiwayatTransferSaldoPersonel::where('kendaraan_id', $kendaraan->id)
+            // Total transfer keluar (saldo personil) sampai akhir bulan lalu di Satker ini
+            $totalTransferKeluarSebelumnya = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
+                ->where('kendaraan_id', $kendaraan->id)
                 ->where('created_at', '<=', $prevMonthEnd)
                 ->sum('jumlah');
 
@@ -543,21 +650,22 @@ class KendaraanController extends Controller
             $sisaBulanLalu = $totalTopupSampaiSebelumnya - $totalPemakaianSampaiSebelumnya - $totalTransferKeluarSebelumnya;
             if ($sisaBulanLalu < 0) $sisaBulanLalu = 0;
 
-            // NEW: Transfer keluar bulan ini
-            $transferBulanIni = \App\Models\RiwayatTransferSaldoPersonel::where('kendaraan_id', $kendaraan->id)
+            // Transfer keluar (ke personil) bulan ini di Satker ini
+            $transferBulanIni = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
+                ->where('kendaraan_id', $kendaraan->id)
                 ->whereMonth('created_at', $bulan)
                 ->whereYear('created_at', $tahun)
                 ->sum('jumlah');
 
-            // Total BBM = Sisa bulan lalu + Top Up bulan ini (Sesuai pola Satker: Transfer tidak langsung mengurangi Total BBM di sini)
             $totalBbm = $sisaBulanLalu + $topupBulanIni;
             
-            // Pemakaian per hari bulan ini
+            // Pemakaian per hari bulan ini di Satker ini
             $dailyUsage = [];
             $totalPemakaian = 0;
             for ($d = 1; $d <= $daysInMonth; $d++) {
                 $date = \Carbon\Carbon::create($tahun, $bulan, $d);
-                $usage = \App\Models\TransaksiBbm::where('kendaraan_id', $kendaraan->id)
+                $usage = \App\Models\TransaksiBbm::where('satker_id', $satkerId)
+                    ->where('kendaraan_id', $kendaraan->id)
                     ->whereDate('tanggal', $date)
                     ->sum('liter');
                 $dailyUsage[$d] = $usage > 0 ? round($usage, 0) : null;

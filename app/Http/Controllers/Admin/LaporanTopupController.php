@@ -16,7 +16,7 @@ class LaporanTopupController extends Controller
 
     public function index(Request $request)
     {
-        $query = RiwayatTopup::with(['kendaraan.satker', 'user'])->orderBy('riwayat_topups.created_at', 'desc');
+        $query = RiwayatTopup::with(['kendaraan', 'user', 'satker'])->orderBy('riwayat_topups.created_at', 'desc');
 
         // Filter Tanggal
         if ($request->filled('start_date')) {
@@ -28,14 +28,12 @@ class LaporanTopupController extends Controller
 
         // Filter Satker
         if ($request->filled('satker_id')) {
-            $query->whereHas('kendaraan', function ($q) use ($request) {
-                $q->where('satker_id', $request->satker_id);
-            });
+            $query->where('riwayat_topups.satker_id', $request->satker_id);
         }
 
         // Hitung Summary per Jenis BBM
         $summary = (clone $query)->reorder()->join('kendaraans', 'riwayat_topups.kendaraan_id', '=', 'kendaraans.id')
-            ->selectRaw('kendaraans.jenis_bbm as jenis_bbm, SUM(riwayat_topups.jumlah) as total')
+            ->selectRaw("kendaraans.jenis_bbm as jenis_bbm, SUM(CASE WHEN riwayat_topups.tipe = 'masuk' THEN riwayat_topups.jumlah ELSE -riwayat_topups.jumlah END) as total")
             ->groupBy('jenis_bbm')
             ->pluck('total', 'jenis_bbm');
 
@@ -48,7 +46,7 @@ class LaporanTopupController extends Controller
 
     public function print(Request $request)
     {
-        $query = RiwayatTopup::with(['kendaraan.satker', 'user'])->orderBy('riwayat_topups.created_at', 'desc');
+        $query = RiwayatTopup::with(['kendaraan', 'user', 'satker'])->orderBy('riwayat_topups.created_at', 'desc');
 
         // Filter Tanggal
         if ($request->filled('start_date')) {
@@ -60,14 +58,12 @@ class LaporanTopupController extends Controller
 
         // Filter Satker
         if ($request->filled('satker_id')) {
-            $query->whereHas('kendaraan', function ($q) use ($request) {
-                $q->where('satker_id', $request->satker_id);
-            });
+            $query->where('riwayat_topups.satker_id', $request->satker_id);
         }
 
         // Hitung Summary per Jenis BBM
         $summary = (clone $query)->reorder()->join('kendaraans', 'riwayat_topups.kendaraan_id', '=', 'kendaraans.id')
-            ->selectRaw('kendaraans.jenis_bbm as jenis_bbm, SUM(riwayat_topups.jumlah) as total')
+            ->selectRaw("kendaraans.jenis_bbm as jenis_bbm, SUM(CASE WHEN riwayat_topups.tipe = 'masuk' THEN riwayat_topups.jumlah ELSE -riwayat_topups.jumlah END) as total")
             ->groupBy('jenis_bbm')
             ->pluck('total', 'jenis_bbm');
 

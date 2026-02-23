@@ -4,8 +4,7 @@
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4">
             <div>
                 <h1 class="text-xl sm:text-3xl font-bold text-slate-900">Dashboard</h1>
-                <p class="mt-1 text-xs sm:text-base text-slate-500">Selamat datang, {{ Auth::user()->name }}.
-                    {{ Auth::user()->satker->nama_satker ?? '' }}</p>
+
             </div>
         </div>
 
@@ -121,7 +120,8 @@
                         <p class="text-xs sm:text-sm text-slate-500">Saldo Kendaraan</p>
                         <p class="text-lg sm:text-2xl font-bold text-slate-900 truncate">
                             {{ number_format($totalSaldoKendaraan, 0, ',', '.') }} <span
-                                class="text-xs sm:text-sm font-medium text-slate-400">L</span></p>
+                                class="text-xs sm:text-sm font-medium text-slate-400">L</span>
+                        </p>
                         <div class="mt-1 sm:mt-2 flex flex-wrap gap-1">
                             @foreach($saldoKendaraanPerBbm as $bbm => $total)
                                 <span
@@ -145,7 +145,8 @@
                         <p class="text-xs sm:text-sm text-slate-500">Saldo Personel</p>
                         <p class="text-lg sm:text-2xl font-bold text-slate-900 truncate">
                             {{ number_format($totalSaldoPersonel, 0, ',', '.') }} <span
-                                class="text-xs sm:text-sm font-medium text-slate-400">L</span></p>
+                                class="text-xs sm:text-sm font-medium text-slate-400">L</span>
+                        </p>
                         <div class="mt-1 sm:mt-2 flex flex-wrap gap-1">
                             @foreach($saldoPersonelPerBbm as $bbm => $total)
                                 <span
@@ -169,7 +170,8 @@
                         <p class="text-xs sm:text-sm text-slate-500">Transfer</p>
                         <p class="text-lg sm:text-2xl font-bold text-slate-900 truncate">
                             {{ number_format($totalLiterTransfer, 0, ',', '.') }} <span
-                                class="text-xs sm:text-sm font-medium text-slate-400">L</span></p>
+                                class="text-xs sm:text-sm font-medium text-slate-400">L</span>
+                        </p>
                         <div class="mt-1 sm:mt-2 flex flex-wrap gap-1">
                             @foreach($literTransferPerBbm as $bbm => $total)
                                 <span
@@ -206,13 +208,15 @@
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <p class="text-xs sm:text-sm font-semibold text-slate-800 truncate">
-                                        {{ $trx->kendaraan->no_polisi ?? '-' }} → {{ $trx->personel->nama ?? '-' }}</p>
+                                        {{ $trx->kendaraan->no_polisi ?? '-' }} → {{ $trx->personel->nama ?? '-' }}
+                                    </p>
                                     <p class="text-[10px] sm:text-xs text-slate-400">{{ $trx->created_at->diffForHumans() }}
                                     </p>
                                 </div>
                                 <div class="text-right">
                                     <p class="text-xs sm:text-sm font-bold text-emerald-600">
-                                        {{ number_format($trx->jumlah, 0, ',', '.') }} L</p>
+                                        {{ number_format($trx->jumlah, 0, ',', '.') }} L
+                                    </p>
                                 </div>
                             </div>
                         </div>

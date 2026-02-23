@@ -177,6 +177,7 @@ class TransaksiController extends Controller
 
         // Catat transaksi
         $transaksi = TransaksiBbm::create([
+            'satker_id' => $target->satker_id,
             'kendaraan_id' => $request->kendaraan_id,
             'personel_id' => $request->personel_id,
             'petugas_id' => auth()->id(),

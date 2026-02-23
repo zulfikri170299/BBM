@@ -299,9 +299,8 @@
     <div class="p-3 sm:p-6 lg:p-8 space-y-4 sm:space-y-8">
         <!-- Page Title -->
         <div>
-            <h1 class="text-xl sm:text-3xl font-bold text-slate-900">Personel Overview</h1>
-            <p class="mt-0.5 sm:mt-1 text-xs sm:text-base text-slate-500">Halo, {{ Auth::user()->name }}! Berikut
-                informasi akun Anda.</p>
+            <h1 class="text-xl sm:text-3xl font-bold text-slate-900">Dashboard</h1>
+
         </div>
 
         <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-8 items-start">

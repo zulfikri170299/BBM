@@ -7,7 +7,7 @@
 
 {{-- Sidebar --}}
 <div x-data="{ 
-        reportsOpen: {{ (request()->routeIs('admin.laporan-topup.*') || request()->routeIs('admin.laporan-harian.*') || request()->routeIs('admin.riwayat.*') || request()->routeIs('admin.ba.*')) ? 'true' : 'false' }},
+        reportsOpen: {{ (request()->routeIs('admin.laporan-topup.*') || request()->routeIs('admin.laporan-harian.*') || request()->routeIs('admin.riwayat.*') || request()->routeIs('admin.ba.*') || request()->routeIs('admin.laporan-sisa.*')) ? 'true' : 'false' }},
         satkerReportsOpen: {{ (request()->routeIs('satker.riwayat.*') || request()->routeIs('satker.kendaraans.laporan-bulanan.*') || request()->routeIs('satker.kendaraans.laporan-transfer.*')) ? 'true' : 'false' }},
         init() {
             // Force sidebar closed on mobile every page load
@@ -188,6 +188,14 @@
                     <a href="{{ route('admin.ba.index') }}"
                         class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.ba.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
                         Berita Acara
+                    </a>
+                    <a href="{{ route('admin.laporan-sisa.kendaraan') }}"
+                        class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-sisa.kendaraan') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                        Sisa BBM Kendaraan
+                    </a>
+                    <a href="{{ route('admin.laporan-sisa.personel') }}"
+                        class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-sisa.personel') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                        Sisa BBM Personel
                     </a>
                 </div>
             </div>

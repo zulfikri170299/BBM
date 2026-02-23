@@ -23,11 +23,18 @@ class RiwayatTopup extends Model
         });
     }
     protected $fillable = [
+        'satker_id',
         'kendaraan_id',
         'user_id',
         'jumlah',
+        'tipe',
         'metode',
     ];
+
+    public function satker()
+    {
+        return $this->belongsTo(Satker::class);
+    }
 
     public function kendaraan()
     {

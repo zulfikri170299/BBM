@@ -23,6 +23,7 @@
             margin: 0;
             padding: 0;
             font-weight: bold;
+            text-align: center;
         }
 
         h2 {
@@ -30,37 +31,11 @@
             margin: 2px 0 15px 0;
             padding: 0;
             font-weight: bold;
+            text-align: center;
         }
 
         .header-section {
             margin-bottom: 5px;
-        }
-
-        .kop-surat {
-            width: 100%;
-            border: none;
-            margin-bottom: 10px;
-        }
-
-        .kop-surat td {
-            border: none;
-            padding: 0;
-            vertical-align: middle;
-            text-align: center;
-        }
-
-        .kop-surat .logo-container {
-            width: 60px;
-        }
-
-        .kop-surat .logo {
-            width: 55px;
-            height: 55px;
-            object-fit: contain;
-        }
-
-        .kop-surat .title-container {
-            flex: 1;
         }
 
         table {
@@ -68,119 +43,92 @@
             border-collapse: collapse;
             table-layout: fixed;
             /* STRICTLY ENFORCE WIDTHS */
-            font-size: 6.5pt;
-            /* Reduced font size */
+            font-size: 6pt;
             border: 1pt solid #000;
         }
 
         th,
         td {
             border: 0.5pt solid #000;
-            padding: 3px 2px;
+            padding: 2px 1px;
             text-align: center;
             vertical-align: middle;
-            overflow: hidden;
-            white-space: nowrap;
+            word-wrap: break-word;
+            /* Allow wrapping */
+            overflow: visible;
         }
 
         th {
             background-color: transparent;
             font-weight: bold;
-            font-size: 7pt;
-            /* Reduced header font size */
-            height: 30px;
-            /* Slightly shorter */
+            font-size: 6pt;
+            height: 40px;
+            /* Increased to allow wrapping */
             color: #000;
         }
 
-        /* Rotated Text for Dates (Bottom-to-Top) */
+        /* Dates Text */
         .vertical-text {
-            writing-mode: horizontal-tb;
-            /* Force reset */
-            transform: rotate(-90deg);
-            white-space: nowrap;
-            height: 5.67pt;
-            /* Precisely 2mm container height = width after rotation */
-            width: 90px;
-            /* Safe width for date string */
-            line-height: 5.67pt;
-            /* Match column width exactly */
-            margin: 0;
+            width: 100%;
             display: block;
-            /* Ensure it takes dimensions */
-            text-align: left;
-            vertical-align: bottom;
+            text-align: center;
+            vertical-align: middle;
             font-size: 5pt;
-            /* Must be < 5.67pt to fit! */
-            transform-origin: bottom left;
-            /* Pivot at bottom-left corner */
-            position: relative;
-            left: 5.67pt;
-            /* Shift right to compensate for pivot */
-            bottom: 0;
+            font-weight: bold;
         }
 
         .row-header-dates th {
-            height: 95px;
-            width: 5.67pt;
-            /* Explicit width */
+            height: 20px;
+            width: 11.5pt;
             padding: 0;
-            vertical-align: bottom;
+            vertical-align: middle;
             text-align: center;
-            padding-bottom: 0;
             overflow: visible;
-            /* CRITICAL: Allow text to show even if tight */
-            position: relative;
         }
 
-        /* Maximized Metadata Widths + 2mm Date Columns (~879pt Total Printable) */
+        /* Recalibrated Widths for F4 Landscape */
         .col-no {
-            width: 20pt;
+            width: 18pt;
         }
 
         .col-jenis {
-            width: 119pt;
+            width: 180pt;
         }
 
-        /* Reduced from 149 */
         .col-nopol {
-            width: 100pt;
+            width: 60pt;
         }
 
-        /* Reduced from 120 */
         .col-bbm {
-            width: 80pt;
+            width: 50pt;
         }
 
-        /* Reduced from 90 */
         .col-sisa-lalu {
-            width: 65pt;
+            width: 35pt;
         }
 
         .col-topup {
-            width: 65pt;
+            width: 35pt;
         }
 
         .col-total-bbm {
-            width: 65pt;
+            width: 35pt;
         }
 
         .col-transfer {
-            width: 65pt;
+            width: 35pt;
         }
 
-        /* NEW COLUMN */
         .col-day {
-            width: 5.67pt;
+            width: 11.5pt;
         }
 
-        /* 2mm * 31 = ~175.77pt */
         .col-total-pakai {
-            width: 65pt;
+            width: 35pt;
         }
 
         .col-sisa-bbm {
-            width: 65pt;
+            width: 35pt;
         }
 
         .text-left {
@@ -224,20 +172,8 @@
 
 <body>
     <div class="header-section">
-        <table class="kop-surat">
-            <tr>
-                <td class="logo-container">
-                    <img src="{{ public_path('Lambang_Polda_NTB.png') }}" class="logo">
-                </td>
-                <td class="title-container">
-                    <h1>LAPORAN PEMAKAIAN BBM BULAN {{ strtoupper($namaBulan) }} TAHUN {{ $tahun }}</h1>
-                    <h2>{{ strtoupper($satkerName) }}</h2>
-                </td>
-                <td class="logo-container">
-                    <img src="{{ public_path('rolog.png') }}" class="logo">
-                </td>
-            </tr>
-        </table>
+        <h1>LAPORAN PEMAKAIAN BBM BULAN {{ strtoupper($namaBulan) }} TAHUN {{ $tahun }}</h1>
+        <h2>{{ strtoupper($satkerName) }}</h2>
     </div>
 
     <table>
@@ -258,31 +194,25 @@
         </colgroup>
         <thead>
             <tr>
-                <th rowspan="2">NO</th>
-                <th rowspan="2" style="font-size: 8pt;">JENIS KENDARAAN</th>
-                <th rowspan="2" style="font-size: 8pt;">NOPOL</th>
-                <th rowspan="2" style="font-size: 8pt;">JENIS BBM</th>
-                <th rowspan="2" style="font-size: 6.5pt; line-height: 1;">SISA BBM<br>BULAN
-                    {{ strtoupper($namaBulanSebelumnya) }}
-                </th>
-                <th rowspan="2" style="font-size: 6.5pt; line-height: 1;">TOP UP BBM<br>BULAN
-                    {{ strtoupper($namaBulan) }}
-                </th>
-                <th rowspan="2" style="font-size: 8pt;">TOTAL<br>BBM</th>
-                <th rowspan="2" style="font-size: 6.5pt; line-height: 1;">TRANSFER<br>KE PERSONEL</th>
-                <th colspan="{{ $daysInMonth }}" style="font-size: 9pt; height: 35px;">LAPORAN PEMAKAIAN BULAN
-                    {{ strtoupper($namaBulan) }}
-                </th>
-                <th rowspan="2" style="font-size: 8pt;">TOTAL<br>PAKAI</th>
-                <th rowspan="2" style="font-size: 8pt;">SISA<br>BBM</th>
+                <th rowspan="2" class="col-no">NO</th>
+                <th rowspan="2" class="col-jenis">JENIS KENDARAAN</th>
+                <th rowspan="2" class="col-nopol">NOPOL</th>
+                <th rowspan="2" class="col-bbm">JENIS BBM</th>
+                <th rowspan="2" style="line-height: 1;">SISA BBM<br>BULAN<br>{{ strtoupper($namaBulanSebelumnya) }}</th>
+                <th rowspan="2" style="line-height: 1;">TOP UP BBM<br>BULAN<br>{{ strtoupper($namaBulan) }}</th>
+                <th rowspan="2">TOTAL<br>BBM</th>
+                <th rowspan="2" style="line-height: 1;">TRANSFER<br>KE PERSONEL</th>
+                <th colspan="{{ $daysInMonth }}" style="font-size: 7pt; height: 30px;">LAPORAN PEMAKAIAN BULAN
+                    {{ strtoupper($namaBulan) }}</th>
+                <th rowspan="2">TOTAL<br>PAKAI</th>
+                <th rowspan="2">SISA<br>BBM</th>
             </tr>
             <tr class="row-header-dates">
                 @for($d = 1; $d <= $daysInMonth; $d++)
-                    @php
-                        $dateStr = str_pad($d, 2, '0', STR_PAD_LEFT) . '/' . str_pad($bulan, 2, '0', STR_PAD_LEFT) . '/' . $tahun;
-                    @endphp
-                    <th>
-                        <div class="vertical-text">{{ $dateStr }}</div>
+                    <th class="col-day">
+                        <div class="vertical-text">
+                            {{ $d }}
+                        </div>
                     </th>
                 @endfor
             </tr>
@@ -290,29 +220,23 @@
         <tbody>
             @foreach($rows as $index => $row)
                 <tr>
-                    <td style="font-size: 7.5pt;">{{ $index + 1 }}</td>
-                    <td class="text-left" style="font-size: 7.5pt;">{{ strtoupper($row['jenis_kendaraan']) }}</td>
-                    <td class="bold" style="font-size: 7.5pt;">{{ strtoupper($row['no_polisi']) }}</td>
-                    <td style="font-size: 7.5pt;">{{ strtoupper($row['jenis_bbm']) }}</td>
-                    <td style="font-size: 7.5pt;">
-                        {{ $row['sisa_bulan_lalu'] > 0 ? number_format($row['sisa_bulan_lalu'], 0, ',', '.') : '-' }}
-                    </td>
-                    <td style="font-size: 7.5pt;">
-                        {{ $row['topup_bulan_ini'] > 0 ? number_format($row['topup_bulan_ini'], 0, ',', '.') : '-' }}
-                    </td>
-                    <td class="bold" style="font-size: 7.5pt;">{{ number_format($row['total_bbm'], 0, ',', '.') }}</td>
-                    <td style="font-size: 7.5pt;">
-                        {{ $row['transfer_bulan_ini'] > 0 ? number_format($row['transfer_bulan_ini'], 0, ',', '.') : '-' }}
+                    <td>{{ $index + 1 }}</td>
+                    <td class="text-left">{{ strtoupper($row['jenis_kendaraan']) }}</td>
+                    <td class="bold">{{ strtoupper($row['no_polisi']) }}</td>
+                    <td>{{ strtoupper($row['jenis_bbm']) }}</td>
+                    <td>{{ $row['sisa_bulan_lalu'] > 0 ? number_format($row['sisa_bulan_lalu'], 0, ',', '.') : '-' }}</td>
+                    <td>{{ $row['topup_bulan_ini'] > 0 ? number_format($row['topup_bulan_ini'], 0, ',', '.') : '-' }}</td>
+                    <td class="bold">{{ number_format($row['total_bbm'], 0, ',', '.') }}</td>
+                    <td>{{ $row['transfer_bulan_ini'] > 0 ? number_format($row['transfer_bulan_ini'], 0, ',', '.') : '-' }}
                     </td>
                     @for($d = 1; $d <= $daysInMonth; $d++)
-                        <td style="font-size: 5pt; padding: 0; text-align: center;">
+                        <td class="col-day" style="font-size: 5pt; padding: 0;">
                             {{ $row['daily_usage'][$d] ? number_format($row['daily_usage'][$d], 0, ',', '.') : '' }}
                         </td>
                     @endfor
-                    <td class="bold" style="font-size: 7.5pt;">
-                        {{ $row['total_pemakaian'] > 0 ? number_format($row['total_pemakaian'], 0, ',', '.') : '-' }}
-                    </td>
-                    <td class="bold" style="font-size: 7.5pt;">{{ number_format($row['sisa_bbm'], 0, ',', '.') }}</td>
+                    <td class="bold">
+                        {{ $row['total_pemakaian'] > 0 ? number_format($row['total_pemakaian'], 0, ',', '.') : '-' }}</td>
+                    <td class="bold">{{ number_format($row['sisa_bbm'], 0, ',', '.') }}</td>
                 </tr>
             @endforeach
 
@@ -324,10 +248,10 @@
                     <td>{{ number_format($summary['total_bbm'], 0, ',', '.') }}</td>
                     <td>{{ number_format($summary['transfer_bulan_ini'], 0, ',', '.') }}</td>
                     @for($d = 1; $d <= $daysInMonth; $d++)
-                        <td></td>
+                        <td class="col-day"></td>
                     @endfor
-                    <td>{{ number_format($summary['total_pemakaian'], 0, ',', '.') }}</td>
-                    <td>{{ number_format($summary['sisa_bbm'], 0, ',', '.') }}</td>
+                    <td class="bold">{{ number_format($summary['total_pemakaian'], 0, ',', '.') }}</td>
+                    <td class="bold">{{ number_format($summary['sisa_bbm'], 0, ',', '.') }}</td>
                 </tr>
             @endforeach
         </tbody>

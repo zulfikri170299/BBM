@@ -16,7 +16,17 @@ class SatkerController extends Controller
     public function index(Request $request)
     {
         $perPage = $this->getPerPage($request);
-        $satkers = Satker::latest()->paginate($perPage)->withQueryString();
+        $query = Satker::latest();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nama_satker', 'like', "%{$search}%")
+                  ->orWhere('alamat', 'like', "%{$search}%");
+            });
+        }
+
+        $satkers = $query->paginate($perPage)->withQueryString();
         return view('admin.satkers.index', compact('satkers'));
     }
 

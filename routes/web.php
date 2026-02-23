@@ -75,6 +75,7 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     Route::post('/kendaraans', [\App\Http\Controllers\Admin\KendaraanController::class, 'store'])->name('kendaraans.store');
     Route::get('/kendaraans/{kendaraan}/print', [\App\Http\Controllers\Admin\KendaraanController::class, 'print'])->name('kendaraans.print');
     Route::post('/kendaraans/{kendaraan}/topup', [\App\Http\Controllers\Admin\KendaraanController::class, 'topup'])->name('kendaraans.topup');
+    Route::post('/kendaraans/transfer', [\App\Http\Controllers\Admin\KendaraanController::class, 'transfer'])->name('kendaraans.transfer');
     Route::post('/kendaraans/{kendaraan}/reset-pin', [\App\Http\Controllers\Admin\KendaraanController::class, 'resetPin'])->name('kendaraans.reset-pin');
     Route::post('/kendaraans/send-otp', [\App\Http\Controllers\Admin\KendaraanController::class, 'sendOtp'])->name('kendaraans.send-otp');
     Route::post('/kendaraans/import-topup', [\App\Http\Controllers\Admin\KendaraanController::class, 'importTopup'])->name('kendaraans.import-topup');
@@ -95,6 +96,12 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     Route::get('/riwayat', [\App\Http\Controllers\Admin\RiwayatController::class, 'index'])->name('riwayat.index');
     Route::get('/laporan-topup/print', [\App\Http\Controllers\Admin\LaporanTopupController::class, 'print'])->name('laporan-topup.print');
     Route::get('/laporan-topup', [\App\Http\Controllers\Admin\LaporanTopupController::class, 'index'])->name('laporan-topup.index');
+    
+    // Laporan Sisa BBM (Kendaraan & Personel)
+    Route::get('/laporan-sisa/kendaraan', [\App\Http\Controllers\Admin\LaporanSisaController::class, 'kendaraan'])->name('laporan-sisa.kendaraan');
+    Route::get('/laporan-sisa/kendaraan/print', [\App\Http\Controllers\Admin\LaporanSisaController::class, 'printKendaraan'])->name('laporan-sisa.kendaraan.print');
+    Route::get('/laporan-sisa/personel', [\App\Http\Controllers\Admin\LaporanSisaController::class, 'personel'])->name('laporan-sisa.personel');
+    Route::get('/laporan-sisa/personel/print', [\App\Http\Controllers\Admin\LaporanSisaController::class, 'printPersonel'])->name('laporan-sisa.personel.print');
     
     // Satisfaction Index
     Route::get('/satisfaction-index', [\App\Http\Controllers\Admin\SatisfactionController::class, 'index'])->name('satisfaction.index');

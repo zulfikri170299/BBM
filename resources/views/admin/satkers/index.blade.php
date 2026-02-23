@@ -86,11 +86,44 @@
                     <thead>
                         <tr class="bg-slate-50/50 border-b border-slate-100">
                             <th colspan="4" class="px-6 py-3">
-                                <div class="flex items-center justify-between">
-                                    <form action="{{ route('admin.satkers.index') }}" method="GET"
-                                        class="flex items-center">
-                                        <x-per-page :current="request('per_page', 15)" />
-                                    </form>
+                                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                    <div class="flex flex-wrap items-center gap-4">
+                                        <form action="{{ route('admin.satkers.index') }}" method="GET"
+                                            class="flex items-center">
+                                            <x-per-page :current="request('per_page', 15)" />
+                                            @if(request('search'))
+                                                <input type="hidden" name="search" value="{{ request('search') }}">
+                                            @endif
+                                        </form>
+
+                                        <!-- Search Bar -->
+                                        <form action="{{ route('admin.satkers.index') }}" method="GET"
+                                            class="flex items-center min-w-[240px]">
+                                            @if(request('per_page'))
+                                                <input type="hidden" name="per_page" value="{{ request('per_page') }}">
+                                            @endif
+                                            <div class="relative w-full">
+                                                <span
+                                                    class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                                    </svg>
+                                                </span>
+                                                <input type="text" name="search" value="{{ request('search') }}"
+                                                    placeholder="Cari satker..."
+                                                    class="block w-full pl-9 pr-3 py-1.5 border border-slate-200 rounded-lg text-xs placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                                            </div>
+                                            @if(request('search'))
+                                                <a href="{{ route('admin.satkers.index', ['per_page' => request('per_page')]) }}"
+                                                    class="ml-2 text-xs text-slate-400 hover:text-slate-600 transition-colors">
+                                                    Reset
+                                                </a>
+                                            @endif
+                                        </form>
+                                    </div>
                                     <div class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
                                         Menampilkan {{ $satkers->firstItem() ?? 0 }}-{{ $satkers->lastItem() ?? 0 }}
                                         dari {{ $satkers->total() }} data

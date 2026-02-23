@@ -2,10 +2,7 @@
     <div class="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6 lg:space-y-8">
         <!-- Page Title -->
         <div>
-            <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900">Petugas BBM</h1>
-            <p class="mt-0.5 sm:mt-1 text-xs sm:text-sm text-slate-500">Station pengisian bahan bakar —
-                {{ Auth::user()->satker->nama_satker ?? '' }}
-            </p>
+            <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900">Dashboard</h1>
         </div>
 
         <!-- Stats Cards -->

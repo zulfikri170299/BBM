@@ -123,15 +123,11 @@
                     }
 
                     .rotate-date {
-                        writing-mode: vertical-rl;
-                        transform: rotate(180deg);
-                        white-space: nowrap;
-                        font-size: 10px;
+                        font-size: 8px;
                         font-weight: bold;
                         display: block;
                         margin: 0 auto;
-                        height: 85px;
-                        padding: 4px 2px;
+                        padding: 2px 0;
                     }
                 </style>
 
@@ -158,11 +154,8 @@
                         </tr>
                         <tr>
                             @for($d = 1; $d <= $daysInMonth; $d++)
-                                @php
-                                    $dateStr = str_pad($d, 2, '0', STR_PAD_LEFT) . '/' . str_pad($bulan, 2, '0', STR_PAD_LEFT) . '/' . $tahun;
-                                @endphp
-                                <th style="padding:0; height:85px; width:22px;">
-                                    <div class="rotate-date">{{ $dateStr }}</div>
+                                <th style="padding:0; width:22px;">
+                                    <div class="rotate-date">{{ $d }}</div>
                                 </th>
                             @endfor
                         </tr>

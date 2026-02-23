@@ -401,6 +401,15 @@
                                                 </path>
                                             </svg>
                                         </a>
+                                        <button type="button"
+                                            @click="$dispatch('open-transfer', {id: {{ $kendaraan->id }}, nopol: '{{ $kendaraan->no_polisi }}', current_satker: '{{ $kendaraan->satker->nama_satker ?? '-' }}'})"
+                                            class="inline-flex items-center p-2 bg-slate-100 hover:bg-violet-100 text-slate-500 hover:text-violet-600 rounded-lg transition-colors"
+                                            title="Pindah Satker">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+                                            </svg>
+                                        </button>
                                         <form action="{{ route('admin.kendaraans.reset-pin', $kendaraan) }}" method="POST"
                                             class="inline">
                                             @csrf
@@ -478,110 +487,110 @@
         <!-- Top Up Modal -->
         <!-- Top Up Modal -->
         <div x-cloak x-data="{
-                                                        showTopup: false,
-                                                        topupId: null,
-                                                        topupNopol: '',
-                                                        topupSaldo: '',
-                                                        jumlah: '',
-                                                        topupPassword: '',
-                                                        selectMode: false,
-                                                        selectedSatkerId: '',
-                                                        // Satker Search
-                                                        satkerSearch: '',
-                                                        satkerOpen: false,
-                                                        satkerLabel: '',
-                                                        satkers: {{ json_encode($satkers->map(fn($s) => ['id' => $s->id, 'nama' => $s->nama_satker])) }},
-                                                        get filteredSatkers() {
-                                                            if (!this.satkerSearch) return this.satkers;
-                                                            return this.satkers.filter(s => s.nama.toLowerCase().includes(this.satkerSearch.toLowerCase()));
-                                                        },
-                                                        selectSatker(s) {
-                                                            this.selectedSatkerId = s.id;
-                                                            this.satkerLabel = s.nama;
-                                                            this.satkerOpen = false;
-                                                            this.satkerSearch = '';
-                                                            this.topupId = null;
-                                                            this.topupNopol = '';
-                                                            this.kendaraanLabel = '';
-                                                        },
-                                                        // Kendaraan Search
-                                                        kendaraanSearch: '',
-                                                        kendaraanOpen: false,
-                                                        kendaraanLabel: '',
-                                                        get filteredKendaraans() {
-                                                            let list = this.allKendaraans.filter(x => x.satker_id == this.selectedSatkerId);
-                                                            if (!this.kendaraanSearch) return list;
-                                                            return list.filter(k => k.nopol.toLowerCase().includes(this.kendaraanSearch.toLowerCase()));
-                                                        },
-                                                        selectKendaraanManual(k) {
-                                                            this.topupId = k.id;
-                                                            this.topupNopol = k.satker_nama + ' - ' + k.nopol;
-                                                            this.topupSaldo = k.saldo;
-                                                            this.kendaraanLabel = k.nopol + ' (' + k.saldo + ' L)';
-                                                            this.kendaraanOpen = false;
-                                                            this.kendaraanSearch = '';
-                                                        },
-                                                        adminStocks: [
-                                                            @foreach($adminStocks as $s)
-                                                                { jenis_bbm: '{{ $s->jenis_bbm }}', saldo: {{ $s->saldo }} },
-                                                            @endforeach
-                                                        ],
-                                                        allKendaraans: [
-                                                            @foreach($allKendaraans as $k)
-                                                                { id: {{ $k->id }}, satker_id: {{ $k->satker_id }}, satker_nama: '{{ $k->satker->nama_satker ?? '-' }}', nopol: '{{ $k->no_polisi }}', jenis_bbm: '{{ $k->jenis_bbm }}', saldo: '{{ number_format($k->saldo, 0, ',', '.') }}', saldoRaw: {{ $k->saldo }} },
-                                                            @endforeach
-                                                        ],
-                                                        get currentAdminStock() {
-                                                            if (!this.topupId) return 0;
-                                                            const k = this.allKendaraans.find(x => x.id == this.topupId);
-                                                            if (!k) return 0;
-                                                            const s = this.adminStocks.find(x => x.jenis_bbm == k.jenis_bbm);
-                                                            return s ? s.saldo : 0;
-                                                        },
-                                                        get canSubmitManual() {
-                                                            return this.topupId && this.jumlah && this.jumlah > 0 && this.jumlah <= this.currentAdminStock && this.topupPassword;
-                                                        },
-                                                        selectKendaraan(id) {
-                                                            const k = this.allKendaraans.find(x => x.id == id);
-                                                            if (k) {
-                                                                this.topupId = k.id;
-                                                                this.topupNopol = k.satker_nama + ' - ' + k.nopol;
-                                                                this.topupSaldo = k.saldo;
-                                                            }
-                                                        },
-                                                        reset() {
-                                                            this.showTopup = false;
-                                                            setTimeout(() => {
-                                                                this.jumlah = '';
-                                                                this.topupPassword = '';
-                                                                this.topupId = null;
-                                                                this.selectedSatkerId = '';
-                                                                this.satkerLabel = '';
-                                                                this.kendaraanLabel = '';
-                                                            }, 300);
-                                                        },
-                                                        number_format(number, decimals, dec_point, thousands_sep) {
-                                                            number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
-                                                            var n = !isFinite(+number) ? 0 : +number,
-                                                                prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
-                                                                sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
-                                                                dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
-                                                                s = '',
-                                                                toFixedFix = function(n, prec) {
-                                                                    var k = Math.pow(10, prec);
-                                                                    return '' + Math.round(n * k) / k;
-                                                                };
-                                                            s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
-                                                            if (s[0].length > 3) {
-                                                                s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
-                                                            }
-                                                            if ((s[1] || '').length < prec) {
-                                                                s[1] = s[1] || '';
-                                                                s[1] += new Array(prec - s[1].length + 1).join('0');
-                                                            }
-                                                            return s.join(dec);
-                                                        }
-                                                    }"
+                                                                    showTopup: false,
+                                                                    topupId: null,
+                                                                    topupNopol: '',
+                                                                    topupSaldo: '',
+                                                                    jumlah: '',
+                                                                    topupPassword: '',
+                                                                    selectMode: false,
+                                                                    selectedSatkerId: '',
+                                                                    // Satker Search
+                                                                    satkerSearch: '',
+                                                                    satkerOpen: false,
+                                                                    satkerLabel: '',
+                                                                    satkers: {{ json_encode($satkers->map(fn($s) => ['id' => $s->id, 'nama' => $s->nama_satker])) }},
+                                                                    get filteredSatkers() {
+                                                                        if (!this.satkerSearch) return this.satkers;
+                                                                        return this.satkers.filter(s => s.nama.toLowerCase().includes(this.satkerSearch.toLowerCase()));
+                                                                    },
+                                                                    selectSatker(s) {
+                                                                        this.selectedSatkerId = s.id;
+                                                                        this.satkerLabel = s.nama;
+                                                                        this.satkerOpen = false;
+                                                                        this.satkerSearch = '';
+                                                                        this.topupId = null;
+                                                                        this.topupNopol = '';
+                                                                        this.kendaraanLabel = '';
+                                                                    },
+                                                                    // Kendaraan Search
+                                                                    kendaraanSearch: '',
+                                                                    kendaraanOpen: false,
+                                                                    kendaraanLabel: '',
+                                                                    get filteredKendaraans() {
+                                                                        let list = this.allKendaraans.filter(x => x.satker_id == this.selectedSatkerId);
+                                                                        if (!this.kendaraanSearch) return list;
+                                                                        return list.filter(k => k.nopol.toLowerCase().includes(this.kendaraanSearch.toLowerCase()));
+                                                                    },
+                                                                    selectKendaraanManual(k) {
+                                                                        this.topupId = k.id;
+                                                                        this.topupNopol = k.satker_nama + ' - ' + k.nopol;
+                                                                        this.topupSaldo = k.saldo;
+                                                                        this.kendaraanLabel = k.nopol + ' (' + k.saldo + ' L)';
+                                                                        this.kendaraanOpen = false;
+                                                                        this.kendaraanSearch = '';
+                                                                    },
+                                                                    adminStocks: [
+                                                                        @foreach($adminStocks as $s)
+                                                                            { jenis_bbm: '{{ $s->jenis_bbm }}', saldo: {{ $s->saldo }} },
+                                                                        @endforeach
+                                                                    ],
+                                                                    allKendaraans: [
+                                                                        @foreach($allKendaraans as $k)
+                                                                            { id: {{ $k->id }}, satker_id: {{ $k->satker_id }}, satker_nama: '{{ $k->satker->nama_satker ?? '-' }}', nopol: '{{ $k->no_polisi }}', jenis_bbm: '{{ $k->jenis_bbm }}', saldo: '{{ number_format($k->saldo, 0, ',', '.') }}', saldoRaw: {{ $k->saldo }} },
+                                                                        @endforeach
+                                                                    ],
+                                                                    get currentAdminStock() {
+                                                                        if (!this.topupId) return 0;
+                                                                        const k = this.allKendaraans.find(x => x.id == this.topupId);
+                                                                        if (!k) return 0;
+                                                                        const s = this.adminStocks.find(x => x.jenis_bbm == k.jenis_bbm);
+                                                                        return s ? s.saldo : 0;
+                                                                    },
+                                                                    get canSubmitManual() {
+                                                                        return this.topupId && this.jumlah && this.jumlah > 0 && this.jumlah <= this.currentAdminStock && this.topupPassword;
+                                                                    },
+                                                                    selectKendaraan(id) {
+                                                                        const k = this.allKendaraans.find(x => x.id == id);
+                                                                        if (k) {
+                                                                            this.topupId = k.id;
+                                                                            this.topupNopol = k.satker_nama + ' - ' + k.nopol;
+                                                                            this.topupSaldo = k.saldo;
+                                                                        }
+                                                                    },
+                                                                    reset() {
+                                                                        this.showTopup = false;
+                                                                        setTimeout(() => {
+                                                                            this.jumlah = '';
+                                                                            this.topupPassword = '';
+                                                                            this.topupId = null;
+                                                                            this.selectedSatkerId = '';
+                                                                            this.satkerLabel = '';
+                                                                            this.kendaraanLabel = '';
+                                                                        }, 300);
+                                                                    },
+                                                                    number_format(number, decimals, dec_point, thousands_sep) {
+                                                                        number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+                                                                        var n = !isFinite(+number) ? 0 : +number,
+                                                                            prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+                                                                            sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+                                                                            dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+                                                                            s = '',
+                                                                            toFixedFix = function(n, prec) {
+                                                                                var k = Math.pow(10, prec);
+                                                                                return '' + Math.round(n * k) / k;
+                                                                            };
+                                                                        s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+                                                                        if (s[0].length > 3) {
+                                                                            s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+                                                                        }
+                                                                        if ((s[1] || '').length < prec) {
+                                                                            s[1] = s[1] || '';
+                                                                            s[1] += new Array(prec - s[1].length + 1).join('0');
+                                                                        }
+                                                                        return s.join(dec);
+                                                                    }
+                                                                }"
             @open-topup.window="topupId = $event.detail.id; topupNopol = $event.detail.nopol; topupSaldo = $event.detail.saldo; jumlah = ''; topupPassword = ''; selectMode = false; showTopup = true"
             @open-topup-select.window="topupId = null; topupNopol = ''; topupSaldo = ''; jumlah = ''; topupPassword = ''; selectMode = true; showTopup = true"
             @turbo:before-cache.window="showTopup = false">
@@ -1777,4 +1786,172 @@
             });
         </script>
     @endpush
+    @if(auth()->user()->role === 'super_admin')
+        <!-- Transfer Satker Modal -->
+        <div x-cloak x-data="{
+                                                    showTransfer: false,
+                                                    transferId: null,
+                                                    transferNopol: '',
+                                                    currentSatker: '',
+                                                    selectedSatkerId: '',
+                                                    satkerSearch: '',
+                                                    satkerOpen: false,
+                                                    satkerLabel: '',
+                                                    satkers: {{ json_encode($satkers->map(fn($s) => ['id' => $s->id, 'nama' => $s->nama_satker])) }},
+                                                    get filteredSatkers() {
+                                                        if (!this.satkerSearch) return this.satkers;
+                                                        return this.satkers.filter(s => s.nama.toLowerCase().includes(this.satkerSearch.toLowerCase()));
+                                                    },
+                                                    selectSatker(s) {
+                                                        this.selectedSatkerId = s.id;
+                                                        this.satkerLabel = s.nama;
+                                                        this.satkerOpen = false;
+                                                        this.satkerSearch = '';
+                                                    },
+                                                    reset() {
+                                                        this.showTransfer = false;
+                                                        setTimeout(() => {
+                                                            this.transferId = null;
+                                                            this.transferNopol = '';
+                                                            this.currentSatker = '';
+                                                            this.selectedSatkerId = '';
+                                                            this.satkerLabel = '';
+                                                        }, 300);
+                                                    }
+                                                }"
+            @open-transfer.window="transferId = $event.detail.id; transferNopol = $event.detail.nopol; currentSatker = $event.detail.current_satker; showTransfer = true"
+            @turbo:before-cache.window="showTransfer = false">
+
+            <div x-show="showTransfer" style="display: none;" x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50" @click="reset()"></div>
+
+            <div x-show="showTransfer" style="display: none;" x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4">
+                <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md flex flex-col max-h-[90vh]" @click.stop>
+                    <div class="px-6 py-5 bg-gradient-to-r from-violet-600 to-indigo-600 shrink-0 rounded-t-2xl">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-white/20 rounded-xl text-white">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-white">Pindah Satker</h3>
+                                    <p class="text-sm text-violet-100" x-text="transferNopol"></p>
+                                </div>
+                            </div>
+                            <button @click="reset()" class="text-white/70 hover:text-white transition">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <form action="{{ route('admin.kendaraans.transfer') }}" method="POST"
+                        class="flex flex-col flex-1 overflow-hidden">
+                        @csrf
+                        <input type="hidden" name="kendaraan_id" :value="transferId">
+
+                        <div class="p-6 space-y-6 overflow-y-auto flex-1">
+                            <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl space-y-2">
+                                <div
+                                    class="flex items-center gap-2 text-amber-700 font-bold text-sm uppercase tracking-wider">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                                        </path>
+                                    </svg>
+                                    Penting
+                                </div>
+                                <p class="text-xs text-amber-600 leading-relaxed font-medium">
+                                    Memindahkan kendaraan akan secara otomatis:
+                                <ul class="list-disc list-inside mt-1 ml-1">
+                                    <li>Mereset PIN kendaraan</li>
+                                    <li>Memindahkan seluruh saldo ke Satker baru</li>
+                                    <li>Mencatat riwayat keluar di Satker asal</li>
+                                    <li>Mencatat riwayat masuk di Satker tujuan</li>
+                                </ul>
+                                </p>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label
+                                        class="block text-xs font-bold text-slate-500 uppercase mb-2 tracking-wider">Satker
+                                        Saat Ini</label>
+                                    <div class="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 font-semibold italic"
+                                        x-text="currentSatker"></div>
+                                </div>
+
+                                <div>
+                                    <label
+                                        class="block text-xs font-bold text-slate-500 uppercase mb-2 tracking-wider">Pilih
+                                        Satker Tujuan</label>
+                                    <div class="relative" @click.outside="satkerOpen = false">
+                                        <div @click="satkerOpen = !satkerOpen; $nextTick(() => { if(satkerOpen) $refs.transferSatkerInput.focus() })"
+                                            class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 flex items-center justify-between cursor-pointer transition-all"
+                                            :class="satkerOpen ? 'border-violet-500 ring-4 ring-violet-500/10' : ''">
+                                            <span x-text="satkerLabel || '-- Pilih Satker Tujuan --'"
+                                                :class="satkerLabel ? 'text-slate-800' : 'text-slate-400'"></span>
+                                            <input type="hidden" name="satker_id" :value="selectedSatkerId">
+                                            <svg class="w-5 h-5 text-slate-400 transition-transform"
+                                                :class="satkerOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 9l-7 7-7-7"></path>
+                                            </svg>
+                                        </div>
+
+                                        <div x-show="satkerOpen" style="display:none;" x-transition
+                                            class="absolute z-50 mt-1 w-full bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden">
+                                            <div class="p-2 border-b border-slate-100">
+                                                <input x-ref="transferSatkerInput" x-model="satkerSearch" type="text"
+                                                    placeholder="Cari Satker..."
+                                                    class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 border-none bg-slate-50">
+                                            </div>
+                                            <div class="max-h-48 overflow-y-auto py-1">
+                                                <template x-for="s in filteredSatkers" :key="s.id">
+                                                    <div @click="selectSatker(s)"
+                                                        class="px-4 py-2.5 text-sm text-slate-700 hover:bg-violet-50 cursor-pointer flex items-center justify-between transition-colors"
+                                                        :class="selectedSatkerId == s.id ? 'bg-violet-50 text-violet-700 font-bold' : ''">
+                                                        <span x-text="s.nama"></span>
+                                                        <svg x-show="selectedSatkerId == s.id"
+                                                            class="w-4 h-4 text-violet-500" fill="currentColor"
+                                                            viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd"
+                                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                                clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center gap-3 shrink-0 rounded-b-2xl">
+                            <button type="button" @click="reset()"
+                                class="flex-1 px-4 py-2.5 bg-white text-slate-700 font-bold rounded-xl border border-slate-200 hover:bg-slate-50 transition">
+                                Batal
+                            </button>
+                            <button type="submit" :disabled="!selectedSatkerId"
+                                class="flex-[2] px-4 py-2.5 bg-violet-600 text-white font-bold rounded-xl hover:bg-violet-700 transition shadow-lg shadow-violet-500/30 disabled:opacity-50 disabled:shadow-none">
+                                Pindahkan Sekarang
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endif
 </x-app-layout>

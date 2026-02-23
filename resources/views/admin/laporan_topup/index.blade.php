@@ -145,7 +145,7 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <span class="px-2 py-1 rounded-md bg-slate-100 text-xs font-semibold text-slate-600">
-                                        {{ $riwayat->kendaraan->satker->nama_satker ?? '-' }}
+                                        {{ $riwayat->satker->nama_satker ?? '-' }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
@@ -169,8 +169,10 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-right">
-                                    <span class="text-sm font-bold text-emerald-600">
-                                        +{{ number_format($riwayat->jumlah, 0, ',', '.') }} L
+                                    <span
+                                        class="text-sm font-bold {{ $riwayat->tipe == 'masuk' ? 'text-emerald-600' : 'text-rose-600' }}">
+                                        {{ $riwayat->tipe == 'masuk' ? '+' : '-' }}{{ number_format($riwayat->jumlah, 0, ',', '.') }}
+                                        L
                                     </span>
                                 </td>
                             </tr>
