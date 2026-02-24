@@ -85,6 +85,19 @@
             background: radial-gradient(circle, rgba(245, 158, 11, 0.4) 0%, transparent 70%);
         }
 
+        /* BRIGHT YELLOW THEME (Specifically for Pertamina Dex) */
+        .card-yellow-dex {
+            background: linear-gradient(135deg, #facc15 0%, #eab308 60%, #000000 100%);
+        }
+
+        .card-yellow-dex::before {
+            background: radial-gradient(circle, rgba(250, 204, 21, 0.5) 0%, transparent 70%);
+        }
+
+        .card-yellow-dex::after {
+            background: radial-gradient(circle, rgba(234, 179, 8, 0.4) 0%, transparent 70%);
+        }
+
         /* === INTERNAL CARD STYLES === */
         .card-header {
             padding: 20px 24px 0;
@@ -308,8 +321,10 @@
             background: #3b82f6;
         }
 
-        .dot-solar {
-            background: #f59e0b;
+        .dot-solar,
+        .dot-dexlite {
+            background: #facc15;
+            box-shadow: 0 0 8px #facc15;
         }
 
         .dot-dexlite {
@@ -488,7 +503,8 @@
 
     @php
         $cardTheme = match ($kendaraan->jenis_bbm) {
-            'Pertamina Dex', 'Dexlite', 'Solar' => 'yellow',
+            'Pertamina Dex' => 'yellow-dex',
+            'Dexlite', 'Solar' => 'yellow',
             default => 'red', // Pertamax, Pertalite defaults to Red
         };
     @endphp

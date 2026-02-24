@@ -62,6 +62,19 @@
                 background: radial-gradient(circle, rgba(245, 158, 11, 0.4) 0%, transparent 70%);
             }
 
+            /* BRIGHT YELLOW THEME (Pertamina Dex) */
+            .id-card-yellow-dex {
+                background: linear-gradient(135deg, #facc15 0%, #eab308 60%, #000000 100%);
+            }
+
+            .id-card-yellow-dex::before {
+                background: radial-gradient(circle, rgba(250, 204, 21, 0.5) 0%, transparent 70%);
+            }
+
+            .id-card-yellow-dex::after {
+                background: radial-gradient(circle, rgba(234, 179, 8, 0.4) 0%, transparent 70%);
+            }
+
             /* HEADER */
             .id-card-header {
                 padding: 12px 14px 0;
@@ -274,9 +287,10 @@
                 box-shadow: 0 0 4px #3498db;
             }
 
-            .id-dot-solar {
-                background: #f1c40f;
-                box-shadow: 0 0 4px #f1c40f;
+            .id-dot-solar,
+            .id-dot-dexlite {
+                background: #facc15;
+                box-shadow: 0 0 4px #facc15;
             }
 
             .id-dot-dexlite {
@@ -318,7 +332,8 @@
                     @if($p)
                         @php
                             $cardTheme = match ($p->jenis_bbm) {
-                                'Pertamina Dex', 'Dexlite', 'Solar' => 'yellow',
+                                'Pertamina Dex' => 'yellow-dex',
+                                'Dexlite', 'Solar' => 'yellow',
                                 default => 'red',
                             };
                             $bbmClass = match ($p->jenis_bbm) {

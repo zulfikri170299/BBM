@@ -299,7 +299,7 @@
                                     @php
                                         $bbmColors = [
                                             'Pertamax' => 'bg-blue-100 text-blue-700',
-                                            'Pertamina Dex' => 'bg-emerald-100 text-emerald-700',
+                                            'Pertamina Dex' => 'bg-yellow-200 text-yellow-700',
                                         ];
                                         $color = $bbmColors[$kendaraan->jenis_bbm] ?? 'bg-slate-100 text-slate-700';
                                     @endphp
