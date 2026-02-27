@@ -72,8 +72,24 @@ class AdminController extends Controller
     public function processTopup(Request $request)
     {
         $request->validate([
-            'amount' => 'required|numeric|min:0.01',
+            'amount' => 'required|numeric|min:0.1',
+            'topup_password' => 'required|string',
+        ], [
+            'amount.required' => 'Jumlah top up wajib diisi.',
+            'amount.min' => 'Jumlah top up minimal 0.1 Liter.',
+            'topup_password.required' => 'Password Top Up wajib diisi.',
         ]);
+
+        $user = auth()->user();
+
+        // Validasi Password Top Up
+        if (!$user->topup_password) {
+            return back()->with('error', 'Anda belum mengatur Password Top Up. Silakan atur di menu Profil.');
+        }
+
+        if (!\Illuminate\Support\Facades\Hash::check($request->topup_password, $user->topup_password)) {
+            return back()->with('error', 'Password Top Up salah! Transaksi massal dibatalkan.');
+        }
 
         $amount = $request->amount;
 

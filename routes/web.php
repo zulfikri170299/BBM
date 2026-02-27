@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/topup-password', [ProfileController::class, 'updateTopupPassword'])->name('profile.topup-password.update');
+    Route::post('/profile/topup-password/reset', [ProfileController::class, 'resetTopupPassword'])->name('profile.topup-password.reset');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/profile/location', [ProfileController::class, 'updateLocation'])->name('profile.location.update');
     Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo.update');
@@ -91,6 +92,9 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     Route::post('/kendaraans/preview-import-kendaraan', [\App\Http\Controllers\Admin\KendaraanController::class, 'previewImportKendaraan'])->name('kendaraans.preview-import-kendaraan');
     Route::post('/kendaraans/import-kendaraan', [\App\Http\Controllers\Admin\KendaraanController::class, 'importKendaraan'])->name('kendaraans.import-kendaraan');
     Route::get('/kendaraans/download-import-template', [\App\Http\Controllers\Admin\KendaraanController::class, 'downloadImportKendaraanTemplate'])->name('kendaraans.download-import-template');
+    // Transfer Saldo Kendaraan ke Personel
+    Route::get('/transfer-saldo', [\App\Http\Controllers\Admin\TransferSaldoController::class, 'index'])->name('transfer-saldo.index');
+    Route::post('/transfer-saldo', [\App\Http\Controllers\Admin\TransferSaldoController::class, 'store'])->name('transfer-saldo.store');
     // Laporan Topup & Riwayat
     Route::get('/riwayat/print', [\App\Http\Controllers\Admin\RiwayatController::class, 'print'])->name('riwayat.print');
     Route::get('/riwayat', [\App\Http\Controllers\Admin\RiwayatController::class, 'index'])->name('riwayat.index');

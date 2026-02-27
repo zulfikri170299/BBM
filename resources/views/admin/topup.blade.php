@@ -21,10 +21,25 @@
                     <form action="{{ route('admin.topup.process') }}" method="POST">
                         @csrf
                         <div class="mb-4">
-                            <label for="amount" class="block text-gray-700 text-sm font-bold mb-2">Amount (Rp):</label>
+                            <label for="amount" class="block text-gray-700 text-sm font-bold mb-2">Amount
+                                (Liter):</label>
                             <input type="number" name="amount" id="amount"
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                min="0" required>
+                                min="0.1" step="0.1" required>
+                        </div>
+
+                        <div class="mb-6">
+                            <label for="topup_password" class="block text-gray-700 text-sm font-bold mb-2">Password Top
+                                Up:</label>
+                            <input type="password" name="topup_password" id="topup_password"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                placeholder="Masukkan password top up" required>
+                            @if(!auth()->user()->topup_password)
+                                <p class="text-xs text-red-500 mt-1">
+                                    Anda belum mengatur password top-up. <a href="{{ route('profile.edit') }}"
+                                        class="underline">Atur di sini</a>.
+                                </p>
+                            @endif
                         </div>
 
                         <div class="flex items-center justify-between">

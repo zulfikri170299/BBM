@@ -135,8 +135,13 @@ class KendaraanController extends Controller
     {
         $request->validate([
             'kendaraan_id' => 'required|exists:kendaraans,id',
-            'jumlah' => 'required|numeric|min:1',
+            'jumlah' => 'required|numeric|min:0.1',
             'topup_password' => 'required|string',
+        ], [
+            'jumlah.required' => 'Jumlah top up wajib diisi.',
+            'jumlah.numeric' => 'Jumlah top up harus berupa angka.',
+            'jumlah.min' => 'Jumlah top up minimal 0.1 Liter.',
+            'topup_password.required' => 'Password Top Up wajib diisi.',
         ]);
 
         $kendaraan = Kendaraan::findOrFail($request->kendaraan_id);
@@ -259,15 +264,29 @@ class KendaraanController extends Controller
             'aktivitas' => "Import Top-up Saldo via Excel: Berhasil memproses {$import->successCount} kendaraan"
         ]);
 
-        $message = "Import selesai! {$import->successCount} kendaraan berhasil di top up.";
+        $message = "<div class='text-left space-y-3'>";
+        
+        // Success Block
+        $message .= "<div class='flex items-center gap-3 p-3 bg-emerald-50 rounded-xl border border-emerald-100'>";
+        $message .= "<div class='p-2 bg-emerald-500 text-white rounded-lg shadow-sm shrink-0'><svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7'></path></svg></div>";
+        $message .= "<div><p class='text-[10px] font-bold text-emerald-600 uppercase tracking-widest'>Berhasil di Top Up</p><p class='text-lg font-black text-emerald-800 leading-tight'>{$import->successCount} <span class='text-xs font-semibold opacity-70'>Kendaraan</span></p></div>";
+        $message .= "</div>";
 
+        // Errors Block
         if (count($import->errors) > 0) {
-            $errorList = implode(' | ', array_slice($import->errors, 0, 5));
-            $message .= " Terdapat " . count($import->errors) . " error: {$errorList}";
-            if (count($import->errors) > 5) {
-                $message .= " ... dan " . (count($import->errors) - 5) . " error lainnya.";
+            $message .= "<div class='p-3 bg-rose-50 rounded-xl border border-rose-100'>";
+            $message .= "<p class='text-[10px] font-bold text-rose-600 uppercase tracking-widest mb-2 flex items-center gap-1.5'><svg class='w-3.5 h-3.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'></path></svg> Terdeteksi " . count($import->errors) . " Kendala</p>";
+            $message .= "<ul class='text-[11px] text-rose-800 space-y-1 font-medium'>";
+            foreach (array_slice($import->errors, 0, 3) as $err) {
+                $message .= "<li class='flex items-start gap-1.5'><span class='mt-1.5 w-1 h-1 rounded-full bg-rose-400 shrink-0'></span><span>{$err}</span></li>";
             }
+            if (count($import->errors) > 3) {
+                $message .= "<li class='pl-2.5 text-[10px] text-rose-500 italic font-bold mt-1'>... (+" . (count($import->errors) - 3) . " kendala lainnya)</li>";
+            }
+            $message .= "</ul></div>";
         }
+        
+        $message .= "</div>";
 
         return redirect()->route('admin.kendaraans.index')->with(
             $import->successCount > 0 ? 'success' : 'error',

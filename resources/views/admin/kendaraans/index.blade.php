@@ -158,63 +158,6 @@
         </div>
 
 
-        <!-- Success Alert -->
-        @if(session('success'))
-            <div class="flex items-center gap-3 p-4 bg-emerald-50 border border-emerald-200 rounded-xl"
-                x-data="{ show: true }" x-show="show" x-transition>
-                <div class="flex-shrink-0 p-1.5 bg-emerald-100 rounded-full">
-                    <svg class="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                </div>
-                <p class="text-sm font-medium text-emerald-700 flex-1">{{ session('success') }}</p>
-                <button @click="show = false" class="text-emerald-400 hover:text-emerald-600 transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                        </path>
-                    </svg>
-                </button>
-            </div>
-        @endif
-
-        @if(session('error'))
-            <div class="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-xl" x-data="{ show: true }"
-                x-show="show" x-transition>
-                <div class="flex-shrink-0 p-1.5 bg-red-100 rounded-full">
-                    <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                </div>
-                <p class="text-sm font-medium text-red-700 flex-1">{{ session('error') }}</p>
-                <button @click="show = false" class="text-red-400 hover:text-red-600 transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                        </path>
-                    </svg>
-                </button>
-            </div>
-        @endif
-
-        @if($errors->any())
-            <div class="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-xl">
-                <div class="flex-shrink-0 p-1.5 bg-red-100 rounded-full">
-                    <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                </div>
-                <div class="flex-1">
-                    @foreach($errors->all() as $error)
-                        <p class="text-sm font-medium text-red-700">{{ $error }}</p>
-                    @endforeach
-                </div>
-            </div>
-        @endif
 
         <!-- Table Card -->
         <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm overflow-hidden">
@@ -349,7 +292,7 @@
                                             {{ strtoupper(substr($kendaraan->satker->nama_satker ?? '-', 0, 2)) }}
                                         </div>
                                         <span
-                                            class="text-sm font-medium text-slate-700">{{ $kendaraan->satker->nama_satker ?? '-' }}</span>
+                                            class="text-xs font-medium text-slate-700">{{ $kendaraan->satker->nama_satker ?? '-' }}</span>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
@@ -358,10 +301,10 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <span
-                                        class="text-sm font-semibold text-slate-800">{{ $kendaraan->jenis_kendaraan }}</span>
+                                        class="text-xs font-semibold text-slate-800">{{ $kendaraan->jenis_kendaraan }}</span>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span class="text-sm font-bold text-slate-800">{{ $kendaraan->no_polisi }}</span>
+                                    <span class="text-xs font-bold text-slate-800">{{ $kendaraan->no_polisi }}</span>
                                 </td>
                                 <td class="px-6 py-4">
                                     @php
@@ -372,13 +315,13 @@
                                         $color = $bbmColors[$kendaraan->jenis_bbm] ?? 'bg-slate-100 text-slate-700';
                                     @endphp
                                     <span
-                                        class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold {{ $color }}">
+                                        class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold whitespace-nowrap {{ $color }}">
                                         {{ $kendaraan->jenis_bbm }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <span
-                                        class="text-sm font-bold {{ $kendaraan->saldo < 10 ? 'text-red-600' : 'text-slate-800' }}">
+                                        class="text-xs font-bold whitespace-nowrap {{ $kendaraan->saldo < 10 ? 'text-red-600' : 'text-slate-800' }}">
                                         {{ number_format($kendaraan->saldo, 0, ',', '.') }} Liter
                                     </span>
                                     @if($kendaraan->saldo < 10)
@@ -487,110 +430,110 @@
         <!-- Top Up Modal -->
         <!-- Top Up Modal -->
         <div x-cloak x-data="{
-                                                                                showTopup: false,
-                                                                                topupId: null,
-                                                                                topupNopol: '',
-                                                                                topupSaldo: '',
-                                                                                jumlah: '',
-                                                                                topupPassword: '',
-                                                                                selectMode: false,
-                                                                                selectedSatkerId: '',
-                                                                                // Satker Search
-                                                                                satkerSearch: '',
-                                                                                satkerOpen: false,
-                                                                                satkerLabel: '',
-                                                                                satkers: {{ json_encode($satkers->map(fn($s) => ['id' => $s->id, 'nama' => $s->nama_satker])) }},
-                                                                                get filteredSatkers() {
-                                                                                    if (!this.satkerSearch) return this.satkers;
-                                                                                    return this.satkers.filter(s => s.nama.toLowerCase().includes(this.satkerSearch.toLowerCase()));
-                                                                                },
-                                                                                selectSatker(s) {
-                                                                                    this.selectedSatkerId = s.id;
-                                                                                    this.satkerLabel = s.nama;
-                                                                                    this.satkerOpen = false;
-                                                                                    this.satkerSearch = '';
-                                                                                    this.topupId = null;
-                                                                                    this.topupNopol = '';
-                                                                                    this.kendaraanLabel = '';
-                                                                                },
-                                                                                // Kendaraan Search
-                                                                                kendaraanSearch: '',
-                                                                                kendaraanOpen: false,
-                                                                                kendaraanLabel: '',
-                                                                                get filteredKendaraans() {
-                                                                                    let list = this.allKendaraans.filter(x => x.satker_id == this.selectedSatkerId);
-                                                                                    if (!this.kendaraanSearch) return list;
-                                                                                    return list.filter(k => k.nopol.toLowerCase().includes(this.kendaraanSearch.toLowerCase()));
-                                                                                },
-                                                                                selectKendaraanManual(k) {
-                                                                                    this.topupId = k.id;
-                                                                                    this.topupNopol = k.satker_nama + ' - ' + k.nopol;
-                                                                                    this.topupSaldo = k.saldo;
-                                                                                    this.kendaraanLabel = k.nopol + ' (' + k.saldo + ' L)';
-                                                                                    this.kendaraanOpen = false;
-                                                                                    this.kendaraanSearch = '';
-                                                                                },
-                                                                                adminStocks: [
-                                                                                    @foreach($adminStocks as $s)
-                                                                                        { jenis_bbm: '{{ $s->jenis_bbm }}', saldo: {{ $s->saldo }} },
-                                                                                    @endforeach
-                                                                                ],
-                                                                                allKendaraans: [
-                                                                                    @foreach($allKendaraans as $k)
-                                                                                        { id: {{ $k->id }}, satker_id: {{ $k->satker_id }}, satker_nama: '{{ $k->satker->nama_satker ?? '-' }}', nopol: '{{ $k->no_polisi }}', jenis_bbm: '{{ $k->jenis_bbm }}', saldo: '{{ number_format($k->saldo, 0, ',', '.') }}', saldoRaw: {{ $k->saldo }} },
-                                                                                    @endforeach
-                                                                                ],
-                                                                                get currentAdminStock() {
-                                                                                    if (!this.topupId) return 0;
-                                                                                    const k = this.allKendaraans.find(x => x.id == this.topupId);
-                                                                                    if (!k) return 0;
-                                                                                    const s = this.adminStocks.find(x => x.jenis_bbm == k.jenis_bbm);
-                                                                                    return s ? s.saldo : 0;
-                                                                                },
-                                                                                get canSubmitManual() {
-                                                                                    return this.topupId && this.jumlah && this.jumlah > 0 && this.jumlah <= this.currentAdminStock && this.topupPassword;
-                                                                                },
-                                                                                selectKendaraan(id) {
-                                                                                    const k = this.allKendaraans.find(x => x.id == id);
-                                                                                    if (k) {
-                                                                                        this.topupId = k.id;
-                                                                                        this.topupNopol = k.satker_nama + ' - ' + k.nopol;
-                                                                                        this.topupSaldo = k.saldo;
-                                                                                    }
-                                                                                },
-                                                                                reset() {
-                                                                                    this.showTopup = false;
-                                                                                    setTimeout(() => {
-                                                                                        this.jumlah = '';
-                                                                                        this.topupPassword = '';
-                                                                                        this.topupId = null;
-                                                                                        this.selectedSatkerId = '';
-                                                                                        this.satkerLabel = '';
-                                                                                        this.kendaraanLabel = '';
-                                                                                    }, 300);
-                                                                                },
-                                                                                number_format(number, decimals, dec_point, thousands_sep) {
-                                                                                    number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
-                                                                                    var n = !isFinite(+number) ? 0 : +number,
-                                                                                        prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
-                                                                                        sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
-                                                                                        dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
-                                                                                        s = '',
-                                                                                        toFixedFix = function(n, prec) {
-                                                                                            var k = Math.pow(10, prec);
-                                                                                            return '' + Math.round(n * k) / k;
-                                                                                        };
-                                                                                    s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
-                                                                                    if (s[0].length > 3) {
-                                                                                        s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
-                                                                                    }
-                                                                                    if ((s[1] || '').length < prec) {
-                                                                                        s[1] = s[1] || '';
-                                                                                        s[1] += new Array(prec - s[1].length + 1).join('0');
-                                                                                    }
-                                                                                    return s.join(dec);
-                                                                                }
-                                                                            }"
+                                                                                                    showTopup: false,
+                                                                                                    topupId: null,
+                                                                                                    topupNopol: '',
+                                                                                                    topupSaldo: '',
+                                                                                                    jumlah: '',
+                                                                                                    topupPassword: '',
+                                                                                                    selectMode: false,
+                                                                                                    selectedSatkerId: '',
+                                                                                                    // Satker Search
+                                                                                                    satkerSearch: '',
+                                                                                                    satkerOpen: false,
+                                                                                                    satkerLabel: '',
+                                                                                                    satkers: {{ json_encode($satkers->map(fn($s) => ['id' => $s->id, 'nama' => $s->nama_satker])) }},
+                                                                                                    get filteredSatkers() {
+                                                                                                        if (!this.satkerSearch) return this.satkers;
+                                                                                                        return this.satkers.filter(s => s.nama.toLowerCase().includes(this.satkerSearch.toLowerCase()));
+                                                                                                    },
+                                                                                                    selectSatker(s) {
+                                                                                                        this.selectedSatkerId = s.id;
+                                                                                                        this.satkerLabel = s.nama;
+                                                                                                        this.satkerOpen = false;
+                                                                                                        this.satkerSearch = '';
+                                                                                                        this.topupId = null;
+                                                                                                        this.topupNopol = '';
+                                                                                                        this.kendaraanLabel = '';
+                                                                                                    },
+                                                                                                    // Kendaraan Search
+                                                                                                    kendaraanSearch: '',
+                                                                                                    kendaraanOpen: false,
+                                                                                                    kendaraanLabel: '',
+                                                                                                    get filteredKendaraans() {
+                                                                                                        let list = this.allKendaraans.filter(x => x.satker_id == this.selectedSatkerId);
+                                                                                                        if (!this.kendaraanSearch) return list;
+                                                                                                        return list.filter(k => k.nopol.toLowerCase().includes(this.kendaraanSearch.toLowerCase()));
+                                                                                                    },
+                                                                                                    selectKendaraanManual(k) {
+                                                                                                        this.topupId = k.id;
+                                                                                                        this.topupNopol = k.satker_nama + ' - ' + k.nopol;
+                                                                                                        this.topupSaldo = k.saldo;
+                                                                                                        this.kendaraanLabel = k.nopol + ' (' + k.saldo + ' L)';
+                                                                                                        this.kendaraanOpen = false;
+                                                                                                        this.kendaraanSearch = '';
+                                                                                                    },
+                                                                                                    adminStocks: [
+                                                                                                        @foreach($adminStocks as $s)
+                                                                                                            { jenis_bbm: '{{ $s->jenis_bbm }}', saldo: {{ $s->saldo }} },
+                                                                                                        @endforeach
+                                                                                                    ],
+                                                                                                    allKendaraans: [
+                                                                                                        @foreach($allKendaraans as $k)
+                                                                                                            { id: {{ $k->id }}, satker_id: {{ $k->satker_id }}, satker_nama: '{{ $k->satker->nama_satker ?? '-' }}', nopol: '{{ $k->no_polisi }}', jenis_bbm: '{{ $k->jenis_bbm }}', saldo: '{{ number_format($k->saldo, 0, ',', '.') }}', saldoRaw: {{ $k->saldo }} },
+                                                                                                        @endforeach
+                                                                                                    ],
+                                                                                                    get currentAdminStock() {
+                                                                                                        if (!this.topupId) return 0;
+                                                                                                        const k = this.allKendaraans.find(x => x.id == this.topupId);
+                                                                                                        if (!k) return 0;
+                                                                                                        const s = this.adminStocks.find(x => x.jenis_bbm == k.jenis_bbm);
+                                                                                                        return s ? s.saldo : 0;
+                                                                                                    },
+                                                                                                    get canSubmitManual() {
+                                                                                                        return this.topupId && this.jumlah && this.jumlah > 0 && this.jumlah <= this.currentAdminStock && this.topupPassword;
+                                                                                                    },
+                                                                                                    selectKendaraan(id) {
+                                                                                                        const k = this.allKendaraans.find(x => x.id == id);
+                                                                                                        if (k) {
+                                                                                                            this.topupId = k.id;
+                                                                                                            this.topupNopol = k.satker_nama + ' - ' + k.nopol;
+                                                                                                            this.topupSaldo = k.saldo;
+                                                                                                        }
+                                                                                                    },
+                                                                                                    reset() {
+                                                                                                        this.showTopup = false;
+                                                                                                        setTimeout(() => {
+                                                                                                            this.jumlah = '';
+                                                                                                            this.topupPassword = '';
+                                                                                                            this.topupId = null;
+                                                                                                            this.selectedSatkerId = '';
+                                                                                                            this.satkerLabel = '';
+                                                                                                            this.kendaraanLabel = '';
+                                                                                                        }, 300);
+                                                                                                    },
+                                                                                                    number_format(number, decimals, dec_point, thousands_sep) {
+                                                                                                        number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+                                                                                                        var n = !isFinite(+number) ? 0 : +number,
+                                                                                                            prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+                                                                                                            sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+                                                                                                            dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+                                                                                                            s = '',
+                                                                                                            toFixedFix = function(n, prec) {
+                                                                                                                var k = Math.pow(10, prec);
+                                                                                                                return '' + Math.round(n * k) / k;
+                                                                                                            };
+                                                                                                        s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+                                                                                                        if (s[0].length > 3) {
+                                                                                                            s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+                                                                                                        }
+                                                                                                        if ((s[1] || '').length < prec) {
+                                                                                                            s[1] = s[1] || '';
+                                                                                                            s[1] += new Array(prec - s[1].length + 1).join('0');
+                                                                                                        }
+                                                                                                        return s.join(dec);
+                                                                                                    }
+                                                                                                }"
             @open-topup.window="topupId = $event.detail.id; topupNopol = $event.detail.nopol; topupSaldo = $event.detail.saldo; jumlah = ''; topupPassword = ''; selectMode = false; showTopup = true"
             @open-topup-select.window="topupId = null; topupNopol = ''; topupSaldo = ''; jumlah = ''; topupPassword = ''; selectMode = true; showTopup = true"
             @turbo:before-cache.window="showTopup = false">
@@ -826,12 +769,12 @@
                                 </div>
 
                                 <div class="pt-2">
-                                    <label for="topupPassword"
-                                        class="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-widest text-center">PIN
-                                        Keamanan Admin</label>
-                                    <input type="password" id="topupPassword" name="topupPassword" x-model="topupPassword"
-                                        required placeholder="••••••"
-                                        class="w-full px-4 py-2.5 bg-slate-50 border-2 border-slate-200 rounded-xl text-center text-base font-bold tracking-[0.3em] focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:tracking-normal placeholder:font-normal placeholder:text-slate-200"
+                                    <label for="topup_password"
+                                        class="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-widest text-center">Password
+                                        Top Up</label>
+                                    <input type="password" id="topup_password" name="topup_password" x-model="topupPassword"
+                                        required placeholder="Masukkan password keamanan"
+                                        class="w-full px-4 py-2.5 bg-slate-50 border-2 border-slate-200 rounded-xl text-center text-base font-bold tracking-normal focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:tracking-normal placeholder:font-normal placeholder:text-slate-200"
                                         autocomplete="off">
                                 </div>
 
@@ -933,13 +876,13 @@
                             <div class="text-[10px] sm:text-xs text-blue-700">
                                 <p class="font-semibold mb-1">Format file Excel (header di baris ke-2):</p>
                                 <ul class="list-disc list-inside space-y-0.5">
-                                    <li>Kolom <strong>NO</strong> — Nomor urut</li>
-                                    <li>Kolom <strong>SATKER</strong> — Nama satuan kerja</li>
-                                    <li>Kolom <strong>KODE KENDARAAN</strong> — Kode unik kendaraan</li>
-                                    <li>Kolom <strong>JENIS KENDARAAN</strong> — Tipe kendaraan</li>
-                                    <li>Kolom <strong>NOPOL</strong> — Nomor polisi kendaraan</li>
-                                    <li>Kolom <strong>JENIS BBM</strong> — Tipe BBM</li>
-                                    <li>Kolom <strong>JUMLAH LITER</strong> — Jumlah liter top up</li>
+                                    <li>Kolom <strong>NO</strong> â€” Nomor urut</li>
+                                    <li>Kolom <strong>SATKER</strong> â€” Nama satuan kerja</li>
+                                    <li>Kolom <strong>KODE KENDARAAN</strong> â€” Kode unik kendaraan</li>
+                                    <li>Kolom <strong>JENIS KENDARAAN</strong> â€” Tipe kendaraan</li>
+                                    <li>Kolom <strong>NOPOL</strong> â€” Nomor polisi kendaraan</li>
+                                    <li>Kolom <strong>JENIS BBM</strong> â€” Tipe BBM</li>
+                                    <li>Kolom <strong>JUMLAH LITER</strong> â€” Jumlah liter top up</li>
                                 </ul>
                             </div>
                         </div>
@@ -1010,7 +953,10 @@
                                 class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-100 text-slate-600 text-sm font-semibold rounded-xl hover:bg-slate-200 transition-colors">Batal</button>
                             <button type="submit"
                                 class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-sm font-bold rounded-xl hover:from-blue-600 hover:to-indigo-700 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 transition-all hover:-translate-y-0.5">
-                                📥 Import Sekarang
+                                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                                </svg> Import Sekarang
                             </button>
                         </div>
                     </form>
@@ -1111,11 +1057,11 @@
                                 <div class="text-[10px] sm:text-xs text-violet-700">
                                     <p class="font-semibold mb-1">Format file Excel (header di baris ke-2):</p>
                                     <ul class="list-disc list-inside space-y-0.5">
-                                        <li>Kolom <strong>NO</strong> — Nomor urut</li>
-                                        <li>Kolom <strong>SATKER</strong> — Nama satuan kerja</li>
-                                        <li>Kolom <strong>JENIS KENDARAAN</strong> — Tipe kendaraan</li>
-                                        <li>Kolom <strong>NOPOL</strong> — Nomor polisi kendaraan</li>
-                                        <li>Kolom <strong>JENIS BBM</strong> — Pertamax / Pertamina Dex</li>
+                                        <li>Kolom <strong>NO</strong> â€” Nomor urut</li>
+                                        <li>Kolom <strong>SATKER</strong> â€” Nama satuan kerja</li>
+                                        <li>Kolom <strong>JENIS KENDARAAN</strong> â€” Tipe kendaraan</li>
+                                        <li>Kolom <strong>NOPOL</strong> â€” Nomor polisi kendaraan</li>
+                                        <li>Kolom <strong>JENIS BBM</strong> â€” Pertamax / Pertamina Dex</li>
                                     </ul>
                                 </div>
                             </div>
@@ -1451,23 +1397,46 @@
                             <button x-show="step === 1" @click="previewImport()" type="button"
                                 :disabled="!selectedFile || isLoading"
                                 class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-violet-500 to-indigo-600 text-white text-sm font-bold rounded-xl hover:from-violet-600 hover:to-indigo-700 shadow-lg shadow-violet-500/30 hover:shadow-violet-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
-                                <span x-show="!isLoading">🔍 Preview Import</span>
-                                <span x-show="isLoading">⏳ Menganalisis...</span>
+                                <span x-show="!isLoading"><svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                                        </path>
+                                    </svg> Preview Import</span>
+                                <span x-show="isLoading"><svg class="w-4 h-4 inline mr-1 animate-spin" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg> Menganalisis...</span>
                             </button>
 
                             <!-- Step 2: Next Button -->
                             <button x-show="step === 2" @click="step = 3" type="button"
                                 :disabled="!previewData || (previewData.new_count === 0 && previewData.duplicate_count === 0)"
                                 class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-violet-500 to-indigo-600 text-white text-sm font-bold rounded-xl hover:from-violet-600 hover:to-indigo-700 shadow-lg shadow-violet-500/30 hover:shadow-violet-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
-                                Lanjutkan ➡️
+                                Lanjutkan <svg class="w-4 h-4 inline ml-1" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                </svg>
                             </button>
 
                             <!-- Step 3: Confirm Import -->
                             <button x-show="step === 3" @click="confirmImport()" type="button"
                                 :disabled="isImporting || (previewData?.duplicate_count > 0 && !duplicateAction)"
                                 class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-sm font-bold rounded-xl hover:from-emerald-600 hover:to-teal-700 shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
-                                <span x-show="!isImporting">✅ Import Sekarang</span>
-                                <span x-show="isImporting">⏳ Memproses...</span>
+                                <span x-show="!isImporting"><svg class="w-4 h-4 inline mr-1" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg> Import Sekarang</span>
+                                <span x-show="isImporting"><svg class="w-4 h-4 inline mr-1 animate-spin" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg> Memproses...</span>
                             </button>
                         </div>
                     </div>
@@ -1789,36 +1758,36 @@
     @if(auth()->user()->role === 'super_admin')
         <!-- Transfer Satker Modal -->
         <div x-cloak x-data="{
-                                                                showTransfer: false,
-                                                                transferId: null,
-                                                                transferNopol: '',
-                                                                currentSatker: '',
-                                                                selectedSatkerId: '',
-                                                                satkerSearch: '',
-                                                                satkerOpen: false,
-                                                                satkerLabel: '',
-                                                                satkers: {{ json_encode($satkers->map(fn($s) => ['id' => $s->id, 'nama' => $s->nama_satker])) }},
-                                                                get filteredSatkers() {
-                                                                    if (!this.satkerSearch) return this.satkers;
-                                                                    return this.satkers.filter(s => s.nama.toLowerCase().includes(this.satkerSearch.toLowerCase()));
-                                                                },
-                                                                selectSatker(s) {
-                                                                    this.selectedSatkerId = s.id;
-                                                                    this.satkerLabel = s.nama;
-                                                                    this.satkerOpen = false;
-                                                                    this.satkerSearch = '';
-                                                                },
-                                                                reset() {
-                                                                    this.showTransfer = false;
-                                                                    setTimeout(() => {
-                                                                        this.transferId = null;
-                                                                        this.transferNopol = '';
-                                                                        this.currentSatker = '';
-                                                                        this.selectedSatkerId = '';
-                                                                        this.satkerLabel = '';
-                                                                    }, 300);
-                                                                }
-                                                            }"
+                                                                                    showTransfer: false,
+                                                                                    transferId: null,
+                                                                                    transferNopol: '',
+                                                                                    currentSatker: '',
+                                                                                    selectedSatkerId: '',
+                                                                                    satkerSearch: '',
+                                                                                    satkerOpen: false,
+                                                                                    satkerLabel: '',
+                                                                                    satkers: {{ json_encode($satkers->map(fn($s) => ['id' => $s->id, 'nama' => $s->nama_satker])) }},
+                                                                                    get filteredSatkers() {
+                                                                                        if (!this.satkerSearch) return this.satkers;
+                                                                                        return this.satkers.filter(s => s.nama.toLowerCase().includes(this.satkerSearch.toLowerCase()));
+                                                                                    },
+                                                                                    selectSatker(s) {
+                                                                                        this.selectedSatkerId = s.id;
+                                                                                        this.satkerLabel = s.nama;
+                                                                                        this.satkerOpen = false;
+                                                                                        this.satkerSearch = '';
+                                                                                    },
+                                                                                    reset() {
+                                                                                        this.showTransfer = false;
+                                                                                        setTimeout(() => {
+                                                                                            this.transferId = null;
+                                                                                            this.transferNopol = '';
+                                                                                            this.currentSatker = '';
+                                                                                            this.selectedSatkerId = '';
+                                                                                            this.satkerLabel = '';
+                                                                                        }, 300);
+                                                                                    }
+                                                                                }"
             @open-transfer.window="transferId = $event.detail.id; transferNopol = $event.detail.nopol; currentSatker = $event.detail.current_satker; showTransfer = true"
             @turbo:before-cache.window="showTransfer = false">
 

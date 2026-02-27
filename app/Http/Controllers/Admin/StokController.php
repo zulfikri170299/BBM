@@ -39,7 +39,7 @@ class StokController extends Controller
             'jenis_bbm' => 'required|in:Pertamax,Pertamina Dex',
             'jumlah' => 'required|numeric|min:0.01',
             'keterangan' => 'nullable|string|max:255',
-            'topup_security_code' => 'required|string',
+            'topup_password' => 'required|string',
         ]);
 
         $user = auth()->user();
@@ -50,8 +50,8 @@ class StokController extends Controller
         }
 
         // Verifikasi password topup
-        if (!\Illuminate\Support\Facades\Hash::check($request->topup_security_code, $user->topup_password)) {
-            return back()->with('error', 'Password konfirmasi salah.');
+        if (!\Illuminate\Support\Facades\Hash::check($request->topup_password, $user->topup_password)) {
+            return back()->with('error', 'Password Top Up salah.');
         }
 
         try {

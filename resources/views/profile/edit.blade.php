@@ -153,3 +153,79 @@
         </div>
     </div>
 </x-app-layout>
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            @if(session('status') === 'password-updated')
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Password Berhasil Diubah!',
+                    text: 'Password akun Anda telah diperbarui. Gunakan password baru saat login berikutnya.',
+                    confirmButtonColor: '#4338ca',
+                    confirmButtonText: 'OK, Mengerti',
+                    background: '#ffffff',
+                    customClass: {
+                        popup: 'rounded-3xl border border-slate-100 shadow-2xl',
+                        title: 'text-xl font-bold text-slate-800',
+                        htmlContainer: 'text-slate-500 font-medium text-sm',
+                        confirmButton: 'rounded-xl px-8 py-2.5 font-bold'
+                    }
+                });
+            @endif
+
+            @if(session('status') === 'topup-password-updated')
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Password Top Up Diperbarui!',
+                    text: 'Password Top Up baru Anda sudah aktif dan siap digunakan untuk otorisasi transaksi.',
+                    confirmButtonColor: '#e11d48',
+                    confirmButtonText: 'OK, Mengerti',
+                    background: '#ffffff',
+                    customClass: {
+                        popup: 'rounded-3xl border border-slate-100 shadow-2xl',
+                        title: 'text-xl font-bold text-slate-800',
+                        htmlContainer: 'text-slate-500 font-medium text-sm',
+                        confirmButton: 'rounded-xl px-8 py-2.5 font-bold'
+                    }
+                });
+            @endif
+
+            @if(session('status') === 'topup-password-reset')
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Password Top Up Direset!',
+                    text: 'Password Top Up berhasil direset ke password default. Silakan hubungi admin jika Anda lupa.',
+                    confirmButtonColor: '#f59e0b',
+                    confirmButtonText: 'OK, Mengerti',
+                    background: '#ffffff',
+                    customClass: {
+                        popup: 'rounded-3xl border border-slate-100 shadow-2xl',
+                        title: 'text-xl font-bold text-slate-800',
+                        htmlContainer: 'text-slate-500 font-medium text-sm',
+                        confirmButton: 'rounded-xl px-8 py-2.5 font-bold'
+                    }
+                });
+            @endif
+
+            @if(session('status') === 'profile-updated')
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Profil Diperbarui!',
+                    text: 'Informasi profil Anda berhasil disimpan.',
+                    confirmButtonColor: '#4338ca',
+                    confirmButtonText: 'OK',
+                    timer: 3000,
+                    timerProgressBar: true,
+                    background: '#ffffff',
+                    customClass: {
+                        popup: 'rounded-3xl border border-slate-100 shadow-2xl',
+                        title: 'text-xl font-bold text-slate-800',
+                        htmlContainer: 'text-slate-500 font-medium text-sm',
+                        confirmButton: 'rounded-xl px-8 py-2.5 font-bold'
+                    }
+                });
+            @endif
+            });
+    </script>
+@endpush

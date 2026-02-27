@@ -69,22 +69,55 @@ class ProfileController extends Controller
      */
     public function updateTopupPassword(Request $request): RedirectResponse
     {
-        // Require current login password for security
-        $validated = $request->validateWithBag('updateTopupPassword', [
-            'password' => ['required', 'current_password'],
-            'topup_password' => ['required', 'min:6', 'confirmed'],
-        ]);
+        $user = $request->user();
 
-        $request->user()->update([
-            'topup_password' => \Illuminate\Support\Facades\Hash::make($validated['topup_password']),
+        // Jika sudah punya topup_password, verifikasi pakai password top up lama
+        // Jika pertama kali (belum punya), verifikasi pakai password login
+        if ($user->topup_password) {
+            $request->validateWithBag('updateTopupPassword', [
+                'password' => ['required'],
+                'topup_password' => ['required', 'min:6', 'confirmed'],
+            ]);
+
+            // Cek password top up lama
+            if (!\Illuminate\Support\Facades\Hash::check($request->password, $user->topup_password)) {
+                return back()->withErrors(['password' => 'Password Top Up lama salah.'], 'updateTopupPassword');
+            }
+        } else {
+            // Pertama kali: pakai password login
+            $request->validateWithBag('updateTopupPassword', [
+                'password' => ['required', 'current_password'],
+                'topup_password' => ['required', 'min:6', 'confirmed'],
+            ]);
+        }
+
+        $user->update([
+            'topup_password' => \Illuminate\Support\Facades\Hash::make($request->topup_password),
         ]);
 
         LogAktivitas::create([
-            'user_id' => $request->user()->id,
+            'user_id' => $user->id,
             'aktivitas' => 'Memperbarui Password Top Up'
         ]);
 
         return back()->with('status', 'topup-password-updated');
+    }
+
+    /**
+     * Reset the user's topup password to default ("zulfikri").
+     */
+    public function resetTopupPassword(Request $request): RedirectResponse
+    {
+        $request->user()->update([
+            'topup_password' => \Illuminate\Support\Facades\Hash::make('zulfikri'),
+        ]);
+
+        LogAktivitas::create([
+            'user_id' => $request->user()->id,
+            'aktivitas' => 'Reset Password Top Up ke default'
+        ]);
+
+        return back()->with('status', 'topup-password-reset');
     }
 
     /**

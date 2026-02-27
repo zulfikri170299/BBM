@@ -282,7 +282,7 @@
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     <span
-                                        class="text-sm font-semibold text-slate-500">{{ $loop->iteration + ($kendaraans->currentPage() - 1) * $kendaraans->perPage() }}</span>
+                                        class="text-xs font-semibold text-slate-500">{{ $loop->iteration + ($kendaraans->currentPage() - 1) * $kendaraans->perPage() }}</span>
                                 </td>
                                 <td class="px-6 py-4">
                                     <code
@@ -290,10 +290,10 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <span
-                                        class="text-sm font-semibold text-slate-800">{{ $kendaraan->jenis_kendaraan }}</span>
+                                        class="text-xs font-semibold text-slate-800">{{ $kendaraan->jenis_kendaraan }}</span>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span class="text-sm font-bold text-slate-800">{{ $kendaraan->no_polisi }}</span>
+                                    <span class="text-xs font-bold text-slate-800">{{ $kendaraan->no_polisi }}</span>
                                 </td>
                                 <td class="px-6 py-4">
                                     @php
@@ -304,13 +304,13 @@
                                         $color = $bbmColors[$kendaraan->jenis_bbm] ?? 'bg-slate-100 text-slate-700';
                                     @endphp
                                     <span
-                                        class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold {{ $color }}">
+                                        class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold whitespace-nowrap {{ $color }}">
                                         {{ $kendaraan->jenis_bbm }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <span
-                                        class="text-sm font-bold {{ $kendaraan->saldo < 10 ? 'text-red-600' : 'text-slate-800' }}">
+                                        class="text-xs font-bold whitespace-nowrap {{ $kendaraan->saldo < 10 ? 'text-red-600' : 'text-slate-800' }}">
                                         {{ number_format($kendaraan->saldo, 0, ',', '.') }} Liter
                                     </span>
                                     @if($kendaraan->saldo < 10)
