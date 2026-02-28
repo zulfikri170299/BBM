@@ -36,6 +36,14 @@ if [ ! -f /var/www/html/public/index.php ]; then
     chown -R www-data:www-data /var/www/html/public
 fi
 
+# Selalu sinkronkan folder build (Vite/Tailwind assets) agar up-to-date setelah rebuild image
+if [ -d /public-init/build ]; then
+    echo "==> [Entrypoint] Sinkronisasi aset frontend (public/build)..."
+    rm -rf /var/www/html/public/build
+    cp -r /public-init/build /var/www/html/public/
+    chown -R www-data:www-data /var/www/html/public/build
+fi
+
 # -------------------------------------------------------
 # 4. Buat file SQLite jika belum ada
 # -------------------------------------------------------
