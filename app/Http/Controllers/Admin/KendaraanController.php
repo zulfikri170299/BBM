@@ -589,17 +589,23 @@ class KendaraanController extends Controller
 
     private function buildLaporanBulananData($satkerId, $bulan, $tahun)
     {
+        $startDateWita = \Carbon\Carbon::create($tahun, $bulan, 1, 0, 0, 0, 'Asia/Makassar');
+        $endDateWita = $startDateWita->copy()->endOfMonth();
+        $daysInMonth = $startDateWita->daysInMonth;
+
+        // Convert WITA boundaries to UTC for DB querying
+        $startUtc = $startDateWita->copy()->setTimezone('UTC')->format('Y-m-d H:i:s');
+        $endUtc = $endDateWita->copy()->setTimezone('UTC')->format('Y-m-d H:i:s');
+
         // Ambil kendaraan yang saat ini di Satker ini ATAU pernah punya aktifitas di Satker ini pada bulan tsb
         $kendaraansInSatker = \App\Models\Kendaraan::where('satker_id', $satkerId)->pluck('id')->toArray();
         $kendaraansWithActivity = \App\Models\TransaksiBbm::where('satker_id', $satkerId)
-            ->whereMonth('tanggal', $bulan)
-            ->whereYear('tanggal', $tahun)
+            ->whereBetween('tanggal', [$startUtc, $endUtc])
             ->distinct()
             ->pluck('kendaraan_id')
             ->toArray();
         $kendaraansWithTopup = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
-            ->whereMonth('created_at', $bulan)
-            ->whereYear('created_at', $tahun)
+            ->whereBetween('created_at', [$startUtc, $endUtc])
             ->distinct()
             ->pluck('kendaraan_id')
             ->toArray();
@@ -607,15 +613,12 @@ class KendaraanController extends Controller
         $allRelevantIds = array_unique(array_merge($kendaraansInSatker, $kendaraansWithActivity, $kendaraansWithTopup));
         $kendaraans = \App\Models\Kendaraan::whereIn('id', $allRelevantIds)->orderBy('jenis_bbm')->orderBy('no_polisi')->get();
 
-        $startDate = \Carbon\Carbon::create($tahun, $bulan, 1)->startOfMonth();
-        $endDate = $startDate->copy()->endOfMonth();
-        $daysInMonth = $startDate->daysInMonth;
-
-        // Bulan sebelumnya
-        $prevMonthEnd = $startDate->copy()->subDay()->endOfDay();
+        // Bulan sebelumnya dalam WITA lalu konversi ke UTC
+        $prevMonthEndWita = $startDateWita->copy()->subDay()->endOfDay();
+        $prevMonthEndUtc = $prevMonthEndWita->copy()->setTimezone('UTC')->format('Y-m-d H:i:s');
         
-        $namaBulan = $startDate->translatedFormat('F');
-        $namaBulanSebelumnya = $prevMonthEnd->translatedFormat('F');
+        $namaBulan = $startDateWita->translatedFormat('F');
+        $namaBulanSebelumnya = $prevMonthEndWita->translatedFormat('F');
 
         $rows = [];
         $summaryByBbm = [];
@@ -625,15 +628,13 @@ class KendaraanController extends Controller
             $topupMasuk = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
                 ->where('tipe', 'masuk')
-                ->whereMonth('created_at', $bulan)
-                ->whereYear('created_at', $tahun)
+                ->whereBetween('created_at', [$startUtc, $endUtc])
                 ->sum('jumlah');
             
             $topupKeluar = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
                 ->where('tipe', 'keluar')
-                ->whereMonth('created_at', $bulan)
-                ->whereYear('created_at', $tahun)
+                ->whereBetween('created_at', [$startUtc, $endUtc])
                 ->sum('jumlah');
 
             $topupBulanIni = $topupMasuk - $topupKeluar;
@@ -642,13 +643,13 @@ class KendaraanController extends Controller
             $totalTopupSampaiSebelumnyaMasuk = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
                 ->where('tipe', 'masuk')
-                ->where('created_at', '<=', $prevMonthEnd)
+                ->where('created_at', '<=', $prevMonthEndUtc)
                 ->sum('jumlah');
             
             $totalTopupSampaiSebelumnyaKeluar = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
                 ->where('tipe', 'keluar')
-                ->where('created_at', '<=', $prevMonthEnd)
+                ->where('created_at', '<=', $prevMonthEndUtc)
                 ->sum('jumlah');
             
             $totalTopupSampaiSebelumnya = $totalTopupSampaiSebelumnyaMasuk - $totalTopupSampaiSebelumnyaKeluar;
@@ -656,13 +657,13 @@ class KendaraanController extends Controller
             // Total pemakaian (transaksi) sampai akhir bulan lalu di Satker ini
             $totalPemakaianSampaiSebelumnya = \App\Models\TransaksiBbm::where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
-                ->where('tanggal', '<=', $prevMonthEnd)
+                ->where('tanggal', '<=', $prevMonthEndUtc)
                 ->sum('liter');
 
             // Total transfer keluar (saldo personil) sampai akhir bulan lalu di Satker ini
             $totalTransferKeluarSebelumnya = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
-                ->where('created_at', '<=', $prevMonthEnd)
+                ->where('created_at', '<=', $prevMonthEndUtc)
                 ->sum('jumlah');
 
             // Sisa BBM bulan lalu = total top up - total pemakaian - total transfer keluar
@@ -672,8 +673,7 @@ class KendaraanController extends Controller
             // Transfer keluar (ke personil) bulan ini di Satker ini
             $transferBulanIni = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
-                ->whereMonth('created_at', $bulan)
-                ->whereYear('created_at', $tahun)
+                ->whereBetween('created_at', [$startUtc, $endUtc])
                 ->sum('jumlah');
 
             $totalBbm = $sisaBulanLalu + $topupBulanIni;
@@ -682,10 +682,14 @@ class KendaraanController extends Controller
             $dailyUsage = [];
             $totalPemakaian = 0;
             for ($d = 1; $d <= $daysInMonth; $d++) {
-                $date = \Carbon\Carbon::create($tahun, $bulan, $d);
+                $dateStartWita = \Carbon\Carbon::create($tahun, $bulan, $d, 0, 0, 0, 'Asia/Makassar');
+                $dateEndWita = $dateStartWita->copy()->endOfDay();
+                $dayStartUtc = $dateStartWita->setTimezone('UTC')->format('Y-m-d H:i:s');
+                $dayEndUtc = $dateEndWita->setTimezone('UTC')->format('Y-m-d H:i:s');
+
                 $usage = \App\Models\TransaksiBbm::where('satker_id', $satkerId)
                     ->where('kendaraan_id', $kendaraan->id)
-                    ->whereDate('tanggal', $date)
+                    ->whereBetween('tanggal', [$dayStartUtc, $dayEndUtc])
                     ->sum('liter');
                 $dailyUsage[$d] = $usage > 0 ? round($usage, 0) : null;
                 $totalPemakaian += $usage;
