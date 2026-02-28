@@ -24,8 +24,13 @@ class ReportController extends Controller
             'type' => 'required|in:pdf,excel',
         ]);
 
+        $startUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->start_date, 'Asia/Makassar')
+            ->startOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
+        $endUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->end_date, 'Asia/Makassar')
+            ->endOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
+
         $transaksi = TransaksiBbm::with(['kendaraan.satker', 'petugas'])
-            ->whereBetween('created_at', [$request->start_date . ' 00:00:00', $request->end_date . ' 23:59:59'])
+            ->whereBetween('created_at', [$startUtc, $endUtc])
             ->latest()
             ->get();
 

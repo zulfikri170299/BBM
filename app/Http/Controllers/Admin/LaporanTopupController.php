@@ -20,10 +20,14 @@ class LaporanTopupController extends Controller
 
         // Filter Tanggal
         if ($request->filled('start_date')) {
-            $query->whereDate('riwayat_topups.created_at', '>=', $request->start_date);
+            $startUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->start_date, 'Asia/Makassar')
+                ->startOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
+            $query->where('riwayat_topups.created_at', '>=', $startUtc);
         }
         if ($request->filled('end_date')) {
-            $query->whereDate('riwayat_topups.created_at', '<=', $request->end_date);
+            $endUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->end_date, 'Asia/Makassar')
+                ->endOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
+            $query->where('riwayat_topups.created_at', '<=', $endUtc);
         }
 
         // Filter Satker
@@ -50,10 +54,14 @@ class LaporanTopupController extends Controller
 
         // Filter Tanggal
         if ($request->filled('start_date')) {
-            $query->whereDate('riwayat_topups.created_at', '>=', $request->start_date);
+            $startUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->start_date, 'Asia/Makassar')
+                ->startOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
+            $query->where('riwayat_topups.created_at', '>=', $startUtc);
         }
         if ($request->filled('end_date')) {
-            $query->whereDate('riwayat_topups.created_at', '<=', $request->end_date);
+            $endUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->end_date, 'Asia/Makassar')
+                ->endOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
+            $query->where('riwayat_topups.created_at', '<=', $endUtc);
         }
 
         // Filter Satker

@@ -99,10 +99,14 @@ class KendaraanController extends Controller
             ->with(['kendaraan', 'personel']);
 
         if ($request->filled('start_date')) {
-            $query->whereDate('created_at', '>=', $request->start_date);
+            $startUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->start_date, 'Asia/Makassar')
+                ->startOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
+            $query->where('created_at', '>=', $startUtc);
         }
         if ($request->filled('end_date')) {
-            $query->whereDate('created_at', '<=', $request->end_date);
+            $endUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->end_date, 'Asia/Makassar')
+                ->endOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
+            $query->where('created_at', '<=', $endUtc);
         }
 
         $perPage = $this->getPerPage($request);
@@ -113,10 +117,14 @@ class KendaraanController extends Controller
             ->join('kendaraans', 'riwayat_transfer_saldo_personels.kendaraan_id', '=', 'kendaraans.id');
 
         if ($request->filled('start_date')) {
-            $summaryQuery->whereDate('riwayat_transfer_saldo_personels.created_at', '>=', $request->start_date);
+            $startUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->start_date, 'Asia/Makassar')
+                ->startOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
+            $summaryQuery->where('riwayat_transfer_saldo_personels.created_at', '>=', $startUtc);
         }
         if ($request->filled('end_date')) {
-            $summaryQuery->whereDate('riwayat_transfer_saldo_personels.created_at', '<=', $request->end_date);
+            $endUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->end_date, 'Asia/Makassar')
+                ->endOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
+            $summaryQuery->where('riwayat_transfer_saldo_personels.created_at', '<=', $endUtc);
         }
 
         $summary = $summaryQuery->selectRaw('kendaraans.jenis_bbm, SUM(riwayat_transfer_saldo_personels.jumlah) as total')
@@ -134,10 +142,14 @@ class KendaraanController extends Controller
             ->with(['kendaraan', 'personel']);
 
         if ($request->filled('start_date')) {
-            $query->whereDate('created_at', '>=', $request->start_date);
+            $startUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->start_date, 'Asia/Makassar')
+                ->startOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
+            $query->where('created_at', '>=', $startUtc);
         }
         if ($request->filled('end_date')) {
-            $query->whereDate('created_at', '<=', $request->end_date);
+            $endUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->end_date, 'Asia/Makassar')
+                ->endOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
+            $query->where('created_at', '<=', $endUtc);
         }
 
         $riwayats = $query->latest()->get();
@@ -147,10 +159,14 @@ class KendaraanController extends Controller
             ->join('kendaraans', 'riwayat_transfer_saldo_personels.kendaraan_id', '=', 'kendaraans.id');
 
         if ($request->filled('start_date')) {
-            $summaryQuery->whereDate('riwayat_transfer_saldo_personels.created_at', '>=', $request->start_date);
+            $startUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->start_date, 'Asia/Makassar')
+                ->startOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
+            $summaryQuery->where('riwayat_transfer_saldo_personels.created_at', '>=', $startUtc);
         }
         if ($request->filled('end_date')) {
-            $summaryQuery->whereDate('riwayat_transfer_saldo_personels.created_at', '<=', $request->end_date);
+            $endUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->end_date, 'Asia/Makassar')
+                ->endOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
+            $summaryQuery->where('riwayat_transfer_saldo_personels.created_at', '<=', $endUtc);
         }
 
         $summary = $summaryQuery->selectRaw('kendaraans.jenis_bbm, SUM(riwayat_transfer_saldo_personels.jumlah) as total')
