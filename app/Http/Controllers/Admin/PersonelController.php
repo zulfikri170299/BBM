@@ -49,7 +49,7 @@ class PersonelController extends Controller
             'satker_id' => 'required|exists:satkers,id',
             'nama' => 'required|string|max:255',
             'nrp' => 'required|string|max:20|unique:personels,nrp',
-            'jenis_bbm' => 'required|string',
+            'jenis_bbm' => 'nullable|string',
             'saldo' => 'required|numeric|min:0',
         ]);
 
@@ -95,7 +95,7 @@ class PersonelController extends Controller
             'satker_id' => 'required|exists:satkers,id',
             'nama' => 'required|string|max:255',
             'nrp' => 'required|string|max:20|unique:personels,nrp,' . $personel->id,
-            'jenis_bbm' => 'required|string',
+            'jenis_bbm' => 'nullable|string',
             'saldo' => 'required|numeric|min:0',
         ]);
 
@@ -173,7 +173,7 @@ class PersonelController extends Controller
                 $nrp = isset($colMap['nrp']) ? trim((string) $sheet->getCell($colMap['nrp'] . $r)->getValue()) : '';
                 $nama = isset($colMap['nama']) ? trim((string) $sheet->getCell($colMap['nama'] . $r)->getValue()) : '';
                 $namaSatker = isset($colMap['satker']) ? trim((string) $sheet->getCell($colMap['satker'] . $r)->getValue()) : '';
-                $jenisBbm = 'Pertamax'; // Default
+                $jenisBbm = null; // Removed default Pertamax
 
                 if (empty($nrp) && empty($nama)) continue;
 
@@ -264,7 +264,7 @@ class PersonelController extends Controller
                 $nrp = isset($colMap['nrp']) ? trim((string) $sheet->getCell($colMap['nrp'] . $r)->getValue()) : '';
                 $nama = isset($colMap['nama']) ? trim((string) $sheet->getCell($colMap['nama'] . $r)->getValue()) : '';
                 $namaSatker = isset($colMap['satker']) ? trim((string) $sheet->getCell($colMap['satker'] . $r)->getValue()) : '';
-                $jenisBbm = 'Pertamax'; // Default
+                $jenisBbm = null; // Removed default Pertamax
 
                 if (empty($nrp) || empty($nama) || empty($namaSatker)) continue;
 

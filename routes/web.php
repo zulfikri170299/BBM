@@ -71,27 +71,29 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     Route::post('/personels/{personel}/reset-pin', [\App\Http\Controllers\Admin\PersonelController::class, 'resetPin'])->name('personels.reset-pin');
     Route::get('/personels/{personel}/print', [\App\Http\Controllers\Admin\PersonelController::class, 'print'])->name('personels.print');
     Route::get('/kendaraans/export', [\App\Http\Controllers\Admin\KendaraanController::class, 'export'])->name('kendaraans.export');
-    Route::get('/kendaraans', [\App\Http\Controllers\Admin\KendaraanController::class, 'index'])->name('kendaraans.index');
-    Route::get('/kendaraans/create', [\App\Http\Controllers\Admin\KendaraanController::class, 'create'])->name('kendaraans.create');
-    Route::post('/kendaraans', [\App\Http\Controllers\Admin\KendaraanController::class, 'store'])->name('kendaraans.store');
-    Route::get('/kendaraans/{kendaraan}/print', [\App\Http\Controllers\Admin\KendaraanController::class, 'print'])->name('kendaraans.print');
-    Route::post('/kendaraans/{kendaraan}/topup', [\App\Http\Controllers\Admin\KendaraanController::class, 'topup'])->name('kendaraans.topup');
-    Route::post('/kendaraans/transfer', [\App\Http\Controllers\Admin\KendaraanController::class, 'transfer'])->name('kendaraans.transfer');
-    Route::post('/kendaraans/{kendaraan}/reset-pin', [\App\Http\Controllers\Admin\KendaraanController::class, 'resetPin'])->name('kendaraans.reset-pin');
-    Route::post('/kendaraans/send-otp', [\App\Http\Controllers\Admin\KendaraanController::class, 'sendOtp'])->name('kendaraans.send-otp');
-    Route::post('/kendaraans/import-topup', [\App\Http\Controllers\Admin\KendaraanController::class, 'importTopup'])->name('kendaraans.import-topup');
     Route::get('/kendaraans/download-template', [\App\Http\Controllers\Admin\KendaraanController::class, 'downloadTemplate'])->name('kendaraans.download-template');
     Route::get('/kendaraans/download-format', [\App\Http\Controllers\Admin\KendaraanController::class, 'downloadFormat'])->name('kendaraans.download-format');
+    Route::get('/kendaraans/download-import-template', [\App\Http\Controllers\Admin\KendaraanController::class, 'downloadImportKendaraanTemplate'])->name('kendaraans.download-import-template');
     Route::get('/kendaraans/laporan-bulanan/export', [\App\Http\Controllers\Admin\KendaraanController::class, 'exportLaporanBulanan'])->name('kendaraans.laporan-bulanan.export');
     Route::get('/kendaraans/laporan-bulanan/print', [\App\Http\Controllers\Admin\KendaraanController::class, 'printLaporanBulanan'])->name('kendaraans.laporan-bulanan.print');
     Route::get('/kendaraans/laporan-bulanan', [\App\Http\Controllers\Admin\KendaraanController::class, 'laporanBulanan'])->name('kendaraans.laporan-bulanan');
-    Route::get('/kendaraans/{kendaraan}/edit', [\App\Http\Controllers\Admin\KendaraanController::class, 'edit'])->name('kendaraans.edit');
-    Route::put('/kendaraans/{kendaraan}', [\App\Http\Controllers\Admin\KendaraanController::class, 'update'])->name('kendaraans.update');
-    Route::delete('/kendaraans/{kendaraan}', [\App\Http\Controllers\Admin\KendaraanController::class, 'destroy'])->name('kendaraans.destroy');
+    Route::post('/kendaraans/transfer', [\App\Http\Controllers\Admin\KendaraanController::class, 'transfer'])->name('kendaraans.transfer');
+    Route::post('/kendaraans/send-otp', [\App\Http\Controllers\Admin\KendaraanController::class, 'sendOtp'])->name('kendaraans.send-otp');
+    Route::post('/kendaraans/import-topup', [\App\Http\Controllers\Admin\KendaraanController::class, 'importTopup'])->name('kendaraans.import-topup');
     Route::post('/kendaraans/bulk-delete', [\App\Http\Controllers\Admin\KendaraanController::class, 'bulkDelete'])->name('kendaraans.bulk-delete');
     Route::post('/kendaraans/preview-import-kendaraan', [\App\Http\Controllers\Admin\KendaraanController::class, 'previewImportKendaraan'])->name('kendaraans.preview-import-kendaraan');
     Route::post('/kendaraans/import-kendaraan', [\App\Http\Controllers\Admin\KendaraanController::class, 'importKendaraan'])->name('kendaraans.import-kendaraan');
-    Route::get('/kendaraans/download-import-template', [\App\Http\Controllers\Admin\KendaraanController::class, 'downloadImportKendaraanTemplate'])->name('kendaraans.download-import-template');
+    Route::get('/kendaraans', [\App\Http\Controllers\Admin\KendaraanController::class, 'index'])->name('kendaraans.index');
+    Route::get('/kendaraans/create', [\App\Http\Controllers\Admin\KendaraanController::class, 'create'])->name('kendaraans.create');
+    Route::post('/kendaraans', [\App\Http\Controllers\Admin\KendaraanController::class, 'store'])->name('kendaraans.store');
+    
+    // Parameterized routes (must be below static routes)
+    Route::get('/kendaraans/{kendaraan}/print', [\App\Http\Controllers\Admin\KendaraanController::class, 'print'])->name('kendaraans.print');
+    Route::post('/kendaraans/{kendaraan}/topup', [\App\Http\Controllers\Admin\KendaraanController::class, 'topup'])->name('kendaraans.topup');
+    Route::post('/kendaraans/{kendaraan}/reset-pin', [\App\Http\Controllers\Admin\KendaraanController::class, 'resetPin'])->name('kendaraans.reset-pin');
+    Route::get('/kendaraans/{kendaraan}/edit', [\App\Http\Controllers\Admin\KendaraanController::class, 'edit'])->name('kendaraans.edit');
+    Route::put('/kendaraans/{kendaraan}', [\App\Http\Controllers\Admin\KendaraanController::class, 'update'])->name('kendaraans.update');
+    Route::delete('/kendaraans/{kendaraan}', [\App\Http\Controllers\Admin\KendaraanController::class, 'destroy'])->name('kendaraans.destroy');
     // Transfer Saldo Kendaraan ke Personel
     Route::get('/transfer-saldo', [\App\Http\Controllers\Admin\TransferSaldoController::class, 'index'])->name('transfer-saldo.index');
     Route::post('/transfer-saldo', [\App\Http\Controllers\Admin\TransferSaldoController::class, 'store'])->name('transfer-saldo.store');

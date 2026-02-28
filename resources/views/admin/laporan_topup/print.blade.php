@@ -64,7 +64,8 @@
 <body>
     <div class="header">
         <h1>LAPORAN TOP UP SALDO KENDARAAN</h1>
-        <p>Dicetak pada: {{ \Carbon\Carbon::now()->setTimezone('Asia/Makassar')->format('d F Y H:i') }} WITA</p>
+        <p>Dicetak pada: {{ \Carbon\Carbon::now()->setTimezone('Asia/Makassar')->translatedFormat('d F Y H:i') }} WITA
+        </p>
         @if(request('start_date') || request('end_date'))
             <p>Periode:
                 {{ request('start_date') ? date('d/m/Y', strtotime(request('start_date'))) : 'Awal' }}

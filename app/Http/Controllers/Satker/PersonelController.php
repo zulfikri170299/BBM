@@ -97,9 +97,10 @@ class PersonelController extends Controller
                     return $query->where('satker_id', auth()->user()->satker_id);
                 })->ignore($personel->id)
             ],
+            'jenis_bbm' => 'nullable|string',
         ]);
 
-        $personel->update($request->only(['nama', 'nrp']));
+        $personel->update($request->only(['nama', 'nrp', 'jenis_bbm']));
 
         LogAktivitas::create([
             'user_id' => auth()->id(),
@@ -189,9 +190,9 @@ class PersonelController extends Controller
                 $nrp = isset($colMap['nrp']) ? trim((string) $sheet->getCell($colMap['nrp'] . $r)->getValue()) : '';
                 $nama = isset($colMap['nama']) ? trim((string) $sheet->getCell($colMap['nama'] . $r)->getValue()) : '';
                 $namaSatker = isset($colMap['satker']) ? trim((string) $sheet->getCell($colMap['satker'] . $r)->getValue()) : '';
-                $jenisBbm = 'Pertamax'; // Default
+            $jenisBbm = null; // Removed default Pertamax
 
-                if (empty($nrp) && empty($nama)) continue;
+            if (empty($nrp) && empty($nama)) continue;
 
                 if (empty($nrp)) { $errors[] = "Baris {$r}: NRP kosong."; continue; }
                 if (empty($nama)) { $errors[] = "Baris {$r}: Nama kosong."; continue; }
@@ -274,10 +275,10 @@ class PersonelController extends Controller
 
             for ($r = $headerRow + 1; $r <= $highestRow; $r++) {
                 $nrp = isset($colMap['nrp']) ? trim((string) $sheet->getCell($colMap['nrp'] . $r)->getValue()) : '';
-                $nama = isset($colMap['nama']) ? trim((string) $sheet->getCell($colMap['nama'] . $r)->getValue()) : '';
-                $jenisBbm = 'Pertamax'; // Default value
+            $nama = isset($colMap['nama']) ? trim((string) $sheet->getCell($colMap['nama'] . $r)->getValue()) : '';
+            $jenisBbm = null; // Removed default Pertamax
 
-                if (empty($nrp) || empty($nama)) continue;
+            if (empty($nrp) || empty($nama)) continue;
 
                 $existing = Personel::where('nrp', $nrp)->first();
                 if ($existing) {

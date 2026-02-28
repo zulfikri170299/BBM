@@ -47,4 +47,13 @@ class Personel extends Model
     {
         return $this->hasMany(RiwayatTransferAntarPersonel::class, 'receiver_id');
     }
+
+    protected static function booted()
+    {
+        static::saving(function ($personel) {
+            if ($personel->saldo <= 0) {
+                $personel->jenis_bbm = null;
+            }
+        });
+    }
 }

@@ -27,7 +27,6 @@ class TransferSaldoController extends Controller
 
         if ($selectedSatkerId) {
             $kendaraans = Kendaraan::where('satker_id', $selectedSatkerId)
-                ->where('saldo', '>', 0)
                 ->orderBy('no_polisi')
                 ->get();
             $personels = Personel::where('satker_id', $selectedSatkerId)

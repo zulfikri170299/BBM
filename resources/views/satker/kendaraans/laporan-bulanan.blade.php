@@ -100,10 +100,6 @@
                         font-weight: bold;
                     }
 
-                    .laporan-tbl .text-green {
-                        color: #10b981;
-                    }
-
                     .laporan-title {
                         text-align: center;
                         padding: 12px 0 12px 0;
@@ -172,7 +168,7 @@
                                 </td>
                                 <td>{{ $row['topup_bulan_ini'] > 0 ? number_format($row['topup_bulan_ini'], 0, ',', '.') : '' }}
                                 </td>
-                                <td class="bold {{ $row['has_transfer'] ? 'text-green' : '' }}">
+                                <td class="bold">
                                     {{ number_format($row['total_bbm'], 0, ',', '.') }}
                                 </td>
                                 <td>{{ $row['transfer_bulan_ini'] > 0 ? number_format($row['transfer_bulan_ini'], 0, ',', '.') : '' }}

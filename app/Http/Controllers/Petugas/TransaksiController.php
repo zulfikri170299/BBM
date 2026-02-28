@@ -173,7 +173,12 @@ class TransaksiController extends Controller
         $totalHarga = $hargaPerLiter * $request->liter;
 
         // Potong saldo
-        $target->decrement('saldo', $request->liter);
+        if ($target instanceof \App\Models\Personel) {
+            $target->saldo -= $request->liter;
+            $target->save(); // Trigger eloquent 'saving' event
+        } else {
+            $target->decrement('saldo', $request->liter);
+        }
 
         // Catat transaksi
         $transaksi = TransaksiBbm::create([

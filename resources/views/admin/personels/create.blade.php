@@ -24,7 +24,6 @@
                         @csrf
                         
                         <!-- Hidden Defaults -->
-                        <input type="hidden" name="jenis_bbm" value="Pertalite">
                         <input type="hidden" name="saldo" value="0">
 
                         <!-- Satker -->
