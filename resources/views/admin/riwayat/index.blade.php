@@ -171,35 +171,39 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-2">
+                                        @php
+                                            $satker = $trx->satker ?? ($trx->kendaraan->satker ?? ($trx->personel->satker ?? null));
+                                        @endphp
                                         <div
                                             class="flex-shrink-0 w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white font-bold text-[10px] shadow-sm">
-                                            {{ strtoupper(substr($trx->kendaraan->satker->nama_satker ?? '-', 0, 2)) }}
+                                            {{ strtoupper(substr($satker->nama_satker ?? '-', 0, 2)) }}
                                         </div>
                                         <span
-                                            class="text-sm font-medium text-slate-700">{{ $trx->kendaraan->satker->nama_satker ?? '-' }}</span>
+                                            class="text-sm font-medium text-slate-700">{{ $satker->nama_satker ?? '-' }}</span>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     <span
-                                        class="text-sm text-slate-700">{{ $trx->kendaraan->jenis_kendaraan ?? '-' }}</span>
+                                        class="text-sm text-slate-700">{{ $trx->kendaraan->jenis_kendaraan ?? ($trx->personel->nama ?? '-') }}</span>
                                 </td>
                                 <td class="px-6 py-4">
                                     <span
-                                        class="text-sm font-bold text-slate-800">{{ $trx->kendaraan->no_polisi ?? '-' }}</span>
+                                        class="text-sm font-bold text-slate-800">{{ $trx->kendaraan->no_polisi ?? ($trx->personel->nrp ?? '-') }}</span>
                                 </td>
                                 <td class="px-6 py-4">
                                     @php
+                                        $jenisBbm = $trx->kendaraan->jenis_bbm ?? ($trx->personel->jenis_bbm ?? null);
                                         $bbmColors = [
                                             'Pertalite' => 'bg-green-100 text-green-700',
                                             'Pertamax' => 'bg-blue-100 text-blue-700',
                                             'Solar' => 'bg-amber-100 text-amber-700',
                                             'Dexlite' => 'bg-purple-100 text-purple-700',
                                         ];
-                                        $color = $bbmColors[$trx->kendaraan->jenis_bbm ?? ''] ?? 'bg-slate-100 text-slate-700';
+                                        $color = $bbmColors[$jenisBbm] ?? 'bg-slate-100 text-slate-700';
                                     @endphp
                                     <span
                                         class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold {{ $color }}">
-                                        {{ $trx->kendaraan->jenis_bbm ?? '-' }}
+                                        {{ $jenisBbm ?? '-' }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">

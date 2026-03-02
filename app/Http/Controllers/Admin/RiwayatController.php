@@ -34,12 +34,16 @@ class RiwayatController extends Controller
         }
 
         // Search nopol
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->whereHas('kendaraan', function ($q) use ($search) {
-                $q->where('no_polisi', 'like', "%{$search}%");
+    if ($request->filled('search')) {
+        $search = $request->search;
+        $query->where(function ($q) use ($search) {
+            $q->whereHas('kendaraan', function ($subQ) use ($search) {
+                $subQ->where('no_polisi', 'like', "%{$search}%");
+            })->orWhereHas('personel', function ($subQ) use ($search) {
+                $subQ->where('nama', 'like', "%{$search}%");
             });
-        }
+        });
+    }
 
         $perPage = $this->getPerPage($request);
         $transaksis = $query->latest()->paginate($perPage)->withQueryString();
@@ -47,31 +51,49 @@ class RiwayatController extends Controller
         $satkers = Satker::orderBy('nama_satker')->get();
 
         // Statistik
-        $statsQuery = TransaksiBbm::query();
-        if ($request->filled('dari')) {
-            $statsQuery->whereDate('tanggal', '>=', $request->dari);
-        }
-        if ($request->filled('sampai')) {
-            $statsQuery->whereDate('tanggal', '<=', $request->sampai);
-        }
-        if ($request->filled('satker_id')) {
-            $statsQuery->whereHas('kendaraan', function ($q) use ($request) {
-                $q->where('satker_id', $request->satker_id);
-            });
-        }
+    $statsQuery = TransaksiBbm::query();
+    if ($request->filled('dari')) {
+        $statsQuery->whereDate('tanggal', '>=', $request->dari);
+    }
+    if ($request->filled('sampai')) {
+        $statsQuery->whereDate('tanggal', '<=', $request->sampai);
+    }
+    if ($request->filled('satker_id')) {
+        $statsQuery->where('satker_id', $request->satker_id);
+    }
 
         $stats = [
             'total_transaksi' => (clone $statsQuery)->count(),
             'total_liter' => (clone $statsQuery)->sum('liter'),
         ];
 
-        // Hitung total per jenis BBM
-        $summaryBbm = (clone $statsQuery)
-            ->join('kendaraans', 'transaksi_bbms.kendaraan_id', '=', 'kendaraans.id')
-            ->selectRaw('kendaraans.jenis_bbm, SUM(transaksi_bbms.liter) as total')
-            ->groupBy('kendaraans.jenis_bbm')
-            ->orderBy('kendaraans.jenis_bbm')
-            ->pluck('total', 'kendaraans.jenis_bbm');
+        // Hitung total per jenis BBM 
+    // Menggabungkan transaksi dari kendaraan dan personel
+    $summaryBbm = collect();
+
+    $summaryKendaraan = (clone $statsQuery)
+        ->whereNotNull('kendaraan_id')
+        ->join('kendaraans', 'transaksi_bbms.kendaraan_id', '=', 'kendaraans.id')
+        ->selectRaw('kendaraans.jenis_bbm as bbm, SUM(transaksi_bbms.liter) as total')
+        ->groupBy('kendaraans.jenis_bbm')
+        ->get();
+
+    $summaryPersonel = (clone $statsQuery)
+        ->whereNotNull('personel_id')
+        ->join('personels', 'transaksi_bbms.personel_id', '=', 'personels.id')
+        ->selectRaw('personels.jenis_bbm as bbm, SUM(transaksi_bbms.liter) as total')
+        ->groupBy('personels.jenis_bbm')
+        ->get();
+
+    foreach ($summaryKendaraan->concat($summaryPersonel) as $item) {
+        if ($item->bbm) {
+            $existing = $summaryBbm->get($item->bbm, 0);
+            $summaryBbm->put($item->bbm, $existing + $item->total);
+        }
+    }
+
+    // Urutkan jenis bbm
+    $summaryBbm = $summaryBbm->sortKeys();
 
         return view('admin.riwayat.index', compact('transaksis', 'satkers', 'stats', 'summaryBbm'));
     }

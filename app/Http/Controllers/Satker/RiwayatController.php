@@ -17,9 +17,7 @@ class RiwayatController extends Controller
     {
         $satker = auth()->user()->satker;
 
-        $query = TransaksiBbm::whereHas('kendaraan', function ($q) use ($satker) {
-            $q->where('satker_id', $satker->id);
-        })->with(['kendaraan.satker', 'personel', 'petugas']);
+        $query = TransaksiBbm::where('satker_id', $satker->id)->with(['kendaraan.satker', 'personel.satker', 'petugas']);
 
         // Filter tanggal
         if ($request->filled('dari')) {
@@ -41,9 +39,7 @@ class RiwayatController extends Controller
             ->get();
 
         // Statistik
-        $statsQuery = TransaksiBbm::whereHas('kendaraan', function ($q) use ($satker) {
-            $q->where('satker_id', $satker->id);
-        });
+        $statsQuery = TransaksiBbm::where('satker_id', $satker->id);
         if ($request->filled('dari')) {
             $statsQuery->whereDate('tanggal', '>=', $request->dari);
         }
@@ -60,12 +56,30 @@ class RiwayatController extends Controller
         ];
 
         // Hitung total per jenis BBM
-        $summaryBbm = (clone $statsQuery)
-            ->join('kendaraans', 'transaksi_bbms.kendaraan_id', '=', 'kendaraans.id')
-            ->selectRaw('kendaraans.jenis_bbm, SUM(transaksi_bbms.liter) as total')
-            ->groupBy('kendaraans.jenis_bbm')
-            ->orderBy('kendaraans.jenis_bbm')
-            ->pluck('total', 'kendaraans.jenis_bbm');
+    $summaryBbm = collect();
+
+    $summaryKendaraan = (clone $statsQuery)
+        ->whereNotNull('kendaraan_id')
+        ->join('kendaraans', 'transaksi_bbms.kendaraan_id', '=', 'kendaraans.id')
+        ->selectRaw('kendaraans.jenis_bbm as bbm, SUM(transaksi_bbms.liter) as total')
+        ->groupBy('kendaraans.jenis_bbm')
+        ->get();
+
+    $summaryPersonel = (clone $statsQuery)
+        ->whereNotNull('personel_id')
+        ->join('personels', 'transaksi_bbms.personel_id', '=', 'personels.id')
+        ->selectRaw('personels.jenis_bbm as bbm, SUM(transaksi_bbms.liter) as total')
+        ->groupBy('personels.jenis_bbm')
+        ->get();
+
+    foreach ($summaryKendaraan->concat($summaryPersonel) as $item) {
+        if ($item->bbm) {
+            $existing = $summaryBbm->get($item->bbm, 0);
+            $summaryBbm->put($item->bbm, $existing + $item->total);
+        }
+    }
+
+    $summaryBbm = $summaryBbm->sortKeys();
 
         return view('satker.riwayat.index', compact('transaksis', 'kendaraans', 'stats', 'summaryBbm'));
     }
@@ -74,9 +88,7 @@ class RiwayatController extends Controller
     {
         $satker = auth()->user()->satker;
 
-        $query = TransaksiBbm::whereHas('kendaraan', function ($q) use ($satker) {
-            $q->where('satker_id', $satker->id);
-        })->with(['kendaraan.satker', 'personel', 'petugas']);
+        $query = TransaksiBbm::where('satker_id', $satker->id)->with(['kendaraan.satker', 'personel.satker', 'petugas']);
 
         // Filter tanggal
         if ($request->filled('dari')) {
@@ -92,11 +104,30 @@ class RiwayatController extends Controller
         }
 
         // Hitung Summary per Jenis BBM
-        $summaryBbm = (clone $query)->join('kendaraans', 'transaksi_bbms.kendaraan_id', '=', 'kendaraans.id')
-            ->selectRaw('kendaraans.jenis_bbm, SUM(transaksi_bbms.liter) as total')
+        $summaryBbm = collect();
+
+        $summaryKendaraan = (clone $query)
+            ->whereNotNull('kendaraan_id')
+            ->join('kendaraans', 'transaksi_bbms.kendaraan_id', '=', 'kendaraans.id')
+            ->selectRaw('kendaraans.jenis_bbm as bbm, SUM(transaksi_bbms.liter) as total')
             ->groupBy('kendaraans.jenis_bbm')
-            ->orderBy('kendaraans.jenis_bbm')
-            ->pluck('total', 'kendaraans.jenis_bbm');
+            ->get();
+
+        $summaryPersonel = (clone $query)
+            ->whereNotNull('personel_id')
+            ->join('personels', 'transaksi_bbms.personel_id', '=', 'personels.id')
+            ->selectRaw('personels.jenis_bbm as bbm, SUM(transaksi_bbms.liter) as total')
+            ->groupBy('personels.jenis_bbm')
+            ->get();
+
+        foreach ($summaryKendaraan->concat($summaryPersonel) as $item) {
+            if ($item->bbm) {
+                $existing = $summaryBbm->get($item->bbm, 0);
+                $summaryBbm->put($item->bbm, $existing + $item->total);
+            }
+        }
+
+        $summaryBbm = $summaryBbm->sortKeys();
 
         $transaksis = $query->latest('tanggal')->get();
 

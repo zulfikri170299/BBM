@@ -485,9 +485,9 @@
                                         </td>
                                         <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                                             <span
-                                                class="text-xs sm:text-sm font-semibold text-slate-800">{{ $trx->kendaraan->no_polisi }}</span>
+                                                class="text-xs sm:text-sm font-semibold text-slate-800">{{ $trx->kendaraan->no_polisi ?? ($trx->personel->nrp ?? '-') }}</span>
                                             <span
-                                                class="text-[10px] sm:text-xs text-slate-400 ml-1">({{ $trx->kendaraan->jenis_bbm }})</span>
+                                                class="text-[10px] sm:text-xs text-slate-400 ml-1">({{ $trx->kendaraan->jenis_bbm ?? ($trx->personel->jenis_bbm ?? '-') }})</span>
                                         </td>
                                         <td
                                             class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-slate-600 text-right">

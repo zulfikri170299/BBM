@@ -164,25 +164,26 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <span
-                                        class="text-sm text-slate-700">{{ $trx->kendaraan->jenis_kendaraan ?? '-' }}</span>
+                                        class="text-sm text-slate-700">{{ $trx->kendaraan->jenis_kendaraan ?? ($trx->personel->nama ?? '-') }}</span>
                                 </td>
                                 <td class="px-6 py-4">
                                     <span
-                                        class="text-sm font-bold text-slate-800">{{ $trx->kendaraan->no_polisi ?? '-' }}</span>
+                                        class="text-sm font-bold text-slate-800">{{ $trx->kendaraan->no_polisi ?? ($trx->personel->nrp ?? '-') }}</span>
                                 </td>
                                 <td class="px-6 py-4">
                                     @php
+                                        $jenisBbm = $trx->kendaraan->jenis_bbm ?? ($trx->personel->jenis_bbm ?? null);
                                         $bbmColors = [
                                             'Pertalite' => 'bg-green-100 text-green-700',
                                             'Pertamax' => 'bg-blue-100 text-blue-700',
                                             'Solar' => 'bg-amber-100 text-amber-700',
                                             'Dexlite' => 'bg-purple-100 text-purple-700',
                                         ];
-                                        $color = $bbmColors[$trx->kendaraan->jenis_bbm ?? ''] ?? 'bg-slate-100 text-slate-700';
+                                        $color = $bbmColors[$jenisBbm] ?? 'bg-slate-100 text-slate-700';
                                     @endphp
                                     <span
                                         class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold {{ $color }}">
-                                        {{ $trx->kendaraan->jenis_bbm ?? '-' }}
+                                        {{ $jenisBbm ?? '-' }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">

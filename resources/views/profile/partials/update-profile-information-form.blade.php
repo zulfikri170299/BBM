@@ -41,27 +41,31 @@
 
 
 
-        <div>
-            <label for="email" class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1 sm:mb-2">Alamat Email /
-                Identitas</label>
-            <div class="relative group">
-                <span
-                    class="absolute inset-y-0 left-0 flex items-center pl-3 sm:pl-4 text-slate-400 group-focus-within:text-indigo-500 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
-                        </path>
-                    </svg>
-                </span>
-                <input id="email" name="email" type="email" value="{{ old('email', $user->email) }}" required
-                    class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder-slate-400"
-                    placeholder="Masukkan alamat email">
+        @if(auth()->user()->role !== 'personel')
+            <div>
+                <label for="email" class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1 sm:mb-2">Alamat Email /
+                    Identitas</label>
+                <div class="relative group">
+                    <span
+                        class="absolute inset-y-0 left-0 flex items-center pl-3 sm:pl-4 text-slate-400 group-focus-within:text-indigo-500 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                    </span>
+                    <input id="email" name="email" type="email" value="{{ old('email', $user->email) }}" required
+                        class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder-slate-400"
+                        placeholder="Masukkan alamat email">
+                </div>
+                <x-input-error class="mt-2" :messages="$errors->get('email')" />
             </div>
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
-        </div>
+        @else
+            <input type="hidden" name="email" value="{{ $user->email }}">
+        @endif
 
         <div>
-            @if(auth()->user()->role !== 'admin_satker' && auth()->user()->role !== 'super_admin')
+            @if(auth()->user()->role !== 'admin_satker' && auth()->user()->role !== 'super_admin' && auth()->user()->role !== 'personel')
                 <label for="otp_email" class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1 sm:mb-2">Email
                     Penerima OTP (Khusus Top-up)</label>
                 <div class="relative group">

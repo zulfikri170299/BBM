@@ -34,7 +34,7 @@
         @if(isset($satker))
             <p>Satker: <strong>{{ $satker->nama_satker }}</strong></p>
         @elseif(request('satker_id') && $transaksis->isNotEmpty())
-            <p>Satker: <strong>{{ $transaksis->first()->kendaraan->satker->nama_satker }}</strong></p>
+            <p>Satker: <strong>{{ $transaksis->first()->satker->nama_satker ?? ($transaksis->first()->kendaraan->satker->nama_satker ?? ($transaksis->first()->personel->satker->nama_satker ?? '-')) }}</strong></p>
         @endif
     </div>
 
@@ -62,10 +62,10 @@
                     <small>{{ \Carbon\Carbon::parse($trx->tanggal)->format('H:i') }}</small>
                 </td>
                 @if(!isset($satker))
-                    <td>{{ $trx->kendaraan->satker->nama_satker ?? '-' }}</td>
-                @endif                <td>{{ $trx->kendaraan->jenis_kendaraan ?? '-' }}</td>
-                <td class="text-center"><b>{{ $trx->kendaraan->no_polisi ?? '-' }}</b></td>
-                <td class="text-center">{{ $trx->kendaraan->jenis_bbm ?? '-' }}</td>
+                    <td>{{ $trx->satker->nama_satker ?? ($trx->kendaraan->satker->nama_satker ?? ($trx->personel->satker->nama_satker ?? '-')) }}</td>
+                @endif                <td>{{ $trx->kendaraan->jenis_kendaraan ?? ($trx->personel->nama ?? '-') }}</td>
+                <td class="text-center"><b>{{ $trx->kendaraan->no_polisi ?? ($trx->personel->nrp ?? '-') }}</b></td>
+                <td class="text-center">{{ $trx->kendaraan->jenis_bbm ?? ($trx->personel->jenis_bbm ?? '-') }}</td>
                 <td>{{ $trx->nama_driver ?? ($trx->personel->nama ?? '-') }}</td>
                 <td class="text-right"><strong>{{ number_format($trx->liter, 0, ',', '.') }}</strong></td>
                 <td>{{ $trx->petugas->name ?? '-' }}</td>
