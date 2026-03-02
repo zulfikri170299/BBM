@@ -396,7 +396,7 @@
                                                         </path>
                                                     </svg>
                                                 </a>
-                                                @if($personel->saldo > 0)
+                                                @if(auth()->user()->role !== 'super_admin' && $personel->saldo > 0)
                                                     <span class="p-2 text-slate-200 cursor-not-allowed group/edit"
                                                         title="Saldo masih {{ number_format($personel->saldo, 0, ',', '.') }} L">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor"
@@ -420,7 +420,7 @@
                                                         </svg>
                                                     </a>
                                                 @endif
-                                                @if($personel->saldo > 0)
+                                                @if(auth()->user()->role !== 'super_admin' && $personel->saldo > 0)
                                                     <span class="p-2 text-slate-200 cursor-not-allowed"
                                                         title="Saldo masih {{ number_format($personel->saldo, 0, ',', '.') }} L">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor"

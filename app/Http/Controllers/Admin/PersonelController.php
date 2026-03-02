@@ -83,7 +83,7 @@ class PersonelController extends Controller
 
     public function edit(Personel $personel)
     {
-        if ($personel->saldo > 0) {
+        if (auth()->user()->role !== 'super_admin' && $personel->saldo > 0) {
             return redirect()->route('admin.personels.index')->with('error', 'Tidak dapat mengedit personel "' . $personel->nama . '" karena masih memiliki saldo ' . number_format($personel->saldo, 0, ',', '.') . ' L.');
         }
 
@@ -93,7 +93,7 @@ class PersonelController extends Controller
 
     public function update(Request $request, Personel $personel)
     {
-        if ($personel->saldo > 0) {
+        if (auth()->user()->role !== 'super_admin' && $personel->saldo > 0) {
             return redirect()->route('admin.personels.index')->with('error', 'Tidak dapat memperbarui personel "' . $personel->nama . '" karena masih memiliki saldo ' . number_format($personel->saldo, 0, ',', '.') . ' L.');
         }
 
@@ -107,8 +107,8 @@ class PersonelController extends Controller
 
         $data = $request->only(['satker_id', 'nama', 'nrp', 'saldo']);
         
-        // Hanya update jenis_bbm jika saldo == 0
-        if ($personel->saldo <= 0) {
+        // Hanya update jenis_bbm jika saldo == 0 (Kecuali Super Admin)
+        if (auth()->user()->role === 'super_admin' || $personel->saldo <= 0) {
             $data['jenis_bbm'] = $request->jenis_bbm;
         }
 
@@ -335,7 +335,7 @@ class PersonelController extends Controller
 
     public function destroy(Personel $personel)
     {
-        if ($personel->saldo > 0) {
+        if (auth()->user()->role !== 'super_admin' && $personel->saldo > 0) {
             return redirect()->route('admin.personels.index')->with('error', 'Tidak dapat menghapus personel "' . $personel->nama . '" karena masih memiliki saldo ' . number_format($personel->saldo, 0, ',', '.') . ' L.');
         }
 
@@ -372,7 +372,7 @@ class PersonelController extends Controller
         $skipped = 0;
 
         foreach ($personels as $personel) {
-            if ($personel->saldo > 0) {
+            if (auth()->user()->role !== 'super_admin' && $personel->saldo > 0) {
                 $skipped++;
                 continue;
             }

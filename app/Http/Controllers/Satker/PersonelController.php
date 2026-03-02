@@ -84,7 +84,7 @@ class PersonelController extends Controller
             abort(403);
         }
 
-        if ($personel->saldo > 0) {
+        if (auth()->user()->role !== 'super_admin' && $personel->saldo > 0) {
             return redirect()->route('satker.personels.index')->with('error', 'Tidak dapat mengedit personel "' . $personel->nama . '" karena masih memiliki saldo ' . number_format($personel->saldo, 0, ',', '.') . ' L.');
         }
 
@@ -97,7 +97,7 @@ class PersonelController extends Controller
             abort(403);
         }
 
-        if ($personel->saldo > 0) {
+        if (auth()->user()->role !== 'super_admin' && $personel->saldo > 0) {
             return redirect()->route('satker.personels.index')->with('error', 'Tidak dapat memperbarui personel "' . $personel->nama . '" karena masih memiliki saldo ' . number_format($personel->saldo, 0, ',', '.') . ' L.');
         }
 
@@ -113,8 +113,8 @@ class PersonelController extends Controller
 
         $data = $request->only(['nama', 'nrp']);
 
-        // Hanya update jenis_bbm jika saldo == 0
-        if ($personel->saldo <= 0) {
+        // Hanya update jenis_bbm jika saldo == 0 (Kecuali Super Admin)
+        if (auth()->user()->role === 'super_admin' || $personel->saldo <= 0) {
             $data['jenis_bbm'] = $request->jenis_bbm;
         }
 
@@ -134,7 +134,7 @@ class PersonelController extends Controller
             abort(403);
         }
 
-        if ($personel->saldo > 0) {
+        if (auth()->user()->role !== 'super_admin' && $personel->saldo > 0) {
             return redirect()->route('satker.personels.index')->with('error', 'Tidak dapat menghapus personel "' . $personel->nama . '" karena masih memiliki saldo ' . number_format($personel->saldo, 1) . ' L.');
         }
 
@@ -350,15 +350,24 @@ class PersonelController extends Controller
         ]);
 
         $satkerId = auth()->user()->satker_id;
-        $skipped = Personel::where('satker_id', $satkerId)
-            ->whereIn('id', $request->ids)
-            ->where('saldo', '>', 0)
-            ->count();
+        $role = auth()->user()->role;
 
-        $deleted = Personel::where('satker_id', $satkerId)
-            ->whereIn('id', $request->ids)
-            ->where('saldo', '<=', 0)
-            ->delete();
+        if ($role === 'super_admin') {
+            $deleted = Personel::where('satker_id', $satkerId)
+                ->whereIn('id', $request->ids)
+                ->delete();
+            $skipped = 0;
+        } else {
+            $skipped = Personel::where('satker_id', $satkerId)
+                ->whereIn('id', $request->ids)
+                ->where('saldo', '>', 0)
+                ->count();
+
+            $deleted = Personel::where('satker_id', $satkerId)
+                ->whereIn('id', $request->ids)
+                ->where('saldo', '<=', 0)
+                ->delete();
+        }
 
         LogAktivitas::create([
             'user_id' => auth()->id(),

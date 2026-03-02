@@ -88,13 +88,13 @@
                                 BBM</label>
                             <div class="relative group">
                                 <select name="jenis_bbm"
-                                    class="w-full h-11 pl-4 pr-10 rounded-xl border-slate-200 bg-slate-50/50 text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all appearance-none {{ $personel->saldo > 0 ? 'bg-slate-100 cursor-not-allowed' : '' }}"
-                                    {{ $personel->saldo > 0 ? 'disabled' : 'required' }}>
+                                    class="w-full h-11 pl-4 pr-10 rounded-xl border-slate-200 bg-slate-50/50 text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all appearance-none {{ auth()->user()->role !== 'super_admin' && $personel->saldo > 0 ? 'bg-slate-100 cursor-not-allowed' : '' }}"
+                                    {{ auth()->user()->role !== 'super_admin' && $personel->saldo > 0 ? 'disabled' : 'required' }}>
                                     <option value="">Pilih Jenis BBM...</option>
                                     <option value="Pertamax" {{ old('jenis_bbm', $personel->jenis_bbm) == 'Pertamax' ? 'selected' : '' }}>Pertamax</option>
                                     <option value="Pertamina Dex" {{ old('jenis_bbm', $personel->jenis_bbm) == 'Pertamina Dex' ? 'selected' : '' }}>Pertamina Dex</option>
                                 </select>
-                                @if ($personel->saldo > 0)
+                                @if (auth()->user()->role !== 'super_admin' && $personel->saldo > 0)
                                     <input type="hidden" name="jenis_bbm" value="{{ $personel->jenis_bbm }}">
                                     <!-- Tooltip -->
                                     <div

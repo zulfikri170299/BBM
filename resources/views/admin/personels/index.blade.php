@@ -292,7 +292,7 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right">
                                             <div class="flex justify-end items-center gap-2">
-                                                @if($personel->saldo > 0)
+                                                @if(auth()->user()->role !== 'super_admin' && $personel->saldo > 0)
                                                     <span
                                                         class="inline-flex items-center p-2 bg-slate-50 text-slate-200 rounded-lg cursor-not-allowed group/edit"
                                                         title="Saldo masih {{ number_format($personel->saldo, 0, ',', '.') }} L">
@@ -347,7 +347,7 @@
                                                     </button>
                                                 </form>
 
-                                                @if($personel->saldo > 0)
+                                                @if(auth()->user()->role !== 'super_admin' && $personel->saldo > 0)
                                                     <span class="p-2 text-slate-200 cursor-not-allowed"
                                                         title="Saldo masih {{ number_format($personel->saldo, 0, ',', '.') }} L">
                                                         <svg class="w-5 h-5" fill="none" stroke="currentColor"

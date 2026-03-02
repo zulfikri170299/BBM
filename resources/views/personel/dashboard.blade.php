@@ -478,7 +478,7 @@
                                     <tr class="hover:bg-slate-50 transition-colors">
                                         <td
                                             class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-slate-600">
-                                            {{ $trx->created_at->format('d/m/Y H:i') }}
+                                            {{ $trx->created_at->timezone('Asia/Makassar')->format('d/m/Y H:i') }}
                                         </td>
                                         <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                                             <span

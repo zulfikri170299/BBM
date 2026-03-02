@@ -247,10 +247,10 @@
                                             <td class="p-3 sm:p-4 whitespace-nowrap">
                                                 <div class="flex flex-col">
                                                     <span
-                                                        class="text-xs sm:text-sm font-semibold text-slate-700">{{ $item->created_at->format('d M Y') }}</span>
+                                                        class="text-xs sm:text-sm font-semibold text-slate-700">{{ $item->created_at->timezone('Asia/Makassar')->format('d M Y') }}</span>
                                                     <span
-                                                        class="text-[10px] sm:text-xs text-slate-400">{{ $item->created_at->format('H:i') }}
-                                                        WIB</span>
+                                                        class="text-[10px] sm:text-xs text-slate-400">{{ $item->created_at->timezone('Asia/Makassar')->format('H:i') }}
+                                                        WITA</span>
                                                 </div>
                                             </td>
                                             <td class="p-3 sm:p-4 whitespace-nowrap">
