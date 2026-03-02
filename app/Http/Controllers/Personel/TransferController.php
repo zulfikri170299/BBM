@@ -92,6 +92,7 @@ class TransferController extends Controller
                     'sender_id' => $sender->id,
                     'receiver_id' => $receiver->id,
                     'jumlah' => $request->jumlah,
+                    'jenis_bbm' => $sender->jenis_bbm ?: 'TANPA JENIS',
                     'keterangan' => $request->keterangan,
                 ]);
                 

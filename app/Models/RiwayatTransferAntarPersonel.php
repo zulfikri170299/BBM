@@ -16,6 +16,7 @@ class RiwayatTransferAntarPersonel extends Model
         'sender_id',
         'receiver_id',
         'jumlah',
+        'jenis_bbm',
         'keterangan',
     ];
 

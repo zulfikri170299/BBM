@@ -802,7 +802,7 @@ class KendaraanController extends Controller
             $rows[] = $row;
 
             // Summary per jenis BBM
-            $bbm = $kendaraan->jenis_bbm ?: 'TANPA JENIS';
+            $bbm = $row['jenis_bbm'];
             if (!isset($summaryByBbm[$bbm])) {
                 $summaryByBbm[$bbm] = [
                     'sisa_bulan_lalu' => 0,

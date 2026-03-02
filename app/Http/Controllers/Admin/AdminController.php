@@ -125,6 +125,19 @@ class AdminController extends Controller
                 // 5. Update saldo kendaraan dalam grup ini
                 foreach ($group as $kendaraan) {
                     $kendaraan->increment('saldo', $amount);
+
+                    // Catat riwayat topup per kendaraan
+                    \App\Models\RiwayatTopup::create([
+                        'satker_id' => $kendaraan->satker_id,
+                        'kendaraan_id' => $kendaraan->id,
+                        'user_id' => auth()->id(),
+                        'jumlah' => $amount,
+                        'tipe' => 'masuk',
+                        'metode' => 'massal',
+                        'status' => 'success',
+                        'jenis_bbm' => $jenisBbm ?: 'TANPA JENIS',
+                        'keterangan' => 'Top-up massal dari Super Admin',
+                    ]);
                 }
             }
 
