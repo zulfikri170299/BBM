@@ -51,9 +51,11 @@ class Personel extends Model
     protected static function booted()
     {
         static::saving(function ($personel) {
-            if ($personel->saldo <= 0) {
-                $personel->jenis_bbm = null;
-            }
+            // Jangan kosongkan jenis_bbm meskipun saldo <= 0
+            // agar riwayat jenis BBM tetap dapat ditampilkan
+            // if ($personel->saldo <= 0) {
+            //     $personel->jenis_bbm = null;
+            // }
         });
     }
 }

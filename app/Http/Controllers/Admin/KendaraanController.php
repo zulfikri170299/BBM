@@ -705,7 +705,7 @@ class KendaraanController extends Controller
                 'kode_kendaraan' => $kendaraan->kode_kendaraan ?? '-',
                 'jenis_kendaraan' => $kendaraan->jenis_kendaraan,
                 'no_polisi' => $kendaraan->no_polisi,
-                'jenis_bbm' => $kendaraan->jenis_bbm,
+                'jenis_bbm' => $kendaraan->jenis_bbm ?: 'TANPA JENIS',
                 'sisa_bulan_lalu' => round($sisaBulanLalu, 0),
                 'topup_bulan_ini' => round($topupBulanIni, 0),
                 'total_bbm' => round($totalBbm, 0),
@@ -718,7 +718,7 @@ class KendaraanController extends Controller
             $rows[] = $row;
 
             // Summary per jenis BBM
-            $bbm = $kendaraan->jenis_bbm;
+            $bbm = $kendaraan->jenis_bbm ?: 'TANPA JENIS';
             if (!isset($summaryByBbm[$bbm])) {
                 $summaryByBbm[$bbm] = [
                     'sisa_bulan_lalu' => 0,

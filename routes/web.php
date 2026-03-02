@@ -104,6 +104,11 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     Route::get('/laporan-topup/print', [\App\Http\Controllers\Admin\LaporanTopupController::class, 'print'])->name('laporan-topup.print');
     Route::get('/laporan-topup', [\App\Http\Controllers\Admin\LaporanTopupController::class, 'index'])->name('laporan-topup.index');
     
+    // Laporan Per 3 Bulan
+    Route::get('/laporan-triwulan/export', [\App\Http\Controllers\Admin\LaporanTriwulanController::class, 'export'])->name('laporan-triwulan.export');
+    Route::get('/laporan-triwulan/print', [\App\Http\Controllers\Admin\LaporanTriwulanController::class, 'print'])->name('laporan-triwulan.print');
+    Route::get('/laporan-triwulan', [\App\Http\Controllers\Admin\LaporanTriwulanController::class, 'index'])->name('laporan-triwulan.index');
+    
     // Laporan Sisa BBM (Kendaraan & Personel)
     Route::get('/laporan-sisa/kendaraan', [\App\Http\Controllers\Admin\LaporanSisaController::class, 'kendaraan'])->name('laporan-sisa.kendaraan');
     Route::get('/laporan-sisa/kendaraan/print', [\App\Http\Controllers\Admin\LaporanSisaController::class, 'printKendaraan'])->name('laporan-sisa.kendaraan.print');

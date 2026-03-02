@@ -16,7 +16,8 @@
                     <div class="text-center sm:text-left">
                         <p class="text-indigo-100 font-medium text-sm sm:text-lg">Saldo Anda Saat Ini</p>
                         <h3 class="text-3xl sm:text-5xl font-bold mt-1 sm:mt-2">
-                            {{ number_format($personel->saldo, 0, ',', '.') }} Liter</h3>
+                            {{ number_format($personel->saldo, 0, ',', '.') }} Liter
+                        </h3>
                         <p
                             class="mt-2 text-indigo-200 text-xs sm:text-sm flex items-center justify-center sm:justify-start">
                             <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5" fill="none" stroke="currentColor"
@@ -70,9 +71,9 @@
                             receiverLabel: '',
                             receivers: [
                                 @foreach($personels as $p)
-                                    { id: {{ $p->id }}, nama: '{{ addslashes($p->nama) }}', nrp: '{{ addslashes($p->nrp) }}' },
+                                    { id: {{ $p->id }}, nama: '{{ addslashes($p->nama) }}', nrp: '{{ addslashes($p->nrp) }}', bbm: '{{ $p->jenis_bbm }}' },
                                 @endforeach
-                            ],
+                        ],
                             get filteredReceivers() {
                                 if (!this.receiverSearch) return this.receivers;
                                 const q = this.receiverSearch.toLowerCase();
@@ -97,11 +98,17 @@
                                         <div @click="receiverOpen = !receiverOpen; $nextTick(() => { if(receiverOpen) $refs.receiverInput.focus() })"
                                             class="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl border border-slate-300 text-xs sm:text-sm shadow-sm transition-all duration-200 cursor-pointer flex items-center justify-between bg-white"
                                             :class="receiverOpen ? 'ring-2 ring-indigo-500 border-indigo-500' : ''">
-                                            <span x-text="receiverLabel || '-- Pilih Rekan --'" :class="receiverLabel ? 'text-slate-800' : 'text-slate-400'" class="truncate"></span>
-                                            <svg class="w-4 h-4 text-slate-400 transition-transform shrink-0" :class="receiverOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                            <span x-text="receiverLabel || '-- Pilih Rekan --'"
+                                                :class="receiverLabel ? 'text-slate-800' : 'text-slate-400'"
+                                                class="truncate"></span>
+                                            <svg class="w-4 h-4 text-slate-400 transition-transform shrink-0"
+                                                :class="receiverOpen ? 'rotate-180' : ''" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 9l-7 7-7-7"></path>
+                                            </svg>
                                         </div>
-                                        <div
-                                            class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400"
+                                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400"
                                             x-show="!receiverOpen">
                                             <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
@@ -110,21 +117,41 @@
                                                 </path>
                                             </svg>
                                         </div>
-                                        <div x-show="receiverOpen" x-transition.opacity.duration.150ms class="absolute z-50 mt-1 w-full bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden" style="display:none;">
+                                        <div x-show="receiverOpen" x-transition.opacity.duration.150ms
+                                            class="absolute z-50 mt-1 w-full bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden"
+                                            style="display:none;">
                                             <div class="p-2 border-b border-slate-100">
                                                 <div class="relative">
-                                                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                                                    <input x-ref="receiverInput" x-model="receiverSearch" type="text" placeholder="Cari nama / NRP..." class="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
+                                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                                    </svg>
+                                                    <input x-ref="receiverInput" x-model="receiverSearch" type="text"
+                                                        placeholder="Cari nama / NRP..."
+                                                        class="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                                                 </div>
                                             </div>
                                             <div class="max-h-48 overflow-y-auto">
                                                 <template x-for="r in filteredReceivers" :key="r.id">
-                                                    <div @click="selectReceiver(r)" class="px-4 py-2.5 text-xs sm:text-sm text-slate-700 hover:bg-indigo-50 cursor-pointer flex items-center justify-between transition-colors" :class="receiverSelected === r.id ? 'bg-indigo-50 text-indigo-700 font-semibold' : ''">
-                                                        <span x-text="r.nama + ' (' + r.nrp + ')'"></span>
-                                                        <svg x-show="receiverSelected === r.id" class="w-4 h-4 text-indigo-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                                    <div @click="selectReceiver(r)"
+                                                        class="px-4 py-2.5 text-xs sm:text-sm text-slate-700 hover:bg-indigo-50 cursor-pointer flex items-center justify-between transition-colors"
+                                                        :class="receiverSelected === r.id ? 'bg-indigo-50 text-indigo-700 font-semibold' : ''">
+                                                        <span
+                                                            x-text="r.nama + ' (' + r.nrp + ')' + (r.bbm ? ' - ' + r.bbm : ' - Belum set BBM')"></span>
+                                                        <svg x-show="receiverSelected === r.id"
+                                                            class="w-4 h-4 text-indigo-500 shrink-0" fill="currentColor"
+                                                            viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd"
+                                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                                clip-rule="evenodd"></path>
+                                                        </svg>
                                                     </div>
                                                 </template>
-                                                <div x-show="filteredReceivers.length === 0" class="px-4 py-3 text-sm text-slate-400 text-center">Tidak ditemukan</div>
+                                                <div x-show="filteredReceivers.length === 0"
+                                                    class="px-4 py-3 text-sm text-slate-400 text-center">Tidak ditemukan
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -133,7 +160,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
-                                        Hanya rekan dengan BBM: {{ $personel->jenis_bbm }}
+                                        Menampilkan rekan dengan BBM {{ $personel->jenis_bbm }} atau yang belum diatur.
                                     </p>
                                     <x-input-error :messages="$errors->get('receiver_id')" class="mt-2" />
                                 </div>
@@ -252,11 +279,13 @@
                                             <td class="p-3 sm:p-4 whitespace-nowrap">
                                                 @if($item->sender_id == $personel->id)
                                                     <div class="text-xs sm:text-sm font-medium text-slate-900">
-                                                        {{ $item->receiver->nama ?? 'Tidak Diketahui' }}</div>
+                                                        {{ $item->receiver->nama ?? 'Tidak Diketahui' }}
+                                                    </div>
                                                     <div class="text-[10px] sm:text-xs text-slate-500">Penerima</div>
                                                 @else
                                                     <div class="text-xs sm:text-sm font-medium text-slate-900">
-                                                        {{ $item->sender->nama ?? 'Tidak Diketahui' }}</div>
+                                                        {{ $item->sender->nama ?? 'Tidak Diketahui' }}
+                                                    </div>
                                                     <div class="text-[10px] sm:text-xs text-slate-500">Pengirim</div>
                                                 @endif
                                             </td>

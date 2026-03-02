@@ -265,7 +265,7 @@
                 // Data mapping
                 const kendaraans = @json($kendaraans ?? []);
                 const personels = @json($personels ?? []);
-                
+
                 // Initialize Personel TomSelect (empty initially or full if no filter logic yet)
                 const personelSelect = document.getElementById('personel_id');
                 let personelTs = null;
@@ -282,15 +282,15 @@
 
                 // Filtering logic
                 if (kendaraanTs && personelTs) {
-                    kendaraanTs.on('change', function(value) {
+                    kendaraanTs.on('change', function (value) {
                         personelTs.clear();
                         personelTs.clearOptions();
-                        
+
                         const infoLabel = document.getElementById('filter_info');
                         const bbmLabel = document.getElementById('filter_bbm_label');
 
                         if (!value) {
-                            if(infoLabel) infoLabel.classList.add('hidden');
+                            if (infoLabel) infoLabel.classList.add('hidden');
                             return;
                         }
 
@@ -298,18 +298,18 @@
                         const requiredBbm = selectedKendaraan ? selectedKendaraan.jenis_bbm : null;
 
                         if (requiredBbm) {
-                            if(infoLabel) {
+                            if (infoLabel) {
                                 infoLabel.classList.remove('hidden');
                                 bbmLabel.textContent = requiredBbm;
                             }
-                            
+
                             const filteredPersonels = personels.filter(p => !p.jenis_bbm || p.jenis_bbm === requiredBbm);
-                            
+
                             const options = filteredPersonels.map(p => ({
                                 id: p.id,
-                                text: `${p.nama} (${p.nrp}) - ${Number(p.saldo).toLocaleString('id-ID')} L`
+                                text: `${p.nama} (${p.nrp}) ${p.jenis_bbm ? ' - ' + p.jenis_bbm : ' - Belum set BBM'} - ${Number(p.saldo).toLocaleString('id-ID')} L`
                             }));
-                            
+
                             personelTs.addOptions(options);
                             personelTs.refreshOptions(false);
                         }

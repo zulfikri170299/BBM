@@ -20,10 +20,14 @@ class TransferController extends Controller
         $personel = $user->personel;
         $satkerId = $user->satker_id;
 
-        // Get list of other personels in same Satker AND same fuel type
+        // Get list of other personels in same Satker AND (same fuel type OR fuel type is empty)
         $personels = Personel::where('satker_id', $satkerId)
             ->where('id', '!=', $personel->id)
-            ->where('jenis_bbm', $personel->jenis_bbm) // Filter by fuel type
+            ->where(function ($q) use ($personel) {
+                $q->where('jenis_bbm', $personel->jenis_bbm)
+                  ->orWhereNull('jenis_bbm')
+                  ->orWhere('jenis_bbm', '');
+            })
             ->orderBy('nama')
             ->get();
 
@@ -57,8 +61,8 @@ class TransferController extends Controller
             return back()->with('error', 'Penerima harus berada dalam satu Satker.');
         }
 
-        if ($sender->jenis_bbm !== $receiver->jenis_bbm) {
-            return back()->with('error', 'Transfer hanya bisa dilakukan ke sesama jenis BBM (' . $sender->jenis_bbm . ').');
+        if ($receiver->jenis_bbm && $sender->jenis_bbm !== $receiver->jenis_bbm) {
+            return back()->with('error', 'Transfer hanya bisa dilakukan ke sesama jenis BBM (' . $sender->jenis_bbm . '). Penerima saat ini terdaftar dengan BBM ' . $receiver->jenis_bbm . '.');
         }
 
         if ($sender->pin !== $request->pin) {
@@ -75,8 +79,11 @@ class TransferController extends Controller
                 $sender->saldo -= $request->jumlah;
                 $sender->save();
 
-                // Add to receiver
+                // Add to receiver & set fuel type if empty
                 $receiver->saldo += $request->jumlah;
+                if (!$receiver->jenis_bbm) {
+                    $receiver->jenis_bbm = $sender->jenis_bbm;
+                }
                 $receiver->save();
 
                 // Record transaction
