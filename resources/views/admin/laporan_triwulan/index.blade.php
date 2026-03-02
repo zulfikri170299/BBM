@@ -158,7 +158,7 @@
                                     @endphp
                                     <td
                                         class="px-4 py-3 whitespace-nowrap text-center text-sm text-slate-600 border-r border-slate-100">
-                                        {{ $valP }}
+                                        {{ number_format($valP, 0, ',', '.') }}
                                     </td>
                                 @endforeach
 
@@ -169,7 +169,7 @@
                                     @endphp
                                     <td
                                         class="px-4 py-3 whitespace-nowrap text-center text-sm text-slate-600 border-r border-slate-100">
-                                        {{ $valM }}
+                                        {{ number_format($valM, 0, ',', '.') }}
                                     </td>
                                 @endforeach
 
@@ -182,7 +182,7 @@
                                     @endphp
                                     <td
                                         class="px-4 py-3 whitespace-nowrap text-center text-sm font-bold {{ $sisa < 0 ? 'text-red-600' : 'text-emerald-600' }} border-r border-slate-100">
-                                        {{ $sisa }}
+                                        {{ number_format($sisa, 0, ',', '.') }}
                                     </td>
                                 @endforeach
                             </tr>
@@ -196,19 +196,19 @@
                             @foreach($allBbmTypes as $jenis)
                                 <td
                                     class="px-4 py-3 whitespace-nowrap text-center text-sm font-bold text-slate-900 border-r border-slate-200">
-                                    {{ $sumPendapatan[$jenis] }}
+                                    {{ number_format($sumPendapatan[$jenis], 0, ',', '.') }}
                                 </td>
                             @endforeach
                             @foreach($allBbmTypes as $jenis)
                                 <td
                                     class="px-4 py-3 whitespace-nowrap text-center text-sm font-bold text-slate-900 border-r border-slate-200">
-                                    {{ $sumPemakaian[$jenis] }}
+                                    {{ number_format($sumPemakaian[$jenis], 0, ',', '.') }}
                                 </td>
                             @endforeach
                             @foreach($allBbmTypes as $jenis)
                                 <td
                                     class="px-4 py-3 whitespace-nowrap text-center text-sm font-bold {{ $sumSisa[$jenis] < 0 ? 'text-red-600' : 'text-emerald-700' }} border-r border-slate-200">
-                                    {{ $sumSisa[$jenis] }}
+                                    {{ number_format($sumSisa[$jenis], 0, ',', '.') }}
                                 </td>
                             @endforeach
                         </tr>

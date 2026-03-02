@@ -195,12 +195,13 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     @php
-                                        $jenisBbm = $trx->kendaraan->jenis_bbm ?? ($trx->personel->jenis_bbm ?? null);
+                                        $jenisBbm = $trx->jenis_bbm;
                                         $bbmColors = [
                                             'Pertalite' => 'bg-green-100 text-green-700',
                                             'Pertamax' => 'bg-blue-100 text-blue-700',
                                             'Solar' => 'bg-amber-100 text-amber-700',
                                             'Dexlite' => 'bg-purple-100 text-purple-700',
+                                            'Pertamina Dex' => 'bg-cyan-100 text-cyan-700',
                                         ];
                                         $color = $bbmColors[$jenisBbm] ?? 'bg-slate-100 text-slate-700';
                                     @endphp

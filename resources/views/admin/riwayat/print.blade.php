@@ -65,7 +65,7 @@
                     <td>{{ $trx->satker->nama_satker ?? ($trx->kendaraan->satker->nama_satker ?? ($trx->personel->satker->nama_satker ?? '-')) }}</td>
                 @endif                <td>{{ $trx->kendaraan->jenis_kendaraan ?? ($trx->personel->nama ?? '-') }}</td>
                 <td class="text-center"><b>{{ $trx->kendaraan->no_polisi ?? ($trx->personel->nrp ?? '-') }}</b></td>
-                <td class="text-center">{{ $trx->kendaraan->jenis_bbm ?? ($trx->personel->jenis_bbm ?? '-') }}</td>
+                <td class="text-center">{{ $trx->jenis_bbm ?? '-' }}</td>
                 <td>{{ $trx->nama_driver ?? ($trx->personel->nama ?? '-') }}</td>
                 <td class="text-right"><strong>{{ number_format($trx->liter, 0, ',', '.') }}</strong></td>
                 <td>{{ $trx->petugas->name ?? '-' }}</td>

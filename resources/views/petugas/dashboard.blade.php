@@ -21,7 +21,8 @@
                             </path>
                         </svg>
                     </div>
-                    <p class="text-2xl sm:text-3xl lg:text-4xl font-extrabold">{{ $todayTransactions }}</p>
+                    <p class="text-2xl sm:text-3xl lg:text-4xl font-extrabold">
+                        {{ number_format($todayTransactions, 0, ',', '.') }}</p>
                     <p class="text-xs sm:text-sm lg:text-base text-cyan-100 mt-1 font-medium">Transaksi Hari Ini</p>
                 </div>
             </div>

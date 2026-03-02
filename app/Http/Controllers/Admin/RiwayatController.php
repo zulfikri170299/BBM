@@ -16,7 +16,7 @@ class RiwayatController extends Controller
 
     public function index(Request $request)
     {
-        $query = TransaksiBbm::with(['kendaraan.satker', 'personel', 'petugas']);
+        $query = TransaksiBbm::with(['satker', 'kendaraan.satker', 'personel', 'petugas']);
 
         // Filter tanggal
         if ($request->filled('dari')) {
@@ -81,7 +81,7 @@ class RiwayatController extends Controller
 
     public function print(Request $request)
     {
-        $query = TransaksiBbm::with(['kendaraan.satker', 'personel', 'petugas']);
+        $query = TransaksiBbm::with(['satker', 'kendaraan.satker', 'personel', 'petugas']);
 
         // Filter tanggal
         if ($request->filled('dari')) {

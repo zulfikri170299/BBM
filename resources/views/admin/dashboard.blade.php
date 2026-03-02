@@ -31,7 +31,7 @@
                             class="text-[9px] sm:text-[10px] font-semibold bg-white/20 hover:bg-white/30 px-2 py-1 rounded-lg transition uppercase tracking-wider">Kelola</a>
                     </div>
                     <div class="flex items-baseline gap-1 sm:gap-2">
-                        <p class="text-xl sm:text-2xl font-black">{{ $stats['totalSatker'] }}</p>
+                        <p class="text-xl sm:text-2xl font-black">{{ number_format($stats['totalSatker'], 0, ',', '.') }}</p>
                         <p class="text-[9px] sm:text-[11px] text-indigo-100 opacity-80 font-medium truncate">Total
                             Satker</p>
                     </div>
@@ -57,7 +57,7 @@
                             class="text-[9px] sm:text-[10px] font-semibold bg-white/20 hover:bg-white/30 px-2 py-1 rounded-lg transition uppercase tracking-wider">Kelola</a>
                     </div>
                     <div class="flex items-baseline gap-1 sm:gap-2">
-                        <p class="text-xl sm:text-2xl font-black">{{ $stats['totalUsers'] }}</p>
+                        <p class="text-xl sm:text-2xl font-black">{{ number_format($stats['totalUsers'], 0, ',', '.') }}</p>
                         <p class="text-[9px] sm:text-[11px] text-emerald-100 opacity-80 font-medium truncate">Total
                             Users</p>
                     </div>
@@ -85,7 +85,7 @@
                             class="text-[9px] sm:text-[10px] font-semibold bg-white/20 hover:bg-white/30 px-2 py-1 rounded-lg transition uppercase tracking-wider">Kelola</a>
                     </div>
                     <div class="flex items-baseline gap-1 sm:gap-2">
-                        <p class="text-xl sm:text-2xl font-black">{{ $stats['totalKendaraan'] }}</p>
+                        <p class="text-xl sm:text-2xl font-black">{{ number_format($stats['totalKendaraan'], 0, ',', '.') }}</p>
                         <p class="text-[9px] sm:text-[11px] text-amber-100 opacity-80 font-medium truncate">Total
                             Kendaraan</p>
                     </div>
@@ -110,7 +110,7 @@
                             class="text-[9px] sm:text-[10px] font-semibold bg-white/20 hover:bg-white/30 px-2 py-1 rounded-lg transition uppercase tracking-wider">Riwayat</a>
                     </div>
                     <div class="flex items-baseline gap-1 sm:gap-2">
-                        <p class="text-xl sm:text-2xl font-black">{{ $stats['totalTransaksi'] }}</p>
+                        <p class="text-xl sm:text-2xl font-black">{{ number_format($stats['totalTransaksi'], 0, ',', '.') }}</p>
                         <p class="text-[9px] sm:text-[11px] text-rose-100 opacity-80 font-medium truncate">Total
                             Transaksi</p>
                     </div>
