@@ -100,6 +100,7 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     // Laporan Topup & Riwayat
     Route::get('/riwayat/print', [\App\Http\Controllers\Admin\RiwayatController::class, 'print'])->name('riwayat.print');
     Route::get('/riwayat', [\App\Http\Controllers\Admin\RiwayatController::class, 'index'])->name('riwayat.index');
+    Route::delete('/riwayat/{transaksi}', [\App\Http\Controllers\Admin\RiwayatController::class, 'destroy'])->name('riwayat.destroy');
     Route::get('/laporan-topup/print', [\App\Http\Controllers\Admin\LaporanTopupController::class, 'print'])->name('laporan-topup.print');
     Route::get('/laporan-topup', [\App\Http\Controllers\Admin\LaporanTopupController::class, 'index'])->name('laporan-topup.index');
     

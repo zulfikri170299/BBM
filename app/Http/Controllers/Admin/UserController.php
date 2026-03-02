@@ -147,7 +147,9 @@ class UserController extends Controller
 
     public function activityLogs(User $user)
     {
-        // 1. Ambil log eksplisit dari tabel log_aktivitas
+        // Semua aktivitas sudah dicatat secara eksplisit di tabel log_aktivitas
+        // Tidak perlu mengambil dan menggabungkan transaksi, topup, stok, dst
+        // karena itu akan menyebabkan data ganda (duplicate).
         $logs = \App\Models\LogAktivitas::where('user_id', $user->id)
             ->latest()
             ->take(50)
@@ -159,88 +161,7 @@ class UserController extends Controller
                 ];
             });
 
-        // 2. Ambil riwayat pemrosesan Transaksi BBM (jika petugas)
-        $transactions = \App\Models\TransaksiBbm::with(['kendaraan', 'personel'])
-            ->where('petugas_id', $user->id)
-            ->latest()
-            ->take(50)
-            ->get()
-            ->map(function($item) {
-                $target = $item->kendaraan ? "Kendaraan ({$item->kendaraan->no_polisi})" : "Personel ({$item->personel->nama})";
-                return [
-                    'aktivitas' => "Memproses pengisian BBM: {$item->liter} L untuk {$target}",
-                    'created_at' => $item->tanggal ? \Carbon\Carbon::parse($item->tanggal) : $item->created_at,
-                ];
-            });
-
-        // 3. Ambil riwayat Topup (jika admin)
-        $topups = \App\Models\RiwayatTopup::with('kendaraan')
-            ->where('user_id', $user->id)
-            ->latest()
-            ->take(50)
-            ->get()
-            ->map(function($item) {
-                return [
-                    'aktivitas' => "Melakukan Top-up Saldo: {$item->jumlah} L untuk Kendaraan ({$item->kendaraan->no_polisi})",
-                    'created_at' => $item->created_at,
-                ];
-            });
-
-        // 4. Ambil riwayat pengelolaan Stok Pusat
-        $stocks = \App\Models\RiwayatStokAdmin::where('user_id', $user->id)
-            ->latest()
-            ->take(50)
-            ->get()
-            ->map(function($item) {
-                $tipe = $item->tipe === 'masuk' ? 'Penambahan' : 'Pengeluaran';
-                return [
-                    'aktivitas' => "{$tipe} Stok Pusat: {$item->jumlah} L {$item->jenis_bbm} (" . ($item->keterangan ?? '-') . ")",
-                    'created_at' => $item->created_at,
-                ];
-            });
-
-        // 5. Ambil riwayat Transfer Saldo ke Personel (jika admin satker)
-        $transfers = collect();
-        if ($user->satker_id) {
-            $transfers = \App\Models\RiwayatTransferSaldoPersonel::with(['kendaraan', 'personel'])
-                ->where('satker_id', $user->satker_id)
-                ->latest()
-                ->take(50)
-                ->get()
-                ->map(function($item) {
-                    return [
-                        'aktivitas' => "Transfer saldo BBM: {$item->jumlah} L dari Kendaraan ({$item->kendaraan->no_polisi}) ke Personel ({$item->personel->nama})",
-                        'created_at' => $item->created_at,
-                    ];
-                });
-        }
-
-        // 6. Ambil riwayat Berita Acara (jika admin)
-        $balogs = collect();
-        if ($user->satker_id) {
-            $balogs = \App\Models\BaLog::where('satker_id', $user->satker_id)
-                ->latest()
-                ->take(50)
-                ->get()
-                ->map(function($item) {
-                    return [
-                        'aktivitas' => "Menghasilkan Berita Acara (BA) Bulan: {$item->bulan}, Tahun: {$item->tahun}",
-                        'created_at' => $item->created_at,
-                    ];
-                });
-        }
-
-        // Gabungkan semua, urutkan berdasarkan waktu terbaru
-        $combined = $logs->concat($transactions)
-                        ->concat($topups)
-                        ->concat($stocks)
-                        ->concat($transfers)
-                        ->concat($balogs)
-                        ->sortByDesc('created_at')
-                        ->values()
-                        ->take(50);
-
-        return response()->json($combined);
+        return response()->json($logs);
     }
 
     public function toggleStatus(User $user)

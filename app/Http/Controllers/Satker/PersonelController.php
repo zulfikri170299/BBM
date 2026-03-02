@@ -45,6 +45,7 @@ class PersonelController extends Controller
                     return $query->where('satker_id', auth()->user()->satker_id);
                 })
             ],
+            'jenis_bbm' => 'required|string',
         ]);
 
         // Create or update user account for personel
@@ -64,6 +65,7 @@ class PersonelController extends Controller
             'user_id' => $user->id,
             'nama' => $request->nama,
             'nrp' => $request->nrp,
+            'jenis_bbm' => $request->jenis_bbm,
             'pin' => Personel::generateUniquePin(),
             'barcode' => $request->nrp,
         ]);
@@ -190,7 +192,7 @@ class PersonelController extends Controller
                 $nrp = isset($colMap['nrp']) ? trim((string) $sheet->getCell($colMap['nrp'] . $r)->getValue()) : '';
                 $nama = isset($colMap['nama']) ? trim((string) $sheet->getCell($colMap['nama'] . $r)->getValue()) : '';
                 $namaSatker = isset($colMap['satker']) ? trim((string) $sheet->getCell($colMap['satker'] . $r)->getValue()) : '';
-            $jenisBbm = null; // Removed default Pertamax
+            $jenisBbm = 'Pertamax'; // default Pertamax
 
             if (empty($nrp) && empty($nama)) continue;
 
@@ -276,7 +278,7 @@ class PersonelController extends Controller
             for ($r = $headerRow + 1; $r <= $highestRow; $r++) {
                 $nrp = isset($colMap['nrp']) ? trim((string) $sheet->getCell($colMap['nrp'] . $r)->getValue()) : '';
             $nama = isset($colMap['nama']) ? trim((string) $sheet->getCell($colMap['nama'] . $r)->getValue()) : '';
-            $jenisBbm = null; // Removed default Pertamax
+            $jenisBbm = 'Pertamax'; // default Pertamax
 
             if (empty($nrp) || empty($nama)) continue;
 

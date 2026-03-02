@@ -151,6 +151,9 @@
                             <th
                                 class="px-6 py-3.5 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                 Jumlah Liter</th>
+                            <th
+                                class="px-6 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
@@ -215,10 +218,31 @@
                                         class="text-sm font-bold text-emerald-600">{{ number_format($trx->liter, 0, ',', '.') }}
                                         L</span>
                                 </td>
+                                <td class="px-6 py-4 text-center">
+                                    <form id="delete-form-{{ $trx->id }}"
+                                        action="{{ route('admin.riwayat.destroy', $trx->id) }}" method="POST"
+                                        class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <input type="hidden" name="topup_password_confirm" id="pwd-{{ $trx->id }}">
+                                        <button type="button"
+                                            class="text-rose-500 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 p-2 rounded-lg transition-colors"
+                                            onclick="confirmDelete('{{ $trx->id }}', '{{ number_format($trx->liter, 0, ',', '.') }}')"
+                                            title="Batalkan Transaksi">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"
+                                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path d="M3 6h18"></path>
+                                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="px-6 py-12 text-center">
+                                <td colspan="8" class="px-6 py-12 text-center">
                                     <div class="flex flex-col items-center">
                                         <div
                                             class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
@@ -277,4 +301,38 @@
             </div>
         </div>
     </div>
+    @push('scripts')
+        <script>
+            function confirmDelete(transaksiId, liter) {
+                Swal.fire({
+                    title: 'Batalkan Transaksi?',
+                    html: 'Saldo sebesar <b>' + liter + ' Liter</b> akan dikembalikan secara otomatis.<br><br>Masukkan PIN Top Up Anda untuk melanjutkan:',
+                    icon: 'warning',
+                    input: 'password',
+                    inputAttributes: {
+                        autocapitalize: 'off',
+                        placeholder: 'Masukkan 6 digit PIN'
+                    },
+                    showCancelButton: true,
+                    confirmButtonColor: '#ef4444',
+                    cancelButtonColor: '#64748b',
+                    confirmButtonText: 'Ya, Batalkan!',
+                    cancelButtonText: 'Batal',
+                    preConfirm: (password) => {
+                        if (!password) {
+                            Swal.showValidationMessage('PIN Top Up wajib diisi')
+                        }
+                        return password
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Set the hidden input value
+                        document.getElementById('pwd-' + transaksiId).value = result.value;
+                        // Submit the form
+                        document.getElementById('delete-form-' + transaksiId).submit();
+                    }
+                })
+            }
+        </script>
+    @endpush
 </x-app-layout>

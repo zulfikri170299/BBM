@@ -53,13 +53,13 @@ class RiwayatController extends Controller
         // Statistik
     $statsQuery = TransaksiBbm::query();
     if ($request->filled('dari')) {
-        $statsQuery->whereDate('tanggal', '>=', $request->dari);
+        $statsQuery->whereDate('transaksi_bbms.tanggal', '>=', $request->dari);
     }
     if ($request->filled('sampai')) {
-        $statsQuery->whereDate('tanggal', '<=', $request->sampai);
+        $statsQuery->whereDate('transaksi_bbms.tanggal', '<=', $request->sampai);
     }
     if ($request->filled('satker_id')) {
-        $statsQuery->where('satker_id', $request->satker_id);
+        $statsQuery->where('transaksi_bbms.satker_id', $request->satker_id);
     }
 
         $stats = [
@@ -138,5 +138,41 @@ class RiwayatController extends Controller
             ->setPaper([0, 0, 609.45, 935.43], 'landscape'); // F4 (215mm x 330mm)
 
         return $pdf->stream('laporan-riwayat-bbm-' . date('Y-m-d_H-i') . '.pdf');
+    }
+
+    public function destroy(Request $request, TransaksiBbm $transaksi)
+    {
+        // Validasi Top Up Password Super Admin
+        $user = auth()->user();
+        if (!\Illuminate\Support\Facades\Hash::check($request->topup_password_confirm, $user->topup_password)) {
+            return back()->with('error', 'Gagal membatalkan transaksi! Password Top Up salah.');
+        }
+
+        $targetStr = "Tidak diketahui";
+
+        if ($transaksi->kendaraan_id) {
+            $kendaraan = $transaksi->kendaraan;
+            if ($kendaraan) {
+                $kendaraan->saldo += $transaksi->liter;
+                $kendaraan->save();
+                $targetStr = "Kendaraan ({$kendaraan->no_polisi})";
+            }
+        } elseif ($transaksi->personel_id) {
+            $personel = $transaksi->personel;
+            if ($personel) {
+                $personel->saldo += $transaksi->liter;
+                $personel->save();
+                $targetStr = "Personel ({$personel->nama})";
+            }
+        }
+
+        \App\Models\LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => "Membatalkan Transaksi BBM sebesar " . number_format($transaksi->liter, 0, ',', '.') . " L untuk {$targetStr}"
+        ]);
+
+        $transaksi->delete();
+
+        return back()->with('success', 'Transaksi berhasil dibatalkan dan saldo dikembalikan sebesar ' . number_format($transaksi->liter, 0, ',', '.') . ' L.');
     }
 }

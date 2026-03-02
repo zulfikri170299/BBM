@@ -39,7 +39,7 @@ class RiwayatController extends Controller
             ->get();
 
         // Statistik
-        $statsQuery = TransaksiBbm::where('satker_id', $satker->id);
+        $statsQuery = TransaksiBbm::where('transaksi_bbms.satker_id', $satker->id);
         if ($request->filled('dari')) {
             $statsQuery->whereDate('tanggal', '>=', $request->dari);
         }

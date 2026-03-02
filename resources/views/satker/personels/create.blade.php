@@ -13,14 +13,33 @@
                         @csrf
                         <div class="mb-4">
                             <label for="nama" class="block text-gray-700 text-sm font-bold mb-2">Nama Personel:</label>
-                            <input type="text" name="nama" id="nama" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                            <input type="text" name="nama" id="nama"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
                         </div>
                         <div class="mb-4">
                             <label for="nrp" class="block text-gray-700 text-sm font-bold mb-2">NRP:</label>
-                            <input type="text" name="nrp" id="nrp" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                            <input type="text" name="nrp" id="nrp"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="jenis_bbm" class="block text-gray-700 text-sm font-bold mb-2">Jenis BBM:</label>
+                            <select name="jenis_bbm" id="jenis_bbm"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                                <option value="">Pilih Jenis BBM</option>
+                                <option value="Pertalite">Pertalite</option>
+                                <option value="Pertamax">Pertamax</option>
+                                <option value="Solar">Solar</option>
+                                <option value="Dexlite">Dexlite</option>
+                                <option value="Pertamina Dex">Pertamina Dex</option>
+                            </select>
                         </div>
                         <div class="flex items-center justify-between">
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Add Personel</button>
+                            <button type="submit"
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Add
+                                Personel</button>
                         </div>
                     </form>
                 </div>

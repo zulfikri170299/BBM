@@ -471,9 +471,6 @@
                                     <th
                                         class="px-4 sm:px-6 py-3 sm:py-3.5 text-right text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                         Liter</th>
-                                    <th
-                                        class="px-4 sm:px-6 py-3 sm:py-3.5 text-right text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                                        Total</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100">
@@ -493,9 +490,6 @@
                                             class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-slate-600 text-right">
                                             {{ $trx->liter }} L
                                         </td>
-                                        <td
-                                            class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-bold text-slate-800 text-right">
-                                            Rp {{ number_format($trx->total) }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
