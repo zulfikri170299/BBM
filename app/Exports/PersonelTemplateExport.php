@@ -28,6 +28,7 @@ class PersonelTemplateExport implements FromArray, WithHeadings, ShouldAutoSize,
         }
         $headings[] = 'NAMA';
         $headings[] = 'NRP';
+        $headings[] = 'JENIS BBM';
 
         return $headings;
     }
@@ -37,22 +38,22 @@ class PersonelTemplateExport implements FromArray, WithHeadings, ShouldAutoSize,
         // Example data rows to guide user
         if ($this->isAdmin) {
             return [
-                [1, 'BIRO LOGISTIK', 'Fulan bin Fulan', '12345678'],
-                [2, 'BIRO LOGISTIK', 'Personel Dua', '87654321'],
-                [3, 'BAG REN', 'Personel Tiga', '11223344'],
+                [1, 'BIRO LOGISTIK', 'Fulan bin Fulan', '12345678', 'Pertamax'],
+                [2, 'BIRO LOGISTIK', 'Personel Dua', '87654321', 'Pertamina Dex'],
+                [3, 'BAG REN', 'Personel Tiga', '11223344', 'Pertamax'],
             ];
         } else {
             return [
-                [1, 'Fulan bin Fulan', '12345678'],
-                [2, 'Personel Dua', '87654321'],
-                [3, 'Personel Tiga', '11223344'],
+                [1, 'Fulan bin Fulan', '12345678', 'Pertamax'],
+                [2, 'Personel Dua', '87654321', 'Pertamina Dex'],
+                [3, 'Personel Tiga', '11223344', 'Pertamax'],
             ];
         }
     }
 
     public function styles(Worksheet $sheet)
     {
-        $highestCol = $this->isAdmin ? 'D' : 'C';
+        $highestCol = $this->isAdmin ? 'E' : 'D';
 
         // Header style
         $sheet->getStyle('A1:' . $highestCol . '1')->applyFromArray([

@@ -48,29 +48,27 @@ class PersonelController extends Controller
         $request->validate([
             'satker_id' => 'required|exists:satkers,id',
             'nama' => 'required|string|max:255',
-            'nrp' => 'required|string|max:20|unique:personels,nrp',
-            'jenis_bbm' => 'required|string',
+            'nrp' => 'required|string|unique:personels,nrp',
+            'jenis_bbm' => 'required|in:Pertamax,Pertamina Dex',
             'saldo' => 'required|numeric|min:0',
         ]);
 
-        $user = \App\Models\User::updateOrCreate(
-            ['username' => $request->nrp],
-            [
-                'name' => $request->nama,
-                'email' => $request->nrp,
-                'password' => \Illuminate\Support\Facades\Hash::make($request->nrp),
-                'role' => 'personel',
-                'satker_id' => $request->satker_id,
-            ]
-        );
+        $user = \App\Models\User::create([
+            'name' => $request->nama,
+            'username' => $request->nrp,
+            'email' => $request->nrp,
+            'password' => \Illuminate\Support\Facades\Hash::make($request->nrp),
+            'role' => 'personel',
+            'satker_id' => $request->satker_id,
+        ]);
 
         Personel::create([
-            'satker_id' => $request->satker_id,
-            'user_id' => $user->id,
             'nama' => $request->nama,
             'nrp' => $request->nrp,
+            'satker_id' => $request->satker_id,
+            'user_id' => $user->id,
+            'saldo' => $request->saldo ?? 0,
             'jenis_bbm' => $request->jenis_bbm,
-            'saldo' => $request->saldo,
             'pin' => Personel::generateUniquePin(),
             'barcode' => $request->nrp,
         ]);
@@ -85,21 +83,36 @@ class PersonelController extends Controller
 
     public function edit(Personel $personel)
     {
+        if ($personel->saldo > 0) {
+            return redirect()->route('admin.personels.index')->with('error', 'Tidak dapat mengedit personel "' . $personel->nama . '" karena masih memiliki saldo ' . number_format($personel->saldo, 0, ',', '.') . ' L.');
+        }
+
         $satkers = \App\Models\Satker::orderBy('nama_satker')->get();
         return view('admin.personels.edit', compact('personel', 'satkers'));
     }
 
     public function update(Request $request, Personel $personel)
     {
+        if ($personel->saldo > 0) {
+            return redirect()->route('admin.personels.index')->with('error', 'Tidak dapat memperbarui personel "' . $personel->nama . '" karena masih memiliki saldo ' . number_format($personel->saldo, 0, ',', '.') . ' L.');
+        }
+
         $request->validate([
             'satker_id' => 'required|exists:satkers,id',
             'nama' => 'required|string|max:255',
-            'nrp' => 'required|string|max:20|unique:personels,nrp,' . $personel->id,
-            'jenis_bbm' => 'required|string',
+            'nrp' => 'required|string|unique:personels,nrp,' . $personel->id,
+            'jenis_bbm' => 'required|in:Pertamax,Pertamina Dex',
             'saldo' => 'required|numeric|min:0',
         ]);
 
-        $personel->update($request->all());
+        $data = $request->only(['satker_id', 'nama', 'nrp', 'saldo']);
+        
+        // Hanya update jenis_bbm jika saldo == 0
+        if ($personel->saldo <= 0) {
+            $data['jenis_bbm'] = $request->jenis_bbm;
+        }
+
+        $personel->update($data);
 
         \App\Models\LogAktivitas::create([
             'user_id' => auth()->id(),
@@ -161,6 +174,8 @@ class PersonelController extends Controller
                     $colMap['nama'] = $col;
                 } elseif (in_array($val, ['satker', 'satuan kerja', 'satuan_kerja', 'nama_satker'])) {
                     $colMap['satker'] = $col;
+                } elseif (in_array($val, ['jenis bbm', 'bbm', 'jenis_bbm', 'tipe bbm'])) {
+                    $colMap['jenis_bbm'] = $col;
                 }
             }
 
@@ -173,7 +188,7 @@ class PersonelController extends Controller
                 $nrp = isset($colMap['nrp']) ? trim((string) $sheet->getCell($colMap['nrp'] . $r)->getValue()) : '';
                 $nama = isset($colMap['nama']) ? trim((string) $sheet->getCell($colMap['nama'] . $r)->getValue()) : '';
                 $namaSatker = isset($colMap['satker']) ? trim((string) $sheet->getCell($colMap['satker'] . $r)->getValue()) : '';
-                $jenisBbm = 'Pertamax'; // default Pertamax
+                $jenisBbm = isset($colMap['jenis_bbm']) ? trim((string) $sheet->getCell($colMap['jenis_bbm'] . $r)->getValue()) : 'Pertamax';
 
                 if (empty($nrp) && empty($nama)) continue;
 
@@ -185,7 +200,7 @@ class PersonelController extends Controller
                 $satker = \App\Models\Satker::where('nama_satker', 'like', "%{$namaSatker}%")->first();
                 if (!$satker) { $errors[] = "Baris {$r}: Satker '{$namaSatker}' tidak ditemukan."; continue; }
 
-                // Find Satker
+                // Find Existing
                 $existing = Personel::where('nrp', $nrp)->first();
                 if ($existing) {
                     $changes = [];
@@ -195,8 +210,12 @@ class PersonelController extends Controller
                     if ($existing->satker_id != $satker->id) {
                         $changes[] = ['field' => 'Satker', 'old' => $existing->satker->nama_satker ?? '-', 'new' => $satker->nama_satker];
                     }
+                    if ($existing->jenis_bbm !== $jenisBbm) {
+                        $changes[] = ['field' => 'Jenis BBM', 'old' => $existing->jenis_bbm, 'new' => $jenisBbm];
+                    }
                     $duplicates[] = [
                         'row' => $r, 'nrp' => $nrp, 'nama' => $nama, 'satker_name' => $satker->nama_satker,
+                        'jenis_bbm' => $jenisBbm,
                         'changes' => $changes, 'has_changes' => count($changes) > 0
                     ];
                 } else {
@@ -256,6 +275,7 @@ class PersonelController extends Controller
                 if (in_array($val, ['nrp', 'nrp/nip', 'nrp_nip', 'nip'])) { $colMap['nrp'] = $col; }
                 elseif (in_array($val, ['nama', 'nama lengkap', 'nama_lengkap', 'personel'])) { $colMap['nama'] = $col; }
                 elseif (in_array($val, ['satker', 'satuan kerja', 'satuan_kerja', 'nama_satker'])) { $colMap['satker'] = $col; }
+                elseif (in_array($val, ['jenis bbm', 'bbm', 'jenis_bbm', 'tipe bbm'])) { $colMap['jenis_bbm'] = $col; }
             }
 
             $successCount = 0; $updatedCount = 0; $skippedCount = 0;
@@ -264,14 +284,12 @@ class PersonelController extends Controller
                 $nrp = isset($colMap['nrp']) ? trim((string) $sheet->getCell($colMap['nrp'] . $r)->getValue()) : '';
                 $nama = isset($colMap['nama']) ? trim((string) $sheet->getCell($colMap['nama'] . $r)->getValue()) : '';
                 $namaSatker = isset($colMap['satker']) ? trim((string) $sheet->getCell($colMap['satker'] . $r)->getValue()) : '';
-                $jenisBbm = 'Pertamax'; // default Pertamax
+                $jenisBbm = isset($colMap['jenis_bbm']) ? trim((string) $sheet->getCell($colMap['jenis_bbm'] . $r)->getValue()) : 'Pertamax';
 
                 if (empty($nrp) || empty($nama) || empty($namaSatker)) continue;
 
                 $satker = \App\Models\Satker::where('nama_satker', 'like', "%{$namaSatker}%")->first();
                 if (!$satker) continue;
-
-
 
                 $existing = Personel::where('nrp', $nrp)->first();
                 if ($existing) {
@@ -317,6 +335,10 @@ class PersonelController extends Controller
 
     public function destroy(Personel $personel)
     {
+        if ($personel->saldo > 0) {
+            return redirect()->route('admin.personels.index')->with('error', 'Tidak dapat menghapus personel "' . $personel->nama . '" karena masih memiliki saldo ' . number_format($personel->saldo, 0, ',', '.') . ' L.');
+        }
+
         $personel->delete();
         return redirect()->route('admin.personels.index')->with('success', 'Personel berhasil dihapus.');
     }
@@ -345,14 +367,31 @@ class PersonelController extends Controller
             'ids.*' => 'exists:personels,id',
         ]);
 
-        $count = Personel::whereIn('id', $request->ids)->count();
-        Personel::whereIn('id', $request->ids)->delete();
+        $personels = Personel::whereIn('id', $request->ids)->get();
+        $deleted = 0;
+        $skipped = 0;
 
-        \App\Models\LogAktivitas::create([
-            'user_id' => auth()->id(),
-            'aktivitas' => "Menghapus {$count} Personel secara massal"
-        ]);
+        foreach ($personels as $personel) {
+            if ($personel->saldo > 0) {
+                $skipped++;
+                continue;
+            }
+            $personel->delete();
+            $deleted++;
+        }
 
-        return back()->with('success', "{$count} personel berhasil dihapus.");
+        if ($deleted > 0) {
+            \App\Models\LogAktivitas::create([
+                'user_id' => auth()->id(),
+                'aktivitas' => "Menghapus {$deleted} Personel secara massal"
+            ]);
+        }
+
+        $message = "{$deleted} personel berhasil dihapus.";
+        if ($skipped > 0) {
+            $message .= " {$skipped} personel dilewati karena masih memiliki saldo.";
+        }
+
+        return back()->with($skipped > 0 ? 'warning' : 'success', $message);
     }
 }

@@ -83,6 +83,11 @@ class PersonelController extends Controller
         if ($personel->satker_id !== auth()->user()->satker_id) {
             abort(403);
         }
+
+        if ($personel->saldo > 0) {
+            return redirect()->route('satker.personels.index')->with('error', 'Tidak dapat mengedit personel "' . $personel->nama . '" karena masih memiliki saldo ' . number_format($personel->saldo, 0, ',', '.') . ' L.');
+        }
+
         return view('satker.personels.edit', compact('personel'));
     }
 
@@ -90,6 +95,10 @@ class PersonelController extends Controller
     {
         if ($personel->satker_id !== auth()->user()->satker_id) {
             abort(403);
+        }
+
+        if ($personel->saldo > 0) {
+            return redirect()->route('satker.personels.index')->with('error', 'Tidak dapat memperbarui personel "' . $personel->nama . '" karena masih memiliki saldo ' . number_format($personel->saldo, 0, ',', '.') . ' L.');
         }
 
         $request->validate([
@@ -102,7 +111,14 @@ class PersonelController extends Controller
             'jenis_bbm' => 'nullable|string',
         ]);
 
-        $personel->update($request->only(['nama', 'nrp', 'jenis_bbm']));
+        $data = $request->only(['nama', 'nrp']);
+
+        // Hanya update jenis_bbm jika saldo == 0
+        if ($personel->saldo <= 0) {
+            $data['jenis_bbm'] = $request->jenis_bbm;
+        }
+
+        $personel->update($data);
 
         LogAktivitas::create([
             'user_id' => auth()->id(),
@@ -178,8 +194,8 @@ class PersonelController extends Controller
                     $colMap['nrp'] = $col;
                 } elseif (in_array($val, ['nama', 'nama lengkap', 'nama_lengkap', 'personel'])) {
                     $colMap['nama'] = $col;
-                } elseif (in_array($val, ['satker', 'satuan kerja', 'satuan_kerja', 'nama_satker'])) {
-                    $colMap['satker'] = $col;
+                } elseif (in_array($val, ['jenis bbm', 'bbm', 'jenis_bbm', 'tipe bbm'])) {
+                    $colMap['jenis_bbm'] = $col;
                 }
             }
 
@@ -191,10 +207,9 @@ class PersonelController extends Controller
             for ($r = $headerRow + 1; $r <= $highestRow; $r++) {
                 $nrp = isset($colMap['nrp']) ? trim((string) $sheet->getCell($colMap['nrp'] . $r)->getValue()) : '';
                 $nama = isset($colMap['nama']) ? trim((string) $sheet->getCell($colMap['nama'] . $r)->getValue()) : '';
-                $namaSatker = isset($colMap['satker']) ? trim((string) $sheet->getCell($colMap['satker'] . $r)->getValue()) : '';
-            $jenisBbm = 'Pertamax'; // default Pertamax
+                $jenisBbm = isset($colMap['jenis_bbm']) ? trim((string) $sheet->getCell($colMap['jenis_bbm'] . $r)->getValue()) : 'Pertamax';
 
-            if (empty($nrp) && empty($nama)) continue;
+                if (empty($nrp) && empty($nama)) continue;
 
                 if (empty($nrp)) { $errors[] = "Baris {$r}: NRP kosong."; continue; }
                 if (empty($nama)) { $errors[] = "Baris {$r}: Nama kosong."; continue; }
@@ -203,20 +218,24 @@ class PersonelController extends Controller
                 $currentUserSatkerName = auth()->user()->satker->nama_satker ?? '';
 
                 // Check duplicate
-                $existing = Personel::where('nrp', $nrp)->first();
+                $existing = Personel::where('nrp', $nrp)->where('satker_id', auth()->user()->satker_id)->first();
                 if ($existing) {
                     $changes = [];
                     if ($existing->nama !== $nama) {
                         $changes[] = ['field' => 'Nama', 'old' => $existing->nama, 'new' => $nama];
                     }
+                    if ($existing->jenis_bbm !== $jenisBbm) {
+                        $changes[] = ['field' => 'Jenis BBM', 'old' => $existing->jenis_bbm, 'new' => $jenisBbm];
+                    }
                     $duplicates[] = [
                         'row' => $r, 'nrp' => $nrp, 'nama' => $nama, 'satker_name' => $currentUserSatkerName,
+                        'jenis_bbm' => $jenisBbm,
                         'changes' => $changes, 'has_changes' => count($changes) > 0
                     ];
                 } else {
                     $newEntries[] = [
                         'row' => $r, 'nrp' => $nrp, 'nama' => $nama, 'satker_id' => $satkerId,
-                        'satker_name' => $currentUserSatkerName
+                        'satker_name' => $currentUserSatkerName, 'jenis_bbm' => $jenisBbm
                     ];
                     $successCount++;
                 }
@@ -270,26 +289,26 @@ class PersonelController extends Controller
                 $val = strtolower(trim((string) $sheet->getCell($col . $headerRow)->getValue()));
                 if (in_array($val, ['nrp', 'nrp/nip', 'nrp_nip', 'nip'])) { $colMap['nrp'] = $col; }
                 elseif (in_array($val, ['nama', 'nama lengkap', 'nama_lengkap', 'personel'])) { $colMap['nama'] = $col; }
-                elseif (in_array($val, ['satker', 'satuan kerja', 'satuan_kerja', 'nama_satker'])) { $colMap['satker'] = $col; }
+                elseif (in_array($val, ['jenis bbm', 'bbm', 'jenis_bbm', 'tipe bbm'])) { $colMap['jenis_bbm'] = $col; }
             }
 
             $successCount = 0; $updatedCount = 0; $skippedCount = 0;
 
             for ($r = $headerRow + 1; $r <= $highestRow; $r++) {
                 $nrp = isset($colMap['nrp']) ? trim((string) $sheet->getCell($colMap['nrp'] . $r)->getValue()) : '';
-            $nama = isset($colMap['nama']) ? trim((string) $sheet->getCell($colMap['nama'] . $r)->getValue()) : '';
-            $jenisBbm = 'Pertamax'; // default Pertamax
+                $nama = isset($colMap['nama']) ? trim((string) $sheet->getCell($colMap['nama'] . $r)->getValue()) : '';
+                $jenisBbm = isset($colMap['jenis_bbm']) ? trim((string) $sheet->getCell($colMap['jenis_bbm'] . $r)->getValue()) : 'Pertamax';
 
-            if (empty($nrp) || empty($nama)) continue;
+                if (empty($nrp) || empty($nama)) continue;
 
-                $existing = Personel::where('nrp', $nrp)->first();
+                $existing = Personel::where('nrp', $nrp)->where('satker_id', auth()->user()->satker_id)->first();
                 if ($existing) {
                     if ($duplicateAction === 'skip') { $skippedCount++; continue; }
                     
                     $existing->update([
-                        'nama' => $nama, 'satker_id' => $satkerId
+                        'nama' => $nama, 'satker_id' => $satkerId, 'jenis_bbm' => $jenisBbm
                     ]);
-                    if ($existing->user) { $existing->user->update(['name' => $nama, 'satker_id' => $satkerId]); }
+                    if ($existing->user) { $existing->user->update(['name' => $nama]); }
                     $updatedCount++;
                 } else {
                     $user = \App\Models\User::updateOrCreate(['username' => $nrp], [

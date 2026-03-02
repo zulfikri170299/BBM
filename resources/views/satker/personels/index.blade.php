@@ -396,17 +396,30 @@
                                                         </path>
                                                     </svg>
                                                 </a>
-                                                <a href="{{ route('satker.personels.edit', $personel) }}"
-                                                    class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
-                                                    title="Edit">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
-                                                        </path>
-                                                    </svg>
-                                                </a>
+                                                @if($personel->saldo > 0)
+                                                    <span class="p-2 text-slate-200 cursor-not-allowed group/edit"
+                                                        title="Saldo masih {{ number_format($personel->saldo, 0, ',', '.') }} L">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                                            </path>
+                                                        </svg>
+                                                    </span>
+                                                @else
+                                                    <a href="{{ route('satker.personels.edit', $personel) }}"
+                                                        class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+                                                        title="Edit">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                                            </path>
+                                                        </svg>
+                                                    </a>
+                                                @endif
                                                 @if($personel->saldo > 0)
                                                     <span class="p-2 text-slate-200 cursor-not-allowed"
                                                         title="Saldo masih {{ number_format($personel->saldo, 0, ',', '.') }} L">
@@ -744,6 +757,9 @@
                                             Nama Personel</th>
                                         <th
                                             class="pr-7 pl-3 py-3 text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100">
+                                            JENIS BBM</th>
+                                        <th
+                                            class="pr-7 pl-3 py-3 text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100">
                                             NRP/NIP</th>
                                     </tr>
                                 </thead>
@@ -765,6 +781,11 @@
                                             </td>
                                             <td class="px-4 py-3 whitespace-nowrap text-center">
                                                 <span
+                                                    class="px-2 py-0.5 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-600 text-[9px] font-black"
+                                                    x-text="item.jenis_bbm"></span>
+                                            </td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-center">
+                                                <span
                                                     class="px-2 py-0.5 rounded-lg bg-white border border-amber-200 text-amber-700 text-[9px] font-black"
                                                     x-text="item.nrp"></span>
                                             </td>
@@ -778,6 +799,11 @@
                                                 x-text="item.row"></td>
                                             <td class="px-4 py-3 text-[10px] font-bold text-slate-900 text-center"
                                                 x-text="item.nama"></td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-center">
+                                                <span
+                                                    class="px-2 py-0.5 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-600 text-[9px] font-black"
+                                                    x-text="item.jenis_bbm"></span>
+                                            </td>
                                             <td class="px-4 py-3 whitespace-nowrap text-center">
                                                 <span
                                                     class="px-2 py-0.5 rounded-lg bg-emerald-50 border border-emerald-100 text-emerald-600 text-[9px] font-black"
