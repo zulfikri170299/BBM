@@ -29,6 +29,9 @@ class RiwayatTopup extends Model
         'jumlah',
         'tipe',
         'metode',
+        'status',
+        'jenis_bbm',
+        'keterangan',
     ];
 
     public function satker()

@@ -175,9 +175,14 @@
                                             <p class="text-[9px] text-slate-400">{{ $item->kendaraan->jenis_bbm ?? '' }}</p>
                                         </td>
                                         <td class="px-4 py-3">
-                                            <span
-                                                class="text-xs font-semibold text-slate-700">{{ $item->personel->nama ?? '-' }}</span>
-                                            <p class="text-[9px] text-slate-400">{{ $item->personel->nrp ?? '' }}</p>
+                                            @if($item->personel_id)
+                                                <span
+                                                    class="text-xs font-semibold text-slate-700">{{ $item->personel->nama ?? '-' }}</span>
+                                                <p class="text-[9px] text-slate-400">{{ $item->personel->nrp ?? '' }}</p>
+                                            @else
+                                                <span class="text-xs font-bold text-rose-600">PUSAT (POTONGAN)</span>
+                                                <p class="text-[9px] text-slate-400">Pengurangan Saldo</p>
+                                            @endif
                                         </td>
                                         <td class="px-4 py-3">
                                             <span

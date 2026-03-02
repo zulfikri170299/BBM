@@ -10,8 +10,7 @@
             <div>
                 <h1 class="text-2xl font-bold text-slate-900">Laporan Bulanan BBM</h1>
                 <p class="text-sm text-slate-500">Satker: <strong>{{ $satker->nama_satker ?? '-' }}</strong> | Periode:
-                    {{ $namaBulan }} {{ $tahun }}
-                </p>
+                    {{ $namaBulan }} {{ $tahun }}</p>
             </div>
             <div class="flex gap-2">
                 <a href="{{ route('satker.kendaraans.laporan-bulanan.export', ['bulan' => $bulan, 'tahun' => $tahun]) }}"
@@ -50,8 +49,7 @@
                     <select name="bulan" class="px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm">
                         @for($m = 1; $m <= 12; $m++)
                             <option value="{{ $m }}" {{ $bulan == $m ? 'selected' : '' }}>
-                                {{ \Carbon\Carbon::create(null, $m, 1)->translatedFormat('F') }}
-                            </option>
+                                {{ \Carbon\Carbon::create(null, $m, 1)->translatedFormat('F') }}</option>
                         @endfor
                     </select>
                 </div>
@@ -144,7 +142,7 @@
                                 BBM<br>BULAN<br>{{ strtoupper($namaBulanSebelumnya) }}</th>
                             <th rowspan="2" style="width:70px;">TOP UP BBM<br>BULAN<br>{{ strtoupper($namaBulan) }}</th>
                             <th rowspan="2" style="width:50px;">TOTAL<br>BBM</th>
-                            <th rowspan="2" style="width:70px;">TRANSFER<br>KE PERSONEL</th>
+                            <th rowspan="2" style="width:70px;">TRANSFER</th>
                             <th colspan="{{ $daysInMonth }}">LAPORAN PEMAKAIAN BULAN {{ strtoupper($namaBulan) }}</th>
                             <th rowspan="2" style="width:50px;">TOTAL<br>PAKAI</th>
                             <th rowspan="2" style="width:50px;">SISA<br>BBM</th>
@@ -158,44 +156,43 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($rows as $index => $row)
-                            <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td class="text-left">{{ strtoupper($row['jenis_kendaraan']) }}</td>
-                                <td>{{ strtoupper($row['no_polisi']) }}</td>
-                                <td style="font-size:8px;">{{ strtoupper($row['jenis_bbm']) }}</td>
-                                <td>{{ $row['sisa_bulan_lalu'] > 0 ? number_format($row['sisa_bulan_lalu'], 0, ',', '.') : '' }}
-                                </td>
-                                <td>{{ $row['topup_bulan_ini'] > 0 ? number_format($row['topup_bulan_ini'], 0, ',', '.') : '' }}
-                                </td>
-                                <td class="bold">
-                                    {{ number_format($row['total_bbm'], 0, ',', '.') }}
-                                </td>
-                                <td>{{ $row['transfer_bulan_ini'] > 0 ? number_format($row['transfer_bulan_ini'], 0, ',', '.') : '' }}
-                                </td>
-                                @for($d = 1; $d <= $daysInMonth; $d++)
-                                    <td style="font-size: 8px;">
-                                        {{ $row['daily_usage'][$d] ? number_format($row['daily_usage'][$d], 0, ',', '.') : '' }}
+                        @if(count($rows) > 0)
+                            @foreach($rows as $index => $row)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td class="text-left">{{ strtoupper($row['jenis_kendaraan']) }}</td>
+                                    <td>{{ strtoupper($row['no_polisi']) }}</td>
+                                    <td style="font-size:8px;">{{ strtoupper($row['jenis_bbm']) }}</td>
+                                    <td>{{ $row['sisa_bulan_lalu'] > 0 ? number_format($row['sisa_bulan_lalu'], 0, ',', '.') : '' }}
                                     </td>
-                                @endfor
-                                <td class="bold">
-                                    {{ $row['total_pemakaian'] > 0 ? number_format($row['total_pemakaian'], 0, ',', '.') : '' }}
-                                </td>
-                                <td class="bold">{{ number_format($row['sisa_bbm'], 0, ',', '.') }}</td>
-                            </tr>
-                        @empty
+                                    <td>{{ $row['topup_bulan_ini'] > 0 ? number_format($row['topup_bulan_ini'], 0, ',', '.') : '' }}
+                                    </td>
+                                    <td class="bold">
+                                        {{ number_format($row['total_bbm'], 0, ',', '.') }}</td>
+                                    <td>{{ $row['transfer_bulan_ini'] > 0 ? number_format($row['transfer_bulan_ini'], 0, ',', '.') : '' }}
+                                    </td>
+                                    @for($d = 1; $d <= $daysInMonth; $d++)
+                                        <td style="font-size: 8px;">
+                                            {{ $row['daily_usage'][$d] ? number_format($row['daily_usage'][$d], 0, ',', '.') : '' }}
+                                        </td>
+                                    @endfor
+                                    <td class="bold">
+                                        {{ $row['total_pemakaian'] > 0 ? number_format($row['total_pemakaian'], 0, ',', '.') : '' }}
+                                    </td>
+                                    <td class="bold">{{ number_format($row['sisa_bbm'], 0, ',', '.') }}</td>
+                                </tr>
+                            @endforeach
+                        @else
                             <tr>
                                 <td colspan="{{ 8 + $daysInMonth + 2 }}" style="padding:20px; color:#999;">Belum ada data
                                     kendaraan</td>
                             </tr>
-                        @endforelse
+                        @endif
 
-                        <!-- Summary Rows -->
                         @foreach($summaryByBbm as $jenisBbm => $summary)
                             <tr class="bold">
                                 <td colspan="4" class="text-left" style="padding-left:20px;">TOTAL
-                                    {{ strtoupper($jenisBbm) }}
-                                </td>
+                                    {{ strtoupper($jenisBbm) }}</td>
                                 <td>{{ number_format($summary['sisa_bulan_lalu'], 0, ',', '.') }}</td>
                                 <td>{{ number_format($summary['topup_bulan_ini'], 0, ',', '.') }}</td>
                                 <td>{{ number_format($summary['total_bbm'], 0, ',', '.') }}</td>

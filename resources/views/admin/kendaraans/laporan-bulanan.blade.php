@@ -143,7 +143,7 @@
                                 BBM<br>BULAN<br>{{ strtoupper($namaBulanSebelumnya) }}</th>
                             <th rowspan="2" style="width:70px;">TOP UP BBM<br>BULAN<br>{{ strtoupper($namaBulan) }}</th>
                             <th rowspan="2" style="width:50px;">TOTAL<br>BBM</th>
-                            <th rowspan="2" style="width:70px;">TRANSFER<br>KE PERSONEL</th>
+                            <th rowspan="2" style="width:70px;">TRANSFER</th>
                             <th colspan="{{ $daysInMonth }}">LAPORAN PEMAKAIAN BULAN {{ strtoupper($namaBulan) }}</th>
                             <th rowspan="2" style="width:50px;">TOTAL<br>PAKAI</th>
                             <th rowspan="2" style="width:50px;">SISA<br>BBM</th>

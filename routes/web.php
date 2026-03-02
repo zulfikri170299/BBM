@@ -90,6 +90,7 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     // Parameterized routes (must be below static routes)
     Route::get('/kendaraans/{kendaraan}/print', [\App\Http\Controllers\Admin\KendaraanController::class, 'print'])->name('kendaraans.print');
     Route::post('/kendaraans/{kendaraan}/topup', [\App\Http\Controllers\Admin\KendaraanController::class, 'topup'])->name('kendaraans.topup');
+    Route::post('/kendaraans/{kendaraan}/potong-saldo', [\App\Http\Controllers\Admin\KendaraanController::class, 'potongSaldo'])->name('kendaraans.potong-saldo');
     Route::post('/kendaraans/{kendaraan}/reset-pin', [\App\Http\Controllers\Admin\KendaraanController::class, 'resetPin'])->name('kendaraans.reset-pin');
     Route::get('/kendaraans/{kendaraan}/edit', [\App\Http\Controllers\Admin\KendaraanController::class, 'edit'])->name('kendaraans.edit');
     Route::put('/kendaraans/{kendaraan}', [\App\Http\Controllers\Admin\KendaraanController::class, 'update'])->name('kendaraans.update');

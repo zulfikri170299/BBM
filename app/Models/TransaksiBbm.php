@@ -19,6 +19,7 @@ class TransaksiBbm extends Model
         'liter',
         'harga_per_liter',
         'total',
+        'jenis_bbm',
     ];
 
     public function kendaraan()

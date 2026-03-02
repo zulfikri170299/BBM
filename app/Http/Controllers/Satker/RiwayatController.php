@@ -55,28 +55,11 @@ class RiwayatController extends Controller
             'total_liter' => (clone $statsQuery)->sum('liter'),
         ];
 
-        // Hitung total per jenis BBM
-    $summaryBbm = collect();
-
-    $summaryKendaraan = (clone $statsQuery)
-        ->whereNotNull('kendaraan_id')
-        ->join('kendaraans', 'transaksi_bbms.kendaraan_id', '=', 'kendaraans.id')
-        ->selectRaw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as bbm, SUM(transaksi_bbms.liter) as total")
+    // Hitung total per jenis BBM
+    $summaryBbm = (clone $statsQuery)
+        ->selectRaw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as bbm, SUM(liter) as total")
         ->groupBy('bbm')
-        ->get();
-
-    $summaryPersonel = (clone $statsQuery)
-        ->whereNotNull('personel_id')
-        ->join('personels', 'transaksi_bbms.personel_id', '=', 'personels.id')
-        ->selectRaw("COALESCE(NULLIF(personels.jenis_bbm, ''), 'TANPA JENIS') as bbm, SUM(transaksi_bbms.liter) as total")
-        ->groupBy('bbm')
-        ->get();
-
-    foreach ($summaryKendaraan->concat($summaryPersonel) as $item) {
-        $bbmKey = $item->bbm ?: 'TANPA JENIS';
-        $existing = $summaryBbm->get($bbmKey, 0);
-        $summaryBbm->put($bbmKey, $existing + $item->total);
-    }
+        ->pluck('total', 'bbm');
 
     $summaryBbm = $summaryBbm->sortKeys();
 
@@ -103,29 +86,11 @@ class RiwayatController extends Controller
         }
 
         // Hitung Summary per Jenis BBM
-        $summaryBbm = collect();
-
-        $summaryKendaraan = (clone $query)
-            ->whereNotNull('kendaraan_id')
-            ->join('kendaraans', 'transaksi_bbms.kendaraan_id', '=', 'kendaraans.id')
-            ->selectRaw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as bbm, SUM(transaksi_bbms.liter) as total")
+        $summaryBbm = (clone $query)
+            ->selectRaw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as bbm, SUM(liter) as total")
             ->groupBy('bbm')
-            ->get();
-
-        $summaryPersonel = (clone $query)
-            ->whereNotNull('personel_id')
-            ->join('personels', 'transaksi_bbms.personel_id', '=', 'personels.id')
-            ->selectRaw("COALESCE(NULLIF(personels.jenis_bbm, ''), 'TANPA JENIS') as bbm, SUM(transaksi_bbms.liter) as total")
-            ->groupBy('bbm')
-            ->get();
-
-        foreach ($summaryKendaraan->concat($summaryPersonel) as $item) {
-            $bbmKey = $item->bbm ?: 'TANPA JENIS';
-            $existing = $summaryBbm->get($bbmKey, 0);
-            $summaryBbm->put($bbmKey, $existing + $item->total);
-        }
-
-        $summaryBbm = $summaryBbm->sortKeys();
+            ->pluck('total', 'bbm')
+            ->sortKeys();
 
         $transaksis = $query->latest('tanggal')->get();
 

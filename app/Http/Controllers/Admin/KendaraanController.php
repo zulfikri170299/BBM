@@ -190,6 +190,7 @@ class KendaraanController extends Controller
                 'tipe' => 'masuk',
                 'metode' => 'manual',
                 'status' => 'success',
+                'jenis_bbm' => $kendaraan->jenis_bbm ?: 'TANPA JENIS',
             ]);
 
             LogAktivitas::create([
@@ -222,6 +223,84 @@ class KendaraanController extends Controller
         }
 
         return redirect()->route('admin.kendaraans.index')->with('success', 'Top Up berhasil!');
+    }
+
+    public function potongSaldo(Request $request, Kendaraan $kendaraan)
+    {
+        $request->validate([
+            'jumlah' => 'required|numeric|min:0.1',
+            'topup_password' => 'required|string',
+            'keterangan' => 'nullable|string|max:255',
+        ], [
+            'jumlah.required' => 'Jumlah potongan wajib diisi.',
+            'jumlah.min' => 'Jumlah potongan minimal 0.1 Liter.',
+            'topup_password.required' => 'Password Keamanan wajib diisi.',
+        ]);
+
+        $user = auth()->user();
+
+        // 0. Validasi Password Top Up (Keamanan)
+        if (! $user->topup_password) {
+            return back()->with('error', 'Anda belum mengatur Password Keamanan. Silakan atur di menu Profil > Password Top Up.');
+        }
+
+        if (! \Illuminate\Support\Facades\Hash::check($request->topup_password, $user->topup_password)) {
+            return back()->with('error', 'Password Keamanan salah! Transaksi dibatalkan.');
+        }
+
+        if ($kendaraan->saldo < $request->jumlah) {
+            return back()->with('error', "Saldo kendaraan tidak mencukupi untuk dipotong. Tersedia: {$kendaraan->saldo} L.");
+        }
+
+        try {
+            \Illuminate\Support\Facades\DB::beginTransaction();
+
+            // 1. Kurangi Saldo Kendaraan
+            $kendaraan->decrement('saldo', $request->jumlah);
+
+            // 2. Tambah Stok Admin (Pusat)
+            $adminStock = \App\Models\AdminBbmStock::firstOrCreate(
+                ['jenis_bbm' => $kendaraan->jenis_bbm],
+                ['saldo' => 0]
+            );
+            $adminStock->increment('saldo', $request->jumlah);
+
+            // 3. Catat Riwayat Stok Admin (Masuk ke Pusat)
+            \App\Models\RiwayatStokAdmin::create([
+                'user_id' => $user->id,
+                'jenis_bbm' => $kendaraan->jenis_bbm,
+                'jumlah' => $request->jumlah,
+                'tipe' => 'masuk',
+                'keterangan' => "Potong saldo (Hutang) dari kendaraan {$kendaraan->no_polisi}. " . ($request->keterangan ?? ''),
+            ]);
+
+            // 4. Catat Riwayat Topup (Keluar dari Kendaraan)
+            RiwayatTopup::create([
+                'satker_id' => $kendaraan->satker_id,
+                'kendaraan_id' => $kendaraan->id,
+                'user_id' => $user->id,
+                'jumlah' => $request->jumlah,
+                'tipe' => 'keluar',
+                'metode' => 'POTONG_HUTANG',
+                'status' => 'success',
+                'jenis_bbm' => $kendaraan->jenis_bbm ?: 'TANPA JENIS',
+                'keterangan' => $request->keterangan ?? 'Potong Saldo (Hutang BBM)',
+            ]);
+
+            LogAktivitas::create([
+                'user_id' => $user->id,
+                'aktivitas' => "Potong saldo kendaraan (Hutang): {$kendaraan->no_polisi} sebesar {$request->jumlah} L dikembalikan ke Stok Pusat."
+            ]);
+
+            \Illuminate\Support\Facades\DB::commit();
+
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\DB::rollBack();
+            \Illuminate\Support\Facades\Log::error("Potong Saldo Error: " . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat memotong saldo: ' . $e->getMessage());
+        }
+
+        return back()->with('success', "Saldo kendaraan {$kendaraan->no_polisi} berhasil dipotong {$request->jumlah} L dan dikembalikan ke Stok Pusat.");
     }
 
     public function importTopup(Request $request)
@@ -496,6 +575,7 @@ class KendaraanController extends Controller
                     'jumlah' => $saldoDipindah,
                     'tipe' => 'keluar',
                     'metode' => 'TRANSFER',
+                    'jenis_bbm' => $kendaraan->jenis_bbm ?: 'TANPA JENIS',
                 ]);
 
                 // 2. Catat Penambahan Saldo di Satker Baru
@@ -506,6 +586,7 @@ class KendaraanController extends Controller
                     'jumlah' => $saldoDipindah,
                     'tipe' => 'masuk',
                     'metode' => 'TRANSFER',
+                    'jenis_bbm' => $kendaraan->jenis_bbm ?: 'TANPA JENIS',
                 ]);
             }
 
@@ -637,7 +718,7 @@ class KendaraanController extends Controller
                 ->whereBetween('created_at', [$startUtc, $endUtc])
                 ->sum('jumlah');
 
-            $topupBulanIni = $topupMasuk - $topupKeluar;
+            $topupBulanIni = $topupMasuk; // Hanya saldo MASUK yang dihitung sebagai Top Up di laporan
 
             // Total top up sampai akhir bulan lalu di Satker ini
             $totalTopupSampaiSebelumnyaMasuk = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
@@ -670,11 +751,14 @@ class KendaraanController extends Controller
             $sisaBulanLalu = $totalTopupSampaiSebelumnya - $totalPemakaianSampaiSebelumnya - $totalTransferKeluarSebelumnya;
             if ($sisaBulanLalu < 0) $sisaBulanLalu = 0;
 
-            // Transfer keluar (ke personil) bulan ini di Satker ini
-            $transferBulanIni = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
+            // Transfer keluar (ke personil ATAU potong saldo central) bulan ini di Satker ini
+            $transferKePersonel = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
                 ->whereBetween('created_at', [$startUtc, $endUtc])
                 ->sum('jumlah');
+            
+            // Gabungkan transfer ke personel dengan potong saldo (keluar)
+            $transferBulanIni = $transferKePersonel + $topupKeluar;
 
             $totalBbm = $sisaBulanLalu + $topupBulanIni;
             

@@ -35,11 +35,37 @@ class TransferSaldoController extends Controller
         }
 
         $perPage = $this->getPerPage($request, 20);
-        $query = RiwayatTransferSaldoPersonel::with(['kendaraan', 'personel', 'satker'])->latest();
+        
+        // Combined query using DB union
+        $transferQuery = \DB::table('riwayat_transfer_saldo_personels')
+            ->select('created_at', 'satker_id', 'kendaraan_id', 'personel_id', 'jumlah', 'keterangan');
+        
+        $potonganQuery = \DB::table('riwayat_topups')
+            ->where('tipe', 'keluar')
+            ->select('created_at', 'satker_id', 'kendaraan_id', \DB::raw('NULL as personel_id'), 'jumlah', 'keterangan');
+
         if ($selectedSatkerId) {
-            $query->where('satker_id', $selectedSatkerId);
+            $transferQuery->where('satker_id', $selectedSatkerId);
+            $potonganQuery->where('satker_id', $selectedSatkerId);
         }
-        $riwayat = $query->paginate($perPage)->withQueryString();
+
+        $combinedQuery = \DB::table(\DB::raw("({$transferQuery->toSql()}) AS combined"))
+            ->mergeBindings($transferQuery)
+            ->union($potonganQuery)
+            ->orderBy('created_at', 'desc');
+
+        $riwayatRaw = $combinedQuery->paginate($perPage)->withQueryString();
+
+        // Transform collection to include models/relationships
+        $riwayatRaw->getCollection()->transform(function($item) {
+            $item->satker = \App\Models\Satker::find($item->satker_id);
+            $item->kendaraan = \App\Models\Kendaraan::find($item->kendaraan_id);
+            $item->personel = $item->personel_id ? \App\Models\Personel::find($item->personel_id) : null;
+            $item->created_at = \Carbon\Carbon::parse($item->created_at);
+            return $item;
+        });
+
+        $riwayat = $riwayatRaw;
 
         return view('admin.transfer-saldo.index', compact('satkers', 'kendaraans', 'personels', 'riwayat', 'selectedSatkerId'));
     }
@@ -84,6 +110,7 @@ class TransferSaldoController extends Controller
                 'kendaraan_id' => $kendaraan->id,
                 'personel_id' => $personel->id,
                 'jumlah' => $request->jumlah,
+                'jenis_bbm' => $kendaraan->jenis_bbm ?: 'TANPA JENIS',
                 'keterangan' => $request->keterangan,
             ]);
 

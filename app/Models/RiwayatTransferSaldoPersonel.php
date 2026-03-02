@@ -16,6 +16,7 @@ class RiwayatTransferSaldoPersonel extends Model
         'kendaraan_id',
         'personel_id',
         'jumlah',
+        'jenis_bbm',
         'keterangan',
     ];
 

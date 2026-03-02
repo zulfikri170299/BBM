@@ -191,6 +191,7 @@ class TransaksiController extends Controller
             'liter' => $request->liter,
             'harga_per_liter' => $hargaPerLiter,
             'total' => $totalHarga,
+            'jenis_bbm' => $target->jenis_bbm ?: 'TANPA JENIS',
         ]);
 
         LogAktivitas::create([

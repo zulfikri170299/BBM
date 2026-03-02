@@ -95,41 +95,94 @@ class KendaraanController extends Controller
     {
         $satkerId = auth()->user()->satker_id;
 
-        $query = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
-            ->with(['kendaraan', 'personel']);
+        // Base queries for union
+        $transferQuery = \DB::table('riwayat_transfer_saldo_personels')
+            ->where('satker_id', $satkerId)
+            ->select(
+                'created_at', 
+                'kendaraan_id', 
+                'personel_id', 
+                'jumlah', 
+                'keterangan', 
+                \DB::raw("'transfer' as tipe_log")
+            );
 
+        $potonganQuery = \DB::table('riwayat_topups')
+            ->where('satker_id', $satkerId)
+            ->where('tipe', 'keluar')
+            ->select(
+                'created_at', 
+                'kendaraan_id', 
+                \DB::raw('NULL as personel_id'), 
+                'jumlah', 
+                'keterangan', 
+                \DB::raw("'potongan' as tipe_log")
+            );
+
+        // Apply shared filters
         if ($request->filled('start_date')) {
             $startUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->start_date, 'Asia/Makassar')
                 ->startOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
-            $query->where('created_at', '>=', $startUtc);
+            $transferQuery->where('created_at', '>=', $startUtc);
+            $potonganQuery->where('created_at', '>=', $startUtc);
         }
         if ($request->filled('end_date')) {
             $endUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->end_date, 'Asia/Makassar')
                 ->endOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
-            $query->where('created_at', '<=', $endUtc);
+            $transferQuery->where('created_at', '<=', $endUtc);
+            $potonganQuery->where('created_at', '<=', $endUtc);
         }
 
-        $perPage = $this->getPerPage($request);
-        $riwayats = $query->latest()->paginate($perPage)->withQueryString();
+        // Combined query for main list
+        $combinedQuery = \DB::table(\DB::raw("({$transferQuery->toSql()}) AS combined"))
+            ->mergeBindings($transferQuery)
+            ->union($potonganQuery)
+            ->orderBy('created_at', 'desc');
 
-        // Summary total per jenis BBM (from all filtered, not just current page)
-        $summaryQuery = \App\Models\RiwayatTransferSaldoPersonel::where('riwayat_transfer_saldo_personels.satker_id', $satkerId)
-            ->join('kendaraans', 'riwayat_transfer_saldo_personels.kendaraan_id', '=', 'kendaraans.id');
+        $perPage = $this->getPerPage($request);
+        $riwayatsRaw = $combinedQuery->paginate($perPage)->withQueryString();
+
+        // Convert raw database results to something more useful (with relationships)
+        $riwayatsRaw->getCollection()->transform(function($item) {
+            $item->kendaraan = \App\Models\Kendaraan::find($item->kendaraan_id);
+            $item->personel = $item->personel_id ? \App\Models\Personel::find($item->personel_id) : null;
+            $item->created_at = \Carbon\Carbon::parse($item->created_at);
+            return $item;
+        });
+
+        $riwayats = $riwayatsRaw;
+
+        // Summary total per jenis BBM
+        $summaryQuery = \DB::table('riwayat_transfer_saldo_personels')
+            ->where('riwayat_transfer_saldo_personels.satker_id', $satkerId)
+            ->join('kendaraans', 'riwayat_transfer_saldo_personels.kendaraan_id', '=', 'kendaraans.id')
+            ->selectRaw('kendaraans.jenis_bbm, SUM(riwayat_transfer_saldo_personels.jumlah) as total');
+
+        $potonganSummaryQuery = \DB::table('riwayat_topups')
+            ->where('riwayat_topups.satker_id', $satkerId)
+            ->where('riwayat_topups.tipe', 'keluar')
+            ->join('kendaraans', 'riwayat_topups.kendaraan_id', '=', 'kendaraans.id')
+            ->selectRaw('kendaraans.jenis_bbm, SUM(riwayat_topups.jumlah) as total');
 
         if ($request->filled('start_date')) {
             $startUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->start_date, 'Asia/Makassar')
                 ->startOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
             $summaryQuery->where('riwayat_transfer_saldo_personels.created_at', '>=', $startUtc);
+            $potonganSummaryQuery->where('riwayat_topups.created_at', '>=', $startUtc);
         }
         if ($request->filled('end_date')) {
             $endUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->end_date, 'Asia/Makassar')
                 ->endOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
             $summaryQuery->where('riwayat_transfer_saldo_personels.created_at', '<=', $endUtc);
+            $potonganSummaryQuery->where('riwayat_topups.created_at', '<=', $endUtc);
         }
 
-        $summary = $summaryQuery->selectRaw('kendaraans.jenis_bbm, SUM(riwayat_transfer_saldo_personels.jumlah) as total')
-            ->groupBy('kendaraans.jenis_bbm')
-            ->pluck('total', 'jenis_bbm');
+        $allSummaries = $summaryQuery->groupBy('kendaraans.jenis_bbm')->get()
+            ->concat($potonganSummaryQuery->groupBy('kendaraans.jenis_bbm')->get());
+
+        $summary = $allSummaries->groupBy('jenis_bbm')->map(function($items) {
+            return $items->sum('total');
+        });
 
         return view('satker.kendaraans.laporan-transfer', compact('riwayats', 'summary'));
     }
@@ -138,40 +191,90 @@ class KendaraanController extends Controller
     {
         $satkerId = auth()->user()->satker_id;
 
-        $query = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
-            ->with(['kendaraan', 'personel']);
+        // Base queries for union
+        $transferQuery = \DB::table('riwayat_transfer_saldo_personels')
+            ->where('satker_id', $satkerId)
+            ->select(
+                'created_at', 
+                'kendaraan_id', 
+                'personel_id', 
+                'jumlah', 
+                'keterangan', 
+                \DB::raw("'transfer' as tipe_log")
+            );
 
+        $potonganQuery = \DB::table('riwayat_topups')
+            ->where('satker_id', $satkerId)
+            ->where('tipe', 'keluar')
+            ->select(
+                'created_at', 
+                'kendaraan_id', 
+                \DB::raw('NULL as personel_id'), 
+                'jumlah', 
+                'keterangan', 
+                \DB::raw("'potongan' as tipe_log")
+            );
+
+        // Apply shared filters
         if ($request->filled('start_date')) {
             $startUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->start_date, 'Asia/Makassar')
                 ->startOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
-            $query->where('created_at', '>=', $startUtc);
+            $transferQuery->where('created_at', '>=', $startUtc);
+            $potonganQuery->where('created_at', '>=', $startUtc);
         }
         if ($request->filled('end_date')) {
             $endUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->end_date, 'Asia/Makassar')
                 ->endOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
-            $query->where('created_at', '<=', $endUtc);
+            $transferQuery->where('created_at', '<=', $endUtc);
+            $potonganQuery->where('created_at', '<=', $endUtc);
         }
 
-        $riwayats = $query->latest()->get();
+        // Combined query for main list
+        $riwayatsRaw = \DB::table(\DB::raw("({$transferQuery->toSql()}) AS combined"))
+            ->mergeBindings($transferQuery)
+            ->union($potonganQuery)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-        // Summary per jenis BBM
-        $summaryQuery = \App\Models\RiwayatTransferSaldoPersonel::where('riwayat_transfer_saldo_personels.satker_id', $satkerId)
-            ->join('kendaraans', 'riwayat_transfer_saldo_personels.kendaraan_id', '=', 'kendaraans.id');
+        // Convert raw database results to models/objects with relationships
+        $riwayats = $riwayatsRaw->map(function($item) {
+            $item->kendaraan = \App\Models\Kendaraan::find($item->kendaraan_id);
+            $item->personel = $item->personel_id ? \App\Models\Personel::find($item->personel_id) : null;
+            $item->created_at = \Carbon\Carbon::parse($item->created_at);
+            return $item;
+        });
+
+        // Summary total per jenis BBM
+        $summaryQuery = \DB::table('riwayat_transfer_saldo_personels')
+            ->where('riwayat_transfer_saldo_personels.satker_id', $satkerId)
+            ->join('kendaraans', 'riwayat_transfer_saldo_personels.kendaraan_id', '=', 'kendaraans.id')
+            ->selectRaw('kendaraans.jenis_bbm, SUM(riwayat_transfer_saldo_personels.jumlah) as total');
+
+        $potonganSummaryQuery = \DB::table('riwayat_topups')
+            ->where('riwayat_topups.satker_id', $satkerId)
+            ->where('riwayat_topups.tipe', 'keluar')
+            ->join('kendaraans', 'riwayat_topups.kendaraan_id', '=', 'kendaraans.id')
+            ->selectRaw('kendaraans.jenis_bbm, SUM(riwayat_topups.jumlah) as total');
 
         if ($request->filled('start_date')) {
             $startUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->start_date, 'Asia/Makassar')
                 ->startOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
             $summaryQuery->where('riwayat_transfer_saldo_personels.created_at', '>=', $startUtc);
+            $potonganSummaryQuery->where('riwayat_topups.created_at', '>=', $startUtc);
         }
         if ($request->filled('end_date')) {
             $endUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->end_date, 'Asia/Makassar')
                 ->endOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
             $summaryQuery->where('riwayat_transfer_saldo_personels.created_at', '<=', $endUtc);
+            $potonganSummaryQuery->where('riwayat_topups.created_at', '<=', $endUtc);
         }
 
-        $summary = $summaryQuery->selectRaw('kendaraans.jenis_bbm, SUM(riwayat_transfer_saldo_personels.jumlah) as total')
-            ->groupBy('kendaraans.jenis_bbm')
-            ->pluck('total', 'jenis_bbm');
+        $allSummaries = $summaryQuery->groupBy('kendaraans.jenis_bbm')->get()
+            ->concat($potonganSummaryQuery->groupBy('kendaraans.jenis_bbm')->get());
+
+        $summary = $allSummaries->groupBy('jenis_bbm')->map(function($items) {
+            return $items->sum('total');
+        });
 
         $satkerName = auth()->user()->satker->nama_satker ?? '';
 
@@ -225,17 +328,23 @@ class KendaraanController extends Controller
 
     private function buildLaporanBulananData($satkerId, $bulan, $tahun)
     {
+        $startDateWita = \Carbon\Carbon::create($tahun, $bulan, 1, 0, 0, 0, 'Asia/Makassar');
+        $endDateWita = $startDateWita->copy()->endOfMonth();
+        $daysInMonth = $startDateWita->daysInMonth;
+
+        // Convert WITA boundaries to UTC for DB querying
+        $startUtc = $startDateWita->copy()->setTimezone('UTC')->format('Y-m-d H:i:s');
+        $endUtc = $endDateWita->copy()->setTimezone('UTC')->format('Y-m-d H:i:s');
+
         // Ambil kendaraan yang saat ini di Satker ini ATAU pernah punya aktifitas di Satker ini pada bulan tsb
         $kendaraansInSatker = \App\Models\Kendaraan::where('satker_id', $satkerId)->pluck('id')->toArray();
         $kendaraansWithActivity = \App\Models\TransaksiBbm::where('satker_id', $satkerId)
-            ->whereMonth('tanggal', $bulan)
-            ->whereYear('tanggal', $tahun)
+            ->whereBetween('tanggal', [$startUtc, $endUtc])
             ->distinct()
             ->pluck('kendaraan_id')
             ->toArray();
         $kendaraansWithTopup = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
-            ->whereMonth('created_at', $bulan)
-            ->whereYear('created_at', $tahun)
+            ->whereBetween('created_at', [$startUtc, $endUtc])
             ->distinct()
             ->pluck('kendaraan_id')
             ->toArray();
@@ -243,15 +352,12 @@ class KendaraanController extends Controller
         $allRelevantIds = array_unique(array_merge($kendaraansInSatker, $kendaraansWithActivity, $kendaraansWithTopup));
         $kendaraans = \App\Models\Kendaraan::whereIn('id', $allRelevantIds)->orderBy('jenis_bbm')->orderBy('no_polisi')->get();
 
-        $startDate = \Carbon\Carbon::create($tahun, $bulan, 1)->startOfMonth();
-        $endDate = $startDate->copy()->endOfMonth();
-        $daysInMonth = $startDate->daysInMonth;
-
-        // Bulan sebelumnya
-        $prevMonthEnd = $startDate->copy()->subDay()->endOfDay();
+        // Bulan sebelumnya dalam WITA lalu konversi ke UTC
+        $prevMonthEndWita = $startDateWita->copy()->subDay()->endOfDay();
+        $prevMonthEndUtc = $prevMonthEndWita->copy()->setTimezone('UTC')->format('Y-m-d H:i:s');
         
-        $namaBulan = $startDate->translatedFormat('F');
-        $namaBulanSebelumnya = $prevMonthEnd->translatedFormat('F');
+        $namaBulan = $startDateWita->translatedFormat('F');
+        $namaBulanSebelumnya = $prevMonthEndWita->translatedFormat('F');
 
         $rows = [];
         $summaryByBbm = [];
@@ -261,30 +367,28 @@ class KendaraanController extends Controller
             $topupMasuk = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
                 ->where('tipe', 'masuk')
-                ->whereMonth('created_at', $bulan)
-                ->whereYear('created_at', $tahun)
+                ->whereBetween('created_at', [$startUtc, $endUtc])
                 ->sum('jumlah');
             
             $topupKeluar = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
                 ->where('tipe', 'keluar')
-                ->whereMonth('created_at', $bulan)
-                ->whereYear('created_at', $tahun)
+                ->whereBetween('created_at', [$startUtc, $endUtc])
                 ->sum('jumlah');
 
-            $topupBulanIni = $topupMasuk - $topupKeluar;
+            $topupBulanIni = $topupMasuk; // Hanya saldo MASUK yang dihitung sebagai Top Up di laporan
 
             // Total top up sampai akhir bulan lalu di Satker ini
             $totalTopupSampaiSebelumnyaMasuk = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
                 ->where('tipe', 'masuk')
-                ->where('created_at', '<=', $prevMonthEnd)
+                ->where('created_at', '<=', $prevMonthEndUtc)
                 ->sum('jumlah');
             
             $totalTopupSampaiSebelumnyaKeluar = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
                 ->where('tipe', 'keluar')
-                ->where('created_at', '<=', $prevMonthEnd)
+                ->where('created_at', '<=', $prevMonthEndUtc)
                 ->sum('jumlah');
             
             $totalTopupSampaiSebelumnya = $totalTopupSampaiSebelumnyaMasuk - $totalTopupSampaiSebelumnyaKeluar;
@@ -292,25 +396,27 @@ class KendaraanController extends Controller
             // Total pemakaian (transaksi) sampai akhir bulan lalu di Satker ini
             $totalPemakaianSampaiSebelumnya = \App\Models\TransaksiBbm::where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
-                ->where('tanggal', '<=', $prevMonthEnd)
+                ->where('tanggal', '<=', $prevMonthEndUtc)
                 ->sum('liter');
 
             // Total transfer keluar (saldo personil) sampai akhir bulan lalu di Satker ini
             $totalTransferKeluarSebelumnya = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
-                ->where('created_at', '<=', $prevMonthEnd)
+                ->where('created_at', '<=', $prevMonthEndUtc)
                 ->sum('jumlah');
 
             // Sisa BBM bulan lalu = total top up - total pemakaian - total transfer keluar
             $sisaBulanLalu = $totalTopupSampaiSebelumnya - $totalPemakaianSampaiSebelumnya - $totalTransferKeluarSebelumnya;
             if ($sisaBulanLalu < 0) $sisaBulanLalu = 0;
 
-            // Transfer keluar (ke personil) bulan ini di Satker ini
-            $transferBulanIni = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
+            // Transfer keluar (ke personil ATAU potong saldo central) bulan ini di Satker ini
+            $transferKePersonel = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
-                ->whereMonth('created_at', $bulan)
-                ->whereYear('created_at', $tahun)
+                ->whereBetween('created_at', [$startUtc, $endUtc])
                 ->sum('jumlah');
+            
+            // Gabungkan transfer ke personel dengan potong saldo (keluar)
+            $transferBulanIni = $transferKePersonel + $topupKeluar;
 
             $totalBbm = $sisaBulanLalu + $topupBulanIni;
             
@@ -318,10 +424,14 @@ class KendaraanController extends Controller
             $dailyUsage = [];
             $totalPemakaian = 0;
             for ($d = 1; $d <= $daysInMonth; $d++) {
-                $date = \Carbon\Carbon::create($tahun, $bulan, $d);
+                $dateStartWita = \Carbon\Carbon::create($tahun, $bulan, $d, 0, 0, 0, 'Asia/Makassar');
+                $dateEndWita = $dateStartWita->copy()->endOfDay();
+                $dayStartUtc = $dateStartWita->setTimezone('UTC')->format('Y-m-d H:i:s');
+                $dayEndUtc = $dateEndWita->setTimezone('UTC')->format('Y-m-d H:i:s');
+
                 $usage = \App\Models\TransaksiBbm::where('satker_id', $satkerId)
                     ->where('kendaraan_id', $kendaraan->id)
-                    ->whereDate('tanggal', $date)
+                    ->whereBetween('tanggal', [$dayStartUtc, $dayEndUtc])
                     ->sum('liter');
                 $dailyUsage[$d] = $usage > 0 ? round($usage, 0) : null;
                 $totalPemakaian += $usage;
