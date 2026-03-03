@@ -105,7 +105,7 @@
         </div>
 
         <!-- Secondary Stats -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             <div
                 class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/70 p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
                 <div class="flex items-center gap-3 sm:gap-4">
@@ -176,6 +176,32 @@
                             @foreach($literTransferPerBbm as $bbm => $total)
                                 <span
                                     class="text-[8px] sm:text-[9px] font-bold bg-teal-50 text-teal-700 px-1.5 py-0.5 rounded border border-teal-100 uppercase">{{ $bbm }}:
+                                    {{ number_format($total, 0, ',', '.') }} L</span>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/70 p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <div class="p-2 sm:p-3 bg-rose-100 text-rose-600 rounded-lg sm:rounded-xl">
+                        <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                            </path>
+                        </svg>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs sm:text-sm text-slate-500">Total Hutang (Bon)</p>
+                        <p class="text-lg sm:text-2xl font-bold text-slate-900 truncate">
+                            {{ number_format($totalHutang, 0, ',', '.') }} <span
+                                class="text-xs sm:text-sm font-medium text-slate-400">L</span>
+                        </p>
+                        <div class="mt-1 sm:mt-2 flex flex-wrap gap-1">
+                            @foreach($hutangPerBbm as $bbm => $total)
+                                <span
+                                    class="text-[8px] sm:text-[9px] font-bold bg-rose-50 text-rose-700 px-1.5 py-0.5 rounded border border-rose-100 uppercase">{{ $bbm }}:
                                     {{ number_format($total, 0, ',', '.') }} L</span>
                             @endforeach
                         </div>

@@ -59,12 +59,24 @@ class DashboardController extends Controller
             ->groupBy('kendaraans.jenis_bbm')
             ->pluck('total', 'jenis_bbm');
 
+        // Hutang Stats
+        $totalHutang = \App\Models\Hutang::where('satker_id', $satkerId)
+            ->where('status', 'belum_dibayar')
+            ->sum('jumlah_bon');
+
+        $hutangPerBbm = \App\Models\Hutang::where('satker_id', $satkerId)
+            ->where('status', 'belum_dibayar')
+            ->select('jenis_bbm', \DB::raw('SUM(jumlah_bon) as total'))
+            ->groupBy('jenis_bbm')
+            ->pluck('total', 'jenis_bbm');
+
         return view('satker.dashboard', compact(
             'totalKendaraan', 'totalPersonel', 'totalTransaksi',
             'totalSaldoKendaraan', 'totalSaldoPersonel',
             'totalTransfer', 'totalLiterTransfer',
             'recentTransfers', 'chartData',
-            'saldoKendaraanPerBbm', 'saldoPersonelPerBbm', 'literTransferPerBbm'
+            'saldoKendaraanPerBbm', 'saldoPersonelPerBbm', 'literTransferPerBbm',
+            'totalHutang', 'hutangPerBbm'
         ));
     }
 }

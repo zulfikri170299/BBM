@@ -19,6 +19,8 @@ class AdminController extends Controller
             'totalTransaksi' => \App\Models\TransaksiBbm::count(),
             'totalPersonel' => \App\Models\Personel::count(),
             'totalLiter' => \App\Models\TransaksiBbm::sum('liter'),
+            'totalHutangPertamax' => \App\Models\Hutang::where('status', 'belum_dibayar')->where('jenis_bbm', 'Pertamax')->sum('jumlah_bon'),
+            'totalHutangDex' => \App\Models\Hutang::where('status', 'belum_dibayar')->where('jenis_bbm', 'Pertamina Dex')->sum('jumlah_bon'),
         ];
 
         $recentTransactions = \App\Models\TransaksiBbm::with(['kendaraan', 'petugas'])

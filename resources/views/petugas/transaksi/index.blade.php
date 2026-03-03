@@ -172,6 +172,16 @@
                             }).catch(err => console.error(err));
                         }
                     }
+
+                    // Auto-start scanner on page load
+                    window.addEventListener('DOMContentLoaded', () => {
+                        // Small delay to ensure the DOM is fully rendered and ready
+                        setTimeout(() => {
+                            if (!html5QrCode || html5QrCode.getState() !== 2) {
+                                startScanner();
+                            }
+                        }, 300);
+                    });
                 </script>
 
                 <!-- Tab Input Nopol -->

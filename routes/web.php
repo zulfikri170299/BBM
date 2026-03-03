@@ -90,7 +90,6 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     // Parameterized routes (must be below static routes)
     Route::get('/kendaraans/{kendaraan}/print', [\App\Http\Controllers\Admin\KendaraanController::class, 'print'])->name('kendaraans.print');
     Route::post('/kendaraans/{kendaraan}/topup', [\App\Http\Controllers\Admin\KendaraanController::class, 'topup'])->name('kendaraans.topup');
-    Route::post('/kendaraans/{kendaraan}/potong-saldo', [\App\Http\Controllers\Admin\KendaraanController::class, 'potongSaldo'])->name('kendaraans.potong-saldo');
     Route::post('/kendaraans/{kendaraan}/reset-pin', [\App\Http\Controllers\Admin\KendaraanController::class, 'resetPin'])->name('kendaraans.reset-pin');
     Route::get('/kendaraans/{kendaraan}/edit', [\App\Http\Controllers\Admin\KendaraanController::class, 'edit'])->name('kendaraans.edit');
     Route::put('/kendaraans/{kendaraan}', [\App\Http\Controllers\Admin\KendaraanController::class, 'update'])->name('kendaraans.update');
@@ -104,6 +103,8 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     Route::delete('/riwayat/{transaksi}', [\App\Http\Controllers\Admin\RiwayatController::class, 'destroy'])->name('riwayat.destroy');
     Route::get('/laporan-topup/print', [\App\Http\Controllers\Admin\LaporanTopupController::class, 'print'])->name('laporan-topup.print');
     Route::get('/laporan-topup', [\App\Http\Controllers\Admin\LaporanTopupController::class, 'index'])->name('laporan-topup.index');
+    Route::get('/laporan-hutang/print', [\App\Http\Controllers\Admin\LaporanHutangController::class, 'print'])->name('laporan-hutang.print');
+    Route::get('/laporan-hutang', [\App\Http\Controllers\Admin\LaporanHutangController::class, 'index'])->name('laporan-hutang.index');
     
     // Laporan Per 3 Bulan
     Route::get('/laporan-triwulan/export', [\App\Http\Controllers\Admin\LaporanTriwulanController::class, 'export'])->name('laporan-triwulan.export');
@@ -144,6 +145,16 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     // Broadcast Messages
     Route::get('/broadcast', [\App\Http\Controllers\Admin\BroadcastController::class, 'index'])->name('broadcast.index');
     Route::post('/broadcast', [\App\Http\Controllers\Admin\BroadcastController::class, 'store'])->name('broadcast.store');
+
+    // Hutang
+    Route::prefix('hutang')->name('hutang.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\HutangController::class, 'index'])->name('index');
+        Route::get('/get-kendaraan', [\App\Http\Controllers\Admin\HutangController::class, 'getKendaraan'])->name('get-kendaraan');
+        Route::post('/{hutang}/bayar', [\App\Http\Controllers\Admin\HutangController::class, 'bayar'])->name('bayar');
+        Route::put('/{hutang}', [\App\Http\Controllers\Admin\HutangController::class, 'update'])->name('update');
+        Route::delete('/{hutang}', [\App\Http\Controllers\Admin\HutangController::class, 'destroy'])->name('destroy');
+        Route::get('/pdf', [\App\Http\Controllers\Admin\HutangController::class, 'downloadPDF'])->name('pdf');
+    });
 });
 
 Route::middleware(['auth', 'role:admin_satker'])->prefix('satker')->name('satker.')->group(function () {
@@ -174,6 +185,13 @@ Route::middleware(['auth', 'role:admin_satker'])->prefix('satker')->name('satker
     Route::resource('personels', \App\Http\Controllers\Satker\PersonelController::class);
     Route::get('/riwayat/print', [\App\Http\Controllers\Satker\RiwayatController::class, 'print'])->name('riwayat.print');
     Route::get('/riwayat', [\App\Http\Controllers\Satker\RiwayatController::class, 'index'])->name('riwayat.index');
+    Route::get('/laporan-hutang/print', [\App\Http\Controllers\Satker\LaporanHutangController::class, 'print'])->name('laporan-hutang.print');
+    Route::get('/laporan-hutang', [\App\Http\Controllers\Satker\LaporanHutangController::class, 'index'])->name('laporan-hutang.index');
+
+    // Hutang
+    Route::get('/hutang/pdf', [\App\Http\Controllers\Satker\HutangController::class, 'downloadPDF'])->name('hutang.pdf');
+    Route::get('/hutang', [\App\Http\Controllers\Satker\HutangController::class, 'index'])->name('hutang.index');
+    Route::post('/hutang/{hutang}/bayar', [\App\Http\Controllers\Satker\HutangController::class, 'bayar'])->name('hutang.bayar');
 });
 
 Route::middleware(['auth', 'role:petugas_bbm'])->prefix('petugas')->name('petugas.')->group(function () {
@@ -190,6 +208,10 @@ Route::middleware(['auth', 'role:petugas_bbm'])->prefix('petugas')->name('petuga
     // Rekapan Pengisian
     Route::get('/rekapan/print', [\App\Http\Controllers\Petugas\RekapanController::class, 'print'])->name('rekapan.print');
     Route::get('/rekapan', [\App\Http\Controllers\Petugas\RekapanController::class, 'index'])->name('rekapan.index');
+
+    // Hutang
+    Route::get('hutang/get-kendaraan', [\App\Http\Controllers\Petugas\HutangController::class, 'getKendaraan'])->name('hutang.get-kendaraan');
+    Route::resource('hutang', \App\Http\Controllers\Petugas\HutangController::class)->only(['index', 'store']);
 });
 
 Route::middleware(['auth', 'role:personel'])->prefix('personel')->name('personel.')->group(function () {

@@ -45,6 +45,12 @@ class DashboardController extends Controller
             $breakdownBbm[$item->jenis_bbm] = ($breakdownBbm[$item->jenis_bbm] ?? 0) + $item->total;
         }
 
-        return view('petugas.dashboard', compact('todayTransactions', 'todayLiter', 'breakdownBbm'));
+        // Hutang Stats
+        $hutangPerBbm = \App\Models\Hutang::where('status', 'belum_dibayar')
+            ->select('jenis_bbm', DB::raw('SUM(jumlah_bon) as total'))
+            ->groupBy('jenis_bbm')
+            ->pluck('total', 'jenis_bbm');
+
+        return view('petugas.dashboard', compact('todayTransactions', 'todayLiter', 'breakdownBbm', 'hutangPerBbm'));
     }
 }

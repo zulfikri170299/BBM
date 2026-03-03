@@ -353,15 +353,6 @@
                                                     d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
                                             </svg>
                                         </button>
-                                        <button type="button"
-                                            @click="$dispatch('open-potong', {id: {{ $kendaraan->id }}, nopol: '{{ $kendaraan->no_polisi }}', saldo: '{{ number_format($kendaraan->saldo, 0, ',', '.') }}'})"
-                                            class="inline-flex items-center p-2 bg-slate-100 hover:bg-rose-100 text-slate-500 hover:text-rose-600 rounded-lg transition-colors"
-                                            title="Potong Saldo (Hutang)">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                            </svg>
-                                        </button>
                                         <form action="{{ route('admin.kendaraans.reset-pin', $kendaraan) }}" method="POST"
                                             class="inline">
                                             @csrf
@@ -439,123 +430,115 @@
         <!-- Top Up Modal -->
         <!-- Top Up Modal -->
         <div x-cloak x-data="{
-                                                                                                                        showTopup: false,
-                                                                                                                        showPotong: false,
-                                                                                                                        topupId: null,
-                                                                                                                        topupNopol: '',
-                                                                                                                        topupSaldo: '',
-                                                                                                                        jumlah: '',
-                                                                                                                        topupPassword: '',
-                                                                                                                        keterangan: '',
-                                                                                                                        selectMode: false,
-                                                                                                                        selectedSatkerId: '',
-                                                                                                                        // Satker Search
-                                                                                                                        satkerSearch: '',
-                                                                                                                        satkerOpen: false,
-                                                                                                                        satkerLabel: '',
-                                                                                                                        satkers: {{ json_encode($satkers->map(fn($s) => ['id' => $s->id, 'nama' => $s->nama_satker])) }},
-                                                                                                                        get filteredSatkers() {
-                                                                                                                            if (!this.satkerSearch) return this.satkers;
-                                                                                                                            return this.satkers.filter(s => s.nama.toLowerCase().includes(this.satkerSearch.toLowerCase()));
-                                                                                                                        },
-                                                                                                                        selectSatker(s) {
-                                                                                                                            this.selectedSatkerId = s.id;
-                                                                                                                            this.satkerLabel = s.nama;
-                                                                                                                            this.satkerOpen = false;
-                                                                                                                            this.satkerSearch = '';
-                                                                                                                            this.topupId = null;
-                                                                                                                            this.topupNopol = '';
-                                                                                                                            this.kendaraanLabel = '';
-                                                                                                                        },
-                                                                                                                        // Kendaraan Search
-                                                                                                                        kendaraanSearch: '',
-                                                                                                                        kendaraanOpen: false,
-                                                                                                                        kendaraanLabel: '',
-                                                                                                                        get filteredKendaraans() {
-                                                                                                                            let list = this.allKendaraans.filter(x => x.satker_id == this.selectedSatkerId);
-                                                                                                                            if (!this.kendaraanSearch) return list;
-                                                                                                                            return list.filter(k => k.nopol.toLowerCase().includes(this.kendaraanSearch.toLowerCase()));
-                                                                                                                        },
-                                                                                                                        selectKendaraanManual(k) {
-                                                                                                                            this.topupId = k.id;
-                                                                                                                            this.topupNopol = k.satker_nama + ' - ' + k.nopol;
-                                                                                                                            this.topupSaldo = k.saldo;
-                                                                                                                            this.kendaraanLabel = k.nopol + ' (' + k.saldo + ' L)';
-                                                                                                                            this.kendaraanOpen = false;
-                                                                                                                            this.kendaraanSearch = '';
-                                                                                                                        },
-                                                                                                                        adminStocks: [
-                                                                                                                            @foreach($adminStocks as $s)
-                                                                                                                                { jenis_bbm: '{{ $s->jenis_bbm }}', saldo: {{ $s->saldo }} },
-                                                                                                                            @endforeach
-                                                                                                                        ],
-                                                                                                                        allKendaraans: [
-                                                                                                                            @foreach($allKendaraans as $k)
-                                                                                                                                { id: {{ $k->id }}, satker_id: {{ $k->satker_id }}, satker_nama: '{{ $k->satker->nama_satker ?? '-' }}', nopol: '{{ $k->no_polisi }}', jenis_bbm: '{{ $k->jenis_bbm }}', saldo: '{{ number_format($k->saldo, 0, ',', '.') }}', saldoRaw: {{ $k->saldo }} },
-                                                                                                                            @endforeach
-                                                                                                                        ],
-                                                                                                                        get currentAdminStock() {
-                                                                                                                            if (!this.topupId) return 0;
-                                                                                                                            const k = this.allKendaraans.find(x => x.id == this.topupId);
-                                                                                                                            if (!k) return 0;
-                                                                                                                            const s = this.adminStocks.find(x => x.jenis_bbm == k.jenis_bbm);
-                                                                                                                            return s ? s.saldo : 0;
-                                                                                                                        },
-                                                                                                                        get canSubmitManual() {
-                                                                                                                            return this.topupId && this.jumlah && this.jumlah > 0 && this.jumlah <= this.currentAdminStock && this.topupPassword;
-                                                                                                                        },
-                                                                                                                        get canSubmitPotong() {
-                                                                                                                            const k = this.allKendaraans.find(x => x.id == this.topupId);
-                                                                                                                            const currentSaldo = k ? k.saldoRaw : 0;
-                                                                                                                            return this.topupId && this.jumlah && this.jumlah > 0 && this.jumlah <= currentSaldo && this.topupPassword;
-                                                                                                                        },
-                                                                                                                        selectKendaraan(id) {
-                                                                                                                            const k = this.allKendaraans.find(x => x.id == id);
-                                                                                                                            if (k) {
+                                                                                                                            showTopup: false,
+                                                                                                                            topupId: null,
+                                                                                                                            topupNopol: '',
+                                                                                                                            topupSaldo: '',
+                                                                                                                            jumlah: '',
+                                                                                                                            topupPassword: '',
+                                                                                                                            keterangan: '',
+                                                                                                                            selectMode: false,
+                                                                                                                            selectedSatkerId: '',
+                                                                                                                            // Satker Search
+                                                                                                                            satkerSearch: '',
+                                                                                                                            satkerOpen: false,
+                                                                                                                            satkerLabel: '',
+                                                                                                                            satkers: {{ json_encode($satkers->map(fn($s) => ['id' => $s->id, 'nama' => $s->nama_satker])) }},
+                                                                                                                            get filteredSatkers() {
+                                                                                                                                if (!this.satkerSearch) return this.satkers;
+                                                                                                                                return this.satkers.filter(s => s.nama.toLowerCase().includes(this.satkerSearch.toLowerCase()));
+                                                                                                                            },
+                                                                                                                            selectSatker(s) {
+                                                                                                                                this.selectedSatkerId = s.id;
+                                                                                                                                this.satkerLabel = s.nama;
+                                                                                                                                this.satkerOpen = false;
+                                                                                                                                this.satkerSearch = '';
+                                                                                                                                this.topupId = null;
+                                                                                                                                this.topupNopol = '';
+                                                                                                                                this.kendaraanLabel = '';
+                                                                                                                            },
+                                                                                                                            // Kendaraan Search
+                                                                                                                            kendaraanSearch: '',
+                                                                                                                            kendaraanOpen: false,
+                                                                                                                            kendaraanLabel: '',
+                                                                                                                            get filteredKendaraans() {
+                                                                                                                                let list = this.allKendaraans.filter(x => x.satker_id == this.selectedSatkerId);
+                                                                                                                                if (!this.kendaraanSearch) return list;
+                                                                                                                                return list.filter(k => k.nopol.toLowerCase().includes(this.kendaraanSearch.toLowerCase()));
+                                                                                                                            },
+                                                                                                                            selectKendaraanManual(k) {
                                                                                                                                 this.topupId = k.id;
                                                                                                                                 this.topupNopol = k.satker_nama + ' - ' + k.nopol;
                                                                                                                                 this.topupSaldo = k.saldo;
+                                                                                                                                this.kendaraanLabel = k.nopol + ' (' + k.saldo + ' L)';
+                                                                                                                                this.kendaraanOpen = false;
+                                                                                                                                this.kendaraanSearch = '';
+                                                                                                                            },
+                                                                                                                            adminStocks: [
+                                                                                                                                @foreach($adminStocks as $s)
+                                                                                                                                    { jenis_bbm: '{{ $s->jenis_bbm }}', saldo: {{ $s->saldo }} },
+                                                                                                                                @endforeach
+                                                                                                                            ],
+                                                                                                                            allKendaraans: [
+                                                                                                                                @foreach($allKendaraans as $k)
+                                                                                                                                    { id: {{ $k->id }}, satker_id: {{ $k->satker_id }}, satker_nama: '{{ $k->satker->nama_satker ?? '-' }}', nopol: '{{ $k->no_polisi }}', jenis_bbm: '{{ $k->jenis_bbm }}', saldo: '{{ number_format($k->saldo, 0, ',', '.') }}', saldoRaw: {{ $k->saldo }} },
+                                                                                                                                @endforeach
+                                                                                                                            ],
+                                                                                                                            get currentAdminStock() {
+                                                                                                                                if (!this.topupId) return 0;
+                                                                                                                                const k = this.allKendaraans.find(x => x.id == this.topupId);
+                                                                                                                                if (!k) return 0;
+                                                                                                                                const s = this.adminStocks.find(x => x.jenis_bbm == k.jenis_bbm);
+                                                                                                                                return s ? s.saldo : 0;
+                                                                                                                            },
+                                                                                                                            get canSubmitManual() {
+                                                                                                                                return this.topupId && this.jumlah && this.jumlah > 0 && this.jumlah <= this.currentAdminStock && this.topupPassword;
+                                                                                                                            },
+                                                                                                                            selectKendaraan(id) {
+                                                                                                                                const k = this.allKendaraans.find(x => x.id == id);
+                                                                                                                                if (k) {
+                                                                                                                                    this.topupId = k.id;
+                                                                                                                                    this.topupNopol = k.satker_nama + ' - ' + k.nopol;
+                                                                                                                                    this.topupSaldo = k.saldo;
+                                                                                                                                }
+                                                                                                                            },
+                                                                                                                            reset() {
+                                                                                                                                this.showTopup = false;
+                                                                                                                                setTimeout(() => {
+                                                                                                                                    this.jumlah = '';
+                                                                                                                                    this.topupPassword = '';
+                                                                                                                                    this.topupId = null;
+                                                                                                                                    this.keterangan = '';
+                                                                                                                                    this.selectedSatkerId = '';
+                                                                                                                                    this.satkerLabel = '';
+                                                                                                                                    this.kendaraanLabel = '';
+                                                                                                                                }, 300);
+                                                                                                                            },
+                                                                                                                            number_format(number, decimals, dec_point, thousands_sep) {
+                                                                                                                                number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+                                                                                                                                var n = !isFinite(+number) ? 0 : +number,
+                                                                                                                                    prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+                                                                                                                                    sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+                                                                                                                                    dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+                                                                                                                                    s = '',
+                                                                                                                                    toFixedFix = function(n, prec) {
+                                                                                                                                        var k = Math.pow(10, prec);
+                                                                                                                                        return '' + Math.round(n * k) / k;
+                                                                                                                                    };
+                                                                                                                                s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+                                                                                                                                if (s[0].length > 3) {
+                                                                                                                                    s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+                                                                                                                                }
+                                                                                                                                if ((s[1] || '').length < prec) {
+                                                                                                                                    s[1] = s[1] || '';
+                                                                                                                                    s[1] += new Array(prec - s[1].length + 1).join('0');
+                                                                                                                                }
+                                                                                                                                return s.join(dec);
                                                                                                                             }
-                                                                                                                        },
-                                                                                                                        reset() {
-                                                                                                                            this.showTopup = false;
-                                                                                                                            this.showPotong = false;
-                                                                                                                            setTimeout(() => {
-                                                                                                                                this.jumlah = '';
-                                                                                                                                this.topupPassword = '';
-                                                                                                                                this.topupId = null;
-                                                                                                                                this.keterangan = '';
-                                                                                                                                this.selectedSatkerId = '';
-                                                                                                                                this.satkerLabel = '';
-                                                                                                                                this.kendaraanLabel = '';
-                                                                                                                            }, 300);
-                                                                                                                        },
-                                                                                                                        number_format(number, decimals, dec_point, thousands_sep) {
-                                                                                                                            number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
-                                                                                                                            var n = !isFinite(+number) ? 0 : +number,
-                                                                                                                                prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
-                                                                                                                                sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
-                                                                                                                                dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
-                                                                                                                                s = '',
-                                                                                                                                toFixedFix = function(n, prec) {
-                                                                                                                                    var k = Math.pow(10, prec);
-                                                                                                                                    return '' + Math.round(n * k) / k;
-                                                                                                                                };
-                                                                                                                            s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
-                                                                                                                            if (s[0].length > 3) {
-                                                                                                                                s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
-                                                                                                                            }
-                                                                                                                            if ((s[1] || '').length < prec) {
-                                                                                                                                s[1] = s[1] || '';
-                                                                                                                                s[1] += new Array(prec - s[1].length + 1).join('0');
-                                                                                                                            }
-                                                                                                                            return s.join(dec);
-                                                                                                                        }
-                                                                                                                    }"
+                                                                                                                        }"
             @open-topup.window="topupId = $event.detail.id; topupNopol = $event.detail.nopol; topupSaldo = $event.detail.saldo; jumlah = ''; topupPassword = ''; selectMode = false; showTopup = true"
             @open-topup-select.window="topupId = null; topupNopol = ''; topupSaldo = ''; jumlah = ''; topupPassword = ''; selectMode = true; showTopup = true"
-            @open-potong.window="topupId = $event.detail.id; topupNopol = $event.detail.nopol; topupSaldo = $event.detail.saldo; jumlah = ''; topupPassword = ''; keterangan = ''; selectMode = false; showPotong = true"
-            @turbo:before-cache.window="showTopup = false; showPotong = false">
+            @turbo:before-cache.window="showTopup = false">
             <!-- Backdrop -->
             <div x-show="showTopup" style="display: none;" x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
@@ -1890,36 +1873,36 @@
     @if(auth()->user()->role === 'super_admin')
         <!-- Transfer Satker Modal -->
         <div x-cloak x-data="{
-                                                                                                        showTransfer: false,
-                                                                                                        transferId: null,
-                                                                                                        transferNopol: '',
-                                                                                                        currentSatker: '',
-                                                                                                        selectedSatkerId: '',
-                                                                                                        satkerSearch: '',
-                                                                                                        satkerOpen: false,
-                                                                                                        satkerLabel: '',
-                                                                                                        satkers: {{ json_encode($satkers->map(fn($s) => ['id' => $s->id, 'nama' => $s->nama_satker])) }},
-                                                                                                        get filteredSatkers() {
-                                                                                                            if (!this.satkerSearch) return this.satkers;
-                                                                                                            return this.satkers.filter(s => s.nama.toLowerCase().includes(this.satkerSearch.toLowerCase()));
-                                                                                                        },
-                                                                                                        selectSatker(s) {
-                                                                                                            this.selectedSatkerId = s.id;
-                                                                                                            this.satkerLabel = s.nama;
-                                                                                                            this.satkerOpen = false;
-                                                                                                            this.satkerSearch = '';
-                                                                                                        },
-                                                                                                        reset() {
-                                                                                                            this.showTransfer = false;
-                                                                                                            setTimeout(() => {
-                                                                                                                this.transferId = null;
-                                                                                                                this.transferNopol = '';
-                                                                                                                this.currentSatker = '';
-                                                                                                                this.selectedSatkerId = '';
-                                                                                                                this.satkerLabel = '';
-                                                                                                            }, 300);
-                                                                                                        }
-                                                                                                    }"
+                                                                                                            showTransfer: false,
+                                                                                                            transferId: null,
+                                                                                                            transferNopol: '',
+                                                                                                            currentSatker: '',
+                                                                                                            selectedSatkerId: '',
+                                                                                                            satkerSearch: '',
+                                                                                                            satkerOpen: false,
+                                                                                                            satkerLabel: '',
+                                                                                                            satkers: {{ json_encode($satkers->map(fn($s) => ['id' => $s->id, 'nama' => $s->nama_satker])) }},
+                                                                                                            get filteredSatkers() {
+                                                                                                                if (!this.satkerSearch) return this.satkers;
+                                                                                                                return this.satkers.filter(s => s.nama.toLowerCase().includes(this.satkerSearch.toLowerCase()));
+                                                                                                            },
+                                                                                                            selectSatker(s) {
+                                                                                                                this.selectedSatkerId = s.id;
+                                                                                                                this.satkerLabel = s.nama;
+                                                                                                                this.satkerOpen = false;
+                                                                                                                this.satkerSearch = '';
+                                                                                                            },
+                                                                                                            reset() {
+                                                                                                                this.showTransfer = false;
+                                                                                                                setTimeout(() => {
+                                                                                                                    this.transferId = null;
+                                                                                                                    this.transferNopol = '';
+                                                                                                                    this.currentSatker = '';
+                                                                                                                    this.selectedSatkerId = '';
+                                                                                                                    this.satkerLabel = '';
+                                                                                                                }, 300);
+                                                                                                            }
+                                                                                                        }"
             @open-transfer.window="transferId = $event.detail.id; transferNopol = $event.detail.nopol; currentSatker = $event.detail.current_satker; showTransfer = true"
             @turbo:before-cache.window="showTransfer = false">
 

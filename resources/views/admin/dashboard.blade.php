@@ -118,6 +118,33 @@
             </div>
         </div>
 
+        <!-- Hutang Stats Row -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="bg-white rounded-2xl border border-rose-100 shadow-sm p-5 flex items-center gap-4 group hover:shadow-md transition-all">
+                <div class="p-3 bg-rose-50 rounded-xl text-rose-500 group-hover:bg-rose-100 transition-colors">
+                    <svg class="w-8 h-8 font-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Hutang Pertamax (Belum Bayar)</p>
+                    <p class="text-2xl font-black text-slate-900 leading-none">{{ number_format($stats['totalHutangPertamax'], 0, ',', '.') }} <span class="text-sm font-bold text-slate-400">Liter</span></p>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-2xl border border-rose-100 shadow-sm p-5 flex items-center gap-4 group hover:shadow-md transition-all">
+                <div class="p-3 bg-rose-50 rounded-xl text-rose-500 group-hover:bg-rose-100 transition-colors">
+                    <svg class="w-8 h-8 font-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Hutang Dex (Belum Bayar)</p>
+                    <p class="text-2xl font-black text-slate-900 leading-none">{{ number_format($stats['totalHutangDex'], 0, ',', '.') }} <span class="text-sm font-bold text-slate-400">Liter</span></p>
+                </div>
+            </div>
+        </div>
+
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8 mt-2 sm:mt-4">
             <!-- Left Column: Unit & Personel Balance -->
             <div

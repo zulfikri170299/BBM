@@ -30,6 +30,9 @@
                         <x-nav-link :href="route('admin.stok.index')" :active="request()->routeIs('admin.stok.*')">
                             {{ __('Stok BBM') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('admin.hutang.index')" :active="request()->routeIs('admin.hutang.*')">
+                            {{ __('Hutang BBM') }}
+                        </x-nav-link>
                     @endif
 
                     @if(auth()->user()->role === 'admin_satker')
@@ -44,6 +47,9 @@
                             :active="request()->routeIs('satker.personels.*')">
                             {{ __('Personel') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('satker.hutang.index')" :active="request()->routeIs('satker.hutang.*')">
+                            {{ __('Hutang BBM') }}
+                        </x-nav-link>
                     @endif
 
                     @if(auth()->user()->role === 'petugas_bbm')
@@ -53,6 +59,9 @@
                         <x-nav-link :href="route('petugas.transaksi.index')"
                             :active="request()->routeIs('petugas.transaksi.*')">
                             {{ __('Transaksi') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('petugas.hutang.index')" :active="request()->routeIs('petugas.hutang.*')">
+                            {{ __('Hutang BBM') }}
                         </x-nav-link>
                     @endif
 
