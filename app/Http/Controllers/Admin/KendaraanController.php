@@ -258,21 +258,11 @@ class KendaraanController extends Controller
             // 1. Kurangi Saldo Kendaraan
             $kendaraan->decrement('saldo', $request->jumlah);
 
-            // 2. Tambah Stok Admin (Pusat)
-            $adminStock = \App\Models\AdminBbmStock::firstOrCreate(
-                ['jenis_bbm' => $kendaraan->jenis_bbm],
-                ['saldo' => 0]
-            );
-            $adminStock->increment('saldo', $request->jumlah);
+            // 2 & 3. Sesuai instruksi: "ketika saldo kendaraan di potong maka jangan masukkan di stok bbm tapi saldo yang di potong itu sifatnya habis"
+            // Oleh karena itu, pengurangan adminStock dinonaktifkan.
 
-            // 3. Catat Riwayat Stok Admin (Masuk ke Pusat)
-            \App\Models\RiwayatStokAdmin::create([
-                'user_id' => $user->id,
-                'jenis_bbm' => $kendaraan->jenis_bbm,
-                'jumlah' => $request->jumlah,
-                'tipe' => 'masuk',
-                'keterangan' => "Potong saldo (Hutang) dari kendaraan {$kendaraan->no_polisi}. " . ($request->keterangan ?? ''),
-            ]);
+         // (RiwayatStokAdmin juga dinonaktifkan asalkan sifatnya habis di kendaraan asalnya)
+
 
             // 4. Catat Riwayat Topup (Keluar dari Kendaraan)
             RiwayatTopup::create([

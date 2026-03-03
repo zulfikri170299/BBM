@@ -38,7 +38,7 @@ class LaporanTopupController extends Controller
         // Hitung Summary per Jenis BBM
         $summary = (clone $query)->reorder()->join('kendaraans', 'riwayat_topups.kendaraan_id', '=', 'kendaraans.id')
             ->selectRaw("kendaraans.jenis_bbm as jenis_bbm, SUM(CASE WHEN riwayat_topups.tipe = 'masuk' THEN riwayat_topups.jumlah ELSE -riwayat_topups.jumlah END) as total")
-            ->groupBy('jenis_bbm')
+            ->groupBy('kendaraans.jenis_bbm')
             ->pluck('total', 'jenis_bbm');
 
         $perPage = $this->getPerPage($request);
@@ -72,7 +72,7 @@ class LaporanTopupController extends Controller
         // Hitung Summary per Jenis BBM
         $summary = (clone $query)->reorder()->join('kendaraans', 'riwayat_topups.kendaraan_id', '=', 'kendaraans.id')
             ->selectRaw("kendaraans.jenis_bbm as jenis_bbm, SUM(CASE WHEN riwayat_topups.tipe = 'masuk' THEN riwayat_topups.jumlah ELSE -riwayat_topups.jumlah END) as total")
-            ->groupBy('jenis_bbm')
+            ->groupBy('kendaraans.jenis_bbm')
             ->pluck('total', 'jenis_bbm');
 
         $riwayats = $query->get(); // Get all data without pagination
