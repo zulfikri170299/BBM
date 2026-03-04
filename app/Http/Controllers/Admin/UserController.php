@@ -52,7 +52,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:super_admin,admin_satker,petugas_bbm,personel',
+            'role' => 'required|in:super_admin,kasubbag,admin_satker,petugas_bbm,personel',
             'satker_id' => 'nullable|exists:satkers,id',
             'username' => 'nullable|string|unique:users',
         ]);
@@ -81,7 +81,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'role' => 'required|in:super_admin,admin_satker,petugas_bbm,personel',
+            'role' => 'required|in:super_admin,kasubbag,admin_satker,petugas_bbm,personel',
             'satker_id' => 'nullable|exists:satkers,id',
             'username' => ['nullable', 'string', Rule::unique('users')->ignore($user->id)],
             'password' => 'nullable|string|min:8|confirmed',

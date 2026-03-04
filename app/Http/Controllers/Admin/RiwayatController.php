@@ -28,9 +28,7 @@ class RiwayatController extends Controller
 
         // Filter satker
         if ($request->filled('satker_id')) {
-            $query->whereHas('kendaraan', function ($q) use ($request) {
-                $q->where('satker_id', $request->satker_id);
-            });
+            $query->where('transaksi_bbms.satker_id', $request->satker_id);
         }
 
         // Search nopol
@@ -93,16 +91,18 @@ class RiwayatController extends Controller
 
         // Filter satker
         if ($request->filled('satker_id')) {
-            $query->whereHas('kendaraan', function ($q) use ($request) {
-                $q->where('satker_id', $request->satker_id);
-            });
+            $query->where('transaksi_bbms.satker_id', $request->satker_id);
         }
 
         // Search nopol (optional for print, but good consistency)
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->whereHas('kendaraan', function ($q) use ($search) {
-                $q->where('no_polisi', 'like', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('kendaraan', function ($subQ) use ($search) {
+                    $subQ->where('no_polisi', 'like', "%{$search}%");
+                })->orWhereHas('personel', function ($subQ) use ($search) {
+                    $subQ->where('nama', 'like', "%{$search}%");
+                });
             });
         }
 

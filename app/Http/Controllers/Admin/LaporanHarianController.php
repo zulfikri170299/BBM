@@ -15,14 +15,14 @@ class LaporanHarianController extends Controller
 {
     public function index(Request $request)
     {
-        $bulan = $request->get('bulan', date('m'));
-        $tahun = $request->get('tahun', date('Y'));
+        $bulan = $request->get('bulan', Carbon::now('Asia/Makassar')->format('m'));
+        $tahun = $request->get('tahun', Carbon::now('Asia/Makassar')->format('Y'));
         
         $startDate = Carbon::createFromDate($tahun, $bulan, 1)->startOfMonth();
         $endDate = $startDate->copy()->endOfMonth();
         
         if ($endDate->isFuture()) {
-            $endDate = Carbon::now();
+            $endDate = Carbon::now('Asia/Makassar');
         }
 
         $dates = [];
@@ -78,14 +78,14 @@ class LaporanHarianController extends Controller
 
     public function exportPdf(Request $request)
     {
-        $bulan = $request->get('bulan', date('m'));
-        $tahun = $request->get('tahun', date('Y'));
+        $bulan = $request->get('bulan', Carbon::now('Asia/Makassar')->format('m'));
+        $tahun = $request->get('tahun', Carbon::now('Asia/Makassar')->format('Y'));
 
         $startDate = Carbon::createFromDate($tahun, $bulan, 1)->startOfMonth();
         $endDate = $startDate->copy()->endOfMonth();
 
         if ($endDate->isFuture()) {
-            $endDate = Carbon::now();
+            $endDate = Carbon::now('Asia/Makassar');
         }
 
         $dates = [];

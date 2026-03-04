@@ -133,6 +133,7 @@ class User extends Authenticatable
     {
         return match($this->role) {
             'super_admin' => 'Super Admin',
+            'kasubbag' => 'Kasubbag',
             'admin_satker' => 'Admin Satker',
             'petugas_bbm' => 'Petugas BBM',
             'personel' => 'Personel',

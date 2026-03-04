@@ -11,7 +11,7 @@ class MeterReadingController extends Controller
 {
     public function index()
     {
-        $today = Carbon::today()->toDateString();
+        $today = Carbon::now('Asia/Makassar')->toDateString();
         $readings = DailyMeterReading::where('tanggal', $today)->get()->keyBy('jenis_bbm');
         
         return view('petugas.meter.index', compact('today', 'readings'));

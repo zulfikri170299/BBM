@@ -129,17 +129,19 @@
 
                             <div
                                 class="flex items-center justify-center sm:justify-end gap-3 w-full lg:w-auto border-t sm:border-t-0 sm:border-l lg:border-l-0 pt-3 sm:pt-0 sm:pl-3 lg:pl-0 border-slate-200">
-                                <button type="button" @click="$dispatch('open-import-modal')"
-                                    class="inline-flex items-center justify-center w-10 h-10 bg-emerald-600 text-white rounded-xl shadow-lg shadow-emerald-500/30 hover:bg-emerald-700 transition-all duration-200 hover:-translate-y-0.5 group relative"
-                                    title="Import Excel">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
-                                    </svg>
-                                    <span
-                                        class="absolute -bottom-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Import
-                                        Excel</span>
-                                </button>
+                                @if(auth()->user()->role !== 'kasubbag')
+                                    <button type="button" @click="$dispatch('open-import-modal')"
+                                        class="inline-flex items-center justify-center w-10 h-10 bg-emerald-600 text-white rounded-xl shadow-lg shadow-emerald-500/30 hover:bg-emerald-700 transition-all duration-200 hover:-translate-y-0.5 group relative"
+                                        title="Import Excel">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                                        </svg>
+                                        <span
+                                            class="absolute -bottom-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Import
+                                            Excel</span>
+                                    </button>
+                                @endif
                                 <a href="{{ route('admin.personels.export', request()->all()) }}"
                                     class="inline-flex items-center justify-center w-10 h-10 bg-amber-500 text-white rounded-xl shadow-lg shadow-amber-500/30 hover:bg-amber-600 transition-all duration-200 hover:-translate-y-0.5 group relative"
                                     title="Export Excel">
@@ -151,17 +153,19 @@
                                         class="absolute -bottom-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Export
                                         Excel</span>
                                 </a>
-                                <a href="{{ route('admin.personels.create') }}"
-                                    class="inline-flex items-center justify-center w-10 h-10 bg-indigo-600 text-white rounded-xl shadow-lg shadow-indigo-500/30 hover:bg-indigo-700 transition-all duration-200 hover:-translate-y-0.5 group relative"
-                                    title="Tambah Personel">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                    </svg>
-                                    <span
-                                        class="absolute -bottom-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Tambah
-                                        Personel</span>
-                                </a>
+                                @if(auth()->user()->role !== 'kasubbag')
+                                    <a href="{{ route('admin.personels.create') }}"
+                                        class="inline-flex items-center justify-center w-10 h-10 bg-indigo-600 text-white rounded-xl shadow-lg shadow-indigo-500/30 hover:bg-indigo-700 transition-all duration-200 hover:-translate-y-0.5 group relative"
+                                        title="Tambah Personel">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                        </svg>
+                                        <span
+                                            class="absolute -bottom-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Tambah
+                                            Personel</span>
+                                    </a>
+                                @endif
                             </div>
                         </form>
                     </div>
@@ -176,28 +180,30 @@
 
 
                     <!-- Bulk Actions -->
-                    <div id="bulkActions"
-                        class="hidden items-center gap-3 mb-4 p-3 bg-indigo-50 border border-indigo-100 rounded-xl">
-                        <span
-                            class="text-xs font-bold text-indigo-600 bg-white px-3 py-1.5 rounded-lg border border-indigo-100">
-                            <span id="selectedCount">0</span> DIPILIH
-                        </span>
-                        <button type="button" id="bulkDeleteBtn"
-                            class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-xs font-bold hover:bg-rose-700 transition shadow-sm">
-                            <svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                </path>
-                            </svg>
-                            Hapus Terpilih
-                        </button>
-                    </div>
+                    @if(auth()->user()->role !== 'kasubbag')
+                        <div id="bulkActions"
+                            class="hidden items-center gap-3 mb-4 p-3 bg-indigo-50 border border-indigo-100 rounded-xl">
+                            <span
+                                class="text-xs font-bold text-indigo-600 bg-white px-3 py-1.5 rounded-lg border border-indigo-100">
+                                <span id="selectedCount">0</span> DIPILIH
+                            </span>
+                            <button type="button" id="bulkDeleteBtn"
+                                class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-xs font-bold hover:bg-rose-700 transition shadow-sm">
+                                <svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                    </path>
+                                </svg>
+                                Hapus Terpilih
+                            </button>
+                        </div>
 
-                    <form id="bulkDeleteForm" action="{{ route('admin.personels.bulk-delete') }}" method="POST"
-                        class="hidden">
-                        @csrf
-                        <div id="bulkIdsContainer"></div>
-                    </form>
+                        <form id="bulkDeleteForm" action="{{ route('admin.personels.bulk-delete') }}" method="POST"
+                            class="hidden">
+                            @csrf
+                            <div id="bulkIdsContainer"></div>
+                        </form>
+                    @endif
 
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-slate-200">
@@ -223,10 +229,12 @@
                                     </th>
                                 </tr>
                                 <tr class="bg-slate-50/50">
-                                    <th class="w-10 px-6 py-4">
-                                        <input type="checkbox" id="checkAll"
-                                            class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
-                                    </th>
+                                    @if(auth()->user()->role !== 'kasubbag')
+                                        <th class="w-10 px-6 py-4">
+                                            <input type="checkbox" id="checkAll"
+                                                class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
+                                        </th>
+                                    @endif
                                     <th
                                         class="px-6 py-4 text-left text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                                         Data Personel</th>
@@ -244,10 +252,12 @@
                             <tbody class="bg-white divide-y divide-slate-100">
                                 @foreach($personels as $personel)
                                     <tr class="hover:bg-slate-50/80 transition-colors group">
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <input type="checkbox" value="{{ $personel->id }}"
-                                                class="item-checkbox rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
-                                        </td>
+                                        @if(auth()->user()->role !== 'kasubbag')
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <input type="checkbox" value="{{ $personel->id }}"
+                                                    class="item-checkbox rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
+                                            </td>
+                                        @endif
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex items-center gap-3">
                                                 <div
@@ -292,30 +302,32 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right">
                                             <div class="flex justify-end items-center gap-2">
-                                                @if(auth()->user()->role !== 'super_admin' && $personel->saldo > 0)
-                                                    <span
-                                                        class="inline-flex items-center p-2 bg-slate-50 text-slate-200 rounded-lg cursor-not-allowed group/edit"
-                                                        title="Saldo masih {{ number_format($personel->saldo, 0, ',', '.') }} L">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                            viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
-                                                            </path>
-                                                        </svg>
-                                                    </span>
-                                                @else
-                                                    <a href="{{ route('admin.personels.edit', $personel) }}"
-                                                        class="inline-flex items-center p-2 bg-slate-100 hover:bg-indigo-100 text-slate-500 hover:text-indigo-600 rounded-lg transition-colors"
-                                                        title="Edit Personel">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                            viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
-                                                            </path>
-                                                        </svg>
-                                                    </a>
+                                                @if(auth()->user()->role !== 'kasubbag')
+                                                    @if(auth()->user()->role !== 'super_admin' && $personel->saldo > 0)
+                                                        <span
+                                                            class="inline-flex items-center p-2 bg-slate-50 text-slate-200 rounded-lg cursor-not-allowed group/edit"
+                                                            title="Saldo masih {{ number_format($personel->saldo, 0, ',', '.') }} L">
+                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                                viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                    @else
+                                                        <a href="{{ route('admin.personels.edit', $personel) }}"
+                                                            class="inline-flex items-center p-2 bg-slate-100 hover:bg-indigo-100 text-slate-500 hover:text-indigo-600 rounded-lg transition-colors"
+                                                            title="Edit Personel">
+                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                                viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                                                </path>
+                                                            </svg>
+                                                        </a>
+                                                    @endif
                                                 @endif
 
                                                 <a href="{{ route('admin.personels.print', $personel) }}" target="_blank"
@@ -329,44 +341,29 @@
                                                     </svg>
                                                     Print
                                                 </a>
-                                                <form action="{{ route('admin.personels.reset-pin', $personel) }}"
-                                                    method="POST" class="inline">
-                                                    @csrf
-                                                    <button type="submit"
-                                                        data-confirm="Reset PIN personel {{ $personel->nama }}? PIN baru akan di-generate secara acak."
-                                                        data-confirm-type="warning"
-                                                        class="inline-flex items-center p-2 bg-slate-100 hover:bg-amber-100 text-slate-500 hover:text-amber-600 rounded-lg transition-colors"
-                                                        title="Reset PIN">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                            viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z">
-                                                            </path>
-                                                        </svg>
-                                                    </button>
-                                                </form>
 
-                                                @if(auth()->user()->role !== 'super_admin' && $personel->saldo > 0)
-                                                    <span class="p-2 text-slate-200 cursor-not-allowed"
-                                                        title="Saldo masih {{ number_format($personel->saldo, 0, ',', '.') }} L">
-                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor"
-                                                            viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                                            </path>
-                                                        </svg>
-                                                    </span>
-                                                @else
-                                                    <form action="{{ route('admin.personels.destroy', $personel) }}"
+                                                @if(auth()->user()->role !== 'kasubbag')
+                                                    <form action="{{ route('admin.personels.reset-pin', $personel) }}"
                                                         method="POST" class="inline">
                                                         @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" data-confirm="Yakin ingin menghapus personel ini?"
-                                                            data-confirm-type="error"
-                                                            class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
-                                                            title="Hapus Personel">
+                                                        <button type="submit"
+                                                            data-confirm="Reset PIN personel {{ $personel->nama }}? PIN baru akan di-generate secara acak."
+                                                            data-confirm-type="warning"
+                                                            class="inline-flex items-center p-2 bg-slate-100 hover:bg-amber-100 text-slate-500 hover:text-amber-600 rounded-lg transition-colors"
+                                                            title="Reset PIN">
+                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                                viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z">
+                                                                </path>
+                                                            </svg>
+                                                        </button>
+                                                    </form>
+
+                                                    @if(auth()->user()->role !== 'super_admin' && $personel->saldo > 0)
+                                                        <span class="p-2 text-slate-200 cursor-not-allowed"
+                                                            title="Saldo masih {{ number_format($personel->saldo, 0, ',', '.') }} L">
                                                             <svg class="w-5 h-5" fill="none" stroke="currentColor"
                                                                 viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -374,8 +371,26 @@
                                                                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
                                                                 </path>
                                                             </svg>
-                                                        </button>
-                                                    </form>
+                                                        </span>
+                                                    @else
+                                                        <form action="{{ route('admin.personels.destroy', $personel) }}"
+                                                            method="POST" class="inline">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" data-confirm="Yakin ingin menghapus personel ini?"
+                                                                data-confirm-type="error"
+                                                                class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
+                                                                title="Hapus Personel">
+                                                                <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                                                    viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                                        stroke-width="2"
+                                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                                    </path>
+                                                                </svg>
+                                                            </button>
+                                                        </form>
+                                                    @endif
                                                 @endif
                                             </div>
                                         </td>

@@ -187,7 +187,7 @@ class TransaksiController extends Controller
             'personel_id' => $request->personel_id,
             'petugas_id' => auth()->id(),
             'nama_driver' => $request->nama_driver,
-            'tanggal' => now(),
+            'tanggal' => \Carbon\Carbon::now('Asia/Makassar'),
             'liter' => $request->liter,
             'harga_per_liter' => $hargaPerLiter,
             'total' => $totalHarga,

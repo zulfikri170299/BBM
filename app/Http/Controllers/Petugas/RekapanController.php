@@ -11,8 +11,8 @@ class RekapanController extends Controller
 {
     public function index(Request $request)
     {
-        $selectedMonth = (int) $request->input('month', Carbon::now()->month);
-        $selectedYear = (int) $request->input('year', Carbon::now()->year);
+        $selectedMonth = (int) $request->input('month', Carbon::now('Asia/Makassar')->month);
+        $selectedYear = (int) $request->input('year', Carbon::now('Asia/Makassar')->year);
 
         $readings = DailyMeterReading::whereYear('tanggal', $selectedYear)
             ->whereMonth('tanggal', $selectedMonth)
@@ -40,8 +40,8 @@ class RekapanController extends Controller
 
     public function print(Request $request)
     {
-        $selectedMonth = (int) $request->input('month', Carbon::now()->month);
-        $selectedYear = (int) $request->input('year', Carbon::now()->year);
+        $selectedMonth = (int) $request->input('month', Carbon::now('Asia/Makassar')->month);
+        $selectedYear = (int) $request->input('year', Carbon::now('Asia/Makassar')->year);
 
         $readings = DailyMeterReading::whereYear('tanggal', $selectedYear)
             ->whereMonth('tanggal', $selectedMonth)

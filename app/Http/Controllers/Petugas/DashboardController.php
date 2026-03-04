@@ -6,22 +6,25 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\TransaksiBbm;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
     public function index()
     {
+        $todayWita = Carbon::now('Asia/Makassar')->toDateString();
+
         $todayTransactions = TransaksiBbm::where('petugas_id', auth()->id())
-            ->whereDate('created_at', today())
+            ->whereDate('created_at', $todayWita)
             ->count();
             
         $todayLiter = TransaksiBbm::where('petugas_id', auth()->id())
-            ->whereDate('created_at', today())
+            ->whereDate('created_at', $todayWita)
             ->sum('liter');
 
         // Breakdown per Jenis BBM
         $literKendaraan = TransaksiBbm::where('petugas_id', auth()->id())
-            ->whereDate('transaksi_bbms.created_at', today())
+            ->whereDate('transaksi_bbms.created_at', $todayWita)
             ->whereNotNull('kendaraan_id')
             ->join('kendaraans', 'transaksi_bbms.kendaraan_id', '=', 'kendaraans.id')
             ->select('kendaraans.jenis_bbm', DB::raw('SUM(transaksi_bbms.liter) as total'))
@@ -29,7 +32,7 @@ class DashboardController extends Controller
             ->get();
 
         $literPersonel = TransaksiBbm::where('petugas_id', auth()->id())
-            ->whereDate('transaksi_bbms.created_at', today())
+            ->whereDate('transaksi_bbms.created_at', $todayWita)
             ->whereNotNull('personel_id')
             ->join('personels', 'transaksi_bbms.personel_id', '=', 'personels.id')
             ->select('personels.jenis_bbm', DB::raw('SUM(transaksi_bbms.liter) as total'))

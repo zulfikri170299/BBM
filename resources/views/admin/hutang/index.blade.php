@@ -168,7 +168,10 @@
                             <th class="px-4 py-3 font-bold">Jumlah Bon</th>
                             <th class="px-4 py-3 font-bold">Petugas Pencatat</th>
                             <th class="px-4 py-3 font-bold">Status</th>
-                            <th class="px-4 py-3 font-bold text-center">Aksi</th>
+                            @if(auth()->user()->role !== 'kasubbag')
+                                <th class="px-4 py-3 font-bold text-center">Pembayaran</th>
+                                <th class="px-4 py-3 font-bold text-center">Kelola</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
@@ -201,12 +204,9 @@
                                 </td>
                                 <td class="px-4 py-2">
                                     <span
-                                        class="inline-flex items-center px-1.5 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded text-[10px] font-bold">
-                                        {{ $hutang->jumlah_bon }} L {{ $hutang->jenis_bbm }}
+                                        class="inline-flex items-center px-2 py-1 bg-amber-50 text-amber-700 border border-amber-200 rounded text-xs font-bold">
+                                        {{ number_format($hutang->jumlah_bon, 0, ',', '.') }} L {{ $hutang->jenis_bbm }}
                                     </span>
-                                    <span
-                                        class="text-sm font-black text-slate-900">{{ number_format($hutang->jumlah_bon, 0, ',', '.') }}
-                                        L</span>
                                 </td>
                                 <td class="px-4 py-2 text-slate-700 text-xs">{{ $hutang->petugas->name ?? '-' }}</td>
                                 <td class="px-4 py-2">
@@ -226,49 +226,57 @@
                                         </div>
                                     @endif
                                 </td>
-                                <td class="px-4 py-2">
-                                    <div class="flex items-center justify-center gap-2">
-                                        @if($hutang->status === 'belum_dibayar')
-                                            <button
-                                                @click="openModal({{ $hutang->id }}, {{ $hutang->satker_id }}, '{{ $hutang->jenis_bbm }}', '{{ $hutang->nopol }}', {{ $hutang->jumlah_bon }})"
-                                                class="px-3 py-1.5 bg-indigo-600 font-bold text-white rounded-lg hover:bg-indigo-700 transition shadow-sm text-[10px] uppercase tracking-wider">
-                                                Bayar
-                                            </button>
-                                        @endif
-
-                                        <button @click="openEditModal({
-                                                                id: {{ $hutang->id }},
-                                                                satker_id: {{ $hutang->satker_id }},
-                                                                nopol: '{{ $hutang->nopol }}',
-                                                                nama_driver: '{{ $hutang->nama_driver }}',
-                                                                jenis_bbm: '{{ $hutang->jenis_bbm }}',
-                                                                jumlah_bon: {{ $hutang->jumlah_bon }},
-                                                                tanggal_bon: '{{ $hutang->tanggal_bon ?? $hutang->created_at->format('Y-m-d') }}'
-                                                            })"
-                                            class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors border border-blue-200">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                            </svg>
-                                        </button>
-
-                                        <form action="{{ route('admin.hutang.destroy', $hutang) }}" method="POST"
-                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus data hutang ini?')">
-                                            @csrf @method('DELETE')
-                                            <button type="submit"
-                                                class="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors border border-rose-200">
+                                @if(auth()->user()->role !== 'kasubbag')
+                                    <td class="px-4 py-2">
+                                        <div class="flex items-center justify-center">
+                                            @if($hutang->status === 'belum_dibayar')
+                                                <button
+                                                    @click="openModal({{ $hutang->id }}, {{ $hutang->satker_id }}, '{{ $hutang->jenis_bbm }}', '{{ $hutang->nopol }}', {{ $hutang->jumlah_bon }})"
+                                                    class="px-3 py-1.5 bg-indigo-600 font-bold text-white rounded-lg hover:bg-indigo-700 transition shadow-sm text-[10px] uppercase tracking-wider">
+                                                    Bayar
+                                                </button>
+                                            @else
+                                                <span class="text-[10px] font-bold text-slate-400 italic">Selesai</span>
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-2">
+                                        <div class="flex items-center justify-center gap-2">
+                                            <button @click="openEditModal({
+                                                                                        id: {{ $hutang->id }},
+                                                                                        satker_id: {{ $hutang->satker_id }},
+                                                                                        nopol: '{{ $hutang->nopol }}',
+                                                                                        nama_driver: '{{ $hutang->nama_driver }}',
+                                                                                        jenis_bbm: '{{ $hutang->jenis_bbm }}',
+                                                                                        jumlah_bon: {{ $hutang->jumlah_bon }},
+                                                                                        tanggal_bon: '{{ $hutang->tanggal_bon ?? $hutang->created_at->format('Y-m-d') }}'
+                                                                                    })"
+                                                class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors border border-blue-200">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                 </svg>
                                             </button>
-                                        </form>
-                                    </div>
-                                </td>
+
+                                            <form action="{{ route('admin.hutang.destroy', $hutang) }}" method="POST"
+                                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus data hutang ini?')">
+                                                @csrf @method('DELETE')
+                                                <button type="submit"
+                                                    class="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors border border-rose-200">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                @endif
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="px-6 py-8 text-center text-slate-500 italic">Tidak ada data hutang
+                                <td colspan="{{ auth()->user()->role === 'kasubbag' ? 7 : 9 }}"
+                                    class="px-6 py-8 text-center text-slate-500 italic">Tidak ada data hutang
                                     ditemukan.</td>
                             </tr>
                         @endforelse
@@ -518,4 +526,3 @@
         </div>
     </div>
 </x-app-layout>
-

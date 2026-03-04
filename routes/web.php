@@ -9,7 +9,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     $user = auth()->user();
-    if ($user->role === 'super_admin') {
+    if ($user->role === 'super_admin' || $user->role === 'kasubbag') {
         return redirect()->route('admin.dashboard');
     } elseif ($user->role === 'admin_satker') {
         return redirect()->route('satker.dashboard');
@@ -47,7 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/satisfaction-index/create', [\App\Http\Controllers\User\SatisfactionController::class, 'create'])->name('satisfaction.create');
 });
 
-Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminController::class, 'index'])->name('dashboard');
     Route::get('/topup', [\App\Http\Controllers\Admin\AdminController::class, 'topup'])->name('topup');
     Route::post('/topup', [\App\Http\Controllers\Admin\AdminController::class, 'processTopup'])->name('topup.process');

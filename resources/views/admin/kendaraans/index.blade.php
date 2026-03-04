@@ -76,17 +76,19 @@
                         class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Laporan
                         Bulanan Satker</span>
                 </button>
-                <a href="{{ route('admin.kendaraans.create') }}"
-                    class="inline-flex items-center justify-center w-10 h-10 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all duration-200 hover:-translate-y-0.5 group relative"
-                    title="Tambah Kendaraan">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    <!-- Tooltip -->
-                    <span
-                        class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Tambah
-                        Kendaraan</span>
-                </a>
+                @if(auth()->user()->role !== 'kasubbag')
+                    <a href="{{ route('admin.kendaraans.create') }}"
+                        class="inline-flex items-center justify-center w-10 h-10 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all duration-200 hover:-translate-y-0.5 group relative"
+                        title="Tambah Kendaraan">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        <!-- Tooltip -->
+                        <span
+                            class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Tambah
+                            Kendaraan</span>
+                    </a>
+                @endif
 
                 <!-- Filter Satker Dropdown (Icon Only) -->
                 <div class="relative" x-data="{ open: false }">
@@ -180,27 +182,31 @@
                 </div>
 
                 <!-- Bulk Actions -->
-                <div id="bulkActions" class="hidden flex items-center gap-3">
-                    <span
-                        class="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100">
-                        <span id="selectedCount">0</span> DIPILIH
-                    </span>
-                    <button type="button" id="bulkDeleteBtn"
-                        class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-xs font-bold hover:bg-rose-700 transition shadow-sm">
-                        <svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                            </path>
-                        </svg>
-                        Hapus Terpilih
-                    </button>
-                </div>
+                @if(auth()->user()->role !== 'kasubbag')
+                    <div id="bulkActions" class="hidden flex items-center gap-3">
+                        <span
+                            class="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100">
+                            <span id="selectedCount">0</span> DIPILIH
+                        </span>
+                        <button type="button" id="bulkDeleteBtn"
+                            class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-xs font-bold hover:bg-rose-700 transition shadow-sm">
+                            <svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                </path>
+                            </svg>
+                            Hapus Terpilih
+                        </button>
+                    </div>
+                @endif
             </div>
 
-            <form id="bulkDeleteForm" action="{{ route('admin.kendaraans.bulk-delete') }}" method="POST" class="hidden">
-                @csrf
-                <div id="bulkIdsContainer"></div>
-            </form>
+            @if(auth()->user()->role !== 'kasubbag')
+                <form id="bulkDeleteForm" action="{{ route('admin.kendaraans.bulk-delete') }}" method="POST" class="hidden">
+                    @csrf
+                    <div id="bulkIdsContainer"></div>
+                </form>
+            @endif
 
             <!-- Table -->
             <div class="overflow-x-auto">
@@ -248,10 +254,12 @@
                             </th>
                         </tr>
                         <tr class="bg-slate-50/70">
-                            <th class="w-10 px-6 py-3.5">
-                                <input type="checkbox" id="checkAll"
-                                    class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
-                            </th>
+                            @if(auth()->user()->role !== 'kasubbag')
+                                <th class="w-10 px-6 py-3.5">
+                                    <input type="checkbox" id="checkAll"
+                                        class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
+                                </th>
+                            @endif
                             <th
                                 class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                 Satker</th>
@@ -281,10 +289,12 @@
                     <tbody class="divide-y divide-slate-100">
                         @forelse($kendaraans as $kendaraan)
                             <tr class="hover:bg-slate-50/50 transition-colors">
-                                <td class="px-6 py-4">
-                                    <input type="checkbox" value="{{ $kendaraan->id }}"
-                                        class="item-checkbox rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
-                                </td>
+                                @if(auth()->user()->role !== 'kasubbag')
+                                    <td class="px-6 py-4">
+                                        <input type="checkbox" value="{{ $kendaraan->id }}"
+                                            class="item-checkbox rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
+                                    </td>
+                                @endif
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
                                         <div
@@ -344,54 +354,56 @@
                                                 </path>
                                             </svg>
                                         </a>
-                                        <button type="button"
-                                            @click="$dispatch('open-transfer', {id: {{ $kendaraan->id }}, nopol: '{{ $kendaraan->no_polisi }}', current_satker: '{{ $kendaraan->satker->nama_satker ?? '-' }}'})"
-                                            class="inline-flex items-center p-2 bg-slate-100 hover:bg-violet-100 text-slate-500 hover:text-violet-600 rounded-lg transition-colors"
-                                            title="Pindah Satker">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
-                                            </svg>
-                                        </button>
-                                        <form action="{{ route('admin.kendaraans.reset-pin', $kendaraan) }}" method="POST"
-                                            class="inline">
-                                            @csrf
-                                            <button type="submit"
-                                                data-confirm="Reset PIN kendaraan {{ $kendaraan->no_polisi }}? PIN baru akan di-generate secara acak."
-                                                data-confirm-type="warning"
-                                                class="inline-flex items-center p-2 bg-slate-100 hover:bg-amber-100 text-slate-500 hover:text-amber-600 rounded-lg transition-colors"
-                                                title="Reset PIN">
+                                        @if(auth()->user()->role !== 'kasubbag')
+                                            <button type="button"
+                                                @click="$dispatch('open-transfer', {id: {{ $kendaraan->id }}, nopol: '{{ $kendaraan->no_polisi }}', current_satker: '{{ $kendaraan->satker->nama_satker ?? '-' }}'})"
+                                                class="inline-flex items-center p-2 bg-slate-100 hover:bg-violet-100 text-slate-500 hover:text-violet-600 rounded-lg transition-colors"
+                                                title="Pindah Satker">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z">
-                                                    </path>
+                                                        d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
                                                 </svg>
                                             </button>
-                                        </form>
-                                        <a href="{{ route('admin.kendaraans.edit', $kendaraan) }}"
-                                            class="inline-flex items-center p-2 bg-slate-100 hover:bg-indigo-100 text-slate-500 hover:text-indigo-600 rounded-lg transition-colors"
-                                            title="Edit">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
-                                                </path>
-                                            </svg>
-                                        </a>
-                                        <form action="{{ route('admin.kendaraans.destroy', $kendaraan) }}" method="POST"
-                                            class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" data-confirm="Yakin ingin menghapus kendaraan ini?"
-                                                data-confirm-type="error"
-                                                class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
-                                                title="Hapus Kendaraan">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <form action="{{ route('admin.kendaraans.reset-pin', $kendaraan) }}" method="POST"
+                                                class="inline">
+                                                @csrf
+                                                <button type="submit"
+                                                    data-confirm="Reset PIN kendaraan {{ $kendaraan->no_polisi }}? PIN baru akan di-generate secara acak."
+                                                    data-confirm-type="warning"
+                                                    class="inline-flex items-center p-2 bg-slate-100 hover:bg-amber-100 text-slate-500 hover:text-amber-600 rounded-lg transition-colors"
+                                                    title="Reset PIN">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                            d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z">
+                                                        </path>
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                            <a href="{{ route('admin.kendaraans.edit', $kendaraan) }}"
+                                                class="inline-flex items-center p-2 bg-slate-100 hover:bg-indigo-100 text-slate-500 hover:text-indigo-600 rounded-lg transition-colors"
+                                                title="Edit">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
                                                     </path>
                                                 </svg>
-                                            </button>
-                                        </form>
+                                            </a>
+                                            <form action="{{ route('admin.kendaraans.destroy', $kendaraan) }}" method="POST"
+                                                class="inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" data-confirm="Yakin ingin menghapus kendaraan ini?"
+                                                    data-confirm-type="error"
+                                                    class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
+                                                    title="Hapus Kendaraan">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                        </path>
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
@@ -429,113 +441,114 @@
     @if(auth()->user()->role === 'super_admin')
         <!-- Top Up Modal -->
         <!-- Top Up Modal -->
-        <div x-cloak x-data="{
-                                                                                                                            showTopup: false,
-                                                                                                                            topupId: null,
-                                                                                                                            topupNopol: '',
-                                                                                                                            topupSaldo: '',
-                                                                                                                            jumlah: '',
-                                                                                                                            topupPassword: '',
-                                                                                                                            keterangan: '',
-                                                                                                                            selectMode: false,
-                                                                                                                            selectedSatkerId: '',
-                                                                                                                            // Satker Search
-                                                                                                                            satkerSearch: '',
-                                                                                                                            satkerOpen: false,
-                                                                                                                            satkerLabel: '',
-                                                                                                                            satkers: {{ json_encode($satkers->map(fn($s) => ['id' => $s->id, 'nama' => $s->nama_satker])) }},
-                                                                                                                            get filteredSatkers() {
-                                                                                                                                if (!this.satkerSearch) return this.satkers;
-                                                                                                                                return this.satkers.filter(s => s.nama.toLowerCase().includes(this.satkerSearch.toLowerCase()));
-                                                                                                                            },
-                                                                                                                            selectSatker(s) {
-                                                                                                                                this.selectedSatkerId = s.id;
-                                                                                                                                this.satkerLabel = s.nama;
-                                                                                                                                this.satkerOpen = false;
-                                                                                                                                this.satkerSearch = '';
-                                                                                                                                this.topupId = null;
-                                                                                                                                this.topupNopol = '';
-                                                                                                                                this.kendaraanLabel = '';
-                                                                                                                            },
-                                                                                                                            // Kendaraan Search
-                                                                                                                            kendaraanSearch: '',
-                                                                                                                            kendaraanOpen: false,
-                                                                                                                            kendaraanLabel: '',
-                                                                                                                            get filteredKendaraans() {
-                                                                                                                                let list = this.allKendaraans.filter(x => x.satker_id == this.selectedSatkerId);
-                                                                                                                                if (!this.kendaraanSearch) return list;
-                                                                                                                                return list.filter(k => k.nopol.toLowerCase().includes(this.kendaraanSearch.toLowerCase()));
-                                                                                                                            },
-                                                                                                                            selectKendaraanManual(k) {
-                                                                                                                                this.topupId = k.id;
-                                                                                                                                this.topupNopol = k.satker_nama + ' - ' + k.nopol;
-                                                                                                                                this.topupSaldo = k.saldo;
-                                                                                                                                this.kendaraanLabel = k.nopol + ' (' + k.saldo + ' L)';
-                                                                                                                                this.kendaraanOpen = false;
-                                                                                                                                this.kendaraanSearch = '';
-                                                                                                                            },
-                                                                                                                            adminStocks: [
-                                                                                                                                @foreach($adminStocks as $s)
-                                                                                                                                    { jenis_bbm: '{{ $s->jenis_bbm }}', saldo: {{ $s->saldo }} },
-                                                                                                                                @endforeach
-                                                                                                                            ],
-                                                                                                                            allKendaraans: [
-                                                                                                                                @foreach($allKendaraans as $k)
-                                                                                                                                    { id: {{ $k->id }}, satker_id: {{ $k->satker_id }}, satker_nama: '{{ $k->satker->nama_satker ?? '-' }}', nopol: '{{ $k->no_polisi }}', jenis_bbm: '{{ $k->jenis_bbm }}', saldo: '{{ number_format($k->saldo, 0, ',', '.') }}', saldoRaw: {{ $k->saldo }} },
-                                                                                                                                @endforeach
-                                                                                                                            ],
-                                                                                                                            get currentAdminStock() {
-                                                                                                                                if (!this.topupId) return 0;
-                                                                                                                                const k = this.allKendaraans.find(x => x.id == this.topupId);
-                                                                                                                                if (!k) return 0;
-                                                                                                                                const s = this.adminStocks.find(x => x.jenis_bbm == k.jenis_bbm);
-                                                                                                                                return s ? s.saldo : 0;
-                                                                                                                            },
-                                                                                                                            get canSubmitManual() {
-                                                                                                                                return this.topupId && this.jumlah && this.jumlah > 0 && this.jumlah <= this.currentAdminStock && this.topupPassword;
-                                                                                                                            },
-                                                                                                                            selectKendaraan(id) {
-                                                                                                                                const k = this.allKendaraans.find(x => x.id == id);
-                                                                                                                                if (k) {
-                                                                                                                                    this.topupId = k.id;
-                                                                                                                                    this.topupNopol = k.satker_nama + ' - ' + k.nopol;
-                                                                                                                                    this.topupSaldo = k.saldo;
-                                                                                                                                }
-                                                                                                                            },
-                                                                                                                            reset() {
-                                                                                                                                this.showTopup = false;
-                                                                                                                                setTimeout(() => {
-                                                                                                                                    this.jumlah = '';
-                                                                                                                                    this.topupPassword = '';
-                                                                                                                                    this.topupId = null;
-                                                                                                                                    this.keterangan = '';
-                                                                                                                                    this.selectedSatkerId = '';
-                                                                                                                                    this.satkerLabel = '';
-                                                                                                                                    this.kendaraanLabel = '';
-                                                                                                                                }, 300);
-                                                                                                                            },
-                                                                                                                            number_format(number, decimals, dec_point, thousands_sep) {
-                                                                                                                                number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
-                                                                                                                                var n = !isFinite(+number) ? 0 : +number,
-                                                                                                                                    prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
-                                                                                                                                    sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
-                                                                                                                                    dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
-                                                                                                                                    s = '',
-                                                                                                                                    toFixedFix = function(n, prec) {
-                                                                                                                                        var k = Math.pow(10, prec);
-                                                                                                                                        return '' + Math.round(n * k) / k;
-                                                                                                                                    };
-                                                                                                                                s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
-                                                                                                                                if (s[0].length > 3) {
-                                                                                                                                    s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
-                                                                                                                                }
-                                                                                                                                if ((s[1] || '').length < prec) {
-                                                                                                                                    s[1] = s[1] || '';
-                                                                                                                                    s[1] += new Array(prec - s[1].length + 1).join('0');
-                                                                                                                                }
-                                                                                                                                return s.join(dec);
-                                                                                                                            }
-                                                                                                                        }"
+        <div x-cloak
+            x-data="{
+                                                                                                                                    showTopup: false,
+                                                                                                                                    topupId: null,
+                                                                                                                                    topupNopol: '',
+                                                                                                                                    topupSaldo: '',
+                                                                                                                                    jumlah: '',
+                                                                                                                                    topupPassword: '',
+                                                                                                                                    keterangan: '',
+                                                                                                                                    selectMode: false,
+                                                                                                                                    selectedSatkerId: '',
+                                                                                                                                    // Satker Search
+                                                                                                                                    satkerSearch: '',
+                                                                                                                                    satkerOpen: false,
+                                                                                                                                    satkerLabel: '',
+                                                                                                                                    satkers: {{ json_encode($satkers->map(fn($s) => ['id' => $s->id, 'nama' => $s->nama_satker])) }},
+                                                                                                                                    get filteredSatkers() {
+                                                                                                                                        if (!this.satkerSearch) return this.satkers;
+                                                                                                                                        return this.satkers.filter(s => s.nama.toLowerCase().includes(this.satkerSearch.toLowerCase()));
+                                                                                                                                    },
+                                                                                                                                    selectSatker(s) {
+                                                                                                                                        this.selectedSatkerId = s.id;
+                                                                                                                                        this.satkerLabel = s.nama;
+                                                                                                                                        this.satkerOpen = false;
+                                                                                                                                        this.satkerSearch = '';
+                                                                                                                                        this.topupId = null;
+                                                                                                                                        this.topupNopol = '';
+                                                                                                                                        this.kendaraanLabel = '';
+                                                                                                                                    },
+                                                                                                                                    // Kendaraan Search
+                                                                                                                                    kendaraanSearch: '',
+                                                                                                                                    kendaraanOpen: false,
+                                                                                                                                    kendaraanLabel: '',
+                                                                                                                                    get filteredKendaraans() {
+                                                                                                                                        let list = this.allKendaraans.filter(x => x.satker_id == this.selectedSatkerId);
+                                                                                                                                        if (!this.kendaraanSearch) return list;
+                                                                                                                                        return list.filter(k => k.nopol.toLowerCase().includes(this.kendaraanSearch.toLowerCase()));
+                                                                                                                                    },
+                                                                                                                                    selectKendaraanManual(k) {
+                                                                                                                                        this.topupId = k.id;
+                                                                                                                                        this.topupNopol = k.satker_nama + ' - ' + k.nopol;
+                                                                                                                                        this.topupSaldo = k.saldo;
+                                                                                                                                        this.kendaraanLabel = k.nopol + ' (' + k.saldo + ' L)';
+                                                                                                                                        this.kendaraanOpen = false;
+                                                                                                                                        this.kendaraanSearch = '';
+                                                                                                                                    },
+                                                                                                                                    adminStocks: [
+                                                                                                                                        @foreach($adminStocks as $s)
+                                                                                                                                            { jenis_bbm: '{{ $s->jenis_bbm }}', saldo: {{ $s->saldo }} },
+                                                                                                                                        @endforeach
+                                                                                                                                    ],
+                                                                                                                                    allKendaraans: [
+                                                                                                                                        @foreach($allKendaraans as $k)
+                                                                                                                                            { id: {{ $k->id }}, satker_id: {{ $k->satker_id }}, satker_nama: '{{ $k->satker->nama_satker ?? '-' }}', nopol: '{{ $k->no_polisi }}', jenis_bbm: '{{ $k->jenis_bbm }}', saldo: '{{ number_format($k->saldo, 0, ',', '.') }}', saldoRaw: {{ $k->saldo }} },
+                                                                                                                                        @endforeach
+                                                                                                                                    ],
+                                                                                                                                    get currentAdminStock() {
+                                                                                                                                        if (!this.topupId) return 0;
+                                                                                                                                        const k = this.allKendaraans.find(x => x.id == this.topupId);
+                                                                                                                                        if (!k) return 0;
+                                                                                                                                        const s = this.adminStocks.find(x => x.jenis_bbm == k.jenis_bbm);
+                                                                                                                                        return s ? s.saldo : 0;
+                                                                                                                                    },
+                                                                                                                                    get canSubmitManual() {
+                                                                                                                                        return this.topupId && this.jumlah && this.jumlah > 0 && this.jumlah <= this.currentAdminStock && this.topupPassword;
+                                                                                                                                    },
+                                                                                                                                    selectKendaraan(id) {
+                                                                                                                                        const k = this.allKendaraans.find(x => x.id == id);
+                                                                                                                                        if (k) {
+                                                                                                                                            this.topupId = k.id;
+                                                                                                                                            this.topupNopol = k.satker_nama + ' - ' + k.nopol;
+                                                                                                                                            this.topupSaldo = k.saldo;
+                                                                                                                                        }
+                                                                                                                                    },
+                                                                                                                                    reset() {
+                                                                                                                                        this.showTopup = false;
+                                                                                                                                        setTimeout(() => {
+                                                                                                                                            this.jumlah = '';
+                                                                                                                                            this.topupPassword = '';
+                                                                                                                                            this.topupId = null;
+                                                                                                                                            this.keterangan = '';
+                                                                                                                                            this.selectedSatkerId = '';
+                                                                                                                                            this.satkerLabel = '';
+                                                                                                                                            this.kendaraanLabel = '';
+                                                                                                                                        }, 300);
+                                                                                                                                    },
+                                                                                                                                    number_format(number, decimals, dec_point, thousands_sep) {
+                                                                                                                                        number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+                                                                                                                                        var n = !isFinite(+number) ? 0 : +number,
+                                                                                                                                            prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+                                                                                                                                            sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+                                                                                                                                            dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+                                                                                                                                            s = '',
+                                                                                                                                            toFixedFix = function(n, prec) {
+                                                                                                                                                var k = Math.pow(10, prec);
+                                                                                                                                                return '' + Math.round(n * k) / k;
+                                                                                                                                            };
+                                                                                                                                        s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+                                                                                                                                        if (s[0].length > 3) {
+                                                                                                                                            s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+                                                                                                                                        }
+                                                                                                                                        if ((s[1] || '').length < prec) {
+                                                                                                                                            s[1] = s[1] || '';
+                                                                                                                                            s[1] += new Array(prec - s[1].length + 1).join('0');
+                                                                                                                                        }
+                                                                                                                                        return s.join(dec);
+                                                                                                                                    }
+                                                                                                                                }"
             @open-topup.window="topupId = $event.detail.id; topupNopol = $event.detail.nopol; topupSaldo = $event.detail.saldo; jumlah = ''; topupPassword = ''; selectMode = false; showTopup = true"
             @open-topup-select.window="topupId = null; topupNopol = ''; topupSaldo = ''; jumlah = ''; topupPassword = ''; selectMode = true; showTopup = true"
             @turbo:before-cache.window="showTopup = false">
@@ -1873,36 +1886,36 @@
     @if(auth()->user()->role === 'super_admin')
         <!-- Transfer Satker Modal -->
         <div x-cloak x-data="{
-                                                                                                            showTransfer: false,
-                                                                                                            transferId: null,
-                                                                                                            transferNopol: '',
-                                                                                                            currentSatker: '',
-                                                                                                            selectedSatkerId: '',
-                                                                                                            satkerSearch: '',
-                                                                                                            satkerOpen: false,
-                                                                                                            satkerLabel: '',
-                                                                                                            satkers: {{ json_encode($satkers->map(fn($s) => ['id' => $s->id, 'nama' => $s->nama_satker])) }},
-                                                                                                            get filteredSatkers() {
-                                                                                                                if (!this.satkerSearch) return this.satkers;
-                                                                                                                return this.satkers.filter(s => s.nama.toLowerCase().includes(this.satkerSearch.toLowerCase()));
-                                                                                                            },
-                                                                                                            selectSatker(s) {
-                                                                                                                this.selectedSatkerId = s.id;
-                                                                                                                this.satkerLabel = s.nama;
-                                                                                                                this.satkerOpen = false;
-                                                                                                                this.satkerSearch = '';
-                                                                                                            },
-                                                                                                            reset() {
-                                                                                                                this.showTransfer = false;
-                                                                                                                setTimeout(() => {
-                                                                                                                    this.transferId = null;
-                                                                                                                    this.transferNopol = '';
-                                                                                                                    this.currentSatker = '';
-                                                                                                                    this.selectedSatkerId = '';
-                                                                                                                    this.satkerLabel = '';
-                                                                                                                }, 300);
-                                                                                                            }
-                                                                                                        }"
+                                                                                                                    showTransfer: false,
+                                                                                                                    transferId: null,
+                                                                                                                    transferNopol: '',
+                                                                                                                    currentSatker: '',
+                                                                                                                    selectedSatkerId: '',
+                                                                                                                    satkerSearch: '',
+                                                                                                                    satkerOpen: false,
+                                                                                                                    satkerLabel: '',
+                                                                                                                    satkers: {{ json_encode($satkers->map(fn($s) => ['id' => $s->id, 'nama' => $s->nama_satker])) }},
+                                                                                                                    get filteredSatkers() {
+                                                                                                                        if (!this.satkerSearch) return this.satkers;
+                                                                                                                        return this.satkers.filter(s => s.nama.toLowerCase().includes(this.satkerSearch.toLowerCase()));
+                                                                                                                    },
+                                                                                                                    selectSatker(s) {
+                                                                                                                        this.selectedSatkerId = s.id;
+                                                                                                                        this.satkerLabel = s.nama;
+                                                                                                                        this.satkerOpen = false;
+                                                                                                                        this.satkerSearch = '';
+                                                                                                                    },
+                                                                                                                    reset() {
+                                                                                                                        this.showTransfer = false;
+                                                                                                                        setTimeout(() => {
+                                                                                                                            this.transferId = null;
+                                                                                                                            this.transferNopol = '';
+                                                                                                                            this.currentSatker = '';
+                                                                                                                            this.selectedSatkerId = '';
+                                                                                                                            this.satkerLabel = '';
+                                                                                                                        }, 300);
+                                                                                                                    }
+                                                                                                                }"
             @open-transfer.window="transferId = $event.detail.id; transferNopol = $event.detail.nopol; currentSatker = $event.detail.current_satker; showTransfer = true"
             @turbo:before-cache.window="showTransfer = false">
 

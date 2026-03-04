@@ -224,6 +224,7 @@
                                         @php
                                             $roleColors = [
                                                 'super_admin' => 'bg-indigo-50 text-indigo-700 border-indigo-100',
+                                                'kasubbag' => 'bg-violet-50 text-violet-700 border-violet-100',
                                                 'admin_satker' => 'bg-emerald-50 text-emerald-700 border-emerald-100',
                                                 'personel' => 'bg-blue-50 text-blue-700 border-blue-100',
                                                 'petugas_bbm' => 'bg-amber-50 text-amber-700 border-amber-100',
