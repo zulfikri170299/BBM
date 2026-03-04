@@ -27,6 +27,14 @@ class KendaraanController extends Controller
 {
     use PaginatesTables;
 
+    public function __construct()
+    {
+        $this->middleware('role:super_admin')->except([
+            'index', 'print', 'export', 'downloadTemplate', 'downloadFormat', 
+            'laporanBulanan', 'printLaporanBulanan', 'exportLaporanBulanan'
+        ]);
+    }
+
     public function index(Request $request)
     {
         $query = Kendaraan::with('satker')->latest();

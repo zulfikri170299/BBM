@@ -12,6 +12,11 @@ class PersonelController extends Controller
 {
     use PaginatesTables;
 
+    public function __construct()
+    {
+        $this->middleware('role:super_admin')->except(['index', 'export', 'downloadTemplate', 'print']);
+    }
+
     public function index(Request $request)
     {
         $query = Personel::with('satker')->latest();

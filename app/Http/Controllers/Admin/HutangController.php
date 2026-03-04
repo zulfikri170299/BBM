@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class HutangController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:super_admin')->except(['index', 'downloadPDF']);
+    }
+
     public function index(Request $request)
     {
         $query = \App\Models\Hutang::with(['satker', 'petugas', 'adminBayar'])->orderBy('created_at', 'desc');

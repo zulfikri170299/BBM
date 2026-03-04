@@ -132,10 +132,10 @@
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                            {{ number_format($log->total_pertamax, 2, ',', '.') }}
+                                            {{ number_format($log->total_pertamax, 0, ',', '.') }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                            {{ number_format($log->total_dex, 2, ',', '.') }}
+                                            {{ number_format($log->total_dex, 0, ',', '.') }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             {{ $log->created_at->format('d/m/Y H:i') }}

@@ -15,6 +15,11 @@ class UserController extends Controller
 {
     use PaginatesTables;
 
+    public function __construct()
+    {
+        $this->middleware('role:super_admin');
+    }
+
     public function index(Request $request)
     {
         $query = User::with('satker');
