@@ -49,12 +49,12 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminController::class, 'index'])->name('dashboard');
-    Route::get('/topup', [\App\Http\Controllers\Admin\AdminController::class, 'topup'])->name('topup');
-    Route::post('/topup', [\App\Http\Controllers\Admin\AdminController::class, 'processTopup'])->name('topup.process');
+    Route::get('/topup', [\App\Http\Controllers\Admin\AdminController::class, 'topup'])->name('topup')->middleware('role:super_admin');
+    Route::post('/topup', [\App\Http\Controllers\Admin\AdminController::class, 'processTopup'])->name('topup.process')->middleware('role:super_admin');
     Route::get('/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
     Route::post('/reports', [\App\Http\Controllers\Admin\ReportController::class, 'generate'])->name('reports.generate');
-    Route::post('/satkers/bulk-delete', [\App\Http\Controllers\Admin\SatkerController::class, 'bulkDelete'])->name('satkers.bulk-delete');
-    Route::resource('satkers', \App\Http\Controllers\Admin\SatkerController::class);
+    Route::post('/satkers/bulk-delete', [\App\Http\Controllers\Admin\SatkerController::class, 'bulkDelete'])->name('satkers.bulk-delete')->middleware('role:super_admin');
+    Route::resource('satkers', \App\Http\Controllers\Admin\SatkerController::class)->middleware('role:super_admin');
     Route::get('/users/monitoring', [\App\Http\Controllers\Admin\UserController::class, 'monitoring'])->name('users.monitoring');
     Route::get('/users/{user}/logs', [\App\Http\Controllers\Admin\UserController::class, 'activityLogs'])->name('users.logs');
     Route::post('/users/{user}/toggle', [\App\Http\Controllers\Admin\UserController::class, 'toggleStatus'])->name('users.toggle');
@@ -132,8 +132,8 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     Route::post('/laporan-harian', [\App\Http\Controllers\Admin\LaporanHarianController::class, 'store'])->name('laporan-harian.store');
 
     // Settings
-    Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
-    Route::post('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
+    Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index')->middleware('role:super_admin');
+    Route::post('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update')->middleware('role:super_admin');
 
 
     // Stok BBM

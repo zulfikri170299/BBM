@@ -1,8 +1,19 @@
 <x-app-layout>
     <div class="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6 lg:space-y-8">
         <!-- Page Title -->
-        <div>
-            <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900">Dashboard</h1>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0">
+            <div>
+                <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900">Dashboard</h1>
+                <p class="text-xs sm:text-sm text-slate-500 font-medium">Selamat datang, {{ auth()->user()->name }}</p>
+            </div>
+            <div class="flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-slate-200 shadow-sm w-fit">
+                <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                <span class="text-xs sm:text-sm font-bold text-slate-700">
+                    {{ \Carbon\Carbon::now('Asia/Makassar')->translatedFormat('l, d F Y') }}
+                    <span class="text-indigo-600 ml-1">{{ \Carbon\Carbon::now('Asia/Makassar')->format('H:i') }}
+                        WITA</span>
+                </span>
+            </div>
         </div>
 
         <!-- Stats Cards -->

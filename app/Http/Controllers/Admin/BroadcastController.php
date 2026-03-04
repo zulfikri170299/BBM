@@ -10,11 +10,6 @@ use Illuminate\Support\Facades\Notification;
 
 class BroadcastController extends Controller
 {
-    public function __construct()
-    {
-        // Internal broadcast only
-    }
-
     public function index()
     {
         return view('admin.broadcast.index');

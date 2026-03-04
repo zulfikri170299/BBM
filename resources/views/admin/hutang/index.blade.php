@@ -169,8 +169,9 @@
                             <th class="px-4 py-3 font-bold">Petugas Pencatat</th>
                             <th class="px-4 py-3 font-bold">Status</th>
                             @if(auth()->user()->role !== 'kasubbag')
-                                <th class="px-4 py-3 font-bold text-center">Pembayaran</th>
-                                <th class="px-4 py-3 font-bold text-center">Kelola</th>
+                                <th class="px-4 py-3 font-bold text-center border-l border-slate-200 bg-slate-100/30">
+                                    Pembayaran</th>
+                                <th class="px-4 py-3 font-bold text-center border-l border-slate-200">Kelola</th>
                             @endif
                         </tr>
                     </thead>
@@ -227,7 +228,7 @@
                                     @endif
                                 </td>
                                 @if(auth()->user()->role !== 'kasubbag')
-                                    <td class="px-4 py-2">
+                                    <td class="px-4 py-2 border-l border-slate-100 bg-slate-50/20">
                                         <div class="flex items-center justify-center">
                                             @if($hutang->status === 'belum_dibayar')
                                                 <button
@@ -240,17 +241,17 @@
                                             @endif
                                         </div>
                                     </td>
-                                    <td class="px-4 py-2">
+                                    <td class="px-4 py-2 border-l border-slate-100">
                                         <div class="flex items-center justify-center gap-2">
                                             <button @click="openEditModal({
-                                                                                        id: {{ $hutang->id }},
-                                                                                        satker_id: {{ $hutang->satker_id }},
-                                                                                        nopol: '{{ $hutang->nopol }}',
-                                                                                        nama_driver: '{{ $hutang->nama_driver }}',
-                                                                                        jenis_bbm: '{{ $hutang->jenis_bbm }}',
-                                                                                        jumlah_bon: {{ $hutang->jumlah_bon }},
-                                                                                        tanggal_bon: '{{ $hutang->tanggal_bon ?? $hutang->created_at->format('Y-m-d') }}'
-                                                                                    })"
+                                                                                                        id: {{ $hutang->id }},
+                                                                                                        satker_id: {{ $hutang->satker_id }},
+                                                                                                        nopol: '{{ $hutang->nopol }}',
+                                                                                                        nama_driver: '{{ $hutang->nama_driver }}',
+                                                                                                        jenis_bbm: '{{ $hutang->jenis_bbm }}',
+                                                                                                        jumlah_bon: {{ $hutang->jumlah_bon }},
+                                                                                                        tanggal_bon: '{{ $hutang->tanggal_bon ?? $hutang->created_at->format('Y-m-d') }}'
+                                                                                                    })"
                                                 class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors border border-blue-200">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

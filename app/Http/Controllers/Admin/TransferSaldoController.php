@@ -17,11 +17,6 @@ class TransferSaldoController extends Controller
 {
     use PaginatesTables;
 
-    public function __construct()
-    {
-        $this->middleware('role:super_admin');
-    }
-
     public function index(Request $request)
     {
         $satkers = Satker::orderBy('nama_satker')->get();

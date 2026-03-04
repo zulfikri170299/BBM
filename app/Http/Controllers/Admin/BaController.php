@@ -149,11 +149,23 @@ class BaController extends Controller
             $templateProcessor->setValue('jabatan pihak1', $settings['ba_pihak_1_jabatan'] ?? '-');
 
             // Save File
-            $fileName = 'BA_' . str_replace(' ', '_', $satker->nama_satker) . '_' . $bulan . '_' . $tahun . '_' . time() . '.docx';
+            // Check for existing BA log for same satker, month, year
+            $existingLog = BaLog::where('satker_id', $satker->id)
+                ->where('bulan', $bulan)
+                ->where('tahun', $tahun)
+                ->first();
+
+            // Save File - Remove time() suffix to keep it clean if we reuse filename
+            $fileName = 'BA_' . str_replace(' ', '_', $satker->nama_satker) . '_' . $bulan . '_' . $tahun . '.docx';
             $storagePath = 'public/berita-acara/' . $fileName;
             
             if (!Storage::exists('public/berita-acara')) {
                 Storage::makeDirectory('public/berita-acara');
+            }
+
+            // If existing file is different, delete old one
+            if ($existingLog && $existingLog->file_path !== $storagePath) {
+                Storage::delete($existingLog->file_path);
             }
 
             $tempPath = tempnam(sys_get_temp_dir(), 'ba');
@@ -162,15 +174,21 @@ class BaController extends Controller
             Storage::put($storagePath, file_get_contents($tempPath));
             unlink($tempPath);
 
-            // Save to Log
-            BaLog::create([
+            // Save or Update Log
+            $data = [
                 'satker_id' => $satker->id,
                 'bulan' => $bulan,
                 'tahun' => $tahun,
                 'total_pertamax' => $fuelTotals['Pertamax'] ?? 0,
                 'total_dex' => $fuelTotals['Pertamina Dex'] ?? 0,
                 'file_path' => $storagePath,
-            ]);
+            ];
+
+            if ($existingLog) {
+                $existingLog->update($data);
+            } else {
+                BaLog::create($data);
+            }
 
             LogAktivitas::create([
                 'user_id' => auth()->id(),

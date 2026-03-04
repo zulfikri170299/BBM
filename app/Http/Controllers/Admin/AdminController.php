@@ -10,11 +10,6 @@ use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('role:super_admin')->only(['topup', 'processTopup']);
-    }
-
     public function index()
     {
         $stats = [
