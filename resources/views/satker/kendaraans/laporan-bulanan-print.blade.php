@@ -93,9 +93,9 @@
 </head>
 
 <body>
+    @include('components.pdf-header')
     <div class="laporan-title">
         <h2>LAPORAN BBM BULAN {{ strtoupper($namaBulan) }} TAHUN {{ $tahun }}</h2>
-        <h3>{{ strtoupper($satkerName ?? '-') }}</h3>
     </div>
 
     <table class="laporan-tbl">
@@ -173,19 +173,7 @@
         </tbody>
     </table>
 
-    <div class="footer-sig">
-        <table>
-            <tr>
-                <td style="width: 65%;"></td>
-                <td>
-                    Mataram, {{ now()->translatedFormat('d F Y') }}<br>
-                    <strong>PENANGGUNG JAWAB BBM</strong>
-                    <br><br><br><br><br>
-                    <strong>( ............................................ )</strong>
-                </td>
-            </tr>
-        </table>
-    </div>
+    @include('components.pdf-signature')
 </body>
 
 </html>

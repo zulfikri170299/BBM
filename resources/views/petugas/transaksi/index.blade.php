@@ -155,7 +155,7 @@
                             }
                         ).catch((err) => {
                             console.error(err);
-                            alert("Gagal mengakses kamera. Pastikan izin kamera diberikan.");
+                            window.showAlert("Akses Kamera Gagal", "Gagal mengakses kamera. Pastikan izin kamera diberikan.", "error");
                             stopScanner();
                         });
                     }

@@ -19,9 +19,10 @@
     </style>
 </head>
 <body>
+    @include('components.pdf-header')
     <div class="header">
         <h1>Laporan Riwayat Pengisian BBM</h1>
-        <p>Dicetak pada: {{ date('d F Y H:i') }}</p>
+
         
         @if(request('dari') || request('sampai'))
             <p>Periode: 
@@ -31,11 +32,7 @@
             </p>
         @endif
 
-        @if(isset($satker))
-            <p>Satker: <strong>{{ $satker->nama_satker }}</strong></p>
-        @elseif(request('satker_id') && $transaksis->isNotEmpty())
-            <p>Satker: <strong>{{ $transaksis->first()->satker->nama_satker ?? ($transaksis->first()->kendaraan->satker->nama_satker ?? ($transaksis->first()->personel->satker->nama_satker ?? '-')) }}</strong></p>
-        @endif
+
     </div>
 
     <table>
@@ -97,9 +94,7 @@
     </div>
     @endif
 
-    <div class="footer">
-        Laporan ini digenerate secara otomatis oleh sistem SPBP.<br>
-        User: {{ auth()->user()->name }}
-    </div>
+
+    @include('components.pdf-signature')
 </body>
 </html>

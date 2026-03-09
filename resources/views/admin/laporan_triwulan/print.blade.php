@@ -86,11 +86,10 @@
 </head>
 
 <body>
+    @include('components.pdf-header')
     <div class="header">
         <h1>REKAPAN PER 3 BULAN</h1>
         <p>Periode {{ $periodeLabel }}</p>
-        <p>Dicetak pada: {{ \Carbon\Carbon::now()->setTimezone('Asia/Makassar')->translatedFormat('d F Y H:i') }} WITA
-        </p>
     </div>
 
     @php
@@ -183,8 +182,8 @@
     </table>
 
     <div class="footer">
-        Dicetak oleh: {{ auth()->user()->name ?? 'Administrator' }}
     </div>
+    @include('components.pdf-signature')
 </body>
 
 </html>

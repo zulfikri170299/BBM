@@ -262,7 +262,7 @@
                 messageInput.disabled = false;
                 sendBtn.disabled = false;
                 sendBtn.classList.remove('opacity-75', 'cursor-not-allowed');
-                alert('Gagal mengirim pesan.');
+                window.showAlert('Gagal', 'Gagal mengirim pesan.', 'error');
             });
         });
 

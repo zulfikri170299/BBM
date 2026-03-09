@@ -118,6 +118,43 @@
             </div>
         </div>
 
+        @if(in_array(auth()->user()->role, ['super_admin', 'kasubbag']))
+        <!-- Tank Stock Section (Sinkronisasi) -->
+        <div class="grid grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-6">
+            <div class="bg-gradient-to-br from-indigo-600 to-indigo-800 rounded-2xl shadow-lg p-3 sm:p-5 text-white flex items-center gap-3 sm:gap-4 group hover:shadow-indigo-500/40 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                <div class="absolute -top-4 -right-4 w-16 sm:w-24 h-16 sm:h-24 bg-white/10 rounded-full blur-lg group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="p-2 sm:p-3 bg-white/20 rounded-xl backdrop-blur-sm group-hover:scale-110 transition-transform shrink-0">
+                    <svg class="w-5 h-5 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                    </svg>
+                </div>
+                <div class="relative z-10 min-w-0">
+                    <p class="text-[8px] sm:text-[10px] font-black text-indigo-100 uppercase tracking-widest mb-0.5 sm:mb-1 opacity-80 truncate">Stok Pertamax</p>
+                    <h3 class="text-lg sm:text-2xl font-black truncate">{{ number_format($tankStock['pertamax'], 0, ',', '.') }} <span class="text-[10px] font-bold text-indigo-200">L</span></h3>
+                </div>
+                <div class="absolute bottom-1 right-2 sm:bottom-2 sm:right-4">
+                    <a href="{{ route('admin.laporan-stok-bbm.index') }}" class="text-[7px] sm:text-[9px] font-bold bg-white/20 hover:bg-white/30 px-1.5 py-0.5 rounded-lg transition uppercase tracking-wider">Laporan</a>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-rose-600 to-rose-800 rounded-2xl shadow-lg p-3 sm:p-5 text-white flex items-center gap-3 sm:gap-4 group hover:shadow-rose-500/40 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                <div class="absolute -top-4 -right-4 w-16 sm:w-24 h-16 sm:h-24 bg-white/10 rounded-full blur-lg group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="p-2 sm:p-3 bg-white/20 rounded-xl backdrop-blur-sm group-hover:scale-110 transition-transform shrink-0">
+                    <svg class="w-5 h-5 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                    </svg>
+                </div>
+                <div class="relative z-10 min-w-0">
+                    <p class="text-[8px] sm:text-[10px] font-black text-rose-100 uppercase tracking-widest mb-0.5 sm:mb-1 opacity-80 truncate">Stok P. Dex</p>
+                    <h3 class="text-lg sm:text-2xl font-black truncate">{{ number_format($tankStock['dex'], 0, ',', '.') }} <span class="text-[10px] font-bold text-rose-200">L</span></h3>
+                </div>
+                <div class="absolute bottom-1 right-2 sm:bottom-2 sm:right-4">
+                    <a href="{{ route('admin.laporan-stok-bbm.index') }}" class="text-[7px] sm:text-[9px] font-bold bg-white/20 hover:bg-white/30 px-1.5 py-0.5 rounded-lg transition uppercase tracking-wider">Laporan</a>
+                </div>
+            </div>
+        </div>
+        @endif
+
         <!-- Hutang Stats Row -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="bg-white rounded-2xl border border-rose-100 shadow-sm p-5 flex items-center gap-4 group hover:shadow-md transition-all">

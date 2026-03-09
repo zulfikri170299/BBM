@@ -19,6 +19,19 @@ class HutangController extends Controller
             $query->where('status', $request->status);
         }
 
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $startDate = $request->start_date;
+            $endDate = $request->end_date;
+            
+            $query->where(function($q) use ($startDate, $endDate) {
+                $q->whereBetween('tanggal_bon', [$startDate, $endDate])
+                  ->orWhere(function($subq) use ($startDate, $endDate) {
+                      $subq->whereNull('tanggal_bon')
+                           ->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+                  });
+            });
+        }
+
         $perPage = $request->input('per_page', 15);
         $hutangs = $query->paginate($perPage)->withQueryString();
         $satkers = \App\Models\Satker::orderBy('nama_satker')->get();
@@ -27,6 +40,17 @@ class HutangController extends Controller
         $summaryQuery = \App\Models\Hutang::where('status', 'belum_dibayar');
         if ($request->filled('satker_id')) {
             $summaryQuery->where('satker_id', $request->satker_id);
+        }
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $startDate = $request->start_date;
+            $endDate = $request->end_date;
+            $summaryQuery->where(function($q) use ($startDate, $endDate) {
+                $q->whereBetween('tanggal_bon', [$startDate, $endDate])
+                  ->orWhere(function($subq) use ($startDate, $endDate) {
+                      $subq->whereNull('tanggal_bon')
+                           ->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+                  });
+            });
         }
         $summaryHutang = $summaryQuery->selectRaw('jenis_bbm, SUM(jumlah_bon) as total')
             ->groupBy('jenis_bbm')
@@ -45,6 +69,19 @@ class HutangController extends Controller
 
         if ($request->filled('status')) {
             $query->where('status', $request->status);
+        }
+
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $startDate = $request->start_date;
+            $endDate = $request->end_date;
+            
+            $query->where(function($q) use ($startDate, $endDate) {
+                $q->whereBetween('tanggal_bon', [$startDate, $endDate])
+                  ->orWhere(function($subq) use ($startDate, $endDate) {
+                      $subq->whereNull('tanggal_bon')
+                           ->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+                  });
+            });
         }
 
         $hutangs = $query->get();

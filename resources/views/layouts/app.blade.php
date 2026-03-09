@@ -250,43 +250,69 @@
             // Initial check
             checkUnreadMessages();
 
-            // Global SweetAlert2 Confirmation Handler
+            // Global SweetAlert2 Helpers & Handler
+            window.showAlert = (title, text, icon = 'info') => {
+                Swal.fire({
+                    title,
+                    text,
+                    icon,
+                    confirmButtonColor: '#4338ca',
+                    confirmButtonText: 'Tutup',
+                    customClass: {
+                        popup: 'rounded-[2rem] border-none shadow-2xl',
+                        title: 'text-2xl font-bold text-slate-800',
+                        confirmButton: 'rounded-xl px-10 py-3 font-bold uppercase tracking-wider text-sm'
+                    }
+                });
+            };
+
+            window.confirmDialog = (options, callback) => {
+                const type = options.type || 'question';
+                let confirmColor = '#4338ca';
+                if (type === 'error' || type === 'danger') confirmColor = '#e11d48';
+                if (type === 'warning') confirmColor = '#f59e0b';
+
+                Swal.fire({
+                    title: options.title || 'Konfirmasi',
+                    text: options.message,
+                    icon: type,
+                    showCancelButton: true,
+                    confirmButtonColor: confirmColor,
+                    cancelButtonColor: '#94a3b8',
+                    confirmButtonText: options.confirmText || 'Ya, Lanjutkan!',
+                    cancelButtonText: options.cancelText || 'Batal',
+                    reverseButtons: true,
+                    customClass: {
+                        popup: 'rounded-[2rem] border-none shadow-2xl p-8',
+                        title: 'text-2xl font-black text-slate-800 mb-2',
+                        htmlContainer: 'text-slate-500 font-medium mb-6',
+                        confirmButton: 'rounded-2xl px-8 py-3.5 font-black uppercase tracking-widest text-xs shadow-lg shadow-indigo-200 ml-3',
+                        cancelButton: 'rounded-2xl px-8 py-3.5 font-bold uppercase tracking-widest text-xs text-slate-600 hover:bg-slate-100'
+                    },
+                    buttonsStyling: true
+                }).then((result) => {
+                    if (result.isConfirmed && callback) callback();
+                });
+            };
+
             document.addEventListener('click', function (e) {
                 const target = e.target.closest('[data-confirm]');
                 if (target) {
                     e.preventDefault();
                     const message = target.getAttribute('data-confirm');
-                    const type = target.getAttribute('data-confirm-type') || 'question';
+                    const type = target.getAttribute('data-confirm-type') || 'warning';
                     const form = target.closest('form');
 
-                    let confirmColor = '#4338ca'; // Indigo
-                    if (type === 'error') confirmColor = '#e11d48'; // Rose
-                    if (type === 'warning') confirmColor = '#f59e0b'; // Amber
-
-                    Swal.fire({
-                        title: 'Konfirmasi',
-                        text: message,
-                        icon: type,
-                        showCancelButton: true,
-                        confirmButtonColor: confirmColor,
-                        cancelButtonColor: '#64748b',
-                        confirmButtonText: 'Ya, Lanjutkan!',
-                        cancelButtonText: 'Batal',
-                        background: '#ffffff',
-                        customClass: {
-                            popup: 'rounded-3xl border border-slate-100 shadow-2xl',
-                            title: 'text-2xl font-bold text-slate-800',
-                            htmlContainer: 'text-slate-600 font-medium',
-                            confirmButton: 'rounded-xl px-6 py-2.5 font-bold',
-                            cancelButton: 'rounded-xl px-6 py-2.5 font-bold text-slate-100'
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            if (form) {
-                                form.submit();
-                            } else if (target.tagName === 'A') {
-                                window.location.href = target.href;
-                            }
+                    window.confirmDialog({
+                        message: message,
+                        type: type,
+                        confirmText: 'Ya, Hapus!',
+                        title: 'Konfirmasi Hapus'
+                    }, () => {
+                        if (form) {
+                            form.submit();
+                        } else if (target.tagName === 'A') {
+                            window.location.href = target.href;
                         }
                     });
                 }

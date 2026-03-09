@@ -25,14 +25,12 @@
         .header h1 {
             font-size: 14pt;
             margin: 0;
-            text-decoration: underline;
             font-weight: bold;
         }
 
         .header h2 {
             font-size: 14pt;
             margin: 5px 0 0 0;
-            text-decoration: underline;
             font-weight: bold;
         }
 
@@ -84,6 +82,7 @@
 </head>
 
 <body>
+    @include('components.pdf-header')
     <div class="header">
         <h1>{{ $title }}</h1>
         <h2>{{ $periode }}</h2>
@@ -119,6 +118,7 @@
             </tr>
         </tfoot>
     </table>
+    @include('components.pdf-signature')
 </body>
 
 </html>

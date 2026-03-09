@@ -13,8 +13,6 @@
         .header {
             text-align: center;
             margin-bottom: 20px;
-            border-bottom: 2px solid #333;
-            padding-bottom: 15px;
         }
 
         .header h1 {
@@ -130,10 +128,9 @@
 </head>
 
 <body>
+    @include('components.pdf-header')
     <div class="header">
         <h1>Laporan Transfer Saldo Kendaraan</h1>
-        <h2>{{ $satkerName }}</h2>
-        <p>Dicetak pada: {{ date('d F Y H:i') }}</p>
         @if(request('start_date') || request('end_date'))
             <p>Periode:
                 {{ request('start_date') ? date('d/m/Y', strtotime(request('start_date'))) : 'Awal' }}
@@ -216,9 +213,8 @@
     @endif
 
     <div class="footer">
-        <span>Dicetak oleh: {{ auth()->user()->name }}</span>
-        <span style="float: right;">SIMAK BBM - Sistem Manajemen BBM</span>
     </div>
+    @include('components.pdf-signature')
 </body>
 
 </html>

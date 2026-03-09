@@ -356,25 +356,44 @@
                 const actionText = status === 'active' ? 'mengaktifkan' : 'menonaktifkan';
                 const selected = document.querySelectorAll('.user-checkbox:checked');
 
-                if (selected.length === 0) return alert('Pilih setidaknya satu user.');
+                if (selected.length === 0) return window.showAlert('Peringatan', 'Pilih setidaknya satu user.', 'warning');
 
-                if (confirm(`Apakah Anda yakin ingin ${actionText} ${selected.length} akun yang terpilih?`)) {
-                    // Clear previous IDs
-                    const container = document.getElementById('bulkIdsContainer');
-                    container.innerHTML = '';
+                Swal.fire({
+                    title: 'Konfirmasi',
+                    text: `Apakah Anda yakin ingin ${actionText} ${selected.length} akun yang terpilih?`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#4338ca',
+                    cancelButtonColor: '#64748b',
+                    confirmButtonText: 'Ya, Lanjutkan!',
+                    cancelButtonText: 'Batal',
+                    background: '#ffffff',
+                    customClass: {
+                        popup: 'rounded-[2rem] border-none shadow-2xl p-8',
+                        title: 'text-2xl font-black text-slate-800 mb-2',
+                        htmlContainer: 'text-slate-500 font-medium mb-6',
+                        confirmButton: 'rounded-2xl px-8 py-3.5 font-black uppercase tracking-widest text-xs shadow-lg shadow-indigo-200 ml-3',
+                        cancelButton: 'rounded-2xl px-8 py-3.5 font-bold uppercase tracking-widest text-xs text-slate-600 hover:bg-slate-100'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Clear previous IDs
+                        const container = document.getElementById('bulkIdsContainer');
+                        container.innerHTML = '';
 
-                    // Add new IDs
-                    selected.forEach(cb => {
-                        const input = document.createElement('input');
-                        input.type = 'hidden';
-                        input.name = 'user_ids[]';
-                        input.value = cb.value;
-                        container.appendChild(input);
-                    });
+                        // Add new IDs
+                        selected.forEach(cb => {
+                            const input = document.createElement('input');
+                            input.type = 'hidden';
+                            input.name = 'user_ids[]';
+                            input.value = cb.value;
+                            container.appendChild(input);
+                        });
 
-                    bulkStatusInput.value = status;
-                    bulkForm.submit();
-                }
+                        bulkStatusInput.value = status;
+                        bulkForm.submit();
+                    }
+                });
             }
         </script>
     @endpush

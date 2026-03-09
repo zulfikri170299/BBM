@@ -91,10 +91,9 @@
                                     throw new Error(data.message || 'Gagal memproses file');
                                 }
                             })
-                            .catch(err => {
                                 clearInterval(interval);
                                 this.uploading = false;
-                                alert('Error: ' + err.message);
+                                window.showAlert('Gagal Unggah', err.message, 'error');
                             });
                     },
 
@@ -132,10 +131,9 @@
                                     });
                                 }
                             })
-                            .catch(err => {
                                 clearInterval(interval);
                                 this.importing = false;
-                                alert('Error: ' + err.message);
+                                window.showAlert('Gagal Import', err.message, 'error');
                             });
                     }
                 };

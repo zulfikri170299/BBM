@@ -7,6 +7,7 @@
     <title>Kartu BBM - {{ $kendaraan->no_polisi }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         * {
             margin: 0;
@@ -613,7 +614,16 @@
                 btn.textContent = '📥 Download Gambar';
                 btn.disabled = false;
             }).catch(function (err) {
-                alert('Gagal membuat gambar. Silakan coba lagi.');
+                Swal.fire({
+                    title: 'Gagal',
+                    text: 'Gagal membuat gambar. Silakan coba lagi.',
+                    icon: 'error',
+                    confirmButtonColor: '#4338ca',
+                    customClass: {
+                        popup: 'rounded-3xl border-none shadow-2xl',
+                        confirmButton: 'rounded-xl px-8 py-3 font-bold uppercase tracking-wider text-sm'
+                    }
+                });
                 btn.textContent = '📥 Download Gambar';
                 btn.disabled = false;
                 console.error(err);

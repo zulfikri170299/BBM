@@ -7,7 +7,7 @@
 
 {{-- Sidebar --}}
 <div x-data="{ 
-        reportsOpen: {{ (request()->routeIs('admin.laporan-topup.*') || request()->routeIs('admin.laporan-triwulan.*') || request()->routeIs('admin.laporan-harian.*') || request()->routeIs('admin.riwayat.*') || request()->routeIs('admin.ba.*') || request()->routeIs('admin.laporan-sisa.*') || request()->routeIs('admin.laporan-hutang.*')) ? 'true' : 'false' }},
+        reportsOpen: {{ (request()->routeIs('admin.laporan-topup.*') || request()->routeIs('admin.laporan-triwulan.*') || request()->routeIs('admin.laporan-stok-bbm.*') || request()->routeIs('admin.laporan-harian.*') || request()->routeIs('admin.riwayat.*') || request()->routeIs('admin.ba.*') || request()->routeIs('admin.laporan-sisa.*') || request()->routeIs('admin.laporan-hutang.*')) ? 'true' : 'false' }},
         satkerReportsOpen: {{ (request()->routeIs('satker.riwayat.*') || request()->routeIs('satker.kendaraans.laporan-bulanan.*') || request()->routeIs('satker.kendaraans.laporan-transfer.*') || request()->routeIs('satker.laporan-hutang.*')) ? 'true' : 'false' }},
         init() {
             // Force sidebar closed on mobile every page load
@@ -148,16 +148,17 @@
                 </a>
             @endif
 
-            <a href="{{ route('admin.satisfaction.index') }}"
-                class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.satisfaction.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
-                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <span class="ml-3 font-medium">Indeks Kepuasan</span>
-            </a>
+
 
             @if(auth()->user()->role === 'super_admin')
+                <a href="{{ route('admin.penanda-tangan.index') }}"
+                    class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.penanda-tangan.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
+                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                    </svg>
+                    <span class="ml-3 font-medium">Penanda Tangan</span>
+                </a>
+
                 <a href="{{ route('admin.settings.index') }}"
                     class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.settings.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                     <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -217,6 +218,14 @@
                         class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-triwulan.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
                         Laporan Per 3 Bulan
                     </a>
+                    <a href="{{ route('admin.laporan-tahunan.index') }}"
+                        class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-tahunan.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                        Laporan Tahunan
+                    </a>
+                    <a href="{{ route('admin.laporan-stok-bbm.index') }}"
+                        class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-stok-bbm.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                        Data BBM Pada Tangki
+                    </a>
                     <a href="{{ route('admin.riwayat.index') }}"
                         class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.riwayat.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
                         Riwayat BBM
@@ -250,14 +259,7 @@
                 <span class="ml-3 font-medium">Dashboard</span>
             </a>
 
-            <a href="{{ route('satisfaction.create') }}"
-                class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('satisfaction.create') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
-                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <span class="ml-3 font-medium">Indeks Kepuasan</span>
-            </a>
+
 
             <a href="{{ route('satker.kendaraans.index') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('satker.kendaraans.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
@@ -288,6 +290,14 @@
                 <span class="ml-3 font-medium">Hutang BBM</span>
             </a>
 
+            <a href="{{ route('satker.penanda-tangan.index') }}"
+                class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('satker.penanda-tangan.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                </svg>
+                <span class="ml-3 font-medium">Penanda Tangan</span>
+            </a>
+
             {{-- Reports Dropdown (Satker) --}}
             <div class="space-y-1">
                 <button @click="satkerReportsOpen = !satkerReportsOpen"
@@ -315,6 +325,10 @@
                     <a href="{{ route('satker.laporan-hutang.index') }}"
                         class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.laporan-hutang.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
                         Laporan Bayar Hutang
+                    </a>
+                    <a href="{{ route('satker.laporan-tahunan.index') }}"
+                        class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.laporan-tahunan.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                        Laporan Tahunan
                     </a>
                     <a href="{{ route('satker.kendaraans.laporan-bulanan') }}"
                         class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.kendaraans.laporan-bulanan.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
@@ -352,6 +366,14 @@
                     </path>
                 </svg>
                 <span class="ml-3 font-medium">Input Meter Pompa</span>
+            </a>
+
+            <a href="{{ route('petugas.sinkronisasi.index') }}"
+                class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('petugas.sinkronisasi.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                </svg>
+                <span class="ml-3 font-medium">Input Stok Tangki</span>
             </a>
 
             <a href="{{ route('petugas.rekapan.index') }}"
@@ -395,14 +417,7 @@
                 <span class="ml-3 font-medium">Transfer Saldo</span>
             </a>
 
-            <a href="{{ route('satisfaction.create') }}"
-                class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('satisfaction.create') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
-                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <span class="ml-3 font-medium">Indeks Kepuasan</span>
-            </a>
+
         @endif
 
         <p class="px-4 py-1 mt-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Komunikasi</p>
@@ -420,6 +435,26 @@
                 class="hidden absolute right-3 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full items-center justify-center border-2 border-slate-900">
             </span>
         </a>
+
+        @if(in_array(auth()->user()->role, ['super_admin', 'kasubbag']))
+            <a href="{{ route('admin.satisfaction.index') }}"
+                class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.satisfaction.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span class="ml-3 font-medium">Indeks Kepuasan</span>
+            </a>
+        @else
+            <a href="{{ route('satisfaction.create') }}"
+                class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('satisfaction.create') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span class="ml-3 font-medium">Indeks Kepuasan</span>
+            </a>
+        @endif
 
         {{-- Logout --}}
         <div class="mt-3 pt-3 border-t border-slate-800/50">

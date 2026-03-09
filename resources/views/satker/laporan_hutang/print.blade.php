@@ -18,8 +18,6 @@
         .header {
             text-align: center;
             margin-bottom: 20px;
-            border-bottom: 2px solid #444;
-            padding-bottom: 10px;
         }
 
         .header h1 {
@@ -94,14 +92,12 @@
 </head>
 
 <body>
+    @include('components.pdf-header')
     <div class="header">
         <h1>Laporan Riwayat Pembayaran Hutang BBM</h1>
-        <div class="satker-name">{{ $satker->nama_satker }}</div>
-        <p>SIM BBM POLDA NTB - BIRO LOGISTIK</p>
     </div>
 
     <div class="filter-info">
-        Dicetak pada: {{ now()->translatedFormat('d F Y H:i') }} WITA<br>
         @if(request('start_date') || request('end_date'))
             Periode: {{ request('start_date') ?? '...' }} s/d {{ request('end_date') ?? '...' }}
         @endif
@@ -159,7 +155,7 @@
         @endif
     </table>
 
-</body>
+    @include('components.pdf-signature')
 </body>
 
 </html>

@@ -63,7 +63,31 @@ class AdminController extends Controller
         // Admin Stock Balances
         $adminStocks = \App\Models\AdminBbmStock::all();
 
-        return view('admin.dashboard', compact('stats', 'recentTransactions', 'kendaraanFuel', 'personelFuel', 'usersWithLocation', 'satisfactionStats', 'adminStocks'));
+        // Latest Physical Tank Stock (Sinkronisasi)
+        $latestSync = \App\Models\SinkronisasiBbm::orderBy('created_at', 'desc')->first();
+        $tankStock = [
+            'pertamax' => 0,
+            'dex' => 0
+        ];
+        
+        if ($latestSync) {
+            $pemakaianPertamax = \App\Models\TransaksiBbm::where(function($q) {
+                    $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX');
+                })
+                ->where('created_at', '>=', $latestSync->created_at)
+                ->sum('liter');
+            
+            $pemakaianDex = \App\Models\TransaksiBbm::where(function($q) {
+                    $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX');
+                })
+                ->where('created_at', '>=', $latestSync->created_at)
+                ->sum('liter');
+
+            $tankStock['pertamax'] = $latestSync->stok_awal_pertamax - $pemakaianPertamax;
+            $tankStock['dex'] = $latestSync->stok_awal_dex - $pemakaianDex;
+        }
+
+        return view('admin.dashboard', compact('stats', 'recentTransactions', 'kendaraanFuel', 'personelFuel', 'usersWithLocation', 'satisfactionStats', 'adminStocks', 'tankStock'));
     }
 
     public function topup()

@@ -111,6 +111,10 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     Route::get('/laporan-triwulan/print', [\App\Http\Controllers\Admin\LaporanTriwulanController::class, 'print'])->name('laporan-triwulan.print');
     Route::get('/laporan-triwulan', [\App\Http\Controllers\Admin\LaporanTriwulanController::class, 'index'])->name('laporan-triwulan.index');
     
+    // Laporan Tahunan
+    Route::get('/laporan-tahunan/print', [\App\Http\Controllers\Admin\LaporanTahunanController::class, 'print'])->name('laporan-tahunan.print');
+    Route::get('/laporan-tahunan', [\App\Http\Controllers\Admin\LaporanTahunanController::class, 'index'])->name('laporan-tahunan.index');
+    
     // Laporan Sisa BBM (Kendaraan & Personel)
     Route::get('/laporan-sisa/kendaraan', [\App\Http\Controllers\Admin\LaporanSisaController::class, 'kendaraan'])->name('laporan-sisa.kendaraan');
     Route::get('/laporan-sisa/kendaraan/print', [\App\Http\Controllers\Admin\LaporanSisaController::class, 'printKendaraan'])->name('laporan-sisa.kendaraan.print');
@@ -131,6 +135,12 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     Route::get('/laporan-harian/pdf', [\App\Http\Controllers\Admin\LaporanHarianController::class, 'exportPdf'])->name('laporan-harian.pdf');
     Route::post('/laporan-harian', [\App\Http\Controllers\Admin\LaporanHarianController::class, 'store'])->name('laporan-harian.store');
 
+    // Penanda Tangan
+    Route::get('/penanda-tangan', [\App\Http\Controllers\Admin\PenandaTanganController::class, 'index'])->name('penanda-tangan.index');
+    Route::post('/penanda-tangan', [\App\Http\Controllers\Admin\PenandaTanganController::class, 'store'])->name('penanda-tangan.store');
+    Route::put('/penanda-tangan/{penandaTangan}', [\App\Http\Controllers\Admin\PenandaTanganController::class, 'update'])->name('penanda-tangan.update');
+    Route::delete('/penanda-tangan/{penandaTangan}', [\App\Http\Controllers\Admin\PenandaTanganController::class, 'destroy'])->name('penanda-tangan.destroy');
+
     // Settings
     Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index')->middleware('role:super_admin');
     Route::post('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update')->middleware('role:super_admin');
@@ -140,6 +150,13 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     Route::get('/stok/print', [\App\Http\Controllers\Admin\StokController::class, 'print'])->name('stok.print');
     Route::get('/stok', [\App\Http\Controllers\Admin\StokController::class, 'index'])->name('stok.index');
     Route::post('/stok', [\App\Http\Controllers\Admin\StokController::class, 'store'])->name('stok.store');
+
+    // Laporan Stok BBM (Sinkronisasi)
+    Route::get('/laporan-stok-bbm/print', [\App\Http\Controllers\Admin\LaporanStokBbmController::class, 'print'])->name('laporan-stok-bbm.print');
+    Route::get('/laporan-stok-bbm', [\App\Http\Controllers\Admin\LaporanStokBbmController::class, 'index'])->name('laporan-stok-bbm.index');
+    Route::get('/laporan-stok-bbm/{sinkronisasi}/edit', [\App\Http\Controllers\Admin\LaporanStokBbmController::class, 'edit'])->name('laporan-stok-bbm.edit');
+    Route::put('/laporan-stok-bbm/{sinkronisasi}', [\App\Http\Controllers\Admin\LaporanStokBbmController::class, 'update'])->name('laporan-stok-bbm.update');
+    Route::delete('/laporan-stok-bbm/{sinkronisasi}', [\App\Http\Controllers\Admin\LaporanStokBbmController::class, 'destroy'])->name('laporan-stok-bbm.destroy');
 
 
     // Broadcast Messages
@@ -188,6 +205,16 @@ Route::middleware(['auth', 'role:admin_satker'])->prefix('satker')->name('satker
     Route::get('/laporan-hutang/print', [\App\Http\Controllers\Satker\LaporanHutangController::class, 'print'])->name('laporan-hutang.print');
     Route::get('/laporan-hutang', [\App\Http\Controllers\Satker\LaporanHutangController::class, 'index'])->name('laporan-hutang.index');
 
+    // Laporan Tahunan
+    Route::get('/laporan-tahunan/print', [\App\Http\Controllers\Satker\LaporanTahunanController::class, 'print'])->name('laporan-tahunan.print');
+    Route::get('/laporan-tahunan', [\App\Http\Controllers\Satker\LaporanTahunanController::class, 'index'])->name('laporan-tahunan.index');
+
+    // Penanda Tangan
+    Route::get('/penanda-tangan', [\App\Http\Controllers\Satker\PenandaTanganController::class, 'index'])->name('penanda-tangan.index');
+    Route::post('/penanda-tangan', [\App\Http\Controllers\Satker\PenandaTanganController::class, 'store'])->name('penanda-tangan.store');
+    Route::put('/penanda-tangan/{penandaTangan}', [\App\Http\Controllers\Satker\PenandaTanganController::class, 'update'])->name('penanda-tangan.update');
+    Route::delete('/penanda-tangan/{penandaTangan}', [\App\Http\Controllers\Satker\PenandaTanganController::class, 'destroy'])->name('penanda-tangan.destroy');
+
     // Hutang
     Route::get('/hutang/pdf', [\App\Http\Controllers\Satker\HutangController::class, 'downloadPDF'])->name('hutang.pdf');
     Route::get('/hutang', [\App\Http\Controllers\Satker\HutangController::class, 'index'])->name('hutang.index');
@@ -204,6 +231,10 @@ Route::middleware(['auth', 'role:petugas_bbm'])->prefix('petugas')->name('petuga
     // Meter Reading
     Route::get('/meter-reading', [\App\Http\Controllers\Petugas\MeterReadingController::class, 'index'])->name('meter.index');
     Route::post('/meter-reading', [\App\Http\Controllers\Petugas\MeterReadingController::class, 'store'])->name('meter.store');
+
+    // Sinkronisasi Stok
+    Route::get('/sinkronisasi', [\App\Http\Controllers\Petugas\SinkronisasiBbmController::class, 'index'])->name('sinkronisasi.index');
+    Route::post('/sinkronisasi', [\App\Http\Controllers\Petugas\SinkronisasiBbmController::class, 'store'])->name('sinkronisasi.store');
 
     // Rekapan Pengisian
     Route::get('/rekapan/print', [\App\Http\Controllers\Petugas\RekapanController::class, 'print'])->name('rekapan.print');

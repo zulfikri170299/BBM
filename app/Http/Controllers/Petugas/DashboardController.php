@@ -54,6 +54,25 @@ class DashboardController extends Controller
             ->groupBy('jenis_bbm')
             ->pluck('total', 'jenis_bbm');
 
-        return view('petugas.dashboard', compact('todayTransactions', 'todayLiter', 'breakdownBbm', 'hutangPerBbm'));
+        // Tank Stock Stats
+        $tankStock = \App\Models\SinkronisasiBbm::latest('created_at')->first();
+        if ($tankStock) {
+            $tankStock->pemakaian_pertamax = TransaksiBbm::where(function($q) {
+                    $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX');
+                })
+                ->where('created_at', '>=', $tankStock->created_at)
+                ->sum('liter');
+
+            $tankStock->pemakaian_dex = TransaksiBbm::where(function($q) {
+                    $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX');
+                })
+                ->where('created_at', '>=', $tankStock->created_at)
+                ->sum('liter');
+
+            $tankStock->sisa_pertamax = $tankStock->stok_awal_pertamax - $tankStock->pemakaian_pertamax;
+            $tankStock->sisa_dex = $tankStock->stok_awal_dex - $tankStock->pemakaian_dex;
+        }
+
+        return view('petugas.dashboard', compact('todayTransactions', 'todayLiter', 'breakdownBbm', 'hutangPerBbm', 'tankStock'));
     }
 }

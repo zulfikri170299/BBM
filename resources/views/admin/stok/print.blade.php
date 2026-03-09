@@ -23,6 +23,7 @@
     </style>
 </head>
 <body>
+    @include('components.pdf-header')
     <div class="header">
         <h2>Riwayat Perubahan Stok BBM Pusat</h2>
         <p>Dicetak pada: {{ date('d/m/Y H:i') }} WIB</p>
@@ -77,5 +78,6 @@
     <div class="footer">
         Aplikasi Manajemen BBM Poldan TB Rolog - {{ date('Y') }}
     </div>
+    @include('components.pdf-signature')
 </body>
 </html>

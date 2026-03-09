@@ -41,23 +41,28 @@ class LaporanTriwulanController extends Controller
             $periodeLabel = "Oktober-Desember $tahun";
         }
 
-        $startDate = Carbon::createFromFormat('Y-m-d', $startDateStr, 'Asia/Makassar')->startOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
-        $endDate = Carbon::createFromFormat('Y-m-d', $endDateStr, 'Asia/Makassar')->endOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
+        $startDate = Carbon::createFromFormat('Y-m-d', $startDateStr, 'Asia/Makassar')->startOfDay();
+        $endDate = Carbon::createFromFormat('Y-m-d', $endDateStr, 'Asia/Makassar')->endOfDay();
 
-        $bbmTypes = TransaksiBbm::whereBetween('tanggal', [$startDateStr, $endDateStr])
+        // RiwayatTopup uses created_at (timestamp)
+        // TransaksiBbm uses tanggal (custom column)
+
+        $bbmTypesTopup = RiwayatTopup::join('kendaraans', 'riwayat_topups.kendaraan_id', '=', 'kendaraans.id')
+            ->whereBetween('riwayat_topups.created_at', [$startDate, $endDate])
+            ->whereIn('riwayat_topups.metode', ['manual', 'IMPORT', 'massal'])
+            ->where('riwayat_topups.tipe', 'masuk')
+            ->selectRaw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm")
+            ->distinct()
+            ->pluck('jenis_bbm')
+            ->toArray();
+
+        $bbmTypesTransaksi = TransaksiBbm::whereBetween('tanggal', [$startDate->format('Y-m-d H:i:s'), $endDate->format('Y-m-d H:i:s')])
             ->selectRaw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm")
             ->distinct()
             ->pluck('jenis_bbm')
             ->toArray();
 
-        $bbmTypesTopup = RiwayatTopup::where('created_at', '>=', $startDate)
-            ->where('created_at', '<=', $endDate)
-            ->selectRaw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm")
-            ->distinct()
-            ->pluck('jenis_bbm')
-            ->toArray();
-
-        $allBbmTypes = array_unique(array_merge($bbmTypes, $bbmTypesTopup));
+        $allBbmTypes = array_unique(array_merge($bbmTypesTopup, $bbmTypesTransaksi));
         sort($allBbmTypes);
         
         if (empty($allBbmTypes)) {
@@ -66,13 +71,16 @@ class LaporanTriwulanController extends Controller
 
         $satkers = Satker::orderBy('nama_satker')->get();
         
-        $pendapatanRaw = RiwayatTopup::select(
-                'satker_id',
-                DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
-                DB::raw("SUM(CASE WHEN tipe = 'masuk' THEN jumlah ELSE -jumlah END) as total")
+        $pendapatanRaw = RiwayatTopup::join('kendaraans', 'riwayat_topups.kendaraan_id', '=', 'kendaraans.id')
+            ->select(
+                'riwayat_topups.satker_id',
+                DB::raw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
+                DB::raw("SUM(riwayat_topups.jumlah) as total")
             )
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->groupBy('satker_id', 'jenis_bbm')
+            ->whereBetween('riwayat_topups.created_at', [$startDate, $endDate])
+            ->whereIn('riwayat_topups.metode', ['manual', 'IMPORT', 'massal'])
+            ->where('riwayat_topups.tipe', 'masuk')
+            ->groupBy('riwayat_topups.satker_id', 'kendaraans.jenis_bbm')
             ->get();
         
         $pendapatan = [];
@@ -85,7 +93,7 @@ class LaporanTriwulanController extends Controller
                 DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
                 DB::raw('SUM(liter) as total')
             )
-            ->whereBetween('tanggal', [$startDateStr, $endDateStr])
+            ->whereBetween('tanggal', [$startDate->format('Y-m-d H:i:s'), $endDate->format('Y-m-d H:i:s')])
             ->groupBy('satker_id', 'jenis_bbm')
             ->get();
 

@@ -112,6 +112,20 @@
                     </select>
                 </div>
 
+                <div class="flex-1">
+                    <x-input-label for="start_date" value="Tanggal Awal" />
+                    <x-text-input type="date" name="start_date" id="start_date"
+                        value="{{ request('start_date') }}"
+                        class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" />
+                </div>
+
+                <div class="flex-1">
+                    <x-input-label for="end_date" value="Tanggal Akhir" />
+                    <x-text-input type="date" name="end_date" id="end_date"
+                        value="{{ request('end_date') }}"
+                        class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" />
+                </div>
+
                 <div class="flex items-end gap-2">
                     <button type="submit"
                         class="px-4 py-2.5 bg-indigo-600 text-white font-semibold rounded-lg shadow hover:bg-indigo-700 transition">
@@ -243,15 +257,18 @@
                                     </td>
                                     <td class="px-4 py-2 border-l border-slate-100">
                                         <div class="flex items-center justify-center gap-2">
-                                            <button @click="openEditModal({
-                                                                                                        id: {{ $hutang->id }},
-                                                                                                        satker_id: {{ $hutang->satker_id }},
-                                                                                                        nopol: '{{ $hutang->nopol }}',
-                                                                                                        nama_driver: '{{ $hutang->nama_driver }}',
-                                                                                                        jenis_bbm: '{{ $hutang->jenis_bbm }}',
-                                                                                                        jumlah_bon: {{ $hutang->jumlah_bon }},
-                                                                                                        tanggal_bon: '{{ $hutang->tanggal_bon ?? $hutang->created_at->format('Y-m-d') }}'
-                                                                                                    })"
+                                            @php
+                                                $editData = json_encode([
+                                                    'id' => $hutang->id,
+                                                    'satker_id' => $hutang->satker_id,
+                                                    'nopol' => $hutang->nopol,
+                                                    'nama_driver' => $hutang->nama_driver,
+                                                    'jenis_bbm' => $hutang->jenis_bbm,
+                                                    'jumlah_bon' => $hutang->jumlah_bon,
+                                                    'tanggal_bon' => $hutang->tanggal_bon ?? $hutang->created_at->format('Y-m-d')
+                                                ]);
+                                            @endphp
+                                            <button @click="openEditModal({{ htmlspecialchars($editData) }})"
                                                 class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors border border-blue-200">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -259,10 +276,11 @@
                                                 </svg>
                                             </button>
 
-                                            <form action="{{ route('admin.hutang.destroy', $hutang) }}" method="POST"
-                                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus data hutang ini?')">
+                                            <form action="{{ route('admin.hutang.destroy', $hutang) }}" method="POST">
                                                 @csrf @method('DELETE')
-                                                <button type="submit"
+                                                <button type="button"
+                                                    data-confirm="Apakah Anda yakin ingin menghapus data hutang ini?"
+                                                    data-confirm-type="warning"
                                                     class="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors border border-rose-200">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -428,102 +446,102 @@
                     </div>
                 </div>
             </div>
-            <!-- Edit Modal -->
-            <div x-show="showEditModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;"
-                aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                    <div x-show="showEditModal" x-transition.opacity
-                        class="fixed inset-0 bg-slate-900/60 transition-opacity backdrop-blur-sm" aria-hidden="true"
-                        @click="showEditModal = false"></div>
-                    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        <!-- Edit Modal -->
+        <div x-show="showEditModal" class="fixed inset-0 z-[60] overflow-y-auto" style="display: none;"
+            aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div x-show="showEditModal" x-transition.opacity
+                    class="fixed inset-0 bg-slate-900/60 transition-opacity backdrop-blur-sm" aria-hidden="true"
+                    @click="showEditModal = false"></div>
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
-                    <div x-show="showEditModal" x-transition:enter="ease-out duration-300"
-                        x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                        x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                        class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl w-full">
+                <div x-show="showEditModal" x-transition:enter="ease-out duration-300"
+                    x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                    x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                    class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl w-full border border-slate-200">
 
-                        <!-- Modal Header -->
-                        <div
-                            class="bg-blue-600 px-6 py-4 text-white flex justify-between items-center bg-gradient-to-r from-blue-600 to-blue-700">
-                            <div class="flex items-center gap-3">
-                                <div class="bg-white/20 p-2 rounded-xl">
-                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg>
-                                </div>
-                                <h3 class="text-xl font-black tracking-tight">EDIT DATA HUTANG</h3>
-                            </div>
-                            <button @click="showEditModal = false"
-                                class="text-white/80 hover:text-white transition-colors">
+                    <!-- Modal Header -->
+                    <div
+                        class="bg-blue-600 px-6 py-4 text-white flex justify-between items-center bg-gradient-to-r from-blue-600 to-blue-700">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-white/20 p-2 rounded-xl">
                                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                        d="M6 18L18 6M6 6l12 12" />
+                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                 </svg>
-                            </button>
+                            </div>
+                            <h3 class="text-xl font-black tracking-tight">EDIT DATA HUTANG</h3>
+                        </div>
+                        <button @click="showEditModal = false"
+                            class="text-white/80 hover:text-white transition-colors">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <form :action="'/admin/hutang/' + editData.id" method="POST" class="p-6 space-y-4">
+                        @csrf @method('PUT')
+
+                        <div>
+                            <x-input-label for="edit_satker_id" value="Satker" />
+                            <select name="satker_id" id="edit_satker_id" x-model="editData.satker_id"
+                                class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-xl shadow-sm font-bold text-slate-700">
+                                @foreach($satkers as $satker)
+                                    <option value="{{ $satker->id }}">{{ $satker->nama_satker }}</option>
+                                @endforeach
+                            </select>
                         </div>
 
-                        <form :action="`/admin/hutang/${editData.id}`" method="POST" class="p-6 space-y-4">
-                            @csrf @method('PUT')
-
+                        <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <x-input-label for="edit_satker_id" value="Satker" />
-                                <select name="satker_id" id="edit_satker_id" x-model="editData.satker_id"
-                                    class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-xl shadow-sm font-bold text-slate-700">
-                                    @foreach($satkers as $satker)
-                                        <option value="{{ $satker->id }}">{{ $satker->nama_satker }}</option>
-                                    @endforeach
+                                <x-input-label for="edit_nopol" value="No. Polisi" />
+                                <x-text-input id="edit_nopol" name="nopol" type="text" x-model="editData.nopol"
+                                    class="mt-1 block w-full font-bold uppercase" />
+                            </div>
+                            <div>
+                                <x-input-label for="edit_jenis_bbm" value="Jenis BBM" />
+                                <select name="jenis_bbm" id="edit_jenis_bbm" x-model="editData.jenis_bbm"
+                                    class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-xl shadow-sm font-bold">
+                                    <option value="PERTAMAX">PERTAMAX</option>
+                                    <option value="PERTAMINA DEX">PERTAMINA DEX</option>
                                 </select>
                             </div>
+                        </div>
 
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <x-input-label for="edit_nopol" value="No. Polisi" />
-                                    <x-text-input id="edit_nopol" name="nopol" type="text" x-model="editData.nopol"
-                                        class="mt-1 block w-full font-bold" />
-                                </div>
-                                <div>
-                                    <x-input-label for="edit_jenis_bbm" value="Jenis BBM" />
-                                    <select name="jenis_bbm" id="edit_jenis_bbm" x-model="editData.jenis_bbm"
-                                        class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-xl shadow-sm font-bold">
-                                        <option value="PERTAMAX">PERTAMAX</option>
-                                        <option value="PERTAMINA DEX">PERTAMINA DEX</option>
-                                    </select>
-                                </div>
-                            </div>
+                        <div>
+                            <x-input-label for="edit_nama_driver" value="Nama Driver" />
+                            <x-text-input id="edit_nama_driver" name="nama_driver" type="text"
+                                x-model="editData.nama_driver" class="mt-1 block w-full font-bold" />
+                        </div>
 
-                            <div>
-                                <x-input-label for="edit_nama_driver" value="Nama Driver" />
-                                <x-text-input id="edit_nama_driver" name="nama_driver" type="text"
-                                    x-model="editData.nama_driver" class="mt-1 block w-full font-bold" />
-                            </div>
+                        <div>
+                            <x-input-label for="edit_tanggal_bon" value="Tanggal Bon" />
+                            <x-text-input id="edit_tanggal_bon" name="tanggal_bon" type="date"
+                                x-model="editData.tanggal_bon" class="mt-1 block w-full font-bold" required />
+                        </div>
 
-                            <div>
-                                <x-input-label for="edit_tanggal_bon" value="Tanggal Bon" />
-                                <x-text-input id="edit_tanggal_bon" name="tanggal_bon" type="date"
-                                    x-model="editData.tanggal_bon" class="mt-1 block w-full font-bold" required />
-                            </div>
+                        <div>
+                            <x-input-label for="edit_jumlah_bon" value="Jumlah Bon (Liter)" />
+                            <x-text-input id="edit_jumlah_bon" name="jumlah_bon" type="number" step="0.1"
+                                x-model="editData.jumlah_bon" class="mt-1 block w-full font-bold text-rose-600" />
+                        </div>
 
-                            <div>
-                                <x-input-label for="edit_jumlah_bon" value="Jumlah Bon (Liter)" />
-                                <x-text-input id="edit_jumlah_bon" name="jumlah_bon" type="number" step="0.1"
-                                    x-model="editData.jumlah_bon" class="mt-1 block w-full font-bold text-rose-600" />
-                            </div>
-
-                            <div class="pt-4 flex flex-col sm:flex-row-reverse gap-3">
-                                <button type="submit"
-                                    class="w-full sm:w-auto px-8 py-3.5 bg-blue-600 text-white font-black rounded-2xl shadow-xl shadow-blue-100 hover:bg-blue-700 active:scale-95 transition-all text-sm uppercase tracking-widest">
-                                    SIMPAN PERUBAHAN
-                                </button>
-                                <button type="button" @click="showEditModal = false"
-                                    class="w-full sm:w-auto px-8 py-3.5 bg-slate-100 text-slate-600 font-bold rounded-2xl hover:bg-slate-200 transition-all text-sm uppercase tracking-widest">
-                                    BATAL
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                        <div class="pt-4 flex flex-col sm:flex-row-reverse gap-3">
+                            <button type="submit"
+                                class="w-full sm:w-auto px-8 py-3.5 bg-blue-600 text-white font-black rounded-2xl shadow-xl shadow-blue-100 hover:bg-blue-700 active:scale-95 transition-all text-sm uppercase tracking-widest">
+                                SIMPAN PERUBAHAN
+                            </button>
+                            <button type="button" @click="showEditModal = false"
+                                class="w-full sm:w-auto px-8 py-3.5 bg-slate-100 text-slate-600 font-bold rounded-2xl hover:bg-slate-200 transition-all text-sm uppercase tracking-widest">
+                                BATAL
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
+        </div>
         </div>
     </div>
 </x-app-layout>

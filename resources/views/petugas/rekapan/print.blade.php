@@ -125,15 +125,9 @@
     </style>
 </head>
 <body onload="window.print()">
-    <div class="header-container">
-        <div class="header">
-            <h1>KEPOLISIAN NEGARA REPUBLIK INDONESIA</h1>
-            <h2>DAERAH NUSA TENGGARA BARAT</h2>
-            <p>BIRO LOGISTIK</p>
-        </div>
-    </div>
+    @include('components.pdf-header')
 
-    <div class="text-center" style="margin-top: 30px; margin-bottom: 20px; text-decoration: underline; font-weight: bold;">
+    <div class="text-center" style="margin-top: 20px; margin-bottom: 20px; text-decoration: underline; font-weight: bold;">
         LAPORAN REKAPAN PENGISIAN BBM (METERAN)
     </div>
 
