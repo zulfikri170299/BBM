@@ -264,4 +264,8 @@ Route::middleware(['auth'])->group(function () {
     })->name('dev.lockdown.toggle');
 });
 
+// Public Balance Check Routes
+Route::get('/cek-saldo', [\App\Http\Controllers\Guest\BalanceCheckController::class, 'index'])->name('cek-saldo.index');
+Route::post('/cek-saldo/check', [\App\Http\Controllers\Guest\BalanceCheckController::class, 'check'])->name('cek-saldo.check');
+
 require __DIR__.'/auth.php';

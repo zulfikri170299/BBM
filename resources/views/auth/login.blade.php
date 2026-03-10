@@ -185,7 +185,7 @@
                     <button type="submit"
                         class="w-full py-4 px-6 bg-gradient-to-r from-red-700 to-amber-700 hover:from-red-600 hover:to-amber-600 text-white font-bold rounded-xl shadow-lg shadow-red-900/30 transform hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 text-sm uppercase tracking-widest border-t border-white/10 relative overflow-hidden group">
                         <span class="relative z-10 flex items-center justify-center gap-2">
-                            Masuk ke Dashboard
+                            LOGIN
                             <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -193,6 +193,26 @@
                             </svg>
                         </span>
                     </button>
+
+                    <!-- Public Check Balance Link -->
+                    <div class="mt-6 flex flex-col gap-3">
+                        <div class="relative">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-slate-700/50"></div>
+                            </div>
+                            <div class="relative flex justify-center text-xs uppercase">
+                                <span class="bg-slate-900 border border-slate-700/50 px-3 py-1 rounded-full text-slate-500 font-bold tracking-widest">Atau</span>
+                            </div>
+                        </div>
+                        
+                        <a href="{{ route('cek-saldo.index') }}"
+                            class="w-full py-3 px-6 bg-slate-800/50 hover:bg-slate-700/50 text-amber-500 border border-amber-500/20 hover:border-amber-500/50 font-bold rounded-xl transition-all duration-200 text-xs uppercase tracking-widest flex items-center justify-center gap-2 group">
+                            <svg class="w-4 h-4 text-amber-500 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Cek Saldo Tanpa Login
+                        </a>
+                    </div>
                     <!-- Mobile only secure badge -->
                     <div class="md:hidden text-center mt-6">
                         <div
