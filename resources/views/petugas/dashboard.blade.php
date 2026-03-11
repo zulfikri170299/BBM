@@ -28,7 +28,7 @@
                     </svg>
                 </div>
                 <div class="relative z-10 min-w-0">
-                    <p class="text-[8px] sm:text-[10px] font-black text-blue-600 uppercase tracking-widest mb-0.5 sm:mb-1 truncate">Sisa Pertamax</p>
+                    <p class="text-[8px] sm:text-[10px] font-black text-blue-600 uppercase tracking-widest mb-0.5 sm:mb-1 opacity-80 whitespace-normal leading-tight">Stok BBM di Tangki (Pertamax)</p>
                     <p class="text-lg sm:text-2xl font-black text-slate-900 leading-none truncate">
                         {{ number_format($tankStock->sisa_pertamax, 0, ',', '.') }} <span class="text-[10px] sm:text-sm font-bold text-slate-400">L</span>
                     </p>
@@ -44,7 +44,7 @@
                     </svg>
                 </div>
                 <div class="relative z-10 min-w-0">
-                    <p class="text-[8px] sm:text-[10px] font-black text-rose-600 uppercase tracking-widest mb-0.5 sm:mb-1 truncate">Sisa P. Dex</p>
+                    <p class="text-[8px] sm:text-[10px] font-black text-rose-600 uppercase tracking-widest mb-0.5 sm:mb-1 opacity-80 whitespace-normal leading-tight">Stok BBM di Tangki (Dex)</p>
                     <p class="text-lg sm:text-2xl font-black text-slate-900 leading-none truncate">
                         {{ number_format($tankStock->sisa_dex, 0, ',', '.') }} <span class="text-[10px] sm:text-sm font-bold text-slate-400">L</span>
                     </p>

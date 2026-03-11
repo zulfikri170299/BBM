@@ -209,6 +209,10 @@ Route::middleware(['auth', 'role:admin_satker'])->prefix('satker')->name('satker
     Route::get('/laporan-tahunan/print', [\App\Http\Controllers\Satker\LaporanTahunanController::class, 'print'])->name('laporan-tahunan.print');
     Route::get('/laporan-tahunan', [\App\Http\Controllers\Satker\LaporanTahunanController::class, 'index'])->name('laporan-tahunan.index');
 
+    // Laporan Per 3 Bulan
+    Route::get('/laporan-triwulan/print', [\App\Http\Controllers\Satker\LaporanTriwulanController::class, 'print'])->name('laporan-triwulan.print');
+    Route::get('/laporan-triwulan', [\App\Http\Controllers\Satker\LaporanTriwulanController::class, 'index'])->name('laporan-triwulan.index');
+
     // Penanda Tangan
     Route::get('/penanda-tangan', [\App\Http\Controllers\Satker\PenandaTanganController::class, 'index'])->name('penanda-tangan.index');
     Route::post('/penanda-tangan', [\App\Http\Controllers\Satker\PenandaTanganController::class, 'store'])->name('penanda-tangan.store');

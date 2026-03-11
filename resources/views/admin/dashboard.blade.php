@@ -129,7 +129,7 @@
                     </svg>
                 </div>
                 <div class="relative z-10 min-w-0">
-                    <p class="text-[8px] sm:text-[10px] font-black text-indigo-100 uppercase tracking-widest mb-0.5 sm:mb-1 opacity-80 truncate">Stok Pertamax</p>
+                    <p class="text-[8px] sm:text-[10px] font-black text-indigo-100 uppercase tracking-widest mb-0.5 sm:mb-1 opacity-80 whitespace-normal leading-tight">Stok BBM di Tangki (Pertamax)</p>
                     <h3 class="text-lg sm:text-2xl font-black truncate">{{ number_format($tankStock['pertamax'], 0, ',', '.') }} <span class="text-[10px] font-bold text-indigo-200">L</span></h3>
                 </div>
                 <div class="absolute bottom-1 right-2 sm:bottom-2 sm:right-4">
@@ -145,7 +145,7 @@
                     </svg>
                 </div>
                 <div class="relative z-10 min-w-0">
-                    <p class="text-[8px] sm:text-[10px] font-black text-rose-100 uppercase tracking-widest mb-0.5 sm:mb-1 opacity-80 truncate">Stok P. Dex</p>
+                    <p class="text-[8px] sm:text-[10px] font-black text-rose-100 uppercase tracking-widest mb-0.5 sm:mb-1 opacity-80 whitespace-normal leading-tight">Stok BBM di Tangki (Dex)</p>
                     <h3 class="text-lg sm:text-2xl font-black truncate">{{ number_format($tankStock['dex'], 0, ',', '.') }} <span class="text-[10px] font-bold text-rose-200">L</span></h3>
                 </div>
                 <div class="absolute bottom-1 right-2 sm:bottom-2 sm:right-4">
@@ -240,17 +240,19 @@
                         </h3>
                         <div class="grid grid-cols-2 gap-2 sm:gap-4">
                             @foreach($personelFuel as $pFuel)
-                                <div
-                                    class="bg-gradient-to-br {{ $bbmStyle[$pFuel->jenis_bbm] ?? 'from-slate-500 to-slate-600' }} p-3 sm:p-4 rounded-lg sm:rounded-xl text-white shadow-md">
-                                    <p
-                                        class="text-[8px] sm:text-[9px] font-bold uppercase tracking-widest opacity-80 truncate">
-                                        {{ $pFuel->jenis_bbm }}</p>
-                                    <div class="flex items-baseline gap-1 mt-0.5 sm:mt-1">
-                                        <span
-                                            class="text-base sm:text-xl font-black">{{ number_format($pFuel->total, 0, ',', '.') }}</span>
-                                        <span class="text-[9px] sm:text-[10px] font-bold opacity-70">L</span>
+                                @if(in_array(strtoupper($pFuel->jenis_bbm), ['PERTAMAX', 'PERTAMINA DEX']))
+                                    <div
+                                        class="bg-gradient-to-br {{ $bbmStyle[$pFuel->jenis_bbm] ?? 'from-slate-500 to-slate-600' }} p-3 sm:p-4 rounded-lg sm:rounded-xl text-white shadow-md">
+                                        <p
+                                            class="text-[8px] sm:text-[9px] font-bold uppercase tracking-widest opacity-80 truncate">
+                                            {{ $pFuel->jenis_bbm }}</p>
+                                        <div class="flex items-baseline gap-1 mt-0.5 sm:mt-1">
+                                            <span
+                                                class="text-base sm:text-xl font-black">{{ number_format($pFuel->total, 0, ',', '.') }}</span>
+                                            <span class="text-[9px] sm:text-[10px] font-bold opacity-70">L</span>
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
                             @endforeach
                             @if(count($personelFuel) == 0)
                                 <p class="col-span-2 text-center text-slate-400 py-4 italic text-sm">Belum ada data saldo
@@ -261,14 +263,14 @@
                 </div>
             </div>
 
-            <!-- Right Column: Stok BBM Pusat (Super Admin) -->
+            <!-- Right Column: Stok Pembelian BBM (Belum Distribusi) (Super Admin) -->
             <div
                 class="bg-indigo-600 rounded-xl sm:rounded-2xl border border-indigo-400 shadow-xl p-4 sm:p-6 overflow-hidden relative">
                 <div class="absolute -top-12 -right-12 w-32 h-32 sm:w-48 sm:h-48 bg-white/10 rounded-full blur-3xl">
                 </div>
                 <h3 class="text-sm sm:text-lg font-bold text-white mb-4 sm:mb-6 flex items-center gap-2 relative z-10">
                     <div class="w-1.5 h-4 sm:w-2 sm:h-6 bg-white rounded-full"></div>
-                    Stok BBM Pusat
+                    Stok Pembelian BBM (Belum Distribusi)
                 </h3>
                 <div class="grid grid-cols-1 gap-2 sm:gap-4 relative z-10">
                     @foreach($adminStocks as $aStock)

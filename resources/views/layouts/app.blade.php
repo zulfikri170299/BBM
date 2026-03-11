@@ -14,6 +14,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Hotwire Turbo Drive (SPA Navigation) -->
+    <script type="module" data-turbo-track="reload">
+        import * as Turbo from 'https://cdn.jsdelivr.net/npm/@hotwired/turbo@8.0.12/+esm';
+        // Only intercept link clicks for SPA navigation, NOT form submissions
+        Turbo.config.forms.mode = "optin";
+    </script>
+
     <!-- Styles & Scripts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -37,7 +44,6 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts" data-turbo-track="reload"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" data-turbo-track="reload"></script>
-    <meta name="turbo-visit-control" content="reload">
     @stack('head')
 
     <style>
@@ -318,38 +324,80 @@
                 }
             });
 
-            // Sidebar Active State Handler for Turbo Permanent & Mobile Close
+            // Sidebar Active State & Mobile Close Handler (for data-turbo-permanent)
             document.addEventListener('turbo:load', function () {
-                // Force close sidebar on mobile for ANY turbo visit
+                // 1. Close sidebar on mobile
                 if (window.innerWidth < 1024) {
                     window.dispatchEvent(new CustomEvent('sidebar-close'));
                 }
 
+                // 2. Update active link classes (since data-turbo-permanent prevents server re-render)
                 const currentPath = window.location.pathname;
-                const sidebarLinks = document.querySelectorAll('#sidebar nav a');
+                const sidebar = document.getElementById('sidebar');
+                if (!sidebar) return;
 
-                sidebarLinks.forEach(link => {
-                    // Logic highlighting active link (tetap sama)
+                const allLinks = sidebar.querySelectorAll('a[href]');
+                
+                // Classes for main menu items
+                const mainActive = ['bg-indigo-600', 'shadow-lg', 'shadow-indigo-500/30'];
+                const mainInactive = ['hover:bg-slate-800'];
+                
+                // Classes for submenu items  
+                const subActive = ['text-white', 'bg-indigo-600/50'];
+                const subInactive = ['text-slate-400', 'hover:text-white', 'hover:bg-slate-800'];
+
+                let activeSubmenuDropdown = null;
+
+                allLinks.forEach(link => {
                     const href = link.getAttribute('href');
-                    if (!href) return;
+                    if (!href || href === '#' || href.startsWith('javascript:')) return;
 
                     try {
-                        const url = new URL(href);
-                        const path = url.pathname;
+                        const url = new URL(href, window.location.origin);
+                        const linkPath = url.pathname;
+                        const isInsideSubmenu = !!link.closest('div[x-show]');
+                        const isMatch = (currentPath === linkPath) || 
+                                        (linkPath !== '/' && linkPath.length > 1 && currentPath.startsWith(linkPath));
 
-                        // Remove existing active classes
-                        link.classList.remove('bg-indigo-600', 'shadow-lg', 'shadow-indigo-500/30');
-                        link.classList.add('hover:bg-slate-800');
-
-                        // Add active classes if path matches
-                        if (currentPath === path || (path !== '/' && currentPath.startsWith(path))) {
-                            link.classList.remove('hover:bg-slate-800');
-                            link.classList.add('bg-indigo-600', 'shadow-lg', 'shadow-indigo-500/30');
+                        if (isInsideSubmenu) {
+                            // Reset submenu link
+                            link.classList.remove(...subActive);
+                            link.classList.add(...subInactive);
+                            
+                            if (isMatch) {
+                                // Activate submenu link
+                                link.classList.remove(...subInactive);
+                                link.classList.add(...subActive);
+                                activeSubmenuDropdown = link.closest('div[x-show]');
+                            }
+                        } else {
+                            // Reset main menu link
+                            link.classList.remove(...mainActive);
+                            if (!link.classList.contains('hover:bg-slate-800')) {
+                                link.classList.add(...mainInactive);
+                            }
+                            
+                            if (isMatch) {
+                                // Activate main menu link
+                                link.classList.remove(...mainInactive);
+                                link.classList.add(...mainActive);
+                            }
                         }
                     } catch (e) {
                         // ignore invalid URLs
                     }
                 });
+
+                // 3. Auto-open the dropdown containing the active submenu link
+                if (activeSubmenuDropdown) {
+                    const dropdownContainer = activeSubmenuDropdown.closest('.space-y-1');
+                    if (dropdownContainer) {
+                        const toggleBtn = dropdownContainer.querySelector('button');
+                        if (toggleBtn && activeSubmenuDropdown.style.display === 'none') {
+                            toggleBtn.click();
+                        }
+                    }
+                }
             });
 
             // Agresif: Tutup sidebar saat link APAPUN diklik di mobile

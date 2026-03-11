@@ -7,8 +7,8 @@
 
 {{-- Sidebar --}}
 <div x-data="{ 
-        reportsOpen: {{ (request()->routeIs('admin.laporan-topup.*') || request()->routeIs('admin.laporan-triwulan.*') || request()->routeIs('admin.laporan-stok-bbm.*') || request()->routeIs('admin.laporan-harian.*') || request()->routeIs('admin.riwayat.*') || request()->routeIs('admin.ba.*') || request()->routeIs('admin.laporan-sisa.*') || request()->routeIs('admin.laporan-hutang.*')) ? 'true' : 'false' }},
-        satkerReportsOpen: {{ (request()->routeIs('satker.riwayat.*') || request()->routeIs('satker.kendaraans.laporan-bulanan.*') || request()->routeIs('satker.kendaraans.laporan-transfer.*') || request()->routeIs('satker.laporan-hutang.*')) ? 'true' : 'false' }},
+        reportsOpen: $persist({{ (request()->routeIs('admin.laporan-topup.*') || request()->routeIs('admin.laporan-triwulan.*') || request()->routeIs('admin.laporan-stok-bbm.*') || request()->routeIs('admin.laporan-harian.*') || request()->routeIs('admin.riwayat.*') || request()->routeIs('admin.ba.*') || request()->routeIs('admin.laporan-sisa.*') || request()->routeIs('admin.laporan-hutang.*')) ? 'true' : 'false' }}).as('sidebar_reports_open'),
+        satkerReportsOpen: $persist({{ (request()->routeIs('satker.riwayat.*') || request()->routeIs('satker.kendaraans.laporan-bulanan.*') || request()->routeIs('satker.kendaraans.laporan-transfer.*') || request()->routeIs('satker.laporan-hutang.*') || request()->routeIs('satker.laporan-triwulan.*')) ? 'true' : 'false' }}).as('sidebar_satker_reports_open'),
         init() {
             // Force sidebar closed on mobile every page load
             if (window.innerWidth < 1024) {
@@ -19,7 +19,7 @@
                 localStorage.setItem('sidebarScroll', this.$el.scrollTop);
             });
         }
-    }" id="sidebar"
+    }" id="sidebar" data-turbo-permanent
     class="fixed inset-y-0 left-0 z-30 w-72 lg:w-64 overflow-y-auto transform bg-slate-900 text-white -translate-x-full lg:translate-x-0 lg:static lg:inset-0 transition-transform duration-300 ease-in-out"
     :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
     style="@media (min-width: 1024px) { display: block !important; }">
@@ -81,7 +81,7 @@
             </a>
 
             <a href="{{ route('admin.kendaraans.index') }}"
-                class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.kendaraans.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
+                class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ (request()->routeIs('admin.kendaraans.*') && !request()->routeIs('admin.kendaraans.laporan-*')) ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -259,10 +259,13 @@
 
 
             <a href="{{ route('satker.kendaraans.index') }}"
-                class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('satker.kendaraans.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
+                class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ (request()->routeIs('satker.kendaraans.*') && !request()->routeIs('satker.kendaraans.laporan-*')) ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+                        d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1">
+                    </path>
                 </svg>
                 <span class="ml-3 font-medium">Kendaraan</span>
             </a>
@@ -322,6 +325,10 @@
                     <a href="{{ route('satker.laporan-hutang.index') }}"
                         class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.laporan-hutang.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
                         Laporan Bayar Hutang
+                    </a>
+                    <a href="{{ route('satker.laporan-triwulan.index') }}"
+                        class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.laporan-triwulan.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                        Laporan Per 3 Bulan
                     </a>
                     <a href="{{ route('satker.laporan-tahunan.index') }}"
                         class="block py-2.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.laporan-tahunan.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">

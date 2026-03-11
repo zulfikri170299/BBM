@@ -41,33 +41,39 @@
                         @csrf
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Stok Pertamax</label>
+                                <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Stok BBM di Tangki (Pertamax)</label>
                                 <div class="relative group">
                                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-blue-500 group-focus-within:text-indigo-600 transition-colors">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                                         </svg>
                                     </div>
-                                    <input type="number" name="stok_awal_pertamax" step="0.01" min="0" required
-                                        class="w-full pl-12 pr-12 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-black text-slate-900 text-lg placeholder:text-slate-300"
-                                        placeholder="0.00">
+                                    <input type="number" name="stok_awal_pertamax" step="0.01" min="0"
+                                        class="w-full pl-12 pr-12 py-4 bg-slate-50 border {{ $errors->has('stok_awal_pertamax') ? 'border-red-500' : 'border-slate-200' }} rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-black text-slate-900 text-lg placeholder:text-slate-300"
+                                        placeholder="0.00" value="{{ old('stok_awal_pertamax') }}">
                                     <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-black text-[10px]">LITER</span>
                                 </div>
+                                @error('stok_awal_pertamax')
+                                    <p class="text-red-500 text-[10px] font-bold mt-1 uppercase">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <div>
-                                <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Stok Pertamina Dex</label>
+                                <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Stok BBM di Tangki (Dex)</label>
                                 <div class="relative group">
                                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-rose-500 group-focus-within:text-indigo-600 transition-colors">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                                         </svg>
                                     </div>
-                                    <input type="number" name="stok_awal_dex" step="0.01" min="0" required
-                                        class="w-full pl-12 pr-12 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-black text-slate-900 text-lg placeholder:text-slate-300"
-                                        placeholder="0.00">
+                                    <input type="number" name="stok_awal_dex" step="0.01" min="0"
+                                        class="w-full pl-12 pr-12 py-4 bg-slate-50 border {{ $errors->has('stok_awal_dex') ? 'border-red-500' : 'border-slate-200' }} rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-black text-slate-900 text-lg placeholder:text-slate-300"
+                                        placeholder="0.00" value="{{ old('stok_awal_dex') }}">
                                     <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-black text-[10px]">LITER</span>
                                 </div>
+                                @error('stok_awal_dex')
+                                    <p class="text-red-500 text-[10px] font-bold mt-1 uppercase">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <div class="p-4 bg-amber-50 rounded-2xl border border-amber-100">

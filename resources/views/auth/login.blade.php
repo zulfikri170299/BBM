@@ -18,14 +18,13 @@
                         class="w-32 h-32 object-contain relative drop-shadow-2xl transform group-hover:scale-105 transition-transform duration-500">
                 </div>
 
-                <h2 class="text-3xl font-bold text-white mb-2 tracking-tight">SISTEM INFORMASI</h2>
-                <h3 class="text-xl font-semibold text-amber-500 mb-6 tracking-widest uppercase">Manajemen Bahan Bakar
-                </h3>
+                <h2 class="text-3xl font-bold text-white mb-2 tracking-tight">SIM-BBM</h2>
+                <h3 class="text-sm font-semibold text-amber-500 mb-6 tracking-wider uppercase">(SISTEM INFORMASI MANAJEMEN BBM)</h3>
 
                 <div class="w-16 h-1 bg-gradient-to-r from-red-500 to-amber-500 rounded-full mb-8"></div>
 
                 <p class="text-slate-300 text-sm leading-relaxed max-w-xs font-light">
-                    Platform digital terintegrasi untuk pengelolaan distribusi dan monitoring bahan bakar kendaraan
+                    Platform digital terintegrasi untuk pengelolaan distribusi dan monitoring bahan bakar minyak kendaraan
                     dinas secara realtime dan transparan.
                 </p>
 
@@ -79,8 +78,14 @@
                 <div class="flex justify-center mb-6 md:hidden">
                     <img src="{{ asset('rolog.png') }}" alt="Logo" class="w-16 h-16 object-contain drop-shadow-lg">
                 </div>
-                <h4 class="text-2xl font-bold text-white mb-2">Selamat Datang</h4>
-                <p class="text-slate-400 text-sm">Silakan masuk menggunakan akun kredensial Anda.</p>
+                <div class="md:hidden">
+                    <h4 class="text-2xl font-bold text-white mb-1">SIM-BBM</h4>
+                    <p class="text-amber-500 text-xs font-semibold tracking-wider uppercase mb-2">(SISTEM INFORMASI MANAJEMEN BBM)</p>
+                </div>
+                <div class="hidden md:block">
+                    <h4 class="text-2xl font-bold text-white mb-2">Selamat Datang</h4>
+                    <p class="text-slate-400 text-sm">Silakan masuk menggunakan akun kredensial Anda.</p>
+                </div>
             </div>
 
             <!-- Session Status -->

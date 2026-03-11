@@ -25,7 +25,7 @@
 <body>
     @include('components.pdf-header')
     <div class="header">
-        <h2>Riwayat Perubahan Stok BBM Pusat</h2>
+        <h2>Riwayat Perubahan Stok Pembelian BBM (Belum Distribusi)</h2>
         <p>Dicetak pada: {{ date('d/m/Y H:i') }} WIB</p>
     </div>
 
