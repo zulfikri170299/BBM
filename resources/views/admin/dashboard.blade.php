@@ -501,7 +501,7 @@
 
         <!-- Map Script -->
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('turbo:load', function () {
                 var mapContainer = document.getElementById('userMap');
                 if (mapContainer) {
                     // Map Initialization
@@ -593,7 +593,7 @@
 
         <!-- Chart Script -->
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('turbo:load', function () {
                 // Satisfaction Donut Chart
                 var satisfactionOptions = {
                     chart: {

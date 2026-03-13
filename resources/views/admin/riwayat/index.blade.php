@@ -158,7 +158,10 @@
                     </thead>
                     <tbody class="divide-y divide-slate-100">
                         @forelse($transaksis as $trx)
-                            <tr class="hover:bg-slate-50/50 transition-colors">
+                            @php
+                                $isPotong = ($trx->row_type ?? 'pengisian') === 'potong_saldo';
+                            @endphp
+                            <tr class="{{ $isPotong ? 'bg-amber-50/30' : 'hover:bg-slate-50/50' }} transition-colors">
                                 <td class="px-6 py-4 text-center">
                                     <span
                                         class="text-sm font-semibold text-slate-500">{{ $loop->iteration + ($transaksis->currentPage() - 1) * $transaksis->perPage() }}</span>
@@ -178,11 +181,15 @@
                                             $satker = $trx->satker ?? ($trx->kendaraan->satker ?? ($trx->personel->satker ?? null));
                                         @endphp
                                         <div
-                                            class="flex-shrink-0 w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white font-bold text-[10px] shadow-sm">
+                                            class="flex-shrink-0 w-7 h-7 rounded-lg {{ $isPotong ? 'bg-gradient-to-br from-amber-500 to-orange-600' : 'bg-gradient-to-br from-indigo-500 to-indigo-600' }} flex items-center justify-center text-white font-bold text-[10px] shadow-sm">
                                             {{ strtoupper(substr($satker->nama_satker ?? '-', 0, 2)) }}
                                         </div>
-                                        <span
-                                            class="text-sm font-medium text-slate-700">{{ $satker->nama_satker ?? '-' }}</span>
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-medium text-slate-700">{{ $satker->nama_satker ?? '-' }}</span>
+                                            @if($isPotong)
+                                                <span class="text-[10px] font-bold text-amber-600 uppercase tracking-tighter">Potong Saldo</span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
@@ -211,34 +218,43 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span
-                                        class="text-sm font-medium text-slate-700">{{ $trx->nama_driver ?? ($trx->personel->nama ?? '-') }}</span>
+                                    @if($isPotong)
+                                        <span class="text-xs text-slate-500 italic leading-tight block max-w-[150px] truncate" title="{{ $trx->keterangan }}">
+                                            {{ $trx->keterangan }}
+                                        </span>
+                                    @else
+                                        <span class="text-sm font-medium text-slate-700">{{ $trx->nama_driver ?? ($trx->personel->nama ?? '-') }}</span>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 text-right">
-                                    <span
-                                        class="text-sm font-bold text-emerald-600">{{ number_format($trx->liter, 0, ',', '.') }}
-                                        L</span>
+                                    <span class="text-sm font-bold {{ $isPotong ? 'text-rose-600' : 'text-emerald-600' }}">
+                                        {{ $isPotong ? '-' : '' }}{{ number_format($trx->liter, 0, ',', '.') }} L
+                                    </span>
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    <form id="delete-form-{{ $trx->id }}"
-                                        action="{{ route('admin.riwayat.destroy', $trx->id) }}" method="POST"
-                                        class="inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <input type="hidden" name="topup_password_confirm" id="pwd-{{ $trx->id }}">
-                                        <button type="button"
-                                            class="text-rose-500 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 p-2 rounded-lg transition-colors"
-                                            onclick="confirmDelete('{{ $trx->id }}', '{{ number_format($trx->liter, 0, ',', '.') }}')"
-                                            title="Batalkan Transaksi">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"
-                                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                stroke-linejoin="round">
-                                                <path d="M3 6h18"></path>
-                                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                                            </svg>
-                                        </button>
-                                    </form>
+                                    @if(!$isPotong)
+                                        <form id="delete-form-{{ $trx->id }}"
+                                            action="{{ route('admin.riwayat.destroy', $trx->id) }}" method="POST"
+                                            class="inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <input type="hidden" name="topup_password_confirm" id="pwd-{{ $trx->id }}">
+                                            <button type="button"
+                                                class="text-rose-500 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 p-2 rounded-lg transition-colors"
+                                                onclick="confirmDelete('{{ $trx->id }}', '{{ number_format($trx->liter, 0, ',', '.') }}')"
+                                                title="Batalkan Transaksi">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"
+                                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round">
+                                                    <path d="M3 6h18"></path>
+                                                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <span class="text-xs text-slate-400 font-medium italic">Fixed</span>
+                                    @endif
                                 </td>
                             </tr>
                         @empty

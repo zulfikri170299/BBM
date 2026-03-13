@@ -47,9 +47,64 @@ class LaporanTahunanController extends Controller
                 })
                 ->whereYear('tanggal', $year)
                 ->sum('liter');
+            
+            // Tambahan: SEMUA RiwayatTopup 'keluar'
+            $psP = RiwayatTopup::where('satker_id', $satker->id)
+                ->where('tipe', 'keluar')
+                ->where(function($q) {
+                    $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX');
+                })
+                ->whereYear('created_at', $year)
+                ->sum('jumlah');
+            
+            $psD = RiwayatTopup::where('satker_id', $satker->id)
+                ->where('tipe', 'keluar')
+                ->where(function($q) {
+                    $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX');
+                })
+                ->whereYear('created_at', $year)
+                ->sum('jumlah');
+            
+            $pemakaianPertamax += $psP;
+            $pemakaianDex += $psD;
                 
-            $sisaPertamax = $pendapatanPertamax - $pemakaianPertamax;
-            $sisaDex = $pendapatanDex - $pemakaianDex;
+            // --- Perbaikan: Hitung Sisa BBM secara Kumulatif ---
+            $totalPendapatanPertamax = RiwayatTopup::where('satker_id', $satker->id)
+                ->where('tipe', 'masuk')
+                ->where(function($q) { $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })
+                ->where('created_at', '<=', "$year-12-31 23:59:59")
+                ->sum('jumlah');
+            
+            $totalPendapatanDex = RiwayatTopup::where('satker_id', $satker->id)
+                ->where('tipe', 'masuk')
+                ->where(function($q) { $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })
+                ->where('created_at', '<=', "$year-12-31 23:59:59")
+                ->sum('jumlah');
+
+            $totalKeluarPertamax = TransaksiBbm::where('satker_id', $satker->id)
+                ->where(function($q) { $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })
+                ->where('tanggal', '<=', "$year-12-31 23:59:59")
+                ->sum('liter');
+            
+            $totalKeluarPertamax += RiwayatTopup::where('satker_id', $satker->id)
+                ->where('tipe', 'keluar')
+                ->where(function($q) { $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })
+                ->where('created_at', '<=', "$year-12-31 23:59:59")
+                ->sum('jumlah');
+
+            $totalKeluarDex = TransaksiBbm::where('satker_id', $satker->id)
+                ->where(function($q) { $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })
+                ->where('tanggal', '<=', "$year-12-31 23:59:59")
+                ->sum('liter');
+            
+            $totalKeluarDex += RiwayatTopup::where('satker_id', $satker->id)
+                ->where('tipe', 'keluar')
+                ->where(function($q) { $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })
+                ->where('created_at', '<=', "$year-12-31 23:59:59")
+                ->sum('jumlah');
+
+            $sisaPertamax = $totalPendapatanPertamax - $totalKeluarPertamax;
+            $sisaDex = $totalPendapatanDex - $totalKeluarDex;
 
             $reportData[] = [
                 'satker' => $satker->nama_satker,
@@ -87,9 +142,26 @@ class LaporanTahunanController extends Controller
             $pendapatanDex = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'masuk')->where(function($q) { $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })->whereYear('created_at', $year)->sum('jumlah');
             $pemakaianPertamax = TransaksiBbm::where('satker_id', $satker->id)->where(function($q) { $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })->whereYear('tanggal', $year)->sum('liter');
             $pemakaianDex = TransaksiBbm::where('satker_id', $satker->id)->where(function($q) { $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })->whereYear('tanggal', $year)->sum('liter');
+            
+            // Tambahan: SEMUA RiwayatTopup 'keluar'
+            $psP = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'keluar')->where(function($q) { $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })->whereYear('created_at', $year)->sum('jumlah');
+            $psD = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'keluar')->where(function($q) { $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })->whereYear('created_at', $year)->sum('jumlah');
+            
+            $pemakaianPertamax += $psP;
+            $pemakaianDex += $psD;
                 
-            $sisaPertamax = $pendapatanPertamax - $pemakaianPertamax;
-            $sisaDex = $pendapatanDex - $pemakaianDex;
+            // --- Perbaikan: Hitung Sisa BBM secara Kumulatif (Print) ---
+            $totalPendapatanPertamax = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'masuk')->where(function($q) { $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })->where('created_at', '<=', "$year-12-31 23:59:59")->sum('jumlah');
+            $totalPendapatanDex = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'masuk')->where(function($q) { $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })->where('created_at', '<=', "$year-12-31 23:59:59")->sum('jumlah');
+            
+            $totalKeluarPertamax = TransaksiBbm::where('satker_id', $satker->id)->where(function($q) { $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })->where('tanggal', '<=', "$year-12-31 23:59:59")->sum('liter');
+            $totalKeluarPertamax += RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'keluar')->where(function($q) { $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })->where('created_at', '<=', "$year-12-31 23:59:59")->sum('jumlah');
+
+            $totalKeluarDex = TransaksiBbm::where('satker_id', $satker->id)->where(function($q) { $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })->where('tanggal', '<=', "$year-12-31 23:59:59")->sum('liter');
+            $totalKeluarDex += RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'keluar')->where(function($q) { $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })->where('created_at', '<=', "$year-12-31 23:59:59")->sum('jumlah');
+
+            $sisaPertamax = $totalPendapatanPertamax - $totalKeluarPertamax;
+            $sisaDex = $totalPendapatanDex - $totalKeluarDex;
 
             $reportData[] = [
                 'satker' => $satker->nama_satker,

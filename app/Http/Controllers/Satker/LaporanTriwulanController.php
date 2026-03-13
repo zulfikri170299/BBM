@@ -76,7 +76,6 @@ class LaporanTriwulanController extends Controller
             )
             ->where('riwayat_topups.satker_id', $satker->id)
             ->whereBetween('riwayat_topups.created_at', [$startDate, $endDate])
-            ->whereIn('riwayat_topups.metode', ['manual', 'IMPORT', 'massal'])
             ->where('riwayat_topups.tipe', 'masuk')
             ->groupBy('kendaraans.jenis_bbm')
             ->get();
@@ -100,7 +99,64 @@ class LaporanTriwulanController extends Controller
             $pemakaian[$item->jenis_bbm] = $item->total;
         }
 
-        return compact('tahun', 'triwulan', 'periodeLabel', 'allBbmTypes', 'satker', 'pendapatan', 'pemakaian');
+        // Tambahan: SEMUA RiwayatTopup 'keluar'
+        $potongSaldoRaw = RiwayatTopup::select(
+                DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
+                DB::raw('SUM(jumlah) as total')
+            )
+            ->where('satker_id', $satker->id)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->where('tipe', 'keluar')
+            ->groupBy('jenis_bbm')
+            ->get();
+
+        foreach($potongSaldoRaw as $item) {
+            $pemakaian[$item->jenis_bbm] = ($pemakaian[$item->jenis_bbm] ?? 0) + $item->total;
+        }
+
+        // --- Perbaikan: Hitung Sisa BBM secara Kumulatif (Sampai Akhir Periode) ---
+        $pendapatanKumulatifRaw = RiwayatTopup::join('kendaraans', 'riwayat_topups.kendaraan_id', '=', 'kendaraans.id')
+            ->select(
+                DB::raw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
+                DB::raw("SUM(riwayat_topups.jumlah) as total")
+            )
+            ->where('riwayat_topups.satker_id', $satker->id)
+            ->where('riwayat_topups.created_at', '<=', $endDate)
+            ->where('riwayat_topups.tipe', 'masuk')
+            ->groupBy('kendaraans.jenis_bbm')
+            ->get();
+
+        $pemakaianKumulatifRaw = TransaksiBbm::select(
+                DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
+                DB::raw('SUM(liter) as total')
+            )
+            ->where('satker_id', $satker->id)
+            ->where('tanggal', '<=', $endDate->format('Y-m-d H:i:s'))
+            ->groupBy('jenis_bbm')
+            ->get();
+
+        $potongSaldoKumulatifRaw = RiwayatTopup::select(
+                DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
+                DB::raw('SUM(jumlah) as total')
+            )
+            ->where('satker_id', $satker->id)
+            ->where('created_at', '<=', $endDate)
+            ->where('tipe', 'keluar')
+            ->groupBy('jenis_bbm')
+            ->get();
+
+        $sisaBbm = [];
+        foreach($pendapatanKumulatifRaw as $item) {
+            $sisaBbm[$item->jenis_bbm] = ($sisaBbm[$item->jenis_bbm] ?? 0) + $item->total;
+        }
+        foreach($pemakaianKumulatifRaw as $item) {
+            $sisaBbm[$item->jenis_bbm] = ($sisaBbm[$item->jenis_bbm] ?? 0) - $item->total;
+        }
+        foreach($potongSaldoKumulatifRaw as $item) {
+            $sisaBbm[$item->jenis_bbm] = ($sisaBbm[$item->jenis_bbm] ?? 0) - $item->total;
+        }
+
+        return compact('tahun', 'triwulan', 'periodeLabel', 'allBbmTypes', 'satker', 'pendapatan', 'pemakaian', 'sisaBbm');
     }
 
     public function index(Request $request)

@@ -152,9 +152,7 @@
 
                     @foreach($allBbmTypes as $jenis)
                         @php
-                            $valP = $pendapatan[$satker->id][$jenis] ?? 0;
-                            $valM = $pemakaian[$satker->id][$jenis] ?? 0;
-                            $sisa = $valP - $valM;
+                            $sisa = $sisaBbm[$satker->id][$jenis] ?? 0;
                             $sumSisa[$jenis] += $sisa;
                         @endphp
                         <td class="text-center font-bold {{ $sisa < 0 ? 'text-red' : '' }}">

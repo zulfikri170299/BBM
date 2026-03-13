@@ -99,7 +99,7 @@
                 @endforeach
                 @foreach($allBbmTypes as $jenis)
                     @php
-                        $sisa = ($pendapatan[$jenis] ?? 0) - ($pemakaian[$jenis] ?? 0);
+                        $sisa = $sisaBbm[$jenis] ?? 0;
                     @endphp
                     <td class="font-bold">{{ number_format($sisa, 0, ',', '.') }}</td>
                 @endforeach

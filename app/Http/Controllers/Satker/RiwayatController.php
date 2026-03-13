@@ -17,51 +17,61 @@ class RiwayatController extends Controller
     {
         $satker = auth()->user()->satker;
 
-        $query = TransaksiBbm::where('satker_id', $satker->id)->with(['kendaraan.satker', 'personel.satker', 'petugas']);
+        // 1. Ambil TransaksiBbm
+        $queryTrx = TransaksiBbm::where('satker_id', $satker->id)->with(['kendaraan.satker', 'personel.satker', 'petugas']);
+        if ($request->filled('dari')) $queryTrx->whereDate('tanggal', '>=', $request->dari);
+        if ($request->filled('sampai')) $queryTrx->whereDate('tanggal', '<=', $request->sampai);
+        if ($request->filled('kendaraan_id')) $queryTrx->where('kendaraan_id', $request->kendaraan_id);
+        
+        $trxs = $queryTrx->get()->map(function($item) {
+            $item->row_type = 'pengisian';
+            $item->sort_date = $item->tanggal;
+            return $item;
+        });
 
-        // Filter tanggal
-        if ($request->filled('dari')) {
-            $query->whereDate('tanggal', '>=', $request->dari);
-        }
-        if ($request->filled('sampai')) {
-            $query->whereDate('tanggal', '<=', $request->sampai);
-        }
+        // 2. Ambil RiwayatTopup (Potong Saldo)
+        $queryTopup = \App\Models\RiwayatTopup::where('satker_id', $satker->id)
+            ->where('tipe', 'keluar')
+            ->with(['kendaraan.satker', 'user']);
+        if ($request->filled('dari')) $queryTopup->whereDate('created_at', '>=', $request->dari);
+        if ($request->filled('sampai')) $queryTopup->whereDate('created_at', '<=', $request->sampai);
+        if ($request->filled('kendaraan_id')) $queryTopup->where('kendaraan_id', $request->kendaraan_id);
 
-        // Filter kendaraan
-        if ($request->filled('kendaraan_id')) {
-            $query->where('kendaraan_id', $request->kendaraan_id);
-        }
+        $topups = $queryTopup->get()->map(function($item) {
+            $item->row_type = 'potong_saldo';
+            $item->sort_date = $item->created_at;
+            $item->tanggal = $item->created_at;
+            $item->liter = $item->jumlah;
+            $item->nama_driver = "POTONG SALDO";
+            return $item;
+        });
 
-        $transaksis = $query->latest('tanggal')->paginate($this->getPerPage($request))->withQueryString();
+        // 3. Gabungkan dan Urutkan
+        $merged = $trxs->concat($topups)->sortByDesc('sort_date')->values();
+
+        // 4. Paginate Manual
+        $currentPage = \Illuminate\Pagination\Paginator::resolveCurrentPage() ?: 1;
+        $perPage = $this->getPerPage($request);
+        $currentItems = $merged->slice(($currentPage - 1) * $perPage, $perPage)->all();
+        $transaksis = new \Illuminate\Pagination\LengthAwarePaginator($currentItems, $merged->count(), $perPage, $currentPage, [
+            'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath(),
+            'query' => $request->query(),
+        ]);
 
         $kendaraans = \App\Models\Kendaraan::where('satker_id', $satker->id)
             ->orderBy('no_polisi')
             ->get();
 
         // Statistik
-        $statsQuery = TransaksiBbm::where('transaksi_bbms.satker_id', $satker->id);
-        if ($request->filled('dari')) {
-            $statsQuery->whereDate('tanggal', '>=', $request->dari);
-        }
-        if ($request->filled('sampai')) {
-            $statsQuery->whereDate('tanggal', '<=', $request->sampai);
-        }
-        if ($request->filled('kendaraan_id')) {
-            $statsQuery->where('kendaraan_id', $request->kendaraan_id);
-        }
-
         $stats = [
-            'total_transaksi' => (clone $statsQuery)->count(),
-            'total_liter' => (clone $statsQuery)->sum('liter'),
+            'total_transaksi' => $merged->count(),
+            'total_liter' => $merged->sum('liter'),
         ];
 
-    // Hitung total per jenis BBM
-    $summaryBbm = (clone $statsQuery)
-        ->selectRaw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as bbm, SUM(liter) as total")
-        ->groupBy('bbm')
-        ->pluck('total', 'bbm');
-
-    $summaryBbm = $summaryBbm->sortKeys();
+        // Summary per Jenis BBM
+        $summaryBbm = $merged->groupBy('jenis_bbm')->map(function ($group) {
+            return $group->sum('liter');
+        })->sortKeys();
 
         return view('satker.riwayat.index', compact('transaksis', 'kendaraans', 'stats', 'summaryBbm'));
     }
@@ -70,29 +80,37 @@ class RiwayatController extends Controller
     {
         $satker = auth()->user()->satker;
 
-        $query = TransaksiBbm::where('satker_id', $satker->id)->with(['kendaraan.satker', 'personel.satker', 'petugas']);
+        // Ambil TransaksiBbm
+        $queryTrx = TransaksiBbm::where('satker_id', $satker->id)->with(['kendaraan.satker', 'personel.satker', 'petugas']);
+        if ($request->filled('dari')) $queryTrx->whereDate('tanggal', '>=', $request->dari);
+        if ($request->filled('sampai')) $queryTrx->whereDate('tanggal', '<=', $request->sampai);
+        if ($request->filled('kendaraan_id')) $queryTrx->where('kendaraan_id', $request->kendaraan_id);
+        $trxs = $queryTrx->get()->map(function($item) {
+            $item->row_type = 'pengisian';
+            $item->sort_date = $item->tanggal;
+            return $item;
+        });
 
-        // Filter tanggal
-        if ($request->filled('dari')) {
-            $query->whereDate('tanggal', '>=', $request->dari);
-        }
-        if ($request->filled('sampai')) {
-            $query->whereDate('tanggal', '<=', $request->sampai);
-        }
+        // Ambil RiwayatTopup (keluar)
+        $queryTopup = \App\Models\RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'keluar')->with(['kendaraan.satker', 'user']);
+        if ($request->filled('dari')) $queryTopup->whereDate('created_at', '>=', $request->dari);
+        if ($request->filled('sampai')) $queryTopup->whereDate('created_at', '<=', $request->sampai);
+        if ($request->filled('kendaraan_id')) $queryTopup->where('kendaraan_id', $request->kendaraan_id);
+        $topups = $queryTopup->get()->map(function($item) {
+            $item->row_type = 'potong_saldo';
+            $item->sort_date = $item->created_at;
+            $item->tanggal = $item->created_at;
+            $item->liter = $item->jumlah;
+            $item->nama_driver = "POTONG SALDO";
+            return $item;
+        });
 
-        // Filter kendaraan
-        if ($request->filled('kendaraan_id')) {
-            $query->where('kendaraan_id', $request->kendaraan_id);
-        }
+        $transaksis = $trxs->concat($topups)->sortByDesc('sort_date')->values();
 
         // Hitung Summary per Jenis BBM
-        $summaryBbm = (clone $query)
-            ->selectRaw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as bbm, SUM(liter) as total")
-            ->groupBy('bbm')
-            ->pluck('total', 'bbm')
-            ->sortKeys();
-
-        $transaksis = $query->latest('tanggal')->get();
+        $summaryBbm = $transaksis->groupBy('jenis_bbm')->map(function ($group) {
+            return $group->sum('liter');
+        })->sortKeys();
 
         $pdf = Pdf::loadView('admin.riwayat.print', compact('transaksis', 'summaryBbm', 'satker'))
             ->setPaper([0, 0, 609.45, 935.43], 'landscape'); // F4 (215mm x 330mm)

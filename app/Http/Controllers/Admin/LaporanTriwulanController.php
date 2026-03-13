@@ -78,7 +78,6 @@ class LaporanTriwulanController extends Controller
                 DB::raw("SUM(riwayat_topups.jumlah) as total")
             )
             ->whereBetween('riwayat_topups.created_at', [$startDate, $endDate])
-            ->whereIn('riwayat_topups.metode', ['manual', 'IMPORT', 'massal'])
             ->where('riwayat_topups.tipe', 'masuk')
             ->groupBy('riwayat_topups.satker_id', 'kendaraans.jenis_bbm')
             ->get();
@@ -102,7 +101,64 @@ class LaporanTriwulanController extends Controller
             $pemakaian[$item->satker_id][$item->jenis_bbm] = ($pemakaian[$item->satker_id][$item->jenis_bbm] ?? 0) + $item->total;
         }
 
-        return compact('tahun', 'triwulan', 'periodeLabel', 'allBbmTypes', 'satkers', 'pendapatan', 'pemakaian');
+        // Tambahan: Hitung SEMUA RiwayatTopup 'keluar' (Potong Saldo, POTONG_HUTANG, TRANSFER, dll) sebagai pemakaian
+        $potongSaldoRaw = RiwayatTopup::select(
+                'satker_id',
+                DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
+                DB::raw('SUM(jumlah) as total')
+            )
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->where('tipe', 'keluar')
+            ->groupBy('satker_id', 'jenis_bbm')
+            ->get();
+
+        foreach($potongSaldoRaw as $item) {
+            $pemakaian[$item->satker_id][$item->jenis_bbm] = ($pemakaian[$item->satker_id][$item->jenis_bbm] ?? 0) + $item->total;
+        }
+
+        // --- Perbaikan: Hitung Sisa BBM secara Kumulatif (Sampai Akhir Periode) ---
+        $pendapatanKumulatifRaw = RiwayatTopup::join('kendaraans', 'riwayat_topups.kendaraan_id', '=', 'kendaraans.id')
+            ->select(
+                'riwayat_topups.satker_id',
+                DB::raw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
+                DB::raw("SUM(riwayat_topups.jumlah) as total")
+            )
+            ->where('riwayat_topups.created_at', '<=', $endDate)
+            ->where('riwayat_topups.tipe', 'masuk')
+            ->groupBy('riwayat_topups.satker_id', 'kendaraans.jenis_bbm')
+            ->get();
+
+        $pemakaianKumulatifRaw = TransaksiBbm::select(
+                'satker_id',
+                DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
+                DB::raw('SUM(liter) as total')
+            )
+            ->where('tanggal', '<=', $endDate->format('Y-m-d H:i:s'))
+            ->groupBy('satker_id', 'jenis_bbm')
+            ->get();
+
+        $potongSaldoKumulatifRaw = RiwayatTopup::select(
+                'satker_id',
+                DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
+                DB::raw('SUM(jumlah) as total')
+            )
+            ->where('created_at', '<=', $endDate)
+            ->where('tipe', 'keluar')
+            ->groupBy('satker_id', 'jenis_bbm')
+            ->get();
+
+        $sisaBbm = [];
+        foreach($pendapatanKumulatifRaw as $item) {
+            $sisaBbm[$item->satker_id][$item->jenis_bbm] = ($sisaBbm[$item->satker_id][$item->jenis_bbm] ?? 0) + $item->total;
+        }
+        foreach($pemakaianKumulatifRaw as $item) {
+            $sisaBbm[$item->satker_id][$item->jenis_bbm] = ($sisaBbm[$item->satker_id][$item->jenis_bbm] ?? 0) - $item->total;
+        }
+        foreach($potongSaldoKumulatifRaw as $item) {
+            $sisaBbm[$item->satker_id][$item->jenis_bbm] = ($sisaBbm[$item->satker_id][$item->jenis_bbm] ?? 0) - $item->total;
+        }
+
+        return compact('tahun', 'triwulan', 'periodeLabel', 'allBbmTypes', 'satkers', 'pendapatan', 'pemakaian', 'sisaBbm');
     }
 
     public function index(Request $request)
@@ -234,9 +290,8 @@ class LaporanTriwulanController extends Controller
             
             foreach($allBbmTypes as $jenis) {
                 $colLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($currColIndex);
-                $pCol = $pendapatanCols[$jenis];
-                $pmCol = $pemakaianCols[$jenis];
-                $sheet->setCellValue($colLetter . $row, "={$pCol}{$row}-{$pmCol}{$row}");
+                $valSisa = $sisaBbm[$satker->id][$jenis] ?? 0;
+                $sheet->setCellValue($colLetter . $row, $valSisa);
                 $currColIndex++;
             }
             

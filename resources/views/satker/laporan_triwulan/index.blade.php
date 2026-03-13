@@ -135,9 +135,7 @@
 
                             @foreach($allBbmTypes as $jenis)
                                 @php
-                                    $valP = $pendapatan[$jenis] ?? 0;
-                                    $valM = $pemakaian[$jenis] ?? 0;
-                                    $sisa = $valP - $valM;
+                                    $sisa = $sisaBbm[$jenis] ?? 0;
                                 @endphp
                                 <td class="px-4 py-3 whitespace-nowrap text-center text-sm font-bold {{ $sisa < 0 ? 'text-red-600' : 'text-emerald-600' }} border-r border-slate-100">
                                     {{ number_format($sisa, 0, ',', '.') }}

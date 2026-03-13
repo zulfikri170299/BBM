@@ -148,7 +148,10 @@
                     </thead>
                     <tbody class="divide-y divide-slate-100">
                         @forelse($transaksis as $trx)
-                            <tr class="hover:bg-slate-50/50 transition-colors">
+                            @php
+                                $isPotong = ($trx->row_type ?? 'pengisian') === 'potong_saldo';
+                            @endphp
+                            <tr class="{{ $isPotong ? 'bg-amber-50/30' : 'hover:bg-slate-50/50' }} transition-colors">
                                 <td class="px-6 py-4 text-center">
                                     <span
                                         class="text-sm font-semibold text-slate-500">{{ $loop->iteration + ($transaksis->currentPage() - 1) * $transaksis->perPage() }}</span>
@@ -163,8 +166,12 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span
-                                        class="text-sm text-slate-700">{{ $trx->kendaraan->jenis_kendaraan ?? ($trx->personel->nama ?? '-') }}</span>
+                                    <div class="flex flex-col">
+                                        <span class="text-sm text-slate-700 font-medium">{{ $trx->kendaraan->jenis_kendaraan ?? ($trx->personel->nama ?? '-') }}</span>
+                                        @if($isPotong)
+                                            <span class="text-[10px] font-bold text-amber-600 uppercase tracking-tighter">Potong Saldo</span>
+                                        @endif
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     <span
@@ -187,13 +194,18 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span
-                                        class="text-sm font-medium text-slate-700">{{ $trx->nama_driver ?? ($trx->personel->nama ?? '-') }}</span>
+                                    @if($isPotong)
+                                        <span class="text-xs text-slate-500 italic leading-tight block max-w-[150px] truncate" title="{{ $trx->keterangan }}">
+                                            {{ $trx->keterangan }}
+                                        </span>
+                                    @else
+                                        <span class="text-sm font-medium text-slate-700">{{ $trx->nama_driver ?? ($trx->personel->nama ?? '-') }}</span>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 text-right">
-                                    <span
-                                        class="text-sm font-bold text-emerald-600">{{ number_format($trx->liter, 0, ',', '.') }}
-                                        L</span>
+                                    <span class="text-sm font-bold {{ $isPotong ? 'text-rose-600' : 'text-emerald-600' }}">
+                                        {{ $isPotong ? '-' : '' }}{{ number_format($trx->liter, 0, ',', '.') }} L
+                                    </span>
                                 </td>
                             </tr>
                         @empty

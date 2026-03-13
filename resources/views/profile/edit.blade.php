@@ -156,7 +156,7 @@
 
 @push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('turbo:load', function () {
             @if(session('status') === 'password-updated')
                 Swal.fire({
                     icon: 'success',

@@ -258,7 +258,7 @@
 
     <!-- Chart Script -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('turbo:load', function () {
             var options = {
                 chart: {
                     type: 'area',

@@ -52,20 +52,39 @@
         </thead>
         <tbody>
             @foreach($transaksis as $index => $trx)
-            <tr>
+            @php
+                $isPotong = ($trx->row_type ?? 'pengisian') === 'potong_saldo';
+            @endphp
+            <tr style="{{ $isPotong ? 'background-color: #fff9e6;' : '' }}">
                 <td class="text-center">{{ $index + 1 }}</td>
                 <td>
                     {{ \Carbon\Carbon::parse($trx->tanggal)->format('d/m/Y') }}<br>
                     <small>{{ \Carbon\Carbon::parse($trx->tanggal)->format('H:i') }}</small>
                 </td>
                 @if(!isset($satker))
-                    <td>{{ $trx->satker->nama_satker ?? ($trx->kendaraan->satker->nama_satker ?? ($trx->personel->satker->nama_satker ?? '-')) }}</td>
-                @endif                <td>{{ $trx->kendaraan->jenis_kendaraan ?? ($trx->personel->nama ?? '-') }}</td>
+                    <td>
+                        {{ $trx->satker->nama_satker ?? ($trx->kendaraan->satker->nama_satker ?? ($trx->personel->satker->nama_satker ?? '-')) }}
+                        @if($isPotong)
+                            <br><small style="color: #b7791f; font-weight: bold;">(POTONG SALDO)</small>
+                        @endif
+                    </td>
+                @endif
+                <td>{{ $trx->kendaraan->jenis_kendaraan ?? ($trx->personel->nama ?? '-') }}</td>
                 <td class="text-center"><b>{{ $trx->kendaraan->no_polisi ?? ($trx->personel->nrp ?? '-') }}</b></td>
                 <td class="text-center">{{ $trx->jenis_bbm ?? '-' }}</td>
-                <td>{{ $trx->nama_driver ?? ($trx->personel->nama ?? '-') }}</td>
-                <td class="text-right"><strong>{{ number_format($trx->liter, 0, ',', '.') }}</strong></td>
-                <td>{{ $trx->petugas->name ?? '-' }}</td>
+                <td>
+                    @if($isPotong)
+                        <small style="color: #666; font-style: italic;">{{ $trx->keterangan }}</small>
+                    @else
+                        {{ $trx->nama_driver ?? ($trx->personel->nama ?? '-') }}
+                    @endif
+                </td>
+                <td class="text-right">
+                    <strong style="color: {{ $isPotong ? '#e53e3e' : '#2f855a' }}">
+                        {{ $isPotong ? '-' : '' }}{{ number_format($trx->liter, 0, ',', '.') }}
+                    </strong>
+                </td>
+                <td>{{ $trx->petugas->name ?? ($trx->user->name ?? '-') }}</td>
             </tr>
             @endforeach
             

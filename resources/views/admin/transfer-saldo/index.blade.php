@@ -253,7 +253,7 @@
     @push('scripts')
         <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('turbo:load', function () {
                 // Initialize Satker TomSelect
                 const satkerSelect = document.getElementById('satker_id');
                 if (satkerSelect) {

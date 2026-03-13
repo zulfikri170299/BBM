@@ -16,104 +16,120 @@ class RiwayatController extends Controller
 
     public function index(Request $request)
     {
-        $query = TransaksiBbm::with(['satker', 'kendaraan.satker', 'personel', 'petugas']);
-
-        // Filter tanggal
-        if ($request->filled('dari')) {
-            $query->whereDate('tanggal', '>=', $request->dari);
-        }
-        if ($request->filled('sampai')) {
-            $query->whereDate('tanggal', '<=', $request->sampai);
-        }
-
-        // Filter satker
-        if ($request->filled('satker_id')) {
-            $query->where('transaksi_bbms.satker_id', $request->satker_id);
-        }
-
-        // Search nopol
-    if ($request->filled('search')) {
-        $search = $request->search;
-        $query->where(function ($q) use ($search) {
-            $q->whereHas('kendaraan', function ($subQ) use ($search) {
-                $subQ->where('no_polisi', 'like', "%{$search}%");
-            })->orWhereHas('personel', function ($subQ) use ($search) {
-                $subQ->where('nama', 'like', "%{$search}%");
+        // 1. Ambil TransaksiBbm
+        $queryTrx = TransaksiBbm::with(['satker', 'kendaraan.satker', 'personel', 'petugas']);
+        if ($request->filled('dari')) $queryTrx->whereDate('tanggal', '>=', $request->dari);
+        if ($request->filled('sampai')) $queryTrx->whereDate('tanggal', '<=', $request->sampai);
+        if ($request->filled('satker_id')) $queryTrx->where('satker_id', $request->satker_id);
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $queryTrx->where(function ($q) use ($search) {
+                $q->whereHas('kendaraan', function ($sub) use ($search) { $sub->where('no_polisi', 'like', "%$search%"); })
+                  ->orWhereHas('personel', function ($sub) use ($search) { $sub->where('nama', 'like', "%$search%"); });
             });
+        }
+        $trxs = $queryTrx->get()->map(function($item) {
+            $item->row_type = 'pengisian';
+            $item->sort_date = $item->tanggal;
+            return $item;
         });
-    }
 
+        // 2. Ambil RiwayatTopup (Hanya yang keluar / potong saldo)
+        $queryTopup = \App\Models\RiwayatTopup::with(['satker', 'kendaraan.satker', 'user'])
+            ->where('tipe', 'keluar');
+        if ($request->filled('dari')) $queryTopup->whereDate('created_at', '>=', $request->dari);
+        if ($request->filled('sampai')) $queryTopup->whereDate('created_at', '<=', $request->sampai);
+        if ($request->filled('satker_id')) $queryTopup->where('satker_id', $request->satker_id);
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $queryTopup->whereHas('kendaraan', function ($sub) use ($search) {
+                $sub->where('no_polisi', 'like', "%$search%");
+            });
+        }
+        $topups = $queryTopup->get()->map(function($item) {
+            $item->row_type = 'potong_saldo';
+            $item->sort_date = $item->created_at;
+            // Map fields to match TransaksiBbm for view consistency
+            $item->tanggal = $item->created_at;
+            $item->liter = $item->jumlah;
+            $item->nama_driver = "POTONG SALDO";
+            return $item;
+        });
+
+        // 3. Gabungkan dan Urutkan
+        $merged = $trxs->concat($topups)->sortByDesc('sort_date')->values();
+
+        // 4. Paginate Manual
+        $currentPage = \Illuminate\Pagination\Paginator::resolveCurrentPage() ?: 1;
         $perPage = $this->getPerPage($request);
-        $transaksis = $query->latest()->paginate($perPage)->withQueryString();
+        $currentItems = $merged->slice(($currentPage - 1) * $perPage, $perPage)->all();
+        $transaksis = new \Illuminate\Pagination\LengthAwarePaginator($currentItems, $merged->count(), $perPage, $currentPage, [
+            'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath(),
+            'query' => $request->query(),
+        ]);
 
         $satkers = Satker::orderBy('nama_satker')->get();
 
-        // Statistik
-    $statsQuery = TransaksiBbm::query();
-    if ($request->filled('dari')) {
-        $statsQuery->whereDate('transaksi_bbms.tanggal', '>=', $request->dari);
-    }
-    if ($request->filled('sampai')) {
-        $statsQuery->whereDate('transaksi_bbms.tanggal', '<=', $request->sampai);
-    }
-    if ($request->filled('satker_id')) {
-        $statsQuery->where('transaksi_bbms.satker_id', $request->satker_id);
-    }
-
+        // Statistik (Tetap murni TransaksiBbm atau gabungan? User minta agar laporan sama, jadi statistik juga sebaiknya gabungan)
+        $totalLiterPengisian = $trxs->sum('liter');
+        $totalLiterPotong = $topups->sum('liter');
+        
         $stats = [
-            'total_transaksi' => (clone $statsQuery)->count(),
-            'total_liter' => (clone $statsQuery)->sum('liter'),
+            'total_transaksi' => $merged->count(),
+            'total_liter' => $totalLiterPengisian + $totalLiterPotong,
         ];
 
-        // Hitung total per jenis BBM 
-    $summaryBbm = (clone $statsQuery)
-        ->selectRaw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as bbm, SUM(liter) as total")
-        ->groupBy('bbm')
-        ->pluck('total', 'bbm');
-
-    // Urutkan jenis bbm
-    $summaryBbm = $summaryBbm->sortKeys();
+        // Summary per Jenis BBM
+        $summaryBbm = $merged->groupBy('jenis_bbm')->map(function ($group) {
+            return $group->sum('liter');
+        })->sortKeys();
 
         return view('admin.riwayat.index', compact('transaksis', 'satkers', 'stats', 'summaryBbm'));
     }
 
     public function print(Request $request)
     {
-        $query = TransaksiBbm::with(['satker', 'kendaraan.satker', 'personel', 'petugas']);
-
-        // Filter tanggal
-        if ($request->filled('dari')) {
-            $query->whereDate('tanggal', '>=', $request->dari);
-        }
-        if ($request->filled('sampai')) {
-            $query->whereDate('tanggal', '<=', $request->sampai);
-        }
-
-        // Filter satker
-        if ($request->filled('satker_id')) {
-            $query->where('transaksi_bbms.satker_id', $request->satker_id);
-        }
-
-        // Search nopol (optional for print, but good consistency)
+        // Ambil TransaksiBbm
+        $queryTrx = TransaksiBbm::with(['satker', 'kendaraan.satker', 'personel', 'petugas']);
+        if ($request->filled('dari')) $queryTrx->whereDate('tanggal', '>=', $request->dari);
+        if ($request->filled('sampai')) $queryTrx->whereDate('tanggal', '<=', $request->sampai);
+        if ($request->filled('satker_id')) $queryTrx->where('satker_id', $request->satker_id);
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->whereHas('kendaraan', function ($subQ) use ($search) {
-                    $subQ->where('no_polisi', 'like', "%{$search}%");
-                })->orWhereHas('personel', function ($subQ) use ($search) {
-                    $subQ->where('nama', 'like', "%{$search}%");
-                });
+            $queryTrx->where(function ($q) use ($search) {
+                $q->whereHas('kendaraan', function ($sub) use ($search) { $sub->where('no_polisi', 'like', "%$search%"); })
+                  ->orWhereHas('personel', function ($sub) use ($search) { $sub->where('nama', 'like', "%$search%"); });
             });
         }
+        $trxs = $queryTrx->get()->map(function($item) {
+            $item->row_type = 'pengisian';
+            $item->sort_date = $item->tanggal;
+            return $item;
+        });
 
-        // Hitung Summary per Jenis BBM
-        $summaryBbm = (clone $query)
-            ->selectRaw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as bbm, SUM(liter) as total")
-            ->groupBy('bbm')
-            ->pluck('total', 'bbm')
-            ->sortKeys();
+        // Ambil RiwayatTopup (keluar)
+        $queryTopup = \App\Models\RiwayatTopup::with(['satker', 'kendaraan.satker', 'user'])->where('tipe', 'keluar');
+        if ($request->filled('dari')) $queryTopup->whereDate('created_at', '>=', $request->dari);
+        if ($request->filled('sampai')) $queryTopup->whereDate('created_at', '<=', $request->sampai);
+        if ($request->filled('satker_id')) $queryTopup->where('satker_id', $request->satker_id);
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $queryTopup->whereHas('kendaraan', function ($sub) use ($search) { $sub->where('no_polisi', 'like', "%$search%"); });
+        }
+        $topups = $queryTopup->get()->map(function($item) {
+            $item->row_type = 'potong_saldo';
+            $item->sort_date = $item->created_at;
+            $item->tanggal = $item->created_at;
+            $item->liter = $item->jumlah;
+            $item->nama_driver = "POTONG SALDO";
+            return $item;
+        });
 
-        $transaksis = $query->latest('tanggal')->get();
+        $transaksis = $trxs->concat($topups)->sortByDesc('sort_date')->values();
+
+        $summaryBbm = $transaksis->groupBy('jenis_bbm')->map(function ($group) {
+            return $group->sum('liter');
+        })->sortKeys();
 
         $pdf = Pdf::loadView('admin.riwayat.print', compact('transaksis', 'summaryBbm'))
             ->setPaper([0, 0, 609.45, 935.43], 'landscape'); // F4 (215mm x 330mm)

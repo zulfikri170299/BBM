@@ -49,8 +49,8 @@
                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Jenis BBM</label>
                             <select name="jenis_bbm" required class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl text-sm font-semibold text-slate-800 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
                                 <option value="">Pilih Jenis BBM</option>
-                                @foreach($stocks as $stock)
-                                    <option value="{{ $stock->jenis_bbm }}">{{ $stock->jenis_bbm }}</option>
+                                @foreach(['Pertamax', 'Pertamina Dex'] as $bbm)
+                                    <option value="{{ $bbm }}">{{ $bbm }}</option>
                                 @endforeach
                             </select>
                         </div>

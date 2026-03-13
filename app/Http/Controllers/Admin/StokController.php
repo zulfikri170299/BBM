@@ -57,7 +57,10 @@ class StokController extends Controller
         try {
             DB::beginTransaction();
 
-            $stock = AdminBbmStock::where('jenis_bbm', $request->jenis_bbm)->firstOrFail();
+            $stock = AdminBbmStock::firstOrCreate(
+                ['jenis_bbm' => $request->jenis_bbm],
+                ['saldo' => 0]
+            );
             $stock->increment('saldo', $request->jumlah);
 
             RiwayatStokAdmin::create([

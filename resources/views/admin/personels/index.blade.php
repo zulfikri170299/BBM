@@ -244,6 +244,11 @@
                                     <th
                                         class="px-6 py-4 text-left text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                                         Saldo</th>
+                                    @if(auth()->user()->role === 'super_admin')
+                                    <th
+                                        class="px-6 py-4 text-left text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                                        PIN</th>
+                                    @endif
                                     <th
                                         class="px-6 py-4 text-right text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                                         Actions</th>
@@ -300,6 +305,11 @@
                                                 <span class="text-[10px] font-bold text-slate-400 uppercase">Liter</span>
                                             </div>
                                         </td>
+                                        @if(auth()->user()->role === 'super_admin')
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="text-sm font-bold text-slate-700 tracking-wider bg-slate-100 rounded px-2 py-1 select-all">{{ $personel->pin }}</span>
+                                        </td>
+                                        @endif
                                         <td class="px-6 py-4 whitespace-nowrap text-right">
                                             <div class="flex justify-end items-center gap-2">
                                                 @if(auth()->user()->role !== 'kasubbag')

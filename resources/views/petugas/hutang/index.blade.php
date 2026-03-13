@@ -388,7 +388,7 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('turbo:load', function () {
             const satkerSelect = document.getElementById('satker_id');
             const kendaraanSelect = document.getElementById('kendaraan_select');
             const inputJenisKendaraan = document.getElementById('jenis_kendaraan');

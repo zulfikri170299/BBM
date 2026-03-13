@@ -75,7 +75,7 @@
         class="flex h-screen bg-slate-50 overflow-hidden">
         @include('layouts.sidebar')
 
-        <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden transition-opacity duration-500">
+        <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden pt-1">
             @include('layouts.header')
 
             <!-- Global Notification Modals -->
@@ -179,243 +179,174 @@
     </div>
     @stack('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // GeoLocation Logic — hanya minta izin sekali per hari
-            const lastLocationUpdate = localStorage.getItem('lastLocationUpdate');
-            const oneDayMs = 24 * 60 * 60 * 1000;
-            if ("geolocation" in navigator && (!lastLocationUpdate || (Date.now() - parseInt(lastLocationUpdate)) > oneDayMs)) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    fetch("{{ route('profile.location.update') }}", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                        },
-                        body: JSON.stringify({
-                            latitude: position.coords.latitude,
-                            longitude: position.coords.longitude
-                        })
-                    }).then(function () {
-                        localStorage.setItem('lastLocationUpdate', Date.now().toString());
-                    });
-                });
-            }
+        // Global helper definitions (Only define once)
+        window.showAlert = window.showAlert || ((title, text, icon = 'info') => {
+            Swal.fire({
+                title, text, icon,
+                confirmButtonColor: '#4338ca',
+                confirmButtonText: 'Tutup',
+                customClass: {
+                    popup: 'rounded-[2rem] border-none shadow-2xl',
+                    title: 'text-2xl font-bold text-slate-800',
+                    confirmButton: 'rounded-xl px-10 py-3 font-bold uppercase tracking-wider text-sm'
+                }
+            });
+        });
 
-            // Chat Notification Logic
-            const sidebarBadge = document.getElementById('sidebar-chat-badge');
-            // Gunakan URL yang lebih stabil atau asset lokal jika ada
-            const notificationSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3');
+        window.confirmDialog = window.confirmDialog || ((options, callback) => {
+            const type = options.type || 'question';
+            let confirmColor = '#4338ca';
+            if (type === 'error' || type === 'danger') confirmColor = '#e11d48';
+            if (type === 'warning') confirmColor = '#f59e0b';
 
+            Swal.fire({
+                title: options.title || 'Konfirmasi',
+                text: options.message,
+                icon: type,
+                showCancelButton: true,
+                confirmButtonColor: confirmColor,
+                cancelButtonColor: '#94a3b8',
+                confirmButtonText: options.confirmText || 'Ya, Lanjutkan!',
+                cancelButtonText: options.cancelText || 'Batal',
+                reverseButtons: true,
+                customClass: {
+                    popup: 'rounded-[2rem] border-none shadow-2xl p-8',
+                    title: 'text-2xl font-black text-slate-800 mb-2',
+                    htmlContainer: 'text-slate-500 font-medium mb-6',
+                    confirmButton: 'rounded-2xl px-8 py-3.5 font-black uppercase tracking-widest text-xs shadow-lg shadow-indigo-200 ml-3',
+                    cancelButton: 'rounded-2xl px-8 py-3.5 font-bold uppercase tracking-widest text-xs text-slate-600 hover:bg-slate-100'
+                },
+                buttonsStyling: true
+            }).then((result) => {
+                if (result.isConfirmed && callback) callback();
+            });
+        });
+
+        // Chat Polling (Initialize once)
+        if (!window.chatPollingActive) {
+            window.chatPollingActive = true;
             let lastUnreadCount = 0;
             let isFirstCheck = true;
             let userInteracted = false;
+            const notificationSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3');
 
-            // Unlock audio on first interaction
-            document.addEventListener('click', function () {
-                userInteracted = true;
-                notificationSound.load(); // Preload on interaction
-            }, { once: true });
+            document.addEventListener('click', () => { userInteracted = true; notificationSound.load(); }, { once: true });
 
             function checkUnreadMessages() {
-                // Only check if user is logged in
+                const sidebarBadge = document.getElementById('sidebar-chat-badge');
+                if (!sidebarBadge) return;
                 @auth
                     fetch("{{ route('chat.unread.count') }}")
-                        .then(response => response.json())
-                        .then(data => {
+                        .then(r => r.json()).then(data => {
                             const count = data.count;
-
                             if (count > 0) {
                                 sidebarBadge.textContent = count > 99 ? '99+' : count;
                                 sidebarBadge.classList.remove('hidden');
                                 sidebarBadge.classList.add('flex');
-
-                                // Play sound if new unread messages arrive
-                                if (count > lastUnreadCount && !isFirstCheck) {
-                                    if (userInteracted) {
-                                        notificationSound.currentTime = 0;
-                                        notificationSound.play().catch(e => console.log('Audio play failed:', e));
-                                    } else {
-                                        console.log('User has not interacted yet, sound blocked.');
-                                    }
+                                if (count > lastUnreadCount && !isFirstCheck && userInteracted) {
+                                    notificationSound.currentTime = 0;
+                                    notificationSound.play().catch(e => console.log('Audio play failed:', e));
                                 }
                             } else {
-                                sidebarBadge.classList.add('hidden');
-                                sidebarBadge.classList.remove('flex');
+                                sidebarBadge.classList.add('hidden'); sidebarBadge.classList.remove('flex');
                             }
-
-                            lastUnreadCount = count;
-                            isFirstCheck = false;
-                        })
-                        .catch(err => console.error('Error checking unread messages:', err));
+                            lastUnreadCount = count; isFirstCheck = false;
+                        }).catch(err => console.error('Error checking unread messages:', err));
                 @endauth
-                }
-
-            // Check every 3 seconds for faster feedback
-            setInterval(checkUnreadMessages, 3000);
-
-            // Initial check
+            }
+            setInterval(checkUnreadMessages, 30000);
             checkUnreadMessages();
+        }
 
-            // Global SweetAlert2 Helpers & Handler
-            window.showAlert = (title, text, icon = 'info') => {
-                Swal.fire({
-                    title,
-                    text,
-                    icon,
-                    confirmButtonColor: '#4338ca',
-                    confirmButtonText: 'Tutup',
-                    customClass: {
-                        popup: 'rounded-[2rem] border-none shadow-2xl',
-                        title: 'text-2xl font-bold text-slate-800',
-                        confirmButton: 'rounded-xl px-10 py-3 font-bold uppercase tracking-wider text-sm'
-                    }
-                });
-            };
-
-            window.confirmDialog = (options, callback) => {
-                const type = options.type || 'question';
-                let confirmColor = '#4338ca';
-                if (type === 'error' || type === 'danger') confirmColor = '#e11d48';
-                if (type === 'warning') confirmColor = '#f59e0b';
-
-                Swal.fire({
-                    title: options.title || 'Konfirmasi',
-                    text: options.message,
-                    icon: type,
-                    showCancelButton: true,
-                    confirmButtonColor: confirmColor,
-                    cancelButtonColor: '#94a3b8',
-                    confirmButtonText: options.confirmText || 'Ya, Lanjutkan!',
-                    cancelButtonText: options.cancelText || 'Batal',
-                    reverseButtons: true,
-                    customClass: {
-                        popup: 'rounded-[2rem] border-none shadow-2xl p-8',
-                        title: 'text-2xl font-black text-slate-800 mb-2',
-                        htmlContainer: 'text-slate-500 font-medium mb-6',
-                        confirmButton: 'rounded-2xl px-8 py-3.5 font-black uppercase tracking-widest text-xs shadow-lg shadow-indigo-200 ml-3',
-                        cancelButton: 'rounded-2xl px-8 py-3.5 font-bold uppercase tracking-widest text-xs text-slate-600 hover:bg-slate-100'
-                    },
-                    buttonsStyling: true
-                }).then((result) => {
-                    if (result.isConfirmed && callback) callback();
-                });
-            };
-
+        // Global Confirmation Handler (Bind once on document)
+        if (!window.confirmHandlerBound) {
+            window.confirmHandlerBound = true;
             document.addEventListener('click', function (e) {
                 const target = e.target.closest('[data-confirm]');
                 if (target) {
                     e.preventDefault();
-                    const message = target.getAttribute('data-confirm');
-                    const type = target.getAttribute('data-confirm-type') || 'warning';
-                    const form = target.closest('form');
-
                     window.confirmDialog({
-                        message: message,
-                        type: type,
+                        message: target.getAttribute('data-confirm'),
+                        type: target.getAttribute('data-confirm-type') || 'warning',
                         confirmText: 'Ya, Hapus!',
                         title: 'Konfirmasi Hapus'
                     }, () => {
-                        if (form) {
-                            form.submit();
-                        } else if (target.tagName === 'A') {
-                            window.location.href = target.href;
-                        }
+                        const form = target.closest('form');
+                        if (form) form.submit();
+                        else if (target.tagName === 'A') window.location.href = target.href;
                     });
                 }
             });
+        }
 
-            // Sidebar Active State & Mobile Close Handler (for data-turbo-permanent)
-            document.addEventListener('turbo:load', function () {
-                // 1. Close sidebar on mobile
-                if (window.innerWidth < 1024) {
-                    window.dispatchEvent(new CustomEvent('sidebar-close'));
-                }
+        // Sidebar logic to run on EVERY Turbo visit
+        document.addEventListener('turbo:load', function () {
+            // 1. Snappily close sidebar on mobile navigation
+            if (window.innerWidth < 1024) {
+                window.dispatchEvent(new CustomEvent('sidebar-close'));
+            }
+            window.dispatchEvent(new CustomEvent('close-reports'));
 
-                // 2. Update active link classes (since data-turbo-permanent prevents server re-render)
-                const currentPath = window.location.pathname;
-                const sidebar = document.getElementById('sidebar');
-                if (!sidebar) return;
+            const currentPath = window.location.pathname;
+            const sidebar = document.getElementById('sidebar');
+            if (!sidebar) return;
 
-                const allLinks = sidebar.querySelectorAll('a[href]');
-                
-                // Classes for main menu items
-                const mainActive = ['bg-indigo-600', 'shadow-lg', 'shadow-indigo-500/30'];
-                const mainInactive = ['hover:bg-slate-800'];
-                
-                // Classes for submenu items  
-                const subActive = ['text-white', 'bg-indigo-600/50'];
-                const subInactive = ['text-slate-400', 'hover:text-white', 'hover:bg-slate-800'];
+            const allLinks = sidebar.querySelectorAll('a[href]');
+            const mainActive = ['bg-indigo-600', 'shadow-lg', 'shadow-indigo-500/30'], mainInactive = ['hover:bg-slate-800'];
+            const subActive = ['text-white', 'bg-indigo-600/50'], subInactive = ['text-slate-400', 'hover:text-white', 'hover:bg-slate-800'];
 
-                let activeSubmenuDropdown = null;
+            let activeSubmenuDropdown = null, bestMatchLink = null, bestMatchLength = 0;
 
-                allLinks.forEach(link => {
-                    const href = link.getAttribute('href');
-                    if (!href || href === '#' || href.startsWith('javascript:')) return;
+            allLinks.forEach(link => {
+                const isInsideSubmenu = !!link.closest('div[x-show]');
+                if (isInsideSubmenu) { link.classList.remove(...subActive); link.classList.add(...subInactive); }
+                else { link.classList.remove(...mainActive); if (!link.classList.contains('hover:bg-slate-800')) link.classList.add(...mainInactive); }
 
-                    try {
-                        const url = new URL(href, window.location.origin);
-                        const linkPath = url.pathname;
-                        const isInsideSubmenu = !!link.closest('div[x-show]');
-                        const isMatch = (currentPath === linkPath) || 
-                                        (linkPath !== '/' && linkPath.length > 1 && currentPath.startsWith(linkPath));
-
-                        if (isInsideSubmenu) {
-                            // Reset submenu link
-                            link.classList.remove(...subActive);
-                            link.classList.add(...subInactive);
-                            
-                            if (isMatch) {
-                                // Activate submenu link
-                                link.classList.remove(...subInactive);
-                                link.classList.add(...subActive);
-                                activeSubmenuDropdown = link.closest('div[x-show]');
-                            }
-                        } else {
-                            // Reset main menu link
-                            link.classList.remove(...mainActive);
-                            if (!link.classList.contains('hover:bg-slate-800')) {
-                                link.classList.add(...mainInactive);
-                            }
-                            
-                            if (isMatch) {
-                                // Activate main menu link
-                                link.classList.remove(...mainInactive);
-                                link.classList.add(...mainActive);
-                            }
-                        }
-                    } catch (e) {
-                        // ignore invalid URLs
+                const href = link.getAttribute('href');
+                if (!href || href === '#' || href.startsWith('javascript:')) return;
+                try {
+                    const linkPath = new URL(href, window.location.origin).pathname;
+                    if (currentPath.startsWith(linkPath)) {
+                        if (linkPath.length > bestMatchLength) { bestMatchLength = linkPath.length; bestMatchLink = link; }
                     }
-                });
-
-                // 3. Auto-open the dropdown containing the active submenu link
-                if (activeSubmenuDropdown) {
-                    const dropdownContainer = activeSubmenuDropdown.closest('.space-y-1');
-                    if (dropdownContainer) {
-                        const toggleBtn = dropdownContainer.querySelector('button');
-                        if (toggleBtn && activeSubmenuDropdown.style.display === 'none') {
-                            toggleBtn.click();
-                        }
-                    }
-                }
+                } catch (e) {}
             });
 
-            // Agresif: Tutup sidebar saat link APAPUN diklik di mobile
-            document.addEventListener('click', function (e) {
-                const link = e.target.closest('a');
-                if (link && window.innerWidth < 1024) {
-                    // Cek apakah link bukan toggle sidebar (cegah konflik)
-                    if (!link.closest('[x-data]')) {
-                        window.dispatchEvent(new CustomEvent('sidebar-close'));
-                    } else {
-                        // Kalau link ada di dalam sidebar, pasti tutup
-                        if (document.getElementById('sidebar').contains(link)) {
-                            window.dispatchEvent(new CustomEvent('sidebar-close'));
-                        }
+            if (bestMatchLink) {
+                const isInsideSubmenu = !!bestMatchLink.closest('div[x-show]');
+                if (isInsideSubmenu) {
+                    bestMatchLink.classList.remove(...subInactive); bestMatchLink.classList.add(...subActive);
+                    activeSubmenuDropdown = bestMatchLink.closest('div[x-show]');
+                } else {
+                    bestMatchLink.classList.remove(...mainInactive); bestMatchLink.classList.add(...mainActive);
+                }
+            }
+
+            if (activeSubmenuDropdown) {
+                const dropdownContainer = activeSubmenuDropdown.closest('.space-y-1');
+                if (dropdownContainer) {
+                    const button = dropdownContainer.querySelector('button');
+                    if (button) {
+                        const evt = button.getAttribute('@click').includes('satkerReportsOpen') ? 'open-satker-reports' : 'open-admin-reports';
+                        window.dispatchEvent(new CustomEvent(evt));
                     }
                 }
-            });
+            }
         });
+
+        // GeoLocation Logic (Run once per session or day)
+        if (!window.geoLocChecked) {
+            window.geoLocChecked = true;
+            const lastLocationUpdate = localStorage.getItem('lastLocationUpdate');
+            if ("geolocation" in navigator && (!lastLocationUpdate || (Date.now() - parseInt(lastLocationUpdate)) > 86400000)) {
+                navigator.geolocation.getCurrentPosition(function (p) {
+                    fetch("{{ route('profile.location.update') }}", {
+                        method: "POST", headers: { "Content-Type": "application/json", "X-CSRF-TOKEN": "{{ csrf_token() }}" },
+                        body: JSON.stringify({ latitude: p.coords.latitude, longitude: p.coords.longitude })
+                    }).then(() => localStorage.setItem('lastLocationUpdate', Date.now().toString()));
+                });
+            }
+        }
     </script>
 </body>
 

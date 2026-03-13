@@ -177,7 +177,7 @@
     }
 
     // Initialize calculation on load if values exist
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('turbo:load', function () {
         @foreach($fuelTypes as $loop)
             calculateTotal({{ $loop->index }});
         @endforeach

@@ -34,14 +34,20 @@ class TransaksiController extends Controller
                     return back()->withErrors(['nopol' => 'Kendaraan dengan nopol "' . $request->nopol . '" tidak ditemukan.']);
                 }
 
-                // Cek apakah Admin Satker aktif
-                $satkerAdminActive = \App\Models\User::where('satker_id', $kendaraan->satker_id)
+                // Cek apakah Admin Satker aktif (hanya blok jika ada admin tapi semua tidak aktif)
+                $hasAdminSatker = \App\Models\User::where('satker_id', $kendaraan->satker_id)
                     ->where('role', 'admin_satker')
-                    ->where('is_active', true)
                     ->exists();
                 
-                if (!$satkerAdminActive) {
-                    return back()->withErrors(['nopol' => 'Akun Satker Anda sedang dinonaktifkan. Silakan hubungi Super Admin.']);
+                if ($hasAdminSatker) {
+                    $activeAdminExists = \App\Models\User::where('satker_id', $kendaraan->satker_id)
+                        ->where('role', 'admin_satker')
+                        ->where('is_active', true)
+                        ->exists();
+                    
+                    if (!$activeAdminExists) {
+                        return back()->withErrors(['nopol' => 'Akun Satker Anda sedang dinonaktifkan. Silakan hubungi Super Admin.']);
+                    }
                 }
 
                 // Fix White Screen: Pastikan data satker ada
@@ -86,15 +92,20 @@ class TransaksiController extends Controller
                     ->first();
 
                 if ($kendaraan) {
-                    // Cek apakah Admin Satker aktif
-                    $satkerAdminActive = \App\Models\User::where('satker_id', $kendaraan->satker_id)
+                    // Cek apakah Admin Satker aktif (hanya blok jika ada admin tapi semua tidak aktif)
+                    $hasAdminSatker = \App\Models\User::where('satker_id', $kendaraan->satker_id)
                         ->where('role', 'admin_satker')
-                        ->where('is_active', true)
                         ->exists();
                     
-                    
-                    if (!$satkerAdminActive) {
-                        return back()->withErrors(['barcode' => 'Akun Satker Anda sedang dinonaktifkan. Silakan hubungi Super Admin.']);
+                    if ($hasAdminSatker) {
+                        $activeAdminExists = \App\Models\User::where('satker_id', $kendaraan->satker_id)
+                            ->where('role', 'admin_satker')
+                            ->where('is_active', true)
+                            ->exists();
+                        
+                        if (!$activeAdminExists) {
+                            return back()->withErrors(['barcode' => 'Akun Satker Anda sedang dinonaktifkan. Silakan hubungi Super Admin.']);
+                        }
                     }
                     
                     // Fix White Screen: Pastikan data satker ada
