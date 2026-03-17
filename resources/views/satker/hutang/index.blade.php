@@ -45,56 +45,42 @@
         </div>
 
         <!-- Filters -->
-        <div class="bg-white p-5 lg:p-6 rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-200/50">
+        <div class="bg-white p-4 lg:p-6 rounded-[2rem] lg:rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-200/50">
             <form action="{{ route('satker.hutang.index') }}" method="GET"
-                class="flex flex-wrap lg:flex-nowrap items-end gap-x-3 gap-y-4">
-                <div class="flex-1 min-w-[140px] space-y-1.5">
-                    <label
-                        class="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">
-                        Dari
-                    </label>
-                    <input type="date" name="start_date" value="{{ request('start_date') }}"
-                        class="flatpickr w-full bg-slate-50 border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-700 text-xs">
+                class="flex flex-col lg:flex-row lg:items-end gap-5 lg:gap-3">
+                <div class="grid grid-cols-2 gap-3 lg:flex lg:flex-nowrap lg:gap-3 flex-1">
+                    <div class="space-y-1.5 lg:flex-1">
+                        <label
+                            class="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">
+                            BBM
+                        </label>
+                        <select name="jenis_bbm"
+                            class="tom-select w-full bg-slate-50 border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-700 text-xs">
+                            <option value="">Semua BBM</option>
+                            <option value="Pertamax" {{ request('jenis_bbm') == 'Pertamax' ? 'selected' : '' }}>Pertamax
+                            </option>
+                            <option value="Pertamina Dex" {{ request('jenis_bbm') == 'Pertamina Dex' ? 'selected' : '' }}>
+                                Pertamina Dex</option>
+                        </select>
+                    </div>
+                    <div class="space-y-1.5 lg:flex-1">
+                        <label
+                            class="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">
+                            Status
+                        </label>
+                        <select name="status"
+                            class="tom-select w-full bg-slate-50 border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-700 text-xs">
+                            <option value="">Semua Status</option>
+                            <option value="belum_dibayar" {{ request('status') == 'belum_dibayar' ? 'selected' : '' }}>BELUM
+                            </option>
+                            <option value="sudah_dibayar" {{ request('status') == 'sudah_dibayar' ? 'selected' : '' }}>LUNAS
+                            </option>
+                        </select>
+                    </div>
                 </div>
-                <div class="flex-1 min-w-[140px] space-y-1.5">
-                    <label
-                        class="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">
-                        Sampai
-                    </label>
-                    <input type="date" name="end_date" value="{{ request('end_date') }}"
-                        class="flatpickr w-full bg-slate-50 border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-700 text-xs">
-                </div>
-                <div class="flex-1 min-w-[150px] space-y-1.5">
-                    <label
-                        class="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">
-                        BBM
-                    </label>
-                    <select name="jenis_bbm"
-                        class="tom-select w-full bg-slate-50 border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-700 text-xs">
-                        <option value="">Semua BBM</option>
-                        <option value="Pertamax" {{ request('jenis_bbm') == 'Pertamax' ? 'selected' : '' }}>Pertamax
-                        </option>
-                        <option value="Pertamina Dex" {{ request('jenis_bbm') == 'Pertamina Dex' ? 'selected' : '' }}>
-                            Pertamina Dex</option>
-                    </select>
-                </div>
-                <div class="flex-1 min-w-[150px] space-y-1.5">
-                    <label
-                        class="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">
-                        Status
-                    </label>
-                    <select name="status"
-                        class="tom-select w-full bg-slate-50 border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-700 text-xs">
-                        <option value="">Semua Status</option>
-                        <option value="belum_dibayar" {{ request('status') == 'belum_dibayar' ? 'selected' : '' }}>BELUM
-                        </option>
-                        <option value="sudah_dibayar" {{ request('status') == 'sudah_dibayar' ? 'selected' : '' }}>LUNAS
-                        </option>
-                    </select>
-                </div>
-                <div class="flex items-center gap-2 lg:mb-0.5">
+                <div class="flex items-center justify-between lg:justify-start gap-2 lg:mb-0.5 pt-1 lg:pt-0">
                     <button type="submit"
-                        class="px-5 py-3.5 bg-indigo-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 active:scale-95 whitespace-nowrap">
+                        class="flex-1 lg:flex-none px-4 py-3.5 lg:px-5 lg:py-3.5 bg-indigo-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 active:scale-95 text-center">
                         Terapkan
                     </button>
                     <a href="{{ route('satker.hutang.index') }}"
@@ -102,7 +88,7 @@
                         Reset
                     </a>
                     <a href="{{ route('satker.hutang.pdf', request()->all()) }}"
-                        class="px-5 py-3.5 bg-rose-50 text-rose-600 border border-rose-100 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-rose-100 transition-all active:scale-95 whitespace-nowrap flex items-center gap-2">
+                        class="flex-1 lg:flex-none justify-center px-4 py-3.5 lg:px-5 lg:py-3.5 bg-rose-50 text-rose-600 border border-rose-100 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-rose-100 transition-all active:scale-95 flex items-center gap-1.5">
                         <svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                         </svg>

@@ -56,16 +56,9 @@
                         <div class="space-y-2">
                             <x-input-label for="satker_id" value="Pilih Satker Unit"
                                 class="text-slate-700 font-bold ml-1" />
-                            <div class="relative group/input">
-                                <div
-                                    class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within/input:text-indigo-500 transition-colors">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                                    </svg>
-                                </div>
+                            <div class="relative">
                                 <select id="satker_id" name="satker_id"
-                                    class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-2xl shadow-sm transition-all duration-300 font-medium text-slate-700"
+                                    class="tom-select block w-full bg-slate-50 border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-2xl shadow-sm transition-all duration-300 font-medium text-slate-700"
                                     required>
                                     <option value="">-- Pilih Satker --</option>
                                     @foreach($satkers as $sat)
@@ -79,21 +72,14 @@
                         <div class="space-y-2">
                             <x-input-label for="kendaraan_select" value="Pilih Kendaraan"
                                 class="text-slate-700 font-bold ml-1" />
-                            <div class="relative group/input">
-                                <div
-                                    class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within/input:text-indigo-500 transition-colors">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                                    </svg>
-                                </div>
+                            <div class="relative">
                                 <select id="kendaraan_select"
-                                    class="block w-full pl-11 pr-10 py-3.5 bg-slate-50 border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-2xl shadow-sm transition-all duration-300 disabled:bg-slate-100 disabled:cursor-not-allowed font-medium text-slate-700 appearance-none"
+                                    class="tom-select block w-full bg-slate-50 border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-2xl shadow-sm transition-all duration-300 disabled:bg-slate-100 disabled:cursor-not-allowed font-medium text-slate-700"
                                     required disabled>
                                     <option value="">-- Pilih Satker Dahulu --</option>
                                 </select>
                                 <div id="vehicle_loader"
-                                    class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none hidden">
+                                    class="absolute inset-y-0 right-0 pr-10 flex items-center pointer-events-none hidden z-10">
                                     <svg class="animate-spin h-5 w-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg"
                                         fill="none" viewBox="0 0 24 24">
                                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
@@ -398,73 +384,127 @@
                 satkerSelect.addEventListener('change', function () {
                     const satkerId = this.value;
 
-                    // Reset and show loader
-                    kendaraanSelect.innerHTML = '<option value="">Memuat kendaraan...</option>';
-                    kendaraanSelect.disabled = true;
-                    vehicleLoader.classList.remove('hidden');
+                    // Get TomSelect instance
+                    let ts = kendaraanSelect.tomselect;
+                    if (!ts) {
+                         window.initTomSelect();
+                         ts = kendaraanSelect.tomselect;
+                    }
 
-                    // Hide info card
-                    vehicleInfoCard.classList.add('hidden');
-
+                    // Reset values and UI
                     inputJenisKendaraan.value = '';
                     inputNopol.value = '';
                     inputJenisBbm.value = '';
+                    vehicleInfoCard.classList.add('hidden');
+
+                    if (ts) {
+                        ts.clear();
+                        ts.clearOptions();
+                        ts.disable();
+                        vehicleLoader.classList.remove('hidden');
+                        
+                        // Add temporary loading option
+                        ts.addOption({value: '', text: 'Memuat kendaraan...'});
+                        ts.refreshOptions(false);
+                    }
 
                     if (satkerId) {
                         fetch(`{{ route('petugas.hutang.get-kendaraan') }}?satker_id=${satkerId}`)
                             .then(response => response.json())
                             .then(data => {
                                 vehicleLoader.classList.add('hidden');
-                                kendaraanSelect.innerHTML = '<option value="">-- Pilih Kendaraan --</option>';
-
-                                if (data.length > 0) {
-                                    data.forEach(kendaraan => {
-                                        const option = document.createElement('option');
-                                        option.value = kendaraan.id;
-                                        option.dataset.nopol = kendaraan.no_polisi;
-                                        option.dataset.jenis = kendaraan.jenis_kendaraan;
-                                        option.dataset.bbm = kendaraan.jenis_bbm;
-                                        option.textContent = `${kendaraan.no_polisi} - ${kendaraan.jenis_kendaraan}`;
-                                        kendaraanSelect.appendChild(option);
-                                    });
-                                    kendaraanSelect.disabled = false;
-                                } else {
-                                    kendaraanSelect.innerHTML = '<option value="">Tidak ada kendaraan terdaftar</option>';
+                                
+                                if (ts) {
+                                    ts.clearOptions();
+                                    ts.addOption({value: '', text: '-- Pilih Kendaraan --'});
+                                    
+                                    if (data.length > 0) {
+                                        data.forEach(kendaraan => {
+                                            ts.addOption({
+                                                value: kendaraan.id,
+                                                text: `${kendaraan.no_polisi} - ${kendaraan.jenis_kendaraan}`,
+                                                nopol: kendaraan.no_polisi,
+                                                jenis: kendaraan.jenis_kendaraan,
+                                                bbm: kendaraan.jenis_bbm
+                                            });
+                                        });
+                                        ts.enable();
+                                    } else {
+                                        ts.addOption({value: '', text: 'Tidak ada kendaraan terdaftar'});
+                                        ts.disable();
+                                    }
+                                    ts.refreshOptions(false);
                                 }
                             })
                             .catch(error => {
                                 console.error('Error fetching kendaraan:', error);
                                 vehicleLoader.classList.add('hidden');
-                                kendaraanSelect.innerHTML = '<option value="">Gagal memuat data</option>';
+                                if (ts) {
+                                    ts.clearOptions();
+                                    ts.addOption({value: '', text: 'Gagal memuat data'});
+                                    ts.disable();
+                                    ts.refreshOptions(false);
+                                }
                             });
                     } else {
                         vehicleLoader.classList.add('hidden');
-                        kendaraanSelect.innerHTML = '<option value="">-- Pilih Satker Terlebih Dahulu --</option>';
+                        if (ts) {
+                            ts.clearOptions();
+                            ts.addOption({value: '', text: '-- Pilih Satker Terlebih Dahulu --'});
+                            ts.disable();
+                            ts.refreshOptions(false);
+                        }
                     }
                 });
             }
 
             if (kendaraanSelect) {
                 kendaraanSelect.addEventListener('change', function () {
-                    const selectedOption = this.options[this.selectedIndex];
-                    if (selectedOption.value) {
-                        const nopol = selectedOption.dataset.nopol;
-                        const bbm = selectedOption.dataset.bbm;
-                        const jenis = selectedOption.dataset.jenis;
+                    const ts = this.tomselect;
+                    if (ts) {
+                        const selectedValue = ts.getValue();
+                        const optionData = ts.options[selectedValue];
 
-                        inputNopol.value = nopol;
-                        inputJenisKendaraan.value = jenis;
-                        inputJenisBbm.value = bbm;
+                        if (selectedValue && optionData) {
+                            const nopol = optionData.nopol;
+                            const bbm = optionData.bbm;
+                            const jenis = optionData.jenis;
 
-                        // Show Info Card
-                        cardNopol.textContent = nopol;
-                        cardBbm.textContent = bbm;
-                        vehicleInfoCard.classList.remove('hidden');
+                            inputNopol.value = nopol;
+                            inputJenisKendaraan.value = jenis;
+                            inputJenisBbm.value = bbm;
+
+                            // Show Info Card
+                            cardNopol.textContent = nopol;
+                            cardBbm.textContent = bbm;
+                            vehicleInfoCard.classList.remove('hidden');
+                        } else {
+                            inputNopol.value = '';
+                            inputJenisKendaraan.value = '';
+                            inputJenisBbm.value = '';
+                            vehicleInfoCard.classList.add('hidden');
+                        }
                     } else {
-                        inputNopol.value = '';
-                        inputJenisKendaraan.value = '';
-                        inputJenisBbm.value = '';
-                        vehicleInfoCard.classList.add('hidden');
+                        // Fallback to native select
+                        const selectedOption = this.options[this.selectedIndex];
+                        if (selectedOption && selectedOption.value) {
+                            const nopol = selectedOption.dataset.nopol;
+                            const bbm = selectedOption.dataset.bbm;
+                            const jenis = selectedOption.dataset.jenis;
+
+                            inputNopol.value = nopol;
+                            inputJenisKendaraan.value = jenis;
+                            inputJenisBbm.value = bbm;
+
+                            cardNopol.textContent = nopol;
+                            cardBbm.textContent = bbm;
+                            vehicleInfoCard.classList.remove('hidden');
+                        } else {
+                            inputNopol.value = '';
+                            inputJenisKendaraan.value = '';
+                            inputJenisBbm.value = '';
+                            vehicleInfoCard.classList.add('hidden');
+                        }
                     }
                 });
             }

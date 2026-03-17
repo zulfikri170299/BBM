@@ -122,7 +122,7 @@
                                         <td class="px-8 py-6" rowspan="2">
                                             <div class="flex items-start gap-4">
                                                 <div class="p-2.5 bg-white border border-slate-200 rounded-xl shadow-sm">
-                                                    <div class="font-black text-slate-900 text-lg leading-none">{{ $sync->created_at->format('d') }}</div>
+                                                    <div class="font-black text-slate-900 text-lg leading-none text-center">{{ $sync->created_at->format('d') }}</div>
                                                     <div class="text-[9px] font-black text-slate-400 uppercase tracking-tighter text-center mt-1">{{ $sync->created_at->format('M Y') }}</div>
                                                 </div>
                                                 <div>
@@ -134,27 +134,27 @@
                                             </div>
                                         </td>
                                         <td class="px-8 py-6 border-l border-slate-100">
-                                            <div class="flex items-center justify-between">
-                                                <span class="text-[9px] font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">PERTAMAX</span>
-                                                <span class="font-black text-slate-900 text-base">{{ number_format($sync->stok_awal_pertamax, 0, ',', '.') }} L</span>
+                                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                                <span class="text-[9px] font-black text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100 whitespace-nowrap">PERTAMAX</span>
+                                                <span class="font-black text-slate-900 text-lg pl-2 border-l-2 border-slate-100">{{ number_format($sync->stok_awal_pertamax, 0, ',', '.') }} L</span>
                                             </div>
                                         </td>
-                                        <td class="px-8 py-6 text-center bg-slate-50/20">
-                                            <div class="font-black text-slate-900 text-lg">{{ number_format($sync->sisa_pertamax, 0, ',', '.') }} L</div>
-                                            <div class="text-[9px] font-bold text-rose-500 uppercase tracking-widest mt-1">PEMAKAIAN: {{ number_format($sync->pemakaian_pertamax, 0, ',', '.') }} L</div>
+                                        <td class="px-8 py-6 text-center bg-slate-50/50">
+                                            <div class="font-black text-slate-900 text-xl">{{ number_format($sync->sisa_pertamax, 0, ',', '.') }} L</div>
+                                            <div class="text-[9px] font-bold text-rose-500 uppercase tracking-widest mt-2 bg-rose-50 inline-block px-2 py-1 rounded-md">PEMAKAIAN: {{ number_format($sync->pemakaian_pertamax, 0, ',', '.') }} L</div>
                                         </td>
                                     </tr>
                                     <!-- Dex Row -->
                                     <tr class="group hover:bg-indigo-50/30 transition-colors {{ $index === 0 ? 'bg-indigo-50/20' : '' }} border-b border-slate-100">
                                         <td class="px-8 py-6 border-l border-slate-100">
-                                            <div class="flex items-center justify-between">
-                                                <span class="text-[9px] font-black text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-100">P. DEX</span>
-                                                <span class="font-black text-slate-900 text-base">{{ number_format($sync->stok_awal_dex, 0, ',', '.') }} L</span>
+                                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                                <span class="text-[9px] font-black text-rose-600 bg-rose-50 px-3 py-1 rounded-full border border-rose-100 whitespace-nowrap">P. DEX</span>
+                                                <span class="font-black text-slate-900 text-lg pl-2 border-l-2 border-slate-100">{{ number_format($sync->stok_awal_dex, 0, ',', '.') }} L</span>
                                             </div>
                                         </td>
-                                        <td class="px-8 py-6 text-center bg-slate-50/20">
-                                            <div class="font-black text-slate-900 text-lg">{{ number_format($sync->sisa_dex, 0, ',', '.') }} L</div>
-                                            <div class="text-[9px] font-bold text-rose-500 uppercase tracking-widest mt-1">PEMAKAIAN: {{ number_format($sync->pemakaian_dex, 0, ',', '.') }} L</div>
+                                        <td class="px-8 py-6 text-center bg-slate-50/50">
+                                            <div class="font-black text-slate-900 text-xl">{{ number_format($sync->sisa_dex, 0, ',', '.') }} L</div>
+                                            <div class="text-[9px] font-bold text-rose-500 uppercase tracking-widest mt-2 bg-rose-50 inline-block px-2 py-1 rounded-md">PEMAKAIAN: {{ number_format($sync->pemakaian_dex, 0, ',', '.') }} L</div>
                                         </td>
                                     </tr>
                                 @empty

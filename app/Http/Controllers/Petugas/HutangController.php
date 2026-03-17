@@ -56,7 +56,10 @@ class HutangController extends Controller
     public function getKendaraan(Request $request)
     {
         $satkerId = $request->satker_id;
-        $kendaraans = \App\Models\Kendaraan::where('satker_id', $satkerId)->get();
+        $kendaraans = \App\Models\Kendaraan::where('satker_id', $satkerId)
+            ->select('id', 'no_polisi', 'jenis_kendaraan', 'jenis_bbm')
+            ->get();
+            
         return response()->json($kendaraans);
     }
 

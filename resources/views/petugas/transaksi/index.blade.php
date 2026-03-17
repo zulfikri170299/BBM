@@ -30,7 +30,16 @@
             @endif
 
             <!-- Tabs -->
-            <div x-data="{ tab: 'barcode' }" class="space-y-3 sm:space-y-4">
+            <div x-data="{ 
+                tab: 'barcode',
+                init() {
+                    this.$watch('tab', value => {
+                        if (value !== 'barcode') {
+                            if (typeof window.stopScanner === 'function') window.stopScanner();
+                        }
+                    });
+                }
+            }" class="space-y-3 sm:space-y-4">
                 <div class="flex bg-slate-100 p-1 rounded-lg sm:rounded-xl">
                     <button @click="tab = 'barcode'"
                         :class="tab === 'barcode' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500 hover:text-slate-700'"
@@ -173,14 +182,29 @@
                         }
                     }
 
-                    // Auto-start scanner on page load
-                    window.addEventListener('DOMContentLoaded', () => {
-                        // Small delay to ensure the DOM is fully rendered and ready
-                        setTimeout(() => {
-                            if (!html5QrCode || html5QrCode.getState() !== 2) {
-                                startScanner();
+                    // Expose to global window object for AlpineJS
+                    window.startScanner = startScanner;
+                    window.stopScanner = stopScanner;
+
+                    // Stop scanner when leaving the page or tab
+                    window.addEventListener('beforeunload', () => {
+                        if (html5QrCode && html5QrCode.getState() === 2) {
+                            html5QrCode.stop();
+                        }
+                    });
+
+                    window.addEventListener('pagehide', () => {
+                        if (html5QrCode && html5QrCode.getState() === 2) {
+                            html5QrCode.stop();
+                        }
+                    });
+
+                    document.addEventListener('visibilitychange', () => {
+                        if (document.visibilityState === 'hidden') {
+                            if (html5QrCode && html5QrCode.getState() === 2) {
+                                html5QrCode.stop();
                             }
-                        }, 300);
+                        }
                     });
                 </script>
 
