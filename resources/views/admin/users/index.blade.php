@@ -57,24 +57,24 @@
 
         <!-- Filter Bar -->
         <div class="bg-white p-4 rounded-2xl border border-slate-200/70 shadow-sm">
-            <form action="{{ route('admin.users.index') }}" method="GET" class="flex flex-wrap items-center gap-4">
-                <div class="flex-1 min-w-[240px]">
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <form action="{{ route('admin.users.index') }}" method="GET" class="flex flex-col lg:flex-row items-stretch lg:items-center gap-4">
+                <div class="flex-1">
+                    <div class="relative group">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 group-focus-within:text-indigo-600 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
                         </span>
                         <input type="text" name="search" value="{{ request('search') }}"
                             placeholder="Cari nama atau email..."
-                            class="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-xl text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                            class="block w-full pl-11 pr-4 py-2.5 bg-slate-50 border-slate-200 rounded-xl text-sm placeholder-slate-400 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium">
                     </div>
                 </div>
 
-                <div class="w-full sm:w-60">
+                <div class="w-full lg:w-72">
                     <select name="satker_id"
-                        class="block w-full py-2 pl-3 pr-10 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                        class="tom-select block w-full bg-slate-50 border border-slate-200 rounded-xl text-sm transition-all">
                         <option value="">Semua Satker</option>
                         @foreach($satkers as $satker)
                             <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
@@ -84,14 +84,13 @@
                     </select>
                 </div>
 
-
                 <div class="flex items-center gap-2">
                     <button type="submit"
-                        class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold text-sm hover:bg-indigo-700 transition shadow-md">
+                        class="flex-1 lg:flex-none inline-flex items-center justify-center px-6 py-2.5 bg-indigo-600 text-white rounded-xl font-bold text-sm hover:bg-indigo-700 transition shadow-lg shadow-indigo-500/20 active:scale-95">
                         Filter
                     </button>
                     <a href="{{ route('admin.users.index') }}"
-                        class="inline-flex items-center px-4 py-2 bg-slate-100 text-slate-600 rounded-xl font-bold text-sm hover:bg-slate-200 transition">
+                        class="inline-flex items-center justify-center px-6 py-2.5 bg-slate-100 text-slate-600 rounded-xl font-bold text-sm hover:bg-slate-200 transition active:scale-95">
                         Reset
                     </a>
                 </div>

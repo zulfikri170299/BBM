@@ -504,12 +504,20 @@
             document.addEventListener('turbo:load', function () {
                 var mapContainer = document.getElementById('userMap');
                 if (mapContainer) {
+                    // Double-initialization prevention for Turbo
+                    if (window.myUserMap) {
+                        window.myUserMap.remove();
+                        window.myUserMap = null;
+                    }
+
                     // Map Initialization
-                    var map = L.map('userMap', {
+                    window.myUserMap = L.map('userMap', {
                         maxBounds: [[-11.0, 95.0], [6.0, 141.0]],
                         minZoom: 5,
                         maxBoundsViscosity: 1.0
                     }).setView([-2.5489, 118.0149], 5); // Center of Indonesia
+
+                    var map = window.myUserMap;
 
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

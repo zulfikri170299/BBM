@@ -40,7 +40,7 @@ class PersonelController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:255',
-            'nrp' => ['required', 'string', 'max:20', 
+            'nrp' => ['required', 'regex:/^[0-9]+$/', 'max:20', 
                 Rule::unique('personels')->where(function ($query) {
                     return $query->where('satker_id', auth()->user()->satker_id);
                 })
@@ -103,7 +103,7 @@ class PersonelController extends Controller
 
         $request->validate([
             'nama' => 'required|string|max:255',
-            'nrp' => ['required', 'string', 'max:20', 
+            'nrp' => ['required', 'regex:/^[0-9]+$/', 'max:20', 
                 Rule::unique('personels')->where(function ($query) {
                     return $query->where('satker_id', auth()->user()->satker_id);
                 })->ignore($personel->id)

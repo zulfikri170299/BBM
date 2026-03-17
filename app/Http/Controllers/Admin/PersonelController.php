@@ -48,7 +48,7 @@ class PersonelController extends Controller
         $request->validate([
             'satker_id' => 'required|exists:satkers,id',
             'nama' => 'required|string|max:255',
-            'nrp' => 'required|string|unique:personels,nrp',
+            'nrp' => 'required|regex:/^[0-9]+$/|unique:personels,nrp',
             'jenis_bbm' => 'required|in:Pertamax,Pertamina Dex',
             'saldo' => 'required|numeric|min:0',
         ]);
@@ -100,7 +100,7 @@ class PersonelController extends Controller
         $request->validate([
             'satker_id' => 'required|exists:satkers,id',
             'nama' => 'required|string|max:255',
-            'nrp' => 'required|string|unique:personels,nrp,' . $personel->id,
+            'nrp' => 'required|regex:/^[0-9]+$/|unique:personels,nrp,' . $personel->id,
             'jenis_bbm' => 'required|in:Pertamax,Pertamina Dex',
             'saldo' => 'required|numeric|min:0',
         ]);

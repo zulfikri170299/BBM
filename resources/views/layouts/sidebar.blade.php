@@ -3,7 +3,7 @@
     x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
     x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
     x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-    class="fixed inset-0 z-20 bg-black/60 lg:hidden"></div>
+    class="fixed inset-0 z-40 bg-black/60 lg:hidden"></div>
 
 {{-- Sidebar --}}
 <div x-data="{ 
@@ -23,7 +23,7 @@
     @close-reports.window="reportsOpen = false; satkerReportsOpen = false"
     @open-admin-reports.window="reportsOpen = true"
     @open-satker-reports.window="satkerReportsOpen = true"
-    class="fixed inset-y-0 left-0 z-30 w-72 lg:w-64 overflow-y-auto transform bg-slate-900 text-white -translate-x-full lg:translate-x-0 lg:static lg:inset-0 transition-transform duration-300 ease-in-out"
+    class="fixed inset-y-0 left-0 z-50 w-72 lg:w-64 overflow-y-auto transform bg-slate-900 text-white -translate-x-full lg:translate-x-0 lg:static lg:inset-0 transition-transform duration-300 ease-in-out"
     :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
     style="@media (min-width: 1024px) { display: block !important; }">
 

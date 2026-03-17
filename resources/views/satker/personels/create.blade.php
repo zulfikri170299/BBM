@@ -45,7 +45,10 @@
                                 / NIP</label>
                             <input type="text" name="nrp" value="{{ old('nrp') }}"
                                 class="w-full h-11 px-4 rounded-xl border-slate-200 bg-slate-50/50 text-xs font-bold text-slate-700 placeholder:text-slate-300 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
-                                placeholder="Masukkan NRP/NIP" required>
+                                placeholder="Masukkan NRP/NIP" 
+                                inputmode="numeric"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                required>
                             @error('nrp') <p class="mt-1 text-[10px] text-rose-500 font-bold ml-1">{{ $message }}</p>
                             @enderror
                         </div>
@@ -55,22 +58,13 @@
                             <label
                                 class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Jenis
                                 BBM</label>
-                            <div class="relative group">
-                                <select name="jenis_bbm"
-                                    class="w-full h-11 pl-4 pr-10 rounded-xl border-slate-200 bg-slate-50/50 text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all appearance-none"
-                                    required>
-                                    <option value="">Pilih Jenis BBM...</option>
-                                    <option value="Pertamax" {{ old('jenis_bbm', 'Pertamax') == 'Pertamax' ? 'selected' : '' }}>Pertamax</option>
-                                    <option value="Pertamina Dex" {{ old('jenis_bbm') == 'Pertamina Dex' ? 'selected' : '' }}>Pertamina Dex</option>
-                                </select>
-                                <div
-                                    class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-400">
-                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 9l-7 7-7-7"></path>
-                                    </svg>
-                                </div>
-                            </div>
+                            <select name="jenis_bbm"
+                                class="tom-select w-full rounded-xl border-slate-200 bg-slate-50/50 text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                                required>
+                                <option value="">Pilih Jenis BBM...</option>
+                                <option value="Pertamax" {{ old('jenis_bbm', 'Pertamax') == 'Pertamax' ? 'selected' : '' }}>Pertamax</option>
+                                <option value="Pertamina Dex" {{ old('jenis_bbm') == 'Pertamina Dex' ? 'selected' : '' }}>Pertamina Dex</option>
+                            </select>
                             @error('jenis_bbm') <p class="mt-1 text-[10px] text-rose-500 font-bold ml-1">{{ $message }}
                             </p> @enderror
                         </div>

@@ -25,8 +25,8 @@
                 class="flex flex-col sm:flex-row gap-4 items-end">
                 <div class="flex-1 w-full">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Tahun</label>
-                    <select name="tahun" required
-                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-700">
+                    <select name="tahun" id="filter_tahun" required onchange="this.form.submit()"
+                        class="tom-select w-full bg-slate-50 border-slate-200 rounded-xl transition-all font-semibold text-sm">
                         @php
                             $currentYear = date('Y');
                         @endphp
@@ -39,8 +39,8 @@
 
                 <div class="flex-1 w-full">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Triwulan</label>
-                    <select name="triwulan" required
-                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-700">
+                    <select name="triwulan" id="filter_triwulan" required onchange="this.form.submit()"
+                        class="tom-select w-full bg-slate-50 border-slate-200 rounded-xl transition-all font-semibold text-sm">
                         <option value="1" {{ request('triwulan', 1) == 1 ? 'selected' : '' }}>Triwulan I (Jan-Mar)
                         </option>
                         <option value="2" {{ request('triwulan') == 2 ? 'selected' : '' }}>Triwulan II (Apr-Jun)</option>
@@ -50,16 +50,8 @@
                 </div>
 
                 <div class="flex gap-2">
-                    <button type="submit"
-                        class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all flex items-center justify-center gap-2">
-                        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                        Tampilkan
-                    </button>
                     <a href="{{ route('satker.laporan-triwulan.index') }}"
-                        class="px-5 py-2.5 bg-slate-100 text-slate-600 rounded-xl font-semibold text-sm hover:bg-slate-200 transition">Reset</a>
+                        class="px-5 py-2.5 bg-slate-100 text-slate-600 rounded-xl font-bold text-xs hover:bg-slate-200 transition flex items-center justify-center">RESET</a>
                 </div>
             </form>
         </div>

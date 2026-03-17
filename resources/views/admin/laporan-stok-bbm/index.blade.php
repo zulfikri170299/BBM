@@ -50,12 +50,12 @@
                 <div class="space-y-2">
                     <label class="block text-xs font-black text-slate-400 uppercase tracking-widest">Mulai Tanggal</label>
                     <input type="date" name="start_date" value="{{ request('start_date') }}"
-                        class="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-900">
+                        class="flatpickr w-full px-5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-900">
                 </div>
                 <div class="space-y-2">
                     <label class="block text-xs font-black text-slate-400 uppercase tracking-widest">Sampai Tanggal</label>
                     <input type="date" name="end_date" value="{{ request('end_date') }}"
-                        class="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-900">
+                        class="flatpickr w-full px-5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-900">
                 </div>
                 <div class="flex gap-3">
                     <button type="submit" class="flex-1 py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl font-black transition-all active:scale-[0.98] shadow-lg shadow-slate-200">

@@ -32,8 +32,8 @@
                 <div>
                     <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Filter
                         Satker</label>
-                    <select name="satker_id"
-                        class="w-full py-2 bg-slate-50 border-slate-200 rounded-xl text-sm focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                    <select name="satker_id" id="filter_satker_id"
+                        class="tom-select w-full bg-slate-50 border-slate-200 rounded-xl text-sm transition-all">
                         <option value="">Semua Satker</option>
                         @foreach($satkers as $satker)
                             <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
@@ -48,7 +48,7 @@
                     <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Filter
                         Tanggal Aktif</label>
                     <input type="date" name="tanggal" value="{{ request('tanggal') }}"
-                        class="w-full py-2 bg-slate-50 border-slate-200 rounded-xl text-sm focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                        class="flatpickr w-full py-2 bg-slate-50 border-slate-200 rounded-xl text-sm focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                 </div>
 
                 <!-- Actions -->

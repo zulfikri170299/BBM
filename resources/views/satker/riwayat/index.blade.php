@@ -50,17 +50,17 @@
                 <div class="flex-1 min-w-[150px]">
                     <label class="block text-xs font-semibold text-slate-500 mb-1.5">Dari Tanggal</label>
                     <input type="date" name="dari" value="{{ request('dari') }}"
-                        class="w-full px-3 py-2 border-2 border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
+                        class="flatpickr w-full border-2 border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
                 </div>
                 <div class="flex-1 min-w-[150px]">
                     <label class="block text-xs font-semibold text-slate-500 mb-1.5">Sampai Tanggal</label>
                     <input type="date" name="sampai" value="{{ request('sampai') }}"
-                        class="w-full px-3 py-2 border-2 border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
+                        class="flatpickr w-full border-2 border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
                 </div>
                 <div class="flex-1 min-w-[180px]">
                     <label class="block text-xs font-semibold text-slate-500 mb-1.5">Kendaraan</label>
                     <select name="kendaraan_id"
-                        class="w-full px-3 py-2 border-2 border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
+                        class="tom-select w-full border-2 border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
                         <option value="">Semua Kendaraan</option>
                         @foreach($kendaraans as $k)
                             <option value="{{ $k->id }}" {{ request('kendaraan_id') == $k->id ? 'selected' : '' }}>
@@ -71,23 +71,28 @@
                 </div>
                 <div class="flex gap-2">
                     <button type="submit"
-                        class="px-5 py-2 bg-indigo-600 text-white rounded-xl font-semibold text-sm hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all">
-                        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all flex items-center justify-center min-w-[44px]">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
-                        Filter
+                        <span class="hidden sm:inline ml-2">Filter</span>
                     </button>
                     <a href="{{ route('satker.riwayat.index') }}"
-                        class="px-4 py-2 bg-slate-100 text-slate-600 rounded-xl font-semibold text-sm hover:bg-slate-200 transition-colors">Reset</a>
+                        class="px-4 py-2.5 bg-slate-100 text-slate-600 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-slate-200 transition-colors flex items-center justify-center min-w-[44px]">
+                        <svg class="w-4 h-4 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        <span class="hidden sm:inline">Reset</span>
+                    </a>
                     <a href="{{ route('satker.riwayat.print', request()->all()) }}" target="_blank"
-                        class="px-4 py-2 bg-red-100 text-red-600 rounded-xl font-semibold text-sm hover:bg-red-200 transition-colors flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        class="px-4 py-2.5 bg-rose-50 text-rose-600 border border-rose-100 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-rose-100 transition-colors flex items-center justify-center min-w-[44px] gap-2">
+                        <svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                 d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
                             </path>
                         </svg>
-                        Cetak PDF
+                        <span class="hidden sm:inline">PDF</span>
                     </a>
                 </div>
             </form>

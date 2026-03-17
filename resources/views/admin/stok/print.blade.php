@@ -26,22 +26,23 @@
     @include('components.pdf-header')
     <div class="header">
         <h2>Riwayat Perubahan Stok Pembelian BBM (Belum Distribusi)</h2>
-        <p>Dicetak pada: {{ date('d/m/Y H:i') }} WIB</p>
     </div>
 
-    <h3>Ringkasan Stok Saat Ini</h3>
+    <h3>Ringkasan Mutasi Stok</h3>
     <table class="stock-summary">
         <thead>
             <tr>
                 <th>Jenis BBM</th>
-                <th>Saldo Saat Ini</th>
+                <th>Total Masuk</th>
+                <th>Total Keluar</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($stocks as $stock)
+            @foreach(['Pertamax', 'Pertamina Dex'] as $bbm)
             <tr>
-                <td>{{ $stock->jenis_bbm }}</td>
-                <td><strong>{{ number_format($stock->saldo, 0, ',', '.') }} Liter</strong></td>
+                <td>{{ $bbm }}</td>
+                <td class="type-masuk">+ {{ number_format($summary[$bbm]['masuk'] ?? 0, 0, ',', '.') }} Liter</td>
+                <td class="type-keluar">- {{ number_format($summary[$bbm]['keluar'] ?? 0, 0, ',', '.') }} Liter</td>
             </tr>
             @endforeach
         </tbody>
@@ -75,9 +76,6 @@
         </tbody>
     </table>
 
-    <div class="footer">
-        Aplikasi Manajemen BBM Poldan TB Rolog - {{ date('Y') }}
-    </div>
     @include('components.pdf-signature')
 </body>
 </html>

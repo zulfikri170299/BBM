@@ -16,68 +16,18 @@
                         <form action="{{ route('admin.personels.index') }}" method="GET"
                             class="w-full flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
-                                <!-- Filter Satker Custom Dropdown -->
-                                <div class="relative" x-data="{ open: false }">
-                                    <input type="hidden" name="satker_id" id="satker_id"
-                                        value="{{ request('satker_id') }}">
-
-                                    <button type="button" @click="open = !open" @click.away="open = false"
-                                        class="flex items-center justify-between w-full sm:w-48 bg-slate-50 border border-slate-300 text-slate-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 p-2.5 hover:bg-white transition-colors uppercase font-bold tracking-wider">
-                                        <span class="truncate block mr-2 text-[10px]">
-                                            @php
-                                                $selectedSatker = $satkers->firstWhere('id', request('satker_id'));
-                                                echo $selectedSatker ? $selectedSatker->nama_satker : 'Semua Satker';
-                                             @endphp
-                                        </span>
-                                        <svg class="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M19 9l-7 7-7-7"></path>
-                                        </svg>
-                                    </button>
-
-                                    <div x-show="open" x-transition:enter="transition ease-out duration-100"
-                                        x-transition:enter-start="transform opacity-0 scale-95"
-                                        x-transition:enter-end="transform opacity-100 scale-100"
-                                        x-transition:leave="transition ease-in duration-75"
-                                        x-transition:leave-start="transform opacity-100 scale-100"
-                                        x-transition:leave-end="transform opacity-0 scale-95"
-                                        class="absolute z-10 w-full sm:w-64 mt-1 bg-white rounded-xl shadow-lg border border-slate-100 py-1 max-h-60 overflow-auto focus:outline-none"
-                                        style="display: none;">
-
-                                        <div
-                                            class="px-3 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                                            Filter Satuan Kerja
-                                        </div>
-
-                                        <button type="button"
-                                            @click="document.getElementById('satker_id').value = ''; $el.closest('form').submit();"
-                                            class="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-indigo-600 flex items-center justify-between group transition-colors">
-                                            <span>Semua Satker</span>
-                                            @if(!request('satker_id'))
-                                                <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M5 13l4 4L19 7"></path>
-                                                </svg>
-                                            @endif
-                                        </button>
-
+                                <!-- Filter Satker TomSelect -->
+                                <div class="w-full sm:w-64">
+                                    <select name="satker_id" id="filter_satker_id"
+                                        onchange="this.form.submit()"
+                                        class="tom-select block w-full bg-slate-50 border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700">
+                                        <option value="">Semua Satker</option>
                                         @foreach($satkers as $satker)
-                                            <button type="button"
-                                                @click="document.getElementById('satker_id').value = '{{ $satker->id }}'; $el.closest('form').submit();"
-                                                class="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-indigo-600 flex items-center justify-between group transition-colors">
-                                                <span class="truncate">{{ $satker->nama_satker }}</span>
-                                                @if(request('satker_id') == $satker->id)
-                                                    <svg class="w-4 h-4 text-indigo-600 shrink-0" fill="none"
-                                                        stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                            d="M5 13l4 4L19 7"></path>
-                                                    </svg>
-                                                @endif
-                                            </button>
+                                            <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
+                                                {{ $satker->nama_satker }}
+                                            </option>
                                         @endforeach
-                                    </div>
+                                    </select>
                                 </div>
 
                                 <!-- Combined Search & Filter Controls -->

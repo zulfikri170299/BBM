@@ -25,13 +25,13 @@
                 class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                     <x-input-label for="start_date" value="Dari Tanggal (Bayar)" />
-                    <x-text-input id="start_date" name="start_date" type="date" class="mt-1 block w-full"
+                    <x-text-input id="start_date" name="start_date" type="date" class="flatpickr mt-1 block w-full"
                         :value="request('start_date')" />
                 </div>
 
                 <div>
                     <x-input-label for="end_date" value="Sampai Tanggal (Bayar)" />
-                    <x-text-input id="end_date" name="end_date" type="date" class="mt-1 block w-full"
+                    <x-text-input id="end_date" name="end_date" type="date" class="flatpickr mt-1 block w-full"
                         :value="request('end_date')" />
                 </div>
 

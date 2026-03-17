@@ -3,15 +3,12 @@
         <!-- Page Title -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h1
-                    class="text-2xl sm:text-3xl font-bold text-slate-900 border-b-4 border-indigo-600 pb-2 inline-block">
-                    Laporan Riwayat Pembayaran Hutang BBM</h1>
-                <p class="text-slate-500 mt-2 text-sm font-medium">Monitoring riwayat pelunasan hutang bon BBM oleh
-                    Satker.</p>
+                <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Laporan Pembayaran Hutang</h1>
+                <p class="mt-1 text-xs sm:text-sm font-medium text-slate-500">Monitoring riwayat pelunasan hutang bon BBM oleh Satker.</p>
             </div>
 
             <a href="{{ route('admin.laporan-hutang.print', request()->all()) }}" target="_blank"
-                class="inline-flex items-center px-6 py-3 bg-rose-600 text-white font-bold rounded-2xl shadow-lg shadow-rose-200 hover:bg-rose-700 transition active:scale-95 gap-2 uppercase tracking-wider text-xs">
+                class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2.5 bg-rose-600 text-white rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-rose-700 shadow-lg shadow-rose-200 transition-all active:scale-95 gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                         d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -21,45 +18,52 @@
         </div>
 
         <!-- Filter & Search -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-6 mb-6">
-            <form action="{{ route('admin.laporan-hutang.index') }}" method="GET"
-                class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div>
-                    <x-input-label for="start_date" value="Dari Tanggal (Bayar)" />
-                    <x-text-input id="start_date" name="start_date" type="date" class="mt-1 block w-full"
-                        :value="request('start_date')" />
-                </div>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5 mb-6">
+            <form action="{{ route('admin.laporan-hutang.index') }}" method="GET" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Dari Tanggal</label>
+                        <input id="start_date" name="start_date" type="date"
+                            class="flatpickr w-full h-11 px-4 border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all bg-slate-50/50"
+                            value="{{ request('start_date') }}" />
+                    </div>
 
-                <div>
-                    <x-input-label for="end_date" value="Sampai Tanggal (Bayar)" />
-                    <x-text-input id="end_date" name="end_date" type="date" class="mt-1 block w-full"
-                        :value="request('end_date')" />
-                </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Sampai Tanggal</label>
+                        <input id="end_date" name="end_date" type="date"
+                            class="flatpickr w-full h-11 px-4 border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all bg-slate-50/50"
+                            value="{{ request('end_date') }}" />
+                    </div>
 
-                <div>
-                    <x-input-label for="satker_id" value="Filter Satker" />
-                    <select name="satker_id" id="satker_id"
-                        class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                        <option value="">Semua Satker</option>
-                        @foreach($satkers as $satker)
-                            <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
-                                {{ $satker->nama_satker }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Filter Satker</label>
+                        <select name="satker_id" id="filter_satker_id"
+                            class="tom-select w-full rounded-xl border-slate-200 bg-slate-50 text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all">
+                            <option value="">Semua Satker</option>
+                            @foreach($satkers as $satker)
+                                <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
+                                    {{ $satker->nama_satker }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                <div class="flex items-end gap-2">
-                    <button type="submit"
-                        class="flex-1 px-4 py-2.5 bg-indigo-600 text-white font-semibold rounded-lg shadow hover:bg-indigo-700 transition">
-                        Filter
-                    </button>
-                    @if(request()->hasAny(['start_date', 'end_date', 'satker_id']))
+                    <div class="flex items-end gap-2">
+                        <button type="submit"
+                            class="flex-1 h-11 bg-indigo-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all active:scale-95 flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                            </svg>
+                            Filter
+                        </button>
                         <a href="{{ route('admin.laporan-hutang.index') }}"
-                            class="px-4 py-2.5 bg-slate-100 text-slate-700 font-semibold rounded-lg hover:bg-slate-200 transition">
+                            class="flex-1 h-11 bg-slate-100 text-slate-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-200 transition-all active:scale-95 flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
                             Reset
                         </a>
-                    @endif
+                    </div>
                 </div>
             </form>
         </div>

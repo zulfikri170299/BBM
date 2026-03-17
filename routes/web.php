@@ -166,6 +166,7 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     // Hutang
     Route::prefix('hutang')->name('hutang.')->group(function () {
         Route::get('/', [\App\Http\Controllers\Admin\HutangController::class, 'index'])->name('index');
+        Route::post('/', [\App\Http\Controllers\Admin\HutangController::class, 'store'])->name('store');
         Route::get('/get-kendaraan', [\App\Http\Controllers\Admin\HutangController::class, 'getKendaraan'])->name('get-kendaraan');
         Route::post('/{hutang}/bayar', [\App\Http\Controllers\Admin\HutangController::class, 'bayar'])->name('bayar');
         Route::put('/{hutang}', [\App\Http\Controllers\Admin\HutangController::class, 'update'])->name('update');

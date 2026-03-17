@@ -142,15 +142,8 @@
                             <x-input-label for="tanggal_bon" value="Tanggal Bon"
                                 class="text-slate-700 font-bold ml-1" />
                             <div class="relative group/input">
-                                <div
-                                    class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within/input:text-indigo-500 transition-colors">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                </div>
                                 <x-text-input id="tanggal_bon" name="tanggal_bon" type="date"
-                                    class="block w-full pl-11 bg-slate-50 border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-2xl py-3.5 transition-all duration-300 font-bold text-slate-700"
+                                    class="flatpickr block w-full bg-slate-50 border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-2xl py-3.5 transition-all duration-300 font-bold text-slate-700"
                                     value="{{ date('Y-m-d') }}" required />
                             </div>
                         </div>
@@ -250,7 +243,7 @@
                                 <x-input-label for="filter_satker" value="Filter Satker"
                                     class="text-xs font-bold text-slate-600 mb-1" />
                                 <select name="satker_id" id="filter_satker"
-                                    class="block w-full text-xs border-slate-200 focus:border-indigo-500 focus:ring-indigo-500 rounded-xl bg-white shadow-sm transition-all">
+                                    class="tom-select block w-full text-xs border-slate-200 focus:border-indigo-500 focus:ring-indigo-500 rounded-xl bg-white shadow-sm transition-all">
                                     <option value="">Semua Satker</option>
                                     @foreach($satkers as $sat)
                                         <option value="{{ $sat->id }}" {{ request('satker_id') == $sat->id ? 'selected' : '' }}>
@@ -263,7 +256,7 @@
                                 <x-input-label for="filter_status" value="Filter Status"
                                     class="text-xs font-bold text-slate-600 mb-1" />
                                 <select name="status" id="filter_status"
-                                    class="block w-full text-xs border-slate-200 focus:border-indigo-500 focus:ring-indigo-500 rounded-xl bg-white shadow-sm transition-all">
+                                    class="tom-select block w-full text-xs border-slate-200 focus:border-indigo-500 focus:ring-indigo-500 rounded-xl bg-white shadow-sm transition-all">
                                     <option value="">Semua Status</option>
                                     <option value="belum_dibayar" {{ request('status') === 'belum_dibayar' ? 'selected' : '' }}>
                                         BELUM BAYAR</option>

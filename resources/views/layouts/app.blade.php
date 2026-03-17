@@ -44,6 +44,10 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts" data-turbo-track="reload"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" data-turbo-track="reload"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/id.js"></script>
     @stack('head')
 
     <style>
@@ -65,6 +69,151 @@
             background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
             color: white;
             box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.4);
+        }
+
+        /* TomSelect Premium Styling */
+        .ts-wrapper .ts-control {
+            border: 2px solid #f1f5f9;
+            background-color: #f8fafc;
+            border-radius: 0.75rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #334155;
+            box-shadow: none;
+            transition: all 0.2s;
+            min-height: 38px;
+            display: flex;
+            align-items: center;
+        }
+
+        .ts-wrapper.focus .ts-control {
+            border-color: #6366f1;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .ts-wrapper .ts-dropdown {
+            border-radius: 1rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            font-size: 0.75rem;
+            overflow: hidden;
+            padding: 0.5rem;
+            z-index: 100;
+        }
+
+        .ts-wrapper .ts-dropdown .option {
+            padding: 0.625rem 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+        }
+
+        .ts-wrapper .ts-dropdown .active {
+            background-color: #f1f5f9;
+            color: #4338ca;
+        }
+        
+        .ts-wrapper .ts-control .item {
+            font-weight: 700;
+            color: #1e293b;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        /* Flatpickr Premium Indigo Styling */
+        .flatpickr-calendar {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border-radius: 2rem;
+            border: 1px solid #e2e8f0;
+            padding: 1rem;
+            font-family: 'Outfit', sans-serif;
+            background: #ffffff;
+            width: 315px; /* Slightly wider for better readability */
+        }
+        .flatpickr-months {
+            margin-bottom: 0.5rem;
+        }
+        .flatpickr-month {
+            height: 40px;
+        }
+        .flatpickr-day {
+            border-radius: 12px;
+            font-weight: 600;
+            height: 38px;
+            line-height: 38px;
+            margin: 2px;
+        }
+        .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, 
+        .flatpickr-day.selected.inRange, .flatpickr-day.startRange.inRange, 
+        .flatpickr-day.endRange.inRange, .flatpickr-day.selected:focus, 
+        .flatpickr-day.startRange:focus, .flatpickr-day.endRange:focus, 
+        .flatpickr-day.selected:hover, .flatpickr-day.startRange:hover, 
+        .flatpickr-day.endRange:hover, .flatpickr-day.selected.prevMonthDay, 
+        .flatpickr-day.startRange.prevMonthDay, .flatpickr-day.endRange.prevMonthDay, 
+        .flatpickr-day.selected.nextMonthDay, .flatpickr-day.startRange.nextMonthDay, 
+        .flatpickr-day.endRange.nextMonthDay {
+            background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%) !important;
+            border-color: transparent !important;
+            box-shadow: 0 4px 12px rgba(67, 56, 202, 0.3);
+        }
+        .flatpickr-day.today {
+            border-color: #4338ca;
+            color: #4338ca;
+        }
+        .flatpickr-day.today:hover {
+            background: #f1f5f9;
+        }
+        .flatpickr-current-month .flatpickr-monthDropdown-months {
+            font-weight: 800 !important;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .flatpickr-weekday {
+            font-weight: 800;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-size: 10px;
+        }
+        /* Style for the input itself - add a nice icon */
+        .flatpickr-input-container {
+            position: relative;
+        }
+        .flatpickr-input-container::after {
+            content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5' /%3E%3C/svg%3E");
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1.25rem;
+            height: 1.25rem;
+            pointer-events: none;
+            transition: all 0.2s;
+        }
+        .flatpickr-input-container:focus-within::after {
+            filter: invert(24%) sepia(86%) saturate(3015%) hue-rotate(240deg) brightness(85%) contrast(92%); /* indigo-600 */
+        }
+        .flatpickr-months .flatpickr-month {
+            color: #1e293b;
+            fill: #1e293b;
+        }
+        .flatpickr-current-month .flatpickr-monthDropdown-months {
+            font-weight: 700;
+        }
+        .flatpickr-calendar .flatpickr-innerContainer {
+            margin-top: 0.5rem;
+        }
+        .flatpickr-day {
+            border-radius: 0.75rem;
+            font-weight: 600;
+            color: #475569;
+        }
+        .flatpickr-day.today {
+            border-color: #4338ca;
+            color: #4338ca;
+        }
+        .flatpickr-day:hover {
+            background: #f1f5f9;
         }
     </style>
     @stack('styles')
@@ -178,7 +327,86 @@
         </div>
     </div>
     @stack('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
+        // Global TomSelect Initializer
+        window.initTomSelect = window.initTomSelect || (() => {
+            document.querySelectorAll('.tom-select:not(.ts-wrapper)').forEach(el => {
+                new TomSelect(el, {
+                    create: false,
+                    dropdownParent: 'body',
+                    onDropdownOpen: (dropdown) => {
+                        dropdown.style.zIndex = "9999";
+                    }
+                });
+            });
+        });
+
+        document.addEventListener('turbo:load', initTomSelect);
+        document.addEventListener('turbo:render', initTomSelect);
+
+        // Global Flatpickr Initializer
+        window.initFlatpickr = window.initFlatpickr || (() => {
+            const inputs = document.querySelectorAll('input[type="date"]:not(.flatpickr-input), .flatpickr:not(.flatpickr-input)');
+            
+            inputs.forEach(el => {
+                // Pre-wrap the element for the icon container
+                // This must be done BEFORE flatpickr initialization to prevent event listener issues
+                if (!el.parentNode.classList.contains('flatpickr-input-container')) {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'flatpickr-input-container w-full';
+                    el.parentNode.insertBefore(wrapper, el);
+                    wrapper.appendChild(el);
+                }
+
+                // Determine if this is a "Dari" (Start) or "Sampai" (End) field
+                const isStart = el.name && (el.name.includes('start') || el.name.includes('dari'));
+                const isEnd = el.name && (el.name.includes('end') || el.name.includes('sampai'));
+                
+                const config = {
+                    locale: "id",
+                    dateFormat: "Y-m-d",
+                    altInput: true,
+                    altFormat: "d F Y",
+                    placeholder: "Tgl",
+                    disableMobile: "true",
+                    prevArrow: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>',
+                    nextArrow: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>',
+                    onReady: function(selectedDates, dateStr, instance) {
+                        // Set placeholder explicitly on the altInput
+                        if (instance.altInput) {
+                            instance.altInput.setAttribute('placeholder', 'Tgl');
+                        }
+                    },
+                    onChange: function(selectedDates, dateStr, instance) {
+                        // Find potential paired inputs in the same form
+                        if (isStart || isEnd) {
+                            const form = el.closest('form');
+                            if (form) {
+                                if (isStart) {
+                                    const endInput = form.querySelector('[name*="end"], [name*="sampai"]');
+                                    if (endInput && endInput._flatpickr) {
+                                        endInput._flatpickr.set('minDate', dateStr);
+                                    }
+                                } else if (isEnd) {
+                                    const startInput = form.querySelector('[name*="start"], [name*="dari"]');
+                                    if (startInput && startInput._flatpickr) {
+                                        startInput._flatpickr.set('maxDate', dateStr);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+
+                flatpickr(el, config);
+            });
+        });
+
+        document.addEventListener('turbo:load', initFlatpickr);
+        document.addEventListener('turbo:render', initFlatpickr);
+        
         // Global helper definitions (Only define once)
         window.showAlert = window.showAlert || ((title, text, icon = 'info') => {
             Swal.fire({

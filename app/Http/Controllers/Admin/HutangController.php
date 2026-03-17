@@ -59,6 +59,38 @@ class HutangController extends Controller
         return view('admin.hutang.index', compact('hutangs', 'satkers', 'summaryHutang'));
     }
 
+    public function store(Request $request)
+    {
+        $request->validate([
+            'satker_id' => 'required|exists:satkers,id',
+            'kendaraan_id' => 'required|exists:kendaraans,id',
+            'nama_driver' => 'required|string',
+            'jumlah_bon' => 'required|numeric|min:0.1',
+            'tanggal_bon' => 'required|date',
+        ]);
+
+        $kendaraan = \App\Models\Kendaraan::findOrFail($request->kendaraan_id);
+
+        $hutang = \App\Models\Hutang::create([
+            'satker_id' => $request->satker_id,
+            'petugas_id' => auth()->id(),
+            'nama_driver' => $request->nama_driver,
+            'jenis_kendaraan' => $kendaraan->jenis_kendaraan,
+            'nopol' => $kendaraan->no_polisi,
+            'jenis_bbm' => $kendaraan->jenis_bbm,
+            'jumlah_bon' => $request->jumlah_bon,
+            'tanggal_bon' => $request->tanggal_bon,
+            'status' => 'belum_dibayar',
+        ]);
+
+        \App\Models\LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => "Super Admin menginput data hutang BBM baru (ID: {$hutang->id}) untuk Satker {$hutang->satker->nama_satker}"
+        ]);
+
+        return back()->with('success', 'Data hutang berhasil ditambahkan.');
+    }
+
     public function downloadPDF(Request $request)
     {
         $query = \App\Models\Hutang::with(['satker', 'petugas', 'adminBayar'])->orderBy('created_at', 'desc');
@@ -103,14 +135,23 @@ class HutangController extends Controller
     {
         $request->validate([
             'satker_id' => 'required|exists:satkers,id',
-            'nopol' => 'required|string',
+            'kendaraan_id' => 'required|exists:kendaraans,id',
             'nama_driver' => 'required|string',
-            'jenis_bbm' => 'required|string',
             'jumlah_bon' => 'required|numeric|min:0.1',
             'tanggal_bon' => 'required|date',
         ]);
 
-        $hutang->update($request->only(['satker_id', 'nopol', 'nama_driver', 'jenis_bbm', 'jumlah_bon', 'tanggal_bon']));
+        $kendaraan = \App\Models\Kendaraan::findOrFail($request->kendaraan_id);
+
+        $hutang->update([
+            'satker_id' => $request->satker_id,
+            'nama_driver' => $request->nama_driver,
+            'jenis_kendaraan' => $kendaraan->jenis_kendaraan,
+            'nopol' => $kendaraan->no_polisi,
+            'jenis_bbm' => $kendaraan->jenis_bbm,
+            'jumlah_bon' => $request->jumlah_bon,
+            'tanggal_bon' => $request->tanggal_bon,
+        ]);
 
         \App\Models\LogAktivitas::create([
             'user_id' => auth()->id(),

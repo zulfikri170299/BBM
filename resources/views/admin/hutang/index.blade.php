@@ -2,16 +2,35 @@
     <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6" x-data="{ 
         showModal: false, 
         showEditModal: false,
+        showCreateModal: false,
         selectedHutang: null, 
         selectedSatker: null,
         hutangData: { nopol: '', bbm: '', jumlah: 0 },
-        editData: { id: '', satker_id: '', nopol: '', nama_driver: '', jenis_bbm: '', jumlah_bon: '', tanggal_bon: '' },
+        editData: { id: '', satker_id: '', kendaraan_id: '', nama_driver: '', jumlah_bon: '', tanggal_bon: '' },
+        createData: { satker_id: '', kendaraan_id: '', nama_driver: '', jumlah_bon: '', tanggal_bon: '{{ date('Y-m-d') }}' },
         selectedKendaraan: '', 
         selectedBbm: '',
         kendaraans: [],
         loadingKendaraan: false,
         get filteredKendaraans() {
             return this.kendaraans.filter(k => k.jenis_bbm === this.selectedBbm);
+        },
+        formKendaraans: [],
+        loadingFormKendaraan: false,
+        async fetchFormKendaraans(satkerId) {
+            if (!satkerId) {
+                this.formKendaraans = [];
+                return;
+            }
+            this.loadingFormKendaraan = true;
+            try {
+                const response = await fetch(`/admin/hutang/get-kendaraan?satker_id=${satkerId}`);
+                this.formKendaraans = await response.json();
+            } catch (error) {
+                console.error('Gagal mengambil data kendaraan:', error);
+            } finally {
+                this.loadingFormKendaraan = false;
+            }
         },
         async openModal(id, satkerId, bbm, nopol, jumlah) {
             this.selectedHutang = id;
@@ -32,9 +51,20 @@
                 this.loadingKendaraan = false;
             }
         },
-        openEditModal(data) {
-            this.editData = { ...data };
+        async openEditModal(data) {
+            this.editData = { ...data, kendaraan_id: '' };
             this.showEditModal = true;
+            if(data.satker_id) {
+                await this.fetchFormKendaraans(data.satker_id);
+                const match = this.formKendaraans.find(k => k.no_polisi === data.nopol);
+                if(match) {
+                    this.editData.kendaraan_id = match.id;
+                }
+            }
+        },
+        openCreateModal() {
+            this.createData = { satker_id: '', kendaraan_id: '', nama_driver: '', jumlah_bon: '', tanggal_bon: '{{ date('Y-m-d') }}' };
+            this.showCreateModal = true;
         }
     }">
         <!-- Page Title -->
@@ -83,68 +113,87 @@
             </div>
         @endif
 
-        <!-- Filter & Search -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-6 mb-6">
-            <form action="{{ route('admin.hutang.index') }}" method="GET" class="flex flex-col sm:flex-row gap-4">
-                <div class="flex-1">
-                    <x-input-label for="satker_id" value="Filter Satker" />
-                    <select name="satker_id" id="satker_id"
-                        class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                        <option value="">Semua Satker</option>
-                        @foreach($satkers as $satker)
-                            <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
-                                {{ $satker->nama_satker }}
-                            </option>
-                        @endforeach
-                    </select>
+        <!-- Condensed Filter & Action Bar -->
+        <div class="bg-white rounded-3xl border border-slate-200/60 shadow-lg shadow-slate-100 p-4 mb-6 relative overflow-hidden group">
+            <!-- Subtle Decorative Flare -->
+            <div class="absolute -right-4 -top-4 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl"></div>
+            
+            <form action="{{ route('admin.hutang.index') }}" method="GET" class="relative z-10 flex flex-wrap lg:flex-nowrap items-end gap-3 lg:gap-4">
+                <!-- Satker -->
+                <div class="w-full sm:flex-1 lg:min-w-[200px]">
+                    <x-input-label for="filter_satker_id" value="Satker" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-1" />
+                    <div class="relative group/input">
+                        <select name="satker_id" id="filter_satker_id"
+                            class="tom-select block w-full bg-slate-50 border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700">
+                            <option value="">Semua Satker</option>
+                            @foreach($satkers as $satker)
+                                <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
+                                    {{ $satker->nama_satker }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
 
-                <div class="flex-1">
-                    <x-input-label for="status" value="Status Pembayaran" />
-                    <select name="status" id="status"
-                        class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                        <option value="">Semua Status</option>
-                        <option value="belum_dibayar" {{ request('status') === 'belum_dibayar' ? 'selected' : '' }}>BELUM
-                            BAYAR
-                        </option>
-                        <option value="sudah_dibayar" {{ request('status') === 'sudah_dibayar' ? 'selected' : '' }}>LUNAS
-                        </option>
-                    </select>
+                <!-- Status -->
+                <div class="w-[calc(50%-0.5rem)] sm:w-44">
+                    <x-input-label for="filter_status" value="Status" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-1" />
+                    <div class="relative group/input">
+                        <select name="status" id="filter_status"
+                            class="tom-select block w-full bg-slate-50 border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700">
+                            <option value="">Semua Status</option>
+                            <option value="belum_dibayar" {{ request('status') === 'belum_dibayar' ? 'selected' : '' }}>BELUM</option>
+                            <option value="sudah_dibayar" {{ request('status') === 'sudah_dibayar' ? 'selected' : '' }}>LUNAS</option>
+                        </select>
+                    </div>
                 </div>
 
-                <div class="flex-1">
-                    <x-input-label for="start_date" value="Tanggal Awal" />
-                    <x-text-input type="date" name="start_date" id="start_date"
-                        value="{{ request('start_date') }}"
-                        class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" />
+                <!-- Date Range Group -->
+                <div class="w-[calc(50%-0.5rem)] sm:w-auto flex items-end gap-3 sm:gap-4">
+                    <!-- Start Date -->
+                    <div class="flex-1 sm:w-40">
+                        <x-input-label for="start_date" value="Dari" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-1" />
+                        <div class="relative group/input">
+                            <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}"
+                                class="flatpickr block w-full py-2 bg-slate-50 border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700" />
+                        </div>
+                    </div>
+
+                    <!-- End Date -->
+                    <div class="flex-1 sm:w-40">
+                        <x-input-label for="end_date" value="Sampai" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-1" />
+                        <div class="relative group/input">
+                            <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}"
+                                class="flatpickr block w-full py-2 bg-slate-50 border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700" />
+                        </div>
+                    </div>
                 </div>
 
-                <div class="flex-1">
-                    <x-input-label for="end_date" value="Tanggal Akhir" />
-                    <x-text-input type="date" name="end_date" id="end_date"
-                        value="{{ request('end_date') }}"
-                        class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" />
-                </div>
-
-                <div class="flex items-end gap-2">
+                <!-- Buttons Group -->
+                <div class="w-full lg:w-auto flex flex-nowrap items-center gap-2">
                     <button type="submit"
-                        class="px-4 py-2.5 bg-indigo-600 text-white font-semibold rounded-lg shadow hover:bg-indigo-700 transition">
-                        Filter
-                    </button>
-                    @if(request()->hasAny(['satker_id', 'status', 'per_page']))
-                        <a href="{{ route('admin.hutang.index') }}"
-                            class="px-4 py-2.5 bg-slate-100 text-slate-700 font-semibold rounded-lg hover:bg-slate-200 transition">
-                            Reset
-                        </a>
-                    @endif
-                    <a href="{{ route('admin.hutang.pdf', request()->all()) }}"
-                        class="px-4 py-2.5 bg-rose-600 text-white font-semibold rounded-lg shadow hover:bg-rose-700 transition flex items-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                        class="flex-1 lg:flex-none px-4 py-2.5 bg-indigo-600 text-white font-black rounded-xl shadow-lg shadow-indigo-100 hover:bg-indigo-700 active:scale-95 transition-all text-[10px] uppercase tracking-widest flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                         </svg>
-                        Cetak PDF
+                        <span class="hidden xl:inline">Filter</span>
+                    </button>
+                    
+                    <a href="{{ route('admin.hutang.pdf', request()->all()) }}"
+                        class="flex-1 lg:flex-none px-4 py-2.5 bg-rose-50 text-rose-600 font-black rounded-xl border border-rose-100 hover:bg-rose-100 active:scale-95 transition-all text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 whitespace-nowrap">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                        </svg>
+                        <span class="hidden xl:inline">Cetak</span>
                     </a>
+
+                    <button type="button" @click="openCreateModal()"
+                        class="flex-1 lg:flex-none px-4 py-2.5 bg-emerald-600 text-white font-black rounded-xl shadow-lg shadow-emerald-100 hover:bg-emerald-700 active:scale-95 transition-all text-[10px] uppercase tracking-widest flex items-center justify-center group/btn gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" />
+                        </svg>
+                        <span class="hidden xl:inline">Tambah</span>
+                    </button>
                 </div>
             </form>
         </div>
@@ -193,14 +242,14 @@
                         @forelse($hutangs as $hutang)
                             <tr class="hover:bg-slate-50/50 transition">
                                 <td class="px-4 py-2">
-                                    <div class="font-medium text-slate-900">
+                                    <div class="text-[10px] sm:text-xs font-bold text-slate-900">
                                         @if($hutang->tanggal_bon)
                                             {{ \Carbon\Carbon::parse($hutang->tanggal_bon)->format('d-m-Y') }}
                                         @else
                                             {{ \Carbon\Carbon::parse($hutang->created_at)->timezone('Asia/Makassar')->format('d-m-Y') }}
                                         @endif
                                     </div>
-                                    <div class="text-[10px] text-slate-500">
+                                    <div class="text-[9px] sm:text-[10px] text-slate-500 uppercase tracking-tight">
                                         @if($hutang->tanggal_bon)
                                             CATATAN MANUAL
                                         @else
@@ -209,10 +258,10 @@
                                         @endif
                                     </div>
                                 </td>
-                                <td class="px-4 py-2 font-semibold text-slate-800">{{ $hutang->satker->nama_satker }}</td>
+                                <td class="px-4 py-2 text-[10px] sm:text-xs font-semibold text-slate-800 leading-tight">{{ $hutang->satker->nama_satker }}</td>
                                 <td class="px-4 py-2">
-                                    <div class="font-bold text-slate-900 leading-tight">{{ $hutang->nopol }}</div>
-                                    <div class="text-[10px] text-slate-500">{{ $hutang->jenis_kendaraan }}</div>
+                                    <div class="text-[11px] sm:text-xs font-black text-slate-900 leading-tight uppercase">{{ $hutang->nopol }}</div>
+                                    <div class="text-[9px] sm:text-[10px] text-slate-500">{{ $hutang->jenis_kendaraan }}</div>
                                 </td>
                                 <td class="px-4 py-2">
                                     <div class="font-bold text-slate-800">{{ $hutang->nama_driver ?? '-' }}</div>
@@ -258,36 +307,42 @@
                                     <td class="px-4 py-2 border-l border-slate-100">
                                         <div class="flex items-center justify-center gap-2">
                                             @php
-                                                $editData = json_encode([
+                                                $editData = [
                                                     'id' => $hutang->id,
                                                     'satker_id' => $hutang->satker_id,
                                                     'nopol' => $hutang->nopol,
+                                                    'jenis_kendaraan' => $hutang->jenis_kendaraan,
                                                     'nama_driver' => $hutang->nama_driver,
                                                     'jenis_bbm' => $hutang->jenis_bbm,
                                                     'jumlah_bon' => $hutang->jumlah_bon,
                                                     'tanggal_bon' => $hutang->tanggal_bon ?? $hutang->created_at->format('Y-m-d')
-                                                ]);
+                                                ];
                                             @endphp
-                                            <button @click="openEditModal({{ htmlspecialchars($editData) }})"
-                                                class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors border border-blue-200">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                                </svg>
-                                            </button>
-
-                                            <form action="{{ route('admin.hutang.destroy', $hutang) }}" method="POST">
-                                                @csrf @method('DELETE')
+                                            @if($hutang->status === 'belum_dibayar')
                                                 <button type="button"
-                                                    data-confirm="Apakah Anda yakin ingin menghapus data hutang ini?"
-                                                    data-confirm-type="warning"
-                                                    class="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors border border-rose-200">
+                                                    @click="openEditModal(@js($editData))"
+                                                    class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors border border-blue-200">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                     </svg>
                                                 </button>
-                                            </form>
+
+                                                <form action="{{ route('admin.hutang.destroy', $hutang) }}" method="POST">
+                                                    @csrf @method('DELETE')
+                                                    <button type="button"
+                                                        data-confirm="Apakah Anda yakin ingin menghapus data hutang ini?"
+                                                        data-confirm-type="warning"
+                                                        class="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors border border-rose-200">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                        </svg>
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <span class="text-[10px] font-bold text-slate-400 italic">No Actions</span>
+                                            @endif
                                         </div>
                                     </td>
                                 @endif
@@ -446,8 +501,10 @@
                     </div>
                 </div>
             </div>
+        </div>
+
         <!-- Edit Modal -->
-        <div x-show="showEditModal" class="fixed inset-0 z-[60] overflow-y-auto" style="display: none;"
+        <div x-show="showEditModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;"
             aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                 <div x-show="showEditModal" x-transition.opacity
@@ -481,60 +538,96 @@
                         </button>
                     </div>
 
-                    <form :action="'/admin/hutang/' + editData.id" method="POST" class="p-6 space-y-4">
+                    <form :action="'/admin/hutang/' + editData.id" method="POST" class="p-8 space-y-6">
                         @csrf @method('PUT')
 
-                        <div>
-                            <x-input-label for="edit_satker_id" value="Satker" />
-                            <select name="satker_id" id="edit_satker_id" x-model="editData.satker_id"
-                                class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-xl shadow-sm font-bold text-slate-700">
-                                @foreach($satkers as $satker)
-                                    <option value="{{ $satker->id }}">{{ $satker->nama_satker }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <x-input-label for="edit_nopol" value="No. Polisi" />
-                                <x-text-input id="edit_nopol" name="nopol" type="text" x-model="editData.nopol"
-                                    class="mt-1 block w-full font-bold uppercase" />
-                            </div>
-                            <div>
-                                <x-input-label for="edit_jenis_bbm" value="Jenis BBM" />
-                                <select name="jenis_bbm" id="edit_jenis_bbm" x-model="editData.jenis_bbm"
-                                    class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-xl shadow-sm font-bold">
-                                    <option value="PERTAMAX">PERTAMAX</option>
-                                    <option value="PERTAMINA DEX">PERTAMINA DEX</option>
+                        <!-- Satker Selection -->
+                        <div class="space-y-2">
+                            <label for="edit_satker_id" class="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Satker</label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                    </svg>
+                                </div>
+                                <select name="satker_id" id="edit_satker_id" x-model="editData.satker_id" @change="fetchFormKendaraans($event.target.value); editData.kendaraan_id = ''"
+                                    class="block w-full pl-11 pr-10 py-3.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-2xl transition-all shadow-sm font-bold text-slate-700 appearance-none">
+                                    @foreach($satkers as $satker)
+                                        <option value="{{ $satker->id }}">{{ $satker->nama_satker }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
 
-                        <div>
-                            <x-input-label for="edit_nama_driver" value="Nama Driver" />
-                            <x-text-input id="edit_nama_driver" name="nama_driver" type="text"
-                                x-model="editData.nama_driver" class="mt-1 block w-full font-bold" />
+                        <!-- Kendaraan Selection -->
+                        <div class="space-y-2">
+                            <label for="edit_kendaraan_id" class="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Pilih Kendaraan</label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+                                    </svg>
+                                </div>
+                                <select name="kendaraan_id" id="edit_kendaraan_id" x-model="editData.kendaraan_id" required
+                                    :disabled="loadingFormKendaraan || !editData.satker_id"
+                                    class="block w-full pl-11 pr-10 py-3.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-2xl transition-all shadow-sm font-bold text-slate-700 appearance-none disabled:opacity-50">
+                                    <option value="" disabled x-text="loadingFormKendaraan ? 'Sedang mengambil data...' : '-- Pilih Kendaraan --'"></option>
+                                    <template x-for="kend in formKendaraans" :key="kend.id">
+                                        <option :value="kend.id" x-text="`${kend.no_polisi} - ${kend.jenis_kendaraan} (${kend.jenis_bbm})`"></option>
+                                    </template>
+                                </select>
+                            </div>
                         </div>
 
-                        <div>
-                            <x-input-label for="edit_tanggal_bon" value="Tanggal Bon" />
-                            <x-text-input id="edit_tanggal_bon" name="tanggal_bon" type="date"
-                                x-model="editData.tanggal_bon" class="mt-1 block w-full font-bold" required />
+                        <!-- Driver Name -->
+                        <div class="space-y-2">
+                            <label for="edit_nama_driver" class="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Nama Driver</label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </div>
+                                <input id="edit_nama_driver" name="nama_driver" type="text" x-model="editData.nama_driver" 
+                                    class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-2xl transition-all shadow-sm font-bold text-slate-700" 
+                                    placeholder="Masukkan nama pengemudi" required />
+                            </div>
                         </div>
 
-                        <div>
-                            <x-input-label for="edit_jumlah_bon" value="Jumlah Bon (Liter)" />
-                            <x-text-input id="edit_jumlah_bon" name="jumlah_bon" type="number" step="0.1"
-                                x-model="editData.jumlah_bon" class="mt-1 block w-full font-bold text-rose-600" />
+                        <!-- Date and Amount Row -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label for="edit_tanggal_bon" class="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Tanggal Bon</label>
+                                <div class="relative group">
+                                    <input id="edit_tanggal_bon" name="tanggal_bon" type="date" x-model="editData.tanggal_bon" 
+                                        class="flatpickr block w-full py-3.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-2xl transition-all shadow-sm font-bold text-slate-700" 
+                                        required />
+                                </div>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label for="edit_jumlah_bon" class="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Jumlah Bon (Liter)</label>
+                                <div class="relative group">
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
+                                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L7.05 15.12a2 2 0 00-1.022.547l-2.387 2.387a2 2 0 000 2.828l.141.141a2 2 0 002.828 0l2.628-2.628a2 2 0 012.33-.213l.317.158a2 2 0 002.33-.213l2.628-2.628a2 2 0 000-2.828l-.141-.141z" />
+                                        </svg>
+                                    </div>
+                                    <input id="edit_jumlah_bon" name="jumlah_bon" type="number" step="0.1" x-model="editData.jumlah_bon" 
+                                        class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-2xl transition-all shadow-sm font-black text-rose-600" 
+                                        placeholder="0.0" required />
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="pt-4 flex flex-col sm:flex-row-reverse gap-3">
+                        <div class="pt-6 flex flex-col sm:flex-row-reverse gap-3 border-t border-slate-100">
                             <button type="submit"
-                                class="w-full sm:w-auto px-8 py-3.5 bg-blue-600 text-white font-black rounded-2xl shadow-xl shadow-blue-100 hover:bg-blue-700 active:scale-95 transition-all text-sm uppercase tracking-widest">
+                                class="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-black rounded-2xl shadow-xl shadow-blue-100 hover:shadow-blue-200 active:scale-95 transition-all text-sm uppercase tracking-widest">
                                 SIMPAN PERUBAHAN
                             </button>
                             <button type="button" @click="showEditModal = false"
-                                class="w-full sm:w-auto px-8 py-3.5 bg-slate-100 text-slate-600 font-bold rounded-2xl hover:bg-slate-200 transition-all text-sm uppercase tracking-widest">
+                                class="w-full sm:w-auto px-10 py-4 bg-slate-100 text-slate-500 font-bold rounded-2xl hover:bg-slate-200 transition-all text-sm uppercase tracking-widest">
                                 BATAL
                             </button>
                         </div>
@@ -542,6 +635,138 @@
                 </div>
             </div>
         </div>
-        </div>
+
+        <!-- Create Modal -->
+        <div x-show="showCreateModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;"
+            aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div x-show="showCreateModal" x-transition.opacity
+                    class="fixed inset-0 bg-slate-900/60 transition-opacity backdrop-blur-sm" aria-hidden="true"
+                    @click="showCreateModal = false"></div>
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                <div x-show="showCreateModal" x-transition:enter="ease-out duration-300"
+                    x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                    x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                    class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl w-full border border-slate-200">
+
+                    <!-- Modal Header -->
+                    <div
+                        class="bg-emerald-600 px-6 py-4 text-white flex justify-between items-center bg-gradient-to-r from-emerald-600 to-emerald-700">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-white/20 p-2 rounded-xl">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M12 4v16m8-8H4" />
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-black tracking-tight">TAMBAH DATA HUTANG</h3>
+                        </div>
+                        <button @click="showCreateModal = false"
+                            class="text-white/80 hover:text-white transition-colors">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <form action="{{ route('admin.hutang.store') }}" method="POST" class="p-8 space-y-6">
+                        @csrf
+                        
+                        <!-- Satker Selection -->
+                        <div class="space-y-2">
+                            <label for="create_satker_id" class="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Unit Kerja / Satker</label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-emerald-600 transition-colors">
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                    </svg>
+                                </div>
+                                <select name="satker_id" id="create_satker_id" x-model="createData.satker_id" @change="fetchFormKendaraans($event.target.value); createData.kendaraan_id = ''"
+                                    class="block w-full pl-11 pr-10 py-3.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-2xl transition-all shadow-sm font-bold text-slate-700 appearance-none" required>
+                                    <option value="">-- Pilih Satker --</option>
+                                    @foreach($satkers as $satker)
+                                        <option value="{{ $satker->id }}">{{ $satker->nama_satker }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Kendaraan Selection -->
+                        <div class="space-y-2">
+                            <label for="create_kendaraan_id" class="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Pilih Kendaraan Dinas</label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-emerald-600 transition-colors">
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+                                    </svg>
+                                </div>
+                                <select name="kendaraan_id" id="create_kendaraan_id" x-model="createData.kendaraan_id" required
+                                    :disabled="loadingFormKendaraan || !createData.satker_id"
+                                    class="block w-full pl-11 pr-10 py-3.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-2xl transition-all shadow-sm font-bold text-slate-700 appearance-none disabled:opacity-50">
+                                    <option value="" disabled x-text="loadingFormKendaraan ? 'Sedang mengambil data...' : '-- Pilih Kendaraan --'"></option>
+                                    <template x-for="kend in formKendaraans" :key="kend.id">
+                                        <option :value="kend.id" x-text="`${kend.no_polisi} - ${kend.jenis_kendaraan} (${kend.jenis_bbm})`"></option>
+                                    </template>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Driver Name -->
+                        <div class="space-y-2">
+                            <label for="create_nama_driver" class="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Nama Driver / Pengemudi</label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-emerald-600 transition-colors">
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </div>
+                                <input id="create_nama_driver" name="nama_driver" type="text" x-model="createData.nama_driver" 
+                                    class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-2xl transition-all shadow-sm font-bold text-slate-700" 
+                                    placeholder="Nama personil yang membon" required />
+                            </div>
+                        </div>
+
+                        <!-- Date and Amount Row -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label for="create_tanggal_bon" class="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Tanggal Bon</label>
+                                <div class="relative group">
+                                    <input id="create_tanggal_bon" name="tanggal_bon" type="date" x-model="createData.tanggal_bon" 
+                                        class="flatpickr block w-full py-3.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-2xl transition-all shadow-sm font-bold text-slate-700" 
+                                        required />
+                                </div>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label for="create_jumlah_bon" class="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Jumlah Bon (Liter)</label>
+                                <div class="relative group">
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-emerald-600 transition-colors">
+                                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L7.05 15.12a2 2 0 00-1.022.547l-2.387 2.387a2 2 0 000 2.828l.141.141a2 2 0 002.828 0l2.628-2.628a2 2 0 012.33-.213l.317.158a2 2 0 002.33-.213l2.628-2.628a2 2 0 000-2.828l-.141-.141z" />
+                                        </svg>
+                                    </div>
+                                    <input id="create_jumlah_bon" name="jumlah_bon" type="number" step="0.1" x-model="createData.jumlah_bon" 
+                                        class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-2xl transition-all shadow-sm font-black text-rose-600" 
+                                        placeholder="0.0" required />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-6 flex flex-col sm:flex-row-reverse gap-3 border-t border-slate-100">
+                            <button type="submit"
+                                class="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-black rounded-2xl shadow-xl shadow-emerald-100 hover:shadow-emerald-200 active:scale-95 transition-all text-sm uppercase tracking-widest">
+                                SIMPAN DATA HUTANG
+                            </button>
+                            <button type="button" @click="showCreateModal = false"
+                                class="w-full sm:w-auto px-10 py-4 bg-slate-100 text-slate-500 font-bold rounded-2xl hover:bg-slate-200 transition-all text-sm uppercase tracking-widest">
+                                BATAL
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>        </div>
     </div>
 </x-app-layout>

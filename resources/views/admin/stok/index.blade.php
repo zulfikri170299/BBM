@@ -47,7 +47,7 @@
 
                         <div>
                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Jenis BBM</label>
-                            <select name="jenis_bbm" required class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl text-sm font-semibold text-slate-800 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
+                            <select name="jenis_bbm" id="filter_jenis_bbm" required class="tom-select w-full bg-slate-50 border-slate-200 rounded-xl transition-all font-semibold text-sm">
                                 <option value="">Pilih Jenis BBM</option>
                                 @foreach(['Pertamax', 'Pertamina Dex'] as $bbm)
                                     <option value="{{ $bbm }}">{{ $bbm }}</option>
@@ -80,17 +80,73 @@
                 </div>
             </div>
 
-            <!-- History Table -->
-            <div class="lg:col-span-2">
-                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                    <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                        <div class="flex items-center gap-3">
-                            <h3 class="text-lg font-bold text-slate-800">Riwayat Perubahan Stok</h3>
+            <!-- History Table & mutation Summary -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Mutation Summary Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    @foreach(['Pertamax', 'Pertamina Dex'] as $bbm)
+                        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 relative overflow-hidden group">
+                            <div class="flex items-center gap-3 mb-3 pb-2 border-b border-slate-100">
+                                <div class="w-1.5 h-6 rounded-full bg-gradient-to-b {{ $bbm === 'Pertamax' ? 'from-blue-500 to-indigo-600' : 'from-rose-500 to-red-600' }}"></div>
+                                <h4 class="text-xs font-black text-slate-700 uppercase tracking-widest">{{ $bbm }}</h4>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-emerald-50/50 p-2.5 rounded-xl border border-emerald-100/50">
+                                    <p class="text-[9px] font-black text-emerald-600/60 uppercase tracking-wider mb-0.5">Total Masuk</p>
+                                    <p class="text-sm font-black text-emerald-600">
+                                        + {{ number_format($summary[$bbm]['masuk'] ?? 0, 0, ',', '.') }} <span class="text-[10px]">L</span>
+                                    </p>
+                                </div>
+                                <div class="bg-rose-50/50 p-2.5 rounded-xl border border-rose-100/50">
+                                    <p class="text-[9px] font-black text-rose-600/60 uppercase tracking-wider mb-0.5">Total Keluar</p>
+                                    <p class="text-sm font-black text-rose-600">
+                                        - {{ number_format($summary[$bbm]['keluar'] ?? 0, 0, ',', '.') }} <span class="text-[10px]">L</span>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                        <a href="{{ route('admin.stok.print') }}" target="_blank" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl shadow-lg shadow-rose-500/30 transition-all flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-                            Cetak PDF
-                        </a>
+                    @endforeach
+                </div>
+
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="p-4 sm:p-5 border-b border-slate-100 bg-slate-50/50 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4">
+                        <div class="flex items-center gap-3">
+                            <h3 class="text-base font-bold text-slate-800">Riwayat Perubahan Stok</h3>
+                        </div>
+                        
+                        <!-- Compact Date Filter -->
+                        <form action="{{ route('admin.stok.index') }}" method="GET" class="flex flex-wrap sm:flex-nowrap items-center gap-2 w-full xl:w-auto">
+                            <input type="hidden" name="per_page" value="{{ request('per_page', 20) }}">
+                            
+                            <!-- Date Inputs (1 baris on mobile) -->
+                            <div class="grid grid-cols-2 gap-2 w-full sm:w-auto">
+                                <div class="relative group/input">
+                                    <input type="date" name="start_date" value="{{ request('start_date') }}" 
+                                        class="flatpickr pr-1 py-1.5 bg-white border-slate-200 rounded-lg text-[11px] font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/5 transition-all w-full sm:w-32" placeholder="Tgl Mulai">
+                                </div>
+                                <div class="relative group/input">
+                                    <input type="date" name="end_date" value="{{ request('end_date') }}" 
+                                        class="flatpickr pr-1 py-1.5 bg-white border-slate-200 rounded-lg text-[11px] font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/5 transition-all w-full sm:w-32" placeholder="Tgl Selesai">
+                                </div>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="flex items-center gap-2 w-full sm:w-auto">
+                                <button type="submit" class="flex-1 sm:flex-none px-3 py-1.5 bg-indigo-600 text-white font-black rounded-lg hover:bg-indigo-700 transition-all text-[10px] uppercase tracking-widest shadow-sm">
+                                    Filter
+                                </button>
+                                @if(request()->hasAny(['start_date', 'end_date']))
+                                    <a href="{{ route('admin.stok.index', request()->only('per_page')) }}" class="px-3 py-1.5 bg-slate-100 text-slate-600 font-bold rounded-lg hover:bg-slate-200 transition-all text-[10px] uppercase tracking-widest leading-normal">
+                                        Reset
+                                    </a>
+                                @endif
+                                <div class="h-6 w-px bg-slate-200 mx-1 hidden xl:block"></div>
+                                <a href="{{ route('admin.stok.print', request()->all()) }}" target="_blank" class="flex-1 sm:flex-none px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-[10px] font-black rounded-lg shadow-sm transition-all flex items-center justify-center gap-1.5 uppercase tracking-widest">
+                                    <svg class="w-3.5 h-3.5 font-bold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                                    Cetak PDF
+                                </a>
+                            </div>
+                        </form>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
@@ -99,6 +155,9 @@
                                     <th colspan="5" class="px-6 py-3">
                                         <div class="flex items-center justify-between">
                                             <form action="{{ route('admin.stok.index') }}" method="GET" class="flex items-center">
+                                                @foreach(request()->except('per_page') as $k => $v)
+                                                    <input type="hidden" name="{{ $k }}" value="{{ $v }}">
+                                                @endforeach
                                                 <x-per-page :current="request('per_page', 20)" />
                                             </form>
                                             <div class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
@@ -120,7 +179,7 @@
                                     <tr class="hover:bg-slate-50 transition-colors">
                                         <td class="px-2 py-3 sm:px-6 sm:py-4">
                                             <p class="text-xs sm:text-sm font-semibold text-slate-700">{{ $item->created_at->format('d/m/Y') }}</p>
-                                            <p class="text-[9px] sm:text-[10px] text-slate-400">{{ $item->created_at->format('H:i') }} WIB</p>
+                                            <p class="text-[9px] sm:text-[10px] text-slate-400">{{ $item->created_at->timezone('Asia/Makassar')->format('H:i') }} WITA</p>
                                         </td>
                                         <td class="px-2 py-3 sm:px-6 sm:py-4 text-center">
                                             <span class="px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[8px] sm:text-[10px] font-bold text-white bg-gradient-to-r {{ $bbmStyle[$item->jenis_bbm] ?? 'from-slate-500 to-slate-600' }} whitespace-nowrap">

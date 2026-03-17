@@ -90,71 +90,50 @@
                     </a>
                 @endif
 
-                <!-- Filter Satker Dropdown (Icon Only) -->
-                <div class="relative" x-data="{ open: false }">
-                    <form action="{{ route('admin.kendaraans.index') }}" method="GET" class="flex items-center gap-3">
-                        <input type="hidden" name="satker_id" id="satker_id" value="{{ request('satker_id') }}">
-                        <button type="button" @click="open = !open" @click.away="open = false"
-                            class="inline-flex items-center justify-center w-10 h-10 bg-white text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 hover:text-indigo-600 hover:border-indigo-200 shadow-sm transition-all duration-200 group relative"
-                            :class="{'bg-indigo-50 border-indigo-200 text-indigo-600': '{{ request('satker_id') }}' }">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z">
-                                </path>
-                            </svg>
-                            <!-- Tooltip -->
-                            <span
-                                class="absolute -bottom-8 right-0 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
-                                @php
-                                    $selectedSatker = $satkers->firstWhere('id', request('satker_id'));
-                                    echo $selectedSatker ? 'Filter: ' . $selectedSatker->nama_satker : 'Filter Satker';
-                                @endphp
-                            </span>
-                        </button>
+                <!-- Filter Satker (Icon-only) -->
+                <div x-data="{ open: false }" class="relative">
+                    <button @click="open = !open"
+                        class="inline-flex items-center justify-center w-10 h-10 bg-white border-2 border-slate-200 text-slate-600 rounded-xl hover:bg-slate-50 hover:border-indigo-500 hover:text-indigo-600 shadow-sm transition-all duration-200 group relative"
+                        :class="{ 'border-indigo-500 text-indigo-600 ring-4 ring-indigo-500/10': open || '{{ request('satker_id') }}' != '' }"
+                        title="Filter Satker">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                            </path>
+                        </svg>
 
-                        <div x-show="open" x-transition:enter="transition ease-out duration-100"
-                            x-transition:enter-start="transform opacity-0 scale-95"
-                            x-transition:enter-end="transform opacity-100 scale-100"
-                            x-transition:leave="transition ease-in duration-75"
-                            x-transition:leave-start="transform opacity-100 scale-100"
-                            x-transition:leave-end="transform opacity-0 scale-95"
-                            class="absolute right-0 z-20 w-64 mt-2 bg-white rounded-xl shadow-xl border border-slate-100 py-1 max-h-60 overflow-auto focus:outline-none"
-                            style="display: none;">
+                        @if(request('satker_id'))
+                            <span class="absolute top-2 right-2 w-2 h-2 bg-indigo-600 rounded-full border-2 border-white"></span>
+                        @endif
 
-                            <div
-                                class="px-3 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider bg-slate-50/50">
-                                Pilih Satuan Kerja
-                            </div>
+                        <!-- Tooltip -->
+                        <span
+                            class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
+                            Filter Satker {{ request('satker_id') ? '(Aktif)' : '' }}
+                        </span>
+                    </button>
 
-                            <button type="button"
-                                @click="document.getElementById('satker_id').value = ''; $el.closest('form').submit();"
-                                class="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 hover:text-indigo-600 flex items-center justify-between group transition-colors border-b border-slate-50">
-                                <span class="font-medium">Semua Satker</span>
-                                @if(!request('satker_id'))
-                                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                @endif
-                            </button>
-
-                            @foreach($satkers as $satker)
-                                <button type="button"
-                                    @click="document.getElementById('satker_id').value = '{{ $satker->id }}'; $el.closest('form').submit();"
-                                    class="w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-indigo-600 flex items-center justify-between group transition-colors">
-                                    <span class="truncate">{{ $satker->nama_satker }}</span>
-                                    @if(request('satker_id') == $satker->id)
-                                        <svg class="w-4 h-4 text-indigo-600 shrink-0" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                    @endif
-                                </button>
-                            @endforeach
+                    <!-- Dropdown Content -->
+                    <div x-show="open" @click.away="open = false" x-cloak
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                        x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                        class="absolute right-0 mt-3 w-72 bg-white rounded-2xl shadow-xl border border-slate-100 p-4 z-50">
+                        <div class="mb-3">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest">Pilih Satuan Kerja</h4>
                         </div>
-                    </form>
+                        <form action="{{ route('admin.kendaraans.index') }}" method="GET">
+                            <select name="satker_id" id="filter_satker_id" onchange="this.form.submit()"
+                                class="tom-select block w-full bg-slate-50 border-slate-200 rounded-xl transition-all shadow-sm font-semibold text-sm">
+                                <option value="">Semua Satker</option>
+                                @foreach($satkers as $satker)
+                                    <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
+                                        {{ $satker->nama_satker }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -213,7 +192,7 @@
                 <table class="min-w-full">
                     <thead>
                         <tr class="bg-slate-50/50 border-b border-slate-100">
-                            <th colspan="9" class="px-6 py-3">
+                            <th colspan="8" class="px-6 py-3">
                                 <div class="flex items-center justify-between">
                                     <form action="{{ route('admin.kendaraans.index') }}" method="GET"
                                         class="flex items-center gap-3">
@@ -234,7 +213,7 @@
                                                 </svg>
                                             </span>
                                             <input type="text" name="search" value="{{ request('search') }}"
-                                                placeholder="Cari nopol, kode..."
+                                                placeholder="Cari nopol, jenis kendaraan..."
                                                 class="block w-48 pl-8 pr-3 py-1.5 border border-slate-200 rounded-lg text-xs placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
                                         </div>
 
@@ -263,9 +242,6 @@
                             <th
                                 class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                 Satker</th>
-                            <th
-                                class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                                Kode</th>
                             <th
                                 class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                 Jenis Kendaraan</th>
@@ -304,10 +280,6 @@
                                         <span
                                             class="text-xs font-medium text-slate-700">{{ $kendaraan->satker->nama_satker ?? '-' }}</span>
                                     </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <code
-                                        class="px-2 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-mono font-bold">{{ $kendaraan->kode_kendaraan ?? '-' }}</code>
                                 </td>
                                 <td class="px-6 py-4">
                                     <span
@@ -1780,8 +1752,8 @@
                 <form action="{{ route('admin.kendaraans.laporan-bulanan') }}" method="GET" class="p-6 space-y-4">
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2">1. Pilih Satuan Kerja</label>
-                        <select name="satker_id" x-model="satkerId" required
-                            class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all">
+                        <select name="satker_id" id="report_satker_id" x-model="satkerId" required
+                            class="tom-select w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 transition-all">
                             <option value="">-- Pilih Satker --</option>
                             @foreach($satkers as $s)
                                 <option value="{{ $s->id }}">{{ $s->nama_satker }}</option>

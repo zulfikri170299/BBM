@@ -41,19 +41,6 @@
                         </div>
                     </div>
                 @endforeach
-
-                <a href="{{ route('satker.hutang.pdf', request()->all()) }}"
-                    class="inline-flex items-center gap-2.5 px-6 py-4 bg-white text-rose-600 border border-rose-100 rounded-[1.5rem] font-black hover:bg-rose-50 hover:border-rose-200 transition-all shadow-sm hover:shadow-md group ml-2">
-                    <div class="p-2 bg-rose-50 rounded-xl group-hover:bg-rose-100 transition-colors">
-                        <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none"
-                            stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z">
-                            </path>
-                        </svg>
-                    </div>
-                    <span class="tracking-wide">CETAK PDF</span>
-                </a>
             </div>
         </div>
 
@@ -64,40 +51,26 @@
                 <div class="flex-1 min-w-[140px] space-y-1.5">
                     <label
                         class="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        Mulai
+                        Dari
                     </label>
                     <input type="date" name="start_date" value="{{ request('start_date') }}"
-                        class="w-full bg-slate-50 border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-700 text-xs py-3">
+                        class="flatpickr w-full bg-slate-50 border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-700 text-xs">
                 </div>
                 <div class="flex-1 min-w-[140px] space-y-1.5">
                     <label
                         class="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
                         Sampai
                     </label>
                     <input type="date" name="end_date" value="{{ request('end_date') }}"
-                        class="w-full bg-slate-50 border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-700 text-xs py-3">
+                        class="flatpickr w-full bg-slate-50 border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-700 text-xs">
                 </div>
                 <div class="flex-1 min-w-[150px] space-y-1.5">
                     <label
                         class="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a2 2 0 00-1.96 1.414l-.727 2.903a2 2 0 01-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1" />
-                        </svg>
                         BBM
                     </label>
                     <select name="jenis_bbm"
-                        class="w-full bg-slate-50 border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-700 text-xs py-3">
+                        class="tom-select w-full bg-slate-50 border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-700 text-xs">
                         <option value="">Semua BBM</option>
                         <option value="Pertamax" {{ request('jenis_bbm') == 'Pertamax' ? 'selected' : '' }}>Pertamax
                         </option>
@@ -108,14 +81,10 @@
                 <div class="flex-1 min-w-[150px] space-y-1.5">
                     <label
                         class="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
                         Status
                     </label>
                     <select name="status"
-                        class="w-full bg-slate-50 border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-700 text-xs py-3">
+                        class="tom-select w-full bg-slate-50 border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-700 text-xs">
                         <option value="">Semua Status</option>
                         <option value="belum_dibayar" {{ request('status') == 'belum_dibayar' ? 'selected' : '' }}>BELUM
                         </option>
@@ -124,14 +93,21 @@
                     </select>
                 </div>
                 <div class="flex items-center gap-2 lg:mb-0.5">
+                    <button type="submit"
+                        class="px-5 py-3.5 bg-indigo-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 active:scale-95 whitespace-nowrap">
+                        Terapkan
+                    </button>
                     <a href="{{ route('satker.hutang.index') }}"
                         class="px-4 py-3 text-slate-400 hover:text-slate-600 font-black text-[10px] uppercase tracking-widest transition-colors">
                         Reset
                     </a>
-                    <button type="submit"
-                        class="px-6 py-3.5 bg-indigo-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 active:scale-95 whitespace-nowrap">
-                        Terapkan
-                    </button>
+                    <a href="{{ route('satker.hutang.pdf', request()->all()) }}"
+                        class="px-5 py-3.5 bg-rose-50 text-rose-600 border border-rose-100 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-rose-100 transition-all active:scale-95 whitespace-nowrap flex items-center gap-2">
+                        <svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                        </svg>
+                        PDF
+                    </a>
                 </div>
             </form>
         </div>

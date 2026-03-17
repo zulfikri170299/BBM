@@ -205,7 +205,7 @@
                 <table class="min-w-full">
                     <thead>
                         <tr class="bg-slate-50/50 border-b border-slate-100">
-                            <th colspan="9" class="px-6 py-3">
+                            <th colspan="8" class="px-6 py-3">
                                 <div class="flex items-center justify-between">
                                     <form action="{{ route('satker.kendaraans.index') }}" method="GET"
                                         class="flex items-center gap-3">
@@ -223,7 +223,7 @@
                                                 </svg>
                                             </span>
                                             <input type="text" name="search" value="{{ request('search') }}"
-                                                placeholder="Cari nopol, kode..."
+                                                placeholder="Cari nopol, jenis..."
                                                 class="block w-48 pl-8 pr-3 py-1.5 border border-slate-200 rounded-lg text-xs placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
                                         </div>
 
@@ -250,9 +250,6 @@
                             <th
                                 class="px-6 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider w-12">
                                 No</th>
-                            <th
-                                class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                                Kode</th>
                             <th
                                 class="px-6 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                 Jenis Kendaraan</th>
@@ -283,10 +280,6 @@
                                 <td class="px-6 py-4 text-center">
                                     <span
                                         class="text-xs font-semibold text-slate-500">{{ $loop->iteration + ($kendaraans->currentPage() - 1) * $kendaraans->perPage() }}</span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <code
-                                        class="px-2 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-mono font-bold">{{ $kendaraan->kode_kendaraan ?? '-' }}</code>
                                 </td>
                                 <td class="px-6 py-4">
                                     <span
@@ -349,7 +342,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="px-6 py-12 text-center">
+                                <td colspan="7" class="px-6 py-12 text-center">
                                     <div class="flex flex-col items-center">
                                         <div
                                             class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">

@@ -18,16 +18,75 @@ class StokController extends Controller
     {
         $stocks = AdminBbmStock::all();
         $perPage = $this->getPerPage($request, 20);
-        $history = RiwayatStokAdmin::with('user')->latest()->paginate($perPage)->withQueryString();
-        return view('admin.stok.index', compact('stocks', 'history'));
+        
+        $query = RiwayatStokAdmin::with('user')->latest();
+
+        if ($request->filled('start_date')) {
+            $query->whereDate('created_at', '>=', $request->start_date);
+        }
+
+        if ($request->filled('end_date')) {
+            $query->whereDate('created_at', '<=', $request->end_date);
+        }
+
+        // Hitung ringkasan mutasi (filtered)
+        $summaryQuery = RiwayatStokAdmin::query();
+        if ($request->filled('start_date')) {
+            $summaryQuery->whereDate('created_at', '>=', $request->start_date);
+        }
+        if ($request->filled('end_date')) {
+            $summaryQuery->whereDate('created_at', '<=', $request->end_date);
+        }
+
+        $summaryData = $summaryQuery->select('jenis_bbm', 'tipe', DB::raw('SUM(jumlah) as total'))
+            ->groupBy('jenis_bbm', 'tipe')
+            ->get();
+
+        $summary = [];
+        foreach ($summaryData as $row) {
+            $summary[$row->jenis_bbm][$row->tipe] = $row->total;
+        }
+
+        $history = $query->paginate($perPage)->withQueryString();
+        
+        return view('admin.stok.index', compact('stocks', 'history', 'summary'));
     }
 
-    public function print()
+    public function print(Request $request)
     {
         $stocks = AdminBbmStock::all();
-        $history = RiwayatStokAdmin::with('user')->latest()->get();
         
-        $pdf = Pdf::loadView('admin.stok.print', compact('stocks', 'history'))
+        $query = RiwayatStokAdmin::with('user')->latest();
+
+        if ($request->filled('start_date')) {
+            $query->whereDate('created_at', '>=', $request->start_date);
+        }
+
+        if ($request->filled('end_date')) {
+            $query->whereDate('created_at', '<=', $request->end_date);
+        }
+
+        $history = $query->get();
+
+        // Hitung ringkasan mutasi (filtered)
+        $summaryQuery = RiwayatStokAdmin::query();
+        if ($request->filled('start_date')) {
+            $summaryQuery->whereDate('created_at', '>=', $request->start_date);
+        }
+        if ($request->filled('end_date')) {
+            $summaryQuery->whereDate('created_at', '<=', $request->end_date);
+        }
+
+        $summaryData = $summaryQuery->select('jenis_bbm', 'tipe', DB::raw('SUM(jumlah) as total'))
+            ->groupBy('jenis_bbm', 'tipe')
+            ->get();
+
+        $summary = [];
+        foreach ($summaryData as $row) {
+            $summary[$row->jenis_bbm][$row->tipe] = $row->total;
+        }
+        
+        $pdf = Pdf::loadView('admin.stok.print', compact('stocks', 'history', 'summary'))
             ->setPaper('a4', 'portrait');
             
         return $pdf->stream('riwayat-stok-pusat-' . date('Y-m-d') . '.pdf');

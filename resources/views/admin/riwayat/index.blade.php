@@ -1,9 +1,20 @@
 <x-app-layout>
     <div class="p-6 lg:p-8 space-y-6">
         <!-- Page Header -->
-        <div>
-            <h1 class="text-3xl font-bold text-slate-900">Riwayat Pengisian BBM</h1>
-            <p class="mt-1 text-slate-500">Histori pengisian BBM seluruh kendaraan dari semua Satuan Kerja.</p>
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Riwayat Pengisian BBM</h1>
+                <p class="mt-1 text-xs sm:text-sm font-medium text-slate-500">Histori pengisian BBM seluruh kendaraan dari semua Satuan Kerja.</p>
+            </div>
+            <a href="{{ route('admin.riwayat.print', request()->all()) }}" target="_blank"
+                class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2.5 bg-rose-600 text-white rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-rose-700 shadow-lg shadow-rose-200 transition-all active:scale-95 gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                        d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
+                    </path>
+                </svg>
+                Cetak PDF
+            </a>
         </div>
 
         <!-- Stats Cards -->
@@ -43,51 +54,50 @@
         </div>
 
         <!-- Filter -->
-        <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm p-5">
-            <form method="GET" action="{{ route('admin.riwayat.index') }}" class="flex flex-wrap gap-4 items-end">
-                <div class="flex-1 min-w-[150px]">
-                    <label class="block text-xs font-semibold text-slate-500 mb-1.5">Dari Tanggal</label>
-                    <input type="date" name="dari" value="{{ request('dari') }}"
-                        class="w-full px-3 py-2 border-2 border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5">
+            <form method="GET" action="{{ route('admin.riwayat.index') }}" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Dari Tanggal</label>
+                        <input type="date" name="dari" value="{{ request('dari') }}"
+                            class="flatpickr w-full h-11 px-4 border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all bg-slate-50/50">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Sampai Tanggal</label>
+                        <input type="date" name="sampai" value="{{ request('sampai') }}"
+                            class="flatpickr w-full h-11 px-4 border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all bg-slate-50/50">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Satker</label>
+                        <select name="satker_id" id="filter_satker_id"
+                            class="tom-select w-full rounded-xl border-slate-200 bg-slate-50 text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all">
+                            <option value="">Semua Satker</option>
+                            @foreach($satkers as $satker)
+                                <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
+                                    {{ $satker->nama_satker }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="flex items-end gap-2">
+                        <button type="submit"
+                            class="flex-1 h-11 bg-indigo-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all active:scale-95 flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                            </svg>
+                            Filter
+                        </button>
+                        <a href="{{ route('admin.riwayat.index') }}"
+                            class="flex-1 h-11 bg-slate-100 text-slate-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-200 transition-all active:scale-95 flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                            Reset
+                        </a>
+                    </div>
                 </div>
-                <div class="flex-1 min-w-[150px]">
-                    <label class="block text-xs font-semibold text-slate-500 mb-1.5">Sampai Tanggal</label>
-                    <input type="date" name="sampai" value="{{ request('sampai') }}"
-                        class="w-full px-3 py-2 border-2 border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
-                </div>
-                <div class="flex-1 min-w-[180px]">
-                    <label class="block text-xs font-semibold text-slate-500 mb-1.5">Satker</label>
-                    <select name="satker_id"
-                        class="w-full px-3 py-2 border-2 border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
-                        <option value="">Semua Satker</option>
-                        @foreach($satkers as $satker)
-                            <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
-                                {{ $satker->nama_satker }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="flex gap-2">
-                    <button type="submit"
-                        class="px-5 py-2 bg-indigo-600 text-white rounded-xl font-semibold text-sm hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all">
-                        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                        Filter
-                    </button>
-                    <a href="{{ route('admin.riwayat.index') }}"
-                        class="px-4 py-2 bg-slate-100 text-slate-600 rounded-xl font-semibold text-sm hover:bg-slate-200 transition-colors">Reset</a>
-                    <a href="{{ route('admin.riwayat.print', request()->all()) }}" target="_blank"
-                        class="px-4 py-2 bg-red-100 text-red-600 rounded-xl font-semibold text-sm hover:bg-red-200 transition-colors flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
-                            </path>
-                        </svg>
-                        Cetak PDF
-                    </a>
-                </div>
+            </form>
+        </div>
             </form>
         </div>
 
