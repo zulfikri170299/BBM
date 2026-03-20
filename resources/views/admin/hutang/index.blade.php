@@ -1,72 +1,5 @@
 <x-app-layout>
-    <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6" x-data="{ 
-        showModal: false, 
-        showEditModal: false,
-        showCreateModal: false,
-        selectedHutang: null, 
-        selectedSatker: null,
-        hutangData: { nopol: '', bbm: '', jumlah: 0 },
-        editData: { id: '', satker_id: '', kendaraan_id: '', nama_driver: '', jumlah_bon: '', tanggal_bon: '' },
-        createData: { satker_id: '', kendaraan_id: '', nama_driver: '', jumlah_bon: '', tanggal_bon: '{{ date('Y-m-d') }}' },
-        selectedKendaraan: '', 
-        selectedBbm: '',
-        kendaraans: [],
-        loadingKendaraan: false,
-        get filteredKendaraans() {
-            return this.kendaraans.filter(k => k.jenis_bbm === this.selectedBbm);
-        },
-        formKendaraans: [],
-        loadingFormKendaraan: false,
-        async fetchFormKendaraans(satkerId) {
-            if (!satkerId) {
-                this.formKendaraans = [];
-                return;
-            }
-            this.loadingFormKendaraan = true;
-            try {
-                const response = await fetch(`/admin/hutang/get-kendaraan?satker_id=${satkerId}`);
-                this.formKendaraans = await response.json();
-            } catch (error) {
-                console.error('Gagal mengambil data kendaraan:', error);
-            } finally {
-                this.loadingFormKendaraan = false;
-            }
-        },
-        async openModal(id, satkerId, bbm, nopol, jumlah) {
-            this.selectedHutang = id;
-            this.selectedSatker = satkerId;
-            this.selectedBbm = bbm;
-            this.hutangData = { nopol, bbm, jumlah };
-            this.selectedKendaraan = '';
-            this.kendaraans = [];
-            this.showModal = true;
-            this.loadingKendaraan = true;
-            
-            try {
-                const response = await fetch(`/admin/hutang/get-kendaraan?satker_id=${satkerId}`);
-                this.kendaraans = await response.json();
-            } catch (error) {
-                console.error('Gagal mengambil data kendaraan:', error);
-            } finally {
-                this.loadingKendaraan = false;
-            }
-        },
-        async openEditModal(data) {
-            this.editData = { ...data, kendaraan_id: '' };
-            this.showEditModal = true;
-            if(data.satker_id) {
-                await this.fetchFormKendaraans(data.satker_id);
-                const match = this.formKendaraans.find(k => k.no_polisi === data.nopol);
-                if(match) {
-                    this.editData.kendaraan_id = match.id;
-                }
-            }
-        },
-        openCreateModal() {
-            this.createData = { satker_id: '', kendaraan_id: '', nama_driver: '', jumlah_bon: '', tanggal_bon: '{{ date('Y-m-d') }}' };
-            this.showCreateModal = true;
-        }
-    }">
+    <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6" x-data="hutangComponent">
         <!-- Page Title -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 border-b-4 border-indigo-600 pb-2 inline-block">
@@ -441,8 +374,8 @@
                                                 d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
                                         </svg>
                                     </div>
-                                    <select name="kendaraan_id" id="kendaraan_id" x-model="selectedKendaraan"
-                                        class="block w-full pl-11 pr-10 py-3.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-2xl transition-all shadow-sm font-bold text-slate-700 appearance-none"
+                                    <select name="kendaraan_id" id="payment_kendaraan_id" x-model="selectedKendaraan"
+                                        class="tom-select-dynamic block w-full pl-11 pr-10 py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700 appearance-none"
                                         :disabled="loadingKendaraan" required>
                                         <option value="" disabled x-show="!loadingKendaraan">-- Pilih Kendaraan --
                                         </option>
@@ -542,16 +475,16 @@
                         @csrf @method('PUT')
 
                         <!-- Satker Selection -->
-                        <div class="space-y-2">
-                            <label for="edit_satker_id" class="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Satker</label>
+                        <div class="space-y-1.5">
+                            <label for="edit_satker_id" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Unit Kerja / Satker</label>
                             <div class="relative group">
-                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
-                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors z-10">
+                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                     </svg>
                                 </div>
                                 <select name="satker_id" id="edit_satker_id" x-model="editData.satker_id" @change="fetchFormKendaraans($event.target.value); editData.kendaraan_id = ''"
-                                    class="block w-full pl-11 pr-10 py-3.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-2xl transition-all shadow-sm font-bold text-slate-700 appearance-none">
+                                    class="tom-select block w-full pl-11 pr-10 py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700 appearance-none">
                                     @foreach($satkers as $satker)
                                         <option value="{{ $satker->id }}">{{ $satker->nama_satker }}</option>
                                     @endforeach
@@ -560,18 +493,18 @@
                         </div>
 
                         <!-- Kendaraan Selection -->
-                        <div class="space-y-2">
-                            <label for="edit_kendaraan_id" class="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Pilih Kendaraan</label>
+                        <div class="space-y-1.5">
+                            <label for="edit_kendaraan_id" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Pilih Kendaraan Dinas</label>
                             <div class="relative group">
-                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
-                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors z-10">
+                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
                                     </svg>
                                 </div>
                                 <select name="kendaraan_id" id="edit_kendaraan_id" x-model="editData.kendaraan_id" required
                                     :disabled="loadingFormKendaraan || !editData.satker_id"
-                                    class="block w-full pl-11 pr-10 py-3.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-2xl transition-all shadow-sm font-bold text-slate-700 appearance-none disabled:opacity-50">
+                                    class="tom-select-dynamic block w-full pl-11 pr-10 py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700 appearance-none disabled:opacity-50">
                                     <option value="" disabled x-text="loadingFormKendaraan ? 'Sedang mengambil data...' : '-- Pilih Kendaraan --'"></option>
                                     <template x-for="kend in formKendaraans" :key="kend.id">
                                         <option :value="kend.id" x-text="`${kend.no_polisi} - ${kend.jenis_kendaraan} (${kend.jenis_bbm})`"></option>
@@ -581,41 +514,41 @@
                         </div>
 
                         <!-- Driver Name -->
-                        <div class="space-y-2">
-                            <label for="edit_nama_driver" class="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Nama Driver</label>
+                        <div class="space-y-1.5">
+                            <label for="edit_nama_driver" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nama Driver</label>
                             <div class="relative group">
-                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
-                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors z-10">
+                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                     </svg>
                                 </div>
                                 <input id="edit_nama_driver" name="nama_driver" type="text" x-model="editData.nama_driver" 
-                                    class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-2xl transition-all shadow-sm font-bold text-slate-700" 
+                                    class="block w-full pl-11 pr-4 py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700" 
                                     placeholder="Masukkan nama pengemudi" required />
                             </div>
                         </div>
 
                         <!-- Date and Amount Row -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            <div class="space-y-2">
-                                <label for="edit_tanggal_bon" class="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Tanggal Bon</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-1.5">
+                                <label for="edit_tanggal_bon" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Tanggal Bon</label>
                                 <div class="relative group">
                                     <input id="edit_tanggal_bon" name="tanggal_bon" type="date" x-model="editData.tanggal_bon" 
-                                        class="flatpickr block w-full py-3.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-2xl transition-all shadow-sm font-bold text-slate-700" 
+                                        class="flatpickr block w-full py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700" 
                                         required />
                                 </div>
                             </div>
 
-                            <div class="space-y-2">
-                                <label for="edit_jumlah_bon" class="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Jumlah Bon (Liter)</label>
+                            <div class="space-y-1.5">
+                                <label for="edit_jumlah_bon" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Jumlah Bon (Liter)</label>
                                 <div class="relative group">
-                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
-                                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L7.05 15.12a2 2 0 00-1.022.547l-2.387 2.387a2 2 0 000 2.828l.141.141a2 2 0 002.828 0l2.628-2.628a2 2 0 012.33-.213l.317.158a2 2 0 002.33-.213l2.628-2.628a2 2 0 000-2.828l-.141-.141z" />
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors z-10">
+                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L7.05 15.12a2 2 0 00-1.022.547l-2.387 2.387a2 2 0 000 2.828l.141.141a2 2 0 002.828 0l2.628-2.628a2 2 0 012.33-.213l.317.158a2 2 0 002.33-.213l2.628-2.628a2 2 0 000-2.828l-.141-.141z" />
                                         </svg>
                                     </div>
                                     <input id="edit_jumlah_bon" name="jumlah_bon" type="number" step="0.1" x-model="editData.jumlah_bon" 
-                                        class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-2xl transition-all shadow-sm font-black text-rose-600" 
+                                        class="block w-full pl-11 pr-4 py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl transition-all shadow-sm font-black text-rose-600 text-xs" 
                                         placeholder="0.0" required />
                                 </div>
                             </div>
@@ -675,16 +608,16 @@
                         @csrf
                         
                         <!-- Satker Selection -->
-                        <div class="space-y-2">
-                            <label for="create_satker_id" class="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Unit Kerja / Satker</label>
+                        <div class="space-y-1.5">
+                            <label for="create_satker_id" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Unit Kerja / Satker</label>
                             <div class="relative group">
-                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-emerald-600 transition-colors">
-                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-emerald-600 transition-colors z-10">
+                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                     </svg>
                                 </div>
                                 <select name="satker_id" id="create_satker_id" x-model="createData.satker_id" @change="fetchFormKendaraans($event.target.value); createData.kendaraan_id = ''"
-                                    class="block w-full pl-11 pr-10 py-3.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-2xl transition-all shadow-sm font-bold text-slate-700 appearance-none" required>
+                                    class="tom-select block w-full pl-11 pr-10 py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700 appearance-none" required>
                                     <option value="">-- Pilih Satker --</option>
                                     @foreach($satkers as $satker)
                                         <option value="{{ $satker->id }}">{{ $satker->nama_satker }}</option>
@@ -694,18 +627,18 @@
                         </div>
 
                         <!-- Kendaraan Selection -->
-                        <div class="space-y-2">
-                            <label for="create_kendaraan_id" class="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Pilih Kendaraan Dinas</label>
+                        <div class="space-y-1.5">
+                            <label for="create_kendaraan_id" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Pilih Kendaraan Dinas</label>
                             <div class="relative group">
-                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-emerald-600 transition-colors">
-                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-emerald-600 transition-colors z-10">
+                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
                                     </svg>
                                 </div>
                                 <select name="kendaraan_id" id="create_kendaraan_id" x-model="createData.kendaraan_id" required
                                     :disabled="loadingFormKendaraan || !createData.satker_id"
-                                    class="block w-full pl-11 pr-10 py-3.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-2xl transition-all shadow-sm font-bold text-slate-700 appearance-none disabled:opacity-50">
+                                    class="tom-select-dynamic block w-full pl-11 pr-10 py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700 appearance-none disabled:opacity-50">
                                     <option value="" disabled x-text="loadingFormKendaraan ? 'Sedang mengambil data...' : '-- Pilih Kendaraan --'"></option>
                                     <template x-for="kend in formKendaraans" :key="kend.id">
                                         <option :value="kend.id" x-text="`${kend.no_polisi} - ${kend.jenis_kendaraan} (${kend.jenis_bbm})`"></option>
@@ -715,41 +648,41 @@
                         </div>
 
                         <!-- Driver Name -->
-                        <div class="space-y-2">
-                            <label for="create_nama_driver" class="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Nama Driver / Pengemudi</label>
+                        <div class="space-y-1.5">
+                            <label for="create_nama_driver" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nama Driver / Pengemudi</label>
                             <div class="relative group">
-                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-emerald-600 transition-colors">
-                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-emerald-600 transition-colors z-10">
+                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                     </svg>
                                 </div>
                                 <input id="create_nama_driver" name="nama_driver" type="text" x-model="createData.nama_driver" 
-                                    class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-2xl transition-all shadow-sm font-bold text-slate-700" 
+                                    class="block w-full pl-11 pr-4 py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700" 
                                     placeholder="Nama personil yang membon" required />
                             </div>
                         </div>
 
                         <!-- Date and Amount Row -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            <div class="space-y-2">
-                                <label for="create_tanggal_bon" class="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Tanggal Bon</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-1.5">
+                                <label for="create_tanggal_bon" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Tanggal Bon</label>
                                 <div class="relative group">
                                     <input id="create_tanggal_bon" name="tanggal_bon" type="date" x-model="createData.tanggal_bon" 
-                                        class="flatpickr block w-full py-3.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-2xl transition-all shadow-sm font-bold text-slate-700" 
+                                        class="flatpickr block w-full py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700" 
                                         required />
                                 </div>
                             </div>
 
-                            <div class="space-y-2">
-                                <label for="create_jumlah_bon" class="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Jumlah Bon (Liter)</label>
+                            <div class="space-y-1.5">
+                                <label for="create_jumlah_bon" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Jumlah Bon (Liter)</label>
                                 <div class="relative group">
-                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-emerald-600 transition-colors">
-                                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L7.05 15.12a2 2 0 00-1.022.547l-2.387 2.387a2 2 0 000 2.828l.141.141a2 2 0 002.828 0l2.628-2.628a2 2 0 012.33-.213l.317.158a2 2 0 002.33-.213l2.628-2.628a2 2 0 000-2.828l-.141-.141z" />
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-emerald-600 transition-colors z-10">
+                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L7.05 15.12a2 2 0 00-1.022.547l-2.387 2.387a2 2 0 000 2.828l.141.141a2 2 0 002.828 0l2.628-2.628a2 2 0 012.33-.213l.317.158a2 2 0 002.33-.213l2.628-2.628a2 2 0 000-2.828l-.141-.141z" />
                                         </svg>
                                     </div>
                                     <input id="create_jumlah_bon" name="jumlah_bon" type="number" step="0.1" x-model="createData.jumlah_bon" 
-                                        class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-2xl transition-all shadow-sm font-black text-rose-600" 
+                                        class="block w-full pl-11 pr-4 py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-xl transition-all shadow-sm font-black text-rose-600 text-xs" 
                                         placeholder="0.0" required />
                                 </div>
                             </div>
@@ -767,6 +700,179 @@
                         </div>
                     </form>
                 </div>
-            </div>        </div>
-    </div>
+            </div>    </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('hutangComponent', () => ({
+                showModal: false,
+                showEditModal: false,
+                showCreateModal: false,
+                selectedHutang: null,
+                selectedSatker: null,
+                hutangData: { nopol: '', bbm: '', jumlah: 0 },
+                editData: { id: '', satker_id: '', kendaraan_id: '', nama_driver: '', jumlah_bon: '', tanggal_bon: '' },
+                createData: { satker_id: '', kendaraan_id: '', nama_driver: '', jumlah_bon: '', tanggal_bon: '{{ date('Y-m-d') }}' },
+                selectedKendaraan: '',
+                selectedBbm: '',
+                kendaraans: [],
+                loadingKendaraan: false,
+                get filteredKendaraans() {
+                    return this.kendaraans.filter(k => k.jenis_bbm === this.selectedBbm);
+                },
+                formKendaraans: [],
+                loadingFormKendaraan: false,
+                init() {
+                    this.$watch('createData.satker_id', val => {
+                        if (val) this.fetchFormKendaraans(val);
+                        else { 
+                            this.formKendaraans = []; 
+                            this.createData.kendaraan_id = '';
+                            const el = document.getElementById('create_kendaraan_id');
+                            if (el && el.tomselect) {
+                                el.tomselect.clearOptions();
+                                el.tomselect.disable();
+                            }
+                        }
+                    });
+                    this.$watch('editData.satker_id', val => {
+                        if (val) this.fetchFormKendaraans(val);
+                        else { 
+                            this.formKendaraans = []; 
+                            this.editData.kendaraan_id = '';
+                            const el = document.getElementById('edit_kendaraan_id');
+                            if (el && el.tomselect) {
+                                el.tomselect.clearOptions();
+                                el.tomselect.disable();
+                            }
+                        }
+                    });
+                },
+                async fetchFormKendaraans(satkerId) {
+                    if (!satkerId) {
+                        this.formKendaraans = [];
+                        return;
+                    }
+                    this.loadingFormKendaraan = true;
+                    try {
+                        const response = await fetch(`/admin/hutang/get-kendaraan?satker_id=${satkerId}`);
+                        this.formKendaraans = await response.json();
+                        
+                        // Sync TomSelect after Alpine updates the DOM
+                        this.$nextTick(() => {
+                            const ids = ['create_kendaraan_id', 'edit_kendaraan_id'];
+                            ids.forEach(id => {
+                                const el = document.getElementById(id);
+                                if (!el) return;
+                                if (el.tomselect) {
+                                    el.tomselect.clearOptions();
+                                    el.tomselect.addOptions(this.formKendaraans.map(k => ({
+                                        value: k.id,
+                                        text: `${k.no_polisi} - ${k.jenis_kendaraan} (${k.jenis_bbm})`
+                                    })));
+                                    el.tomselect.refreshOptions(false);
+                                    el.tomselect.enable();
+                                } else {
+                                    // Initialize if not already done
+                                    new TomSelect(el, {
+                                        create: false,
+                                        dropdownParent: 'body',
+                                        onDropdownOpen: (dropdown) => {
+                                            dropdown.style.zIndex = "9999";
+                                        },
+                                        labelField: 'text',
+                                        valueField: 'value',
+                                        searchField: ['text'],
+                                        options: this.formKendaraans.map(k => ({
+                                            value: k.id,
+                                            text: `${k.no_polisi} - ${k.jenis_kendaraan} (${k.jenis_bbm})`
+                                        }))
+                                    });
+                                }
+                            });
+                        });
+                    } catch (error) {
+                        console.error('Gagal mengambil data kendaraan:', error);
+                    } finally {
+                        this.loadingFormKendaraan = false;
+                    }
+                },
+                async openModal(id, satkerId, bbm, nopol, jumlah) {
+                    this.selectedHutang = id;
+                    this.selectedSatker = satkerId;
+                    this.selectedBbm = bbm;
+                    this.hutangData = { nopol, bbm, jumlah };
+                    this.selectedKendaraan = '';
+                    this.kendaraans = [];
+                    this.showModal = true;
+                    this.loadingKendaraan = true;
+                    
+                    try {
+                        const response = await fetch(`/admin/hutang/get-kendaraan?satker_id=${satkerId}`);
+                        this.kendaraans = await response.json();
+
+                        // Sync TomSelect after Alpine updates the DOM
+                        this.$nextTick(() => {
+                            const el = document.getElementById('payment_kendaraan_id');
+                            if (el) {
+                                if (el.tomselect) {
+                                    el.tomselect.clearOptions();
+                                    el.tomselect.addOptions(this.filteredKendaraans.map(k => ({
+                                        value: k.id,
+                                        text: `${k.no_polisi} (Saldo: ${k.saldo} L)`
+                                    })));
+                                    el.tomselect.refreshOptions(false);
+                                    el.tomselect.enable();
+                                } else {
+                                    new TomSelect(el, {
+                                        create: false,
+                                        dropdownParent: 'body',
+                                        onDropdownOpen: (dropdown) => {
+                                            dropdown.style.zIndex = "9999";
+                                        },
+                                        labelField: 'text',
+                                        valueField: 'value',
+                                        searchField: ['text'],
+                                        options: this.filteredKendaraans.map(k => ({
+                                            value: k.id,
+                                            text: `${k.no_polisi} (Saldo: ${k.saldo} L)`
+                                        }))
+                                    });
+                                }
+                            }
+                        });
+                    } catch (error) {
+                        console.error('Gagal mengambil data kendaraan:', error);
+                    } finally {
+                        this.loadingKendaraan = false;
+                    }
+                },
+                async openEditModal(hutang) {
+                    this.editData = {
+                        id: hutang.id,
+                        satker_id: hutang.satker_id,
+                        kendaraan_id: '',
+                        nama_driver: hutang.nama_driver,
+                        jumlah_bon: hutang.jumlah_bon,
+                        tanggal_bon: hutang.tanggal_bon
+                    };
+                    
+                    await this.fetchFormKendaraans(hutang.satker_id);
+                    const foundKend = this.formKendaraans.find(k => k.no_polisi === hutang.nopol);
+                    if (foundKend) {
+                        this.editData.kendaraan_id = foundKend.id;
+                        this.$nextTick(() => {
+                            const el = document.getElementById('edit_kendaraan_id');
+                            if (el && el.tomselect) el.tomselect.setValue(foundKend.id);
+                        });
+                    }
+                    this.showEditModal = true;
+                },
+                openCreateModal() {
+                    this.createData = { satker_id: '', kendaraan_id: '', nama_driver: '', jumlah_bon: '', tanggal_bon: '{{ date('Y-m-d') }}' };
+                    this.showCreateModal = true;
+                }
+            }));
+        });
+    </script>
 </x-app-layout>

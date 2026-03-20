@@ -51,7 +51,6 @@ class TransaksiController extends Controller
                 }
 
                 // Fix White Screen: Pastikan data satker ada
-                // Fix White Screen: Pastikan data satker ada
                 if (!$kendaraan->satker) {
                     return back()->withErrors(['nopol' => 'Data Satker untuk kendaraan ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
                 }

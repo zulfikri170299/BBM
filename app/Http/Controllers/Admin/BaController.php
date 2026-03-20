@@ -20,11 +20,19 @@ class BaController extends Controller
 
     public function index(Request $request)
     {
-        $query = BaLog::with('satker');
+        $tahun = $request->input('tahun', now()->year);
+        $query = BaLog::with('satker')->where('tahun', $tahun);
         $perPage = $this->getPerPage($request);
         $logs = $query->latest()->paginate($perPage)->withQueryString();
         $settings = Setting::all()->pluck('value', 'key');
-        return view('admin.ba.index', compact('logs', 'settings'));
+        
+        $tahunList = BaLog::select('tahun')->distinct()->orderBy('tahun', 'desc')->pluck('tahun');
+        if ($tahunList->isEmpty() || !$tahunList->contains(now()->year)) {
+            $tahunList->push(now()->year);
+            $tahunList = $tahunList->sortDesc()->values();
+        }
+
+        return view('admin.ba.index', compact('logs', 'settings', 'tahun', 'tahunList'));
     }
 
     public function updateSettings(Request $request)
@@ -40,8 +48,21 @@ class BaController extends Controller
 
         LogAktivitas::create([
             'user_id' => auth()->id(),
-            'aktivitas' => "Memperbarui data Pihak Kesatu Berita Acara"
+            'aktivitas' => "Memperbarui data Pihak Kesatu Berita Acara dan merestorasi seluruh dokumen"
         ]);
+
+        // Regenerate ALL existing BA files so that the new settings apply to them immediately
+        $allLogs = BaLog::with('satker')->get();
+        foreach($allLogs as $log) {
+            $this->automatedGenerate(
+                $log->satker, 
+                ['Pertamax' => $log->total_pertamax, 'Pertamina Dex' => $log->total_dex], 
+                $log->bulan, 
+                $log->tahun,
+                true, // isRegenerate
+                $log  // pass existing log
+            );
+        }
 
         return back()->with('success', 'Data Pihak Kesatu berhasil diperbarui.');
     }
@@ -86,7 +107,7 @@ class BaController extends Controller
     /**
      * Generate BA Otomatis setelah import
      */
-    public function automatedGenerate(Satker $satker, array $fuelTotals, $bulan, $tahun)
+    public function automatedGenerate(Satker $satker, array $fuelTotals, $bulan, $tahun, $isRegenerate = false, ?BaLog $existingLog = null)
     {
         try {
             $templatePath = 'E:\\BA.docx';
@@ -98,10 +119,6 @@ class BaController extends Controller
 
             $templateProcessor = new TemplateProcessor($templatePath);
 
-            $namaHari = [
-                'Sunday' => 'Senin', 'Monday' => 'Senin', 'Tuesday' => 'Selasa',
-                'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'
-            ];
             // Fix map keys and Sunday mapping
             $namaHari = [
                 'Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa',
@@ -122,7 +139,7 @@ class BaController extends Controller
             $currentDayName = $namaHari[$now->format('l')] ?? '-';
 
             // Fill Placeholders (Detected from BA.docx v2)
-            $templateProcessor->setValue('satker', strtoupper($satker->nama_satker));
+            $templateProcessor->setValue('satker', ucwords(strtolower($satker->nama_satker)));
             
             $p_total = number_format($fuelTotals['Pertamax'] ?? 0, 0, ',', '.');
             $d_total = number_format($fuelTotals['Pertamina Dex'] ?? 0, 0, ',', '.');
@@ -148,23 +165,31 @@ class BaController extends Controller
             $templateProcessor->setValue('nrp pihak1', $settings['ba_pihak_1_nrp'] ?? '-');
             $templateProcessor->setValue('jabatan pihak1', $settings['ba_pihak_1_jabatan'] ?? '-');
 
-            // Save File
-            // Check for existing BA log for same satker, month, year
-            $existingLog = BaLog::where('satker_id', $satker->id)
-                ->where('bulan', $bulan)
-                ->where('tahun', $tahun)
-                ->first();
+            // Force override on static texts left in the original DOCX Template
+            $xml = $templateProcessor->tempDocumentMainPart;
+            $xml = str_replace('BIRO LOGISTIK Polda NTB', ucwords(strtolower($satker->nama_satker)) . ' Polda NTB', $xml);
+            $xml = str_replace('PIHAK kedua', 'Pihak kedua', $xml);
+            
+            // To handle cases where Word injects spelling-check tags inside the text like PI</w:t>...<w:t>HAK:
+            $xml = preg_replace('/P(<[^>]+>)*I(<[^>]+>)*H(<[^>]+>)*A(<[^>]+>)*K(<[^>]+>)*(\s+)(<[^>]+>)*k(<[^>]+>)*e(<[^>]+>)*d(<[^>]+>)*u(<[^>]+>)*a/i', 'Pihak$6$7kedua', $xml);
+            $templateProcessor->tempDocumentMainPart = $xml;
 
-            // Save File - Remove time() suffix to keep it clean if we reuse filename
-            $fileName = 'BA_' . str_replace(' ', '_', $satker->nama_satker) . '_' . $bulan . '_' . $tahun . '.docx';
-            $storagePath = 'public/berita-acara/' . $fileName;
+            // Save File
+            $fileName = 'BA_' . str_replace(' ', '_', $satker->nama_satker) . '_' . $bulan . '_' . $tahun . '_' . time() . '.docx';
+            
+            if ($isRegenerate && $existingLog) {
+                // Keep the exact same filename for regeneration
+                $storagePath = $existingLog->file_path;
+            } else {
+                $storagePath = 'public/berita-acara/' . $fileName;
+            }
             
             if (!Storage::exists('public/berita-acara')) {
                 Storage::makeDirectory('public/berita-acara');
             }
 
-            // If existing file is different, delete old one
-            if ($existingLog && $existingLog->file_path !== $storagePath) {
+            // Remove old file ONLY if the storage path is different and it's not a new record
+            if ($existingLog && $existingLog->file_path !== $storagePath && Storage::exists($existingLog->file_path)) {
                 Storage::delete($existingLog->file_path);
             }
 
@@ -186,14 +211,17 @@ class BaController extends Controller
 
             if ($existingLog) {
                 $existingLog->update($data);
+                $existingLog->touch();
             } else {
                 BaLog::create($data);
             }
 
-            LogAktivitas::create([
-                'user_id' => auth()->id(),
-                'aktivitas' => "Menghasilkan Berita Acara otomatis untuk Satker: {$satker->nama_satker} (Bulan: {$bulan}, Tahun: {$tahun})"
-            ]);
+            if (!$isRegenerate) {
+                LogAktivitas::create([
+                    'user_id' => auth()->id(),
+                    'aktivitas' => "Menghasilkan Berita Acara otomatis untuk Satker: {$satker->nama_satker} (Bulan: {$bulan}, Tahun: {$tahun})"
+                ]);
+            }
 
             return true;
         } catch (\Exception $e) {
@@ -209,6 +237,48 @@ class BaController extends Controller
         }
 
         return Storage::download($log->file_path);
+    }
+
+    public function downloadPdf(BaLog $log)
+    {
+        $settings = Setting::all()->pluck('value', 'key');
+
+        $namaHari = [
+            'Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa',
+            'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'
+        ];
+
+        $namaBulan = [
+            1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 
+            5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus', 
+            9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+        ];
+
+        $witaDate = $log->created_at->setTimezone('Asia/Makassar');
+        $currentMonth = $log->bulan;
+        $currentYear = $log->tahun;
+        $currentDay = $witaDate->format('d');
+        $currentDayName = $namaHari[$witaDate->format('l')] ?? '-';
+
+        $data = [
+            'log' => $log,
+            'settings' => $settings,
+            'satker' => ucwords(strtolower($log->satker->nama_satker)),
+            'p_total' => number_format($log->total_pertamax, 0, ',', '.'),
+            'd_total' => number_format($log->total_dex, 0, ',', '.'),
+            'hari_huruf' => $currentDayName,
+            'tanggal_huruf' => trim($this->terbilang($currentDay)),
+            'bulan' => $namaBulan[$currentMonth] ?? '-',
+            'tahun' => $currentYear,
+            'bulang_angka_romawi' => $this->toRoman($currentMonth)
+        ];
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.ba.pdf', $data)
+            ->setPaper('a4', 'portrait');
+
+        $fileName = 'BA_' . str_replace(' ', '_', $log->satker->nama_satker) . '_' . $log->bulan . '_' . $log->tahun . '.pdf';
+        
+        return $pdf->stream($fileName);
     }
 
     public function destroy(BaLog $log)

@@ -61,7 +61,7 @@
                 <!-- Jenis BBM -->
                 <div>
                     <label for="jenis_bbm" class="block text-sm font-semibold text-slate-700 mb-2">Jenis BBM <span class="text-red-500">*</span></label>
-                    <select name="jenis_bbm" id="jenis_bbm" required class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
+                    <select name="jenis_bbm" id="jenis_bbm" required class="tom-select w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
                         <option value="Pertamax" {{ old('jenis_bbm', $kendaraan->jenis_bbm) == 'Pertamax' ? 'selected' : '' }}>Pertamax</option>
                         <option value="Pertamina Dex" {{ old('jenis_bbm', $kendaraan->jenis_bbm) == 'Pertamina Dex' ? 'selected' : '' }}>Pertamina Dex</option>
                     </select>

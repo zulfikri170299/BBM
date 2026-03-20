@@ -128,6 +128,7 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     Route::get('/berita-acara', [\App\Http\Controllers\Admin\BaController::class, 'index'])->name('ba.index');
     Route::post('/berita-acara/settings', [\App\Http\Controllers\Admin\BaController::class, 'updateSettings'])->name('ba.update-settings');
     Route::get('/berita-acara/download/{log}', [\App\Http\Controllers\Admin\BaController::class, 'downloadLog'])->name('ba.download-log');
+    Route::get('/berita-acara/pdf/{log}', [\App\Http\Controllers\Admin\BaController::class, 'downloadPdf'])->name('ba.download-pdf');
     Route::delete('/berita-acara/{log}', [\App\Http\Controllers\Admin\BaController::class, 'destroy'])->name('ba.destroy');
 
     // Laporan Harian

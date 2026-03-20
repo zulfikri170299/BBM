@@ -80,8 +80,13 @@
                                     <th colspan="7" class="px-6 py-3">
                                         <div class="flex items-center justify-between">
                                             <form action="{{ route('admin.ba.index') }}" method="GET"
-                                                class="flex items-center">
+                                                class="flex items-center space-x-3">
                                                 <x-per-page :current="request('per_page', 15)" />
+                                                <select name="tahun" onchange="this.form.submit()" class="text-xs border-slate-300 rounded-lg shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 py-1.5 pl-3 pr-8">
+                                                    @foreach($tahunList as $t)
+                                                        <option value="{{ $t }}" {{ $tahun == $t ? 'selected' : '' }}>Tahun {{ $t }}</option>
+                                                    @endforeach
+                                                </select>
                                             </form>
                                             <div
                                                 class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
@@ -109,7 +114,7 @@
                                         Dex (L)</th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Tanggal Dibuat</th>
+                                        Terakhir Diperbarui</th>
                                     <th
                                         class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Aksi</th>
@@ -138,18 +143,29 @@
                                             {{ number_format($log->total_dex, 0, ',', '.') }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ $log->created_at->format('d/m/Y H:i') }}
+                                            {{ $log->updated_at->format('d/m/Y H:i') }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
                                             <a href="{{ route('admin.ba.download-log', $log) }}"
-                                                class="inline-flex items-center px-3 py-1.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm">
+                                                class="inline-flex items-center px-3 py-1.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm" title="Download Word (DOCX)">
                                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                         d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4">
                                                     </path>
                                                 </svg>
-                                                Download
+                                                DOCX
+                                            </a>
+
+                                            <a href="{{ route('admin.ba.download-pdf', $log) }}" target="_blank"
+                                                class="inline-flex items-center px-3 py-1.5 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition-colors shadow-sm" title="Download PDF">
+                                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z">
+                                                    </path>
+                                                </svg>
+                                                PDF
                                             </a>
 
                                             <!-- Delete -->

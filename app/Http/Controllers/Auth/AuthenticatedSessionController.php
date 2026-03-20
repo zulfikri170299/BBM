@@ -47,6 +47,8 @@ class AuthenticatedSessionController extends Controller
             'aktivitas' => 'Melakukan Logout Aplikasi'
         ]);
 
+        \Illuminate\Support\Facades\Cache::forget('user-is-online-' . Auth::id());
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

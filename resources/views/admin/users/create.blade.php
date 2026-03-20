@@ -41,7 +41,7 @@
                         <div class="mb-4">
                             <label for="role" class="block text-gray-700 text-sm font-bold mb-2">Role:</label>
                             <select name="role" id="role"
-                                class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                class="tom-select shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                 required>
                                 <option value="super_admin">Super Admin</option>
                                 <option value="kasubbag">Kasubbag</option>
@@ -53,7 +53,7 @@
                         <div class="mb-4">
                             <label for="satker_id" class="block text-gray-700 text-sm font-bold mb-2">Satker:</label>
                             <select name="satker_id" id="satker_id"
-                                class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                class="tom-select shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                 <option value="">None</option>
                                 @foreach($satkers as $satker)
                                     <option value="{{ $satker->id }}">{{ $satker->nama_satker }}</option>

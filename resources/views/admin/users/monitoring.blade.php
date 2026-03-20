@@ -158,8 +158,7 @@
                                     @if($user->last_activity_at)
                                         <p class="text-xs font-medium text-slate-700">
                                             {{ $user->last_activity_at->diffForHumans() }}</p>
-                                        <p class="text-[10px] text-slate-400">{{ $user->last_activity_at->format('d/m H:i') }}
-                                            WIB</p>
+                                        <p class="text-[10px] text-slate-400">{{ $user->last_activity_at->format('d/m H:i T') }}</p>
                                     @else
                                         <span class="text-xs italic text-slate-400">Belum pernah aktif</span>
                                     @endif
