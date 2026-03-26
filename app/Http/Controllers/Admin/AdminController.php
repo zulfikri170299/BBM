@@ -77,11 +77,25 @@ class AdminController extends Controller
                 ->where('created_at', '>=', $latestSync->created_at)
                 ->sum('liter');
             
+            // Tambahkan Hutang Pertamax
+            $pemakaianPertamax += \App\Models\Hutang::where(function($q) {
+                    $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX');
+                })
+                ->where('created_at', '>=', $latestSync->created_at)
+                ->sum('jumlah_bon');
+            
             $pemakaianDex = \App\Models\TransaksiBbm::where(function($q) {
                     $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX');
                 })
                 ->where('created_at', '>=', $latestSync->created_at)
                 ->sum('liter');
+
+            // Tambahkan Hutang Dex
+            $pemakaianDex += \App\Models\Hutang::where(function($q) {
+                    $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX');
+                })
+                ->where('created_at', '>=', $latestSync->created_at)
+                ->sum('jumlah_bon');
 
             $tankStock['pertamax'] = $latestSync->stok_awal_pertamax - $pemakaianPertamax;
             $tankStock['dex'] = $latestSync->stok_awal_dex - $pemakaianDex;

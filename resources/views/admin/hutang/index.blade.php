@@ -593,7 +593,7 @@
                                         d="M12 4v16m8-8H4" />
                                 </svg>
                             </div>
-                            <h3 class="text-xl font-black tracking-tight">TAMBAH DATA HUTANG</h3>
+                            <h3 class="text-xl font-black tracking-tight" id="modal-title-create">TAMBAH DATA HUTANG</h3>
                         </div>
                         <button @click="showCreateModal = false"
                             class="text-white/80 hover:text-white transition-colors">
@@ -700,7 +700,9 @@
                         </div>
                     </form>
                 </div>
-            </div>    </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         document.addEventListener('alpine:init', () => {
@@ -870,6 +872,13 @@
                 },
                 openCreateModal() {
                     this.createData = { satker_id: '', kendaraan_id: '', nama_driver: '', jumlah_bon: '', tanggal_bon: '{{ date('Y-m-d') }}' };
+                    
+                    // Sync TomSelect
+                    this.$nextTick(() => {
+                        const el = document.getElementById('create_satker_id');
+                        if (el && el.tomselect) el.tomselect.clear();
+                    });
+
                     this.showCreateModal = true;
                 }
             }));

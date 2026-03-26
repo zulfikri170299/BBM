@@ -31,12 +31,28 @@ class SinkronisasiBbmController extends Controller
                 ->where('created_at', '<', $nextSyncTime)
                 ->sum('liter');
 
+            // Tambahkan Hutang Pertamax
+            $sync->pemakaian_pertamax += \App\Models\Hutang::where(function($q) {
+                    $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX');
+                })
+                ->where('created_at', '>=', $sync->created_at)
+                ->where('created_at', '<', $nextSyncTime)
+                ->sum('jumlah_bon');
+
             $sync->pemakaian_dex = TransaksiBbm::where(function($q) {
                     $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX');
                 })
                 ->where('created_at', '>=', $sync->created_at)
                 ->where('created_at', '<', $nextSyncTime)
                 ->sum('liter');
+
+            // Tambahkan Hutang Dex
+            $sync->pemakaian_dex += \App\Models\Hutang::where(function($q) {
+                    $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX');
+                })
+                ->where('created_at', '>=', $sync->created_at)
+                ->where('created_at', '<', $nextSyncTime)
+                ->sum('jumlah_bon');
 
             $sync->sisa_pertamax = $sync->stok_awal_pertamax - $sync->pemakaian_pertamax;
             $sync->sisa_dex = $sync->stok_awal_dex - $sync->pemakaian_dex;
@@ -77,6 +93,14 @@ class SinkronisasiBbmController extends Controller
                     })
                     ->where('created_at', '>=', $latestSync->created_at)
                     ->sum('liter');
+
+                // Tambahkan Hutang Pertamax
+                $pemakaian += \App\Models\Hutang::where(function($q) {
+                        $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX');
+                    })
+                    ->where('created_at', '>=', $latestSync->created_at)
+                    ->sum('jumlah_bon');
+
                 $stokPertamax = $latestSync->stok_awal_pertamax - $pemakaian;
             } else {
                 $stokPertamax = 0;
@@ -90,6 +114,14 @@ class SinkronisasiBbmController extends Controller
                     })
                     ->where('created_at', '>=', $latestSync->created_at)
                     ->sum('liter');
+
+                // Tambahkan Hutang Dex
+                $pemakaian += \App\Models\Hutang::where(function($q) {
+                        $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX');
+                    })
+                    ->where('created_at', '>=', $latestSync->created_at)
+                    ->sum('jumlah_bon');
+
                 $stokDex = $latestSync->stok_awal_dex - $pemakaian;
             } else {
                 $stokDex = 0;

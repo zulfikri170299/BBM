@@ -63,11 +63,25 @@ class DashboardController extends Controller
                 ->where('created_at', '>=', $tankStock->created_at)
                 ->sum('liter');
 
+            // Tambahkan Hutang Pertamax
+            $tankStock->pemakaian_pertamax += \App\Models\Hutang::where(function($q) {
+                    $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX');
+                })
+                ->where('created_at', '>=', $tankStock->created_at)
+                ->sum('jumlah_bon');
+
             $tankStock->pemakaian_dex = TransaksiBbm::where(function($q) {
                     $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX');
                 })
                 ->where('created_at', '>=', $tankStock->created_at)
                 ->sum('liter');
+
+            // Tambahkan Hutang Dex
+            $tankStock->pemakaian_dex += \App\Models\Hutang::where(function($q) {
+                    $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX');
+                })
+                ->where('created_at', '>=', $tankStock->created_at)
+                ->sum('jumlah_bon');
 
             $tankStock->sisa_pertamax = $tankStock->stok_awal_pertamax - $tankStock->pemakaian_pertamax;
             $tankStock->sisa_dex = $tankStock->stok_awal_dex - $tankStock->pemakaian_dex;

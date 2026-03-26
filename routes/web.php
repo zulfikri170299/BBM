@@ -157,10 +157,16 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     // Laporan Stok BBM (Sinkronisasi)
     Route::get('/laporan-stok-bbm/print', [\App\Http\Controllers\Admin\LaporanStokBbmController::class, 'print'])->name('laporan-stok-bbm.print');
     Route::get('/laporan-stok-bbm', [\App\Http\Controllers\Admin\LaporanStokBbmController::class, 'index'])->name('laporan-stok-bbm.index');
+    Route::post('/laporan-stok-bbm', [\App\Http\Controllers\Admin\LaporanStokBbmController::class, 'store'])->name('laporan-stok-bbm.store');
     Route::get('/laporan-stok-bbm/{sinkronisasi}/edit', [\App\Http\Controllers\Admin\LaporanStokBbmController::class, 'edit'])->name('laporan-stok-bbm.edit');
     Route::put('/laporan-stok-bbm/{sinkronisasi}', [\App\Http\Controllers\Admin\LaporanStokBbmController::class, 'update'])->name('laporan-stok-bbm.update');
     Route::delete('/laporan-stok-bbm/{sinkronisasi}', [\App\Http\Controllers\Admin\LaporanStokBbmController::class, 'destroy'])->name('laporan-stok-bbm.destroy');
-
+    
+    // Transaksi BBM (Scan Barcode)
+    Route::get('/transaksi', [\App\Http\Controllers\Admin\TransaksiController::class, 'index'])->name('transaksi.index');
+    Route::post('/transaksi/check', [\App\Http\Controllers\Admin\TransaksiController::class, 'check'])->name('transaksi.check');
+    Route::post('/transaksi/process', [\App\Http\Controllers\Admin\TransaksiController::class, 'process'])->name('transaksi.process');
+    Route::get('/transaksi/{transaksi}/print', [\App\Http\Controllers\Admin\TransaksiController::class, 'print'])->name('transaksi.print');
 
     // Broadcast Messages
     Route::get('/broadcast', [\App\Http\Controllers\Admin\BroadcastController::class, 'index'])->name('broadcast.index');

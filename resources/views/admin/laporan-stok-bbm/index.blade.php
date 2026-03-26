@@ -39,29 +39,101 @@
             </div>
         @endif
 
+        <!-- Input Form Card (Restored & Cleaned) -->
+        <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden group mb-8">
+            <div class="p-6 bg-slate-50/50 border-b border-slate-100 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="p-2.5 bg-indigo-50 text-indigo-600 rounded-xl border border-indigo-100 shadow-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-black text-slate-800 tracking-tight leading-none">Input Stok Fisik Tangki</h3>
+                        <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest mt-1.5">Masukkan hASIL TERBARU DARI TONGKAT UKUR TANGKI</p>
+                    </div>
+                </div>
+            </div>
+            
+            <form action="{{ route('admin.laporan-stok-bbm.store') }}" method="POST" class="p-6">
+                @csrf
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
+                    <div class="md:col-span-4">
+                        <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Stok Pertamax (Liter)</label>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-blue-500/80 group-focus-within:text-indigo-600 transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                                </svg>
+                            </div>
+                            <input type="number" name="stok_awal_pertamax" step="0.01" min="0" required
+                                class="w-full pl-11 pr-12 py-3 bg-slate-50 border {{ $errors->has('stok_awal_pertamax') ? 'border-red-500' : 'border-slate-200' }} rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-black text-slate-800 placeholder:text-slate-300"
+                                placeholder="0.00" value="{{ old('stok_awal_pertamax') }}">
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-4">
+                        <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Stok P. DEX (Liter)</label>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-rose-500/80 group-focus-within:text-indigo-600 transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                                </svg>
+                            </div>
+                            <input type="number" name="stok_awal_dex" step="0.01" min="0" required
+                                class="w-full pl-11 pr-12 py-3 bg-slate-50 border {{ $errors->has('stok_awal_dex') ? 'border-red-500' : 'border-slate-200' }} rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-black text-slate-800 placeholder:text-slate-300"
+                                placeholder="0.00" value="{{ old('stok_awal_dex') }}">
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-4">
+                        <button type="submit" 
+                            data-confirm="Apakah Anda yakin data stok sudah benar? Tindakan ini akan mereset nilai pemakaian mulai sekarang."
+                            data-confirm-type="warning"
+                            class="w-full py-3.5 bg-indigo-600 hover:bg-slate-900 text-white rounded-2xl font-black shadow-lg shadow-indigo-200 transition-all active:scale-[0.98] flex items-center justify-center gap-3 tracking-widest uppercase text-xs">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
+                            </svg>
+                            SIMPAN STOK FISIK
+                        </button>
+                    </div>
+                </div>
+
+                @if ($errors->any())
+                    <div class="mt-4 p-4 bg-red-50 rounded-2xl border border-red-100">
+                        <ul class="list-disc list-inside text-xs font-bold text-red-600 uppercase tracking-widest italic">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+            </form>
+        </div>
+
         <!-- Filter Card -->
-        <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8 relative overflow-hidden group">
+        <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden relative group">
             <div class="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity">
                 <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
                 </svg>
             </div>
-            <form action="{{ route('admin.laporan-stok-bbm.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-8 items-end relative z-10">
-                <div class="space-y-2">
-                    <label class="block text-xs font-black text-slate-400 uppercase tracking-widest">Mulai Tanggal</label>
+            <form action="{{ route('admin.laporan-stok-bbm.index') }}" method="GET" class="p-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-end relative z-10">
+                <div class="md:col-span-4 space-y-2">
+                    <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Mulai Tanggal</label>
                     <input type="date" name="start_date" value="{{ request('start_date') }}"
-                        class="flatpickr w-full px-5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-900">
+                        class="flatpickr w-full px-5 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-800">
                 </div>
-                <div class="space-y-2">
-                    <label class="block text-xs font-black text-slate-400 uppercase tracking-widest">Sampai Tanggal</label>
+                <div class="md:col-span-4 space-y-2">
+                    <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Sampai Tanggal</label>
                     <input type="date" name="end_date" value="{{ request('end_date') }}"
-                        class="flatpickr w-full px-5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-900">
+                        class="flatpickr w-full px-5 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-800">
                 </div>
-                <div class="flex gap-3">
-                    <button type="submit" class="flex-1 py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl font-black transition-all active:scale-[0.98] shadow-lg shadow-slate-200">
+                <div class="md:col-span-4 flex gap-3">
+                    <button type="submit" class="flex-1 py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl font-black transition-all active:scale-[0.98] shadow-lg shadow-slate-200 uppercase tracking-widest text-xs">
                         TAMPILKAN DATA
                     </button>
-                    <a href="{{ route('admin.laporan-stok-bbm.index') }}" class="px-5 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl font-black transition-all active:scale-[0.98]">
+                    <a href="{{ route('admin.laporan-stok-bbm.index') }}" class="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl font-black transition-all active:scale-[0.98] uppercase tracking-widest text-xs">
                         RESET
                     </a>
                 </div>
