@@ -29,8 +29,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/profile/location', [ProfileController::class, 'updateLocation'])->name('profile.location.update');
     Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo.update');
-    Route::post('/profile/face', [ProfileController::class, 'updateFace'])->name('profile.face.update');
-    Route::delete('/profile/face', [ProfileController::class, 'deleteFace'])->name('profile.face.delete');
 
     Route::post('/notifications/{id}/read', function ($id) {
         auth()->user()->notifications()->findOrFail($id)->markAsRead();

@@ -21,73 +21,73 @@ class TransaksiController extends Controller
         try {
             $mode = $request->input('mode', 'barcode');
 
-            if ($mode === 'nopol') {
-                $request->validate([
-                    'nopol' => 'required|string',
-                ]);
-
-                $kendaraan = Kendaraan::with('satker')
+            if ($mode === 'manual') {
+                $val = str_replace([' ', '-', '.'], '', trim($request->value));
+                if (empty($val)) {
+                    return response()->json(['success' => false, 'message' => 'Input tidak boleh kosong.'], 422);
+                }
+                
+                // Cari di Kendaraan (Nopol)
+                $target = Kendaraan::with('satker')
+                    ->whereRaw("REPLACE(REPLACE(REPLACE(no_polisi, ' ', ''), '-', ''), '.', '') LIKE ?", ["%$val%"])
+                    ->first();
+                
+                // Jika tidak ditemukan, cari di Personel (NRP)
+                if (!$target) {
+                    $target = Personel::with(['satker', 'user'])
+                        ->where('nrp', 'like', "%$val%")
+                        ->first();
+                }
+            } elseif ($mode === 'nopol') {
+                $request->validate(['nopol' => 'required|string']);
+                $target = Kendaraan::with('satker')
                     ->where('no_polisi', 'like', '%' . trim($request->nopol) . '%')
                     ->first();
-
-                if (!$kendaraan) {
-                    return back()->withErrors(['nopol' => 'Kendaraan dengan nopol "' . $request->nopol . '" tidak ditemukan.']);
-                }
-
-                if (!$kendaraan || !$kendaraan->satker) {
-                    return back()->withErrors(['nopol' => 'Data Satker untuk kendaraan ini tidak ditemukan/corrupt.']);
-                }
-
-                return response(view('admin.transaksi.create', compact('kendaraan'))->render());
-
             } elseif ($mode === 'nrp') {
-                $request->validate([
-                    'nrp' => 'required|string',
-                ]);
-
-                $personel = Personel::with(['satker', 'user'])
+                $request->validate(['nrp' => 'required|string']);
+                $target = Personel::with(['satker', 'user'])
                     ->where('nrp', 'like', '%' . trim($request->nrp) . '%')
                     ->first();
-
-                if (!$personel) {
-                    return back()->withErrors(['nrp' => 'Personel dengan NRP "' . $request->nrp . '" tidak ditemukan.']);
-                }
-
-                if (!$personel || !$personel->satker) {
-                    return back()->withErrors(['nrp' => 'Data Satker untuk personel ini tidak ditemukan/corrupt.']);
-                }
-
-                return response(view('admin.transaksi.create', compact('personel'))->render());
             } else {
-                $request->validate([
-                    'barcode' => 'required|string',
-                ]);
-
-                $kendaraan = Kendaraan::with('satker')
-                    ->where('barcode', $request->barcode)
-                    ->first();
-
-                if ($kendaraan) {
-                    if (!$kendaraan->satker) {
-                        return back()->withErrors(['barcode' => 'Data Satker untuk kendaraan ini tidak ditemukan/corrupt.']);
-                    }
-                    return response(view('admin.transaksi.create', compact('kendaraan'))->render());
+                $request->validate(['barcode' => 'required|string']);
+                $target = Kendaraan::with('satker')->where('barcode', $request->barcode)->first();
+                if (!$target) {
+                    $target = Personel::with(['satker', 'user'])->where('barcode', $request->barcode)->first();
                 }
-
-                $personel = Personel::with(['satker', 'user'])
-                    ->where('barcode', $request->barcode)
-                    ->first();
-
-                if ($personel) {
-                    if (!$personel->satker) {
-                        return back()->withErrors(['barcode' => 'Data Satker untuk personel ini tidak ditemukan/corrupt.']);
-                    }
-                    return response(view('admin.transaksi.create', compact('personel'))->render());
-                }
-
-                return back()->withErrors(['barcode' => 'Barcode "' . $request->barcode . '" tidak ditemukan.']);
             }
+
+            if (!$target) {
+                $message = $mode === 'barcode' ? 'Barcode tidak ditemukan.' : 'Data tidak ditemukan.';
+                if ($request->wantsJson()) return response()->json(['success' => false, 'message' => $message], 404);
+                return back()->withErrors(['error' => $message]);
+            }
+
+            if (!$target->satker) {
+                $message = 'Data Satker tidak ditemukan/corrupt.';
+                if ($request->wantsJson()) return response()->json(['success' => false, 'message' => $message], 422);
+                return back()->withErrors(['error' => $message]);
+            }
+
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'data' => $target,
+                    'type' => ($target instanceof Kendaraan) ? 'kendaraan' : 'personel',
+                    'satker' => $target->satker->nama_satker
+                ]);
+            }
+
+            $kendaraan = ($target instanceof Kendaraan) ? $target : null;
+            $personel = ($target instanceof Personel) ? $target : null;
+            
+            // Fallback for non-AJAX requests (though unlikely in current SPA design)
+            return redirect()->route('admin.transaksi.index')->with([
+                'target_data' => $target,
+                'target_type' => ($target instanceof Kendaraan) ? 'kendaraan' : 'personel'
+            ]);
+
         } catch (\Throwable $e) {
+            if ($request->wantsJson()) return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
             return back()->withErrors(['error' => 'SYSTEM ERROR: ' . $e->getMessage()]);
         }
     }

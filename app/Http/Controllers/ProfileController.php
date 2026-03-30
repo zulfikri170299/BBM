@@ -167,41 +167,4 @@ class ProfileController extends Controller
         return back()->with('status', 'photo-updated');
     }
 
-    /**
-     * Update the user's face descriptor for login.
-     */
-    public function updateFace(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'face_descriptor' => ['required', 'string'],
-        ]);
-
-        $request->user()->update([
-            'face_descriptor' => $request->face_descriptor,
-        ]);
-
-        LogAktivitas::create([
-            'user_id' => $request->user()->id,
-            'aktivitas' => 'Mendaftarkan scan wajah untuk login'
-        ]);
-
-        return back()->with('status', 'face-updated');
-    }
-
-    /**
-     * Delete the user's face descriptor.
-     */
-    public function deleteFace(Request $request): RedirectResponse
-    {
-        $request->user()->update([
-            'face_descriptor' => null,
-        ]);
-
-        LogAktivitas::create([
-            'user_id' => $request->user()->id,
-            'aktivitas' => 'Menghapus scan wajah untuk login'
-        ]);
-
-        return back()->with('status', 'face-deleted');
-    }
 }

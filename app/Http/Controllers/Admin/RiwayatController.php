@@ -70,17 +70,17 @@ class RiwayatController extends Controller
 
         $satkers = Satker::orderBy('nama_satker')->get();
 
-        // Statistik (Tetap murni TransaksiBbm atau gabungan? User minta agar laporan sama, jadi statistik juga sebaiknya gabungan)
-        $totalLiterPengisian = $trxs->sum('liter');
-        $totalLiterPotong = $topups->sum('liter');
+        // Statistik (Mengecualikan Biro Logistik/ID 1 karena dianggap data pengujian/potong saldo)
+        $trxs_murni = $trxs->where('satker_id', '!=', 1);
+        $totalLiterMurni = $trxs_murni->sum('liter');
         
         $stats = [
             'total_transaksi' => $merged->count(),
-            'total_liter' => $totalLiterPengisian + $totalLiterPotong,
+            'total_liter' => $totalLiterMurni,
         ];
 
-        // Summary per Jenis BBM
-        $summaryBbm = $merged->groupBy('jenis_bbm')->map(function ($group) {
+        // Summary per Jenis BBM (Hanya dari pengisian murni di luar Biro Logistik)
+        $summaryBbm = $trxs_murni->groupBy('jenis_bbm')->map(function ($group) {
             return $group->sum('liter');
         })->sortKeys();
 
@@ -127,7 +127,7 @@ class RiwayatController extends Controller
 
         $transaksis = $trxs->concat($topups)->sortByDesc('sort_date')->values();
 
-        $summaryBbm = $transaksis->groupBy('jenis_bbm')->map(function ($group) {
+        $summaryBbm = $trxs->where('satker_id', '!=', 1)->groupBy('jenis_bbm')->map(function ($group) {
             return $group->sum('liter');
         })->sortKeys();
 

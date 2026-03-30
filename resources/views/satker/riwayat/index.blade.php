@@ -233,6 +233,18 @@
                             </tr>
                         @endforelse
                     </tbody>
+                    <tfoot class="bg-slate-50/80 border-t border-slate-200">
+                        <tr>
+                            <th colspan="6" class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-widest">
+                                TOTAL PADA DATA INI (TERFILTER)
+                            </th>
+                            <th class="px-6 py-4 text-right">
+                                <span class="text-lg font-black text-indigo-600">
+                                    {{ number_format($stats['total_liter'], 0, ',', '.') }} L
+                                </span>
+                            </th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
 
@@ -253,7 +265,7 @@
                 </svg>
                 Total Pengisian BBM
             </h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 @foreach($summaryBbm as $jenis => $total)
                     @php
                         $bbmColors = [
@@ -265,11 +277,20 @@
                         $style = $bbmColors[$jenis] ?? 'bg-slate-50 border-slate-100 text-slate-700';
                     @endphp
                     <div class="p-4 rounded-xl border {{ $style }}">
-                        <p class="text-xs font-semibold opacity-70 mb-1 uppercase tracking-wider">{{ $jenis }}</p>
+                        <p class="text-xs font-semibold opacity-70 mb-1 uppercase tracking-wider">{{ $jenis ?: 'LAINNYA' }}</p>
                         <p class="text-xl font-bold">{{ number_format($total, 0, ',', '.') }} <span
                                 class="text-sm font-medium opacity-70">L</span></p>
                     </div>
                 @endforeach
+
+                {{-- Grand Total Box --}}
+                <div class="p-4 rounded-xl border bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-100">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-indigo-100 mb-1 leading-none">GRAND TOTAL</p>
+                    <div class="flex items-baseline gap-1">
+                        <span class="text-2xl font-black">{{ number_format($stats['total_liter'], 0, ',', '.') }}</span>
+                        <span class="text-xs font-bold text-indigo-200">Liter</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

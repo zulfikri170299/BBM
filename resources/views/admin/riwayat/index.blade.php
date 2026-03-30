@@ -98,7 +98,50 @@
                 </div>
             </form>
         </div>
-            </form>
+
+
+        <!-- Summary Statistics (Terfilter) -->
+        <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm p-6 overflow-hidden">
+            <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest mb-4 flex items-center gap-2">
+                <div class="w-1.5 h-4 bg-indigo-500 rounded-full"></div>
+                Total Pengisian BBM (Terfilter)
+            </h3>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+                @foreach($summaryBbm as $jenis => $total)
+                    @php
+                        $bbmColors = [
+                            'Pertalite' => 'from-emerald-50 to-emerald-100/50 border-emerald-100 text-emerald-700 icon-emerald-500',
+                            'Pertamax' => 'from-blue-50 to-blue-100/50 border-blue-100 text-blue-700 icon-blue-500',
+                            'Solar' => 'from-amber-50 to-amber-100/50 border-amber-100 text-amber-700 icon-amber-500',
+                            'Dexlite' => 'from-purple-50 to-purple-100/50 border-purple-100 text-purple-700 icon-purple-500',
+                            'Pertamina Dex' => 'from-cyan-50 to-cyan-100/50 border-cyan-100 text-cyan-700 icon-cyan-500',
+                        ];
+                        $style = $bbmColors[$jenis] ?? 'from-slate-50 to-slate-100 border-slate-200 text-slate-700 icon-slate-500';
+                    @endphp
+                    <div class="relative overflow-hidden bg-gradient-to-br {{ explode(' icon-', $style)[0] }} border p-4 rounded-2xl shadow-sm hover:shadow-md transition-all group">
+                        <div class="absolute -right-2 -top-2 opacity-[0.03] group-hover:opacity-[0.06] transition-all transform group-hover:scale-110">
+                            <svg class="w-20 h-20" fill="currentColor" viewBox="0 0 24 24"><path d="M18.82 12.14l-1.32-1.32-4.23 4.23-2.09-2.09-1.32 1.32 3.41 3.41z"/></svg>
+                        </div>
+                        <p class="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1 leading-none">{{ $jenis ?: 'Lainnya' }}</p>
+                        <div class="flex items-baseline gap-1">
+                            <span class="text-xl font-black">{{ number_format($total, 0, ',', '.') }}</span>
+                            <span class="text-xs font-bold opacity-60">Liter</span>
+                        </div>
+                    </div>
+                @endforeach
+
+                {{-- Total Keseluruhan --}}
+                <div class="relative overflow-hidden bg-gradient-to-br from-indigo-600 to-indigo-800 border-indigo-500 p-4 rounded-2xl shadow-lg shadow-indigo-100 text-white group lg:col-span-1">
+                     <div class="absolute -right-2 -top-2 opacity-10 group-hover:opacity-20 transition-all transform group-hover:scale-110">
+                        <svg class="w-20 h-20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                    </div>
+                    <p class="text-[10px] font-black uppercase tracking-widest text-indigo-100 mb-1 leading-none">GRAND TOTAL</p>
+                    <div class="flex items-baseline gap-1">
+                        <span class="text-2xl font-black">{{ number_format($stats['total_liter'], 0, ',', '.') }}</span>
+                        <span class="text-xs font-bold text-indigo-200">Liter</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Table Card -->
@@ -269,7 +312,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="px-6 py-12 text-center">
+                                <td colspan="9" class="px-6 py-12 text-center">
                                     <div class="flex flex-col items-center">
                                         <div
                                             class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
@@ -287,6 +330,19 @@
                             </tr>
                         @endforelse
                     </tbody>
+                    <tfoot class="bg-slate-50/80 border-t border-slate-200">
+                        <tr>
+                            <th colspan="7" class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-widest">
+                                TOTAL PADA DATA INI (TERFILTER)
+                            </th>
+                            <th class="px-6 py-4 text-right">
+                                <span class="text-lg font-black text-indigo-600">
+                                    {{ number_format($stats['total_liter'], 0, ',', '.') }} L
+                                </span>
+                            </th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
 
@@ -297,36 +353,6 @@
             @endif
         </div>
 
-        <!-- Summary Card -->
-        <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm overflow-hidden p-6 mt-6">
-            <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-                <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
-                    </path>
-                </svg>
-                Total Pengisian BBM
-            </h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                @foreach($summaryBbm as $jenis => $total)
-                    @php
-                        $bbmColors = [
-                            'Pertalite' => 'bg-green-50 border-green-100 text-green-700',
-                            'Pertamax' => 'bg-blue-50 border-blue-100 text-blue-700',
-                            'Solar' => 'bg-amber-50 border-amber-100 text-amber-700',
-                            'Dexlite' => 'bg-purple-50 border-purple-100 text-purple-700',
-                        ];
-                        $style = $bbmColors[$jenis] ?? 'bg-slate-50 border-slate-100 text-slate-700';
-                    @endphp
-                    <div class="p-4 rounded-xl border {{ $style }}">
-                        <p class="text-xs font-semibold opacity-70 mb-1 uppercase tracking-wider">{{ $jenis }}</p>
-                        <p class="text-xl font-bold">{{ number_format($total, 0, ',', '.') }} <span
-                                class="text-sm font-medium opacity-70">L</span></p>
-                    </div>
-                @endforeach
-                <!-- Total Keseluruhan (Optional, but user asked for per Fuel Type, but usually total is also good. User said 'SESUAI DENGAN JENIS BBM NYA'. existing stats has total_liter already) -->
-            </div>
-        </div>
     </div>
     @push('scripts')
         <script>

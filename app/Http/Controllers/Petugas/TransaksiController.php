@@ -21,7 +21,61 @@ class TransaksiController extends Controller
         try {
             $mode = $request->input('mode', 'barcode');
 
-            if ($mode === 'nopol') {
+            if ($mode === 'manual') {
+                $val = str_replace([' ', '-', '.'], '', trim($request->value));
+                if (empty($val)) {
+                    return back()->withErrors(['error' => 'Input tidak boleh kosong.']);
+                }
+
+                // Cari di Kendaraan (Nopol)
+                $kendaraan = Kendaraan::with('satker')
+                    ->whereRaw("REPLACE(REPLACE(REPLACE(no_polisi, ' ', ''), '-', ''), '.', '') LIKE ?", ["%$val%"])
+                    ->first();
+
+                if ($kendaraan) {
+                    // Cek apakah Admin Satker aktif
+                    $hasAdminSatker = \App\Models\User::where('satker_id', $kendaraan->satker_id)
+                        ->where('role', 'admin_satker')
+                        ->exists();
+                    
+                    if ($hasAdminSatker) {
+                        $activeAdminExists = \App\Models\User::where('satker_id', $kendaraan->satker_id)
+                            ->where('role', 'admin_satker')
+                            ->where('is_active', true)
+                            ->exists();
+                        
+                        if (!$activeAdminExists) {
+                            return back()->withErrors(['value' => 'Akun Satker Anda sedang dinonaktifkan. Silakan hubungi Super Admin.']);
+                        }
+                    }
+
+                    if (!$kendaraan->satker) {
+                        return back()->withErrors(['value' => 'Data Satker untuk kendaraan ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
+                    }
+
+                    return response(view('petugas.transaksi.create', compact('kendaraan'))->render());
+                }
+
+                // Jika tidak ditemukan di kendaraan, cari di personel
+                $personel = Personel::with(['satker', 'user'])
+                    ->where('nrp', 'like', '%' . $val . '%')
+                    ->first();
+
+                if ($personel) {
+                    if ($personel->user_id && (!$personel->user || !($personel->user->is_active ?? false))) {
+                        return back()->withErrors(['value' => 'Akun Anda sedang dinonaktifkan. Silakan hubungi Super Admin.']);
+                    }
+
+                    if (!$personel->satker) {
+                        return back()->withErrors(['value' => 'Data Satker untuk personel ini tidak ditemukan/corrupt. Silakan hubungi Super Admin.']);
+                    }
+
+                    return response(view('petugas.transaksi.create', compact('personel'))->render());
+                }
+
+                return back()->withErrors(['value' => 'Data dengan NOPOL/NRP "' . $val . '" tidak ditemukan.']);
+
+            } elseif ($mode === 'nopol') {
                 $request->validate([
                     'nopol' => 'required|string',
                 ]);

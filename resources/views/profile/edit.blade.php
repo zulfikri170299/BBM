@@ -60,16 +60,6 @@
                             </svg>
                             Keamanan Password
                         </a>
-                        <a href="#update-face-scan"
-                            class="flex items-center gap-3 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50 rounded-xl transition-colors">
-                            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z">
-                                </path>
-                            </svg>
-                            Registrasi Scan Wajah
-                        </a>
                         @if(!in_array(Auth::user()->role, ['admin_satker', 'personel']))
                             <a href="#update-topup-password"
                                 class="flex items-center gap-3 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50 rounded-xl transition-colors">
@@ -142,13 +132,6 @@
                     </div>
                 </div>
 
-                <!-- Update Face Scan -->
-                <div id="update-face-scan"
-                    class="bg-white rounded-2xl border border-slate-200/70 shadow-sm overflow-hidden scroll-mt-6">
-                    <div class="p-4 sm:p-6 lg:p-8">
-                        @include('profile.partials.update-face-scan-form')
-                    </div>
-                </div>
 
                 <!-- Update Password -->
                 <div id="update-password"
@@ -235,42 +218,6 @@
                     confirmButtonText: 'OK',
                     timer: 3000,
                     timerProgressBar: true,
-                    background: '#ffffff',
-                    customClass: {
-                        popup: 'rounded-3xl border border-slate-100 shadow-2xl',
-                        title: 'text-xl font-bold text-slate-800',
-                        htmlContainer: 'text-slate-500 font-medium text-sm',
-                        confirmButton: 'rounded-xl px-8 py-2.5 font-bold'
-                    }
-                });
-            @endif
-
-            @if(session('status') === 'face-updated')
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Wajah Berhasil Didaftarkan!',
-                    text: 'Anda sekarang bisa login menggunakan scan wajah.',
-                    confirmButtonColor: '#10b981',
-                    confirmButtonText: 'OK',
-                    timer: 3000,
-                    timerProgressBar: true,
-                    background: '#ffffff',
-                    customClass: {
-                        popup: 'rounded-3xl border border-slate-100 shadow-2xl',
-                        title: 'text-xl font-bold text-slate-800',
-                        htmlContainer: 'text-slate-500 font-medium text-sm',
-                        confirmButton: 'rounded-xl px-8 py-2.5 font-bold'
-                    }
-                });
-            @endif
-
-            @if(session('status') === 'face-deleted')
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Scan Wajah Dihapus',
-                    text: 'Data wajah Anda telah dihapus. Login scan wajah sudah dinonaktifkan.',
-                    confirmButtonColor: '#6366f1',
-                    confirmButtonText: 'OK, Mengerti',
                     background: '#ffffff',
                     customClass: {
                         popup: 'rounded-3xl border border-slate-100 shadow-2xl',
