@@ -1,258 +1,242 @@
 <x-app-layout>
-    <div class="relative min-h-[calc(100vh-64px)] p-2 sm:p-4 overflow-hidden">
-        <!-- Decorative background elements -->
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-48 bg-gradient-to-b from-indigo-500/10 to-transparent blur-3xl -z-10"></div>
-        <div class="absolute bottom-0 right-0 w-48 h-48 bg-rose-500/5 blur-3xl -z-10 animate-pulse"></div>
+    <div x-data="transaksi()" @@start-scan.window="startScanner()" @@stop-scan.window="stopScanner()" class="max-w-sm mx-auto p-2 sm:p-4 pb-12">
+        <!-- Header: High Contrast -->
+        <div class="text-center mb-3">
+            <h1 class="text-lg font-black text-slate-900 tracking-tight">TRANSAKSI BBM</h1>
+            <p class="text-[8px] font-bold text-slate-500 uppercase tracking-widest leading-none mt-0.5" x-text="step === 'search' ? 'IDENTIFIKASI' : 'KONFIRMASI'"></p>
+        </div>
 
-        <div class="max-w-md mx-auto">
-            <!-- Header Section -->
-            <div class="text-center mb-4 relative">
-                <div class="relative inline-block group">
-                    <div class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-                    <div class="relative flex items-center justify-center w-12 h-12 bg-white rounded-xl shadow-xl shadow-indigo-500/10 mb-2 mx-auto border border-white/50 bg-clip-padding backdrop-blur-xl">
-                        <svg class="w-6 h-6 text-indigo-600 animate-bounce-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z">
-                            </path>
-                        </svg>
-                    </div>
-                </div>
-                <h1 class="text-xl font-black text-slate-800 tracking-tight leading-none">PENGISIAN BBM</h1>
-                <p class="text-[10px] font-bold text-slate-500/80 uppercase tracking-widest mt-1">Identifikasi Kendaraan</p>
+        <!-- Step 1: Search -->
+        <div x-show="step === 'search'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" class="space-y-2.5">
+            <!-- Tabs -->
+            <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-inner">
+                <button @@click="tab = 'barcode'; stopScanner();" 
+                    :class="tab === 'barcode' ? 'bg-white text-indigo-700 shadow-sm border border-slate-200' : 'text-slate-500'"
+                    class="flex-1 py-1.5 text-[9px] font-black uppercase rounded-lg transition-all">Barcode</button>
+                <button @@click="tab = 'manual'; stopScanner();" 
+                    :class="tab === 'manual' ? 'bg-white text-indigo-700 shadow-sm border border-slate-200' : 'text-slate-500'"
+                    class="flex-1 py-1.5 text-[9px] font-black uppercase rounded-lg transition-all">NOPOL / NRP</button>
             </div>
 
-            <div x-data="{ 
-                tab: 'barcode',
-                init() {
-                    this.$watch('tab', value => {
-                        if (value !== 'barcode') {
-                            if (typeof window.stopScanner === 'function') window.stopScanner();
-                        }
-                    });
-                }
-            }" class="space-y-4">
-                
-                <!-- Premium Tab Switcher - More Compact -->
-                <div class="glass p-1 rounded-xl shadow-xl flex relative overflow-hidden">
-                    <button @click="tab = 'barcode'"
-                        class="flex-1 relative z-10 flex flex-col items-center justify-center gap-1 py-2 rounded-lg transition-all duration-300 group"
-                        :class="tab === 'barcode' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'">
-                        <svg class="w-4 h-4 transition-transform duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" :class="tab === 'barcode' && 'animate-pulse'">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
-                        </svg>
-                        <span class="text-[9px] font-black uppercase tracking-tighter">Barcode</span>
-                        <div x-show="tab === 'barcode'" x-transition:enter="transition-all duration-300 transform" x-transition:enter-start="opacity-0 scale-x-0" x-transition:enter-end="opacity-100 scale-x-100" class="absolute inset-0 bg-white rounded-lg shadow-md -z-10"></div>
-                    </button>
-
-                    <button @click="tab = 'manual'"
-                        class="flex-[2] relative z-10 flex flex-col items-center justify-center gap-1 py-2 rounded-lg transition-all duration-300 group"
-                        :class="tab === 'manual' ? 'text-amber-600' : 'text-slate-400 hover:text-slate-600'">
-                        <div class="flex items-center gap-1.5">
-                            <svg class="w-4 h-4 transition-transform duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" :class="tab === 'manual' && 'animate-pulse'">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1"></path>
-                            </svg>
-                            <span class="text-slate-300">/</span>
-                            <svg class="w-4 h-4 transition-transform duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" :class="tab === 'manual' && 'animate-pulse'">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                            </svg>
+            <!-- Card Container -->
+            <div class="bg-white border-2 border-slate-100 rounded-2xl p-4 shadow-xl shadow-slate-200/50 relative">
+                <!-- Barcode -->
+                <div x-show="tab === 'barcode'" class="space-y-3 flex flex-col items-center">
+                    <div class="w-full max-w-[260px] aspect-square bg-slate-50 rounded-xl relative overflow-hidden border-2 border-slate-100">
+                        <div id="reader" class="w-full h-full"></div>
+                        <div id="scanner-placeholder" x-show="!isScannerActive || isLoadingScanner" 
+                             class="absolute inset-0 flex flex-col items-center justify-center bg-white/90 backdrop-blur-sm">
+                            <div x-show="isLoadingScanner" class="mb-2">
+                                <svg class="animate-spin h-7 w-7 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                            </div>
+                            <div x-show="!isLoadingScanner" class="relative group">
+                                <div class="relative w-36 h-36 bg-white rounded-3xl border border-slate-200 shadow-sm flex items-center justify-center overflow-hidden">
+                                    <svg class="w-20 h-20 text-indigo-300/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                                    </svg>
+                                    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-indigo-400/10 to-transparent h-1/2 w-full -translate-y-full animate-[scan_3s_ease-in-out_infinite]"></div>
+                                </div>
+                            </div>
+                            <p class="text-slate-400 text-[8px] font-black uppercase tracking-[0.2em] mt-3" x-text="isLoadingScanner ? 'INIT...' : 'SIAP SCAN'"></p>
                         </div>
-                        <span class="text-[9px] font-black uppercase tracking-tighter">NOPOL / NRP</span>
-                        <div x-show="tab === 'manual'" x-transition:enter="transition-all duration-300 transform" x-transition:enter-start="opacity-0 scale-x-0" x-transition:enter-end="opacity-100 scale-x-100" class="absolute inset-0 bg-white rounded-lg shadow-md -z-10"></div>
+                        <!-- Square Scan Overlay -->
+                        <div x-show="isScannerActive" class="absolute inset-0 pointer-events-none flex items-center justify-center p-6">
+                             <div class="w-full aspect-square border-2 border-indigo-500/40 relative transform scale-90">
+                                  <div class="absolute -top-1 -left-1 w-6 h-6 border-t-4 border-l-4 border-indigo-600 rounded-tl-sm"></div>
+                                  <div class="absolute -top-1 -right-1 w-6 h-6 border-t-4 border-r-4 border-indigo-600 rounded-tr-sm"></div>
+                                  <div class="absolute -bottom-1 -left-1 w-6 h-6 border-b-4 border-l-4 border-indigo-600 rounded-bl-sm"></div>
+                                  <div class="absolute -bottom-1 -right-1 w-6 h-6 border-b-4 border-r-4 border-indigo-600 rounded-br-sm"></div>
+                                  <div class="absolute left-0 right-0 h-[1.5px] bg-red-500/60 animate-scan"></div>
+                             </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" @@click="isScannerActive ? stopScanner() : startScanner()" 
+                        :disabled="isLoadingScanner"
+                        :class="isScannerActive ? 'bg-slate-900 text-white' : 'bg-indigo-600 hover:bg-indigo-700 text-white' "
+                        class="w-full px-4 py-3.5 font-black rounded-xl shadow-xl shadow-indigo-100 transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.98]">
+                        <svg x-show="!isScannerActive" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <svg x-show="isScannerActive" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span class="uppercase tracking-widest text-[11px]" x-text="isScannerActive ? 'MATIKAN KAMERA' : 'AKTIFKAN KAMERA'"></span>
                     </button>
                 </div>
 
-                <!-- Tab Contents Container - Reduced height -->
-                <div class="relative min-h-[350px]">
-                    <!-- Tab Barcode -->
-                    <div x-show="tab === 'barcode'" x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
-                        class="glass rounded-3xl shadow-2xl overflow-hidden border border-white/40">
-                        <div class="px-4 py-2 bg-gradient-to-r from-indigo-50/50 to-white/50 border-b border-indigo-100/30">
-                            <h2 class="text-[9px] font-black text-indigo-900/40 text-center uppercase tracking-widest leading-none">Scanning Interface</h2>
-                        </div>
-                        
-                        <div class="p-4">
-                            <div class="aspect-[4/3] max-h-[220px] mx-auto rounded-xl bg-slate-900 relative overflow-hidden shadow-inner border-4 border-slate-800">
-                                <div id="reader" class="w-full h-full"></div>
-                                
-                                <!-- Scanner Overlay -->
-                                <div id="scanner-placeholder" class="absolute inset-0 flex flex-col items-center justify-center bg-slate-900/60 backdrop-blur-sm z-20">
-                                    <div class="relative group">
-                                        <div class="relative w-36 h-36 bg-white/20 rounded-3xl border border-white/20 backdrop-blur-md flex items-center justify-center overflow-hidden">
-                                            <img src="{{ asset('images/qr-placeholder.png') }}" class="w-28 h-28 object-contain opacity-100" alt="QR">
-                                            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent h-1/2 w-full -translate-y-full animate-[scan_4s_linear_infinite]"></div>
-                                        </div>
-                                    </div>
-                                    <span class="mt-4 text-[10px] font-black text-white/50 uppercase tracking-[0.2em]">Kamera Standby</span>
-                                </div>
-
-                                <!-- Scanning Line Animation -->
-                                <div id="scanning-line" class="hidden absolute left-0 right-0 h-1 bg-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.8)] z-30 animate-scan"></div>
-                            </div>
-
-                            <form id="barcode-form" action="{{ route('petugas.transaksi.check') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="mode" value="barcode">
-                                <input type="hidden" name="barcode" id="barcode">
-                            </form>
-
-                            <div class="mt-4 space-y-3">
-                                <button type="button" id="start-scanner"
-                                    class="w-full px-4 py-3.5 bg-indigo-600 hover:bg-black text-white font-black rounded-xl shadow-xl shadow-indigo-200 transition-all duration-300 flex items-center justify-center gap-3 group active:scale-[0.98]">
-                                    <span class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center group-hover:rotate-12 transition-transform">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
-                                        </svg>
-                                    </span>
-                                    <span id="button-text" class="uppercase tracking-widest text-[11px]">AKTIFKAN KAMERA</span>
-                                </button>
-                                
-                                <p class="text-[9px] text-center text-slate-400 font-bold uppercase tracking-widest">Posisikan barcode kendaraan di tengah</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tab Input Manual (Nopol/NRP) -->
-                    <div x-show="tab === 'manual'" x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
-                        class="glass rounded-3xl shadow-2xl overflow-hidden border border-white/40">
-                        <div class="px-4 py-2 bg-gradient-to-r from-amber-50/50 to-rose-50/50 border-b border-amber-100/30">
-                            <h2 class="text-[9px] font-black text-amber-900/40 text-center uppercase tracking-widest leading-none">Manual Identification</h2>
-                        </div>
-                        <div class="p-6">
-                            <div class="mb-4">
-                                <div class="flex justify-center gap-3 mb-3">
-                                    <div class="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center shadow-inner">
-                                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                        </svg>
-                                    </div>
-                                    <div class="w-12 h-12 bg-rose-100 rounded-2xl flex items-center justify-center shadow-inner">
-                                        <svg class="w-5 h-5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <h3 class="text-lg font-black text-slate-800 text-center mb-0.5 uppercase">Cari NOPOL / NRP</h3>
-                            </div>
-
-                            @if($errors->has('error'))
-                                <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-[10px] font-black uppercase text-center">
-                                    {{ $errors->first('error') }}
-                                </div>
-                            @endif
-
-                            <form action="{{ route('petugas.transaksi.check') }}" method="POST" class="space-y-4">
-                                @csrf
-                                <input type="hidden" name="mode" value="manual">
-                                <div>
-                                    <input type="text" name="value" id="manual_value" required
-                                        class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl text-lg text-center text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all font-black uppercase tracking-[0.2em] shadow-inner placeholder-slate-300"
-                                        placeholder="INPUT NOPOL / NRP">
-                                </div>
-                                <button type="submit"
-                                    class="w-full px-4 py-3.5 bg-indigo-600 hover:bg-black text-white font-black rounded-xl shadow-xl shadow-indigo-100 transition-all duration-300 flex items-center justify-center gap-3 active:scale-[0.98]">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                    </svg>
-                                    <span class="uppercase tracking-widest text-[11px]">PROSES DATA</span>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
+                <!-- Manual -->
+                <div x-show="tab !== 'barcode'" class="space-y-3 py-1" x-cloak>
+                    <div x-show="error" class="p-2 bg-red-50 border border-red-200 rounded-lg text-red-600 text-[10px] font-black uppercase text-center" x-text="error"></div>
+                    
+                    <input type="text" x-model="manualValue" @@keyup.enter="checkData(tab, manualValue)"
+                        class="w-full px-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-xl text-2xl text-center font-black text-slate-900 uppercase tracking-widest outline-none"
+                        autocomplete="off" spellcheck="false" :placeholder="'CARI ' + (tab === 'manual' ? 'NOPOL / NRP' : tab.toUpperCase())">
+                    <button @@click="checkData(tab, manualValue)" :disabled="isLoading"
+                        class="w-full px-4 py-3.5 bg-indigo-600 hover:bg-black text-white font-black rounded-xl shadow-xl shadow-indigo-100 transition-all duration-300 flex items-center justify-center gap-3 active:scale-[0.98] disabled:opacity-50">
+                        <svg x-show="!isLoading" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        <span x-show="!isLoading" class="uppercase tracking-widest text-[11px]">PROSES DATA</span>
+                        <span x-show="isLoading" class="flex items-center justify-center gap-2">
+                            <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            MENCARI...
+                        </span>
+                    </button>
                 </div>
             </div>
         </div>
+
+        <!-- Step 2: Form (Extreme Anti-Autofill) -->
+        <div x-show="step === 'form'" x-transition:enter="transition duration-300" class="space-y-2.5" x-cloak>
+            <div class="bg-white border-2 border-slate-100 rounded-2xl overflow-hidden shadow-lg">
+                <div :class="type === 'kendaraan' ? 'bg-indigo-600' : 'bg-rose-600'" class="px-4 py-3.5 text-white flex justify-between items-end">
+                    <div>
+                        <p class="text-[7px] font-black uppercase tracking-widest opacity-70" x-text="type === 'kendaraan' ? 'NO POLISI' : 'NRP'"></p>
+                        <h2 class="text-xl font-black leading-none mt-0.5 tracking-tight" x-text="type === 'kendaraan' ? target.no_polisi : target.nrp"></h2>
+                    </div>
+                    <div class="text-right text-xl font-black" x-text="target.saldo + ' L'"></div>
+                </div>
+                <div class="px-4 py-2.5 grid grid-cols-2 gap-3 bg-slate-50/50">
+                    <span class="text-[11px] font-bold text-slate-700 truncate" x-text="type === 'kendaraan' ? target.jenis_kendaraan : target.nama"></span>
+                    <span class="text-[11px] font-black text-indigo-600 uppercase text-right" x-text="target.jenis_bbm"></span>
+                </div>
+            </div>
+
+            <form action="{{ route('petugas.transaksi.process') }}" method="POST" class="space-y-2.5" autocomplete="off">
+                @csrf
+                <!-- Dummy Hidden Fields to Bait Autofill Away -->
+                <input type="text" name="prevent_autofill_username" style="display:none" autocomplete="username">
+                <input type="password" name="prevent_autofill_password" style="display:none" autocomplete="current-password">
+
+                <input type="hidden" name="kendaraan_id" :value="type === 'kendaraan' ? target.id : ''">
+                <input type="hidden" name="personel_id" :value="type === 'personel' ? target.id : ''">
+
+                <div class="bg-white border-2 border-slate-100 rounded-2xl p-4 space-y-3.5 shadow-xl">
+                    <div>
+                        <label class="block text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">JUMLAH LITER</label>
+                        <div class="relative">
+                            <input type="number" name="liter" step="0.1" min="0.1" :max="target.saldo" required x-model="liter"
+                                class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl text-3xl font-black text-indigo-600 outline-none"
+                                autocomplete="off" placeholder="0.0">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">NAMA DRIVER</label>
+                        <input type="text" name="nama_driver" required
+                            class="w-full px-4 py-3.5 bg-slate-50 border-2 border-slate-100 rounded-xl text-xs font-bold text-slate-800 outline-none"
+                            autocomplete="off" spellcheck="false" placeholder="Siapa pembawa?">
+                    </div>
+                    <div>
+                        <label class="block text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">PIN OTORISASI</label>
+                        <!-- Using type="text" with custom masking to hide characters and avoid password manager popups -->
+                        <input type="text" name="pin" maxlength="6" inputmode="numeric" required
+                            class="w-full px-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-xl text-2xl text-center font-mono tracking-[0.4em] text-emerald-600 outline-none"
+                            style="-webkit-text-security: disc;"
+                            autocomplete="off"
+                            spellcheck="false"
+                            placeholder="••••••">
+                    </div>
+                </div>
+
+                <div class="flex gap-2.5 pt-1">
+                    <button type="button" @@click="reset()" 
+                        class="flex-1 py-4 bg-slate-100 text-slate-500 font-black rounded-xl text-[10px] uppercase transition-all">BATAL</button>
+                    <button type="submit" :disabled="liter <= 0 || (target && liter > target.saldo)"
+                        class="flex-[2] py-4 bg-emerald-500 text-white font-black rounded-xl text-[10px] uppercase shadow-xl disabled:opacity-50">PROSES</button>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <!-- Styles for Animations -->
-    <style>
-        @keyframes scan {
-            0% { top: 0; opacity: 0; }
-            5% { opacity: 1; }
-            95% { opacity: 1; }
-            100% { top: 100%; opacity: 0; }
-        }
-        .animate-scan {
-            animation: scan 3s linear infinite;
-        }
-        .animate-bounce-slow {
-            animation: bounce 3s infinite;
-        }
-    </style>
-
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <!-- Scanner & Alpine Script -->
+    <script src="https://unpkg.com/html5-qrcode"></script>
     <script>
-        let html5QrCode;
-        const scannerButton = document.getElementById('start-scanner');
-        const buttonText = document.getElementById('button-text');
-        const placeholder = document.getElementById('scanner-placeholder');
-        const scanLine = document.getElementById('scanning-line');
-        const barcodeInput = document.getElementById('barcode');
-        const barcodeForm = document.getElementById('barcode-form');
+        function transaksi() {
+            return {
+                step: 'search',
+                tab: 'barcode',
+                isLoading: false,
+                isScannerActive: false,
+                isLoadingScanner: false,
+                error: null,
+                target: null,
+                type: null,
+                manualValue: '',
+                liter: '',
 
-        scannerButton.addEventListener('click', () => {
-            if (html5QrCode && html5QrCode.getState() === 2) {
-                stopScanner();
-            } else {
-                startScanner();
-            }
-        });
-
-        function startScanner() {
-            placeholder.classList.add('opacity-0');
-            setTimeout(() => placeholder.classList.add('hidden'), 300);
-            scanLine.classList.remove('hidden');
-            buttonText.textContent = 'MATIKAN KAMERA';
-            
-            scannerButton.classList.replace('bg-indigo-600', 'bg-rose-600');
-            scannerButton.classList.replace('shadow-indigo-200', 'shadow-rose-100');
-
-            html5QrCode = new Html5Qrcode("reader");
-            const config = { fps: 20, qrbox: { width: 250, height: 250 } };
-
-            html5QrCode.start(
-                { facingMode: "environment" },
-                config,
-                (decodedText, decodedResult) => {
-                    barcodeInput.value = decodedText;
-                    stopScanner();
-                    
-                    // Simple sound or vibration if available
-                    if (window.navigator.vibrate) window.navigator.vibrate(200);
-                    
-                    barcodeForm.submit();
+                async checkData(mode, value) {
+                    if (!value) return;
+                    console.log('Searching for:', mode, value);
+                    this.isLoading = true;
+                    this.error = null;
+                    try {
+                        const response = await fetch('{{ route('petugas.transaksi.check') }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({ mode, [mode === 'manual' ? 'value' : mode]: value })
+                        });
+                        
+                        const res = await response.json();
+                        console.log('Response:', res);
+                        
+                        if (res.success) {
+                            this.target = res.data; 
+                            this.type = res.type; 
+                            this.step = 'form'; 
+                            this.stopScanner();
+                        } else { 
+                            this.error = res.message; 
+                        }
+                    } catch (e) { 
+                        console.error('Error:', e);
+                        this.error = 'Koneksi bermasalah.'; 
+                    } finally { 
+                        this.isLoading = false; 
+                    }
                 },
-                (errorMessage) => {}
-            ).catch((err) => {
-                console.error(err);
-                window.showAlert("Akses Kamera Gagal", "Gagal mengakses kamera. Pastikan izin kamera diberikan.", "error");
-                stopScanner();
-            });
-        }
 
-        function stopScanner() {
-            if (html5QrCode) {
-                html5QrCode.stop().then(() => {
-                    placeholder.classList.remove('hidden');
-                    setTimeout(() => placeholder.classList.remove('opacity-0'), 10);
-                    scanLine.classList.add('hidden');
-                    buttonText.textContent = 'AKTIFKAN KAMERA';
-                    
-                    scannerButton.classList.replace('bg-rose-600', 'bg-indigo-600');
-                    scannerButton.classList.replace('shadow-rose-100', 'shadow-indigo-200');
-                }).catch(err => console.error(err));
+                reset() {
+                    this.step = 'search'; this.target = null; this.type = null; this.error = null; this.liter = '';
+                    if (this.tab === 'barcode') setTimeout(() => this.startScanner(), 300);
+                },
+
+                async startScanner() {
+                    if (this.isLoadingScanner) return;
+                    this.isLoadingScanner = true; this.error = null;
+                    try {
+                        if (window.html5QrCode) try { await window.html5QrCode.stop(); } catch(e) {}
+                        window.html5QrCode = new Html5Qrcode("reader");
+                        await window.html5QrCode.start({ facingMode: "environment" }, { 
+                            fps: 15, qrbox: (vw, vh) => { const s = Math.min(vw, vh) * 0.8; return { width: s, height: s }; }, aspectRatio: 1.0 
+                        }, (txt) => this.checkData('barcode', txt));
+                        this.isScannerActive = true;
+                    } catch (e) { this.error = "Gagal buka kamera."; } finally { this.isLoadingScanner = false; }
+                },
+
+                async stopScanner() {
+                    this.isScannerActive = false; this.isLoadingScanner = false;
+                    if (window.html5QrCode && window.html5QrCode.getState() === 2) try { await window.html5QrCode.stop(); } catch (e) {}
+                }
             }
         }
-
-        window.startScanner = startScanner;
-        window.stopScanner = stopScanner;
-
-        // Visibility and page events
-        window.addEventListener('beforeunload', stopScanner);
-        window.addEventListener('pagehide', stopScanner);
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'hidden') stopScanner();
-        });
     </script>
+    <style>
+        #reader__dashboard_section_csr button { display: none !important; }
+        #reader__scan_region video { object-fit: cover !important; }
+        [x-cloak] { display: none !important; }
+        @keyframes scan { 0% { top:0; } 100% { top:100%; } }
+        .animate-scan { animation: scan 2s linear infinite; position: absolute; }
+    </style>
 </x-app-layout>

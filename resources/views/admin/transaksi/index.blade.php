@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div x-data="transaksi()" @@start-scan.window="startScanner()" @@stop-scan.window="stopScanner()" class="max-w-xl mx-auto p-2 sm:p-4 pb-12">
+    <div x-data="transaksi()" @@start-scan.window="startScanner()" @@stop-scan.window="stopScanner()" class="max-w-sm mx-auto p-2 sm:p-4 pb-12">
         <!-- Header: High Contrast -->
         <div class="text-center mb-3">
             <h1 class="text-lg font-black text-slate-900 tracking-tight">TRANSAKSI BBM</h1>
@@ -34,8 +34,10 @@
                             </div>
                             <div x-show="!isLoadingScanner" class="relative group">
                                 <div class="relative w-36 h-36 bg-white rounded-3xl border border-slate-200 shadow-sm flex items-center justify-center overflow-hidden">
-                                    <img src="{{ asset('images/qr-placeholder.png') }}" class="w-28 h-28 object-contain opacity-100" alt="QR">
-                                    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-slate-400/5 to-transparent h-1/2 w-full -translate-y-full animate-[scan_3s_ease-in-out_infinite]"></div>
+                                    <svg class="w-20 h-20 text-indigo-300/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                                    </svg>
+                                    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-indigo-400/10 to-transparent h-1/2 w-full -translate-y-full animate-[scan_3s_ease-in-out_infinite]"></div>
                                 </div>
                             </div>
                             <p class="text-slate-400 text-[8px] font-black uppercase tracking-[0.2em] mt-3" x-text="isLoadingScanner ? 'INIT...' : 'SIAP SCAN'"></p>
@@ -54,9 +56,16 @@
                     
                     <button type="button" @@click="isScannerActive ? stopScanner() : startScanner()" 
                         :disabled="isLoadingScanner"
-                        :class="isScannerActive ? 'bg-slate-900 text-white' : 'bg-indigo-600' "
-                        class="w-full py-3.5 font-black rounded-xl text-[10px] tracking-widest uppercase transition-all duration-300">
-                        <span x-text="isScannerActive ? 'MATIKAN' : 'AKTIFKAN KAMERA'"></span>
+                        :class="isScannerActive ? 'bg-slate-900 text-white' : 'bg-indigo-600 hover:bg-indigo-700 text-white' "
+                        class="w-full px-4 py-3.5 font-black rounded-xl shadow-xl shadow-indigo-100 transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.98]">
+                        <svg x-show="!isScannerActive" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <svg x-show="isScannerActive" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span class="uppercase tracking-widest text-[11px]" x-text="isScannerActive ? 'MATIKAN KAMERA' : 'AKTIFKAN KAMERA'"></span>
                     </button>
                 </div>
 
@@ -68,8 +77,11 @@
                         class="w-full px-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-xl text-2xl text-center font-black text-slate-900 uppercase tracking-widest outline-none"
                         autocomplete="off" spellcheck="false" :placeholder="'CARI ' + (tab === 'manual' ? 'NOPOL / NRP' : tab.toUpperCase())">
                     <button @@click="checkData(tab, manualValue)" :disabled="isLoading"
-                        class="w-full py-4 bg-indigo-600 text-white font-black rounded-xl text-[10px] tracking-widest uppercase transition-all active:scale-[0.98]">
-                        <span x-show="!isLoading" x-text="'PROSES ' + (tab === 'manual' ? 'NOPOL / NRP' : tab.toUpperCase())"></span>
+                        class="w-full px-4 py-3.5 bg-indigo-600 hover:bg-black text-white font-black rounded-xl shadow-xl shadow-indigo-100 transition-all duration-300 flex items-center justify-center gap-3 active:scale-[0.98] disabled:opacity-50">
+                        <svg x-show="!isLoading" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        <span x-show="!isLoading" class="uppercase tracking-widest text-[11px]">PROSES DATA</span>
                         <span x-show="isLoading" class="flex items-center justify-center gap-2">
                             <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
