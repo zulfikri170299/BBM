@@ -54,7 +54,7 @@
                         class="absolute top-0 right-0 w-12 h-12 sm:w-32 sm:h-32 bg-{{ $colorClass }}-50/50 rounded-bl-3xl sm:rounded-bl-[10rem] transition-all group-hover:w-16 group-hover:h-16 sm:group-hover:w-36 sm:group-hover:h-36">
                     </div>
 
-                    <form action="{{ route('petugas.meter.store') }}" method="POST" class="p-4 sm:p-10 relative z-10">
+                    <form action="{{ route('admin.meter.store') }}" method="POST" class="p-4 sm:p-10 relative z-10">
                         @csrf
                         <input type="hidden" name="tanggal" value="{{ $today }}">
                         <input type="hidden" name="jenis_bbm" value="{{ $type['name'] }}">

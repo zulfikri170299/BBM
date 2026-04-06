@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Petugas;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -14,7 +14,7 @@ class MeterReadingController extends Controller
         $today = $request->input('tanggal', Carbon::now('Asia/Makassar')->toDateString());
         $readings = DailyMeterReading::where('tanggal', $today)->get()->keyBy('jenis_bbm');
         
-        return view('petugas.meter.index', compact('today', 'readings'));
+        return view('admin.meter.index', compact('today', 'readings'));
     }
 
     public function store(Request $request)

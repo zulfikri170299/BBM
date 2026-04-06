@@ -52,6 +52,8 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     Route::get('/topup', [\App\Http\Controllers\Admin\AdminController::class, 'topup'])->name('topup')->middleware('role:super_admin');
     Route::post('/topup', [\App\Http\Controllers\Admin\AdminController::class, 'processTopup'])->name('topup.process')->middleware('role:super_admin');
     Route::get('/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
+    Route::get('/meter-reading', [\App\Http\Controllers\Admin\MeterReadingController::class, 'index'])->name('meter.index');
+    Route::post('/meter-reading', [\App\Http\Controllers\Admin\MeterReadingController::class, 'store'])->name('meter.store');
     Route::post('/reports', [\App\Http\Controllers\Admin\ReportController::class, 'generate'])->name('reports.generate');
     Route::post('/satkers/bulk-delete', [\App\Http\Controllers\Admin\SatkerController::class, 'bulkDelete'])->name('satkers.bulk-delete')->middleware('role:super_admin');
     Route::resource('satkers', \App\Http\Controllers\Admin\SatkerController::class)->middleware('role:super_admin');
