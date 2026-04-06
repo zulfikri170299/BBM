@@ -50,13 +50,11 @@
 <body>
     <table style="width: 100%; margin-bottom: 2px;" cellspacing="0" cellpadding="0">
         <tr>
-            <td style="width: 380px; text-align: center; vertical-align: top;">
-                <div style="border-bottom: 2.5px solid black; padding-bottom: 2px;">
-                    <div style="border-bottom: 1px solid black; padding-bottom: 5px; line-height: 1.15; font-size: 10.5pt;">
-                        KEPOLISIAN NEGARA REPUBLIK INDONESIA<br>
-                        DAERAH NUSA TENGGARA BARAT<br>
-                        {{ strtoupper($satker) }}
-                    </div>
+            <td style="width: 320px; text-align: center; vertical-align: top;">
+                <div style="border-bottom: 1.5px solid black; padding-bottom: 5px; line-height: 1.15; font-size: 10.5pt;">
+                    KEPOLISIAN NEGARA REPUBLIK INDONESIA<br>
+                    DAERAH NUSA TENGGARA BARAT<br>
+                    {{ strtoupper($satker) }}
                 </div>
             </td>
             <td>&nbsp;</td>
@@ -64,8 +62,10 @@
     </table>
     
     <div class="text-center" style="margin-bottom: 15px; margin-top: 30px;">
-        <span style="text-decoration: underline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BERITA ACARA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
-        Nomor: BA- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /{{ $bulang_angka_romawi }}/LOG.5.15.1./{{ $tahun }}/Rolog
+        <div style="display: inline-block; text-align: center; line-height: 1.1;">
+            <div style="border-bottom: 1.5px solid black; padding-bottom: 0px; font-size: 11.5pt;">BERITA ACARA</div>
+            <div style="padding-top: 1px;">Nomor: BA- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/{{ $bulang_angka_romawi }}/LOG.5.15.1./{{ $tahun }}/Rolog</div>
+        </div>
     </div>
 
     <div class="content">

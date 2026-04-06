@@ -165,14 +165,18 @@ class BaController extends Controller
             $templateProcessor->setValue('nrp pihak1', $settings['ba_pihak_1_nrp'] ?? '-');
             $templateProcessor->setValue('jabatan pihak1', $settings['ba_pihak_1_jabatan'] ?? '-');
 
-            // Force override on static texts left in the original DOCX Template
-            $xml = $templateProcessor->tempDocumentMainPart;
+            // Force override on static texts left in the original DOCX Template using Closure binding to access protected property
+            $getXml = function() { return $this->tempDocumentMainPart; };
+            $setXml = function($xml) { $this->tempDocumentMainPart = $xml; };
+            
+            $xml = $getXml->call($templateProcessor);
             $xml = str_replace('BIRO LOGISTIK Polda NTB', ucwords(strtolower($satker->nama_satker)) . ' Polda NTB', $xml);
             $xml = str_replace('PIHAK kedua', 'Pihak kedua', $xml);
             
             // To handle cases where Word injects spelling-check tags inside the text like PI</w:t>...<w:t>HAK:
             $xml = preg_replace('/P(<[^>]+>)*I(<[^>]+>)*H(<[^>]+>)*A(<[^>]+>)*K(<[^>]+>)*(\s+)(<[^>]+>)*k(<[^>]+>)*e(<[^>]+>)*d(<[^>]+>)*u(<[^>]+>)*a/i', 'Pihak$6$7kedua', $xml);
-            $templateProcessor->tempDocumentMainPart = $xml;
+            
+            $setXml->call($templateProcessor, $xml);
 
             // Save File
             $fileName = 'BA_' . str_replace(' ', '_', $satker->nama_satker) . '_' . $bulan . '_' . $tahun . '_' . time() . '.docx';

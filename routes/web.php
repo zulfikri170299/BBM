@@ -131,6 +131,12 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     Route::get('/berita-acara/pdf/{log}', [\App\Http\Controllers\Admin\BaController::class, 'downloadPdf'])->name('ba.download-pdf');
     Route::delete('/berita-acara/{log}', [\App\Http\Controllers\Admin\BaController::class, 'destroy'])->name('ba.destroy');
 
+    // Nominatif
+    Route::get('/nominatif', [\App\Http\Controllers\Admin\NominatifController::class, 'index'])->name('nominatif.index');
+    Route::post('/nominatif/settings', [\App\Http\Controllers\Admin\NominatifController::class, 'updateSettings'])->name('nominatif.update-settings');
+    Route::get('/nominatif/export', [\App\Http\Controllers\Admin\NominatifController::class, 'export'])->name('nominatif.export');
+    Route::get('/nominatif/pdf', [\App\Http\Controllers\Admin\NominatifController::class, 'exportPdf'])->name('nominatif.pdf');
+
     // Laporan Harian
     Route::get('/laporan-harian', [\App\Http\Controllers\Admin\LaporanHarianController::class, 'index'])->name('laporan-harian.index');
     Route::get('/laporan-harian/pdf', [\App\Http\Controllers\Admin\LaporanHarianController::class, 'exportPdf'])->name('laporan-harian.pdf');
