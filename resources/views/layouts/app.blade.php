@@ -343,8 +343,11 @@
             });
         });
 
-        document.addEventListener('turbo:load', initTomSelect);
-        document.addEventListener('turbo:render', initTomSelect);
+        if (!window.tomSelectBound) {
+            window.tomSelectBound = true;
+            document.addEventListener('turbo:load', window.initTomSelect);
+            document.addEventListener('turbo:render', window.initTomSelect);
+        }
 
         // Global Flatpickr Initializer
         window.initFlatpickr = window.initFlatpickr || (() => {
@@ -404,8 +407,11 @@
             });
         });
 
-        document.addEventListener('turbo:load', initFlatpickr);
-        document.addEventListener('turbo:render', initFlatpickr);
+        if (!window.flatpickrBound) {
+            window.flatpickrBound = true;
+            document.addEventListener('turbo:load', window.initFlatpickr);
+            document.addEventListener('turbo:render', window.initFlatpickr);
+        }
         
         // Global helper definitions (Only define once)
         window.showAlert = window.showAlert || ((title, text, icon = 'info') => {
@@ -508,16 +514,18 @@
         }
 
         // Sidebar logic to run on EVERY Turbo visit
-        document.addEventListener('turbo:load', function () {
-            // 1. Snappily close sidebar on mobile navigation
-            if (window.innerWidth < 1024) {
-                window.dispatchEvent(new CustomEvent('sidebar-close'));
-            }
-            window.dispatchEvent(new CustomEvent('close-reports'));
+        if (!window.sidebarLogicBound) {
+            window.sidebarLogicBound = true;
+            document.addEventListener('turbo:load', function () {
+                // 1. Snappily close sidebar on mobile navigation
+                if (window.innerWidth < 1024) {
+                    window.dispatchEvent(new CustomEvent('sidebar-close'));
+                }
+                window.dispatchEvent(new CustomEvent('close-reports'));
 
-            const currentPath = window.location.pathname;
-            const sidebar = document.getElementById('sidebar');
-            if (!sidebar) return;
+                const currentPath = window.location.pathname;
+                const sidebar = document.getElementById('sidebar');
+                if (!sidebar) return;
 
             const allLinks = sidebar.querySelectorAll('a[href]');
             const mainActive = ['bg-indigo-600', 'shadow-lg', 'shadow-indigo-500/30'], mainInactive = ['hover:bg-slate-800'];
@@ -550,17 +558,18 @@
                 }
             }
 
-            if (activeSubmenuDropdown) {
-                const dropdownContainer = activeSubmenuDropdown.closest('.space-y-1');
-                if (dropdownContainer) {
-                    const button = dropdownContainer.querySelector('button');
-                    if (button) {
-                        const evt = button.getAttribute('@click').includes('satkerReportsOpen') ? 'open-satker-reports' : 'open-admin-reports';
-                        window.dispatchEvent(new CustomEvent(evt));
+                if (activeSubmenuDropdown) {
+                    const dropdownContainer = activeSubmenuDropdown.closest('.space-y-1');
+                    if (dropdownContainer) {
+                        const button = dropdownContainer.querySelector('button');
+                        if (button) {
+                            const evt = button.getAttribute('@click').includes('satkerReportsOpen') ? 'open-satker-reports' : 'open-admin-reports';
+                            window.dispatchEvent(new CustomEvent(evt));
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
 
         // GeoLocation Logic (Run once per session or day)
         if (!window.geoLocChecked) {

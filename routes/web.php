@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/chat/{receiver}', [\App\Http\Controllers\ChatController::class, 'show'])->name('chat.show');
     Route::get('/chat/{receiver}/messages', [\App\Http\Controllers\ChatController::class, 'getMessages'])->name('chat.messages');
     Route::post('/chat/{receiver}', [\App\Http\Controllers\ChatController::class, 'store'])->name('chat.store');
+    Route::delete('/chat/{chat}', [\App\Http\Controllers\ChatController::class, 'destroy'])->name('chat.destroy');
 
     // Satisfaction Index
     Route::post('/satisfaction-index', [\App\Http\Controllers\SatisfactionIndexController::class, 'store'])->name('satisfaction.store');

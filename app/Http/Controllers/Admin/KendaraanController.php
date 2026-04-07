@@ -137,11 +137,14 @@ class KendaraanController extends Controller
             'kendaraan_id' => 'required|exists:kendaraans,id',
             'jumlah' => 'required|numeric|min:0.1',
             'topup_password' => 'required|string',
+            'tanggal_topup' => 'required|date',
         ], [
             'jumlah.required' => 'Jumlah top up wajib diisi.',
             'jumlah.numeric' => 'Jumlah top up harus berupa angka.',
             'jumlah.min' => 'Jumlah top up minimal 0.1 Liter.',
             'topup_password.required' => 'Password Top Up wajib diisi.',
+            'tanggal_topup.required' => 'Tanggal Top Up wajib diisi.',
+            'tanggal_topup.date' => 'Format Tanggal Top Up tidak valid.',
         ]);
 
         $kendaraan = Kendaraan::findOrFail($request->kendaraan_id);
@@ -175,6 +178,8 @@ class KendaraanController extends Controller
                 'jumlah' => $request->jumlah,
                 'tipe' => 'keluar',
                 'keterangan' => "Top-up manual untuk kendaraan {$kendaraan->no_polisi}",
+                'created_at' => \Carbon\Carbon::parse($request->tanggal_topup)->format('Y-m-d H:i:s'),
+                'updated_at' => \Carbon\Carbon::parse($request->tanggal_topup)->format('Y-m-d H:i:s'),
             ]);
 
             // 4. Update Saldo Kendaraan
@@ -191,6 +196,8 @@ class KendaraanController extends Controller
                 'metode' => 'manual',
                 'status' => 'success',
                 'jenis_bbm' => $kendaraan->jenis_bbm ?: 'TANPA JENIS',
+                'created_at' => \Carbon\Carbon::parse($request->tanggal_topup)->format('Y-m-d H:i:s'),
+                'updated_at' => \Carbon\Carbon::parse($request->tanggal_topup)->format('Y-m-d H:i:s'),
             ]);
 
             LogAktivitas::create([

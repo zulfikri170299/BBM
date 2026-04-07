@@ -32,6 +32,8 @@ class RiwayatTopup extends Model
         'status',
         'jenis_bbm',
         'keterangan',
+        'created_at',
+        'updated_at',
     ];
 
     public function satker()

@@ -106,38 +106,49 @@
 
     @push('scripts')
         <script>
-            // Simple client-side search
-            const searchInput = document.getElementById('search-contact');
-            const contactList = document.getElementById('contact-list');
-            const contacts = document.querySelectorAll('.contact-card');
-            const noResults = document.getElementById('no-results');
+            document.addEventListener('turbo:load', function () {
+                const searchInput = document.getElementById('search-contact');
+                const contactList = document.getElementById('contact-list');
+                const noResults = document.getElementById('no-results');
+                
+                if (!searchInput || !contactList || !noResults) return;
 
-            searchInput.addEventListener('input', function (e) {
-                const term = e.target.value.toLowerCase();
-                let visibleCount = 0;
+                // Remove existing listeners to avoid duplicates on Turbo navigation
+                const newSearchInput = searchInput.cloneNode(true);
+                searchInput.parentNode.replaceChild(newSearchInput, searchInput);
 
-                contacts.forEach(card => {
-                    const name = card.querySelector('p.font-bold').textContent.toLowerCase();
-                    const role = card.querySelector('.contact-role').textContent.toLowerCase();
-                    const satker = card.querySelector('.contact-satker') ? card.querySelector('.contact-satker').textContent.toLowerCase() : '';
+                newSearchInput.addEventListener('input', function (e) {
+                    const term = e.target.value.toLowerCase();
+                    const contacts = document.querySelectorAll('.contact-card');
+                    let visibleCount = 0;
 
-                    if (name.includes(term) || role.includes(term) || satker.includes(term)) {
-                        card.style.display = 'flex';
-                        visibleCount++;
+                    contacts.forEach(card => {
+                        const nameEl = card.querySelector('.text-sm.font-bold');
+                        const roleEl = card.querySelector('.contact-role');
+                        const satkerEl = card.querySelector('.contact-satker');
+                        
+                        const name = nameEl ? nameEl.textContent.toLowerCase() : '';
+                        const role = roleEl ? roleEl.textContent.toLowerCase() : '';
+                        const satker = satkerEl ? satkerEl.textContent.toLowerCase() : '';
+
+                        if (name.includes(term) || role.includes(term) || satker.includes(term)) {
+                            card.style.display = 'flex';
+                            visibleCount++;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+
+                    if (visibleCount === 0) {
+                        contactList.classList.add('hidden');
+                        noResults.classList.remove('hidden');
+                        noResults.classList.add('flex');
                     } else {
-                        card.style.display = 'none';
+                        contactList.classList.remove('hidden');
+                        noResults.classList.add('hidden');
+                        noResults.classList.remove('flex');
                     }
                 });
-
-                if (visibleCount === 0) {
-                    contactList.classList.add('hidden');
-                    noResults.classList.remove('hidden');
-                    noResults.classList.add('flex');
-                } else {
-                    contactList.classList.remove('hidden');
-                    noResults.classList.add('hidden');
-                    noResults.classList.remove('flex');
-                }
             });
         </script>
     @endpush

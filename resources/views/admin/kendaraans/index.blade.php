@@ -421,6 +421,7 @@
                                                                                                                                     topupSaldo: '',
                                                                                                                                     jumlah: '',
                                                                                                                                     topupPassword: '',
+                                                                                                                                    topupTanggal: '{{ date('Y-m-d') }}',
                                                                                                                                     keterangan: '',
                                                                                                                                     selectMode: false,
                                                                                                                                     selectedSatkerId: '',
@@ -477,7 +478,7 @@
                                                                                                                                         return s ? s.saldo : 0;
                                                                                                                                     },
                                                                                                                                     get canSubmitManual() {
-                                                                                                                                        return this.topupId && this.jumlah && this.jumlah > 0 && this.jumlah <= this.currentAdminStock && this.topupPassword;
+                                                                                                                                        return this.topupId && this.jumlah && this.jumlah > 0 && this.jumlah <= this.currentAdminStock && this.topupPassword && this.topupTanggal;
                                                                                                                                     },
                                                                                                                                     selectKendaraan(id) {
                                                                                                                                         const k = this.allKendaraans.find(x => x.id == id);
@@ -492,6 +493,7 @@
                                                                                                                                         setTimeout(() => {
                                                                                                                                             this.jumlah = '';
                                                                                                                                             this.topupPassword = '';
+                                                                                                                                            this.topupTanggal = '{{ date('Y-m-d') }}';
                                                                                                                                             this.topupId = null;
                                                                                                                                             this.keterangan = '';
                                                                                                                                             this.selectedSatkerId = '';
@@ -572,20 +574,29 @@
                     <form :action="'/admin/kendaraans/' + topupId + '/topup'" method="POST"
                         class="flex flex-col flex-1 overflow-hidden">
                         @csrf
-                        <div class="p-3 sm:p-5 space-y-4 overflow-y-auto flex-1 bg-slate-50/30">
+                        <div class="p-2 sm:p-4 space-y-2 overflow-y-auto flex-1 bg-slate-50/30">
                             <!-- Hidden Inputs -->
                             <input type="hidden" name="kendaraan_id" :value="topupId">
 
+                            <!-- Tanggal Top Up (Paling Atas) -->
+                            <div class="bg-white p-2.5 sm:p-3 rounded-xl border border-slate-200 shadow-sm">
+                                <label for="tanggal_topup"
+                                    class="block text-[10px] sm:text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Tanggal Top Up</label>
+                                <input type="date" id="tanggal_topup" name="tanggal_topup" x-model="topupTanggal"
+                                    required
+                                    class="w-full px-3 py-1.5 bg-slate-50 border-2 border-slate-200 rounded-xl text-xs font-bold focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all">
+                            </div>
+
                             <!-- Section 1: Pemilihan -->
-                            <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm space-y-3">
-                                <div x-show="selectMode" class="space-y-4">
+                            <div class="bg-white p-2.5 sm:p-3 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                                <div x-show="selectMode" class="space-y-3">
                                     <div>
                                         <label
-                                            class="block text-xs sm:text-sm font-bold text-slate-700 mb-2 uppercase tracking-wider">1.
+                                            class="block text-[10px] sm:text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">1.
                                             Pilih Satuan Kerja</label>
                                         <div class="relative" @click.outside="satkerOpen = false">
                                             <div @click="satkerOpen = !satkerOpen; $nextTick(() => { if(satkerOpen) $refs.satkerInput.focus() })"
-                                                class="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 flex items-center justify-between cursor-pointer transition-all"
+                                                class="w-full px-3 py-1.5 sm:py-2 bg-white border-2 border-slate-200 rounded-xl text-xs font-semibold text-slate-800 flex items-center justify-between cursor-pointer transition-all"
                                                 :class="satkerOpen ? 'border-emerald-500 ring-4 ring-emerald-500/10' : ''">
                                                 <span x-text="satkerLabel || '-- Pilih Satker --'"
                                                     :class="satkerLabel ? 'text-slate-800' : 'text-slate-400'"></span>
@@ -637,11 +648,11 @@
 
                                     <div x-show="selectedSatkerId">
                                         <label
-                                            class="block text-xs sm:text-sm font-bold text-slate-700 mb-2 uppercase tracking-wider">2.
+                                            class="block text-[10px] sm:text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">2.
                                             Pilih Kendaraan</label>
                                         <div class="relative" @click.outside="kendaraanOpen = false">
                                             <div @click="kendaraanOpen = !kendaraanOpen; $nextTick(() => { if(kendaraanOpen) $refs.kendaraanInputManual.focus() })"
-                                                class="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 flex items-center justify-between cursor-pointer transition-all"
+                                                class="w-full px-3 py-1.5 sm:py-2 bg-white border-2 border-slate-200 rounded-xl text-xs font-semibold text-slate-800 flex items-center justify-between cursor-pointer transition-all"
                                                 :class="kendaraanOpen ? 'border-emerald-500 ring-4 ring-emerald-500/10' : ''">
                                                 <span x-text="kendaraanLabel || '-- Pilih Kendaraan --'"
                                                     :class="kendaraanLabel ? 'text-slate-800' : 'text-slate-400'"></span>
@@ -693,9 +704,9 @@
                             </div>
 
                             <!-- Section 2: Informasi Saldo & Stok -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" x-transition>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2" x-transition>
                                 <!-- Current Saldo -->
-                                <div class="flex items-center gap-2.5 p-3 bg-blue-50/50 rounded-xl border border-blue-100">
+                                <div class="flex items-center gap-2.5 p-2 bg-blue-50/50 rounded-xl border border-blue-100">
                                     <div class="p-2 bg-blue-100 text-blue-600 rounded-lg">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -711,7 +722,7 @@
                                 </div>
 
                                 <!-- Admin Stock Info -->
-                                <div class="flex items-center gap-2.5 p-3 bg-amber-50 rounded-xl border border-amber-200">
+                                <div class="flex items-center gap-2.5 p-2 bg-amber-50 rounded-xl border border-amber-200">
                                     <div class="p-2 bg-amber-100 text-amber-600 rounded-lg">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -729,39 +740,39 @@
                             </div>
 
                             <!-- Section 3: Input Nominal -->
-                            <div class="bg-white p-3 sm:p-5 rounded-xl border border-slate-200 shadow-sm space-y-3"
+                            <div class="bg-white p-2.5 sm:p-3.5 rounded-xl border border-slate-200 shadow-sm space-y-2"
                                 x-transition>
                                 <div>
                                     <label for="jumlah"
-                                        class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wider text-center">Jumlah
+                                        class="block text-[10px] sm:text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider text-center">Jumlah
                                         Top Up</label>
                                     <div class="relative max-w-[180px] mx-auto">
                                         <input type="number" name="jumlah" id="jumlah" x-model="jumlah" step="0.1" min="0.1"
                                             max="10000" required placeholder="0.0"
-                                            class="w-full px-4 py-3 pr-14 bg-slate-50 border-2 border-slate-200 rounded-2xl text-xl font-bold text-slate-800 text-center focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:text-slate-200">
-                                        <div class="absolute inset-y-0 right-0 flex items-center pr-4">
-                                            <span class="text-xs font-bold text-slate-400">LITER</span>
+                                            class="w-full px-3 py-1.5 pr-12 bg-slate-50 border-2 border-slate-200 rounded-xl text-lg font-bold text-slate-800 text-center focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:text-slate-200">
+                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                            <span class="text-[10px] font-bold text-slate-400">LITER</span>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Quick Amount Buttons -->
-                                <div class="grid grid-cols-4 gap-2">
+                                <div class="grid grid-cols-4 gap-1.5">
                                     <template x-for="q in [5, 10, 15, 20, 25, 30, 40, 50]">
                                         <button type="button" @click="jumlah = q"
-                                            class="py-2 text-xs font-bold rounded-xl border-2 transition-all hover:scale-105 active:scale-95"
+                                            class="py-1 text-[10px] font-bold rounded-lg border-2 transition-all hover:scale-105 active:scale-95"
                                             :class="jumlah == q ? 'border-emerald-500 bg-emerald-50 text-emerald-700 ring-2 ring-emerald-200' : 'border-slate-100 bg-white text-slate-500 hover:border-emerald-200 hover:bg-emerald-50/50'"
                                             x-text="q + ' L'"></button>
                                     </template>
                                 </div>
 
-                                <div class="pt-2">
+                                <div class="pt-1.5">
                                     <label for="topup_password"
-                                        class="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-widest text-center">Password
+                                        class="block text-[10px] font-bold text-slate-400 mb-1.5 uppercase tracking-widest text-center">Password
                                         Top Up</label>
                                     <input type="password" id="topup_password" name="topup_password" x-model="topupPassword"
                                         required placeholder="Masukkan password keamanan"
-                                        class="w-full px-4 py-2.5 bg-slate-50 border-2 border-slate-200 rounded-xl text-center text-base font-bold tracking-normal focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:tracking-normal placeholder:font-normal placeholder:text-slate-200"
+                                        class="w-full px-3 py-1.5 bg-slate-50 border-2 border-slate-200 rounded-xl text-center text-sm font-bold tracking-normal focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all placeholder:tracking-normal placeholder:font-normal placeholder:text-slate-200"
                                         autocomplete="off">
                                 </div>
 
@@ -778,13 +789,13 @@
                         </div>
 
                         <!-- Footer Buttons -->
-                        <div class="px-4 sm:px-6 py-4 bg-white border-t border-slate-100 flex gap-3 shrink-0">
+                        <div class="px-3 sm:px-4 py-3 bg-white border-t border-slate-100 flex gap-2 shrink-0">
                             <button type="button" @click="reset()"
-                                class="flex-1 px-4 py-3 bg-slate-100 text-slate-600 font-bold rounded-xl hover:bg-slate-200 transition-all active:scale-95 text-xs sm:text-sm uppercase tracking-wider">Batal</button>
+                                class="flex-1 px-3 py-2 bg-slate-100 text-slate-600 font-bold rounded-xl hover:bg-slate-200 transition-all active:scale-95 text-[10px] sm:text-xs uppercase tracking-wider">Batal</button>
                             <button type="submit"
-                                class="flex-[2] px-4 py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white font-black rounded-xl hover:from-emerald-600 hover:to-green-700 shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/40 transition-all hover:-translate-y-0.5 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:grayscale text-xs sm:text-sm uppercase tracking-widest flex items-center justify-center gap-2"
+                                class="flex-[2] px-3 py-2 bg-gradient-to-r from-emerald-500 to-green-600 text-white font-black rounded-xl hover:from-emerald-600 hover:to-green-700 shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/40 transition-all hover:-translate-y-0.5 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:grayscale text-[10px] sm:text-xs uppercase tracking-widest flex items-center justify-center gap-1.5"
                                 :disabled="!canSubmitManual">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                 </svg>

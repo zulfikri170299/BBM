@@ -14,9 +14,14 @@ class ChatController extends Controller
         $user = Auth::user();
         
         // Ambil semua user kecuali diri sendiri
-        // Bisa difilter berdasarkan role jika perlu, tapi request ini "semua akun"
+        // Sort by unread messages first, then by name
         $users = User::with('satker')
                     ->where('id', '!=', $user->id)
+                    ->withCount(['sentChats as unread_count' => function ($query) use ($user) {
+                        $query->where('receiver_id', $user->id)
+                              ->where('is_read', false);
+                    }])
+                    ->orderByDesc('unread_count')
                     ->orderBy('name')
                     ->get();
                     
@@ -77,5 +82,15 @@ class ChatController extends Controller
                      ->count();
                      
         return response()->json(['count' => $count]);
+    }
+
+    public function destroy(Chat $chat)
+    {
+        if ($chat->sender_id !== Auth::id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $chat->delete();
+        return response()->json(['success' => true]);
     }
 }

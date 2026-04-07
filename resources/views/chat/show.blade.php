@@ -205,8 +205,17 @@
                 html += `
                     <div class="flex ${alignClass} ${mtClass} group px-1 animate-fadeIn">
                         <div class="flex flex-col ${containerClass} max-w-[85%] md:max-w-[70%] lg:max-w-[60%]">
-                            <div class="${bubbleClass} px-5 py-3 relative text-[15px] leading-relaxed break-words transition-all hover:shadow-md">
-                                ${msg.message}
+                            <div class="flex items-center gap-2 w-full ${isMe ? 'flex-row' : 'flex-row-reverse'}">
+                                ${isMe ? `
+                                    <button onclick="deleteMessage(${msg.id})" class="opacity-0 group-hover:opacity-100 p-1.5 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-full transition-all focus:outline-none flex-shrink-0" title="Hapus pesan (karena salah ketik)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </button>
+                                ` : ''}
+                                <div class="${bubbleClass} px-5 py-3 relative text-[15px] leading-relaxed break-words transition-all hover:shadow-md flex-1">
+                                    ${msg.message}
+                                </div>
                             </div>
                             <div class="flex items-center mt-1 space-x-1.5 px-1 select-none">
                                 <span class="text-[10px] text-slate-400 font-medium tracking-wide">
@@ -265,6 +274,35 @@
                 window.showAlert('Gagal', 'Gagal mengirim pesan.', 'error');
             });
         });
+
+        window.deleteMessage = function(chatId) {
+            window.confirmDialog({
+                title: 'Hapus Pesan?',
+                message: 'Pesan akan dihapus permanen. Gunakan jika ada salah ketik.',
+                type: 'warning',
+                confirmText: 'Ya, Hapus'
+            }, () => {
+                fetch(`/chat/${chatId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.success) {
+                        fetchMessages();
+                    } else {
+                        window.showAlert('Gagal', data.error || 'Tidak dapat menghapus pesan', 'error');
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    window.showAlert('Gagal', 'Terjadi kesalahan sistem saat menghapus.', 'error');
+                });
+            });
+        };
 
         // Initial load
         fetchMessages();

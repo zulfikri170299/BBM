@@ -32,6 +32,8 @@ class RiwayatStokAdmin extends Model
         'jumlah',
         'tipe',
         'keterangan',
+        'created_at',
+        'updated_at',
     ];
 
     public function user()
