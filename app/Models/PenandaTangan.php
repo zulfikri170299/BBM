@@ -38,11 +38,10 @@ class PenandaTangan extends Model
     public static function getForPdf($satkerId = null)
     {
         if ($satkerId) {
-            $satkerSigner = static::where('satker_id', $satkerId)->latest()->first();
-            if ($satkerSigner) return $satkerSigner;
+            return static::where('satker_id', $satkerId)->latest()->first();
         }
 
-        // Fallback to global signer (super admin)
+        // Fallback to global signer (super admin) only for global reports
         return static::whereNull('satker_id')->latest()->first();
     }
 }

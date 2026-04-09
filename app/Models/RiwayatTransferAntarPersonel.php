@@ -15,6 +15,7 @@ class RiwayatTransferAntarPersonel extends Model
         'satker_id',
         'sender_id',
         'receiver_id',
+        'target_kendaraan_id',
         'jumlah',
         'jenis_bbm',
         'keterangan',
@@ -33,5 +34,10 @@ class RiwayatTransferAntarPersonel extends Model
     public function receiver()
     {
         return $this->belongsTo(Personel::class, 'receiver_id');
+    }
+
+    public function targetKendaraan()
+    {
+        return $this->belongsTo(Kendaraan::class, 'target_kendaraan_id');
     }
 }

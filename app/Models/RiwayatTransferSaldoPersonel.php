@@ -15,6 +15,7 @@ class RiwayatTransferSaldoPersonel extends Model
         'satker_id',
         'kendaraan_id',
         'personel_id',
+        'tujuan_kendaraan_id',
         'jumlah',
         'jenis_bbm',
         'keterangan',
@@ -28,6 +29,11 @@ class RiwayatTransferSaldoPersonel extends Model
     public function kendaraan()
     {
         return $this->belongsTo(Kendaraan::class);
+    }
+
+    public function tujuanKendaraan()
+    {
+        return $this->belongsTo(Kendaraan::class, 'tujuan_kendaraan_id');
     }
 
     public function personel()

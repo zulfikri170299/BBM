@@ -22,6 +22,8 @@
             this.kendaraanOpen = false;
             this.kendaraanSearch = '';
         },
+        // Target Type
+        tipeTujuan: 'personel',
         // Searchable Personel
         personelSearch: '',
         personelOpen: false,
@@ -38,7 +40,31 @@
             this.personelLabel = p.nama + ' • ' + (p.jenis_bbm ? p.jenis_bbm : 'Belum set BBM');
             this.personelOpen = false;
             this.personelSearch = '';
-        }
+        },
+        // Searchable Tujuan Kendaraan
+        tujuanKendaraanSearch: '',
+        tujuanKendaraanOpen: false,
+        tujuanKendaraanSelected: null,
+        tujuanKendaraanLabel: '',
+        get filteredTujuanKendaraans() {
+            // Filter: Bukan kendaraan sumber, dan BBM harus sama
+            let list = this.kendaraans.filter(k => k.id !== this.kendaraanSelected && (!this.selectedBbm || k.jenis_bbm === this.selectedBbm));
+            if (!this.tujuanKendaraanSearch) return list;
+            const q = this.tujuanKendaraanSearch.toLowerCase();
+            return list.filter(k => k.no_polisi.toLowerCase().includes(q));
+        },
+        selectTujuanKendaraan(k) {
+            this.tujuanKendaraanSelected = k.id;
+            this.tujuanKendaraanLabel = k.no_polisi + ' • ' + k.jenis_bbm;
+            this.tujuanKendaraanOpen = false;
+            this.tujuanKendaraanSearch = '';
+        },
+        get selectedSourceSaldo() {
+            if (!this.kendaraanSelected) return 0;
+            const k = this.kendaraans.find(v => v.id === this.kendaraanSelected);
+            return k ? k.saldo : 0;
+        },
+        jumlahTransfer: 0
     }">
         <!-- Page Header -->
         <div class="flex flex-col gap-3 sm:gap-4">
@@ -390,7 +416,7 @@
                     x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
                     x-transition:leave-end="opacity-0 scale-95"
                     class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto max-h-[90vh] flex flex-col overflow-hidden">
-                    <form action="{{ route('satker.kendaraans.transfer') }}" method="POST">
+                    <form action="{{ route('satker.kendaraans.transfer') }}" method="POST" class="flex flex-col h-full min-h-0">
                         @csrf
 
                         <!-- Header with Gradient -->
@@ -407,7 +433,10 @@
                                     </div>
                                     <div>
                                         <h3 class="text-lg font-bold text-white" id="modal-title">Transfer Saldo</h3>
-                                        <p class="text-emerald-100 text-xs">Kendaraan → Personel</p>
+                                        <p class="text-emerald-100 text-xs">
+                                            <span x-show="tipeTujuan === 'personel'">Kendaraan → Personel</span>
+                                            <span x-show="tipeTujuan === 'kendaraan'">Kendaraan → Kendaraan</span>
+                                        </p>
                                     </div>
                                 </div>
                                 <button type="button" @click="showTransferModal = false"
@@ -506,8 +535,24 @@
                                 </div>
                             </div>
 
+                            <!-- Tipe Tujuan Selector -->
+                            <div class="p-1 bg-slate-100 rounded-xl flex">
+                                <button type="button" @click="tipeTujuan = 'personel'"
+                                    class="flex-1 px-4 py-2 text-xs font-bold rounded-lg transition-all"
+                                    :class="tipeTujuan === 'personel' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'">
+                                    Ke Personel
+                                </button>
+                                <button type="button" @click="tipeTujuan = 'kendaraan'"
+                                    class="flex-1 px-4 py-2 text-xs font-bold rounded-lg transition-all"
+                                    :class="tipeTujuan === 'kendaraan' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'">
+                                    Antar Kendaraan
+                                </button>
+                            </div>
+
+                            <input type="hidden" name="tipe_tujuan" :value="tipeTujuan">
+
                             <!-- Tujuan Personel (Searchable) -->
-                            <div>
+                            <div x-show="tipeTujuan === 'personel'">
                                 <label class="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
                                     <span
                                         class="flex items-center justify-center w-6 h-6 rounded-lg bg-purple-100 text-purple-600">
@@ -519,7 +564,7 @@
                                     </span>
                                     Tujuan Personel
                                 </label>
-                                <input type="hidden" name="personel_id" :value="personelSelected" required>
+                                <input type="hidden" name="personel_id" :value="personelSelected" :required="tipeTujuan === 'personel'">
                                 <div class="relative" @click.outside="personelOpen = false">
                                     <div @click="personelOpen = !personelOpen; $nextTick(() => { if(personelOpen) $refs.personelInput.focus() })"
                                         class="block w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm cursor-pointer flex items-center justify-between transition-all"
@@ -573,6 +618,72 @@
                                 </div>
                             </div>
 
+                            <!-- Tujuan Kendaraan (Searchable) -->
+                            <div x-show="tipeTujuan === 'kendaraan'">
+                                <label class="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
+                                    <span
+                                        class="flex items-center justify-center w-6 h-6 rounded-lg bg-emerald-100 text-emerald-600">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                    Tujuan Kendaraan
+                                </label>
+                                <input type="hidden" name="tujuan_kendaraan_id" :value="tujuanKendaraanSelected" :required="tipeTujuan === 'kendaraan'">
+                                <div class="relative" @click.outside="tujuanKendaraanOpen = false">
+                                    <div @click="tujuanKendaraanOpen = !tujuanKendaraanOpen; $nextTick(() => { if(tujuanKendaraanOpen) $refs.tujuanKendaraanInput.focus() })"
+                                        class="block w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm cursor-pointer flex items-center justify-between transition-all"
+                                        :class="tujuanKendaraanOpen ? 'ring-2 ring-emerald-500 border-emerald-500' : ''">
+                                        <span x-text="tujuanKendaraanLabel || '— Pilih Kendaraan Tujuan —'"
+                                            :class="tujuanKendaraanLabel ? 'text-slate-800' : 'text-slate-400'"></span>
+                                        <svg class="w-4 h-4 text-slate-400 transition-transform"
+                                            :class="tujuanKendaraanOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                    <div x-show="tujuanKendaraanOpen" x-transition.opacity.duration.150ms
+                                        class="absolute z-50 mt-1 w-full bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden"
+                                        style="display:none;">
+                                        <div class="p-2 border-b border-slate-100">
+                                            <div class="relative">
+                                                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
+                                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                                </svg>
+                                                <input x-ref="tujuanKendaraanInput" x-model="tujuanKendaraanSearch" type="text"
+                                                    placeholder="Cari nopol kendaraan..."
+                                                    class="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                            </div>
+                                        </div>
+                                        <div class="max-h-48 overflow-y-auto">
+                                            <template x-for="k in filteredTujuanKendaraans" :key="k.id">
+                                                <div @click="selectTujuanKendaraan(k)"
+                                                    class="px-4 py-2.5 text-sm text-slate-700 hover:bg-emerald-50 cursor-pointer flex items-center justify-between transition-colors"
+                                                    :class="tujuanKendaraanSelected === k.id ? 'bg-emerald-50 text-emerald-700 font-semibold' : ''">
+                                                    <span x-text="k.no_polisi + ' • ' + k.jenis_bbm"></span>
+                                                    <svg x-show="tujuanKendaraanSelected === k.id"
+                                                        class="w-4 h-4 text-emerald-500" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd"
+                                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                            clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            </template>
+                                            <div x-show="filteredTujuanKendaraans.length === 0"
+                                                class="px-4 py-3 text-sm text-slate-400 text-center">Tidak ditemukan atau BBM tidak cocok atau kendaraan sama
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="h-px bg-slate-100"></div>
 
                             <!-- Jumlah Transfer -->
@@ -590,13 +701,20 @@
                                     Jumlah Transfer
                                 </label>
                                 <div class="relative">
-                                    <input type="number" name="jumlah" id="jumlah" required step="0.01" min="0.1"
+                                    <input type="number" name="jumlah" id="jumlah" required step="0.01" min="0.1" x-model="jumlahTransfer"
                                         class="block w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all pr-16"
+                                        :class="jumlahTransfer > selectedSourceSaldo ? 'ring-2 ring-red-500 border-red-500' : ''"
                                         placeholder="Masukkan jumlah">
                                     <div class="absolute inset-y-0 right-0 flex items-center pr-4">
                                         <span
                                             class="text-xs font-bold text-slate-400 bg-slate-200/60 px-2 py-0.5 rounded-md">LITER</span>
                                     </div>
+                                </div>
+                                <div x-show="jumlahTransfer > selectedSourceSaldo" class="mt-1 text-[10px] text-red-500 font-bold flex items-center gap-1">
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                    Saldo tidak mencukupi! (Tersedia: <span x-text="selectedSourceSaldo"></span> L)
                                 </div>
                             </div>
 
@@ -624,8 +742,8 @@
                         <!-- Footer -->
                         <div
                             class="px-4 sm:px-6 py-3 sm:py-4 bg-slate-50/80 border-t border-slate-100 flex flex-row-reverse gap-2 sm:gap-3 shrink-0">
-                            <button type="submit"
-                                class="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-sm font-bold rounded-xl hover:from-emerald-600 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 shadow-lg shadow-emerald-500/25 transition-all duration-200 hover:-translate-y-0.5">
+                            <button type="submit" :disabled="jumlahTransfer > selectedSourceSaldo || jumlahTransfer <= 0"
+                                class="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-sm font-bold rounded-xl hover:from-emerald-600 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 shadow-lg shadow-emerald-500/25 transition-all duration-200 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M5 13l4 4L19 7"></path>

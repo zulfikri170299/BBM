@@ -756,20 +756,46 @@ class KendaraanController extends Controller
                 ->where('created_at', '<=', $prevMonthEndUtc)
                 ->sum('jumlah');
 
-            // Sisa BBM bulan lalu = total top up - total pemakaian - total transfer keluar
-            $sisaBulanLalu = $totalTopupSampaiSebelumnya - $totalPemakaianSampaiSebelumnya - $totalTransferKeluarSebelumnya;
+            // Total transfer masuk (TM) sampai akhir bulan lalu di Satker ini
+            $totalTmSampaiSebelumnya1 = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
+                ->where('tujuan_kendaraan_id', $kendaraan->id)
+                ->where('created_at', '<=', $prevMonthEndUtc)
+                ->sum('jumlah');
+            
+            $totalTmSampaiSebelumnya2 = \App\Models\RiwayatTransferAntarPersonel::where('satker_id', $satkerId)
+                ->where('target_kendaraan_id', $kendaraan->id)
+                ->where('created_at', '<=', $prevMonthEndUtc)
+                ->sum('jumlah');
+            
+            $totalTmSampaiSebelumnya = $totalTmSampaiSebelumnya1 + $totalTmSampaiSebelumnya2;
+
+            // Sisa BBM bulan lalu = (total top up masuk + total TM) - (total top up keluar + total pemakaian + total transfer keluar)
+            $sisaBulanLalu = ($totalTopupSampaiSebelumnyaMasuk + $totalTmSampaiSebelumnya) - ($totalTopupSampaiSebelumnyaKeluar + $totalPemakaianSampaiSebelumnya + $totalTransferKeluarSebelumnya);
             if ($sisaBulanLalu < 0) $sisaBulanLalu = 0;
 
-            // Transfer keluar (ke personil ATAU potong saldo central) bulan ini di Satker ini
-            $transferKePersonel = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
+            // Transfer Masuk (TM) bulan ini
+            $tmBulanIni1 = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
+                ->where('tujuan_kendaraan_id', $kendaraan->id)
+                ->whereBetween('created_at', [$startUtc, $endUtc])
+                ->sum('jumlah');
+            
+            $tmBulanIni2 = \App\Models\RiwayatTransferAntarPersonel::where('satker_id', $satkerId)
+                ->where('target_kendaraan_id', $kendaraan->id)
+                ->whereBetween('created_at', [$startUtc, $endUtc])
+                ->sum('jumlah');
+
+            $tmBulanIni = $tmBulanIni1 + $tmBulanIni2;
+
+            // Transfer Keluar (TK) bulan ini (ke personil ATAU kendaraan lain ATAU potong saldo central)
+            $tkBulanIni = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
                 ->whereBetween('created_at', [$startUtc, $endUtc])
                 ->sum('jumlah');
             
-            // Gabungkan transfer ke personel dengan potong saldo (keluar)
-            $transferBulanIni = $transferKePersonel + $topupKeluar;
+            // Gabungkan transfer keluar dengan potong saldo (keluar)
+            $tkBulanIni = $tkBulanIni + $topupKeluar;
 
-            $totalBbm = $sisaBulanLalu + $topupBulanIni;
+            $totalBbm = $sisaBulanLalu + $topupBulanIni + $tmBulanIni;
             
             // Pemakaian per hari bulan ini di Satker ini
             $dailyUsage = [];
@@ -788,8 +814,8 @@ class KendaraanController extends Controller
                 $totalPemakaian += $usage;
             }
 
-            // Total Pemakaian = Total Harian + Transfer (Transfer dianggap pemakaian)
-            $totalPemakaian += $transferBulanIni;
+            // Total Pemakaian = Total Harian + Transfer Keluar (Transfer dianggap pemakaian)
+            $totalPemakaian += $tkBulanIni;
 
             // Sisa BBM = Total BBM - Total Pemakaian
             $sisaBbm = $totalBbm - $totalPemakaian;
@@ -801,9 +827,10 @@ class KendaraanController extends Controller
                 'jenis_bbm' => $kendaraan->jenis_bbm ?: 'TANPA JENIS',
                 'sisa_bulan_lalu' => round($sisaBulanLalu, 0),
                 'topup_bulan_ini' => round($topupBulanIni, 0),
+                'tm_bulan_ini' => round($tmBulanIni, 0),
                 'total_bbm' => round($totalBbm, 0),
-                'transfer_bulan_ini' => round($transferBulanIni, 0), 
-                'has_transfer' => $transferBulanIni > 0,
+                'tk_bulan_ini' => round($tkBulanIni, 0), 
+                'has_transfer' => $tkBulanIni > 0,
                 'daily_usage' => $dailyUsage,
                 'total_pemakaian' => round($totalPemakaian, 0),
                 'sisa_bbm' => round($sisaBbm, 0),
@@ -816,16 +843,18 @@ class KendaraanController extends Controller
                 $summaryByBbm[$bbm] = [
                     'sisa_bulan_lalu' => 0,
                     'topup_bulan_ini' => 0,
+                    'tm_bulan_ini' => 0,
                     'total_bbm' => 0,
-                    'transfer_bulan_ini' => 0,
+                    'tk_bulan_ini' => 0,
                     'total_pemakaian' => 0,
                     'sisa_bbm' => 0,
                 ];
             }
             $summaryByBbm[$bbm]['sisa_bulan_lalu'] += $row['sisa_bulan_lalu'];
             $summaryByBbm[$bbm]['topup_bulan_ini'] += $row['topup_bulan_ini'];
+            $summaryByBbm[$bbm]['tm_bulan_ini'] += $row['tm_bulan_ini'];
             $summaryByBbm[$bbm]['total_bbm'] += $row['total_bbm'];
-            $summaryByBbm[$bbm]['transfer_bulan_ini'] += $row['transfer_bulan_ini'];
+            $summaryByBbm[$bbm]['tk_bulan_ini'] += $row['tk_bulan_ini'];
             $summaryByBbm[$bbm]['total_pemakaian'] += $row['total_pemakaian'];
             $summaryByBbm[$bbm]['sisa_bbm'] += $row['sisa_bbm'];
         }

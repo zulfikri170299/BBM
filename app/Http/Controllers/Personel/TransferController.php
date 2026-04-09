@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Personel;
 
 use App\Http\Controllers\Controller;
+use App\Models\Kendaraan;
 use App\Models\Personel;
 use App\Models\RiwayatTransferAntarPersonel;
 use Illuminate\Http\Request;
@@ -30,6 +31,12 @@ class TransferController extends Controller
             })
             ->orderBy('nama')
             ->get();
+        
+        // Get list of vehicles in same Satker with same fuel type or matching bbm
+        $availableKendaraans = Kendaraan::where('satker_id', $satkerId)
+            ->where('jenis_bbm', $personel->jenis_bbm)
+            ->orderBy('no_polisi')
+            ->get();
 
         // Get transfer history (sent and received)
         $riwayat = RiwayatTransferAntarPersonel::with(['sender', 'receiver'])
@@ -40,13 +47,15 @@ class TransferController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('personel.transfer.index', compact('personel', 'personels', 'riwayat'));
+        return view('personel.transfer.index', compact('personel', 'personels', 'riwayat', 'availableKendaraans'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'receiver_id' => 'required|exists:personels,id',
+            'tipe_tujuan' => 'required|in:personel,kendaraan',
+            'receiver_id' => 'nullable|required_if:tipe_tujuan,personel|exists:personels,id',
+            'target_kendaraan_id' => 'nullable|required_if:tipe_tujuan,kendaraan|exists:kendaraans,id',
             'jumlah' => 'required|numeric|min:1',
             'pin' => 'required|string',
             'keterangan' => 'nullable|string|max:255',
@@ -54,15 +63,32 @@ class TransferController extends Controller
 
         $user = Auth::user();
         $sender = $user->personel;
-        $receiver = Personel::findOrFail($request->receiver_id);
+        $targetName = '';
+        $targetType = $request->tipe_tujuan;
 
-        // Validate Security
-        if ($sender->satker_id !== $receiver->satker_id) {
-            return back()->with('error', 'Penerima harus berada dalam satu Satker.');
-        }
+        // Find Target
+        if ($targetType === 'personel') {
+            $receiver = Personel::findOrFail($request->receiver_id);
+            $targetName = $receiver->nama;
 
-        if ($receiver->jenis_bbm && $sender->jenis_bbm !== $receiver->jenis_bbm) {
-            return back()->with('error', 'Transfer hanya bisa dilakukan ke sesama jenis BBM (' . $sender->jenis_bbm . '). Penerima saat ini terdaftar dengan BBM ' . $receiver->jenis_bbm . '.');
+            if ($sender->satker_id !== $receiver->satker_id) {
+                return back()->with('error', 'Penerima harus berada dalam satu Satker.');
+            }
+
+            if ($receiver->jenis_bbm && $sender->jenis_bbm !== $receiver->jenis_bbm) {
+                return back()->with('error', 'Transfer hanya bisa dilakukan ke sesama jenis BBM (' . $sender->jenis_bbm . '). Penerima saat ini terdaftar dengan BBM ' . $receiver->jenis_bbm . '.');
+            }
+        } else {
+            $receiverKendaraan = Kendaraan::findOrFail($request->target_kendaraan_id);
+            $targetName = "Kendaraan " . $receiverKendaraan->no_polisi;
+
+            if ($sender->satker_id !== $receiverKendaraan->satker_id) {
+                return back()->with('error', 'Kendaraan harus berada dalam satu Satker.');
+            }
+
+            if ($sender->jenis_bbm !== $receiverKendaraan->jenis_bbm) {
+                 return back()->with('error', 'Jenis BBM kendaraan (' . $receiverKendaraan->jenis_bbm . ') tidak cocok dengan BBM Anda (' . $sender->jenis_bbm . ').');
+            }
         }
 
         if ($sender->pin !== $request->pin) {
@@ -74,45 +100,58 @@ class TransferController extends Controller
         }
 
         try {
-            DB::transaction(function () use ($sender, $receiver, $request) {
+            DB::transaction(function () use ($sender, $request, $targetType, $targetName) {
                 // Deduct from sender
-                $sender->saldo -= $request->jumlah;
-                $sender->save();
+                $sender->decrement('saldo', $request->jumlah);
 
-                // Add to receiver & set fuel type if empty
-                $receiver->saldo += $request->jumlah;
-                if (!$receiver->jenis_bbm) {
-                    $receiver->jenis_bbm = $sender->jenis_bbm;
+                if ($targetType === 'personel') {
+                    $receiver = Personel::findOrFail($request->receiver_id);
+                    // Add to receiver & set fuel type if empty
+                    $receiver->increment('saldo', $request->jumlah);
+                    if (!$receiver->jenis_bbm) {
+                        $receiver->jenis_bbm = $sender->jenis_bbm;
+                        $receiver->save();
+                    }
+
+                    // Record transaction
+                    RiwayatTransferAntarPersonel::create([
+                        'satker_id' => $sender->satker_id,
+                        'sender_id' => $sender->id,
+                        'receiver_id' => $receiver->id,
+                        'jumlah' => $request->jumlah,
+                        'jenis_bbm' => $sender->jenis_bbm ?: 'TANPA JENIS',
+                        'keterangan' => $request->keterangan,
+                    ]);
+
+                    // Send Notification & Chat
+                    if ($receiver->user) {
+                        $receiver->user->notify(new TransferNotification($sender, $request->jumlah, $request->keterangan));
+                        Chat::create([
+                            'sender_id' => Auth::id(),
+                            'receiver_id' => $receiver->user->id,
+                            'message' => "Transfer saldo berhasil masuk sebesar " . number_format($request->jumlah, 0, ',', '.') . " Liter" . ($request->keterangan ? ". Keterangan: " . $request->keterangan : ""),
+                            'is_read' => false,
+                        ]);
+                    }
+                } else {
+                    $receiverKendaraan = Kendaraan::findOrFail($request->target_kendaraan_id);
+                    $receiverKendaraan->increment('saldo', $request->jumlah);
+
+                    // Record transaction
+                    RiwayatTransferAntarPersonel::create([
+                        'satker_id' => $sender->satker_id,
+                        'sender_id' => $sender->id,
+                        'target_kendaraan_id' => $receiverKendaraan->id,
+                        'jumlah' => $request->jumlah,
+                        'jenis_bbm' => $sender->jenis_bbm ?: 'TANPA JENIS',
+                        'keterangan' => $request->keterangan,
+                    ]);
                 }
-                $receiver->save();
-
-                // Record transaction
-                RiwayatTransferAntarPersonel::create([
-                    'satker_id' => $sender->satker_id,
-                    'sender_id' => $sender->id,
-                    'receiver_id' => $receiver->id,
-                    'jumlah' => $request->jumlah,
-                    'jenis_bbm' => $sender->jenis_bbm ?: 'TANPA JENIS',
-                    'keterangan' => $request->keterangan,
-                ]);
                 
                 LogAktivitas::create([
                     'user_id' => Auth::id(),
-                    'aktivitas' => "Transfer: " . number_format($request->jumlah, 0, ',', '.') . " Liter ke " . $receiver->nama . ". Ket: " . ($request->keterangan ?? '-'),
+                    'aktivitas' => "Transfer: " . number_format($request->jumlah, 0, ',', '.') . " Liter ke " . $targetName . ". Ket: " . ($request->keterangan ?? '-'),
                 ]);
-
-                // Send Notification to Receiver
-                if ($receiver->user) {
-                    $receiver->user->notify(new TransferNotification($sender, $request->jumlah, $request->keterangan));
-
-                    // Send Chat Message to Receiver
-                    Chat::create([
-                        'sender_id' => Auth::id(),
-                        'receiver_id' => $receiver->user->id,
-                        'message' => "Transfer saldo berhasil masuk sebesar " . number_format($request->jumlah, 0, ',', '.') . " Liter" . ($request->keterangan ? ". Keterangan: " . $request->keterangan : ""),
-                        'is_read' => false,
-                    ]);
-                }
             });
 
             return back()->with('success', 'Transfer saldo berhasil.');

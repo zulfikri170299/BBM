@@ -145,8 +145,9 @@
                             <th rowspan="2" style="width:70px;">SISA
                                 BBM<br>BULAN<br>{{ strtoupper($namaBulanSebelumnya) }}</th>
                             <th rowspan="2" style="width:70px;">TOP UP BBM<br>BULAN<br>{{ strtoupper($namaBulan) }}</th>
+                            <th rowspan="2" style="width:50px;">TM</th>
                             <th rowspan="2" style="width:50px;">TOTAL<br>BBM</th>
-                            <th rowspan="2" style="width:70px;">TRANSFER</th>
+                            <th rowspan="2" style="width:50px;">TK</th>
                             <th colspan="{{ $daysInMonth }}">LAPORAN PEMAKAIAN BULAN {{ strtoupper($namaBulan) }}</th>
                             <th rowspan="2" style="width:50px;">TOTAL<br>PAKAI</th>
                             <th rowspan="2" style="width:50px;">SISA<br>BBM</th>
@@ -171,9 +172,11 @@
                                     </td>
                                     <td>{{ $row['topup_bulan_ini'] > 0 ? number_format($row['topup_bulan_ini'], 0, ',', '.') : '' }}
                                     </td>
+                                    <td>{{ $row['tm_bulan_ini'] > 0 ? number_format($row['tm_bulan_ini'], 0, ',', '.') : '' }}
+                                    </td>
                                     <td class="bold">
                                         {{ number_format($row['total_bbm'], 0, ',', '.') }}</td>
-                                    <td>{{ $row['transfer_bulan_ini'] > 0 ? number_format($row['transfer_bulan_ini'], 0, ',', '.') : '' }}
+                                    <td>{{ $row['tk_bulan_ini'] > 0 ? number_format($row['tk_bulan_ini'], 0, ',', '.') : '' }}
                                     </td>
                                     @for($d = 1; $d <= $daysInMonth; $d++)
                                         <td style="font-size: 8px;">
@@ -188,7 +191,7 @@
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="{{ 8 + $daysInMonth + 2 }}" style="padding:20px; color:#999;">Belum ada data
+                                <td colspan="{{ 9 + $daysInMonth + 2 }}" style="padding:20px; color:#999;">Belum ada data
                                     kendaraan</td>
                             </tr>
                         @endif
@@ -199,8 +202,9 @@
                                     {{ strtoupper($jenisBbm) }}</td>
                                 <td>{{ number_format($summary['sisa_bulan_lalu'], 0, ',', '.') }}</td>
                                 <td>{{ number_format($summary['topup_bulan_ini'], 0, ',', '.') }}</td>
+                                <td>{{ number_format($summary['tm_bulan_ini'], 0, ',', '.') }}</td>
                                 <td>{{ number_format($summary['total_bbm'], 0, ',', '.') }}</td>
-                                <td>{{ number_format($summary['transfer_bulan_ini'], 0, ',', '.') }}</td>
+                                <td>{{ number_format($summary['tk_bulan_ini'], 0, ',', '.') }}</td>
                                 @for($d = 1; $d <= $daysInMonth; $d++)
                                     <td></td>
                                 @endfor

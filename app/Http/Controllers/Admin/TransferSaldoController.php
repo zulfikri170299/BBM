@@ -61,6 +61,7 @@ class TransferSaldoController extends Controller
             $item->satker = \App\Models\Satker::find($item->satker_id);
             $item->kendaraan = \App\Models\Kendaraan::find($item->kendaraan_id);
             $item->personel = $item->personel_id ? \App\Models\Personel::find($item->personel_id) : null;
+            $item->tujuan_kendaraan = isset($item->tujuan_kendaraan_id) ? \App\Models\Kendaraan::find($item->tujuan_kendaraan_id) : null;
             $item->created_at = \Carbon\Carbon::parse($item->created_at);
             return $item;
         });
@@ -74,52 +75,73 @@ class TransferSaldoController extends Controller
     {
         $request->validate([
             'kendaraan_id' => 'required|exists:kendaraans,id',
-            'personel_id' => 'required|exists:personels,id',
+            'tipe_tujuan' => 'required|in:personel,kendaraan',
+            'personel_id' => 'required_if:tipe_tujuan,personel|nullable|exists:personels,id',
+            'tujuan_kendaraan_id' => 'required_if:tipe_tujuan,kendaraan|nullable|exists:kendaraans,id',
             'jumlah' => 'required|numeric|min:0.1',
             'keterangan' => 'nullable|string|max:255',
         ], [
             'kendaraan_id.required' => 'Pilih kendaraan sumber.',
-            'personel_id.required' => 'Pilih personel tujuan.',
+            'personel_id.required_if' => 'Pilih personel tujuan.',
+            'tujuan_kendaraan_id.required_if' => 'Pilih kendaraan tujuan.',
             'jumlah.required' => 'Jumlah transfer wajib diisi.',
             'jumlah.min' => 'Jumlah transfer minimal 0.1 Liter.',
         ]);
 
         $kendaraan = Kendaraan::findOrFail($request->kendaraan_id);
-        $personel = Personel::findOrFail($request->personel_id);
-
+        
         if ($kendaraan->saldo < $request->jumlah) {
             return back()->with('error', 'Saldo kendaraan tidak mencukupi. Tersedia: ' . $kendaraan->saldo . ' L.');
         }
 
-        // Tolak transfer jika personel sudah punya jenis BBM berbeda
-        if ($personel->jenis_bbm && $personel->jenis_bbm !== $kendaraan->jenis_bbm) {
-            return back()->with('error', 'Transfer ditolak! Personel "' . $personel->nama . '" sudah memiliki jenis BBM ' . $personel->jenis_bbm . '. Tidak bisa menerima BBM ' . $kendaraan->jenis_bbm . '.');
+        $tujuan = null;
+        if ($request->tipe_tujuan === 'personel') {
+            $tujuan = Personel::findOrFail($request->personel_id);
+            // Validasi BBM Personel
+            if ($tujuan->jenis_bbm && $tujuan->jenis_bbm !== $kendaraan->jenis_bbm) {
+                return back()->with('error', 'Transfer ditolak! Personel "' . $tujuan->nama . '" sudah memiliki jenis BBM ' . $tujuan->jenis_bbm . '.');
+            }
+        } else {
+            $tujuan = Kendaraan::findOrFail($request->tujuan_kendaraan_id);
+            if ($tujuan->id === $kendaraan->id) {
+                return back()->with('error', 'Kendaraan sumber dan tujuan tidak boleh sama.');
+            }
+            // Validasi BBM Kendaraan
+            if ($tujuan->jenis_bbm !== $kendaraan->jenis_bbm) {
+                return back()->with('error', 'Transfer ditolak! Kendaraan tujuan memiliki jenis BBM berbeda (' . $tujuan->jenis_bbm . ').');
+            }
         }
 
-        DB::transaction(function () use ($kendaraan, $personel, $request) {
-            // Kurangi saldo kendaraan
+        DB::transaction(function () use ($kendaraan, $tujuan, $request) {
+            // Kurangi saldo kendaraan sumber
             $kendaraan->decrement('saldo', $request->jumlah);
 
-            // Tambah saldo personel & update jenis BBM
-            $personel->increment('saldo', $request->jumlah);
-            $personel->update(['jenis_bbm' => $kendaraan->jenis_bbm]);
+            // Tambah saldo tujuan
+            $tujuan->increment('saldo', $request->jumlah);
+            
+            if ($request->tipe_tujuan === 'personel') {
+                $tujuan->update(['jenis_bbm' => $kendaraan->jenis_bbm]);
+            }
 
             // Catat riwayat
             RiwayatTransferSaldoPersonel::create([
                 'satker_id' => $kendaraan->satker_id,
                 'kendaraan_id' => $kendaraan->id,
-                'personel_id' => $personel->id,
+                'personel_id' => $request->tipe_tujuan === 'personel' ? $tujuan->id : null,
+                'tujuan_kendaraan_id' => $request->tipe_tujuan === 'kendaraan' ? $tujuan->id : null,
                 'jumlah' => $request->jumlah,
                 'jenis_bbm' => $kendaraan->jenis_bbm ?: 'TANPA JENIS',
                 'keterangan' => $request->keterangan,
             ]);
 
+            $targetName = $request->tipe_tujuan === 'personel' ? "Personel ({$tujuan->nama})" : "Kendaraan ({$tujuan->no_polisi})";
             LogAktivitas::create([
                 'user_id' => auth()->id(),
-                'aktivitas' => "Transfer saldo BBM (Super Admin): {$request->jumlah} L dari Kendaraan ({$kendaraan->no_polisi}) ke Personel ({$personel->nama})"
+                'aktivitas' => "Transfer saldo BBM: {$request->jumlah} L dari Kendaraan ({$kendaraan->no_polisi}) ke {$targetName}"
             ]);
         });
 
-        return back()->with('success', "Transfer {$request->jumlah} L dari {$kendaraan->no_polisi} ke {$personel->nama} berhasil.");
+        $targetName = $request->tipe_tujuan === 'personel' ? $tujuan->nama : $tujuan->no_polisi;
+        return back()->with('success', "Transfer {$request->jumlah} L dari {$kendaraan->no_polisi} ke {$targetName} berhasil.");
     }
 }

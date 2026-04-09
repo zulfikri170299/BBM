@@ -65,35 +65,78 @@
                         </div>
 
                         <div class="p-4 sm:p-6" x-data="{
+                            tipeTujuan: '{{ old('tipe_tujuan', 'personel') }}',
+                            jumlah: {{ old('jumlah', 0) }},
+                            userSaldo: {{ $personel->saldo }},
                             receiverSearch: '',
                             receiverOpen: false,
-                            receiverSelected: '',
-                            receiverLabel: '',
+                            receiverSelected: '{{ old('receiver_id', '') }}',
+                            receiverLabel: '{{ $personels->where('id', old('receiver_id'))->first()->nama ?? '' }}',
                             receivers: [
                                 @foreach($personels as $p)
                                     { id: {{ $p->id }}, nama: '{{ addslashes($p->nama) }}', nrp: '{{ addslashes($p->nrp) }}', bbm: '{{ $p->jenis_bbm }}' },
                                 @endforeach
-                        ],
+                            ],
+                            // Searchable Kendaraan
+                            kendaraanSearch: '',
+                            kendaraanOpen: false,
+                            kendaraanSelected: '{{ old('target_kendaraan_id', '') }}',
+                            kendaraanLabel: '{{ $availableKendaraans->where('id', old('target_kendaraan_id'))->first()->no_polisi ?? '' }}',
+                            kendaraans: [
+                                @foreach($availableKendaraans as $k)
+                                    { id: {{ $k->id }}, no_polisi: '{{ $k->no_polisi }}', jenis_bbm: '{{ $k->jenis_bbm }}' },
+                                @endforeach
+                            ],
                             get filteredReceivers() {
                                 if (!this.receiverSearch) return this.receivers;
                                 const q = this.receiverSearch.toLowerCase();
                                 return this.receivers.filter(r => r.nama.toLowerCase().includes(q) || r.nrp.toLowerCase().includes(q));
+                            },
+                            get filteredKendaraans() {
+                                if (!this.kendaraanSearch) return this.kendaraans;
+                                const q = this.kendaraanSearch.toLowerCase();
+                                return this.kendaraans.filter(k => k.no_polisi.toLowerCase().includes(q));
                             },
                             selectReceiver(r) {
                                 this.receiverSelected = r.id;
                                 this.receiverLabel = r.nama + ' (' + r.nrp + ')';
                                 this.receiverOpen = false;
                                 this.receiverSearch = '';
+                            },
+                            selectKendaraan(k) {
+                                this.kendaraanSelected = k.id;
+                                this.kendaraanLabel = k.no_polisi;
+                                this.kendaraanOpen = false;
+                                this.kendaraanSearch = '';
+                            },
+                            get isInvalid() {
+                                return this.jumlah > this.userSaldo || this.jumlah <= 0 || (!this.receiverSelected && this.tipeTujuan === 'personel') || (!this.kendaraanSelected && this.tipeTujuan === 'kendaraan');
                             }
                         }">
                             <form method="post" action="{{ route('personel.transfer.store') }}"
                                 class="space-y-4 sm:space-y-5">
                                 @csrf
 
-                                <div>
+                                <!-- Tipe Tujuan Selector -->
+                                <div class="p-1 bg-slate-100 rounded-xl flex mb-4">
+                                    <button type="button" @click="tipeTujuan = 'personel'"
+                                        class="flex-1 px-4 py-2 text-xs font-bold rounded-lg transition-all"
+                                        :class="tipeTujuan === 'personel' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'">
+                                        Ke Rekan
+                                    </button>
+                                    <button type="button" @click="tipeTujuan = 'kendaraan'"
+                                        class="flex-1 px-4 py-2 text-xs font-bold rounded-lg transition-all"
+                                        :class="tipeTujuan === 'kendaraan' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'">
+                                        Ke Kendaraan
+                                    </button>
+                                </div>
+
+                                <input type="hidden" name="tipe_tujuan" :value="tipeTujuan">
+
+                                <div x-show="tipeTujuan === 'personel'">
                                     <x-input-label for="receiver_id" :value="__('Penerima')"
                                         class="text-xs sm:text-sm text-slate-700" />
-                                    <input type="hidden" name="receiver_id" :value="receiverSelected" required>
+                                    <input type="hidden" name="receiver_id" :value="receiverSelected" :required="tipeTujuan === 'personel'">
                                     <div class="relative mt-1" @click.outside="receiverOpen = false">
                                         <div @click="receiverOpen = !receiverOpen; $nextTick(() => { if(receiverOpen) $refs.receiverInput.focus() })"
                                             class="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl border border-slate-300 text-xs sm:text-sm shadow-sm transition-all duration-200 cursor-pointer flex items-center justify-between bg-white"
@@ -165,14 +208,99 @@
                                     <x-input-error :messages="$errors->get('receiver_id')" class="mt-2" />
                                 </div>
 
+                                <div x-show="tipeTujuan === 'kendaraan'" style="display:none;">
+                                    <x-input-label for="target_kendaraan_id" :value="__('Kendaraan Tujuan')"
+                                        class="text-xs sm:text-sm text-slate-700" />
+                                    <input type="hidden" name="target_kendaraan_id" :value="kendaraanSelected" :required="tipeTujuan === 'kendaraan'">
+                                    <div class="relative mt-1" @click.outside="kendaraanOpen = false">
+                                        <div @click="kendaraanOpen = !kendaraanOpen; $nextTick(() => { if(kendaraanOpen) $refs.kendaraanInput.focus() })"
+                                            class="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl border border-slate-300 text-xs sm:text-sm shadow-sm transition-all duration-200 cursor-pointer flex items-center justify-between bg-white"
+                                            :class="kendaraanOpen ? 'ring-2 ring-indigo-500 border-indigo-500' : ''">
+                                            <span x-text="kendaraanLabel || '-- Pilih Kendaraan --'"
+                                                :class="kendaraanLabel ? 'text-slate-800' : 'text-slate-400'"
+                                                class="truncate"></span>
+                                            <svg class="w-4 h-4 text-slate-400 transition-transform shrink-0"
+                                                :class="kendaraanOpen ? 'rotate-180' : ''" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 9l-7 7-7-7"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400"
+                                            x-show="!kendaraanOpen">
+                                            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1"></path>
+                                            </svg>
+                                        </div>
+                                        <div x-show="kendaraanOpen" x-transition.opacity.duration.150ms
+                                            class="absolute z-50 mt-1 w-full bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden"
+                                            style="display:none;">
+                                            <div class="p-2 border-b border-slate-100">
+                                                <div class="relative">
+                                                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
+                                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                                    </svg>
+                                                    <input x-ref="kendaraanInput" x-model="kendaraanSearch" type="text"
+                                                        placeholder="Cari nopol kendaraan..."
+                                                        class="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                                </div>
+                                            </div>
+                                            <div class="max-h-48 overflow-y-auto">
+                                                <template x-for="k in filteredKendaraans" :key="k.id">
+                                                    <div @click="selectKendaraan(k)"
+                                                        class="px-4 py-2.5 text-xs sm:text-sm text-slate-700 hover:bg-indigo-50 cursor-pointer flex items-center justify-between transition-colors"
+                                                        :class="kendaraanSelected === k.id ? 'bg-indigo-50 text-indigo-700 font-semibold' : ''">
+                                                        <span x-text="k.no_polisi + ' - ' + k.jenis_bbm"></span>
+                                                        <svg x-show="kendaraanSelected === k.id"
+                                                            class="w-4 h-4 text-indigo-500 shrink-0" fill="currentColor"
+                                                            viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd"
+                                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                                clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </div>
+                                                </template>
+                                                <div x-show="filteredKendaraans.length === 0"
+                                                    class="px-4 py-3 text-sm text-slate-400 text-center">Tidak ditemukan atau BBM tidak cocok
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="mt-1.5 text-[10px] sm:text-xs text-slate-500 flex items-center">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        Hanya menampilkan kendaraan dengan BBM {{ $personel->jenis_bbm }}.
+                                    </p>
+                                    <x-input-error :messages="$errors->get('target_kendaraan_id')" class="mt-2" />
+                                </div>
+
+                                <x-input-error :messages="$errors->get('tipe_tujuan')" class="mt-2" />
+
                                 <div>
                                     <x-input-label for="jumlah" :value="__('Jumlah Transfer')"
                                         class="text-xs sm:text-sm text-slate-700 font-medium" />
                                     <div class="relative mt-1 sm:mt-2">
-                                        <input id="jumlah" name="jumlah" type="number"
+                                        <input id="jumlah" name="jumlah" type="number" x-model.number="jumlah"
                                             class="w-full pl-4 pr-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 text-slate-800 font-bold text-base sm:text-lg shadow-sm transition-all duration-200"
-                                            value="{{ old('jumlah') }}" required min="1" placeholder="0"
+                                            :class="jumlah > userSaldo ? 'border-rose-500 ring-rose-500/10' : ''"
+                                            required min="1" placeholder="0"
                                             autocomplete="off">
+                                    </div>
+                                    <div x-show="jumlah > userSaldo" x-transition.opacity
+                                        class="mt-2 text-xs text-rose-600 flex items-center bg-rose-50 p-2 rounded-lg border border-rose-100">
+                                        <svg class="w-4 h-4 mr-1.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        Saldo tidak mencukupi (Maks: <span x-text="userSaldo"></span> L)
                                     </div>
                                     <x-input-error :messages="$errors->get('jumlah')" class="mt-2" />
                                 </div>
@@ -197,8 +325,8 @@
                                     <x-input-error :messages="$errors->get('pin')" class="mt-2" />
                                 </div>
 
-                                <button type="submit"
-                                    class="w-full flex items-center justify-center px-4 py-2.5 sm:py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg sm:rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/30 transform hover:-translate-y-0.5 text-xs sm:text-base">
+                                <button type="submit" :disabled="isInvalid"
+                                    class="w-full flex items-center justify-center px-4 py-2.5 sm:py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg sm:rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/30 transform hover:-translate-y-0.5 text-xs sm:text-base disabled:opacity-50 disabled:cursor-not-allowed disabled:grayscale disabled:hover:transform-none">
                                     <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -279,7 +407,11 @@
                                             <td class="p-3 sm:p-4 whitespace-nowrap">
                                                 @if($item->sender_id == $personel->id)
                                                     <div class="text-xs sm:text-sm font-medium text-slate-900">
-                                                        {{ $item->receiver->nama ?? 'Tidak Diketahui' }}
+                                                        @if($item->target_kendaraan_id)
+                                                            <span class="text-indigo-600">Kendaraan: {{ $item->targetKendaraan->no_polisi ?? 'N/A' }}</span>
+                                                        @else
+                                                            {{ $item->receiver->nama ?? 'Tidak Diketahui' }}
+                                                        @endif
                                                     </div>
                                                     <div class="text-[10px] sm:text-xs text-slate-500">Penerima</div>
                                                 @else

@@ -47,49 +47,80 @@ class KendaraanController extends Controller
     {
         $request->validate([
             'kendaraan_id' => 'required|exists:kendaraans,id',
-            'personel_id' => 'required|exists:personels,id',
+            'tipe_tujuan' => 'required|in:personel,kendaraan',
+            'personel_id' => 'required_if:tipe_tujuan,personel|nullable|exists:personels,id',
+            'tujuan_kendaraan_id' => 'required_if:tipe_tujuan,kendaraan|nullable|exists:kendaraans,id',
             'jumlah' => 'required|numeric|min:0.1',
             'keterangan' => 'nullable|string|max:255',
         ]);
 
         $satkerId = auth()->user()->satker_id;
         $kendaraan = Kendaraan::where('id', $request->kendaraan_id)->where('satker_id', $satkerId)->firstOrFail();
-        $personel = \App\Models\Personel::where('id', $request->personel_id)->where('satker_id', $satkerId)->firstOrFail();
-
+        
         if ($kendaraan->saldo < $request->jumlah) {
             return back()->with('error', 'Saldo kendaraan tidak mencukupi.');
         }
 
-        // Tolak transfer jika personel sudah punya jenis BBM berbeda
-        if ($personel->jenis_bbm && $personel->jenis_bbm !== $kendaraan->jenis_bbm) {
-            return back()->with('error', 'Transfer ditolak! Personel "' . $personel->nama . '" sudah memiliki jenis BBM ' . $personel->jenis_bbm . '. Tidak bisa menerima BBM ' . $kendaraan->jenis_bbm . '.');
+        $targetName = '';
+        $personelId = null;
+        $tujuanKendaraanId = null;
+
+        if ($request->tipe_tujuan === 'personel') {
+            $personel = \App\Models\Personel::where('id', $request->personel_id)->where('satker_id', $satkerId)->firstOrFail();
+            
+            if ($personel->jenis_bbm && $personel->jenis_bbm !== $kendaraan->jenis_bbm) {
+                return back()->with('error', 'Transfer ditolak! Personel memiliki jenis BBM berbeda.');
+            }
+            
+            $personelId = $personel->id;
+            $targetName = "Personel (" . $personel->nama . ")";
+            
+            \Illuminate\Support\Facades\DB::transaction(function () use ($kendaraan, $personel, $request, $satkerId) {
+                $kendaraan->decrement('saldo', $request->jumlah);
+                $personel->increment('saldo', $request->jumlah);
+                $personel->update(['jenis_bbm' => $kendaraan->jenis_bbm]);
+                $this->createTransferHistory($satkerId, $kendaraan->id, $personel->id, null, $request->jumlah, $kendaraan->jenis_bbm, $request->keterangan);
+            });
+        } else {
+            if ($request->tujuan_kendaraan_id == $kendaraan->id) {
+                return back()->with('error', 'Kendaraan tujuan tidak boleh sama dengan sumber.');
+            }
+            
+            $tujuan = Kendaraan::where('id', $request->tujuan_kendaraan_id)->where('satker_id', $satkerId)->firstOrFail();
+            
+            if ($tujuan->jenis_bbm !== $kendaraan->jenis_bbm) {
+                return back()->with('error', 'Transfer ditolak! Jenis BBM tidak cocok.');
+            }
+
+            $tujuanKendaraanId = $tujuan->id;
+            $targetName = "Kendaraan (" . $tujuan->no_polisi . ")";
+
+            \Illuminate\Support\Facades\DB::transaction(function () use ($kendaraan, $tujuan, $request, $satkerId) {
+                $kendaraan->decrement('saldo', $request->jumlah);
+                $tujuan->increment('saldo', $request->jumlah);
+                $this->createTransferHistory($satkerId, $kendaraan->id, null, $tujuan->id, $request->jumlah, $kendaraan->jenis_bbm, $request->keterangan);
+            });
         }
 
-        \Illuminate\Support\Facades\DB::transaction(function () use ($kendaraan, $personel, $request, $satkerId) {
-            // Kurangi saldo kendaraan
-            $kendaraan->decrement('saldo', $request->jumlah);
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => "Transfer saldo BBM: {$request->jumlah} L dari Kendaraan ({$kendaraan->no_polisi}) ke {$targetName}"
+        ]);
 
-            // Tambah saldo personel & update jenis BBM dari kendaraan sumber
-            $personel->increment('saldo', $request->jumlah);
-            $personel->update(['jenis_bbm' => $kendaraan->jenis_bbm]);
+        return back()->with('success', 'Transfer saldo berhasil dikirim.');
+    }
 
-            // Catat riwayat
-            \App\Models\RiwayatTransferSaldoPersonel::create([
-                'satker_id' => $satkerId,
-                'kendaraan_id' => $kendaraan->id,
-                'personel_id' => $personel->id,
-                'jumlah' => $request->jumlah,
-                'jenis_bbm' => $kendaraan->jenis_bbm ?: 'TANPA JENIS',
-                'keterangan' => $request->keterangan,
-            ]);
-
-            LogAktivitas::create([
-                'user_id' => auth()->id(),
-                'aktivitas' => "Transfer saldo BBM: {$request->jumlah} L dari Kendaraan ({$kendaraan->no_polisi}) ke Personel ({$personel->nama})"
-            ]);
-        });
-
-        return back()->with('success', 'Transfer saldo ke personel berhasil.');
+    private function createTransferHistory($satkerId, $sourceId, $personelId, $targetKendaraanId, $jumlah, $bbm, $keterangan)
+    {
+        \App\Models\RiwayatTransferSaldoPersonel::create([
+            'satker_id' => $satkerId,
+            'kendaraan_id' => $sourceId,
+            'personel_id' => $personelId,
+            'tujuan_kendaraan_id' => $targetKendaraanId,
+            'jumlah' => $jumlah,
+            'jenis_bbm' => $bbm ?: 'TANPA JENIS',
+            'keterangan' => $keterangan,
+        ]);
     }
 
     public function laporanTransfer(Request $request)
@@ -406,20 +437,46 @@ class KendaraanController extends Controller
                 ->where('created_at', '<=', $prevMonthEndUtc)
                 ->sum('jumlah');
 
-            // Sisa BBM bulan lalu = total top up - total pemakaian - total transfer keluar
-            $sisaBulanLalu = $totalTopupSampaiSebelumnya - $totalPemakaianSampaiSebelumnya - $totalTransferKeluarSebelumnya;
+            // Total transfer masuk (TM) sampai akhir bulan lalu di Satker ini
+            $totalTmSampaiSebelumnya1 = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
+                ->where('tujuan_kendaraan_id', $kendaraan->id)
+                ->where('created_at', '<=', $prevMonthEndUtc)
+                ->sum('jumlah');
+            
+            $totalTmSampaiSebelumnya2 = \App\Models\RiwayatTransferAntarPersonel::where('satker_id', $satkerId)
+                ->where('target_kendaraan_id', $kendaraan->id)
+                ->where('created_at', '<=', $prevMonthEndUtc)
+                ->sum('jumlah');
+            
+            $totalTmSampaiSebelumnya = $totalTmSampaiSebelumnya1 + $totalTmSampaiSebelumnya2;
+
+            // Sisa BBM bulan lalu = (total top up masuk + total TM) - (total top up keluar + total pemakaian + total transfer keluar)
+            $sisaBulanLalu = ($totalTopupSampaiSebelumnyaMasuk + $totalTmSampaiSebelumnya) - ($totalTopupSampaiSebelumnyaKeluar + $totalPemakaianSampaiSebelumnya + $totalTransferKeluarSebelumnya);
             if ($sisaBulanLalu < 0) $sisaBulanLalu = 0;
 
-            // Transfer keluar (ke personil ATAU potong saldo central) bulan ini di Satker ini
-            $transferKePersonel = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
+            // Transfer Masuk (TM) bulan ini
+            $tmBulanIni1 = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
+                ->where('tujuan_kendaraan_id', $kendaraan->id)
+                ->whereBetween('created_at', [$startUtc, $endUtc])
+                ->sum('jumlah');
+            
+            $tmBulanIni2 = \App\Models\RiwayatTransferAntarPersonel::where('satker_id', $satkerId)
+                ->where('target_kendaraan_id', $kendaraan->id)
+                ->whereBetween('created_at', [$startUtc, $endUtc])
+                ->sum('jumlah');
+
+            $tmBulanIni = $tmBulanIni1 + $tmBulanIni2;
+
+            // Transfer Keluar (TK) bulan ini (ke personil ATAU kendaraan lain ATAU potong saldo central)
+            $tkBulanIni = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
                 ->whereBetween('created_at', [$startUtc, $endUtc])
                 ->sum('jumlah');
             
-            // Gabungkan transfer ke personel dengan potong saldo (keluar)
-            $transferBulanIni = $transferKePersonel + $topupKeluar;
+            // Gabungkan transfer keluar dengan potong saldo (keluar)
+            $tkBulanIni = $tkBulanIni + $topupKeluar;
 
-            $totalBbm = $sisaBulanLalu + $topupBulanIni;
+            $totalBbm = $sisaBulanLalu + $topupBulanIni + $tmBulanIni;
             
             // Pemakaian per hari bulan ini di Satker ini
             $dailyUsage = [];
@@ -438,8 +495,8 @@ class KendaraanController extends Controller
                 $totalPemakaian += $usage;
             }
 
-            // Total Pemakaian = Total Harian + Transfer (Transfer dianggap pemakaian)
-            $totalPemakaian += $transferBulanIni;
+            // Total Pemakaian = Total Harian + Transfer Keluar (Transfer dianggap pemakaian)
+            $totalPemakaian += $tkBulanIni;
 
             // Sisa BBM = Total BBM - Total Pemakaian
             $sisaBbm = $totalBbm - $totalPemakaian;
@@ -451,9 +508,10 @@ class KendaraanController extends Controller
                 'jenis_bbm' => $kendaraan->jenis_bbm ?: 'TANPA JENIS',
                 'sisa_bulan_lalu' => round($sisaBulanLalu, 0),
                 'topup_bulan_ini' => round($topupBulanIni, 0),
+                'tm_bulan_ini' => round($tmBulanIni, 0),
                 'total_bbm' => round($totalBbm, 0),
-                'transfer_bulan_ini' => round($transferBulanIni, 0), 
-                'has_transfer' => $transferBulanIni > 0,
+                'tk_bulan_ini' => round($tkBulanIni, 0), 
+                'has_transfer' => $tkBulanIni > 0,
                 'daily_usage' => $dailyUsage,
                 'total_pemakaian' => round($totalPemakaian, 0),
                 'sisa_bbm' => round($sisaBbm, 0),
@@ -466,16 +524,18 @@ class KendaraanController extends Controller
                 $summaryByBbm[$bbm] = [
                     'sisa_bulan_lalu' => 0,
                     'topup_bulan_ini' => 0,
+                    'tm_bulan_ini' => 0,
                     'total_bbm' => 0,
-                    'transfer_bulan_ini' => 0,
+                    'tk_bulan_ini' => 0,
                     'total_pemakaian' => 0,
                     'sisa_bbm' => 0,
                 ];
             }
             $summaryByBbm[$bbm]['sisa_bulan_lalu'] += $row['sisa_bulan_lalu'];
             $summaryByBbm[$bbm]['topup_bulan_ini'] += $row['topup_bulan_ini'];
+            $summaryByBbm[$bbm]['tm_bulan_ini'] += $row['tm_bulan_ini'];
             $summaryByBbm[$bbm]['total_bbm'] += $row['total_bbm'];
-            $summaryByBbm[$bbm]['transfer_bulan_ini'] += $row['transfer_bulan_ini'];
+            $summaryByBbm[$bbm]['tk_bulan_ini'] += $row['tk_bulan_ini'];
             $summaryByBbm[$bbm]['total_pemakaian'] += $row['total_pemakaian'];
             $summaryByBbm[$bbm]['sisa_bbm'] += $row['sisa_bbm'];
         }

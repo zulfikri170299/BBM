@@ -1,34 +1,29 @@
 <x-app-layout>
-    <div class="p-6 lg:p-8 space-y-8">
+    <div class="p-4 lg:p-6 space-y-4 sm:space-y-6">
         {{-- Page Header --}}
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">Transfer Saldo ke Personel</h1>
-                <p class="mt-1 text-sm text-slate-500">Transfer saldo BBM dari kendaraan ke personel di seluruh satker.
-                </p>
+                <h1 class="text-xl sm:text-2xl font-black text-slate-900 leading-tight tracking-tight uppercase">Transfer Saldo</h1>
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Manajemen Perpindahan BBM antar Unit</p>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6" x-data="{ tipeTujuan: 'personel', selectedKendaraan: '' }">
             {{-- Transfer Form --}}
-            <div class="lg:col-span-1">
-                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm sticky top-8 relative z-10">
-                    <div class="p-4 sm:p-6 border-b border-slate-100 bg-slate-50/50 rounded-t-2xl">
-                        <h3 class="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
-                            </svg>
+            <div class="lg:col-span-4">
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm relative z-10 overflow-hidden">
+                    <div class="p-3 sm:p-4 border-b border-slate-100 bg-slate-50/50">
+                        <h3 class="text-xs sm:text-sm font-black text-slate-800 flex items-center gap-2 uppercase tracking-widest">
+                            <i class="fas fa-exchange-alt text-indigo-500"></i>
                             Form Transfer
                         </h3>
                     </div>
-                    <form action="{{ route('admin.transfer-saldo.store') }}" method="POST" class="p-4 sm:p-6 space-y-4">
+                    <form action="{{ route('admin.transfer-saldo.store') }}" method="POST" class="p-3 sm:p-4 space-y-3">
                         @csrf
 
                         {{-- Pilih Satker --}}
                         <div>
-                            <label
-                                class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Satker</label>
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">1. Satuan Kerja</label>
                             <select name="satker_id" id="transfer_satker_id"
                                 onchange="if(this.value) { window.location.href='{{ route('admin.transfer-saldo.index') }}?satker_id=' + this.value }"
                                 class="tom-select w-full">
@@ -40,66 +35,70 @@
                         </div>
 
                         @if($selectedSatkerId)
-                            {{-- Pilih Kendaraan --}}
+                            {{-- Pilih Kendaraan Sumber --}}
                             <div>
-                                <label
-                                    class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Kendaraan
-                                    Sumber</label>
-                                <select name="kendaraan_id" id="transfer_kendaraan_id" required class="tom-select w-full">
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">2. Kendaraan Sumber</label>
+                                <select name="kendaraan_id" id="transfer_kendaraan_id" required class="tom-select w-full" x-model="selectedKendaraan">
                                     <option value="">-- Pilih Kendaraan --</option>
                                     @foreach($kendaraans as $k)
-                                        <option value="{{ $k->id }}">{{ $k->no_polisi }} ({{ $k->jenis_bbm }} -
-                                            {{ number_format($k->saldo, 0, ',', '.') }} L)
-                                        </option>
+                                        <option value="{{ $k->id }}">{{ $k->no_polisi }} ({{ $k->jenis_bbm }} - {{ number_format($k->saldo, 0, ',', '.') }} L)</option>
                                     @endforeach
                                 </select>
-                                @if($kendaraans->isEmpty())
-                                    <p class="text-xs text-amber-500 mt-1 font-medium">Tidak ada kendaraan di satker ini.</p>
-                                @endif
                             </div>
 
-                            {{-- Pilih Personel --}}
-                            <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Personel
-                                    Tujuan</label>
-                                <select name="personel_id" id="transfer_personel_id" required class="w-full">
+                            {{-- Tipe Tujuan --}}
+                            <div class="pt-1">
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">3. Tipe Tujuan</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <label class="relative flex items-center justify-center p-2 rounded-xl border-2 cursor-pointer transition-all"
+                                        :class="tipeTujuan === 'personel' ? 'border-indigo-500 bg-indigo-50 text-indigo-700' : 'border-slate-100 bg-white text-slate-400'">
+                                        <input type="radio" name="tipe_tujuan" value="personel" x-model="tipeTujuan" class="sr-only">
+                                        <span class="text-[11px] font-black uppercase tracking-wider">Personel</span>
+                                    </label>
+                                    <label class="relative flex items-center justify-center p-2 rounded-xl border-2 cursor-pointer transition-all"
+                                        :class="tipeTujuan === 'kendaraan' ? 'border-indigo-500 bg-indigo-50 text-indigo-700' : 'border-slate-100 bg-white text-slate-400'">
+                                        <input type="radio" name="tipe_tujuan" value="kendaraan" x-model="tipeTujuan" class="sr-only">
+                                        <span class="text-[11px] font-black uppercase tracking-wider">Kendaraan</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            {{-- Tujuan Personel --}}
+                            <div x-show="tipeTujuan === 'personel'" x-transition>
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Tujuan Personel</label>
+                                <select name="personel_id" id="transfer_personel_id" :required="tipeTujuan === 'personel'" class="w-full">
                                     <option value="">-- Pilih Personel --</option>
-                                    <!-- Options will be populated by TomSelect -->
                                 </select>
-                                @if($personels->isEmpty())
-                                    <p class="text-xs text-amber-500 mt-1 font-medium">Tidak ada personel di satker ini.</p>
-                                @endif
-                                <p id="filter_info" class="text-[10px] text-indigo-500 mt-1 font-bold hidden">
-                                    Menampilkan personel dengan BBM <span id="filter_bbm_label"></span> atau belum set BBM.
-                                </p>
                             </div>
 
-                            {{-- Jumlah --}}
-                            <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Jumlah
-                                    (Liter)</label>
-                                <input type="number" name="jumlah" step="0.1" min="0.1" required placeholder="0"
-                                    class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl text-sm font-semibold text-slate-800 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
+                            {{-- Tujuan Kendaraan --}}
+                            <div x-show="tipeTujuan === 'kendaraan'" x-transition>
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Tujuan Kendaraan</label>
+                                <select name="tujuan_kendaraan_id" id="transfer_tujuan_kendaraan_id" :required="tipeTujuan === 'kendaraan'" class="w-full">
+                                    <option value="">-- Pilih Kendaraan Tujuan --</option>
+                                </select>
                             </div>
 
-                            {{-- Keterangan --}}
-                            <div>
-                                <label
-                                    class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Keterangan
-                                    (Opsional)</label>
-                                <textarea name="keterangan" rows="2"
-                                    class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl text-sm text-slate-800 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"
-                                    placeholder="Keterangan transfer..."></textarea>
+                            <div class="grid grid-cols-2 gap-3 pt-1">
+                                {{-- Jumlah --}}
+                                <div>
+                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Jumlah (L)</label>
+                                    <input type="number" name="jumlah" step="0.1" min="0.1" required placeholder="0"
+                                        class="w-full px-3 py-2 bg-slate-50 border-2 border-slate-100 rounded-xl text-sm font-bold text-slate-800 focus:border-indigo-500 transition-all">
+                                </div>
+                                {{-- Keterangan --}}
+                                <div>
+                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Keterangan</label>
+                                    <input name="keterangan" placeholder="..."
+                                        class="w-full px-3 py-2 bg-slate-50 border-2 border-slate-100 rounded-xl text-sm font-bold text-slate-800 focus:border-indigo-500 transition-all">
+                                </div>
                             </div>
 
                             <button type="submit"
-                                class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-lg shadow-indigo-500/30 transition-all active:scale-95 flex items-center justify-center gap-2"
-                                {{ $kendaraans->isEmpty() || $personels->isEmpty() ? 'disabled' : '' }}>
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
-                                </svg>
-                                Transfer Saldo
+                                class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-black shadow-lg shadow-indigo-500/30 transition-all active:scale-95 flex items-center justify-center gap-2 text-xs uppercase tracking-widest mt-2"
+                                {{ $kendaraans->isEmpty() ? 'disabled' : '' }}>
+                                <i class="fas fa-paper-plane"></i>
+                                Konfirmasi Transfer
                             </button>
                         @endif
                     </form>
@@ -107,107 +106,92 @@
             </div>
 
             {{-- Riwayat Transfer --}}
-            <div class="lg:col-span-2">
+            <div class="lg:col-span-8">
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                    <div class="p-6 border-b border-slate-100 bg-slate-50/50">
-                        <h3 class="text-lg font-bold text-slate-800">Riwayat Transfer</h3>
+                    <div class="p-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+                        <h3 class="text-xs sm:text-sm font-black text-slate-800 uppercase tracking-widest">Riwayat Transfer</h3>
+                        <div class="text-[9px] font-bold text-slate-400 uppercase">
+                            {{ $riwayat->total() }} Data Ditemukan
+                        </div>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-slate-50 border-b border-slate-100">
-                                    <th colspan="6" class="px-6 py-3">
-                                        <div class="flex items-center justify-between">
-                                            <form action="{{ route('admin.transfer-saldo.index') }}" method="GET"
-                                                class="flex items-center">
-                                                @if($selectedSatkerId)
-                                                    <input type="hidden" name="satker_id" value="{{ $selectedSatkerId }}">
-                                                @endif
-                                                <x-per-page :current="request('per_page', 20)" />
-                                            </form>
-                                            <div
-                                                class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
-                                                Menampilkan
-                                                {{ $riwayat->firstItem() ?? 0 }}-{{ $riwayat->lastItem() ?? 0 }} dari
-                                                {{ $riwayat->total() }} data
-                                            </div>
-                                        </div>
-                                    </th>
-                                </tr>
-                                <tr class="bg-slate-50 border-b border-slate-100">
-                                    <th
-                                        class="px-4 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                        Tanggal</th>
-                                    <th
-                                        class="px-4 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                        Satker</th>
-                                    <th
-                                        class="px-4 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                        Kendaraan</th>
-                                    <th
-                                        class="px-4 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                        Personel</th>
-                                    <th
-                                        class="px-4 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                        Jumlah</th>
-                                    <th
-                                        class="px-4 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                        Keterangan</th>
+                                    <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">Tanggal</th>
+                                    <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">Sumber (Kendaraan)</th>
+                                    <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">Tujuan</th>
+                                    <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Jumlah</th>
+                                    <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">Keterangan</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100">
                                 @forelse($riwayat as $item)
-                                    <tr class="hover:bg-slate-50 transition-colors">
-                                        <td class="px-4 py-3">
-                                            <p class="text-xs font-semibold text-slate-700">
-                                                {{ $item->created_at->format('d/m/Y') }}
-                                            </p>
-                                            <p class="text-[9px] text-slate-400">{{ $item->created_at->format('H:i') }} WIB
-                                            </p>
+                                    <tr class="hover:bg-slate-50/80 transition-colors">
+                                        <td class="px-4 py-2.5">
+                                            <p class="text-[11px] font-black text-slate-700">{{ $item->created_at->format('d M Y') }}</p>
+                                            <p class="text-[9px] font-bold text-slate-400 uppercase">{{ $item->created_at->format('H:i') }} WIB</p>
                                         </td>
-                                        <td class="px-4 py-3">
-                                            <span
-                                                class="text-xs font-semibold text-slate-700">{{ $item->satker->nama_satker ?? '-' }}</span>
+                                        <td class="px-4 py-2.5">
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-7 h-7 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-500">
+                                                    <i class="fas fa-car text-[10px]"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="text-[11px] font-black text-slate-700">{{ $item->kendaraan->no_polisi ?? '-' }}</p>
+                                                    <p class="text-[9px] font-bold text-slate-400 uppercase">{{ $item->kendaraan->jenis_bbm ?? 'LOG' }}</p>
+                                                </div>
+                                            </div>
                                         </td>
-                                        <td class="px-4 py-3">
-                                            <span
-                                                class="text-xs font-semibold text-slate-700">{{ $item->kendaraan->no_polisi ?? '-' }}</span>
-                                            <p class="text-[9px] text-slate-400">{{ $item->kendaraan->jenis_bbm ?? '' }}</p>
+                                        <td class="px-4 py-2.5">
+                                            <div class="flex items-center gap-2">
+                                                @if($item->personel_id)
+                                                    <div class="w-7 h-7 bg-amber-50 rounded-lg flex items-center justify-center text-amber-500">
+                                                        <i class="fas fa-user text-[10px]"></i>
+                                                    </div>
+                                                    <div>
+                                                        <p class="text-[11px] font-black text-slate-700">{{ $item->personel->nama ?? '-' }}</p>
+                                                        <p class="text-[9px] font-bold text-slate-400 uppercase">PERSONEL</p>
+                                                    </div>
+                                                @elseif(isset($item->tujuan_kendaraan_id) || isset($item->tujuan_kendaraan))
+                                                    <div class="w-7 h-7 bg-emerald-50 rounded-lg flex items-center justify-center text-emerald-500">
+                                                        <i class="fas fa-car-side text-[10px]"></i>
+                                                    </div>
+                                                    <div>
+                                                        <p class="text-[11px] font-black text-slate-700">{{ $item->tujuan_kendaraan->no_polisi ?? '-' }}</p>
+                                                        <p class="text-[9px] font-bold text-slate-400 uppercase">KENDARAAN</p>
+                                                    </div>
+                                                @else
+                                                    <div class="w-7 h-7 bg-rose-50 rounded-lg flex items-center justify-center text-rose-500">
+                                                        <i class="fas fa-minus-circle text-[10px]"></i>
+                                                    </div>
+                                                    <div>
+                                                        <p class="text-[11px] font-black text-rose-600 uppercase">Potongan Pusat</p>
+                                                        <p class="text-[9px] font-bold text-slate-400 uppercase">SYSTEM</p>
+                                                    </div>
+                                                @endif
+                                            </div>
                                         </td>
-                                        <td class="px-4 py-3">
-                                            @if($item->personel_id)
-                                                <span
-                                                    class="text-xs font-semibold text-slate-700">{{ $item->personel->nama ?? '-' }}</span>
-                                                <p class="text-[9px] text-slate-400">{{ $item->personel->nrp ?? '' }}</p>
-                                            @else
-                                                <span class="text-xs font-bold text-rose-600">PUSAT (POTONGAN)</span>
-                                                <p class="text-[9px] text-slate-400">Pengurangan Saldo</p>
-                                            @endif
+                                        <td class="px-4 py-2.5 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-black bg-indigo-100 text-indigo-700">
+                                                {{ number_format($item->jumlah, 1, ',', '.') }} L
+                                            </span>
                                         </td>
-                                        <td class="px-4 py-3">
-                                            <span
-                                                class="text-xs font-bold text-indigo-600">{{ number_format($item->jumlah, 0, ',', '.') }}
-                                                L</span>
-                                        </td>
-                                        <td class="px-4 py-3">
-                                            <p class="text-xs text-slate-600 line-clamp-2">{{ $item->keterangan ?: '-' }}
-                                            </p>
+                                        <td class="px-4 py-2.5">
+                                            <p class="text-[10px] font-bold text-slate-500 line-clamp-1 italic">{{ $item->keterangan ?: '-' }}</p>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="px-6 py-12 text-center text-slate-400 italic">Belum ada
-                                            riwayat transfer.</td>
+                                        <td colspan="5" class="px-6 py-12 text-center text-slate-400">
+                                            <i class="fas fa-folder-open mb-2 block text-xl"></i>
+                                            <span class="text-[11px] font-bold uppercase tracking-widest">Belum ada riwayat transfer.</span>
+                                        </td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>
                     </div>
-                    @if($riwayat->hasPages())
-                        <div class="px-6 py-4 bg-slate-50 border-t border-slate-100">
-                            {{ $riwayat->links() }}
-                        </div>
-                    @endif
                 </div>
             </div>
         </div>
@@ -216,18 +200,21 @@
     @push('scripts')
         <script>
             document.addEventListener('turbo:load', function () {
+                const satkerSelect = document.getElementById('transfer_satker_id');
                 const kendaraanSelect = document.getElementById('transfer_kendaraan_id');
                 const personelSelect = document.getElementById('transfer_personel_id');
+                const tujuanKendaraanSelect = document.getElementById('transfer_tujuan_kendaraan_id');
                 
-                if (!kendaraanSelect || !personelSelect) return;
+                if (!kendaraanSelect || !personelSelect || !tujuanKendaraanSelect) return;
 
-                // Function to get or create TomSelect instance
                 function getTsInstance(el, config = {}) {
                     if (el.tomselect) return el.tomselect;
                     return new TomSelect(el, config);
                 }
 
+                const satkerTs = getTsInstance(satkerSelect);
                 const kendaraanTs = getTsInstance(kendaraanSelect);
+                
                 const personelTs = getTsInstance(personelSelect, {
                     create: false,
                     valueField: 'id',
@@ -237,12 +224,31 @@
                     render: {
                         option: function(data, escape) {
                             return '<div class="px-3 py-2 border-b border-slate-50">' +
-                                        '<div class="font-bold text-slate-800 text-sm">' + escape(data.nama) + '</div>' +
-                                        '<div class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">' + escape(data.nrp) + ' • ' + escape(data.bbm_label) + ' • ' + escape(data.saldo_label) + '</div>' +
+                                        '<div class="font-bold text-slate-800 text-xs">' + escape(data.nama) + '</div>' +
+                                        '<div class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">' + escape(data.nrp) + ' • ' + escape(data.bbm_label) + ' • ' + escape(data.saldo_label) + '</div>' +
                                    '</div>';
                         },
                         item: function(data, escape) {
-                            return '<div>' + escape(data.nama) + ' (' + escape(data.nrp) + ')</div>';
+                            return '<div class="text-xs font-bold">' + escape(data.nama) + ' (' + escape(data.nrp) + ')</div>';
+                        }
+                    }
+                });
+
+                const tujuanKendaraanTs = getTsInstance(tujuanKendaraanSelect, {
+                    create: false,
+                    valueField: 'id',
+                    labelField: 'text',
+                    searchField: 'text',
+                    options: [],
+                    render: {
+                        option: function(data, escape) {
+                            return '<div class="px-3 py-2 border-b border-slate-50">' +
+                                        '<div class="font-bold text-slate-800 text-xs">' + escape(data.nopol) + '</div>' +
+                                        '<div class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">' + escape(data.jenis) + ' • ' + escape(data.bbm) + ' • ' + escape(data.saldo) + ' L</div>' +
+                                   '</div>';
+                        },
+                        item: function(data, escape) {
+                            return '<div class="text-xs font-bold">' + escape(data.nopol) + ' (' + escape(data.bbm) + ')</div>';
                         }
                     }
                 });
@@ -250,56 +256,48 @@
                 const kendaraans = @json($kendaraans ?? []);
                 const personels = @json($personels ?? []);
 
-                function updatePersonels(value) {
+                function updateOptions(value) {
                     personelTs.clear();
                     personelTs.clearOptions();
+                    tujuanKendaraanTs.clear();
+                    tujuanKendaraanTs.clearOptions();
 
-                    const infoLabel = document.getElementById('filter_info');
-                    const bbmLabel = document.getElementById('filter_bbm_label');
-
-                    if (!value) {
-                        if (infoLabel) infoLabel.classList.add('hidden');
-                        return;
-                    }
+                    if (!value) return;
 
                     const selectedKendaraan = kendaraans.find(k => k.id == value);
                     const requiredBbm = selectedKendaraan ? (selectedKendaraan.jenis_bbm || '').toUpperCase() : null;
 
                     if (requiredBbm) {
-                        if (infoLabel) {
-                            infoLabel.classList.remove('hidden');
-                            bbmLabel.textContent = selectedKendaraan.jenis_bbm;
-                        }
-
-                        // Case-insensitive filtering
-                        const filteredPersonels = personels.filter(p => {
-                            if (!p.jenis_bbm) return true; // Show those with no BBM set
-                            return p.jenis_bbm.toUpperCase() === requiredBbm;
-                        });
-
-                        const options = filteredPersonels.map(p => ({
+                        // Filter & Add Personels
+                        const filteredPersonels = personels.filter(p => !p.jenis_bbm || p.jenis_bbm.toUpperCase() === requiredBbm);
+                        personelTs.addOptions(filteredPersonels.map(p => ({
                             id: p.id,
                             nama: p.nama,
                             nrp: p.nrp,
                             bbm_label: p.jenis_bbm || 'BELUM SET BBM',
                             saldo_label: Number(p.saldo).toLocaleString('id-ID') + ' L',
-                            text: `${p.nama} (${p.nrp}) ${p.jenis_bbm ? ' - ' + p.jenis_bbm : ' - Belum set BBM'} - ${Number(p.saldo).toLocaleString('id-ID')} L`
-                        }));
+                            text: `${p.nama} (${p.nrp})`
+                        })));
 
-                        personelTs.addOptions(options);
-                        personelTs.refreshOptions(false);
+                        // Filter & Add Kendaraans (Exclude source)
+                        const filteredKendaraans = kendaraans.filter(k => k.id != value && (k.jenis_bbm || '').toUpperCase() === requiredBbm);
+                        tujuanKendaraanTs.addOptions(filteredKendaraans.map(k => ({
+                            id: k.id,
+                            nopol: k.no_polisi,
+                            jenis: k.jenis_kendaraan,
+                            bbm: k.jenis_bbm,
+                            saldo: k.saldo,
+                            text: k.no_polisi
+                        })));
                     }
                 }
 
-                if (kendaraanTs && personelTs) {
-                    kendaraanTs.on('change', function (value) {
-                        updatePersonels(value);
-                    });
+                kendaraanTs.on('change', function (value) {
+                    updateOptions(value);
+                });
 
-                    // Initial trigger
-                    if (kendaraanTs.getValue()) {
-                        updatePersonels(kendaraanTs.getValue());
-                    }
+                if (kendaraanTs.getValue()) {
+                    updateOptions(kendaraanTs.getValue());
                 }
             });
         </script>
