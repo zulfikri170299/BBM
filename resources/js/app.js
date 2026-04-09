@@ -11,3 +11,6 @@ Alpine.plugin(persist);
 window.Alpine = Alpine;
 
 Alpine.start();
+
+// Configure Turbo
+Turbo.config.forms.mode = "optin";

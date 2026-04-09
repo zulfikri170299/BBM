@@ -110,6 +110,7 @@ class TopupSaldoImport implements ToCollection, WithHeadingRow, WithStartRow
                 'kendaraan_id' => $kendaraan->id,
                 'user_id' => auth()->id(),
                 'jumlah' => $jumlah,
+                'jenis_bbm' => $kendaraan->jenis_bbm,
                 'tipe' => 'masuk',
                 'metode' => 'IMPORT',
             ]);

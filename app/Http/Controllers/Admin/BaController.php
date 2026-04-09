@@ -110,7 +110,7 @@ class BaController extends Controller
     public function automatedGenerate(Satker $satker, array $fuelTotals, $bulan, $tahun, $isRegenerate = false, ?BaLog $existingLog = null)
     {
         try {
-            $templatePath = 'E:\\BA.docx';
+            $templatePath = public_path('word_media/BA.docx');
             
             if (!file_exists($templatePath)) {
                 Log::error("Template BA tidak ditemukan di: {$templatePath}");
@@ -172,6 +172,8 @@ class BaController extends Controller
             $xml = $getXml->call($templateProcessor);
             $xml = str_replace('BIRO LOGISTIK Polda NTB', ucwords(strtolower($satker->nama_satker)) . ' Polda NTB', $xml);
             $xml = str_replace('PIHAK kedua', 'Pihak kedua', $xml);
+            // Fix space between Pertamina Dex and sejumlah using positive lookahead to avoid breaking XML tags
+            $xml = preg_replace('/(Pertamina\s+Dex)(?=(<[^>]+>)*sejumlah)/i', '$1 ', $xml);
             
             // To handle cases where Word injects spelling-check tags inside the text like PI</w:t>...<w:t>HAK:
             $xml = preg_replace('/P(<[^>]+>)*I(<[^>]+>)*H(<[^>]+>)*A(<[^>]+>)*K(<[^>]+>)*(\s+)(<[^>]+>)*k(<[^>]+>)*e(<[^>]+>)*d(<[^>]+>)*u(<[^>]+>)*a/i', 'Pihak$6$7kedua', $xml);

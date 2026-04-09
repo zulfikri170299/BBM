@@ -93,6 +93,7 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     // Parameterized routes (must be below static routes)
     Route::get('/kendaraans/{kendaraan}/print', [\App\Http\Controllers\Admin\KendaraanController::class, 'print'])->name('kendaraans.print');
     Route::post('/kendaraans/{kendaraan}/topup', [\App\Http\Controllers\Admin\KendaraanController::class, 'topup'])->name('kendaraans.topup');
+    Route::post('/kendaraans/{kendaraan}/potong-saldo', [\App\Http\Controllers\Admin\KendaraanController::class, 'potongSaldo'])->name('kendaraans.potong-saldo');
     Route::post('/kendaraans/{kendaraan}/reset-pin', [\App\Http\Controllers\Admin\KendaraanController::class, 'resetPin'])->name('kendaraans.reset-pin');
     Route::get('/kendaraans/{kendaraan}/edit', [\App\Http\Controllers\Admin\KendaraanController::class, 'edit'])->name('kendaraans.edit');
     Route::put('/kendaraans/{kendaraan}', [\App\Http\Controllers\Admin\KendaraanController::class, 'update'])->name('kendaraans.update');
@@ -139,11 +140,16 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     Route::post('/nominatif/settings', [\App\Http\Controllers\Admin\NominatifController::class, 'updateSettings'])->name('nominatif.update-settings');
     Route::get('/nominatif/export', [\App\Http\Controllers\Admin\NominatifController::class, 'export'])->name('nominatif.export');
     Route::get('/nominatif/pdf', [\App\Http\Controllers\Admin\NominatifController::class, 'exportPdf'])->name('nominatif.pdf');
+    Route::delete('/nominatif/delete-group', [\App\Http\Controllers\Admin\NominatifController::class, 'destroyGroup'])->name('nominatif.destroy-group');
 
     // Laporan Harian
     Route::get('/laporan-harian', [\App\Http\Controllers\Admin\LaporanHarianController::class, 'index'])->name('laporan-harian.index');
     Route::get('/laporan-harian/pdf', [\App\Http\Controllers\Admin\LaporanHarianController::class, 'exportPdf'])->name('laporan-harian.pdf');
     Route::post('/laporan-harian', [\App\Http\Controllers\Admin\LaporanHarianController::class, 'store'])->name('laporan-harian.store');
+
+    // Laporan Potong Saldo
+    Route::get('/laporan-potong-saldo', [\App\Http\Controllers\Admin\LaporanPotongController::class, 'index'])->name('laporan-potong.index');
+    Route::get('/laporan-potong-saldo/print', [\App\Http\Controllers\Admin\LaporanPotongController::class, 'print'])->name('laporan-potong.print');
 
     // Penanda Tangan
     Route::get('/penanda-tangan', [\App\Http\Controllers\Admin\PenandaTanganController::class, 'index'])->name('penanda-tangan.index');

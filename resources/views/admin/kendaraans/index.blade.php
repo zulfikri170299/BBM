@@ -351,6 +351,14 @@
                                                     </svg>
                                                 </button>
                                             </form>
+                                            <button type="button"
+                                                @click="$dispatch('open-potong-saldo', {id: {{ $kendaraan->id }}, nopol: '{{ $kendaraan->no_polisi }}', saldo: {{ $kendaraan->saldo }}, jenis_bbm: '{{ $kendaraan->jenis_bbm }}'})"
+                                                class="inline-flex items-center p-2 bg-slate-100 hover:bg-rose-100 text-slate-500 hover:text-rose-600 rounded-lg transition-colors"
+                                                title="Potong Saldo">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                                                </svg>
+                                            </button>
                                             <a href="{{ route('admin.kendaraans.edit', $kendaraan) }}"
                                                 class="inline-flex items-center p-2 bg-slate-100 hover:bg-indigo-100 text-slate-500 hover:text-indigo-600 rounded-lg transition-colors"
                                                 title="Edit">
@@ -923,7 +931,85 @@
 
     @if(auth()->user()->role === 'super_admin')
         <!-- Import Excel Modal -->
-        <div x-cloak x-data="{ showImport: false }" @open-import.window="showImport = true"
+        <div x-cloak x-data="{ 
+            showImport: false,
+            pTotal: 0,
+            dTotal: 0,
+            columnFound: true,
+            fileSelected: false,
+            handleFile(e) {
+                const file = e.target.files[0];
+                this.fileSelected = !!file;
+                if(!file) {
+                    this.pTotal = 0;
+                    this.dTotal = 0;
+                    return;
+                }
+
+                if (typeof XLSX === 'undefined') {
+                    alert('Library XLSX belum termuat, silakan muat ulang halaman.');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const data = new Uint8Array(event.target.result);
+                        const workbook = XLSX.read(data, {type: 'array'});
+                        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                        const rows = XLSX.utils.sheet_to_json(firstSheet, {header: 1});
+                        
+                        let headerIdx = -1;
+                        let bbmIdx = -1;
+                        let literIdx = -1;
+
+                        // Cari header di 10 baris pertama untuk lebih robust
+                        for (let i = 0; i < Math.min(rows.length, 10); i++) {
+                            const row = rows[i];
+                            if (!row) continue;
+                            
+                            bbmIdx = row.findIndex(c => c && c.toString().toUpperCase().includes('JENIS BBM'));
+                            literIdx = row.findIndex(c => c && c.toString().toUpperCase().includes('JUMLAH LITER'));
+                            
+                            if (bbmIdx !== -1 && literIdx !== -1) {
+                                headerIdx = i;
+                                break;
+                            }
+                        }
+                        
+                        if(headerIdx === -1) {
+                            this.columnFound = false;
+                            this.pTotal = 0;
+                            this.dTotal = 0;
+                            return;
+                        }
+
+                        this.columnFound = true;
+                        let pVal = 0;
+                        let dVal = 0;
+                        
+                        for(let i = headerIdx + 1; i < rows.length; i++) {
+                            const row = rows[i];
+                            if (!row) continue;
+                            const jenis = (row[bbmIdx] || '').toString().toUpperCase();
+                            const liter = parseFloat(row[literIdx]) || 0;
+                            
+                            if(jenis.includes('PERTAMAX')) pVal += liter;
+                            else if(jenis.includes('DEX')) dVal += liter;
+                        }
+                        
+                        this.pTotal = pVal;
+                        this.dTotal = dVal;
+                    } catch (err) {
+                        console.error('Error parsing Excel:', err);
+                        this.pTotal = 0;
+                        this.dTotal = 0;
+                        this.columnFound = false;
+                    }
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        }" @open-import.window="showImport = true"
             @turbo:before-cache.window="showImport = false">
             <!-- Backdrop -->
             <div x-show="showImport" style="display: none;" x-transition:enter="transition ease-out duration-200"
@@ -1038,9 +1124,58 @@
                                 class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 sm:mb-2">Pilih
                                 File</label>
                             <input type="file" name="file" id="file" accept=".xlsx,.xls,.csv" required
+                                @change="handleFile($event)"
                                 class="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-slate-200 rounded-xl text-xs sm:text-sm text-slate-800 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all file:mr-3 sm:file:mr-4 file:py-1 file:px-2 sm:file:px-3 file:rounded-lg file:border-0 file:text-xs sm:file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                             <p class="mt-1 sm:mt-1.5 text-[10px] sm:text-xs text-slate-400">Maksimal 2MB. Format: .xlsx,
                                 .xls, .csv</p>
+                        </div>
+
+                        <!-- Data Preview Summary -->
+                        <div x-show="fileSelected" x-collapse>
+                            <div class="bg-blue-50 border border-blue-100 rounded-xl p-3 sm:p-4">
+                                <!-- Jika kolom ditemukan -->
+                                <template x-if="columnFound">
+                                    <div>
+                                        <p class="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-2 sm:mb-3 flex items-center gap-2">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 00-4-4H5m11 4v2a4 4 0 004 4h1m-1-4h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                            </svg>
+                                            Ringkasan Data Excel
+                                        </p>
+                                        <div class="grid grid-cols-2 gap-2 sm:gap-3">
+                                            <div class="bg-white p-2 rounded-lg border border-blue-100 shadow-sm">
+                                                <p class="text-[9px] font-bold text-slate-400 uppercase">Total Pertamax</p>
+                                                <p class="text-sm font-black text-blue-600">
+                                                    <span x-text="pTotal"></span> L
+                                                </p>
+                                            </div>
+                                            <div class="bg-white p-2 rounded-lg border border-blue-100 shadow-sm">
+                                                <p class="text-[9px] font-bold text-slate-400 uppercase">Total Pertamina Dex</p>
+                                                <p class="text-sm font-black text-blue-600">
+                                                    <span x-text="dTotal"></span> L
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- Warning jika total 0 -->
+                                        <div x-show="pTotal === 0 && dTotal === 0" class="mt-2 p-2 bg-amber-50 text-[10px] text-amber-700 rounded-lg flex items-center gap-2">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                            </svg>
+                                            Peringatan: Tidak ditemukan data liter dalam file ini.
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <!-- Jika kolom TIDAK ditemukan -->
+                                <template x-if="!columnFound">
+                                    <div class="flex items-center gap-2 text-rose-600 text-[10px] font-bold">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        Format Kolom Tidak Sesuai (Pastikan ada kolom JENIS BBM & JUMLAH LITER)
+                                    </div>
+                                </template>
+                            </div>
                         </div>
 
                         <!-- Password Top Up -->
@@ -2034,4 +2169,105 @@
             </div>
         </div>
     @endif
+
+
+<!-- Potong Saldo Modal (Admin) -->
+<div x-cloak
+    x-data="{
+        show: false,
+        id: null,
+        nopol: '',
+        saldo: 0,
+        jumlah: '',
+        topup_password: '',
+        kembalikan_ke_stok: 'ya',
+        keterangan: '',
+        reset() {
+            this.show = false;
+            setTimeout(() => {
+                this.id = null;
+                this.nopol = '';
+                this.saldo = 0;
+                this.jumlah = '';
+                this.topup_password = '';
+                this.kembalikan_ke_stok = 'ya';
+                this.keterangan = '';
+            }, 300);
+        }
+    }"
+    @open-potong-saldo.window="id = $event.detail.id; nopol = $event.detail.nopol; saldo = $event.detail.saldo; show = true"
+    @turbo:before-cache.window="show = false">
+
+    <!-- Backdrop -->
+    <div x-show="show" style="display: none;"
+        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50"></div>
+
+    <!-- Modal -->
+    <div x-show="show" style="display: none;"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md mx-auto flex flex-col overflow-hidden" @click.stop>
+            <!-- Header -->
+            <div class="px-6 py-4 bg-rose-600">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-bold text-white">Potong Saldo Kendaraan</h3>
+                    <button @click="reset()" class="text-white/70 hover:text-white">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                <p class="text-rose-100 text-sm mt-1" x-text="nopol"></p>
+            </div>
+
+            <!-- Form -->
+            <form :action="'{{ route('admin.kendaraans.index') }}/' + id + '/potong-saldo'" method="POST" class="p-6 space-y-4">
+                @csrf
+                <!-- Info Saldo -->
+                <div class="flex items-center justify-between p-3 bg-rose-50 border border-rose-100 rounded-xl">
+                    <span class="text-xs font-bold text-rose-600 uppercase">Saldo Saat Ini</span>
+                    <span class="text-lg font-black text-rose-700 font-mono" x-text="saldo + ' L'"></span>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">Jumlah Potongan (Liter)</label>
+                    <input type="number" name="jumlah" x-model="jumlah" step="0.1" min="0.1" :max="saldo" required
+                        class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all font-mono" placeholder="0.0">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">Tindakan Untuk Saldo</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="relative flex flex-col items-start p-3 bg-white border-2 rounded-xl cursor-pointer transition-all"
+                            :class="kembalikan_ke_stok === 'ya' ? 'border-indigo-500 bg-indigo-50/50' : 'border-slate-200 hover:border-indigo-200'">
+                            <input type="radio" name="kembalikan_ke_stok" value="ya" x-model="kembalikan_ke_stok" class="sr-only">
+                            <span class="text-sm font-bold text-slate-800" :class="kembalikan_ke_stok === 'ya' ? 'text-indigo-700' : ''">Kembalikan ke Stok BBM</span>
+                            <span class="text-xs text-slate-500 mt-1">Saldo kembali ke pusat</span>
+                        </label>
+                        <label class="relative flex flex-col items-start p-3 bg-white border-2 rounded-xl cursor-pointer transition-all"
+                            :class="kembalikan_ke_stok === 'tidak' ? 'border-rose-500 bg-rose-50/50' : 'border-slate-200 hover:border-rose-200'">
+                            <input type="radio" name="kembalikan_ke_stok" value="tidak" x-model="kembalikan_ke_stok" class="sr-only">
+                            <span class="text-sm font-bold text-slate-800" :class="kembalikan_ke_stok === 'tidak' ? 'text-rose-700' : ''">Hangus (Void)</span>
+                            <span class="text-xs text-slate-500 mt-1">Saldo dihapus permanen</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">Keterangan</label>
+                    <textarea name="keterangan" rows="2" required
+                        class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all" placeholder="Alasan pemotongan saldo..."></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide text-center">Masukkan PIN</label>
+                    <input type="password" name="topup_password" x-model="topup_password" required autocomplete="new-password"
+                        class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all text-center font-bold tracking-widest" placeholder="••••••">
+                </div>
+
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" @click="reset()" class="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-100 rounded-xl transition">Batal</button>
+                    <button type="submit" class="px-4 py-2 text-sm font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-lg shadow-rose-500/30 transition disabled:opacity-50" :disabled="!jumlah || jumlah <= 0 || jumlah > saldo || !topup_password">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </x-app-layout>

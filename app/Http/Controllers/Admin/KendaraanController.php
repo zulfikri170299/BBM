@@ -473,6 +473,85 @@ class KendaraanController extends Controller
         return back()->with('success', "PIN Kendaraan {$kendaraan->no_polisi} berhasil di-reset. PIN Baru: {$newPin}");
     }
 
+    public function potongSaldo(Request $request, Kendaraan $kendaraan)
+    {
+        $request->validate([
+            'jumlah' => 'required|numeric|min:0.1|max:' . $kendaraan->saldo,
+            'kembalikan_ke_stok' => 'required|in:ya,tidak',
+            'keterangan' => 'required|string|max:255',
+            'topup_password' => 'required|string',
+        ]);
+
+        $user = auth()->user();
+
+        // 0. Validasi Password Top Up
+        if (!$user->topup_password) {
+            return back()->with('error', 'Anda belum mengatur Password Top Up. Silakan atur di menu Profil > Password Top Up.');
+        }
+
+        if (!\Illuminate\Support\Facades\Hash::check($request->topup_password, $user->topup_password)) {
+            return back()->with('error', 'Password Top Up salah! Transaksi dibatalkan.');
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $user = auth()->user();
+            $jumlah = $request->jumlah;
+            $kembalikanKeStok = $request->kembalikan_ke_stok === 'ya';
+
+            // 1. Kurangi Saldo Kendaraan
+            $kendaraan->decrement('saldo', $jumlah);
+
+            // 2. Catat Riwayat Pengurangan dari Kendaraan (RiwayatTopup tipe='keluar')
+            RiwayatTopup::create([
+                'satker_id' => $kendaraan->satker_id,
+                'kendaraan_id' => $kendaraan->id,
+                'user_id' => $user->id,
+                'jumlah' => $jumlah,
+                'tipe' => 'keluar',
+                'metode' => 'potong_saldo',
+                'status' => 'success',
+                'jenis_bbm' => $kendaraan->jenis_bbm ?: 'TANPA JENIS',
+                'keterangan' => $request->keterangan,
+            ]);
+
+            // 3. Jika dikembalikan ke stok BBM, tambahkan ke AdminBbmStock
+            if ($kembalikanKeStok) {
+                $adminStock = \App\Models\AdminBbmStock::firstOrCreate(
+                    ['jenis_bbm' => $kendaraan->jenis_bbm],
+                    ['saldo' => 0]
+                );
+                
+                $adminStock->increment('saldo', $jumlah);
+
+                // Catat Riwayat Stok Admin
+                \App\Models\RiwayatStokAdmin::create([
+                    'user_id' => $user->id,
+                    'jenis_bbm' => $kendaraan->jenis_bbm,
+                    'jumlah' => $jumlah,
+                    'tipe' => 'masuk',
+                    'keterangan' => "Pengembalian saldo dari potong kendaraan {$kendaraan->no_polisi}. Ket: {$request->keterangan}",
+                ]);
+            }
+
+            // 4. Log Aktivitas
+            $statusHangus = $kembalikanKeStok ? 'dikembalikan ke stok pusat' : 'di-hangus-kan';
+            LogAktivitas::create([
+                'user_id' => $user->id,
+                'aktivitas' => "Potong saldo kendaraan {$kendaraan->no_polisi} sebesar {$jumlah} L ({$statusHangus}). Ket: {$request->keterangan}"
+            ]);
+
+            DB::commit();
+            return back()->with('success', "Saldo kendaraan berhasil dipotong sebesar {$jumlah} Liter dan {$statusHangus}.");
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error("Potong Saldo Error: " . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat memotong saldo: ' . $e->getMessage());
+        }
+    }
+
     public function transfer(Request $request)
     {
         $request->validate([

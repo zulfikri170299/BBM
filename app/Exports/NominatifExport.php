@@ -13,24 +13,32 @@ class NominatifExport implements FromView, ShouldAutoSize, WithStyles
 {
     protected $tahun;
     protected $bulan;
+    protected $startDate;
+    protected $endDate;
 
-    public function __construct($tahun, $bulan)
+    public function __construct($tahun, $bulan, $startDate = null, $endDate = null)
     {
         $this->tahun = $tahun;
         $this->bulan = $bulan;
+        $this->startDate = $startDate;
+        $this->endDate = $endDate;
     }
 
     public function view(): View
     {
-        $logs = \App\Http\Controllers\Admin\NominatifController::getSortedLogs($this->tahun, $this->bulan);
+        $logs = \App\Http\Controllers\Admin\NominatifController::getSortedLogs($this->tahun, $this->bulan, $this->startDate, $this->endDate);
         $namaBulan = \Carbon\Carbon::create()->month((int) $this->bulan)->translatedFormat('F');
         $tw = \App\Http\Controllers\Admin\NominatifController::getTriwulan($this->bulan);
+        $periodeText = \App\Http\Controllers\Admin\NominatifController::getPeriodeText($this->tahun, $this->bulan, $this->startDate, $this->endDate);
 
         return view('admin.nominatif.excel', [
             'logs' => $logs,
             'tahun' => $this->tahun,
             'namaBulan' => $namaBulan,
-            'tw' => $tw
+            'tw' => $tw,
+            'periodeText' => $periodeText,
+            'startDate' => $this->startDate,
+            'endDate' => $this->endDate
         ]);
     }
 

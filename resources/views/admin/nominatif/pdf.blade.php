@@ -26,7 +26,8 @@
     </div>
 
     <div class="title">
-        DAFTAR NOMINATIF BUKTI PENERIMAAN BBM TW {{ $tw }} BULAN {{ strtoupper($namaBulan) }} T.A. {{ $tahun }}
+        DAFTAR NOMINATIF BUKTI PENERIMAAN BBM {{ $startDate && $endDate ? '' : 'TW ' . $tw }}<br>
+        PERIODE {{ strtoupper($periodeText) }}
     </div>
 
     <table>
@@ -97,7 +98,7 @@
             </tr>
             <tr>
                 <td style="border: none; padding: 0px; margin: 0px; text-align: left;">Pada tanggal</td>
-                <td style="border: none; padding: 0px; margin: 0px; text-align: left;">: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $namaBulan }} {{ $tahun }}</td>
+                <td style="border: none; padding: 0px; margin: 0px; text-align: left;">: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $endDate ? \Carbon\Carbon::parse($endDate)->translatedFormat('F Y') : ($namaBulan . ' ' . $tahun) }}</td>
             </tr>
         </table>
         

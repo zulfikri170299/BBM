@@ -2,4 +2,130 @@
 @tailwind components;
 @tailwind utilities;
 
-[x-cloak] { display: none !important; }
+@layer base {
+    [x-cloak] {
+        display: none !important;
+    }
+}
+
+@layer components {
+    .glass {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .sidebar-active {
+        background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
+        color: white;
+        box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.4);
+    }
+
+    /* TomSelect Premium Styling */
+    .ts-wrapper .ts-control {
+        @apply border-2 border-slate-100 bg-slate-50 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 shadow-none transition-all flex items-center;
+        min-height: 38px;
+    }
+
+    .ts-wrapper.focus .ts-control {
+        @apply border-indigo-500 bg-white ring-4 ring-indigo-500/10;
+    }
+
+    .ts-wrapper .ts-dropdown {
+        @apply rounded-2xl border border-slate-200 shadow-xl text-xs overflow-hidden p-2 z-[100];
+    }
+
+    .ts-wrapper .ts-dropdown .option {
+        @apply px-3 py-2.5 rounded-lg font-semibold;
+    }
+
+    .ts-wrapper .ts-dropdown .active {
+        @apply bg-slate-100 text-indigo-600;
+    }
+
+    .ts-wrapper .ts-control .item {
+        @apply font-bold text-slate-800 uppercase tracking-wider;
+    }
+
+    /* Flatpickr Premium Indigo Styling */
+    .flatpickr-calendar {
+        @apply shadow-2xl rounded-[2rem] border border-slate-200 p-4 font-sans bg-white;
+        width: 315px;
+    }
+
+    .flatpickr-months {
+        @apply mb-2;
+    }
+
+    .flatpickr-month {
+        height: 40px;
+    }
+
+    .flatpickr-day {
+        @apply rounded-xl font-semibold h-[38px] leading-[38px] m-[2px];
+    }
+
+    .flatpickr-day.selected,
+    .flatpickr-day.startRange,
+    .flatpickr-day.endRange,
+    .flatpickr-day.selected.inRange,
+    .flatpickr-day.startRange.inRange,
+    .flatpickr-day.endRange.inRange,
+    .flatpickr-day.selected:focus,
+    .flatpickr-day.startRange:focus,
+    .flatpickr-day.endRange:focus,
+    .flatpickr-day.selected:hover,
+    .flatpickr-day.startRange:hover,
+    .flatpickr-day.endRange:hover,
+    .flatpickr-day.selected.prevMonthDay,
+    .flatpickr-day.startRange.prevMonthDay,
+    .flatpickr-day.endRange.prevMonthDay,
+    .flatpickr-day.selected.nextMonthDay,
+    .flatpickr-day.startRange.nextMonthDay,
+    .flatpickr-day.endRange.nextMonthDay {
+        background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%) !important;
+        border-color: transparent !important;
+        box-shadow: 0 4px 12px rgba(67, 56, 202, 0.3);
+    }
+
+    .flatpickr-day.today {
+        @apply border-indigo-600 text-indigo-600;
+    }
+
+    .flatpickr-day.today:hover {
+        @apply bg-slate-100;
+    }
+
+    .flatpickr-current-month .flatpickr-monthDropdown-months {
+        @apply font-extrabold uppercase tracking-widest;
+    }
+
+    .flatpickr-weekday {
+        @apply font-extrabold text-slate-400 uppercase text-[10px];
+    }
+
+    .flatpickr-input-container {
+        @apply relative;
+    }
+
+    .flatpickr-input-container::after {
+        content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5' /%3E%3C/svg%3E");
+        @apply absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none transition-all;
+    }
+
+    .flatpickr-input-container:focus-within::after {
+        filter: invert(24%) sepia(86%) saturate(3015%) hue-rotate(240deg) brightness(85%) contrast(92%);
+    }
+
+    .flatpickr-months .flatpickr-month {
+        @apply text-slate-800 fill-slate-800;
+    }
+
+    .flatpickr-calendar .flatpickr-innerContainer {
+        @apply mt-2;
+    }
+
+    .flatpickr-day {
+        @apply rounded-xl font-semibold text-slate-600;
+    }
+}
