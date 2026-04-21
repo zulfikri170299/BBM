@@ -86,7 +86,14 @@ class DashboardController extends Controller
             $tankStock->sisa_pertamax = $tankStock->stok_awal_pertamax - $tankStock->pemakaian_pertamax;
             $tankStock->sisa_dex = $tankStock->stok_awal_dex - $tankStock->pemakaian_dex;
         }
+        $adminTransactions = TransaksiBbm::whereDate('created_at', $todayWita)
+            ->whereHas('petugas', function($q) {
+                $q->whereIn('role', ['super_admin', 'kasubbag', 'admin_satker']);
+            })
+            ->select('jenis_bbm', DB::raw('SUM(liter) as total_liter'), DB::raw('COUNT(*) as total_transaksi'))
+            ->groupBy('jenis_bbm')
+            ->get();
 
-        return view('petugas.dashboard', compact('todayTransactions', 'todayLiter', 'breakdownBbm', 'hutangPerBbm', 'tankStock'));
+        return view('petugas.dashboard', compact('todayTransactions', 'todayLiter', 'breakdownBbm', 'hutangPerBbm', 'tankStock', 'adminTransactions'));
     }
 }

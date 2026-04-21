@@ -134,6 +134,7 @@ class KendaraanController extends Controller
                 'created_at', 
                 'kendaraan_id', 
                 'personel_id', 
+                'tujuan_kendaraan_id',
                 'jumlah', 
                 'keterangan', 
                 \DB::raw("'transfer' as tipe_log")
@@ -141,14 +142,14 @@ class KendaraanController extends Controller
 
         $potonganQuery = \DB::table('riwayat_topups')
             ->where('satker_id', $satkerId)
-            ->where('tipe', 'keluar')
             ->select(
                 'created_at', 
                 'kendaraan_id', 
                 \DB::raw('NULL as personel_id'), 
+                \DB::raw('NULL as tujuan_kendaraan_id'),
                 'jumlah', 
                 'keterangan', 
-                \DB::raw("'potongan' as tipe_log")
+                \DB::raw("tipe as tipe_log")
             );
 
         // Apply shared filters
@@ -176,8 +177,9 @@ class KendaraanController extends Controller
 
         // Convert raw database results to something more useful (with relationships)
         $riwayatsRaw->getCollection()->transform(function($item) {
-            $item->kendaraan = \App\Models\Kendaraan::find($item->kendaraan_id);
+            $item->kendaraan = $item->kendaraan_id ? \App\Models\Kendaraan::find($item->kendaraan_id) : null;
             $item->personel = $item->personel_id ? \App\Models\Personel::find($item->personel_id) : null;
+            $item->tujuanKendaraan = isset($item->tujuan_kendaraan_id) ? \App\Models\Kendaraan::find($item->tujuan_kendaraan_id) : null;
             $item->created_at = \Carbon\Carbon::parse($item->created_at);
             return $item;
         });
@@ -230,6 +232,7 @@ class KendaraanController extends Controller
                 'created_at', 
                 'kendaraan_id', 
                 'personel_id', 
+                'tujuan_kendaraan_id',
                 'jumlah', 
                 'keterangan', 
                 \DB::raw("'transfer' as tipe_log")
@@ -237,14 +240,14 @@ class KendaraanController extends Controller
 
         $potonganQuery = \DB::table('riwayat_topups')
             ->where('satker_id', $satkerId)
-            ->where('tipe', 'keluar')
             ->select(
                 'created_at', 
                 'kendaraan_id', 
                 \DB::raw('NULL as personel_id'), 
+                \DB::raw('NULL as tujuan_kendaraan_id'),
                 'jumlah', 
                 'keterangan', 
-                \DB::raw("'potongan' as tipe_log")
+                \DB::raw("tipe as tipe_log")
             );
 
         // Apply shared filters
@@ -270,8 +273,9 @@ class KendaraanController extends Controller
 
         // Convert raw database results to models/objects with relationships
         $riwayats = $riwayatsRaw->map(function($item) {
-            $item->kendaraan = \App\Models\Kendaraan::find($item->kendaraan_id);
+            $item->kendaraan = $item->kendaraan_id ? \App\Models\Kendaraan::find($item->kendaraan_id) : null;
             $item->personel = $item->personel_id ? \App\Models\Personel::find($item->personel_id) : null;
+            $item->tujuanKendaraan = isset($item->tujuan_kendaraan_id) ? \App\Models\Kendaraan::find($item->tujuan_kendaraan_id) : null;
             $item->created_at = \Carbon\Carbon::parse($item->created_at);
             return $item;
         });

@@ -131,6 +131,40 @@
             @endforelse
         </div>
 
+        <!-- Transaksi Admin / Super Admin -->
+        @if($adminTransactions->isNotEmpty())
+        <div class="pt-4 sm:pt-6">
+            <h2 class="text-lg sm:text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+                <svg class="w-6 h-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                Penyaluran dari Stok Pusat (Super Admin) Hari Ini
+            </h2>
+            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
+                @foreach($adminTransactions as $at)
+                    <div class="bg-gradient-to-br from-purple-500 to-fuchsia-700 rounded-xl sm:rounded-2xl border border-purple-100 shadow-xl p-4 sm:p-5 flex items-center gap-4 group hover:shadow-purple-500/40 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute -top-4 -right-4 w-16 sm:w-24 h-16 sm:h-24 bg-white/10 rounded-full blur-lg group-hover:scale-150 transition-transform duration-500"></div>
+                        <div class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm text-white flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform relative z-10">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                        </div>
+                        <div class="relative z-10 text-white">
+                            <p class="text-xs font-bold text-purple-100 uppercase tracking-widest mb-0.5">{{ $at->jenis_bbm }}</p>
+                            <div class="flex items-baseline gap-1">
+                                <p class="text-xl sm:text-2xl font-black leading-none">
+                                    {{ number_format($at->total_liter, 0, ',', '.') }}
+                                </p>
+                                <span class="text-sm font-bold text-purple-200">L</span>
+                            </div>
+                            <p class="text-[10px] sm:text-xs text-purple-100 mt-1">{{ $at->total_transaksi }} Transaksi</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
         <!-- Hutang Belum Dibayar Stats -->
         <div class="pt-4 sm:pt-6">
             <h2 class="text-lg sm:text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">

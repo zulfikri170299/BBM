@@ -159,18 +159,26 @@
                     <td class="text-center">{{ $index + 1 }}</td>
                     <td>{{ $riwayat->created_at->format('d/m/Y H:i') }}</td>
                     <td>
-                        <b>{{ $riwayat->kendaraan->no_polisi ?? '-' }}</b><br>
-                        <span class="small">{{ $riwayat->kendaraan->jenis_kendaraan ?? '-' }}</span>
+                        @if($riwayat->tipe_log == 'masuk' || ($riwayat->tipe_log == 'transfer' && !$riwayat->kendaraan_id))
+                            <b>STOK PUSAT</b><br>
+                            <span class="small">SUPER ADMIN</span>
+                        @else
+                            <b>{{ $riwayat->kendaraan->no_polisi ?? '-' }}</b><br>
+                            <span class="small">{{ $riwayat->kendaraan->jenis_kendaraan ?? '-' }}</span>
+                        @endif
                     </td>
                     <td class="text-center">
                         <span
-                            class="badge {{ ($riwayat->kendaraan->jenis_bbm ?? '') == 'Pertamina Dex' ? 'badge-green' : 'badge-blue' }}">
-                            {{ $riwayat->kendaraan->jenis_bbm ?? '-' }}
+                            class="badge {{ (($riwayat->kendaraan->jenis_bbm ?? '') == 'Pertamina Dex' || ($riwayat->tujuanKendaraan->jenis_bbm ?? '') == 'Pertamina Dex') ? 'badge-green' : 'badge-blue' }}">
+                            {{ $riwayat->kendaraan->jenis_bbm ?? ($riwayat->tujuanKendaraan->jenis_bbm ?? '-') }}
                         </span>
                     </td>
                     <td class="text-center arrow">→</td>
                     <td>
-                        @if($riwayat->personel_id)
+                        @if($riwayat->tipe_log == 'masuk' || ($riwayat->tipe_log == 'transfer' && $riwayat->tujuan_kendaraan_id))
+                            <b>{{ $riwayat->tujuanKendaraan->no_polisi ?? '-' }}</b><br>
+                            <span class="small">{{ $riwayat->tujuanKendaraan->jenis_kendaraan ?? '-' }}</span>
+                        @elseif($riwayat->personel_id)
                             <b>{{ $riwayat->personel->nama ?? '-' }}</b><br>
                             <span class="small">NRP: {{ $riwayat->personel->nrp ?? '-' }}</span>
                         @else

@@ -146,23 +146,23 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-2">
-                                        <div class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center">
-                                            <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z">
-                                                </path>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1">
-                                                </path>
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <span
-                                                class="text-sm font-bold text-slate-800">{{ $riwayat->kendaraan->no_polisi ?? '-' }}</span>
-                                            <span
-                                                class="text-xs text-slate-400 block">{{ $riwayat->kendaraan->jenis_kendaraan ?? '-' }}</span>
-                                        </div>
+                                        @if($riwayat->tipe_log == 'masuk' || ($riwayat->tipe_log == 'transfer' && !$riwayat->kendaraan_id))
+                                            <div class="w-7 h-7 bg-rose-50 rounded-lg flex items-center justify-center text-rose-500">
+                                                <i class="fas fa-gas-pump text-[10px]"></i>
+                                            </div>
+                                            <div>
+                                                <span class="text-sm font-bold text-rose-600">STOK PUSAT</span>
+                                                <span class="text-xs text-slate-400 block">SUPER ADMIN</span>
+                                            </div>
+                                        @else
+                                            <div class="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center">
+                                                <i class="fas fa-car-side text-[10px] text-blue-600"></i>
+                                            </div>
+                                            <div>
+                                                <span class="text-sm font-bold text-slate-800">{{ $riwayat->kendaraan->no_polisi ?? '-' }}</span>
+                                                <span class="text-xs text-slate-400 block">{{ $riwayat->kendaraan->jenis_kendaraan ?? '-' }}</span>
+                                            </div>
+                                        @endif
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 text-center">
@@ -185,28 +185,28 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-2">
-                                        @if($riwayat->personel_id)
+                                        @if($riwayat->tipe_log == 'masuk' || ($riwayat->tipe_log == 'transfer' && $riwayat->tujuan_kendaraan_id))
+                                            <div class="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center">
+                                                <i class="fas fa-car-side text-[10px] text-emerald-600"></i>
+                                            </div>
+                                            <div>
+                                                <span class="text-sm font-bold text-slate-800">{{ $riwayat->tujuanKendaraan->no_polisi ?? ($riwayat->kendaraan->no_polisi ?? '-') }}</span>
+                                                <span class="text-xs text-slate-400 block">{{ $riwayat->tujuanKendaraan->jenis_kendaraan ?? ($riwayat->kendaraan->jenis_kendaraan ?? '-') }}</span>
+                                            </div>
+                                        @elseif($riwayat->personel_id)
                                             <div class="w-7 h-7 rounded-lg bg-purple-100 flex items-center justify-center">
-                                                <svg class="w-3.5 h-3.5 text-purple-600" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
-                                                    </path>
+                                                <svg class="w-3.5 h-3.5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                                 </svg>
                                             </div>
                                             <div>
-                                                <span
-                                                    class="text-sm font-medium text-slate-800">{{ $riwayat->personel->nama ?? '-' }}</span>
-                                                <span class="text-xs text-slate-400 block">NRP:
-                                                    {{ $riwayat->personel->nrp ?? '-' }}</span>
+                                                <span class="text-sm font-medium text-slate-800">{{ $riwayat->personel->nama ?? '-' }}</span>
+                                                <span class="text-xs text-slate-400 block">NRP: {{ $riwayat->personel->nrp ?? '-' }}</span>
                                             </div>
                                         @else
                                             <div class="w-7 h-7 rounded-lg bg-rose-100 flex items-center justify-center">
-                                                <svg class="w-3.5 h-3.5 text-rose-600" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                                    </path>
+                                                <svg class="w-3.5 h-3.5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                                 </svg>
                                             </div>
                                             <div>

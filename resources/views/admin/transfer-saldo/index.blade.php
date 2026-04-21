@@ -8,14 +8,14 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6" x-data="{ tipeTujuan: 'personel', selectedKendaraan: '' }">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6" x-data="{ tipeTujuan: 'kendaraan', selectedKendaraan: '' }">
             {{-- Transfer Form --}}
             <div class="lg:col-span-4">
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm relative z-10 overflow-hidden">
                     <div class="p-3 sm:p-4 border-b border-slate-100 bg-slate-50/50">
                         <h3 class="text-xs sm:text-sm font-black text-slate-800 flex items-center gap-2 uppercase tracking-widest">
                             <i class="fas fa-exchange-alt text-indigo-500"></i>
-                            Form Transfer
+                            Kustomisasi Transfer
                         </h3>
                     </div>
                     <form action="{{ route('admin.transfer-saldo.store') }}" method="POST" class="p-3 sm:p-4 space-y-3">
@@ -35,10 +35,33 @@
                         </div>
 
                         @if($selectedSatkerId)
-                            {{-- Pilih Kendaraan Sumber --}}
-                            <div>
-                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">2. Kendaraan Sumber</label>
-                                <select name="kendaraan_id" id="transfer_kendaraan_id" required class="tom-select w-full" x-model="selectedKendaraan">
+                            {{-- Tipe Tujuan --}}
+                            <div class="pt-1">
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">2. Tipe Transfer</label>
+                                <div class="grid grid-cols-1 gap-2">
+                                    <label class="relative flex items-center justify-center p-2 rounded-xl border-2 cursor-pointer transition-all"
+                                        :class="tipeTujuan === 'kendaraan' ? 'border-indigo-500 bg-indigo-50 text-indigo-700' : 'border-slate-100 bg-white text-slate-400'">
+                                        <input type="radio" name="tipe_tujuan" value="kendaraan" x-model="tipeTujuan" class="sr-only">
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-gas-pump"></i>
+                                            <span class="text-[11px] font-black uppercase tracking-wider">Pusat ke Kendaraan (TM)</span>
+                                        </div>
+                                    </label>
+                                    <label class="relative flex items-center justify-center p-2 rounded-xl border-2 cursor-pointer transition-all"
+                                        :class="tipeTujuan === 'personel' ? 'border-indigo-500 bg-indigo-50 text-indigo-700' : 'border-slate-100 bg-white text-slate-400'">
+                                        <input type="radio" name="tipe_tujuan" value="personel" x-model="tipeTujuan" class="sr-only">
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-user-tag"></i>
+                                            <span class="text-[11px] font-black uppercase tracking-wider">Kendaraan ke Anggota</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            {{-- Pilih Kendaraan Sumber (Jika Kendaraan -> Personel) --}}
+                            <div x-show="tipeTujuan === 'personel'" x-transition>
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Kendaraan Sumber</label>
+                                <select name="kendaraan_id" id="transfer_kendaraan_id" :required="tipeTujuan === 'personel'" class="w-full" x-model="selectedKendaraan" x-ref="kendaraanSelect">
                                     <option value="">-- Pilih Kendaraan --</option>
                                     @foreach($kendaraans as $k)
                                         <option value="{{ $k->id }}">{{ $k->no_polisi }} ({{ $k->jenis_bbm }} - {{ number_format($k->saldo, 0, ',', '.') }} L)</option>
@@ -46,37 +69,40 @@
                                 </select>
                             </div>
 
-                            {{-- Tipe Tujuan --}}
-                            <div class="pt-1">
-                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">3. Tipe Tujuan</label>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <label class="relative flex items-center justify-center p-2 rounded-xl border-2 cursor-pointer transition-all"
-                                        :class="tipeTujuan === 'personel' ? 'border-indigo-500 bg-indigo-50 text-indigo-700' : 'border-slate-100 bg-white text-slate-400'">
-                                        <input type="radio" name="tipe_tujuan" value="personel" x-model="tipeTujuan" class="sr-only">
-                                        <span class="text-[11px] font-black uppercase tracking-wider">Personel</span>
-                                    </label>
-                                    <label class="relative flex items-center justify-center p-2 rounded-xl border-2 cursor-pointer transition-all"
-                                        :class="tipeTujuan === 'kendaraan' ? 'border-indigo-500 bg-indigo-50 text-indigo-700' : 'border-slate-100 bg-white text-slate-400'">
-                                        <input type="radio" name="tipe_tujuan" value="kendaraan" x-model="tipeTujuan" class="sr-only">
-                                        <span class="text-[11px] font-black uppercase tracking-wider">Kendaraan</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            {{-- Tujuan Personel --}}
+                            {{-- Tujuan Personel (Jika Kendaraan -> Personel) --}}
                             <div x-show="tipeTujuan === 'personel'" x-transition>
-                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Tujuan Personel</label>
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Anggota Tujuan</label>
                                 <select name="personel_id" id="transfer_personel_id" :required="tipeTujuan === 'personel'" class="w-full">
-                                    <option value="">-- Pilih Personel --</option>
+                                    <option value="">-- Pilih Anggota --</option>
                                 </select>
                             </div>
 
-                            {{-- Tujuan Kendaraan --}}
-                            <div x-show="tipeTujuan === 'kendaraan'" x-transition>
-                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Tujuan Kendaraan</label>
-                                <select name="tujuan_kendaraan_id" id="transfer_tujuan_kendaraan_id" :required="tipeTujuan === 'kendaraan'" class="w-full">
-                                    <option value="">-- Pilih Kendaraan Tujuan --</option>
-                                </select>
+                            {{-- Tujuan Kendaraan (Jika Pusat -> Kendaraan) --}}
+                            <div x-show="tipeTujuan === 'kendaraan'" x-transition class="space-y-3">
+                                {{-- Info Stok Pusat --}}
+                                @if(isset($adminStocks) && $adminStocks->count() > 0)
+                                <div class="bg-indigo-50/50 border border-indigo-100 rounded-xl p-3">
+                                    <label class="block text-[9px] font-black text-indigo-400 uppercase tracking-widest mb-2 text-center items-center flex justify-center gap-1.5"><i class="fas fa-database"></i> Sisa Stok Pusat</label>
+                                    <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                        @foreach($adminStocks as $stock)
+                                        <div class="bg-white border border-indigo-50 rounded-lg py-1.5 px-2 text-center shadow-sm hover:border-indigo-200 transition-colors">
+                                            <div class="text-[9px] font-bold text-slate-500 uppercase">{{ $stock->jenis_bbm }}</div>
+                                            <div class="text-[11px] font-black text-indigo-600">{{ number_format($stock->saldo, 0, ',', '.') }} L</div>
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                @endif
+
+                                <div>
+                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Kendaraan Tujuan</label>
+                                    <select name="tujuan_kendaraan_id" id="transfer_tujuan_kendaraan_id" :required="tipeTujuan === 'kendaraan'" class="w-full" x-ref="tujuanKendaraanSelect">
+                                        <option value="">-- Pilih Kendaraan Tujuan --</option>
+                                        @foreach($kendaraans as $k)
+                                            <option value="{{ $k->id }}">{{ $k->no_polisi }} ({{ $k->jenis_bbm }} - {{ number_format($k->saldo, 0, ',', '.') }} L)</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
 
                             <div class="grid grid-cols-2 gap-3 pt-1">
@@ -86,12 +112,19 @@
                                     <input type="number" name="jumlah" step="0.1" min="0.1" required placeholder="0"
                                         class="w-full px-3 py-2 bg-slate-50 border-2 border-slate-100 rounded-xl text-sm font-bold text-slate-800 focus:border-indigo-500 transition-all">
                                 </div>
-                                {{-- Keterangan --}}
+                                {{-- Password Top Up --}}
                                 <div>
-                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Keterangan</label>
-                                    <input name="keterangan" placeholder="..."
+                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">PIN / Password Topup</label>
+                                    <input type="password" name="topup_password" required placeholder="***"
                                         class="w-full px-3 py-2 bg-slate-50 border-2 border-slate-100 rounded-xl text-sm font-bold text-slate-800 focus:border-indigo-500 transition-all">
                                 </div>
+                            </div>
+                            
+                            {{-- Keterangan --}}
+                            <div class="pt-1">
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Keterangan</label>
+                                <input name="keterangan" placeholder="Keterangan opsional..."
+                                    class="w-full px-3 py-2 bg-slate-50 border-2 border-slate-100 rounded-xl text-sm font-bold text-slate-800 focus:border-indigo-500 transition-all">
                             </div>
 
                             <button type="submit"
@@ -109,7 +142,7 @@
             <div class="lg:col-span-8">
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                     <div class="p-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
-                        <h3 class="text-xs sm:text-sm font-black text-slate-800 uppercase tracking-widest">Riwayat Transfer</h3>
+                        <h3 class="text-xs sm:text-sm font-black text-slate-800 uppercase tracking-widest">Riwayat Transfer BBM</h3>
                         <div class="text-[9px] font-bold text-slate-400 uppercase">
                             {{ $riwayat->total() }} Data Ditemukan
                         </div>
@@ -118,11 +151,11 @@
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-slate-50 border-b border-slate-100">
-                                    <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">Tanggal</th>
-                                    <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">Sumber (Kendaraan)</th>
+                                    <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">Tgl</th>
+                                    <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">Sumber</th>
                                     <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">Tujuan</th>
                                     <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Jumlah</th>
-                                    <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">Keterangan</th>
+                                    <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">Ket</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100">
@@ -130,45 +163,51 @@
                                     <tr class="hover:bg-slate-50/80 transition-colors">
                                         <td class="px-4 py-2.5">
                                             <p class="text-[11px] font-black text-slate-700">{{ $item->created_at->format('d M Y') }}</p>
-                                            <p class="text-[9px] font-bold text-slate-400 uppercase">{{ $item->created_at->format('H:i') }} WIB</p>
+                                            <p class="text-[9px] font-bold text-slate-400 uppercase">{{ $item->created_at->format('H:i') }}</p>
                                         </td>
                                         <td class="px-4 py-2.5">
-                                            <div class="flex items-center gap-2">
-                                                <div class="w-7 h-7 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-500">
-                                                    <i class="fas fa-car text-[10px]"></i>
+                                            @if($item->kendaraan_id)
+                                                <div class="flex items-center gap-2">
+                                                    <div class="w-7 h-7 bg-indigo-50 rounded-lg flex items-center justify-center text-indigo-500">
+                                                        <i class="fas fa-car text-[10px]"></i>
+                                                    </div>
+                                                    <div>
+                                                        <p class="text-[11px] font-black text-slate-700">{{ $item->kendaraan->no_polisi ?? '-' }}</p>
+                                                        <p class="text-[9px] font-bold text-slate-400 uppercase">KENDARAAN</p>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <p class="text-[11px] font-black text-slate-700">{{ $item->kendaraan->no_polisi ?? '-' }}</p>
-                                                    <p class="text-[9px] font-bold text-slate-400 uppercase">{{ $item->kendaraan->jenis_bbm ?? 'LOG' }}</p>
+                                            @else
+                                                <div class="flex items-center gap-2">
+                                                    <div class="w-7 h-7 bg-rose-50 rounded-lg flex items-center justify-center text-rose-500">
+                                                        <i class="fas fa-gas-pump text-[10px]"></i>
+                                                    </div>
+                                                    <div>
+                                                        <p class="text-[11px] font-black text-rose-600 uppercase">Stok Pusat</p>
+                                                        <p class="text-[9px] font-bold text-slate-400 uppercase">SYSTEM</p>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            @endif
                                         </td>
                                         <td class="px-4 py-2.5">
                                             <div class="flex items-center gap-2">
                                                 @if($item->personel_id)
                                                     <div class="w-7 h-7 bg-amber-50 rounded-lg flex items-center justify-center text-amber-500">
-                                                        <i class="fas fa-user text-[10px]"></i>
+                                                        <i class="fas fa-user-tag text-[10px]"></i>
                                                     </div>
                                                     <div>
                                                         <p class="text-[11px] font-black text-slate-700">{{ $item->personel->nama ?? '-' }}</p>
                                                         <p class="text-[9px] font-bold text-slate-400 uppercase">PERSONEL</p>
                                                     </div>
-                                                @elseif(isset($item->tujuan_kendaraan_id) || isset($item->tujuan_kendaraan))
+                                                @elseif(isset($item->tujuan_kendaraan_id))
                                                     <div class="w-7 h-7 bg-emerald-50 rounded-lg flex items-center justify-center text-emerald-500">
                                                         <i class="fas fa-car-side text-[10px]"></i>
                                                     </div>
                                                     <div>
-                                                        <p class="text-[11px] font-black text-slate-700">{{ $item->tujuan_kendaraan->no_polisi ?? '-' }}</p>
+                                                        <p class="text-[11px] font-black text-slate-700">{{ $item->tujuanKendaraan->no_polisi ?? '-' }}</p>
                                                         <p class="text-[9px] font-bold text-slate-400 uppercase">KENDARAAN</p>
                                                     </div>
                                                 @else
-                                                    <div class="w-7 h-7 bg-rose-50 rounded-lg flex items-center justify-center text-rose-500">
-                                                        <i class="fas fa-minus-circle text-[10px]"></i>
-                                                    </div>
-                                                    <div>
-                                                        <p class="text-[11px] font-black text-rose-600 uppercase">Potongan Pusat</p>
-                                                        <p class="text-[9px] font-bold text-slate-400 uppercase">SYSTEM</p>
-                                                    </div>
+                                                    -
                                                 @endif
                                             </div>
                                         </td>
@@ -191,6 +230,9 @@
                                 @endforelse
                             </tbody>
                         </table>
+                        <div class="p-3 border-t border-slate-100">
+                            {{ $riwayat->links() }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -202,19 +244,31 @@
             document.addEventListener('turbo:load', function () {
                 const satkerSelect = document.getElementById('transfer_satker_id');
                 const kendaraanSelect = document.getElementById('transfer_kendaraan_id');
-                const personelSelect = document.getElementById('transfer_personel_id');
                 const tujuanKendaraanSelect = document.getElementById('transfer_tujuan_kendaraan_id');
+                const personelSelect = document.getElementById('transfer_personel_id');
                 
-                if (!kendaraanSelect || !personelSelect || !tujuanKendaraanSelect) return;
-
                 function getTsInstance(el, config = {}) {
+                    if (!el) return null;
                     if (el.tomselect) return el.tomselect;
                     return new TomSelect(el, config);
                 }
 
-                const satkerTs = getTsInstance(satkerSelect);
+                if (satkerSelect) {
+                    getTsInstance(satkerSelect);
+                }
+
                 const kendaraanTs = getTsInstance(kendaraanSelect);
-                
+
+                if (tujuanKendaraanSelect) {
+                    getTsInstance(tujuanKendaraanSelect, {
+                        create: false,
+                        sortField: {
+                            field: 'text',
+                            direction: 'asc'
+                        }
+                    });
+                }
+
                 const personelTs = getTsInstance(personelSelect, {
                     create: false,
                     valueField: 'id',
@@ -234,33 +288,13 @@
                     }
                 });
 
-                const tujuanKendaraanTs = getTsInstance(tujuanKendaraanSelect, {
-                    create: false,
-                    valueField: 'id',
-                    labelField: 'text',
-                    searchField: 'text',
-                    options: [],
-                    render: {
-                        option: function(data, escape) {
-                            return '<div class="px-3 py-2 border-b border-slate-50">' +
-                                        '<div class="font-bold text-slate-800 text-xs">' + escape(data.nopol) + '</div>' +
-                                        '<div class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">' + escape(data.jenis) + ' • ' + escape(data.bbm) + ' • ' + escape(data.saldo) + ' L</div>' +
-                                   '</div>';
-                        },
-                        item: function(data, escape) {
-                            return '<div class="text-xs font-bold">' + escape(data.nopol) + ' (' + escape(data.bbm) + ')</div>';
-                        }
-                    }
-                });
-
                 const kendaraans = @json($kendaraans ?? []);
                 const personels = @json($personels ?? []);
 
                 function updateOptions(value) {
+                    if(!personelTs) return;
                     personelTs.clear();
                     personelTs.clearOptions();
-                    tujuanKendaraanTs.clear();
-                    tujuanKendaraanTs.clearOptions();
 
                     if (!value) return;
 
@@ -278,26 +312,17 @@
                             saldo_label: Number(p.saldo).toLocaleString('id-ID') + ' L',
                             text: `${p.nama} (${p.nrp})`
                         })));
-
-                        // Filter & Add Kendaraans (Exclude source)
-                        const filteredKendaraans = kendaraans.filter(k => k.id != value && (k.jenis_bbm || '').toUpperCase() === requiredBbm);
-                        tujuanKendaraanTs.addOptions(filteredKendaraans.map(k => ({
-                            id: k.id,
-                            nopol: k.no_polisi,
-                            jenis: k.jenis_kendaraan,
-                            bbm: k.jenis_bbm,
-                            saldo: k.saldo,
-                            text: k.no_polisi
-                        })));
                     }
                 }
 
-                kendaraanTs.on('change', function (value) {
-                    updateOptions(value);
-                });
+                if (kendaraanTs) {
+                    kendaraanTs.on('change', function (value) {
+                        updateOptions(value);
+                    });
 
-                if (kendaraanTs.getValue()) {
-                    updateOptions(kendaraanTs.getValue());
+                    if (kendaraanTs.getValue()) {
+                        updateOptions(kendaraanTs.getValue());
+                    }
                 }
             });
         </script>
