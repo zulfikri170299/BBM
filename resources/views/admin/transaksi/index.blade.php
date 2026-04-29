@@ -159,7 +159,7 @@
     <!-- Scanner & Alpine Script -->
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script>
-        function transaksi() {
+        window.transaksi = function() {
             return {
                 step: 'search',
                 tab: 'barcode',

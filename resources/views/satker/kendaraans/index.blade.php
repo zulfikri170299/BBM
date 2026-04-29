@@ -1319,7 +1319,7 @@
             </div>
 
             <script>
-                function importKendaraanModal() {
+                window.importKendaraanModal = function() {
                     return {
                         showModal: false,
                         step: 1,
