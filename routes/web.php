@@ -58,6 +58,7 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     Route::post('/reports', [\App\Http\Controllers\Admin\ReportController::class, 'generate'])->name('reports.generate');
     Route::post('/satkers/bulk-delete', [\App\Http\Controllers\Admin\SatkerController::class, 'bulkDelete'])->name('satkers.bulk-delete')->middleware('role:super_admin');
     Route::resource('satkers', \App\Http\Controllers\Admin\SatkerController::class)->middleware('role:super_admin');
+    Route::resource('petugas-spbp', \App\Http\Controllers\Admin\PetugasSpbpController::class);
     Route::get('/users/monitoring', [\App\Http\Controllers\Admin\UserController::class, 'monitoring'])->name('users.monitoring');
     Route::get('/users/{user}/logs', [\App\Http\Controllers\Admin\UserController::class, 'activityLogs'])->name('users.logs');
     Route::post('/users/{user}/toggle', [\App\Http\Controllers\Admin\UserController::class, 'toggleStatus'])->name('users.toggle');
@@ -146,6 +147,10 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     Route::get('/laporan-harian', [\App\Http\Controllers\Admin\LaporanHarianController::class, 'index'])->name('laporan-harian.index');
     Route::get('/laporan-harian/pdf', [\App\Http\Controllers\Admin\LaporanHarianController::class, 'exportPdf'])->name('laporan-harian.pdf');
     Route::post('/laporan-harian', [\App\Http\Controllers\Admin\LaporanHarianController::class, 'store'])->name('laporan-harian.store');
+
+    // Laporan Slog
+    Route::get('/laporan-slog', [\App\Http\Controllers\Admin\LaporanSlogController::class, 'index'])->name('laporan-slog.index');
+    Route::get('/laporan-slog/print', [\App\Http\Controllers\Admin\LaporanSlogController::class, 'print'])->name('laporan-slog.print');
 
     // Laporan Potong Saldo
     Route::get('/laporan-potong-saldo', [\App\Http\Controllers\Admin\LaporanPotongController::class, 'index'])->name('laporan-potong.index');

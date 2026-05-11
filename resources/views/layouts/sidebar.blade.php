@@ -7,7 +7,7 @@
 
 {{-- Sidebar --}}
 <div x-data="{ 
-        reportsOpen: {{ (request()->routeIs('admin.nominatif.*') || request()->routeIs('admin.laporan-topup.*') || request()->routeIs('admin.laporan-triwulan.*') || request()->routeIs('admin.laporan-stok-bbm.*') || request()->routeIs('admin.laporan-harian.*') || request()->routeIs('admin.riwayat.*') || request()->routeIs('admin.ba.*') || request()->routeIs('admin.laporan-sisa.*') || request()->routeIs('admin.laporan-hutang.*') || request()->routeIs('admin.laporan-potong.*')) ? 'true' : 'false' }},
+        reportsOpen: {{ (request()->routeIs('admin.laporan-slog.*') || request()->routeIs('admin.nominatif.*') || request()->routeIs('admin.laporan-topup.*') || request()->routeIs('admin.laporan-triwulan.*') || request()->routeIs('admin.laporan-stok-bbm.*') || request()->routeIs('admin.laporan-harian.*') || request()->routeIs('admin.riwayat.*') || request()->routeIs('admin.ba.*') || request()->routeIs('admin.laporan-sisa.*') || request()->routeIs('admin.laporan-hutang.*') || request()->routeIs('admin.laporan-potong.*')) ? 'true' : 'false' }},
         satkerReportsOpen: {{ (request()->routeIs('satker.riwayat.*') || request()->routeIs('satker.kendaraans.laporan-bulanan.*') || request()->routeIs('satker.kendaraans.laporan-transfer.*') || request()->routeIs('satker.laporan-hutang.*') || request()->routeIs('satker.laporan-triwulan.*')) ? 'true' : 'false' }},
         init() {
             // Force sidebar closed on mobile every page load
@@ -128,6 +128,8 @@
                 <span class="ml-3 font-medium">Personel</span>
             </a>
 
+
+
             @if(auth()->user()->role === 'super_admin')
                 <a href="{{ route('admin.transfer-saldo.index') }}"
                     class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.transfer-saldo.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
@@ -193,6 +195,10 @@
                 </button>
 
                 <div x-show="reportsOpen" x-collapse style="display: none;" class="pl-10 pr-2 space-y-1">
+                    <a href="{{ route('admin.laporan-slog.index') }}"
+                        class="block py-1.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-slog.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                        Laporan Slog
+                    </a>
                     <a href="{{ route('admin.laporan-topup.index') }}"
                         class="block py-1.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-topup.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
                         Laporan Top Up
@@ -251,6 +257,16 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
                     </svg>
                     <span class="ml-3 font-medium">Penanda Tangan</span>
+                </a>
+
+                <a href="{{ route('admin.petugas-spbp.index') }}"
+                    class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.petugas-spbp.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
+                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2">
+                        </path>
+                    </svg>
+                    <span class="ml-3 font-medium">Petugas SPBP</span>
                 </a>
 
                 <a href="{{ route('admin.settings.index') }}"
