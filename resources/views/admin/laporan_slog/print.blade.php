@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Laporan BBM Rutin Slog</title>
+    <title>Laporan Rutin</title>
     <style>
         @page {
             size: a4 landscape;

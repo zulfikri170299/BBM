@@ -43,7 +43,7 @@ class LaporanSlogController extends Controller
             ->setPaper('a4', 'landscape');
 
         $jenisStr = ucfirst($jenisLaporan);
-        return $pdf->stream("Laporan_BBM_Rutin_Slog_{$jenisStr}_{$bulan}_{$tahun}.pdf");
+        return $pdf->stream("Laporan_Rutin_{$jenisStr}_{$bulan}_{$tahun}.pdf");
     }
 
     private function getWeeksForMonth($bulan, $tahun)

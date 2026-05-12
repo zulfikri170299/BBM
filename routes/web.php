@@ -46,6 +46,9 @@ Route::middleware('auth')->group(function () {
     // Satisfaction Index
     Route::post('/satisfaction-index', [\App\Http\Controllers\SatisfactionIndexController::class, 'store'])->name('satisfaction.store');
     Route::get('/satisfaction-index/create', [\App\Http\Controllers\User\SatisfactionController::class, 'create'])->name('satisfaction.create');
+
+    // Catatan Routes
+    Route::resource('catatan', \App\Http\Controllers\CatatanController::class)->only(['index', 'store', 'update', 'destroy']);
 });
 
 Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name('admin.')->group(function () {

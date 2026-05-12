@@ -4,7 +4,7 @@
     <div class="max-w-7xl mx-auto mb-8">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
-                <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Laporan BBM Rutin Slog</h1>
+                <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Laporan Rutin</h1>
                 <p class="mt-1 text-sm text-gray-500 font-medium italic">Rekapitulasi persediaan, penerimaan, dan pengeluaran BBM {{ $jenisLaporan == 'harian' ? 'Per Hari (Harian)' : 'Per Minggu (Bulanan)' }}.</p>
             </div>
             
