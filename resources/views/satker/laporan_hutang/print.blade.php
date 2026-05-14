@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Laporan Riwayat Pembayaran Hutang</title>
+    <title>Laporan Hutang BBM</title>
     <style>
         @page {
             margin: 1cm;
@@ -10,7 +10,7 @@
 
         body {
             font-family: 'Helvetica', 'Arial', sans-serif;
-            font-size: 10pt;
+            font-size: 9pt;
             color: #333;
             line-height: 1.4;
         }
@@ -22,44 +22,41 @@
 
         .header h1 {
             margin: 0;
-            font-size: 18pt;
+            font-size: 16pt;
             text-transform: uppercase;
-        }
-
-        .satker-name {
-            font-size: 14pt;
-            font-weight: bold;
-            color: #4338ca;
-            margin-top: 5px;
+            font-weight: 800;
         }
 
         .filter-info {
-            margin-bottom: 15px;
-            font-size: 9pt;
+            margin-bottom: 10px;
+            font-size: 8pt;
             font-style: italic;
+            color: #666;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
+            table-layout: fixed;
         }
 
         th {
-            background-color: #f2f2f2;
+            background-color: #f8f9fa;
             font-weight: bold;
             text-transform: uppercase;
             font-size: 8pt;
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
+            border: 1px solid #999;
+            padding: 8px 4px;
+            text-align: center;
         }
 
         td {
-            border: 1px solid #eee;
-            padding: 8px;
-            vertical-align: top;
-            font-size: 9pt;
+            border: 1px solid #999;
+            padding: 6px 4px;
+            vertical-align: middle;
+            font-size: 8pt;
+            word-wrap: break-word;
         }
 
         .text-center {
@@ -74,30 +71,26 @@
             font-weight: bold;
         }
 
-        .footer {
-            margin-top: 40px;
-            width: 100%;
+        .status-lunas {
+            color: #059669;
+            font-weight: bold;
         }
 
-        .signature-box {
-            width: 250px;
-            float: right;
-            text-align: center;
-        }
-
-        .signature-space {
-            height: 70px;
+        .status-belum {
+            color: #dc2626;
+            font-weight: bold;
         }
     </style>
 </head>
 
 <body>
     @include('components.pdf-header')
+    
     <div class="header">
-        <h1>Laporan Riwayat Pembayaran Hutang BBM</h1>
+        <h1>LAPORAN HUTANG BBM</h1>
     </div>
 
-    <div class="filter-info">
+    <div class="filter-info text-right">
         @if(request('start_date') || request('end_date'))
             Periode: {{ request('start_date') ?? '...' }} s/d {{ request('end_date') ?? '...' }}
         @endif
@@ -106,50 +99,64 @@
     <table>
         <thead>
             <tr>
-                <th width="5%">No</th>
-                <th width="12%">Tanggal Bon</th>
-                <th width="18%">Tanggal Bayar</th>
-                <th width="20%">Kendaraan Hutang</th>
-                <th width="20%">Driver</th>
-                <th width="15%">Jumlah Bon</th>
-                <th width="10%">Pelaksana Pelunasan</th>
+                <th width="40">NO</th>
+                <th width="80">TGL BON</th>
+                <th width="100">TGL BAYAR</th>
+                <th>KENDARAAN</th>
+                <th>DRIVER</th>
+                <th width="100">JUMLAH</th>
+                <th width="80">STATUS</th>
             </tr>
         </thead>
         <tbody>
             @forelse($hutangs as $index => $hutang)
                 <tr>
                     <td class="text-center">{{ $index + 1 }}</td>
-                    <td>
-                        {{ \Carbon\Carbon::parse($hutang->created_at)->timezone('Asia/Makassar')->format('d/m/y') }}
+                    <td class="text-center">
+                        {{ \Carbon\Carbon::parse($hutang->created_at)->timezone('Asia/Makassar')->format('d/m/Y') }}
                     </td>
-                    <td>
-                        {{ \Carbon\Carbon::parse($hutang->tanggal_bayar)->timezone('Asia/Makassar')->translatedFormat('d M Y') }}<br>
-                        {{ \Carbon\Carbon::parse($hutang->tanggal_bayar)->timezone('Asia/Makassar')->format('H:i') }} WITA
+                    <td class="text-center">
+                        @if($hutang->tanggal_bayar)
+                            {{ \Carbon\Carbon::parse($hutang->tanggal_bayar)->timezone('Asia/Makassar')->format('d/m/Y') }}<br>
+                            <span style="font-size: 7pt; color: #777;">{{ \Carbon\Carbon::parse($hutang->tanggal_bayar)->timezone('Asia/Makassar')->format('H:i') }} WITA</span>
+                        @else
+                            -
+                        @endif
                     </td>
                     <td>
                         <span class="font-bold">{{ $hutang->nopol }}</span><br>
-                        {{ $hutang->jenis_kendaraan }}
+                        <span style="font-size: 7pt; color: #666; text-transform: uppercase;">{{ $hutang->jenis_kendaraan }}</span>
                     </td>
-                    <td>{{ $hutang->nama_driver ?? '-' }}</td>
-                    <td class="text-center font-bold">
-                        {{ $hutang->jumlah_bon }} L {{ $hutang->jenis_bbm }}
+                    <td class="text-center">{{ $hutang->nama_driver ?? '-' }}</td>
+                    <td class="text-center">
+                        <span class="font-bold">{{ number_format($hutang->jumlah_bon, 0) }} L</span><br>
+                        <span style="font-size: 7pt; color: #666;">{{ $hutang->jenis_bbm }}</span>
                     </td>
-                    <td>
-                        {{ $hutang->adminBayar->name ?? '-' }}
+                    <td class="text-center">
+                        @if($hutang->status === 'sudah_dibayar')
+                            <span class="status-lunas">Lunas</span>
+                        @else
+                            <span class="status-belum">Belum Lunas</span>
+                        @endif
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="7" class="text-center italic">Tidak ada data riwayat pembayaran.</td>
+                    <td colspan="7" class="text-center italic">Tidak ada data hutang.</td>
                 </tr>
             @endforelse
         </tbody>
         @if($hutangs->count() > 0)
             <tfoot>
-                <tr>
-                    <th colspan="4" class="text-right">TOTAL PEMBAYARAN</th>
-                    <th class="text-center">{{ $hutangs->sum('jumlah_bon') }} L</th>
-                    <th colspan="2"></th>
+                <tr style="background-color: #f8f9fa;">
+                    <th colspan="5" class="text-right" style="padding-right: 10px;">TOTAL HUTANG PERTAMAX</th>
+                    <th class="text-center">{{ number_format($totalPertamax, 0) }} L</th>
+                    <th></th>
+                </tr>
+                <tr style="background-color: #f8f9fa;">
+                    <th colspan="5" class="text-right" style="padding-right: 10px;">TOTAL HUTANG PERTAMINA DEX</th>
+                    <th class="text-center">{{ number_format($totalDex, 0) }} L</th>
+                    <th></th>
                 </tr>
             </tfoot>
         @endif

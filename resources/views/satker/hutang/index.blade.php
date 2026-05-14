@@ -87,13 +87,7 @@
                         class="px-4 py-3 text-slate-400 hover:text-slate-600 font-black text-[10px] uppercase tracking-widest transition-colors">
                         Reset
                     </a>
-                    <a href="{{ route('satker.hutang.pdf', request()->all()) }}"
-                        class="flex-1 lg:flex-none justify-center px-4 py-3.5 lg:px-5 lg:py-3.5 bg-rose-50 text-rose-600 border border-rose-100 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-rose-100 transition-all active:scale-95 flex items-center gap-1.5">
-                        <svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                        </svg>
-                        PDF
-                    </a>
+
                 </div>
             </form>
         </div>

@@ -159,6 +159,10 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     Route::get('/laporan-potong-saldo', [\App\Http\Controllers\Admin\LaporanPotongController::class, 'index'])->name('laporan-potong.index');
     Route::get('/laporan-potong-saldo/print', [\App\Http\Controllers\Admin\LaporanPotongController::class, 'print'])->name('laporan-potong.print');
 
+    // Potong Saldo Masal
+    Route::get('/potong-saldo-masal', [\App\Http\Controllers\Admin\BulkPotongSaldoController::class, 'index'])->name('bulk-potong.index');
+    Route::post('/potong-saldo-masal', [\App\Http\Controllers\Admin\BulkPotongSaldoController::class, 'process'])->name('bulk-potong.process');
+
     // Penanda Tangan
     Route::get('/penanda-tangan', [\App\Http\Controllers\Admin\PenandaTanganController::class, 'index'])->name('penanda-tangan.index');
     Route::post('/penanda-tangan', [\App\Http\Controllers\Admin\PenandaTanganController::class, 'store'])->name('penanda-tangan.store');

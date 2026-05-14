@@ -25,6 +25,7 @@ class RiwayatTopup extends Model
     protected $fillable = [
         'satker_id',
         'kendaraan_id',
+        'personel_id',
         'user_id',
         'jumlah',
         'tipe',
@@ -44,6 +45,11 @@ class RiwayatTopup extends Model
     public function kendaraan()
     {
         return $this->belongsTo(Kendaraan::class);
+    }
+
+    public function personel()
+    {
+        return $this->belongsTo(Personel::class);
     }
 
     public function user()
