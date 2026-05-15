@@ -12,21 +12,42 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $satkerId = auth()->user()->satker_id;
+        $user = auth()->user();
+        $satkerId = $user->satker_id;
 
-        $totalKendaraan = Kendaraan::where('satker_id', $satkerId)->count();
-        $totalPersonel = Personel::where('satker_id', $satkerId)->count();
-        $totalTransaksi = TransaksiBbm::whereHas('kendaraan', function($q) use ($satkerId) {
-            $q->where('satker_id', $satkerId);
-        })->count();
+        $queryKendaraan = Kendaraan::query();
+        $queryPersonel = Personel::query();
+        $queryTransaksi = TransaksiBbm::query();
 
-        $totalSaldoKendaraan = Kendaraan::where('satker_id', $satkerId)->sum('saldo');
-        $totalSaldoPersonel = Personel::where('satker_id', $satkerId)->sum('saldo');
+        if ($user->role !== 'super_admin') {
+            $queryKendaraan->where('satker_id', $satkerId);
+            $queryPersonel->where('satker_id', $satkerId);
+            $queryTransaksi->whereHas('kendaraan', function($q) use ($satkerId) {
+                $q->where('satker_id', $satkerId);
+            });
+        }
 
-        $totalTransfer = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)->count();
-        $totalLiterTransfer = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)->sum('jumlah');
+        $totalKendaraan = $queryKendaraan->count();
+        $totalPersonel = $queryPersonel->count();
+        $totalTransaksi = $queryTransaksi->count();
 
-        $recentTransfers = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
+        $querySaldoK = Kendaraan::query();
+        $querySaldoP = Personel::query();
+        $queryTransfer = \App\Models\RiwayatTransferSaldoPersonel::query();
+
+        if ($user->role !== 'super_admin') {
+            $querySaldoK->where('satker_id', $satkerId);
+            $querySaldoP->where('satker_id', $satkerId);
+            $queryTransfer->where('satker_id', $satkerId);
+        }
+
+        $totalSaldoKendaraan = $querySaldoK->sum('saldo');
+        $totalSaldoPersonel = $querySaldoP->sum('saldo');
+
+        $totalTransfer = $queryTransfer->count();
+        $totalLiterTransfer = (clone $queryTransfer)->sum('jumlah');
+
+        $recentTransfers = (clone $queryTransfer)
             ->with(['kendaraan', 'personel'])
             ->latest()
             ->take(7)
@@ -35,37 +56,40 @@ class DashboardController extends Controller
         $chartData = [];
         for ($i = 6; $i >= 0; $i--) {
             $date = now()->subDays($i);
-            $count = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
-                ->whereDate('created_at', $date)->count();
-            $liter = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
-                ->whereDate('created_at', $date)->sum('jumlah');
+            $qChart = \App\Models\RiwayatTransferSaldoPersonel::whereDate('created_at', $date);
+            if ($user->role !== 'super_admin') {
+                $qChart->where('satker_id', $satkerId);
+            }
+            $count = (clone $qChart)->count();
+            $liter = (clone $qChart)->sum('jumlah');
             $chartData[] = ['date' => $date->format('d M'), 'count' => $count, 'liter' => round($liter, 1)];
         }
 
         // Breakdown per Jenis BBM
-        $saldoKendaraanPerBbm = Kendaraan::where('satker_id', $satkerId)
-            ->select('jenis_bbm', \DB::raw('SUM(saldo) as total'))
-            ->groupBy('jenis_bbm')
-            ->pluck('total', 'jenis_bbm');
-
-        $saldoPersonelPerBbm = Personel::where('satker_id', $satkerId)
-            ->select('jenis_bbm', \DB::raw('SUM(saldo) as total'))
-            ->groupBy('jenis_bbm')
-            ->pluck('total', 'jenis_bbm');
-
-        $literTransferPerBbm = \App\Models\RiwayatTransferSaldoPersonel::where('riwayat_transfer_saldo_personels.satker_id', $satkerId)
-            ->join('kendaraans', 'riwayat_transfer_saldo_personels.kendaraan_id', '=', 'kendaraans.id')
+        $qSK = Kendaraan::select('jenis_bbm', \DB::raw('SUM(saldo) as total'))->groupBy('jenis_bbm');
+        $qSP = Personel::select('jenis_bbm', \DB::raw('SUM(saldo) as total'))->groupBy('jenis_bbm');
+        $qLT = \App\Models\RiwayatTransferSaldoPersonel::join('kendaraans', 'riwayat_transfer_saldo_personels.kendaraan_id', '=', 'kendaraans.id')
             ->select('kendaraans.jenis_bbm', \DB::raw('SUM(riwayat_transfer_saldo_personels.jumlah) as total'))
-            ->groupBy('kendaraans.jenis_bbm')
-            ->pluck('total', 'jenis_bbm');
+            ->groupBy('kendaraans.jenis_bbm');
+
+        if ($user->role !== 'super_admin') {
+            $qSK->where('satker_id', $satkerId);
+            $qSP->where('satker_id', $satkerId);
+            $qLT->where('riwayat_transfer_saldo_personels.satker_id', $satkerId);
+        }
+
+        $saldoKendaraanPerBbm = $qSK->pluck('total', 'jenis_bbm');
+        $saldoPersonelPerBbm = $qSP->pluck('total', 'jenis_bbm');
+        $literTransferPerBbm = $qLT->pluck('total', 'jenis_bbm');
 
         // Hutang Stats
-        $totalHutang = \App\Models\Hutang::where('satker_id', $satkerId)
-            ->where('status', 'belum_dibayar')
-            ->sum('jumlah_bon');
+        $qH = \App\Models\Hutang::where('status', 'belum_dibayar');
+        if ($user->role !== 'super_admin') {
+            $qH->where('satker_id', $satkerId);
+        }
 
-        $hutangPerBbm = \App\Models\Hutang::where('satker_id', $satkerId)
-            ->where('status', 'belum_dibayar')
+        $totalHutang = (clone $qH)->sum('jumlah_bon');
+        $hutangPerBbm = (clone $qH)
             ->select('jenis_bbm', \DB::raw('SUM(jumlah_bon) as total'))
             ->groupBy('jenis_bbm')
             ->pluck('total', 'jenis_bbm');

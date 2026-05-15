@@ -503,8 +503,8 @@
                     window.confirmDialog({
                         message: target.getAttribute('data-confirm'),
                         type: target.getAttribute('data-confirm-type') || 'warning',
-                        confirmText: 'Ya, Hapus!',
-                        title: 'Konfirmasi Hapus'
+                        confirmText: target.getAttribute('data-confirm-text') || 'Ya, Lanjutkan!',
+                        title: target.getAttribute('data-confirm-title') || 'Konfirmasi'
                     }, () => {
                         const form = target.closest('form');
                         if (form) form.submit();

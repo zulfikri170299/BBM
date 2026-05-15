@@ -342,8 +342,8 @@
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     <div class="flex items-center justify-center gap-2">
-                                        <a href="{{ route('satker.kendaraans.print', $kendaraan) }}" target="_blank"
-                                            rel="nofollow"
+                                        <a href="{{ route('satker.kendaraans.print', $kendaraan) }}"
+
                                             class="p-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-600 hover:text-indigo-700 rounded-lg transition-colors group"
                                             title="Print Barcode">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -362,6 +362,23 @@
                                                     </path>
                                                 </svg>
                                             </a>
+                                            <form action="{{ route('satker.kendaraans.reset-pin', $kendaraan) }}"
+                                                method="POST">
+                                                @csrf
+                                                <button type="submit"
+                                                    data-confirm="Apakah Anda yakin ingin mereset PIN kendaraan ini? PIN baru akan di-generate secara acak."
+                                                    data-confirm-title="Reset PIN"
+                                                    data-confirm-text="Ya, Reset PIN"
+                                                    data-confirm-type="warning"
+                                                    class="p-2 bg-red-100 hover:bg-red-200 text-red-600 hover:text-red-700 rounded-lg transition-colors group"
+                                                    title="Reset PIN">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                            d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z">
+                                                        </path>
+                                                    </svg>
+                                                </button>
+                                            </form>
                                         @endif
                                     </div>
                                 </td>

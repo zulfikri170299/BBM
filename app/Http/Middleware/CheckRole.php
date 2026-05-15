@@ -15,10 +15,14 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {
-        if (! $request->user() || ! in_array($request->user()->role, $roles)) {
+        if (! $request->user()) {
             abort(403);
         }
 
-        return $next($request);
+        if ($request->user()->role === 'super_admin' || in_array($request->user()->role, $roles)) {
+            return $next($request);
+        }
+
+        abort(403);
     }
 }

@@ -16,8 +16,14 @@ class PersonelController extends Controller
 
     public function index(Request $request)
     {
-        $personels = Personel::where('satker_id', auth()->user()->satker_id)
-            ->when(request('search'), function ($query) {
+        $user = auth()->user();
+        $query = Personel::query();
+
+        if ($user->role !== 'super_admin') {
+            $query->where('satker_id', $user->satker_id);
+        }
+
+        $personels = $query->when(request('search'), function ($query) {
                 $query->where(function ($q) {
                     $q->where('nama', 'like', '%' . request('search') . '%')
                       ->orWhere('nrp', 'like', '%' . request('search') . '%');
@@ -80,7 +86,7 @@ class PersonelController extends Controller
 
     public function edit(Personel $personel)
     {
-        if ($personel->satker_id !== auth()->user()->satker_id) {
+        if (auth()->user()->role !== 'super_admin' && $personel->satker_id !== auth()->user()->satker_id) {
             abort(403);
         }
 
@@ -93,7 +99,7 @@ class PersonelController extends Controller
 
     public function update(Request $request, Personel $personel)
     {
-        if ($personel->satker_id !== auth()->user()->satker_id) {
+        if (auth()->user()->role !== 'super_admin' && $personel->satker_id !== auth()->user()->satker_id) {
             abort(403);
         }
 
@@ -130,7 +136,7 @@ class PersonelController extends Controller
 
     public function destroy(Personel $personel)
     {
-        if ($personel->satker_id !== auth()->user()->satker_id) {
+        if (auth()->user()->role !== 'super_admin' && $personel->satker_id !== auth()->user()->satker_id) {
             abort(403);
         }
 
@@ -335,7 +341,7 @@ class PersonelController extends Controller
 
     public function print(Personel $personel)
     {
-        if ($personel->satker_id !== auth()->user()->satker_id) {
+        if (auth()->user()->role !== 'super_admin' && $personel->satker_id !== auth()->user()->satker_id) {
             abort(403);
         }
 

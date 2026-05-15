@@ -313,7 +313,7 @@
             </a>
         @endif
 
-        @if(auth()->user()->role === 'admin_satker')
+        @if(in_array(auth()->user()->role, ['super_admin', 'admin_satker']))
             <p class="px-4 py-2 mt-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Satker Management</p>
 
             <a href="{{ route('satker.dashboard') }}"

@@ -10,8 +10,14 @@ class PenandaTanganController extends Controller
 {
     public function index()
     {
-        $satkerId = auth()->user()->satker_id;
-        $penandaTangans = PenandaTangan::where('satker_id', $satkerId)->latest()->get();
+        $user = auth()->user();
+        $query = PenandaTangan::query();
+
+        if ($user->role !== 'super_admin') {
+            $query->where('satker_id', $user->satker_id);
+        }
+
+        $penandaTangans = $query->latest()->get();
         
         return view('satker.penanda_tangan.index', compact('penandaTangans'));
     }
@@ -41,7 +47,7 @@ class PenandaTanganController extends Controller
 
     public function update(Request $request, PenandaTangan $penandaTangan)
     {
-        if ($penandaTangan->satker_id !== auth()->user()->satker_id) {
+        if (auth()->user()->role !== 'super_admin' && $penandaTangan->satker_id !== auth()->user()->satker_id) {
             abort(403);
         }
 
@@ -60,7 +66,7 @@ class PenandaTanganController extends Controller
 
     public function destroy(PenandaTangan $penandaTangan)
     {
-        if ($penandaTangan->satker_id !== auth()->user()->satker_id) {
+        if (auth()->user()->role !== 'super_admin' && $penandaTangan->satker_id !== auth()->user()->satker_id) {
             abort(403);
         }
 

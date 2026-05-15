@@ -15,10 +15,15 @@ class RiwayatController extends Controller
 
     public function index(Request $request)
     {
-        $satker = auth()->user()->satker;
+        $user = auth()->user();
+        $satker = $user->satker;
 
         // 1. Ambil TransaksiBbm
-        $queryTrx = TransaksiBbm::where('satker_id', $satker->id)->with(['kendaraan.satker', 'personel.satker', 'petugas']);
+        $queryTrx = TransaksiBbm::with(['kendaraan.satker', 'personel.satker', 'petugas']);
+        if ($user->role !== 'super_admin') {
+            $queryTrx->where('satker_id', $satker->id);
+        }
+        
         if ($request->filled('dari')) $queryTrx->whereDate('tanggal', '>=', $request->dari);
         if ($request->filled('sampai')) $queryTrx->whereDate('tanggal', '<=', $request->sampai);
         if ($request->filled('kendaraan_id')) $queryTrx->where('kendaraan_id', $request->kendaraan_id);
@@ -30,9 +35,13 @@ class RiwayatController extends Controller
         });
 
         // 2. Ambil RiwayatTopup (Potong Saldo)
-        $queryTopup = \App\Models\RiwayatTopup::where('satker_id', $satker->id)
-            ->where('tipe', 'keluar')
+        $queryTopup = \App\Models\RiwayatTopup::where('tipe', 'keluar')
             ->with(['kendaraan.satker', 'user']);
+        
+        if ($user->role !== 'super_admin') {
+            $queryTopup->where('satker_id', $satker->id);
+        }
+
         if ($request->filled('dari')) $queryTopup->whereDate('created_at', '>=', $request->dari);
         if ($request->filled('sampai')) $queryTopup->whereDate('created_at', '<=', $request->sampai);
         if ($request->filled('kendaraan_id')) $queryTopup->where('kendaraan_id', $request->kendaraan_id);
@@ -58,9 +67,11 @@ class RiwayatController extends Controller
             'query' => $request->query(),
         ]);
 
-        $kendaraans = \App\Models\Kendaraan::where('satker_id', $satker->id)
-            ->orderBy('no_polisi')
-            ->get();
+        $queryKendaraan = \App\Models\Kendaraan::orderBy('no_polisi');
+        if ($user->role !== 'super_admin') {
+            $queryKendaraan->where('satker_id', $satker->id);
+        }
+        $kendaraans = $queryKendaraan->get();
 
         // Statistik (Mengecualikan Biro Logistik/ID 1 karena dianggap data pengujian/potong saldo)
         $trxs_murni = $trxs->where('satker_id', '!=', 1);
@@ -81,10 +92,15 @@ class RiwayatController extends Controller
 
     public function print(Request $request)
     {
-        $satker = auth()->user()->satker;
+        $user = auth()->user();
+        $satker = $user->satker;
 
         // Ambil TransaksiBbm
-        $queryTrx = TransaksiBbm::where('satker_id', $satker->id)->with(['kendaraan.satker', 'personel.satker', 'petugas']);
+        $queryTrx = TransaksiBbm::with(['kendaraan.satker', 'personel.satker', 'petugas']);
+        if ($user->role !== 'super_admin') {
+            $queryTrx->where('satker_id', $satker->id);
+        }
+
         if ($request->filled('dari')) $queryTrx->whereDate('tanggal', '>=', $request->dari);
         if ($request->filled('sampai')) $queryTrx->whereDate('tanggal', '<=', $request->sampai);
         if ($request->filled('kendaraan_id')) $queryTrx->where('kendaraan_id', $request->kendaraan_id);
@@ -95,7 +111,11 @@ class RiwayatController extends Controller
         });
 
         // Ambil RiwayatTopup (keluar)
-        $queryTopup = \App\Models\RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'keluar')->with(['kendaraan.satker', 'user']);
+        $queryTopup = \App\Models\RiwayatTopup::where('tipe', 'keluar')->with(['kendaraan.satker', 'user']);
+        if ($user->role !== 'super_admin') {
+            $queryTopup->where('satker_id', $satker->id);
+        }
+
         if ($request->filled('dari')) $queryTopup->whereDate('created_at', '>=', $request->dari);
         if ($request->filled('sampai')) $queryTopup->whereDate('created_at', '<=', $request->sampai);
         if ($request->filled('kendaraan_id')) $queryTopup->where('kendaraan_id', $request->kendaraan_id);

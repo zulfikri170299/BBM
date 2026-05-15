@@ -76,6 +76,7 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     Route::post('/personels/bulk-delete', [\App\Http\Controllers\Admin\PersonelController::class, 'bulkDelete'])->name('personels.bulk-delete');
     Route::resource('personels', \App\Http\Controllers\Admin\PersonelController::class);
     Route::post('/personels/{personel}/reset-pin', [\App\Http\Controllers\Admin\PersonelController::class, 'resetPin'])->name('personels.reset-pin');
+    Route::post('/personels/{personel}/reset-password', [\App\Http\Controllers\Admin\PersonelController::class, 'resetPassword'])->name('personels.reset-password');
     Route::get('/personels/{personel}/print', [\App\Http\Controllers\Admin\PersonelController::class, 'print'])->name('personels.print');
     Route::get('/kendaraans/export', [\App\Http\Controllers\Admin\KendaraanController::class, 'export'])->name('kendaraans.export');
     Route::get('/kendaraans/download-template', [\App\Http\Controllers\Admin\KendaraanController::class, 'downloadTemplate'])->name('kendaraans.download-template');
@@ -225,6 +226,7 @@ Route::middleware(['auth', 'role:admin_satker'])->prefix('satker')->name('satker
     Route::post('/kendaraans/preview-import', [\App\Http\Controllers\Satker\KendaraanController::class, 'previewImport'])->name('kendaraans.preview-import');
     Route::get('/kendaraans/download-template', [\App\Http\Controllers\Satker\KendaraanController::class, 'downloadTemplate'])->name('kendaraans.download-template');
     Route::get('/kendaraans/export', [\App\Http\Controllers\Satker\KendaraanController::class, 'export'])->name('kendaraans.export');
+    Route::post('/kendaraans/{kendaraan}/reset-pin', [\App\Http\Controllers\Satker\KendaraanController::class, 'resetPin'])->name('kendaraans.reset-pin');
     Route::resource('kendaraans', \App\Http\Controllers\Satker\KendaraanController::class)->except(['edit', 'update']);
     
     // Personel Routes
@@ -296,6 +298,7 @@ Route::middleware(['auth', 'role:super_admin,petugas_bbm'])->prefix('pembelian-b
 
 Route::middleware(['auth', 'role:personel'])->prefix('personel')->name('personel.')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Personel\DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/reset-pin', [\App\Http\Controllers\Personel\DashboardController::class, 'resetPin'])->name('reset-pin');
     Route::get('/transfer', [\App\Http\Controllers\Personel\TransferController::class, 'index'])->name('transfer.index');
     Route::post('/transfer', [\App\Http\Controllers\Personel\TransferController::class, 'store'])->name('transfer.store');
 });

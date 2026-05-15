@@ -41,4 +41,23 @@ class DashboardController extends Controller
 
         return view('personel.dashboard', compact('saldo', 'transactions', 'kendaraans'));
     }
+
+    public function resetPin()
+    {
+        $personel = auth()->user()->personel;
+        
+        if (!$personel) {
+            return back()->with('error', 'Akun Anda belum terhubung dengan data Personel.');
+        }
+
+        $newPin = \App\Models\Personel::generateUniquePin();
+        $personel->update(['pin' => $newPin]);
+
+        \App\Models\LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => "Personel melakukan Reset PIN mandiri"
+        ]);
+
+        return back()->with('success', "PIN Anda berhasil direset menjadi: {$newPin}. Mohon hafalkan PIN baru ini.");
+    }
 }

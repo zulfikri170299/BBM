@@ -290,7 +290,8 @@
                                                     @endif
                                                 @endif
 
-                                                <a href="{{ route('admin.personels.print', $personel) }}" target="_blank"
+                                                <a href="{{ route('admin.personels.print', $personel) }}"
+
                                                     class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white rounded-lg text-xs font-bold transition-all duration-200">
                                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
@@ -303,14 +304,34 @@
                                                 </a>
 
                                                 @if(auth()->user()->role !== 'kasubbag')
+                                                    <form action="{{ route('admin.personels.reset-password', $personel) }}"
+                                                        method="POST" class="inline">
+                                                        @csrf
+                                                        <button type="submit"
+                                                            data-confirm="Reset password akun login {{ $personel->nama }} menjadi NRP ({{ $personel->nrp }})?"
+                                                            data-confirm-title="Reset Password Akun"
+                                                            data-confirm-text="Ya, Reset Password"
+                                                            data-confirm-type="warning"
+                                                            class="inline-flex items-center p-2 bg-slate-100 hover:bg-amber-100 text-slate-500 hover:text-amber-600 rounded-lg transition-colors"
+                                                            title="Reset Password Akun">
+                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                                                                </path>
+                                                            </svg>
+                                                        </button>
+                                                    </form>
+
                                                     <form action="{{ route('admin.personels.reset-pin', $personel) }}"
                                                         method="POST" class="inline">
                                                         @csrf
                                                         <button type="submit"
                                                             data-confirm="Reset PIN personel {{ $personel->nama }}? PIN baru akan di-generate secara acak."
+                                                            data-confirm-title="Reset PIN"
+                                                            data-confirm-text="Ya, Reset PIN"
                                                             data-confirm-type="warning"
                                                             class="inline-flex items-center p-2 bg-slate-100 hover:bg-amber-100 text-slate-500 hover:text-amber-600 rounded-lg transition-colors"
-                                                            title="Reset PIN">
+                                                            title="Reset PIN (Kartu)">
                                                             <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                                 viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"

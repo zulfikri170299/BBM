@@ -383,7 +383,8 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
                                             <div class="flex items-center justify-end gap-2">
-                                                <a href="{{ route('satker.personels.print', $personel) }}" target="_blank"
+                                                <a href="{{ route('satker.personels.print', $personel) }}"
+
                                                     class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"
                                                     title="Cetak Kartu">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor"
@@ -448,7 +449,9 @@
                                                         </button>
                                                     </form>
                                                 @endif
-                                            </div>
+
+                                                {{-- Reset buttons removed for Satker Admin as per request --}}
+                                             </div>
                                         </td>
                                     </tr>
                                 @endforeach

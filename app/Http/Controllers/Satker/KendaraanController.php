@@ -23,10 +23,16 @@ class KendaraanController extends Controller
 
     public function index(Request $request)
     {
-        $satkerId = auth()->user()->satker_id;
+        $user = auth()->user();
+        $satkerId = $user->satker_id;
         $search = $request->input('search');
 
-        $query = Kendaraan::where('satker_id', $satkerId);
+        // Jika Super Admin, tampilkan semua kendaraan jika tidak ada filter satker
+        // atau gunakan satker_id dari user jika ada.
+        $query = Kendaraan::query();
+        if ($user->role !== 'super_admin') {
+            $query->where('satker_id', $satkerId);
+        }
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -37,8 +43,15 @@ class KendaraanController extends Controller
         }
 
         $kendaraans = $query->latest()->paginate($this->getPerPage($request))->withQueryString();
-        $personels = \App\Models\Personel::where('satker_id', $satkerId)->get();
-        $availableKendaraans = Kendaraan::where('satker_id', $satkerId)->get();
+        
+        // Untuk dropdown filter atau data lainnya di view
+        if ($user->role === 'super_admin') {
+            $personels = \App\Models\Personel::all();
+            $availableKendaraans = Kendaraan::all();
+        } else {
+            $personels = \App\Models\Personel::where('satker_id', $satkerId)->get();
+            $availableKendaraans = Kendaraan::where('satker_id', $satkerId)->get();
+        }
 
         return view('satker.kendaraans.index', compact('kendaraans', 'personels', 'availableKendaraans'));
     }
@@ -549,7 +562,7 @@ class KendaraanController extends Controller
 
     public function print(Kendaraan $kendaraan)
     {
-        if ($kendaraan->satker_id !== auth()->user()->satker_id) {
+        if (auth()->user()->role !== 'super_admin' && $kendaraan->satker_id !== auth()->user()->satker_id) {
             abort(403);
         }
 
@@ -612,7 +625,7 @@ class KendaraanController extends Controller
     }
     public function edit(Kendaraan $kendaraan)
     {
-        if ($kendaraan->satker_id !== auth()->user()->satker_id) {
+        if (auth()->user()->role !== 'super_admin' && $kendaraan->satker_id !== auth()->user()->satker_id) {
             abort(403);
         }
         
@@ -626,7 +639,7 @@ class KendaraanController extends Controller
 
     public function update(Request $request, Kendaraan $kendaraan)
     {
-        if ($kendaraan->satker_id !== auth()->user()->satker_id) {
+        if (auth()->user()->role !== 'super_admin' && $kendaraan->satker_id !== auth()->user()->satker_id) {
             abort(403);
         }
 
@@ -962,6 +975,22 @@ class KendaraanController extends Controller
         ]);
 
         return redirect()->route('satker.kendaraans.index')->with('success', "{$deleted} kendaraan berhasil dihapus.");
+    }
+    public function resetPin(Kendaraan $kendaraan)
+    {
+        if (auth()->user()->role !== 'super_admin' && $kendaraan->satker_id !== auth()->user()->satker_id) {
+            abort(403);
+        }
+
+        $newPin = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        $kendaraan->update(['pin' => $newPin]);
+
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => "Reset PIN Kendaraan: {$kendaraan->no_polisi}"
+        ]);
+
+        return back()->with('success', "PIN Kendaraan {$kendaraan->no_polisi} berhasil direset menjadi: {$newPin}");
     }
 }
 

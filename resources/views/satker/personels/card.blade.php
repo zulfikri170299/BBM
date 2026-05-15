@@ -456,7 +456,7 @@
         
         <!-- Tombol Kembali (Tetap di bawah kartu di mobile) -->
         <div class="bottom-controls">
-            <button onclick="window.location.href='{{ route('satker.personels.index') }}'" class="btn btn-back">← Kembali</button>
+            <button onclick="window.location.href='{{ auth()->user()->role === 'super_admin' ? route('admin.personels.index') : route('satker.personels.index') }}'" class="btn btn-back">← Kembali</button>
         </div>
     </div>
 

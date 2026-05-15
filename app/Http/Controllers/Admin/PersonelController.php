@@ -360,6 +360,28 @@ class PersonelController extends Controller
         return back()->with('success', "PIN Personel {$personel->nama} berhasil di-reset. PIN Baru: {$newPin}");
     }
 
+    public function resetPassword(Personel $personel)
+    {
+        if (auth()->user()->role !== 'super_admin') {
+            abort(403);
+        }
+
+        if (!$personel->user) {
+            return back()->with('error', 'Personel ini tidak memiliki akun login.');
+        }
+
+        $personel->user->update([
+            'password' => \Illuminate\Support\Facades\Hash::make($personel->nrp)
+        ]);
+
+        \App\Models\LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => "Reset Password Akun Personel (Super Admin): {$personel->nama} (NRP: {$personel->nrp})"
+        ]);
+
+        return back()->with('success', "Password login untuk {$personel->nama} berhasil direset menjadi NRP-nya.");
+    }
+
     public function bulkDelete(Request $request)
     {
         $request->validate([

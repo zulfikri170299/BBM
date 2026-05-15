@@ -316,8 +316,8 @@
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex items-center justify-end gap-1.5">
-                                        <a href="{{ route('admin.kendaraans.print', $kendaraan) }}" target="_blank"
-                                            rel="nofollow"
+                                        <a href="{{ route('admin.kendaraans.print', $kendaraan) }}"
+
                                             class="inline-flex items-center p-2 bg-slate-100 hover:bg-indigo-100 text-slate-500 hover:text-indigo-600 rounded-lg transition-colors"
                                             title="Print Kartu Kendaraan">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -341,6 +341,8 @@
                                                 @csrf
                                                 <button type="submit"
                                                     data-confirm="Reset PIN kendaraan {{ $kendaraan->no_polisi }}? PIN baru akan di-generate secara acak."
+                                                    data-confirm-title="Reset PIN"
+                                                    data-confirm-text="Ya, Reset PIN"
                                                     data-confirm-type="warning"
                                                     class="inline-flex items-center p-2 bg-slate-100 hover:bg-amber-100 text-slate-500 hover:text-amber-600 rounded-lg transition-colors"
                                                     title="Reset PIN">

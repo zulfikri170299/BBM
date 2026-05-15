@@ -15,9 +15,13 @@ class LaporanHutangController extends Controller
 
     public function index(Request $request)
     {
-        $satker = auth()->user()->satker;
-        $query = Hutang::with(['petugas', 'adminBayar'])
-            ->where('satker_id', $satker->id);
+        $user = auth()->user();
+        $satker = $user->satker;
+        $query = Hutang::with(['petugas', 'adminBayar']);
+        
+        if ($user->role !== 'super_admin') {
+            $query->where('satker_id', $satker->id);
+        }
 
         // Filter Tanggal
         if ($request->filled('start_date')) {
@@ -49,9 +53,13 @@ class LaporanHutangController extends Controller
 
     public function print(Request $request)
     {
-        $satker = auth()->user()->satker;
-        $query = Hutang::with(['petugas', 'adminBayar'])
-            ->where('satker_id', $satker->id);
+        $user = auth()->user();
+        $satker = $user->satker;
+        $query = Hutang::with(['petugas', 'adminBayar']);
+        
+        if ($user->role !== 'super_admin') {
+            $query->where('satker_id', $satker->id);
+        }
 
         // Filter Tanggal
         if ($request->filled('start_date')) {

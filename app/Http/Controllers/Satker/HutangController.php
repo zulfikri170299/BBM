@@ -9,11 +9,15 @@ class HutangController extends Controller
 {
     public function index(Request $request)
     {
-        $satkerId = auth()->user()->satker_id;
+        $user = auth()->user();
+        $satkerId = $user->satker_id;
 
         $query = \App\Models\Hutang::with(['petugas', 'adminBayar'])
-            ->where('satker_id', $satkerId)
             ->orderBy('created_at', 'desc');
+
+        if ($user->role !== 'super_admin') {
+            $query->where('satker_id', $satkerId);
+        }
 
         if ($request->filled('start_date')) {
             $query->whereDate('created_at', '>=', $request->start_date);
@@ -35,10 +39,18 @@ class HutangController extends Controller
         $hutangs = $query->paginate($perPage)->withQueryString();
 
         // Fetch kendaraans for the payment modal
-        $kendaraans = \App\Models\Kendaraan::where('satker_id', $satkerId)->get();
+        $queryKendaraan = \App\Models\Kendaraan::query();
+        if ($user->role !== 'super_admin') {
+            $queryKendaraan->where('satker_id', $satkerId);
+        }
+        $kendaraans = $queryKendaraan->get();
 
         // Calculate unpaid hutang per BBM type
-        $hutangPerBbm = \App\Models\Hutang::where('satker_id', $satkerId)
+        $queryHutangSum = \App\Models\Hutang::where('status', 'belum_dibayar');
+        if ($user->role !== 'super_admin') {
+            $queryHutangSum->where('satker_id', $satkerId);
+        }
+        $hutangPerBbm = $queryHutangSum
             ->where('status', 'belum_dibayar')
             ->selectRaw('jenis_bbm, sum(jumlah_bon) as total')
             ->groupBy('jenis_bbm')
@@ -49,12 +61,16 @@ class HutangController extends Controller
 
     public function downloadPDF(Request $request)
     {
-        $satkerId = auth()->user()->satker_id;
-        $satker = auth()->user()->satker;
+        $user = auth()->user();
+        $satkerId = $user->satker_id;
+        $satker = $user->satker;
 
         $query = \App\Models\Hutang::with(['petugas', 'adminBayar'])
-            ->where('satker_id', $satkerId)
             ->orderBy('created_at', 'desc');
+
+        if ($user->role !== 'super_admin') {
+            $query->where('satker_id', $satkerId);
+        }
 
         if ($request->filled('start_date')) {
             $query->whereDate('created_at', '>=', $request->start_date);
@@ -88,7 +104,7 @@ class HutangController extends Controller
         $user = auth()->user();
 
         // Security check
-        if ($hutang->satker_id !== $user->satker_id) {
+        if ($user->role !== 'super_admin' && $hutang->satker_id !== $user->satker_id) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -100,9 +116,11 @@ class HutangController extends Controller
             'kendaraan_id' => 'required|exists:kendaraans,id'
         ]);
 
-        $kendaraan = \App\Models\Kendaraan::where('id', $request->kendaraan_id)
-            ->where('satker_id', $user->satker_id)
-            ->firstOrFail();
+        $queryKendaraanCheck = \App\Models\Kendaraan::where('id', $request->kendaraan_id);
+        if ($user->role !== 'super_admin') {
+            $queryKendaraanCheck->where('satker_id', $user->satker_id);
+        }
+        $kendaraan = $queryKendaraanCheck->firstOrFail();
 
         if ($kendaraan->saldo < $hutang->jumlah_bon) {
             return back()->with('error', 'Saldo kendaraan tidak mencukupi untuk membayar hutang ini. Saldo: ' . $kendaraan->saldo . ' L');

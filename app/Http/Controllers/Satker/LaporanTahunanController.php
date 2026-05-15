@@ -13,11 +13,13 @@ class LaporanTahunanController extends Controller
     public function index(Request $request)
     {
         $year = $request->input('year', date('Y'));
-        $satker = auth()->user()->satker;
+        $user = auth()->user();
+        $satkers = ($user->role === 'super_admin') ? \App\Models\Satker::all() : collect([$user->satker]);
         
         $reportData = [];
 
-        if ($satker) {
+        foreach ($satkers as $satker) {
+            if (!$satker) continue;
             $isPertamaxTopup = function($q) {
                 $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX')
                   ->orWhereHas('kendaraan', function($k) { $k->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); });
@@ -90,7 +92,8 @@ class LaporanTahunanController extends Controller
     public function print(Request $request)
     {
         $year = $request->input('year', date('Y'));
-        $satker = auth()->user()->satker;
+        $user = auth()->user();
+        $satkers = ($user->role === 'super_admin') ? \App\Models\Satker::all() : collect([$user->satker]);
         $reportData = [];
         
         $total = [
@@ -102,7 +105,8 @@ class LaporanTahunanController extends Controller
             'sisa_dex' => 0,
         ];
 
-        if ($satker) {
+        foreach ($satkers as $satker) {
+            if (!$satker) continue;
             $isPertamaxTopup = function($q) {
                 $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX')
                   ->orWhereHas('kendaraan', function($k) { $k->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); });
@@ -147,12 +151,12 @@ class LaporanTahunanController extends Controller
                 'sisa_dex' => $sisaDex,
             ];
 
-            $total['pendapatan_pertamax'] = $pendapatanPertamax;
-            $total['pendapatan_dex'] = $pendapatanDex;
-            $total['pemakaian_pertamax'] = $pemakaianPertamax;
-            $total['pemakaian_dex'] = $pemakaianDex;
-            $total['sisa_pertamax'] = $sisaPertamax;
-            $total['sisa_dex'] = $sisaDex;
+            $total['pendapatan_pertamax'] += $pendapatanPertamax;
+            $total['pendapatan_dex'] += $pendapatanDex;
+            $total['pemakaian_pertamax'] += $pemakaianPertamax;
+            $total['pemakaian_dex'] += $pemakaianDex;
+            $total['sisa_pertamax'] += $sisaPertamax;
+            $total['sisa_dex'] += $sisaDex;
         }
 
         $pdf = Pdf::loadView('satker.laporan-tahunan.print', compact('reportData', 'year', 'total'));

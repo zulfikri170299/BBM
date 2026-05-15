@@ -4,33 +4,37 @@
             /* Container yang akan di-resize oleh JavaScript */
             .zoom-wrapper {
                 width: 100% !important;
-                max-width: 400px; /* Lebar maksimal di dashboard */
-                height: auto;
-                position: relative;
+                max-width: 500px;
                 margin: 0 auto;
+                position: relative;
                 aspect-ratio: 1000 / 620;
+                overflow: hidden;
+                border-radius: 20px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             }
 
             .zoom-scale-container {
+                width: 1000px;
+                height: 620px;
                 position: absolute;
                 top: 0;
                 left: 0;
                 transform-origin: top left;
+                will-change: transform;
             }
 
-            /* === CARD DESIGN === */
+            /* === CARD DESIGN SCOPED === */
             .bbm-card-design {
                 width: 1000px;
                 height: 620px;
                 position: relative;
-                border-radius: 40px;
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
                 color: #fff;
                 display: flex;
                 flex-direction: column;
-                border: 1px solid rgba(255, 255, 255, 0.15);
                 overflow: hidden;
                 font-family: 'Outfit', sans-serif;
+                background-size: cover !important;
+                background-position: center !important;
             }
 
             .bbm-card-design::before {
@@ -332,15 +336,32 @@
                             </div>
                         </div>
 
-                        <div class="mt-4 sm:mt-6 text-center">
+                        <div class="mt-4 sm:mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
                             <button onclick="downloadCard()"
-                                class="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 bg-indigo-600 text-white rounded-lg sm:rounded-xl shadow-lg hover:bg-indigo-700 hover:shadow-indigo-500/40 transition-all duration-200 transform hover:-translate-y-0.5 font-medium text-xs sm:text-sm">
+                                class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 bg-indigo-600 text-white rounded-lg sm:rounded-xl shadow-lg hover:bg-indigo-700 hover:shadow-indigo-500/40 transition-all duration-200 transform hover:-translate-y-0.5 font-medium text-xs sm:text-sm">
                                 <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                                 </svg>
                                 Download Kartu
                             </button>
+
+                            <form action="{{ route('personel.reset-pin') }}" method="POST" class="w-full sm:w-auto">
+                                @csrf
+                                <button type="submit"
+                                    data-confirm="Apakah Anda yakin ingin mereset PIN Kartu Anda? PIN baru akan di-generate secara acak dan akan langsung ditampilkan di layar."
+                                    data-confirm-title="Reset PIN Kartu"
+                                    data-confirm-text="Ya, Reset PIN"
+                                    data-confirm-type="warning"
+                                    class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 bg-rose-600 text-white rounded-lg sm:rounded-xl shadow-lg hover:bg-rose-700 hover:shadow-rose-500/40 transition-all duration-200 transform hover:-translate-y-0.5 font-medium text-xs sm:text-sm">
+                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z">
+                                        </path>
+                                    </svg>
+                                    Reset PIN Kartu
+                                </button>
+                            </form>
                         </div>
                     @endif
                 </div>
@@ -427,20 +448,19 @@
                     const wrapper = document.getElementById('zoom-wrapper');
                     const scaleContainer = document.getElementById('zoom-scale-container');
                     if(wrapper && scaleContainer) {
-                        const availableWidth = wrapper.clientWidth;
-                        if(availableWidth === 0) {
-                            setTimeout(setDashboardCardScale, 100);
-                            return;
+                        const availableWidth = wrapper.offsetWidth;
+                        if(availableWidth > 0) {
+                            const scale = availableWidth / 1000;
+                            scaleContainer.style.transform = `scale(${scale})`;
                         }
-                        const scale = availableWidth / 1000;
-                        scaleContainer.style.transform = `scale(${scale})`;
-                        wrapper.style.height = `${620 * scale}px`;
                     }
                 }
                 window.addEventListener('resize', setDashboardCardScale);
+                window.addEventListener('load', setDashboardCardScale);
                 document.addEventListener('turbo:load', setDashboardCardScale);
                 document.addEventListener('turbo:render', setDashboardCardScale);
-                setTimeout(setDashboardCardScale, 50);
+                // Initial call with a small delay to ensure DOM is ready
+                setTimeout(setDashboardCardScale, 100);
 
                 function downloadCard() {
                     const btn = event.currentTarget;
