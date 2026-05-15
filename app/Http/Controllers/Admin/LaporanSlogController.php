@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\RiwayatStokAdmin;
 use App\Models\TransaksiBbm;
 use App\Models\Hutang;
+use App\Models\PembelianBbm;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -97,13 +98,11 @@ class LaporanSlogController extends Controller
             $start = $dates[0];
             $end = $dates[1];
 
-            $terimaPertamax = RiwayatStokAdmin::where('tipe', 'masuk')
-                ->where(function($q) { $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })
-                ->whereBetween('created_at', [$start, $end])->sum('jumlah');
+            $terimaPertamax = PembelianBbm::where(function($q) { $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })
+                ->whereBetween('tanggal', [$start->format('Y-m-d'), $end->format('Y-m-d')])->sum('jumlah');
 
-            $terimaDex = RiwayatStokAdmin::where('tipe', 'masuk')
-                ->where(function($q) { $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })
-                ->whereBetween('created_at', [$start, $end])->sum('jumlah');
+            $terimaDex = PembelianBbm::where(function($q) { $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })
+                ->whereBetween('tanggal', [$start->format('Y-m-d'), $end->format('Y-m-d')])->sum('jumlah');
 
             $keluarPertamax = TransaksiBbm::where(function($q) { $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })
                 ->whereBetween('tanggal', [$start, $end])->sum('liter');
@@ -181,13 +180,11 @@ class LaporanSlogController extends Controller
                 $dayStart = $currentDate->copy()->startOfDay();
                 $dayEnd = $currentDate->copy()->endOfDay();
 
-                $terimaPertamax = RiwayatStokAdmin::where('tipe', 'masuk')
-                    ->where(function($q) { $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })
-                    ->whereBetween('created_at', [$dayStart, $dayEnd])->sum('jumlah');
+                $terimaPertamax = PembelianBbm::where(function($q) { $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })
+                    ->whereDate('tanggal', $currentDate->format('Y-m-d'))->sum('jumlah');
 
-                $terimaDex = RiwayatStokAdmin::where('tipe', 'masuk')
-                    ->where(function($q) { $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })
-                    ->whereBetween('created_at', [$dayStart, $dayEnd])->sum('jumlah');
+                $terimaDex = PembelianBbm::where(function($q) { $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })
+                    ->whereDate('tanggal', $currentDate->format('Y-m-d'))->sum('jumlah');
 
                 $keluarPertamax = TransaksiBbm::where(function($q) { $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })
                     ->whereBetween('tanggal', [$dayStart, $dayEnd])->sum('liter');
@@ -246,11 +243,10 @@ class LaporanSlogController extends Controller
 
     private function getHistoricalStock($jenisBbm, $date)
     {
-        $totalMasuk = RiwayatStokAdmin::where('tipe', 'masuk')
-            ->where(function($q) use ($jenisBbm) {
+        $totalMasuk = PembelianBbm::where(function($q) use ($jenisBbm) {
                 $q->where('jenis_bbm', $jenisBbm)->orWhere('jenis_bbm', strtoupper($jenisBbm));
             })
-            ->where('created_at', '<', $date)
+            ->whereDate('tanggal', '<', $date->format('Y-m-d'))
             ->sum('jumlah');
 
         $totalKeluarTransaksi = TransaksiBbm::where(function($q) use ($jenisBbm) {

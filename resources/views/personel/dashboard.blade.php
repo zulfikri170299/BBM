@@ -1,311 +1,224 @@
 <x-app-layout>
     @push('styles')
         <style>
-            /* === ID CARD STYLES === */
-            .id-card {
-                width: 320px;
-                /* Reduced to 320px */
-                border-radius: 12px;
-                overflow: hidden;
-                box-shadow: 0 8px 20px -5px rgba(0, 0, 0, 0.3);
-                color: #fff;
+            /* Container yang akan di-resize oleh JavaScript */
+            .zoom-wrapper {
+                width: 100% !important;
+                max-width: 400px; /* Lebar maksimal di dashboard */
+                height: auto;
                 position: relative;
                 margin: 0 auto;
-                font-family: 'Outfit', sans-serif;
-                background-color: #000;
-                transform-origin: center top;
+                aspect-ratio: 1000 / 620;
             }
 
-            /* Shared pseudo-elements */
-            .id-card::before {
-                content: '';
+            .zoom-scale-container {
                 position: absolute;
-                top: -40px;
-                right: -40px;
-                width: 100px;
-                height: 100px;
-                border-radius: 50%;
+                top: 0;
+                left: 0;
+                transform-origin: top left;
             }
 
-            .id-card::after {
-                content: '';
-                position: absolute;
-                bottom: -20px;
-                left: -20px;
-                width: 80px;
-                height: 80px;
-                border-radius: 50%;
-            }
-
-            /* VARIANTS */
-            .id-card-red {
-                background: linear-gradient(135deg, #d50000 0%, #7f0000 60%, #000000 100%);
-            }
-
-            .id-card-red::before {
-                background: radial-gradient(circle, rgba(255, 50, 50, 0.5) 0%, transparent 70%);
-            }
-
-            .id-card-red::after {
-                background: radial-gradient(circle, rgba(220, 0, 0, 0.4) 0%, transparent 70%);
-            }
-
-            .id-card-yellow {
-                background: linear-gradient(135deg, #f59e0b 0%, #b45309 60%, #000000 100%);
-            }
-
-            .id-card-yellow::before {
-                background: radial-gradient(circle, rgba(251, 191, 36, 0.5) 0%, transparent 70%);
-            }
-
-            .id-card-yellow::after {
-                background: radial-gradient(circle, rgba(245, 158, 11, 0.4) 0%, transparent 70%);
-            }
-
-            /* BRIGHT YELLOW THEME (Pertamina Dex) */
-            .id-card-yellow-dex {
-                background: linear-gradient(135deg, #facc15 0%, #eab308 60%, #000000 100%);
-            }
-
-            .id-card-yellow-dex::before {
-                background: radial-gradient(circle, rgba(250, 204, 21, 0.5) 0%, transparent 70%);
-            }
-
-            .id-card-yellow-dex::after {
-                background: radial-gradient(circle, rgba(234, 179, 8, 0.4) 0%, transparent 70%);
-            }
-
-            /* HEADER */
-            .id-card-header {
-                padding: 12px 14px 0;
+            /* === CARD DESIGN === */
+            .bbm-card-design {
+                width: 1000px;
+                height: 620px;
                 position: relative;
+                border-radius: 40px;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+                color: #fff;
+                display: flex;
+                flex-direction: column;
+                border: 1px solid rgba(255, 255, 255, 0.15);
+                overflow: hidden;
+                font-family: 'Outfit', sans-serif;
+            }
+
+            .bbm-card-design::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%);
+                border-radius: 40px;
+                pointer-events: none;
                 z-index: 1;
+            }
+
+            /* === HEADER SECTION === */
+            .bbm-header {
                 display: flex;
                 justify-content: space-between;
-                align-items: center;
+                align-items: flex-start;
+                padding: 40px 60px 0;
+                z-index: 2;
             }
 
-            .id-header-info {
+            .bbm-logo-box {
+                width: 90px;
+                height: 90px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .bbm-logo-box img {
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: contain;
+                filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
+            }
+
+            .bbm-header-text {
                 flex: 1;
                 text-align: center;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
+                padding-top: 5px;
             }
 
-            .id-label {
-                font-size: 18px;
-                /* Reduced */
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                color: #fff;
-                font-weight: 800;
+            .bbm-header-text h1 {
+                font-size: 58px;
+                font-weight: 900;
+                letter-spacing: 2px;
                 line-height: 1.1;
-                text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            }
-
-            .id-satker-name {
-                font-size: 11px;
-                /* Reduced */
-                color: rgba(255, 255, 255, 0.95);
-                margin-top: 1px;
-                font-weight: 700;
+                margin-bottom: 2px;
                 text-transform: uppercase;
-                letter-spacing: 0.5px;
+                text-shadow: 0 4px 10px rgba(0,0,0,0.6);
             }
 
-            .id-header-logo-left,
-            .id-header-logo-right {
-                flex-shrink: 0;
-                width: 35px;
+            .bbm-header-text h2 {
+                font-size: 34px;
+                font-weight: 700;
+                letter-spacing: 6px;
+                color: #f8fafc;
+                text-transform: uppercase;
+                text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            }
+
+            /* === MAIN CONTENT === */
+            .bbm-content {
                 display: flex;
+                flex: 1;
                 align-items: center;
+                padding: 10px 60px;
+                gap: 50px;
+                z-index: 2;
             }
 
-            .id-header-logo-left {
-                justify-content: flex-start;
-            }
-
-            .id-header-logo-right {
-                justify-content: flex-end;
-            }
-
-            .id-card-header img {
-                width: 30px;
-                height: 30px;
-                object-fit: contain;
-                filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
-            }
-
-            /* BODY */
-            .id-card-body {
-                padding: 12px 14px;
-                display: flex;
-                gap: 10px;
-                position: relative;
-                z-index: 1;
-            }
-
-            .id-qr-section {
-                flex-shrink: 0;
+            .bbm-qr-area {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 4px;
+                gap: 12px;
             }
 
-            .id-qr-wrapper {
+            .bbm-qr-box {
                 background: #fff;
-                padding: 4px;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                padding: 15px;
+                border-radius: 20px;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
 
-            .id-qr-code-text {
-                font-size: 7px;
-                color: rgba(255, 255, 255, 0.4);
+            .bbm-qr-label {
                 font-family: monospace;
-                letter-spacing: 1px;
+                font-size: 15px;
+                color: rgba(255, 255, 255, 0.6);
+                letter-spacing: 3px;
+                font-weight: 600;
             }
 
-            .id-info-section {
+            .bbm-info-area {
                 flex: 1;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
-                gap: 8px;
             }
 
-            .id-info-item .info-label {
-                font-size: 7px;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                color: rgba(255, 255, 255, 0.4);
+            .bbm-info-item {
+                margin-bottom: 15px;
+            }
+
+            .bbm-label-small {
+                font-size: 16px;
                 font-weight: 600;
+                color: rgba(255, 255, 255, 0.6);
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                margin-bottom: 5px;
             }
 
-            .id-info-item .info-value {
-                font-size: 10px;
-                font-weight: 700;
-                color: #fff;
-                margin-top: 1px;
-            }
-
-            .id-website-link {
-                font-size: 14px;
-                /* Reduced */
+            .bbm-val-medium {
+                font-size: 36px;
                 font-weight: 800;
-                color: #fff;
-                margin-top: 8px;
+                text-transform: uppercase;
+                line-height: 1.2;
+                text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+            }
+
+            .bbm-val-xlarge {
+                font-size: 76px;
+                font-weight: 900;
+                text-transform: uppercase;
+                line-height: 1;
                 letter-spacing: 1px;
-                display: block;
-                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+                text-shadow: 0 6px 15px rgba(0,0,0,0.6);
+                margin-top: 5px;
             }
 
-            /* FOOTER */
-            .id-card-footer {
-                padding: 6px 14px 10px;
-                background: rgba(0, 0, 0, 0.2);
-                position: relative;
-                z-index: 1;
-                display: flex;
-                flex-direction: column;
-                gap: 4px;
-            }
-
-            .id-footer-top {
+            /* === FOOTER AREA === */
+            .bbm-footer-area {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                width: 100%;
+                padding: 0 60px 45px;
+                z-index: 2;
             }
 
-            .id-footer-bottom {
-                text-align: center;
-                width: 100%;
-            }
-
-            .id-footer-link {
-                font-size: 11px;
-                /* Reduced */
-                font-weight: 700;
-                color: #1e90ff;
-                /* Blue */
-                letter-spacing: 0.5px;
-                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-                text-transform: lowercase;
-            }
-
-            .id-bbm-badge {
-                display: inline-flex;
+            .bbm-pill {
+                background: rgba(15, 23, 42, 0.85);
+                padding: 12px 30px;
+                border-radius: 50px;
+                display: flex;
                 align-items: center;
-                gap: 4px;
-                padding: 3px 8px;
-                border-radius: 12px;
-                background: rgba(255, 255, 255, 0.15);
-                backdrop-filter: blur(4px);
+                gap: 12px;
                 border: 1px solid rgba(255, 255, 255, 0.2);
-                font-size: 8px;
-                font-weight: 600;
-                color: #fff;
-                letter-spacing: 0.5px;
+                backdrop-filter: blur(8px);
+                box-shadow: 0 8px 20px rgba(0,0,0,0.4);
             }
 
-            .id-bbm-pertalite {
-                background: rgba(255, 255, 255, 0.15);
-                color: #fff;
-            }
-
-            .id-bbm-pertamax {
-                background: rgba(255, 255, 255, 0.15);
-                color: #fff;
-            }
-
-            .id-bbm-solar {
-                background: rgba(255, 255, 255, 0.15);
-                color: #fff;
-            }
-
-            .id-bbm-dexlite {
-                background: rgba(255, 255, 255, 0.15);
-                color: #fff;
-            }
-
-            .id-bbm-dot {
-                width: 4px;
-                height: 4px;
+            .bbm-dot-status {
+                width: 14px;
+                height: 14px;
                 border-radius: 50%;
             }
 
-            .id-dot-pertalite {
-                background: #2ecc71;
-                box-shadow: 0 0 4px #2ecc71;
+            .bbm-pertamax .bbm-dot-status { background: #3b82f6; box-shadow: 0 0 12px #3b82f6; }
+            .bbm-dex .bbm-dot-status { background: #a855f7; box-shadow: 0 0 12px #a855f7; }
+
+            .bbm-label-text {
+                font-size: 22px;
+                font-weight: 800;
+                color: #fff;
             }
 
-            .id-dot-pertamax {
-                background: #3498db;
-                box-shadow: 0 0 4px #3498db;
+            .bbm-logo-pertamina {
+                height: 38px;
+                object-fit: contain;
+                filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
             }
 
-            .id-dot-solar,
-            .id-dot-dexlite {
-                background: #facc15;
-                box-shadow: 0 0 4px #facc15;
-            }
-
-            .id-dot-dexlite {
-                background: #9b59b6;
-                box-shadow: 0 0 4px #9b59b6;
-            }
-
-            /* RESPONSIVE MOBILE STYLES */
-            @media (max-width: 640px) {
-                .id-card {
-                    transform: scale(0.85);
-                    /* Slightly scale down on mobile */
-                    margin-bottom: -20px;
-                    /* Offset the scale whitespace */
-                }
+            .bbm-ip-text {
+                position: absolute;
+                bottom: 12px;
+                left: 0;
+                right: 0;
+                text-align: center;
+                font-size: 24px;
+                font-weight: 900;
+                color: #3b82f6;
+                letter-spacing: 3px;
+                z-index: 2;
+                text-shadow: 0 2px 4px rgba(0,0,0,0.6);
             }
         </style>
     @endpush
@@ -330,63 +243,57 @@
                         $p = auth()->user()->personel;
                     @endphp
                     @if($p)
-                        @php
-                            $cardTheme = match ($p->jenis_bbm) {
-                                'Pertamina Dex' => 'yellow-dex',
-                                'Dexlite', 'Solar' => 'yellow',
-                                default => 'red',
-                            };
-                            $bbmClass = match ($p->jenis_bbm) {
-                                'Pertalite' => 'pertalite',
-                                'Pertamax' => 'pertamax',
-                                'Solar' => 'solar',
-                                'Dexlite' => 'dexlite',
-                                default => 'pertalite',
-                            };
-                        @endphp
-
-                        <!-- Kartu BBM (Style matched to restored card.blade.php) -->
-                        <div class="id-card id-card-{{ $cardTheme }}" id="personel-card">
-                            <div class="id-card-header">
-                                <div class="id-header-logo-left">
-                                    <img src="{{ asset('Lambang_Polda_NTB.png') }}" alt="Logo Polda">
-                                </div>
-                                <div class="id-header-info">
-                                    <div class="id-label">Kartu Kendali BBM</div>
-                                    <div class="id-satker-name">{{ $p->satker->nama_satker }}</div>
-                                </div>
-                                <div class="id-header-logo-right">
-                                    <img src="{{ asset('rolog.png') }}" alt="Logo Logistik">
-                                </div>
-                            </div>
-
-                            <div class="id-card-body">
-                                <div class="id-qr-section">
-                                    <div class="id-qr-wrapper">
-                                        <div id="p-qrcode"></div>
+                        <!-- Kartu BBM -->
+                        <div class="zoom-wrapper" id="zoom-wrapper">
+                            <div class="zoom-scale-container" id="zoom-scale-container">
+                                @php
+                                    $bgImage = str_contains(strtolower($p->jenis_bbm ?? ''), 'dex') 
+                                        ? 'background pertamina dex.png' 
+                                        : 'background pertamax.png';
+                                @endphp
+                                <div class="bbm-card-design" id="personel-card" style="background: url('{{ asset('images/' . $bgImage) }}?v={{ time() }}') no-repeat center center; background-size: cover;">
+                                    <div class="bbm-header">
+                                        <div class="bbm-logo-box">
+                                            <img src="{{ asset('Lambang_Polda_NTB.png') }}" alt="Polda NTB">
+                                        </div>
+                                        <div class="bbm-header-text">
+                                            <h1>KARTU KENDALI BBM</h1>
+                                            <h2>BIRO LOGISTIK</h2>
+                                        </div>
+                                        <div class="bbm-logo-box">
+                                            <img src="{{ asset('rolog.png') }}" alt="Logistik">
+                                        </div>
                                     </div>
-                                    <div class="id-qr-code-text">{{ $p->barcode ?? $p->nrp }}</div>
-                                </div>
-                                <div class="id-info-section">
-                                    <div class="id-info-item">
-                                        <div class="info-label">Nama Personel</div>
-                                        <div class="info-value">{{ strtoupper($p->nama) }}</div>
-                                        <div class="id-website-link">{{ $p->nrp }}</div>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="id-card-footer">
-                                <div class="id-footer-top">
-                                    <div class="id-bbm-badge id-bbm-{{ $bbmClass }}">
-                                        <span class="id-bbm-dot id-dot-{{ $bbmClass }}"></span>
-                                        {{ $p->jenis_bbm ?? 'BBM' }}
+                                    <div class="bbm-content">
+                                        <div class="bbm-qr-area">
+                                            <div class="bbm-qr-box">
+                                                <div id="p-qrcode"></div>
+                                            </div>
+                                            <div class="bbm-qr-label">{{ $p->barcode ?? $p->nrp }}</div>
+                                        </div>
+                                        <div class="bbm-info-area">
+                                            <div class="bbm-info-item">
+                                                <div class="bbm-label-small">Nama Personel</div>
+                                                <div class="bbm-val-medium">{{ strtoupper($p->nama) }}</div>
+                                            </div>
+                                            <div class="bbm-info-item">
+                                                <div class="bbm-val-xlarge">{{ $p->nrp }}</div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <img src="{{ asset('assets/images/mypertamina.png') }}" alt="MyPertamina"
-                                        style="height: 14px; opacity: 0.8;">
-                                </div>
-                                <div class="id-footer-bottom">
-                                    <div class="id-footer-link">{{ request()->getHost() }}</div>
+
+                                    <div class="bbm-footer-area">
+                                        <div class="bbm-pill {{ str_contains(strtolower($p->jenis_bbm ?? ''), 'dex') ? 'bbm-dex' : 'bbm-pertamax' }}">
+                                            <div class="bbm-dot-status"></div>
+                                            <div class="bbm-label-text">{{ $p->jenis_bbm ?? 'BBM' }}</div>
+                                        </div>
+                                        <img src="{{ asset('assets/images/mypertamina.png') }}" class="bbm-logo-pertamina" alt="MyPertamina">
+                                    </div>
+
+                                    <div class="bbm-ip-text">
+                                        {{ request()->getHost() == 'localhost' ? '127.0.0.1' : request()->getHost() }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -509,28 +416,63 @@
             @if(auth()->user()->personel)
                 new QRCode(document.getElementById('p-qrcode'), {
                     text: '{{ auth()->user()->personel->barcode ?? auth()->user()->personel->nrp }}',
-                    width: 50,
-                    height: 50,
-                    colorDark: '#1e293b',
+                    width: 160,
+                    height: 160,
+                    colorDark: '#000000',
                     colorLight: '#ffffff',
                     correctLevel: QRCode.CorrectLevel.H
                 });
 
-                function downloadCard() {
-                    const card = document.getElementById('personel-card');
+                function setDashboardCardScale() {
+                    const wrapper = document.getElementById('zoom-wrapper');
+                    const scaleContainer = document.getElementById('zoom-scale-container');
+                    if(wrapper && scaleContainer) {
+                        const availableWidth = wrapper.clientWidth;
+                        if(availableWidth === 0) {
+                            setTimeout(setDashboardCardScale, 100);
+                            return;
+                        }
+                        const scale = availableWidth / 1000;
+                        scaleContainer.style.transform = `scale(${scale})`;
+                        wrapper.style.height = `${620 * scale}px`;
+                    }
+                }
+                window.addEventListener('resize', setDashboardCardScale);
+                document.addEventListener('turbo:load', setDashboardCardScale);
+                document.addEventListener('turbo:render', setDashboardCardScale);
+                setTimeout(setDashboardCardScale, 50);
 
-                    // Generate QR Image first to ensure it's rendered
-                    // Wait a bit for images to load
+                function downloadCard() {
+                    const btn = event.currentTarget;
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = '⏳ Memproses...';
+                    btn.disabled = true;
+
+                    const card = document.getElementById('personel-card');
+                    const scaleContainer = document.getElementById('zoom-scale-container');
+                    const originalTransform = scaleContainer.style.transform;
+                    
+                    // Kembalikan skala ke asli untuk menangkap resolusi tinggi
+                    scaleContainer.style.transform = 'scale(1)';
+
                     html2canvas(card, {
-                        scale: 3, // High resolution
+                        scale: 2,
                         backgroundColor: null,
                         useCORS: true,
                         logging: false
                     }).then(canvas => {
+                        scaleContainer.style.transform = originalTransform;
                         const link = document.createElement('a');
-                        link.download = 'Kartu-Personel-{{ auth()->user()->personel->nrp }}.jpg';
-                        link.href = canvas.toDataURL('image/jpeg', 0.9);
+                        link.download = 'Kartu-Personel-{{ auth()->user()->personel->nrp }}.png';
+                        link.href = canvas.toDataURL('image/png');
                         link.click();
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                    }).catch(err => {
+                        scaleContainer.style.transform = originalTransform;
+                        alert('Gagal memproses gambar');
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
                     });
                 }
 

@@ -284,6 +284,16 @@ Route::middleware(['auth', 'role:petugas_bbm'])->prefix('petugas')->name('petuga
     Route::resource('hutang', \App\Http\Controllers\Petugas\HutangController::class)->only(['index', 'store']);
 });
 
+Route::middleware(['auth', 'role:super_admin,petugas_bbm'])->prefix('pembelian-bbm')->name('pembelian-bbm.')->group(function () {
+    Route::get('/print', [\App\Http\Controllers\PembelianBbmController::class, 'print'])->name('print');
+    Route::get('/', [\App\Http\Controllers\PembelianBbmController::class, 'index'])->name('index');
+    Route::get('/create', [\App\Http\Controllers\PembelianBbmController::class, 'create'])->name('create');
+    Route::post('/', [\App\Http\Controllers\PembelianBbmController::class, 'store'])->name('store');
+    Route::get('/{pembelianBbm}/edit', [\App\Http\Controllers\PembelianBbmController::class, 'edit'])->name('edit');
+    Route::put('/{pembelianBbm}', [\App\Http\Controllers\PembelianBbmController::class, 'update'])->name('update');
+    Route::delete('/{pembelianBbm}', [\App\Http\Controllers\PembelianBbmController::class, 'destroy'])->name('destroy');
+});
+
 Route::middleware(['auth', 'role:personel'])->prefix('personel')->name('personel.')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Personel\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/transfer', [\App\Http\Controllers\Personel\TransferController::class, 'index'])->name('transfer.index');

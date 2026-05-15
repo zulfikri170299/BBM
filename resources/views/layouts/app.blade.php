@@ -222,7 +222,7 @@
 
 <body class="font-sans antialiased bg-slate-50 text-slate-900">
     <div x-data="{ sidebarOpen: false }" @sidebar-close.window="sidebarOpen = false"
-        class="flex h-screen bg-slate-50 overflow-hidden">
+        class="flex h-[100dvh] bg-slate-50 overflow-hidden">
         @include('layouts.sidebar')
 
         <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden pt-1">

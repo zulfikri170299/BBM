@@ -17,434 +17,372 @@
 
         body {
             font-family: 'Outfit', sans-serif;
-            background: #f1f5f9;
+            background: #0f172a;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Container yang akan di-resize oleh JavaScript */
+        .zoom-wrapper {
+            width: 1000px;
+            height: 620px;
+            position: relative;
+            margin: 0 auto;
+            transition: width 0.1s, height 0.1s;
         }
 
         /* === CARD DESIGN === */
         .card {
-            width: 100%;
-            max-width: 550px;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+            width: 1000px;
+            height: 620px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: top left;
+            @php
+                $bgImage = str_contains(strtolower($personel->jenis_bbm), 'dex') 
+                    ? 'background pertamina dex.png' 
+                    : 'background pertamax.png';
+            @endphp
+            background: url('{{ asset('images/' . $bgImage) }}?v={{ time() }}') no-repeat center center;
+            background-size: cover;
+            border-radius: 40px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
             color: #fff;
-            position: relative;
-            background-color: #000;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            overflow: hidden;
         }
 
-        /* Shared pseudo-elements layout */
         .card::before {
             content: '';
             position: absolute;
-            top: -60px;
-            right: -60px;
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-        }
-
-        .card::after {
-            content: '';
-            position: absolute;
-            bottom: -40px;
-            left: -40px;
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-        }
-
-        /* === CARD VARIANTS === */
-        /* RED THEME */
-        .card-red {
-            background: linear-gradient(135deg, #d50000 0%, #7f0000 60%, #000000 100%);
-        }
-
-        .card-red::before {
-            background: radial-gradient(circle, rgba(255, 50, 50, 0.5) 0%, transparent 70%);
-        }
-
-        .card-red::after {
-            background: radial-gradient(circle, rgba(220, 0, 0, 0.4) 0%, transparent 70%);
-        }
-
-        /* YELLOW THEME */
-        .card-yellow {
-            background: linear-gradient(135deg, #f59e0b 0%, #b45309 60%, #000000 100%);
-        }
-
-        .card-yellow::before {
-            background: radial-gradient(circle, rgba(251, 191, 36, 0.5) 0%, transparent 70%);
-        }
-
-        .card-yellow::after {
-            background: radial-gradient(circle, rgba(245, 158, 11, 0.4) 0%, transparent 70%);
-        }
-
-        /* BRIGHT YELLOW THEME (Specifically for Pertamina Dex) */
-        .card-yellow-dex {
-            background: linear-gradient(135deg, #facc15 0%, #eab308 60%, #000000 100%);
-        }
-
-        .card-yellow-dex::before {
-            background: radial-gradient(circle, rgba(250, 204, 21, 0.5) 0%, transparent 70%);
-        }
-
-        .card-yellow-dex::after {
-            background: radial-gradient(circle, rgba(234, 179, 8, 0.4) 0%, transparent 70%);
-        }
-
-        /* === INTERNAL CARD STYLES === */
-        .card-header {
-            padding: 20px 24px 0;
-            position: relative;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%);
+            border-radius: 40px;
+            pointer-events: none;
             z-index: 1;
+        }
+
+        /* === HEADER SECTION === */
+        .header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
+            padding: 40px 60px 0;
+            z-index: 2;
         }
 
-        .card-header .header-info {
+        .logo-box {
+            width: 90px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
+        }
+
+        .header-text {
             flex: 1;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            padding-top: 5px;
         }
 
-        .card-header .label {
-            font-size: 32px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #fff;
-            font-weight: 800;
+        .header-text h1 {
+            font-size: 58px;
+            font-weight: 900;
+            letter-spacing: 2px;
             line-height: 1.1;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .card-header .satker-name {
-            font-size: 20px;
-            color: rgba(255, 255, 255, 0.95);
-            margin-top: 2px;
-            font-weight: 700;
+            margin-bottom: 2px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 4px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.6);
         }
 
-        .card-header .header-logo-left,
-        .card-header .header-logo-right {
-            flex-shrink: 0;
-            width: 60px;
+        .header-text h2 {
+            font-size: 34px;
+            font-weight: 700;
+            letter-spacing: 6px;
+            color: #f8fafc;
+            text-transform: uppercase;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+
+        /* === MAIN CONTENT === */
+        .content {
             display: flex;
+            flex: 1;
             align-items: center;
+            padding: 10px 60px;
+            gap: 50px;
+            z-index: 2;
         }
 
-        .card-header .header-logo-left {
-            justify-content: flex-start;
-        }
-
-        .card-header .header-logo-right {
-            justify-content: flex-end;
-        }
-
-        .card-header img {
-            width: 55px;
-            height: 55px;
-            object-fit: contain;
-            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
-        }
-
-        .card-body {
-            padding: 20px 24px;
-            display: flex;
-            gap: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .qr-section {
-            flex-shrink: 0;
+        .qr-area {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
+            gap: 12px;
         }
 
-        .qr-wrapper {
+        .qr-box {
             background: #fff;
-            padding: 8px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .qr-code-text {
-            font-size: 9px;
-            color: rgba(255, 255, 255, 0.4);
+        .qr-label {
             font-family: monospace;
-            letter-spacing: 1px;
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 3px;
+            font-weight: 600;
         }
 
-        .info-section {
+        .info-area {
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            gap: 12px;
         }
 
-        .info-item .info-label {
-            font-size: 9px;
+        .info-item {
+            margin-bottom: 15px;
+        }
+
+        .label-small {
+            font-size: 16px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.6);
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.4);
-            font-weight: 600;
+            margin-bottom: 5px;
         }
 
-        .info-item .info-value {
-            font-size: 15px;
-            font-weight: 700;
-            color: #fff;
-            margin-top: 1px;
-            white-space: normal;
-            line-height: 1.15;
-            overflow: visible;
-        }
-
-        .website-link-text {
-            font-size: 24px;
+        .val-medium {
+            font-size: 36px;
             font-weight: 800;
-            color: #fff;
-            margin-top: 15px;
+            text-transform: uppercase;
+            line-height: 1.2;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        }
+
+        .val-xlarge {
+            font-size: 76px;
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 1;
             letter-spacing: 1px;
-            display: block;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 6px 15px rgba(0,0,0,0.6);
+            margin-top: 5px;
         }
 
-        .card-footer {
-            padding: 10px 24px 14px;
-            background: rgba(0, 0, 0, 0.2);
-            position: relative;
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .footer-top-row {
+        /* === FOOTER AREA === */
+        .footer-area {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            width: 100%;
+            padding: 0 60px 45px;
+            z-index: 2;
         }
 
-        .footer-bottom-row {
-            text-align: center;
-            width: 100%;
-        }
-
-        .footer-website-link {
-            font-size: 18px;
-            font-weight: 700;
-            color: #1e90ff;
-            /* Blue */
-            letter-spacing: 1.2px;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-            text-transform: lowercase;
-        }
-
-        .bbm-badge {
-            display: inline-flex;
+        .pill-bbm {
+            background: rgba(15, 23, 42, 0.85);
+            padding: 12px 30px;
+            border-radius: 50px;
+            display: flex;
             align-items: center;
-            gap: 6px;
-            padding: 4px 10px;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(4px);
+            gap: 12px;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            font-size: 12px;
-            font-weight: 600;
-            color: #fff;
-            letter-spacing: 0.5px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         }
 
-        .bbm-dot {
-            width: 8px;
-            height: 8px;
+        .dot-status {
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
-            display: inline-block;
         }
 
-        /* BBM Badge Colors */
-        .dot-pertalite {
-            background-color: #2ecc71;
-            box-shadow: 0 0 8px #2ecc71;
+        .pertamax .dot-status { background: #3b82f6; box-shadow: 0 0 12px #3b82f6; }
+        .dex .dot-status { background: #a855f7; box-shadow: 0 0 12px #a855f7; }
+
+        .bbm-label {
+            font-size: 22px;
+            font-weight: 800;
+            color: #fff;
         }
 
-        .dot-pertamax {
-            background-color: #3498db;
-            box-shadow: 0 0 8px #3498db;
+        .logo-pertamina {
+            height: 38px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
         }
 
-        .dot-solar,
-        .dot-dexlite {
-            background-color: #facc15;
-            box-shadow: 0 0 8px #facc15;
+        .ip-text {
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 900;
+            color: #3b82f6;
+            letter-spacing: 3px;
+            z-index: 2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
         }
 
-        .dot-dexlite {
-            background-color: #9b59b6;
-            box-shadow: 0 0 8px #9b59b6;
-        }
-
-        .side-id-section {
+        /* === MOBILE MENU BUTTON === */
+        .mobile-menu-btn {
             display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            z-index: 100;
+            cursor: pointer;
+            font-size: 20px;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            transition: background 0.2s;
+        }
+        
+        .mobile-menu-btn:hover {
+            background: rgba(30, 41, 59, 1);
+        }
+
+        /* === CONTROLS === */
+        .action-buttons-wrapper {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            max-width: 1000px;
+            z-index: 10;
         }
 
         .controls {
-            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .bottom-controls {
             display: flex;
             gap: 15px;
         }
 
         .btn {
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 14px 30px;
+            border-radius: 16px;
             border: none;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 15px;
             cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
-            text-decoration: none;
+            transition: transform 0.2s, opacity 0.2s;
         }
 
-        .btn-print {
-            background: #1e293b;
-            color: #fff;
-        }
+        .btn-print { background: #4f46e5; color: #fff; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4); }
+        .btn-dl { background: #10b981; color: #fff; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4); }
+        .btn-back { background: #334155; color: #fff; }
 
-        .btn-download {
-            background: #fff;
-            color: #1e293b;
-            border: 1px solid #cbd5e1;
-        }
+        .btn:hover { transform: translateY(-3px); opacity: 0.9; }
 
-        .btn-back {
-            background: transparent;
-            color: #64748b;
-        }
-
-        /* === MOBILE RESPONSIVENESS === */
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
+        /* Tampilan tombol responsif di HP (Dropdown Menu & Bottom Back Button) */
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: flex;
             }
-
-            .card-header {
-                padding: 15px 15px 0;
+            .action-buttons-wrapper {
+                margin-top: 20px;
             }
-
-            .card-header .label {
-                font-size: 20px;
-            }
-
-            .card-header .satker-name {
-                font-size: 14px;
+            .controls {
+                display: none; /* hidden secara default di mobile */
+                position: fixed;
+                top: 75px;
+                right: 20px;
+                background: rgba(15, 23, 42, 0.95);
+                backdrop-filter: blur(10px);
+                padding: 15px;
+                border-radius: 16px;
+                flex-direction: column;
+                gap: 10px;
+                width: 220px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+                border: 1px solid rgba(255,255,255,0.15);
+                animation: fadeIn 0.2s ease-out;
                 margin-top: 0;
             }
-
-            .card-header .header-logo-left,
-            .card-header .header-logo-right {
-                width: 45px;
+            .controls.show {
+                display: flex;
             }
-
-            .card-header img {
-                width: 40px;
-                height: 40px;
-            }
-
-            .card-body {
-                gap: 12px;
-                padding: 12px 15px;
-            }
-
-            .qr-wrapper {
-                padding: 5px;
-            }
-
-            #qrcode img {
-                width: 70px !important;
-                height: 70px !important;
-            }
-
-            .qr-code-text {
-                font-size: 7px;
-                margin-top: 2px;
-            }
-
-            .info-section {
-                gap: 8px;
-            }
-
-            .info-item .info-label {
-                font-size: 8px;
-                letter-spacing: 1px;
-            }
-
-            .info-item .info-value {
-                font-size: 13px;
-                line-height: 1.2;
-            }
-
-            .website-link-text {
-                font-size: 18px;
-                margin-top: 6px;
-            }
-
-            .card-footer {
-                padding: 8px 15px 12px;
-                gap: 4px;
-            }
-
-            .footer-website-link {
+            .controls .btn {
+                width: 100%;
+                padding: 14px 20px;
+                justify-content: flex-start;
                 font-size: 14px;
-                letter-spacing: 0.8px;
             }
-
-            .bbm-badge {
-                padding: 3px 8px;
-                font-size: 10px;
+            
+            .bottom-controls {
+                width: 100%;
+                justify-content: center;
+                padding: 0 10px;
             }
-
-            .footer-right img {
-                height: 14px !important;
+            .bottom-controls .btn-back {
+                width: 100%;
+                padding: 16px 20px;
             }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @media print {
-            body {
-                background: #fff;
-                padding: 0;
-                justify-content: flex-start;
-                align-items: flex-start;
+            body { background: transparent; padding: 0; }
+            .action-buttons-wrapper, .mobile-menu-btn { display: none !important; }
+            .zoom-wrapper { 
+                width: 1000px !important; 
+                height: 620px !important; 
+                display: block; 
             }
-
-            .controls {
-                display: none;
-            }
-
-            .card {
-                width: 550px !important;
-                box-shadow: none;
-                -webkit-print-color-adjust: exact;
+            .card { 
+                transform: none !important;
+                box-shadow: none; 
+                border: none;
+                -webkit-print-color-adjust: exact; 
                 print-color-adjust: exact;
+                position: relative;
             }
         }
     </style>
@@ -452,83 +390,74 @@
 
 <body>
 
-    @php
-        $cardTheme = match ($personel->jenis_bbm) {
-            'Pertamina Dex' => 'yellow-dex',
-            'Dexlite', 'Solar' => 'yellow',
-            default => 'red', // Pertamax, Pertalite defaults to Red
-        };
-    @endphp
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" id="menu-btn" onclick="toggleMenu()">
+        ⋮
+    </button>
 
-    <div class="card card-{{ $cardTheme }}" id="kartu-bbm">
-        <div class="card-header">
-            <div class="header-logo-left">
-                <img src="{{ asset('Lambang_Polda_NTB.png') }}" alt="Logo Polda NTB">
-            </div>
-            <div class="header-info">
-                <div class="label">Kartu Kendali BBM</div>
-                <div class="satker-name">{{ $personel->satker->nama_satker }}</div>
-            </div>
-            <div class="header-logo-right">
-                <img src="{{ asset('rolog.png') }}" alt="Logo Logistik">
-            </div>
-        </div>
-
-        <div class="card-body">
-            <div class="qr-section">
-                <div class="qr-wrapper">
-                    <div id="qrcode"></div>
+    <div class="zoom-wrapper" id="zoom-wrapper">
+        <div class="card" id="kartu-bbm">
+            <!-- Header -->
+            <div class="header">
+                <div class="logo-box">
+                    <img src="{{ asset('Lambang_Polda_NTB.png') }}" alt="Polda NTB">
                 </div>
-                <div class="qr-code-text">{{ $personel->barcode ?? $personel->nrp }}</div>
-            </div>
-            <div class="info-section">
-                <div class="info-item">
-                    <div class="info-label">Nama Personel</div>
-                    <div class="info-value">{{ strtoupper($personel->nama) }}</div>
-                    <div class="website-link-text">{{ $personel->nrp }}</div>
+                <div class="header-text">
+                    <h1>KARTU KENDALI BBM</h1>
+                    <h2>BIRO LOGISTIK</h2>
                 </div>
-
-            </div>
-            <div class="side-id-section">
-            </div>
-        </div>
-
-        <div class="card-footer">
-            @php
-                $bbmClass = match ($personel->jenis_bbm) {
-                    'Pertalite' => 'pertalite',
-                    'Pertamax' => 'pertamax',
-                    'Solar' => 'solar',
-                    'Dexlite' => 'dexlite',
-                    default => 'pertalite',
-                };
-            @endphp
-            <div class="footer-top-row">
-                <div class="bbm-badge bbm-{{ $bbmClass }}">
-                    <span class="bbm-dot dot-{{ $bbmClass }}"></span>
-                    {{ $personel->jenis_bbm ?? 'BBM' }}
-                </div>
-                <div class="footer-right">
-                    <img src="{{ asset('assets/images/mypertamina.png') }}" alt="MyPertamina"
-                        style="height: 18px; opacity: 0.8;">
+                <div class="logo-box">
+                    <img src="{{ asset('rolog.png') }}" alt="Logistik">
                 </div>
             </div>
-            <div class="footer-bottom-row">
-                <div class="footer-website-link">{{ request()->getHost() }}</div>
+
+            <!-- Content -->
+            <div class="content">
+                <div class="qr-area">
+                    <div class="qr-box">
+                        <div id="qrcode"></div>
+                    </div>
+                    <div class="qr-label">{{ $personel->barcode ?? $personel->nrp }}</div>
+                </div>
+                <div class="info-area">
+                    <div class="info-item">
+                        <div class="label-small">Nama Personel</div>
+                        <div class="val-medium">{{ strtoupper($personel->nama) }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="val-xlarge">{{ $personel->nrp }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer-area">
+                <div class="pill-bbm {{ str_contains(strtolower($personel->jenis_bbm), 'dex') ? 'dex' : 'pertamax' }}">
+                    <div class="dot-status"></div>
+                    <div class="bbm-label">{{ $personel->jenis_bbm ?? 'BBM' }}</div>
+                </div>
+                <img src="{{ asset('assets/images/mypertamina.png') }}" class="logo-pertamina" alt="MyPertamina">
+            </div>
+
+            <!-- IP -->
+            <div class="ip-text">
+                {{ request()->getHost() == 'localhost' ? '127.0.0.1' : request()->getHost() }}
             </div>
         </div>
     </div>
 
-    <div class="controls">
-        <button onclick="window.print()" class="btn btn-print">
-            🖨️ Cetak Kartu
-        </button>
-        <button onclick="downloadKartu()" class="btn btn-download" id="btn-download">
-            📥 Download Gambar
-        </button>
-        <button onclick="window.close(); history.back();" class="btn btn-back">
-            ← Kembali
-        </button>
+    <!-- Controls Container -->
+    <div class="action-buttons-wrapper">
+        <!-- Cetak & Download (Jadi dropdown di mobile) -->
+        <div class="controls" id="mobile-menu">
+            <button onclick="window.print()" class="btn btn-print">🖨️ Cetak Kartu</button>
+            <button onclick="downloadKartu()" class="btn btn-dl" id="btn-download">📥 Download Gambar</button>
+        </div>
+        
+        <!-- Tombol Kembali (Tetap di bawah kartu di mobile) -->
+        <div class="bottom-controls">
+            <button onclick="window.location.href='{{ route('satker.personels.index') }}'" class="btn btn-back">← Kembali</button>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
@@ -536,48 +465,85 @@
     <script>
         new QRCode(document.getElementById('qrcode'), {
             text: '{{ $personel->barcode ?? $personel->nrp }}',
-            width: 100,
-            height: 100,
-            colorDark: '#1e293b',
+            width: 160,
+            height: 160,
+            colorDark: '#000000',
             colorLight: '#ffffff',
             correctLevel: QRCode.CorrectLevel.H
         });
 
+        // Script cerdas untuk menyesuaikan skala kartu secara tepat ke layar tanpa memotong
+        function setResponsiveScale() {
+            const wrapper = document.getElementById('zoom-wrapper');
+            const card = document.getElementById('kartu-bbm');
+            
+            // 40px adalah kompensasi dari padding body (20px kiri + 20px kanan)
+            let availableWidth = window.innerWidth - 40;
+            
+            // Jika di laptop/desktop dengan lebar lebih dari 1000px, batas ke 1000px
+            if (availableWidth > 1000) {
+                availableWidth = 1000;
+            }
+            
+            const scale = availableWidth / 1000;
+            
+            card.style.transform = `scale(${scale})`;
+            wrapper.style.width = `${1000 * scale}px`;
+            wrapper.style.height = `${620 * scale}px`;
+        }
+
+        window.addEventListener('resize', setResponsiveScale);
+        document.addEventListener('DOMContentLoaded', setResponsiveScale);
+        setResponsiveScale();
+
+        // Fungsi toggle menu di mobile
+        function toggleMenu() {
+            document.getElementById('mobile-menu').classList.toggle('show');
+        }
+
+        // Tutup menu jika klik di luar area menu
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('mobile-menu');
+            const btn = document.getElementById('menu-btn');
+            if (window.innerWidth <= 768 && !menu.contains(e.target) && !btn.contains(e.target)) {
+                menu.classList.remove('show');
+            }
+        });
+
         function downloadKartu() {
             const btn = document.getElementById('btn-download');
-            btn.textContent = '⏳ Memproses...';
+            btn.innerHTML = '⏳ Memproses...';
             btn.disabled = true;
 
-            const kartu = document.getElementById('kartu-bbm');
+            const card = document.getElementById('kartu-bbm');
+            const originalTransform = card.style.transform;
+            
+            // Kembalikan ke ukuran 1000x620 asli agar hasil download resolusi tinggi
+            card.style.transform = 'scale(1)';
 
-            html2canvas(kartu, {
-                scale: 3,
+            // Sembunyikan menu saat download jika terbuka
+            document.getElementById('mobile-menu').classList.remove('show');
+
+            html2canvas(card, {
+                scale: 2,
                 useCORS: true,
-                allowTaint: true,
                 backgroundColor: null,
-                borderRadius: 20,
-            }).then(function (canvas) {
+            }).then(canvas => {
+                // Kembalikan skala responsif untuk tampilan layar
+                card.style.transform = originalTransform;
+
                 const link = document.createElement('a');
                 link.download = 'Kartu_Personel_{{ $personel->nrp }}.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
 
-                btn.textContent = '📥 Download Gambar';
+                btn.innerHTML = '📥 Download Gambar';
                 btn.disabled = false;
-            }).catch(function (err) {
-                Swal.fire({
-                    title: 'Gagal',
-                    text: 'Gagal membuat gambar. Silakan coba lagi.',
-                    icon: 'error',
-                    confirmButtonColor: '#4338ca',
-                    customClass: {
-                        popup: 'rounded-3xl border-none shadow-2xl',
-                        confirmButton: 'rounded-xl px-8 py-3 font-bold uppercase tracking-wider text-sm'
-                    }
-                });
-                btn.textContent = '📥 Download Gambar';
+            }).catch(err => {
+                card.style.transform = originalTransform;
+                Swal.fire('Gagal', 'Terjadi kesalahan saat memproses gambar.', 'error');
+                btn.innerHTML = '📥 Download Gambar';
                 btn.disabled = false;
-                console.error(err);
             });
         }
     </script>
