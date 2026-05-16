@@ -69,6 +69,14 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     Route::post('/users/bulk-status', [\App\Http\Controllers\Admin\UserController::class, 'bulkStatus'])->name('users.bulk-status');
     Route::post('/users/bulk-delete', [\App\Http\Controllers\Admin\UserController::class, 'bulkDelete'])->name('users.bulk-delete');
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+
+    // PIN Management (Super Admin Only)
+    Route::middleware('role:super_admin')->group(function () {
+        Route::get('/pin-management', [\App\Http\Controllers\Admin\PinManagementController::class, 'index'])->name('pin-management.index');
+        Route::post('/pin-management/personel/{personel}', [\App\Http\Controllers\Admin\PinManagementController::class, 'updatePersonelPin'])->name('pin-management.personel.update');
+        Route::post('/pin-management/kendaraan/{kendaraan}', [\App\Http\Controllers\Admin\PinManagementController::class, 'updateKendaraanPin'])->name('pin-management.kendaraan.update');
+    });
+
     Route::get('/personels/export', [\App\Http\Controllers\Admin\PersonelController::class, 'export'])->name('personels.export');
     Route::post('/personels/preview-import', [\App\Http\Controllers\Admin\PersonelController::class, 'previewImport'])->name('personels.preview-import');
     Route::post('/personels/import', [\App\Http\Controllers\Admin\PersonelController::class, 'import'])->name('personels.import');

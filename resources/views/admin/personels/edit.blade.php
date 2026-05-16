@@ -99,6 +99,23 @@
                             @error('jenis_bbm') <p class="mt-1 text-[10px] text-rose-500 font-bold ml-1">{{ $message }}</p> @enderror
                         </div>
 
+                        <!-- PIN (Super Admin Only) -->
+                        @if(auth()->user()->role === 'super_admin')
+                        <div>
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">
+                                PIN Keamanan <span class="text-slate-300 normal-case font-medium">(Isi untuk mengubah)</span>
+                            </label>
+                            <input type="text" name="pin" 
+                                class="w-full h-11 px-4 rounded-xl border-slate-200 bg-slate-50/50 text-xs font-mono font-black text-slate-700 placeholder:text-slate-200 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all tracking-[0.3em]"
+                                placeholder="••••••"
+                                maxlength="6"
+                                inputmode="numeric"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6)">
+                            <p class="mt-1 text-[9px] text-slate-400 font-medium ml-1">PIN saat ini: <span class="font-black text-indigo-600">{{ $personel->pin }}</span></p>
+                            @error('pin') <p class="mt-1 text-[10px] text-rose-500 font-bold ml-1">{{ $message }}</p> @enderror
+                        </div>
+                        @endif
+
                         <!-- Action Button -->
                         <div class="pt-2">
                             <button type="submit"

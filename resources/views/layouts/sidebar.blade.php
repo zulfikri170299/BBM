@@ -333,6 +333,11 @@
                             <div class="submenu-dot {{ request()->routeIs('admin.users.monitoring') ? 'active-dot' : '' }}"></div>
                             Monitoring User
                         </a>
+                        <a href="{{ route('admin.pin-management.index') }}"
+                            class="group submenu-item flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.pin-management.index') ? 'text-white active-submenu-item' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
+                            <div class="submenu-dot {{ request()->routeIs('admin.pin-management.index') ? 'active-dot' : '' }}"></div>
+                            Manajemen PIN
+                        </a>
                     </div>
                 </div>
             @endif

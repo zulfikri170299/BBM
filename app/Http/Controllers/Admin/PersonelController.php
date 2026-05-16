@@ -103,9 +103,14 @@ class PersonelController extends Controller
             'nrp' => 'required|regex:/^[0-9]+$/|unique:personels,nrp,' . $personel->id,
             'jenis_bbm' => 'required|in:Pertamax,Pertamina Dex',
             'saldo' => 'required|numeric|min:0',
+            'pin' => 'nullable|numeric|digits:6',
         ]);
 
         $data = $request->only(['satker_id', 'nama', 'nrp', 'saldo']);
+        
+        if ($request->filled('pin')) {
+            $data['pin'] = $request->pin;
+        }
         
         // Hanya update jenis_bbm jika saldo == 0 (Kecuali Super Admin)
         if (auth()->user()->role === 'super_admin' || $personel->saldo <= 0) {

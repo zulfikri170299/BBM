@@ -11,6 +11,7 @@ use App\Models\RiwayatTopup;
 use App\Models\LogAktivitas;
 use App\Models\AdminBbmStock;
 use App\Models\RiwayatStokAdmin;
+use App\Models\Satker;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -21,8 +22,9 @@ class BulkPotongSaldoController extends Controller
     {
         $kendaraans = Kendaraan::with('satker')->orderBy('no_polisi')->get();
         $personels = Personel::with('satker')->orderBy('nama')->get();
+        $satkers = Satker::orderBy('nama_satker')->get();
         
-        return view('admin.potong-saldo.index', compact('kendaraans', 'personels'));
+        return view('admin.potong-saldo.index', compact('kendaraans', 'personels', 'satkers'));
     }
 
     public function process(Request $request)

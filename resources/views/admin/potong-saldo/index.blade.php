@@ -5,6 +5,8 @@
         selectedPersonel: [],
         searchKendaraan: '',
         searchPersonel: '',
+        filterSatker: '',
+        filterBbm: '',
         allSelectedKendaraan: false,
         allSelectedPersonel: false,
         
@@ -34,14 +36,20 @@
         
         toggleAllKendaraan() {
             if (this.allSelectedKendaraan) {
-                this.selectedKendaraan = Array.from(document.querySelectorAll('.kendaraan-checkbox')).map(el => el.value);
+                // Hanya pilih yang terlihat (tidak kena filter)
+                this.selectedKendaraan = Array.from(document.querySelectorAll('.kendaraan-checkbox'))
+                    .filter(el => el.closest('tr').style.display !== 'none')
+                    .map(el => el.value);
             } else {
                 this.selectedKendaraan = [];
             }
         },
         toggleAllPersonel() {
             if (this.allSelectedPersonel) {
-                this.selectedPersonel = Array.from(document.querySelectorAll('.personel-checkbox')).map(el => el.value);
+                // Hanya pilih yang terlihat (tidak kena filter)
+                this.selectedPersonel = Array.from(document.querySelectorAll('.personel-checkbox'))
+                    .filter(el => el.closest('tr').style.display !== 'none')
+                    .map(el => el.value);
             } else {
                 this.selectedPersonel = [];
             }
@@ -83,7 +91,92 @@
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-2">
+                            
+                            <div class="flex items-center gap-2 flex-1 justify-end">
+                                <!-- Custom Dropdown Satker -->
+                                <div class="relative" x-data="{ 
+                                    open: false,
+                                    search: '',
+                                    get selectedLabel() {
+                                        if (filterSatker === '') return 'Semua Satker';
+                                        let item = @js($satkers).find(s => s.id == filterSatker);
+                                        return item ? item.nama_satker : 'Semua Satker';
+                                    }
+                                }" @click.away="open = false">
+                                    <button @click="open = !open" type="button" 
+                                        class="flex items-center justify-between gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[10px] font-black text-gray-700 hover:border-indigo-300 hover:bg-indigo-50/30 transition-all min-w-[160px]">
+                                        <span x-text="selectedLabel" class="truncate"></span>
+                                        <svg class="w-3 h-3 text-gray-400 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </button>
+
+                                    <div x-show="open" 
+                                        x-transition:enter="transition ease-out duration-100"
+                                        x-transition:enter-start="opacity-0 scale-95"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-100 z-[100] overflow-hidden">
+                                        
+                                        <!-- Search Satker inside dropdown -->
+                                        <div class="p-2 border-b border-gray-50 bg-gray-50/50">
+                                            <div class="relative">
+                                                <input type="text" x-model="search" placeholder="Cari satker..." 
+                                                    class="w-full pl-7 pr-3 py-1.5 text-[10px] font-bold border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                                                <div class="absolute left-2.5 top-2 text-gray-400">
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="max-h-60 overflow-y-auto custom-scrollbar p-1">
+                                            <button @click="filterSatker = ''; open = false; search = ''" type="button"
+                                                class="w-full text-left px-3 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all"
+                                                :class="filterSatker === '' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'">
+                                                Semua Satker
+                                            </button>
+                                            @foreach($satkers as $satker)
+                                                <button x-show="'{{ strtolower($satker->nama_satker) }}'.includes(search.toLowerCase())"
+                                                    @click="filterSatker = '{{ $satker->id }}'; open = false; search = ''" type="button"
+                                                    class="w-full text-left px-3 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all"
+                                                    :class="filterSatker == '{{ $satker->id }}' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'">
+                                                    {{ $satker->nama_satker }}
+                                                </button>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Custom Dropdown BBM -->
+                                <div class="relative" x-data="{ open: false }" @click.away="open = false">
+                                    <button @click="open = !open" type="button" 
+                                        class="flex items-center justify-between gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-[10px] font-black text-gray-700 hover:border-indigo-300 hover:bg-indigo-50/30 transition-all min-w-[120px]">
+                                        <span x-text="filterBbm === '' ? 'Semua BBM' : filterBbm"></span>
+                                        <svg class="w-3 h-3 text-gray-400 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </button>
+
+                                    <div x-show="open" 
+                                        x-transition:enter="transition ease-out duration-100"
+                                        x-transition:enter-start="opacity-0 scale-95"
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        class="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-xl border border-gray-100 z-[100] p-1">
+                                        <button @click="filterBbm = ''; open = false" type="button"
+                                            class="w-full text-left px-3 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all"
+                                            :class="filterBbm === '' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'">
+                                            Semua BBM
+                                        </button>
+                                        <button @click="filterBbm = 'Pertamax'; open = false" type="button"
+                                            class="w-full text-left px-3 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all"
+                                            :class="filterBbm === 'Pertamax' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'">
+                                            Pertamax
+                                        </button>
+                                        <button @click="filterBbm = 'Pertamina Dex'; open = false" type="button"
+                                            class="w-full text-left px-3 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all"
+                                            :class="filterBbm === 'Pertamina Dex' ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'">
+                                            P. Dex
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-2 shrink-0">
                                 <span class="px-2.5 py-0.5 bg-indigo-600 text-white text-[10px] font-black rounded-full" x-text="tab === 'kendaraan' ? selectedKendaraan.length : selectedPersonel.length">0</span>
                                 <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Item Terpilih</span>
                             </div>
@@ -106,7 +199,9 @@
                                     </thead>
                                     <tbody class="divide-y divide-gray-50">
                                         @foreach($kendaraans as $k)
-                                            <tr x-show="searchKendaraan === '' || '{{ $k->no_polisi }}'.toLowerCase().includes(searchKendaraan.toLowerCase())" 
+                                            <tr x-show="(searchKendaraan === '' || '{{ $k->no_polisi }}'.toLowerCase().includes(searchKendaraan.toLowerCase())) && 
+                                                        (filterSatker === '' || '{{ $k->satker_id }}' === filterSatker) &&
+                                                        (filterBbm === '' || '{{ $k->jenis_bbm }}' === filterBbm)" 
                                                 class="hover:bg-indigo-50/20 transition-colors">
                                                 <td class="px-4 py-2.5 text-center">
                                                     <input type="checkbox" value="{{ $k->id }}" x-model="selectedKendaraan" class="kendaraan-checkbox rounded-sm border-gray-300 text-indigo-600 focus:ring-indigo-500 scale-90">
@@ -151,7 +246,9 @@
                                     </thead>
                                     <tbody class="divide-y divide-gray-50">
                                         @foreach($personels as $p)
-                                            <tr x-show="searchPersonel === '' || '{{ $p->nama }} {{ $p->nrp }}'.toLowerCase().includes(searchPersonel.toLowerCase())" 
+                                            <tr x-show="(searchPersonel === '' || '{{ $p->nama }} {{ $p->nrp }}'.toLowerCase().includes(searchPersonel.toLowerCase())) &&
+                                                        (filterSatker === '' || '{{ $p->satker_id }}' === filterSatker) &&
+                                                        (filterBbm === '' || '{{ $p->jenis_bbm }}' === filterBbm)" 
                                                 class="hover:bg-indigo-50/20 transition-colors">
                                                 <td class="px-4 py-2.5 text-center">
                                                     <input type="checkbox" value="{{ $p->id }}" x-model="selectedPersonel" class="personel-checkbox rounded-sm border-gray-300 text-indigo-600 focus:ring-indigo-500 scale-90">
