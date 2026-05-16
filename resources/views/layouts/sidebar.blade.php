@@ -8,6 +8,10 @@
 {{-- Sidebar --}}
 <div x-data="{ 
         reportsOpen: {{ (request()->routeIs('admin.laporan-slog.*') || request()->routeIs('admin.nominatif.*') || request()->routeIs('admin.laporan-topup.*') || request()->routeIs('admin.laporan-triwulan.*') || request()->routeIs('admin.laporan-stok-bbm.*') || request()->routeIs('admin.laporan-harian.*') || request()->routeIs('admin.riwayat.*') || request()->routeIs('admin.ba.*') || request()->routeIs('admin.laporan-sisa.*') || request()->routeIs('admin.laporan-hutang.*') || request()->routeIs('admin.laporan-potong.*')) ? 'true' : 'false' }},
+        transactionsOpen: {{ (request()->routeIs('admin.transaksi.*') || request()->routeIs('admin.transfer-saldo.*') || request()->routeIs('admin.bulk-potong.*') || request()->routeIs('admin.meter.*')) ? 'true' : 'false' }},
+        masterBbmOpen: {{ (request()->routeIs('admin.stok.*') || request()->routeIs('pembelian-bbm.*') || request()->routeIs('admin.hutang.*')) ? 'true' : 'false' }},
+        settingsOpen: {{ (request()->routeIs('admin.satkers.*') || request()->routeIs('admin.penanda-tangan.*') || request()->routeIs('admin.petugas-spbp.*') || request()->routeIs('admin.settings.*')) ? 'true' : 'false' }},
+        userManagementOpen: {{ (request()->routeIs('admin.users.index') || request()->routeIs('admin.users.monitoring')) ? 'true' : 'false' }},
         satkerReportsOpen: {{ (request()->routeIs('satker.riwayat.*') || request()->routeIs('satker.kendaraans.laporan-bulanan.*') || request()->routeIs('satker.kendaraans.laporan-transfer.*') || request()->routeIs('satker.laporan-hutang.*') || request()->routeIs('satker.laporan-triwulan.*')) ? 'true' : 'false' }},
         init() {
             // Force sidebar closed on mobile every page load
@@ -20,7 +24,7 @@
             });
         }
     }" id="sidebar" 
-    @close-reports.window="reportsOpen = false; satkerReportsOpen = false"
+    @close-reports.window="reportsOpen = false; satkerReportsOpen = false; transactionsOpen = false; masterBbmOpen = false; settingsOpen = false; userManagementOpen = false"
     @open-admin-reports.window="reportsOpen = true"
     @open-satker-reports.window="satkerReportsOpen = true"
     class="fixed inset-y-0 left-0 z-50 w-72 lg:w-64 overflow-y-auto transform bg-slate-900 text-white -translate-x-full lg:translate-x-0 lg:static lg:inset-0 transition-transform duration-300 ease-in-out"
@@ -61,61 +65,6 @@
                 <span class="ml-3 font-medium">Dashboard</span>
             </a>
 
-            @if(auth()->user()->role === 'super_admin')
-                <a href="{{ route('admin.transaksi.index') }}"
-                    class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.transaksi.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
-                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
-                    </svg>
-                    <span class="ml-3 font-medium">Transaksi BBM</span>
-                </a>
-            @endif
-
-            @if(auth()->user()->role === 'super_admin')
-                <a href="{{ route('admin.stok.index') }}"
-                    class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.stok.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
-                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
-                        </path>
-                    </svg>
-                    <span class="ml-3 font-medium">Stok BBM</span>
-                </a>
-
-                <a href="{{ route('pembelian-bbm.index') }}"
-                    class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('pembelian-bbm.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
-                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
-                        </path>
-                    </svg>
-                    <span class="ml-3 font-medium">Pembelian BBM</span>
-                </a>
-            @endif
-
-            @if(auth()->user()->role === 'super_admin')
-                <a href="{{ route('admin.meter.index') }}"
-                    class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.meter.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
-                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
-                        </path>
-                    </svg>
-                    <span class="ml-3 font-medium">Input Meter Pompa</span>
-                </a>
-            @endif
-
-            <a href="{{ route('admin.hutang.index') }}"
-                class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.hutang.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
-                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                    </path>
-                </svg>
-                <span class="ml-3 font-medium">Hutang BBM</span>
-            </a>
-
             <a href="{{ route('admin.kendaraans.index') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ (request()->routeIs('admin.kendaraans.*') && !request()->routeIs('admin.kendaraans.laporan-*')) ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -138,63 +87,81 @@
                 <span class="ml-3 font-medium">Personel</span>
             </a>
 
+            <div class="space-y-1">
+                <button @click="masterBbmOpen = !masterBbmOpen"
+                    class="w-full flex items-center justify-between px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 hover:bg-slate-800 focus:outline-none active:scale-[0.98]">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20 7l-1.207 9.658A2 2 0 0116.8 18.5H7.2a2 2 0 01-1.993-1.842L4 7m16 0a2 2 0 00-2-2H6a2 2 0 00-2 2m16 0l-2.4-2.4a1 1 0 00-.707-.293H9.107a1 1 0 00-.707.293L6 7m4 4h4">
+                            </path>
+                        </svg>
+                        <span class="ml-3 font-medium">Master BBM</span>
+                    </div>
+                    <svg class="w-4 h-4 transition-transform duration-200 shrink-0" :class="masterBbmOpen ? 'rotate-180' : ''"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
 
+                <div x-show="masterBbmOpen" x-collapse style="display: none;" class="pl-10 pr-2 space-y-1">
+                    @if(auth()->user()->role === 'super_admin')
+                        <a href="{{ route('admin.stok.index') }}"
+                            class="block py-1.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.stok.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                            Stok BBM
+                        </a>
+                        <a href="{{ route('pembelian-bbm.index') }}"
+                            class="block py-1.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('pembelian-bbm.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                            Pembelian BBM
+                        </a>
+                    @endif
+                    <a href="{{ route('admin.hutang.index') }}"
+                        class="block py-1.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.hutang.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                        Hutang BBM
+                    </a>
+                </div>
+            </div>
 
             @if(auth()->user()->role === 'super_admin')
-                <a href="{{ route('admin.transfer-saldo.index') }}"
-                    class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.transfer-saldo.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
-                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4">
-                        </path>
-                    </svg>
-                    <span class="ml-3 font-medium">Transfer Saldo</span>
-                </a>
+                <div class="space-y-1">
+                    <button @click="transactionsOpen = !transactionsOpen"
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 hover:bg-slate-800 focus:outline-none active:scale-[0.98]">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                </path>
+                            </svg>
+                            <span class="ml-3 font-medium">Transaksi</span>
+                        </div>
+                        <svg class="w-4 h-4 transition-transform duration-200 shrink-0" :class="transactionsOpen ? 'rotate-180' : ''"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
 
-                <a href="{{ route('admin.bulk-potong.index') }}"
-                    class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.bulk-potong.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
-                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z">
-                        </path>
-                    </svg>
-                    <span class="ml-3 font-medium">Potong Saldo Masal</span>
-                </a>
-
-                <a href="{{ route('admin.users.index') }}"
-                    class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.users.index') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
-                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
-                        </path>
-                    </svg>
-                    <span class="ml-3 font-medium">Users</span>
-                </a>
-
-                <a href="{{ route('admin.users.monitoring') }}"
-                    class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.users.monitoring') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
-                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
-                        </path>
-                    </svg>
-                    <span class="ml-3 font-medium">Monitoring User</span>
-                </a>
+                    <div x-show="transactionsOpen" x-collapse style="display: none;" class="pl-10 pr-2 space-y-1">
+                        <a href="{{ route('admin.transaksi.index') }}"
+                            class="block py-1.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.transaksi.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                            Transaksi BBM
+                        </a>
+                        <a href="{{ route('admin.transfer-saldo.index') }}"
+                            class="block py-1.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.transfer-saldo.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                            Transfer Saldo
+                        </a>
+                        <a href="{{ route('admin.bulk-potong.index') }}"
+                            class="block py-1.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.bulk-potong.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                            Potong Saldo Masal
+                        </a>
+                        <a href="{{ route('admin.meter.index') }}"
+                            class="block py-1.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.meter.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                            Input Meter Pompa
+                        </a>
+                    </div>
+                </div>
             @endif
 
-            @if(auth()->user()->role === 'super_admin')
-                <a href="{{ route('admin.satkers.index') }}"
-                    class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.satkers.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
-                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
-                        </path>
-                    </svg>
-                    <span class="ml-3 font-medium">Satkers</span>
-                </a>
-            @endif
+
 
             {{-- Reports Dropdown --}}
             <div class="space-y-1">
@@ -271,49 +238,83 @@
             </div>
 
             @if(auth()->user()->role === 'super_admin')
-                <a href="{{ route('admin.penanda-tangan.index') }}"
-                    class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.penanda-tangan.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
-                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
-                    </svg>
-                    <span class="ml-3 font-medium">Penanda Tangan</span>
-                </a>
+                <div class="space-y-1">
+                    <button @click="userManagementOpen = !userManagementOpen"
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 hover:bg-slate-800 focus:outline-none active:scale-[0.98]">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
+                                </path>
+                            </svg>
+                            <span class="ml-3 font-medium">Manajemen User</span>
+                        </div>
+                        <svg class="w-4 h-4 transition-transform duration-200 shrink-0" :class="userManagementOpen ? 'rotate-180' : ''"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
 
-                <a href="{{ route('admin.petugas-spbp.index') }}"
-                    class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.petugas-spbp.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
-                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2">
-                        </path>
-                    </svg>
-                    <span class="ml-3 font-medium">Petugas SPBP</span>
-                </a>
-
-                <a href="{{ route('admin.settings.index') }}"
-                    class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.settings.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
-                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
-                        </path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    </svg>
-                    <span class="ml-3 font-medium">Pengaturan</span>
-                </a>
+                    <div x-show="userManagementOpen" x-collapse style="display: none;" class="pl-10 pr-2 space-y-1">
+                        <a href="{{ route('admin.users.index') }}"
+                            class="block py-1.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.users.index') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                            Users
+                        </a>
+                        <a href="{{ route('admin.users.monitoring') }}"
+                            class="block py-1.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.users.monitoring') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                            Monitoring User
+                        </a>
+                    </div>
+                </div>
             @endif
 
-            <a href="{{ route('admin.broadcast.index') }}"
-                class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.broadcast.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
-                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z">
-                    </path>
-                </svg>
-                <span class="ml-3 font-medium">Pesan Siaran</span>
-            </a>
+            @if(auth()->user()->role === 'super_admin')
+                <div class="space-y-1">
+                    <button @click="settingsOpen = !settingsOpen"
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 hover:bg-slate-800 focus:outline-none active:scale-[0.98]">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                                </path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            <span class="ml-3 font-medium">Pengaturan</span>
+                        </div>
+                        <svg class="w-4 h-4 transition-transform duration-200 shrink-0" :class="settingsOpen ? 'rotate-180' : ''"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+
+                    <div x-show="settingsOpen" x-collapse style="display: none;" class="pl-10 pr-2 space-y-1">
+                        <a href="{{ route('admin.satkers.index') }}"
+                            class="block py-1.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.satkers.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                            Satkers
+                        </a>
+                        <a href="{{ route('admin.penanda-tangan.index') }}"
+                            class="block py-1.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.penanda-tangan.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                            Penanda Tangan
+                        </a>
+                        <a href="{{ route('admin.petugas-spbp.index') }}"
+                            class="block py-1.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.petugas-spbp.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                            Petugas SPBP
+                        </a>
+                        <a href="{{ route('admin.settings.index') }}"
+                            class="block py-1.5 px-4 text-sm font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.settings.*') ? 'text-white bg-indigo-600/50' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+                            Sistem
+                        </a>
+                    </div>
+                </div>
+            @endif
+
+
+
+
         @endif
 
-        @if(in_array(auth()->user()->role, ['super_admin', 'admin_satker']))
+        @if(auth()->user()->role === 'admin_satker')
             <p class="px-4 py-2 mt-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Satker Management</p>
 
             <a href="{{ route('satker.dashboard') }}"
@@ -434,7 +435,8 @@
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('petugas.transaksi.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
+                        d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v10a2 2 0 002 2z">
+                    </path>
                 </svg>
                 <span class="ml-3 font-medium">Transaksi BBM</span>
             </a>
@@ -443,7 +445,7 @@
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('petugas.meter.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                        d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z">
                     </path>
                 </svg>
                 <span class="ml-3 font-medium">Input Meter Pompa</span>
@@ -512,6 +514,17 @@
         @endif
 
         <p class="px-4 py-1 mt-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Komunikasi</p>
+        @if(in_array(auth()->user()->role, ['super_admin', 'kasubbag']))
+            <a href="{{ route('admin.broadcast.index') }}"
+                class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.broadcast.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z">
+                    </path>
+                </svg>
+                <span class="ml-3 font-medium">Pesan Siaran</span>
+            </a>
+        @endif
         <a href="{{ route('chat.index') }}"
             class="relative flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('chat.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
             <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
