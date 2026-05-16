@@ -28,8 +28,7 @@
     @open-admin-reports.window="reportsOpen = true"
     @open-satker-reports.window="satkerReportsOpen = true"
     class="fixed inset-y-0 left-0 z-50 w-72 lg:w-64 overflow-y-auto transform bg-slate-900 text-white -translate-x-full lg:translate-x-0 lg:static lg:inset-0 transition-transform duration-300 ease-in-out"
-    :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
-    style="@media (min-width: 1024px) { display: block !important; }">
+    :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
 
     {{-- Sidebar Header --}}
     <div class="flex items-center justify-between px-5 py-3 border-b border-slate-800/50">

@@ -230,16 +230,16 @@
 
             <!-- Global Notification Modals -->
             @if(session('success') || session('error') || $errors->any())
-                <div x-data="{ show: true }" x-show="show"
-                    class="fixed inset-0 z-[9999] flex flex-col items-center justify-center p-4 sm:p-0 gap-4">
+                <div x-data="{ show: true }" x-show="show" x-cloak
+                    class="fixed inset-0 z-[9999] flex flex-col items-center justify-center p-4 sm:p-0 gap-4 pointer-events-none">
                     <!-- Backdrop -->
-                    <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" @click="show = false"
+                    <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity pointer-events-auto" @click="show = false"
                         x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
                         x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
                         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"></div>
 
                     @if(session('success'))
-                        <div class="relative w-full max-w-sm bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center p-8 text-center"
+                        <div class="relative w-full max-w-sm bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center p-8 text-center pointer-events-auto"
                             @click.stop x-transition:enter="transition ease-out duration-300 transform"
                             x-transition:enter-start="opacity-0 translate-y-8 scale-95"
                             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
@@ -264,7 +264,7 @@
                     @endif
 
                     @if(session('error'))
-                        <div class="relative w-full max-w-sm bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center p-8 text-center"
+                        <div class="relative w-full max-w-sm bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center p-8 text-center pointer-events-auto"
                             @click.stop x-transition:enter="transition ease-out duration-300 transform"
                             x-transition:enter-start="opacity-0 translate-y-8 scale-95"
                             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
@@ -290,7 +290,7 @@
                     @endif
 
                     @if ($errors->any())
-                        <div class="relative w-full max-w-sm bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center p-8 text-center"
+                        <div class="relative w-full max-w-sm bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center p-8 text-center pointer-events-auto"
                             @click.stop x-transition:enter="transition ease-out duration-300 transform"
                             x-transition:enter-start="opacity-0 translate-y-8 scale-95"
                             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
