@@ -196,8 +196,7 @@ class LaporanSlogController extends Controller
                 $keluarDex += Hutang::where(function($q) { $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })
                     ->whereBetween('tanggal', [$dayStart, $dayEnd])->sum('jumlah_bon');
 
-                if ($currentDate->month == (int)$bulan && $currentDate->year == (int)$tahun && 
-                   ($currentDate->isWeekday() || $terimaPertamax > 0 || $terimaDex > 0 || $keluarPertamax > 0 || $keluarDex > 0)) {
+                if ($currentDate->month == (int)$bulan && $currentDate->year == (int)$tahun) {
                     $daysInWeek[] = [
                         'date' => $currentDate->copy(),
                         'nama_hari' => strtoupper($currentDate->translatedFormat('l d-n-Y')),
