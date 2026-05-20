@@ -27,7 +27,9 @@ class PembelianBbmController extends Controller
         $perPage = $request->input('per_page', 15);
         $pembelians = $query->orderBy('tanggal', 'desc')->orderBy('created_at', 'desc')->paginate($perPage)->withQueryString();
 
-        return view('pembelian_bbm.index', compact('pembelians'));
+        $latestDate = date('Y-m-d');
+
+        return view('pembelian_bbm.index', compact('pembelians', 'latestDate'));
     }
 
     public function print(Request $request)

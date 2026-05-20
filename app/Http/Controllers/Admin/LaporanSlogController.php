@@ -17,34 +17,68 @@ class LaporanSlogController extends Controller
     {
         $bulan = $request->get('bulan', Carbon::now('Asia/Makassar')->format('m'));
         $tahun = $request->get('tahun', Carbon::now('Asia/Makassar')->format('Y'));
+        $tw = $request->get('tw', 1);
         $jenisLaporan = $request->get('jenis_laporan', 'harian');
 
         if ($jenisLaporan === 'bulanan') {
             $data = $this->generateBulananData($bulan, $tahun);
+        } elseif ($jenisLaporan === 'triwulan') {
+            $data = $this->generateTriwulanData($tw, $tahun);
         } else {
             $data = $this->generateHarianData($bulan, $tahun);
         }
 
-        return view('admin.laporan_slog.index', compact('data', 'bulan', 'tahun', 'jenisLaporan'));
+        return view('admin.laporan_slog.index', compact('data', 'bulan', 'tahun', 'tw', 'jenisLaporan'));
     }
 
     public function print(Request $request)
     {
         $bulan = $request->get('bulan', Carbon::now('Asia/Makassar')->format('m'));
         $tahun = $request->get('tahun', Carbon::now('Asia/Makassar')->format('Y'));
+        $tw = $request->get('tw', 1);
         $jenisLaporan = $request->get('jenis_laporan', 'harian');
 
         if ($jenisLaporan === 'bulanan') {
             $data = $this->generateBulananData($bulan, $tahun);
+        } elseif ($jenisLaporan === 'triwulan') {
+            $data = $this->generateTriwulanData($tw, $tahun);
         } else {
             $data = $this->generateHarianData($bulan, $tahun);
         }
         
-        $pdf = Pdf::loadView('admin.laporan_slog.print', compact('data', 'bulan', 'tahun', 'jenisLaporan'))
+        $pdf = Pdf::loadView('admin.laporan_slog.print', compact('data', 'bulan', 'tahun', 'tw', 'jenisLaporan'))
             ->setPaper('a4', 'landscape');
 
         $jenisStr = ucfirst($jenisLaporan);
-        return $pdf->stream("Laporan_Rutin_{$jenisStr}_{$bulan}_{$tahun}.pdf");
+        $periodeStr = $jenisLaporan === 'triwulan' ? "TW_{$tw}" : $bulan;
+        return $pdf->stream("Laporan_Rutin_{$jenisStr}_{$periodeStr}_{$tahun}.pdf");
+    }
+
+    public function word(Request $request)
+    {
+        $bulan = $request->get('bulan', Carbon::now('Asia/Makassar')->format('m'));
+        $tahun = $request->get('tahun', Carbon::now('Asia/Makassar')->format('Y'));
+        $tw = $request->get('tw', 1);
+        $jenisLaporan = $request->get('jenis_laporan', 'harian');
+
+        if ($jenisLaporan === 'bulanan') {
+            $data = $this->generateBulananData($bulan, $tahun);
+        } elseif ($jenisLaporan === 'triwulan') {
+            $data = $this->generateTriwulanData($tw, $tahun);
+        } else {
+            $data = $this->generateHarianData($bulan, $tahun);
+        }
+
+        $jenisStr = ucfirst($jenisLaporan);
+        $periodeStr = $jenisLaporan === 'triwulan' ? "TW_{$tw}" : $bulan;
+        $filename = "Laporan_Rutin_{$jenisStr}_{$periodeStr}_{$tahun}.doc";
+
+        $headers = [
+            "Content-type" => "application/vnd.ms-word",
+            "Content-Disposition" => "attachment;Filename={$filename}"
+        ];
+
+        return response()->view('admin.laporan_slog.print', compact('data', 'bulan', 'tahun', 'tw', 'jenisLaporan'), 200, $headers);
     }
 
     private function getWeeksForMonth($bulan, $tahun)
@@ -145,6 +179,86 @@ class LaporanSlogController extends Controller
             'weeks' => $report,
             'rekap' => $rekap
         ];
+    }
+
+    private function generateTriwulanData($tw, $tahun)
+    {
+        $months = [];
+        if ($tw == 1) $months = [1, 2, 3];
+        elseif ($tw == 2) $months = [4, 5, 6];
+        elseif ($tw == 3) $months = [7, 8, 9];
+        elseif ($tw == 4) $months = [10, 11, 12];
+        else $months = [1, 2, 3];
+
+        $firstMonthStart = Carbon::createFromDate($tahun, $months[0], 1, 'Asia/Makassar')->startOfMonth();
+        $initialPertamax = $this->getHistoricalStock('Pertamax', $firstMonthStart);
+        $initialDex = $this->getHistoricalStock('Pertamina Dex', $firstMonthStart);
+
+        $currentPertamax = $initialPertamax;
+        $currentDex = $initialDex;
+
+        $report = [];
+        $rekap = [
+            'awal_pertamax' => $currentPertamax,
+            'awal_dex' => $currentDex,
+            'terima_pertamax' => 0,
+            'terima_dex' => 0,
+            'keluar_pertamax' => 0,
+            'keluar_dex' => 0,
+        ];
+
+        foreach ($months as $m) {
+            $startOfMonth = Carbon::createFromDate($tahun, $m, 1, 'Asia/Makassar')->startOfMonth();
+            $endOfMonth = $startOfMonth->copy()->endOfMonth();
+
+            $monthName = $startOfMonth->translatedFormat('F');
+
+            $terimaPertamax = PembelianBbm::where(function($q) { $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })
+                ->whereBetween('tanggal', [$startOfMonth->format('Y-m-d'), $endOfMonth->format('Y-m-d')])->sum('jumlah');
+
+            $terimaDex = PembelianBbm::where(function($q) { $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })
+                ->whereBetween('tanggal', [$startOfMonth->format('Y-m-d'), $endOfMonth->format('Y-m-d')])->sum('jumlah');
+
+            $keluarPertamax = TransaksiBbm::where(function($q) { $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })
+                ->whereBetween('tanggal', [$startOfMonth, $endOfMonth])->sum('liter');
+            $keluarPertamax += Hutang::where(function($q) { $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })
+                ->whereBetween('tanggal', [$startOfMonth, $endOfMonth])->sum('jumlah_bon');
+
+            $keluarDex = TransaksiBbm::where(function($q) { $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })
+                ->whereBetween('tanggal', [$startOfMonth, $endOfMonth])->sum('liter');
+            $keluarDex += Hutang::where(function($q) { $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })
+                ->whereBetween('tanggal', [$startOfMonth, $endOfMonth])->sum('jumlah_bon');
+
+            $report['months'][$monthName] = [
+                'awal_pertamax' => $currentPertamax,
+                'awal_dex' => $currentDex,
+                'terima_pertamax' => $terimaPertamax,
+                'terima_dex' => $terimaDex,
+                'jumlah_pertamax' => $currentPertamax + $terimaPertamax,
+                'jumlah_dex' => $currentDex + $terimaDex,
+                'keluar_pertamax' => $keluarPertamax,
+                'keluar_dex' => $keluarDex,
+                'akhir_pertamax' => ($currentPertamax + $terimaPertamax) - $keluarPertamax,
+                'akhir_dex' => ($currentDex + $terimaDex) - $keluarDex,
+            ];
+
+            $rekap['terima_pertamax'] += $terimaPertamax;
+            $rekap['terima_dex'] += $terimaDex;
+            $rekap['keluar_pertamax'] += $keluarPertamax;
+            $rekap['keluar_dex'] += $keluarDex;
+
+            $currentPertamax = $report['months'][$monthName]['akhir_pertamax'];
+            $currentDex = $report['months'][$monthName]['akhir_dex'];
+        }
+
+        $rekap['jumlah_pertamax'] = $rekap['awal_pertamax'] + $rekap['terima_pertamax'];
+        $rekap['jumlah_dex'] = $rekap['awal_dex'] + $rekap['terima_dex'];
+        $rekap['akhir_pertamax'] = $rekap['jumlah_pertamax'] - $rekap['keluar_pertamax'];
+        $rekap['akhir_dex'] = $rekap['jumlah_dex'] - $rekap['keluar_dex'];
+
+        $report['rekap'] = $rekap;
+
+        return $report;
     }
 
     private function generateHarianData($bulan, $tahun)

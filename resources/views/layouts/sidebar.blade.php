@@ -156,7 +156,7 @@
                         <a href="{{ route('admin.stok.index') }}"
                             class="group submenu-item flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.stok.*') ? 'text-white active-submenu-item' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
                             <div class="submenu-dot {{ request()->routeIs('admin.stok.*') ? 'active-dot' : '' }}"></div>
-                            Stok BBM
+                            Saldo BBM
                         </a>
                         <a href="{{ route('pembelian-bbm.index') }}"
                             class="group submenu-item flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('pembelian-bbm.*') ? 'text-white active-submenu-item' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">

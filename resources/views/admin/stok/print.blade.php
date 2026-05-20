@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Riwayat Perubahan Stok BBM</title>
+    <title>Riwayat Perubahan Saldo BBM</title>
     <style>
         body { font-family: sans-serif; font-size: 12px; }
         .header { text-align: center; margin-bottom: 20px; }
@@ -25,10 +25,10 @@
 <body>
     @include('components.pdf-header')
     <div class="header">
-        <h2>Riwayat Perubahan Stok Pembelian BBM (Belum Distribusi)</h2>
+        <h2>Riwayat Perubahan Saldo BBM (Belum Distribusi)</h2>
     </div>
 
-    <h3>Ringkasan Mutasi Stok</h3>
+    <h3>Ringkasan Mutasi Saldo</h3>
     <table class="stock-summary">
         <thead>
             <tr>
@@ -48,7 +48,7 @@
         </tbody>
     </table>
 
-    <h3>Log Perubahan Stok</h3>
+    <h3>Log Perubahan Saldo</h3>
     <table class="history-table">
         <thead>
             <tr>

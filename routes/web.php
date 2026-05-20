@@ -163,6 +163,7 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     // Laporan Slog
     Route::get('/laporan-slog', [\App\Http\Controllers\Admin\LaporanSlogController::class, 'index'])->name('laporan-slog.index');
     Route::get('/laporan-slog/print', [\App\Http\Controllers\Admin\LaporanSlogController::class, 'print'])->name('laporan-slog.print');
+    Route::get('/laporan-slog/word', [\App\Http\Controllers\Admin\LaporanSlogController::class, 'word'])->name('laporan-slog.word');
 
     // Laporan Potong Saldo
     Route::get('/laporan-potong-saldo', [\App\Http\Controllers\Admin\LaporanPotongController::class, 'index'])->name('laporan-potong.index');

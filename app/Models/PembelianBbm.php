@@ -11,4 +11,8 @@ class PembelianBbm extends Model
         'jenis_bbm',
         'jumlah',
     ];
+
+    protected $casts = [
+        'tanggal' => 'date',
+    ];
 }

@@ -31,7 +31,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Add Purchase Form -->
             <div class="lg:col-span-1">
-                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden sticky top-8">
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm sticky top-8">
                     <div class="p-4 sm:p-6 border-b border-slate-100 bg-slate-50/50">
                         <h3 class="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
                             <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
@@ -42,7 +42,7 @@
                         @csrf
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">1. Pilih Tanggal</label>
-                            <input type="date" name="tanggal" value="{{ old('tanggal', date('Y-m-d')) }}" class="flatpickr w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" required>
+                            <input type="date" name="tanggal" value="{{ old('tanggal', $latestDate ?? date('Y-m-d')) }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none font-semibold text-sm" required>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">2. Jenis BBM</label>
@@ -166,15 +166,20 @@
                                                 {{ number_format($item->jumlah, 0, ',', '.') }} L
                                             </p>
                                         </td>
-                                        <td class="px-4 py-3 text-center">
+                                         <td class="px-4 py-3 text-center">
                                             <div class="flex items-center justify-center gap-2">
-                                                <a href="{{ route('pembelian-bbm.edit', $item->id) }}" class="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="Edit">
+                                                <a href="{{ route('pembelian-bbm.edit', $item) }}" class="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="Edit">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                                 </a>
-                                                <form action="{{ route('pembelian-bbm.destroy', $item->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                                                <form action="{{ route('pembelian-bbm.destroy', $item->id) }}" method="POST" class="inline-block">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Hapus">
+                                                    <button type="button" 
+                                                        data-confirm="Apakah Anda yakin ingin menghapus data pembelian ini?"
+                                                        data-confirm-type="danger"
+                                                        data-confirm-title="Hapus Data!"
+                                                        data-confirm-text="Ya, Hapus!"
+                                                        class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Hapus">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                                     </button>
                                                 </form>

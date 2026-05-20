@@ -28,7 +28,7 @@
                             {{ __('Berita Acara') }}
                         </x-nav-link>
                         <x-nav-link :href="route('admin.stok.index')" :active="request()->routeIs('admin.stok.*')">
-                            {{ __('Stok BBM') }}
+                            {{ __('Saldo BBM') }}
                         </x-nav-link>
                         <x-nav-link :href="route('admin.hutang.index')" :active="request()->routeIs('admin.hutang.*')">
                             {{ __('Hutang BBM') }}

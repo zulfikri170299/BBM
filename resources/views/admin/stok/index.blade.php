@@ -2,8 +2,8 @@
     <div class="p-6 lg:p-8 space-y-8">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">Manajemen Stok BBM</h1>
-                <p class="mt-1 text-sm text-slate-500">Kelola stok bahan bakar pusat sebelum dibagikan ke Satker.</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">Manajemen Saldo BBM</h1>
+                <p class="mt-1 text-sm text-slate-500">Kelola saldo bahan bakar pusat sebelum dibagikan ke Satker.</p>
             </div>
         </div>
 
@@ -36,7 +36,7 @@
                     <div class="p-4 sm:p-6 border-b border-slate-100 bg-slate-50/50">
                         <h3 class="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
                             <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                            Tambah Stok Baru
+                            Tambah Saldo Baru
                         </h3>
                     </div>
                     <form action="{{ route('admin.stok.store') }}" method="POST" class="p-4 sm:p-6 space-y-4" autocomplete="off">
@@ -74,7 +74,7 @@
                         </div>
                         <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-lg shadow-indigo-500/30 transition-all active:scale-95 flex items-center justify-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            Simpan Stok
+                            Simpan Saldo
                         </button>
                     </form>
                 </div>
@@ -111,7 +111,7 @@
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                     <div class="p-4 sm:p-5 border-b border-slate-100 bg-slate-50/50 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4">
                         <div class="flex items-center gap-3">
-                            <h3 class="text-base font-bold text-slate-800">Riwayat Perubahan Stok</h3>
+                            <h3 class="text-base font-bold text-slate-800">Riwayat Perubahan Saldo</h3>
                         </div>
                         
                         <!-- Compact Date Filter -->
@@ -210,7 +210,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="px-6 py-12 text-center text-slate-400 italic">Belum ada riwayat stok.</td>
+                                        <td colspan="5" class="px-6 py-12 text-center text-slate-400 italic">Belum ada riwayat saldo.</td>
                                     </tr>
                                 @endforelse
                             </tbody>

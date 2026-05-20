@@ -127,10 +127,12 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             border-radius: 2rem;
             border: 1px solid #e2e8f0;
-            padding: 1rem;
+            padding: 0.5rem;
             font-family: 'Outfit', sans-serif;
             background: #ffffff;
-            width: 315px; /* Slightly wider for better readability */
+            z-index: 99999 !important;
+            max-width: none !important;
+            /* width: 315px; */ /* Removed custom width to prevent clipping on mobile */
         }
         .flatpickr-months {
             margin-bottom: 0.5rem;
@@ -180,20 +182,6 @@
         .flatpickr-input-container {
             position: relative;
         }
-        .flatpickr-input-container::after {
-            content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5' /%3E%3C/svg%3E");
-            position: absolute;
-            right: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 1.25rem;
-            height: 1.25rem;
-            pointer-events: none;
-            transition: all 0.2s;
-        }
-        .flatpickr-input-container:focus-within::after {
-            filter: invert(24%) sepia(86%) saturate(3015%) hue-rotate(240deg) brightness(85%) contrast(92%); /* indigo-600 */
-        }
         .flatpickr-months .flatpickr-month {
             color: #1e293b;
             fill: #1e293b;
@@ -216,6 +204,17 @@
         .flatpickr-day:hover {
             background: #f1f5f9;
         }
+
+        /* Mobile Table Scrolling Improvements */
+        @media (max-width: 768px) {
+            .overflow-x-auto {
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: thin;
+            }
+            .min-w-full {
+                min-width: 800px !important; /* Ensure table doesn't squash on small screens */
+            }
+        }
     </style>
     @stack('styles')
 </head>
@@ -225,7 +224,7 @@
         class="flex h-[100dvh] bg-slate-50 overflow-hidden">
         @include('layouts.sidebar')
 
-        <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden pt-1">
+        <div class="relative flex flex-col flex-1 overflow-y-auto pt-1">
             @include('layouts.header')
 
             <!-- Global Notification Modals -->
@@ -355,14 +354,6 @@
             const inputs = document.querySelectorAll('input[type="date"]:not(.flatpickr-input), .flatpickr:not(.flatpickr-input)');
             
             inputs.forEach(el => {
-                // Pre-wrap the element for the icon container
-                // This must be done BEFORE flatpickr initialization to prevent event listener issues
-                if (!el.parentNode.classList.contains('flatpickr-input-container')) {
-                    const wrapper = document.createElement('div');
-                    wrapper.className = 'flatpickr-input-container w-full';
-                    el.parentNode.insertBefore(wrapper, el);
-                    wrapper.appendChild(el);
-                }
 
                 // Determine if this is a "Dari" (Start) or "Sampai" (End) field
                 const isStart = el.name && (el.name.includes('start') || el.name.includes('dari'));
@@ -375,6 +366,12 @@
                     altFormat: "d F Y",
                     placeholder: "Tgl",
                     disableMobile: "true",
+                    monthSelectorType: "static",
+                    animate: true,
+                    appendTo: document.body,
+                    static: false,
+                    position: "auto",
+                    defaultDate: el.getAttribute('data-default-date') || el.value,
                     prevArrow: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>',
                     nextArrow: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>',
                     onReady: function(selectedDates, dateStr, instance) {
