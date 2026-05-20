@@ -39,9 +39,7 @@ class AdminController extends Controller
             ->get();
 
         // Get Users with Location
-        $usersWithLocation = \App\Models\User::whereNotNull('last_latitude')
-            ->whereNotNull('last_longitude')
-            ->select('id', 'name', 'role', 'last_latitude', 'last_longitude', 'last_activity_at')
+        $usersWithLocation = \App\Models\User::select('id', 'name', 'role', 'last_latitude', 'last_longitude', 'last_activity_at')
             ->get();
 
         // Satisfaction Stats

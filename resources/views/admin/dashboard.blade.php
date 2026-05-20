@@ -442,8 +442,6 @@
     @endphp
 
     @push('styles')
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-            integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
         <style>
             .leaflet-popup-content-wrapper {
                 border-radius: 12px;
@@ -457,16 +455,17 @@
     @endpush
 
     @push('scripts')
-        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
         <!-- Map Script -->
         <script>
             document.addEventListener('turbo:load', function () {
                 var mapContainer = document.getElementById('userMap');
-                if (mapContainer) {
+                if (mapContainer && typeof L !== 'undefined') {
+                    // Force height for standard Leaflet initialization
+                    mapContainer.style.height = '300px';
+                    
                     // Double-initialization prevention for Turbo
                     if (window.myUserMap) {
+                        window.myUserMap.off();
                         window.myUserMap.remove();
                         window.myUserMap = null;
                     }
