@@ -213,7 +213,8 @@
                 -webkit-overflow-scrolling: touch;
                 scrollbar-width: thin;
             }
-            .min-w-full {
+            .overflow-x-auto table.min-w-full,
+            .overflow-x-auto .min-w-full {
                 min-width: 800px !important; /* Ensure table doesn't squash on small screens */
             }
         }
