@@ -1,0 +1,1 @@
+<img src="{{ asset('rolog.png') }}" {{ $attributes }} alt="Logo SPBP Rolog Polda NTB">
