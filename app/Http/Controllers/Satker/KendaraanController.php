@@ -448,6 +448,13 @@ class KendaraanController extends Controller
                 ->where('tanggal', '<=', $prevMonthEndUtc)
                 ->sum('liter');
 
+            // Total hutang (bon) sampai akhir bulan lalu untuk kendaraan ini
+            $totalHutangSampaiSebelumnya = \App\Models\Hutang::where('satker_id', $satkerId)
+                ->where('nopol', $kendaraan->no_polisi)
+                ->where('jenis_bbm', $kendaraan->jenis_bbm)
+                ->where('tanggal_bon', '<', $startDateWita->format('Y-m-d'))
+                ->sum('jumlah_bon');
+
             // Total transfer keluar (saldo personil) sampai akhir bulan lalu di Satker ini
             $totalTransferKeluarSebelumnya = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
@@ -467,8 +474,8 @@ class KendaraanController extends Controller
             
             $totalTmSampaiSebelumnya = $totalTmSampaiSebelumnya1 + $totalTmSampaiSebelumnya2;
 
-            // Sisa BBM bulan lalu = (total top up masuk + total TM) - (total top up keluar + total pemakaian + total transfer keluar)
-            $sisaBulanLalu = ($totalTopupSampaiSebelumnyaMasuk + $totalTmSampaiSebelumnya) - ($totalTopupSampaiSebelumnyaKeluar + $totalPemakaianSampaiSebelumnya + $totalTransferKeluarSebelumnya);
+            // Sisa BBM bulan lalu = (total top up masuk + total TM) - (total top up keluar + total pemakaian + total hutang + total transfer keluar)
+            $sisaBulanLalu = ($totalTopupSampaiSebelumnyaMasuk + $totalTmSampaiSebelumnya) - ($totalTopupSampaiSebelumnyaKeluar + $totalPemakaianSampaiSebelumnya + $totalHutangSampaiSebelumnya + $totalTransferKeluarSebelumnya);
             if ($sisaBulanLalu < 0) $sisaBulanLalu = 0;
 
             // Transfer Masuk (TM) bulan ini
@@ -508,6 +515,15 @@ class KendaraanController extends Controller
                     ->where('kendaraan_id', $kendaraan->id)
                     ->whereBetween('tanggal', [$dayStartUtc, $dayEndUtc])
                     ->sum('liter');
+
+                // Tambahkan hutang (bon) pada tanggal ini
+                $usageHutang = \App\Models\Hutang::where('satker_id', $satkerId)
+                    ->where('nopol', $kendaraan->no_polisi)
+                    ->where('jenis_bbm', $kendaraan->jenis_bbm)
+                    ->where('tanggal_bon', $dateStartWita->format('Y-m-d'))
+                    ->sum('jumlah_bon');
+                $usage += $usageHutang;
+
                 $dailyUsage[$d] = $usage > 0 ? round($usage, 0) : null;
                 $totalPemakaian += $usage;
             }

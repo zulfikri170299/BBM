@@ -202,8 +202,14 @@
                                     <div class="font-bold text-slate-800">{{ $hutang->nama_driver ?? '-' }}</div>
                                 </td>
                                 <td class="px-4 py-2">
+                                    @php
+                                        $bbmUpper = strtoupper($hutang->jenis_bbm);
+                                        $bbmColorClass = str_contains($bbmUpper, 'DEX')
+                                            ? 'bg-blue-50 text-blue-700 border-blue-200'
+                                            : 'bg-emerald-50 text-emerald-700 border-emerald-200';
+                                    @endphp
                                     <span
-                                        class="inline-flex items-center px-2 py-1 bg-amber-50 text-amber-700 border border-amber-200 rounded text-xs font-bold">
+                                        class="inline-flex items-center px-2 py-1 {{ $bbmColorClass }} rounded text-xs font-bold">
                                         {{ number_format($hutang->jumlah_bon, 0, ',', '.') }} L {{ $hutang->jenis_bbm }}
                                     </span>
                                 </td>

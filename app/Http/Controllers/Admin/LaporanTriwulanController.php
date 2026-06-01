@@ -44,11 +44,14 @@ class LaporanTriwulanController extends Controller
         $startDate = Carbon::createFromFormat('Y-m-d', $startDateStr, 'Asia/Makassar')->startOfDay();
         $endDate = Carbon::createFromFormat('Y-m-d', $endDateStr, 'Asia/Makassar')->endOfDay();
 
+        $startUtc = $startDate->copy()->setTimezone('UTC')->format('Y-m-d H:i:s');
+        $endUtc = $endDate->copy()->setTimezone('UTC')->format('Y-m-d H:i:s');
+
         // RiwayatTopup uses created_at (timestamp)
         // TransaksiBbm uses tanggal (custom column)
 
         $bbmTypesTopup = RiwayatTopup::join('kendaraans', 'riwayat_topups.kendaraan_id', '=', 'kendaraans.id')
-            ->whereBetween('riwayat_topups.created_at', [$startDate, $endDate])
+            ->whereBetween('riwayat_topups.created_at', [$startUtc, $endUtc])
             ->whereIn('riwayat_topups.metode', ['manual', 'IMPORT', 'massal'])
             ->where('riwayat_topups.tipe', 'masuk')
             ->selectRaw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm")
@@ -61,8 +64,14 @@ class LaporanTriwulanController extends Controller
             ->distinct()
             ->pluck('jenis_bbm')
             ->toArray();
+            
+        $bbmTypesHutang = \App\Models\Hutang::whereBetween('tanggal_bon', [$startDate->format('Y-m-d H:i:s'), $endDate->format('Y-m-d H:i:s')])
+            ->selectRaw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm")
+            ->distinct()
+            ->pluck('jenis_bbm')
+            ->toArray();
 
-        $allBbmTypes = array_unique(array_merge($bbmTypesTopup, $bbmTypesTransaksi));
+        $allBbmTypes = array_unique(array_merge($bbmTypesTopup, $bbmTypesTransaksi, $bbmTypesHutang));
         sort($allBbmTypes);
         
         if (empty($allBbmTypes)) {
@@ -77,7 +86,7 @@ class LaporanTriwulanController extends Controller
                 DB::raw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
                 DB::raw("SUM(riwayat_topups.jumlah) as total")
             )
-            ->whereBetween('riwayat_topups.created_at', [$startDate, $endDate])
+            ->whereBetween('riwayat_topups.created_at', [$startUtc, $endUtc])
             ->where('riwayat_topups.tipe', 'masuk')
             ->groupBy('riwayat_topups.satker_id', 'kendaraans.jenis_bbm')
             ->get();
@@ -107,55 +116,35 @@ class LaporanTriwulanController extends Controller
                 DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
                 DB::raw('SUM(jumlah) as total')
             )
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereBetween('created_at', [$startUtc, $endUtc])
             ->where('tipe', 'keluar')
+            ->groupBy('satker_id', 'jenis_bbm')
+            ->get();
+
+        // Tambahan: Hutang bulan ini dihitung sebagai pemakaian
+        $hutangRaw = \App\Models\Hutang::select(
+                'satker_id',
+                DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
+                DB::raw('SUM(jumlah_bon) as total')
+            )
+            ->whereBetween('tanggal_bon', [$startDate->format('Y-m-d H:i:s'), $endDate->format('Y-m-d H:i:s')])
             ->groupBy('satker_id', 'jenis_bbm')
             ->get();
 
         foreach($potongSaldoRaw as $item) {
             $pemakaian[$item->satker_id][$item->jenis_bbm] = ($pemakaian[$item->satker_id][$item->jenis_bbm] ?? 0) + $item->total;
         }
-
-        // --- Perbaikan: Hitung Sisa BBM secara Kumulatif (Sampai Akhir Periode) ---
-        $pendapatanKumulatifRaw = RiwayatTopup::join('kendaraans', 'riwayat_topups.kendaraan_id', '=', 'kendaraans.id')
-            ->select(
-                'riwayat_topups.satker_id',
-                DB::raw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
-                DB::raw("SUM(riwayat_topups.jumlah) as total")
-            )
-            ->where('riwayat_topups.created_at', '<=', $endDate)
-            ->where('riwayat_topups.tipe', 'masuk')
-            ->groupBy('riwayat_topups.satker_id', 'kendaraans.jenis_bbm')
-            ->get();
-
-        $pemakaianKumulatifRaw = TransaksiBbm::select(
-                'satker_id',
-                DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
-                DB::raw('SUM(liter) as total')
-            )
-            ->where('tanggal', '<=', $endDate->format('Y-m-d H:i:s'))
-            ->groupBy('satker_id', 'jenis_bbm')
-            ->get();
-
-        $potongSaldoKumulatifRaw = RiwayatTopup::select(
-                'satker_id',
-                DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
-                DB::raw('SUM(jumlah) as total')
-            )
-            ->where('created_at', '<=', $endDate)
-            ->where('tipe', 'keluar')
-            ->groupBy('satker_id', 'jenis_bbm')
-            ->get();
+        foreach($hutangRaw as $item) {
+            $pemakaian[$item->satker_id][$item->jenis_bbm] = ($pemakaian[$item->satker_id][$item->jenis_bbm] ?? 0) + $item->total;
+        }
 
         $sisaBbm = [];
-        foreach($pendapatanKumulatifRaw as $item) {
-            $sisaBbm[$item->satker_id][$item->jenis_bbm] = ($sisaBbm[$item->satker_id][$item->jenis_bbm] ?? 0) + $item->total;
-        }
-        foreach($pemakaianKumulatifRaw as $item) {
-            $sisaBbm[$item->satker_id][$item->jenis_bbm] = ($sisaBbm[$item->satker_id][$item->jenis_bbm] ?? 0) - $item->total;
-        }
-        foreach($potongSaldoKumulatifRaw as $item) {
-            $sisaBbm[$item->satker_id][$item->jenis_bbm] = ($sisaBbm[$item->satker_id][$item->jenis_bbm] ?? 0) - $item->total;
+        foreach($satkers as $satker) {
+            foreach($allBbmTypes as $jenis) {
+                $p = $pendapatan[$satker->id][$jenis] ?? 0;
+                $m = $pemakaian[$satker->id][$jenis] ?? 0;
+                $sisaBbm[$satker->id][$jenis] = $p - $m;
+            }
         }
 
         return compact('tahun', 'triwulan', 'periodeLabel', 'allBbmTypes', 'satkers', 'pendapatan', 'pemakaian', 'sisaBbm');

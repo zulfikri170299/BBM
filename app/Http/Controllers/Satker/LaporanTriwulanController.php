@@ -50,8 +50,11 @@ class LaporanTriwulanController extends Controller
         $startDate = Carbon::createFromFormat('Y-m-d', $startDateStr, 'Asia/Makassar')->startOfDay();
         $endDate = Carbon::createFromFormat('Y-m-d', $endDateStr, 'Asia/Makassar')->endOfDay();
 
+        $startUtc = $startDate->copy()->setTimezone('UTC')->format('Y-m-d H:i:s');
+        $endUtc = $endDate->copy()->setTimezone('UTC')->format('Y-m-d H:i:s');
+
         $queryTopup = RiwayatTopup::join('kendaraans', 'riwayat_topups.kendaraan_id', '=', 'kendaraans.id')
-            ->whereBetween('riwayat_topups.created_at', [$startDate, $endDate])
+            ->whereBetween('riwayat_topups.created_at', [$startUtc, $endUtc])
             ->whereIn('riwayat_topups.metode', ['manual', 'IMPORT', 'massal'])
             ->where('riwayat_topups.tipe', 'masuk');
         
@@ -75,7 +78,17 @@ class LaporanTriwulanController extends Controller
             ->pluck('jenis_bbm')
             ->toArray();
 
-        $allBbmTypes = array_unique(array_merge($bbmTypesTopup, $bbmTypesTransaksi));
+        $queryHutang = \App\Models\Hutang::whereBetween('tanggal_bon', [$startDate->format('Y-m-d H:i:s'), $endDate->format('Y-m-d H:i:s')]);
+        if (!$isSuperAdmin) {
+            $queryHutang->where('satker_id', $satker->id);
+        }
+        $bbmTypesHutang = $queryHutang
+            ->selectRaw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm")
+            ->distinct()
+            ->pluck('jenis_bbm')
+            ->toArray();
+
+        $allBbmTypes = array_unique(array_merge($bbmTypesTopup, $bbmTypesTransaksi, $bbmTypesHutang));
         sort($allBbmTypes);
         
         if (empty($allBbmTypes)) {
@@ -87,7 +100,7 @@ class LaporanTriwulanController extends Controller
                 DB::raw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
                 DB::raw("SUM(riwayat_topups.jumlah) as total")
             )
-            ->whereBetween('riwayat_topups.created_at', [$startDate, $endDate])
+            ->whereBetween('riwayat_topups.created_at', [$startUtc, $endUtc])
             ->where('riwayat_topups.tipe', 'masuk');
         
         if (!$isSuperAdmin) {
@@ -125,7 +138,7 @@ class LaporanTriwulanController extends Controller
                 DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
                 DB::raw('SUM(jumlah) as total')
             )
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereBetween('created_at', [$startUtc, $endUtc])
             ->where('tipe', 'keluar');
         
         if (!$isSuperAdmin) {
@@ -134,59 +147,33 @@ class LaporanTriwulanController extends Controller
 
         $potongSaldoRaw = $queryPotongSaldoRaw->groupBy('jenis_bbm')->get();
 
+        // Tambahan: Hutang bulan ini dihitung sebagai pemakaian
+        $queryHutangRaw = \App\Models\Hutang::select(
+                DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
+                DB::raw('SUM(jumlah_bon) as total')
+            )
+            ->whereBetween('tanggal_bon', [$startDate->format('Y-m-d H:i:s'), $endDate->format('Y-m-d H:i:s')]);
+        
+        if (!$isSuperAdmin) {
+            $queryHutangRaw->where('satker_id', $satker->id);
+        }
+
+        $hutangRaw = $queryHutangRaw->groupBy('jenis_bbm')->get();
+
+        $potongSaldoRaw = $queryPotongSaldoRaw->groupBy('jenis_bbm')->get();
+
         foreach($potongSaldoRaw as $item) {
             $pemakaian[$item->jenis_bbm] = ($pemakaian[$item->jenis_bbm] ?? 0) + $item->total;
         }
-
-        // --- Perbaikan: Hitung Sisa BBM secara Kumulatif (Sampai Akhir Periode) ---
-        $queryPendKumulatif = RiwayatTopup::join('kendaraans', 'riwayat_topups.kendaraan_id', '=', 'kendaraans.id')
-            ->select(
-                DB::raw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
-                DB::raw("SUM(riwayat_topups.jumlah) as total")
-            )
-            ->where('riwayat_topups.created_at', '<=', $endDate)
-            ->where('riwayat_topups.tipe', 'masuk');
-        
-        if (!$isSuperAdmin) {
-            $queryPendKumulatif->where('riwayat_topups.satker_id', $satker->id);
+        foreach($hutangRaw as $item) {
+            $pemakaian[$item->jenis_bbm] = ($pemakaian[$item->jenis_bbm] ?? 0) + $item->total;
         }
-
-        $pendapatanKumulatifRaw = $queryPendKumulatif->groupBy('kendaraans.jenis_bbm')->get();
-
-        $queryPemKumulatif = TransaksiBbm::select(
-                DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
-                DB::raw('SUM(liter) as total')
-            )
-            ->where('tanggal', '<=', $endDate->format('Y-m-d H:i:s'));
-        
-        if (!$isSuperAdmin) {
-            $queryPemKumulatif->where('satker_id', $satker->id);
-        }
-
-        $pemakaianKumulatifRaw = $queryPemKumulatif->groupBy('jenis_bbm')->get();
-
-        $queryPotKumulatif = RiwayatTopup::select(
-                DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
-                DB::raw('SUM(jumlah) as total')
-            )
-            ->where('created_at', '<=', $endDate)
-            ->where('tipe', 'keluar');
-        
-        if (!$isSuperAdmin) {
-            $queryPotKumulatif->where('satker_id', $satker->id);
-        }
-
-        $potongSaldoKumulatifRaw = $queryPotKumulatif->groupBy('jenis_bbm')->get();
 
         $sisaBbm = [];
-        foreach($pendapatanKumulatifRaw as $item) {
-            $sisaBbm[$item->jenis_bbm] = ($sisaBbm[$item->jenis_bbm] ?? 0) + $item->total;
-        }
-        foreach($pemakaianKumulatifRaw as $item) {
-            $sisaBbm[$item->jenis_bbm] = ($sisaBbm[$item->jenis_bbm] ?? 0) - $item->total;
-        }
-        foreach($potongSaldoKumulatifRaw as $item) {
-            $sisaBbm[$item->jenis_bbm] = ($sisaBbm[$item->jenis_bbm] ?? 0) - $item->total;
+        foreach($allBbmTypes as $jenis) {
+            $p = $pendapatan[$jenis] ?? 0;
+            $m = $pemakaian[$jenis] ?? 0;
+            $sisaBbm[$jenis] = $p - $m;
         }
 
         return compact('tahun', 'triwulan', 'periodeLabel', 'allBbmTypes', 'satker', 'pendapatan', 'pemakaian', 'sisaBbm');

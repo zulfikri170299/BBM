@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Satker;
-use App\Models\Kendaraan;
-use App\Models\Personel;
+use App\Models\RiwayatTopup;
+use App\Models\TransaksiBbm;
+use App\Models\Hutang;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class LaporanSisaController extends Controller
@@ -46,31 +48,53 @@ class LaporanSisaController extends Controller
         $totalPertamax = 0;
         $totalDex = 0;
 
+        $isPertamaxTopup = function($q) {
+            $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX')
+              ->orWhereHas('kendaraan', fn($k) => $k->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'));
+        };
+        $isDexTopup = function($q) {
+            $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX')
+              ->orWhereHas('kendaraan', fn($k) => $k->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'));
+        };
+        $isPertamaxTrans = fn($q) => $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX');
+        $isDexTrans      = fn($q) => $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX');
+
         foreach ($satkers as $satker) {
-            $pertamax = Kendaraan::where('satker_id', $satker->id)
-                ->where('jenis_bbm', 'Pertamax')
-                ->sum('saldo');
-            
-            $dex = Kendaraan::where('satker_id', $satker->id)
-                ->where('jenis_bbm', 'Pertamina Dex')
-                ->sum('saldo');
+            // Total topup masuk
+            $pendP = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'masuk')->where($isPertamaxTopup)->sum('jumlah');
+            $pendD = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'masuk')->where($isDexTopup)->sum('jumlah');
+
+            // Total pemakaian (transaksi BBM)
+            $pakaiP = TransaksiBbm::where('satker_id', $satker->id)->where($isPertamaxTrans)->sum('liter');
+            $pakaiD = TransaksiBbm::where('satker_id', $satker->id)->where($isDexTrans)->sum('liter');
+
+            // Total potong saldo (RiwayatTopup keluar)
+            $potongP = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'keluar')->where($isPertamaxTopup)->sum('jumlah');
+            $potongD = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'keluar')->where($isDexTopup)->sum('jumlah');
+
+            // Total hutang (semua status — sudah_dibayar sudah ada di RiwayatTopup keluar, jadi hanya kurangi belum_dibayar)
+            $hutangP = Hutang::where('satker_id', $satker->id)->where('jenis_bbm', 'Pertamax')->where('status', 'belum_dibayar')->sum('jumlah_bon');
+            $hutangD = Hutang::where('satker_id', $satker->id)->where('jenis_bbm', 'Pertamina Dex')->where('status', 'belum_dibayar')->sum('jumlah_bon');
+
+            $pertamax = $pendP - $pakaiP - $potongP - $hutangP;
+            $dex      = $pendD - $pakaiD - $potongD - $hutangD;
 
             $rows[] = [
-                'satker' => $satker->nama_satker,
+                'satker'   => $satker->nama_satker,
                 'pertamax' => $pertamax,
-                'dex' => $dex
+                'dex'      => $dex,
             ];
 
             $totalPertamax += $pertamax;
-            $totalDex += $dex;
+            $totalDex      += $dex;
         }
 
         return [
-            'rows' => $rows,
+            'rows'          => $rows,
             'totalPertamax' => $totalPertamax,
-            'totalDex' => $totalDex,
-            'title' => 'DATA BBM KENDARAAN PADA SATKER MAPOLDA NTB',
-            'periode' => 'SAMPAI DENGAN BULAN ' . strtoupper(now()->translatedFormat('F Y'))
+            'totalDex'      => $totalDex,
+            'title'         => 'DATA BBM KENDARAAN PADA SATKER MAPOLDA NTB',
+            'periode'       => 'SAMPAI DENGAN BULAN ' . strtoupper(now()->translatedFormat('F Y'))
         ];
     }
 
@@ -81,31 +105,49 @@ class LaporanSisaController extends Controller
         $totalPertamax = 0;
         $totalDex = 0;
 
+        $isPertamaxTopup = function($q) {
+            $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX')
+              ->orWhereHas('kendaraan', fn($k) => $k->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'));
+        };
+        $isDexTopup = function($q) {
+            $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX')
+              ->orWhereHas('kendaraan', fn($k) => $k->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'));
+        };
+        $isPertamaxTrans = fn($q) => $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX');
+        $isDexTrans      = fn($q) => $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX');
+
         foreach ($satkers as $satker) {
-            $pertamax = Personel::where('satker_id', $satker->id)
-                ->where('jenis_bbm', 'Pertamax')
-                ->sum('saldo');
-            
-            $dex = Personel::where('satker_id', $satker->id)
-                ->where('jenis_bbm', 'Pertamina Dex')
-                ->sum('saldo');
+            $pendP = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'masuk')->where($isPertamaxTopup)->sum('jumlah');
+            $pendD = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'masuk')->where($isDexTopup)->sum('jumlah');
+
+            $pakaiP = TransaksiBbm::where('satker_id', $satker->id)->where($isPertamaxTrans)->sum('liter');
+            $pakaiD = TransaksiBbm::where('satker_id', $satker->id)->where($isDexTrans)->sum('liter');
+
+            $potongP = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'keluar')->where($isPertamaxTopup)->sum('jumlah');
+            $potongD = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'keluar')->where($isDexTopup)->sum('jumlah');
+
+            $hutangP = Hutang::where('satker_id', $satker->id)->where('jenis_bbm', 'Pertamax')->where('status', 'belum_dibayar')->sum('jumlah_bon');
+            $hutangD = Hutang::where('satker_id', $satker->id)->where('jenis_bbm', 'Pertamina Dex')->where('status', 'belum_dibayar')->sum('jumlah_bon');
+
+            $pertamax = $pendP - $pakaiP - $potongP - $hutangP;
+            $dex      = $pendD - $pakaiD - $potongD - $hutangD;
 
             $rows[] = [
-                'satker' => $satker->nama_satker,
+                'satker'   => $satker->nama_satker,
                 'pertamax' => $pertamax,
-                'dex' => $dex
+                'dex'      => $dex,
             ];
 
             $totalPertamax += $pertamax;
-            $totalDex += $dex;
+            $totalDex      += $dex;
         }
 
         return [
-            'rows' => $rows,
+            'rows'          => $rows,
             'totalPertamax' => $totalPertamax,
-            'totalDex' => $totalDex,
-            'title' => 'DATA BBM PERSONEL PADA SATKER MAPOLDA NTB',
-            'periode' => 'SAMPAI DENGAN BULAN ' . strtoupper(now()->translatedFormat('F Y'))
+            'totalDex'      => $totalDex,
+            'title'         => 'DATA BBM PERSONEL PADA SATKER MAPOLDA NTB',
+            'periode'       => 'SAMPAI DENGAN BULAN ' . strtoupper(now()->translatedFormat('F Y'))
         ];
     }
 }

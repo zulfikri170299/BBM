@@ -47,11 +47,11 @@
                                     {{ $index + 1 }}</td>
                                 <td class="px-6 py-4 font-black text-slate-700 border-r border-slate-100 uppercase tracking-tight">
                                     {{ $row['satker'] }}</td>
-                                <td class="px-6 py-4 text-center border-r border-slate-100 bg-emerald-50/10">
-                                    <span class="text-base font-black text-emerald-600 tracking-tighter">{{ number_format($row['pertamax'], 0, ',', '.') }}</span>
+                                <td class="px-6 py-4 text-center border-r border-slate-100 {{ $row['pertamax'] < 0 ? 'bg-red-50/30' : 'bg-emerald-50/10' }}">
+                                    <span class="text-base font-black tracking-tighter {{ $row['pertamax'] < 0 ? 'text-red-600' : 'text-emerald-600' }}">{{ number_format($row['pertamax'], 0, ',', '.') }}</span>
                                 </td>
-                                <td class="px-6 py-4 text-center bg-indigo-50/10">
-                                    <span class="text-base font-black text-indigo-600 tracking-tighter">{{ number_format($row['dex'], 0, ',', '.') }}</span>
+                                <td class="px-6 py-4 text-center {{ $row['dex'] < 0 ? 'bg-red-50/30' : 'bg-indigo-50/10' }}">
+                                    <span class="text-base font-black tracking-tighter {{ $row['dex'] < 0 ? 'text-red-600' : 'text-indigo-600' }}">{{ number_format($row['dex'], 0, ',', '.') }}</span>
                                 </td>
                             </tr>
                         @endforeach
@@ -87,18 +87,18 @@
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-emerald-50/50 p-3 rounded-2xl border border-emerald-100/50 relative overflow-hidden">
-                            <p class="text-[9px] font-black text-emerald-600/60 uppercase tracking-widest mb-1.5">Pertamax</p>
+                        <div class="{{ $row['pertamax'] < 0 ? 'bg-red-50/50 border-red-100/50' : 'bg-emerald-50/50 border-emerald-100/50' }} p-3 rounded-2xl border relative overflow-hidden">
+                            <p class="text-[9px] font-black {{ $row['pertamax'] < 0 ? 'text-red-600/60' : 'text-emerald-600/60' }} uppercase tracking-widest mb-1.5">Pertamax</p>
                             <div class="flex items-baseline gap-1">
-                                <span class="text-lg font-black text-emerald-600 tracking-tighter">{{ number_format($row['pertamax'], 0, ',', '.') }}</span>
-                                <span class="text-[9px] font-bold text-emerald-600/60 uppercase">Liter</span>
+                                <span class="text-lg font-black {{ $row['pertamax'] < 0 ? 'text-red-600' : 'text-emerald-600' }} tracking-tighter">{{ number_format($row['pertamax'], 0, ',', '.') }}</span>
+                                <span class="text-[9px] font-bold {{ $row['pertamax'] < 0 ? 'text-red-600/60' : 'text-emerald-600/60' }} uppercase">Liter</span>
                             </div>
                         </div>
-                        <div class="bg-indigo-50/50 p-3 rounded-2xl border border-indigo-100/50 relative overflow-hidden">
-                            <p class="text-[9px] font-black text-indigo-600/60 uppercase tracking-widest mb-1.5">P. Dex</p>
+                        <div class="{{ $row['dex'] < 0 ? 'bg-red-50/50 border-red-100/50' : 'bg-indigo-50/50 border-indigo-100/50' }} p-3 rounded-2xl border relative overflow-hidden">
+                            <p class="text-[9px] font-black {{ $row['dex'] < 0 ? 'text-red-600/60' : 'text-indigo-600/60' }} uppercase tracking-widest mb-1.5">P. Dex</p>
                             <div class="flex items-baseline gap-1">
-                                <span class="text-lg font-black text-indigo-600 tracking-tighter">{{ number_format($row['dex'], 0, ',', '.') }}</span>
-                                <span class="text-[9px] font-bold text-indigo-600/60 uppercase">Liter</span>
+                                <span class="text-lg font-black {{ $row['dex'] < 0 ? 'text-red-600' : 'text-indigo-600' }} tracking-tighter">{{ number_format($row['dex'], 0, ',', '.') }}</span>
+                                <span class="text-[9px] font-bold {{ $row['dex'] < 0 ? 'text-red-600/60' : 'text-indigo-600/60' }} uppercase">Liter</span>
                             </div>
                         </div>
                     </div>

@@ -47,30 +47,17 @@ class LaporanTahunanController extends Controller
             
             $potongSaldoDex = RiwayatTopup::where('satker_id', $satker->id)
                 ->where('tipe', 'keluar')->where($isDexTopup)->whereYear('created_at', $year)->sum('jumlah');
-            
-            $pemakaianPertamax += $potongSaldoPertamax;
-            $pemakaianDex += $potongSaldoDex;
                 
-            $totalPendapatanPertamax = RiwayatTopup::where('satker_id', $satker->id)
-                ->where('tipe', 'masuk')->where($isPertamaxTopup)->where('created_at', '<=', "$year-12-31 23:59:59")->sum('jumlah');
+            $hutangPertamax = \App\Models\Hutang::where('satker_id', $satker->id)
+                ->where($isPertamaxTrans)->whereYear('tanggal_bon', $year)->sum('jumlah_bon');
+            $hutangDex = \App\Models\Hutang::where('satker_id', $satker->id)
+                ->where($isDexTrans)->whereYear('tanggal_bon', $year)->sum('jumlah_bon');
             
-            $totalPendapatanDex = RiwayatTopup::where('satker_id', $satker->id)
-                ->where('tipe', 'masuk')->where($isDexTopup)->where('created_at', '<=', "$year-12-31 23:59:59")->sum('jumlah');
-
-            $totalKeluarPertamax = TransaksiBbm::where('satker_id', $satker->id)
-                ->where($isPertamaxTrans)->where('tanggal', '<=', "$year-12-31 23:59:59")->sum('liter');
-            
-            $totalKeluarPertamax += RiwayatTopup::where('satker_id', $satker->id)
-                ->where('tipe', 'keluar')->where($isPertamaxTopup)->where('created_at', '<=', "$year-12-31 23:59:59")->sum('jumlah');
-
-            $totalKeluarDex = TransaksiBbm::where('satker_id', $satker->id)
-                ->where($isDexTrans)->where('tanggal', '<=', "$year-12-31 23:59:59")->sum('liter');
-            
-            $totalKeluarDex += RiwayatTopup::where('satker_id', $satker->id)
-                ->where('tipe', 'keluar')->where($isDexTopup)->where('created_at', '<=', "$year-12-31 23:59:59")->sum('jumlah');
-
-            $sisaPertamax = $totalPendapatanPertamax - $totalKeluarPertamax;
-            $sisaDex = $totalPendapatanDex - $totalKeluarDex;
+            $pemakaianPertamax += $potongSaldoPertamax + $hutangPertamax;
+            $pemakaianDex += $potongSaldoDex + $hutangDex;
+                
+            $sisaPertamax = $pendapatanPertamax - $pemakaianPertamax;
+            $sisaDex = $pendapatanDex - $pemakaianDex;
 
             $reportData[] = [
                 'satker' => $satker->nama_satker,
@@ -124,20 +111,14 @@ class LaporanTahunanController extends Controller
             $psP = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'keluar')->where($isPertamaxTopup)->whereYear('created_at', $year)->sum('jumlah');
             $psD = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'keluar')->where($isDexTopup)->whereYear('created_at', $year)->sum('jumlah');
             
-            $pemakaianPertamax += $psP;
-            $pemakaianDex += $psD;
-                
-            $totalPendapatanPertamax = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'masuk')->where($isPertamaxTopup)->where('created_at', '<=', "$year-12-31 23:59:59")->sum('jumlah');
-            $totalPendapatanDex = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'masuk')->where($isDexTopup)->where('created_at', '<=', "$year-12-31 23:59:59")->sum('jumlah');
+            $hutangP = \App\Models\Hutang::where('satker_id', $satker->id)->where($isPertamaxTrans)->whereYear('tanggal_bon', $year)->sum('jumlah_bon');
+            $hutangD = \App\Models\Hutang::where('satker_id', $satker->id)->where($isDexTrans)->whereYear('tanggal_bon', $year)->sum('jumlah_bon');
             
-            $totalKeluarPertamax = TransaksiBbm::where('satker_id', $satker->id)->where($isPertamaxTrans)->where('tanggal', '<=', "$year-12-31 23:59:59")->sum('liter');
-            $totalKeluarPertamax += RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'keluar')->where($isPertamaxTopup)->where('created_at', '<=', "$year-12-31 23:59:59")->sum('jumlah');
-
-            $totalKeluarDex = TransaksiBbm::where('satker_id', $satker->id)->where($isDexTrans)->where('tanggal', '<=', "$year-12-31 23:59:59")->sum('liter');
-            $totalKeluarDex += RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'keluar')->where($isDexTopup)->where('created_at', '<=', "$year-12-31 23:59:59")->sum('jumlah');
-
-            $sisaPertamax = $totalPendapatanPertamax - $totalKeluarPertamax;
-            $sisaDex = $totalPendapatanDex - $totalKeluarDex;
+            $pemakaianPertamax += $psP + $hutangP;
+            $pemakaianDex += $psD + $hutangD;
+                
+            $sisaPertamax = $pendapatanPertamax - $pemakaianPertamax;
+            $sisaDex = $pendapatanDex - $pemakaianDex;
 
             $reportData[] = [
                 'satker' => $satker->nama_satker,
