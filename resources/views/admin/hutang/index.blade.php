@@ -519,6 +519,18 @@
                                     </template>
                                 </select>
                             </div>
+                            <div x-show="createSelectedKendaraan" x-cloak
+                                :class="createVehicleHasSaldo ? 'bg-rose-50 border-rose-100 text-rose-700' : 'bg-emerald-50 border-emerald-100 text-emerald-700'"
+                                class="flex items-start gap-2 rounded-xl border px-3 py-2 text-[10px] font-bold">
+                                <svg class="mt-0.5 h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 9v-1m0 1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <div>
+                                    <div>Saldo Kendaraan: <span x-text="`${formatLiter(createSelectedSaldo)} L`"></span></div>
+                                    <div x-show="createVehicleHasSaldo" class="mt-0.5 font-black">Saldo masih ada, hutang BBM tidak dapat disimpan.</div>
+                                    <div x-show="!createVehicleHasSaldo" class="mt-0.5 font-black">Saldo kosong, kendaraan boleh hutang BBM.</div>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Driver Name -->
@@ -704,6 +716,7 @@
                                     </div>
                                     <input id="create_jumlah_bon" name="jumlah_bon" type="number" step="0.1" x-model="createData.jumlah_bon" 
                                         :max="createCurrentStock"
+                                        :disabled="!createData.kendaraan_id || createVehicleHasSaldo"
                                         class="block w-full pl-11 pr-4 py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-xl transition-all shadow-sm font-black text-rose-600 text-xs disabled:opacity-50" 
                                         placeholder="0.0" required />
                                 </div>
@@ -713,7 +726,7 @@
 
                         <div class="pt-6 flex flex-col sm:flex-row-reverse gap-3 border-t border-slate-100">
                             <button type="submit"
-                                :disabled="createCurrentStock !== null && (createData.jumlah_bon > createCurrentStock || createCurrentStock <= 0)"
+                                :disabled="createSubmitDisabled"
                                 class="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-black rounded-2xl shadow-xl shadow-emerald-100 hover:shadow-emerald-200 active:scale-95 transition-all text-sm uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed">
                                 SIMPAN DATA HUTANG
                             </button>
@@ -755,6 +768,26 @@
                     if (upper.includes('DEX')) return 'Pertamina Dex';
                     if (upper.includes('PERTAMAX')) return 'Pertamax';
                     return bbm;
+                },
+                formatLiter(value) {
+                    const number = Number(value || 0);
+                    return new Intl.NumberFormat('id-ID', { maximumFractionDigits: 1 }).format(number);
+                },
+                get createSelectedKendaraan() {
+                    if (!this.createData.kendaraan_id || !this.formKendaraans.length) return null;
+                    return this.formKendaraans.find(k => k.id == this.createData.kendaraan_id) || null;
+                },
+                get createSelectedSaldo() {
+                    return this.createSelectedKendaraan ? Number(this.createSelectedKendaraan.saldo || 0) : 0;
+                },
+                get createVehicleHasSaldo() {
+                    return this.createSelectedKendaraan && this.createSelectedSaldo > 0;
+                },
+                get createSubmitDisabled() {
+                    if (!this.createData.kendaraan_id) return true;
+                    if (this.createVehicleHasSaldo) return true;
+                    if (this.createCurrentStock !== null && (this.createData.jumlah_bon > this.createCurrentStock || this.createCurrentStock <= 0)) return true;
+                    return false;
                 },
                 get createCurrentStock() {
                     if (!this.createData.kendaraan_id || !this.formKendaraans.length) return null;
@@ -812,7 +845,7 @@
                                     el.tomselect.clearOptions();
                                     el.tomselect.addOptions(this.formKendaraans.map(k => ({
                                         value: k.id,
-                                        text: `${k.no_polisi} - ${k.jenis_kendaraan} (${k.jenis_bbm})`
+                                        text: `${k.no_polisi} - ${k.jenis_kendaraan} (${k.jenis_bbm}) | Saldo: ${this.formatLiter(k.saldo)} L`
                                     })));
                                     el.tomselect.refreshOptions(false);
                                     el.tomselect.enable();
@@ -829,7 +862,7 @@
                                         searchField: ['text'],
                                         options: this.formKendaraans.map(k => ({
                                             value: k.id,
-                                            text: `${k.no_polisi} - ${k.jenis_kendaraan} (${k.jenis_bbm})`
+                                            text: `${k.no_polisi} - ${k.jenis_kendaraan} (${k.jenis_bbm}) | Saldo: ${this.formatLiter(k.saldo)} L`
                                         }))
                                     });
                                 }

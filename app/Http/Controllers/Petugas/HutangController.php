@@ -82,6 +82,7 @@ class HutangController extends Controller
     {
         $satkerId = $request->satker_id;
         $kendaraans = \App\Models\Kendaraan::where('satker_id', $satkerId)
+            ->where('saldo', '<=', 0)
             ->select('id', 'no_polisi', 'jenis_kendaraan', 'jenis_bbm')
             ->get();
             
@@ -99,6 +100,17 @@ class HutangController extends Controller
             'jumlah_bon' => 'required|numeric|min:0.1',
             'tanggal_bon' => 'required|date',
         ]);
+
+        // Validasi jika kendaraan masih memiliki saldo
+        $kendaraan = \App\Models\Kendaraan::where('satker_id', $request->satker_id)
+            ->where('no_polisi', $request->nopol)
+            ->first();
+            
+        if ($kendaraan && $kendaraan->saldo > 0) {
+            return back()
+                ->withInput()
+                ->withErrors(['nopol' => "Kendaraan dengan No. Polisi {$request->nopol} masih memiliki saldo BBM ({$kendaraan->saldo} L), tidak diizinkan untuk hutang."]);
+        }
 
         // Validasi stok tangki BBM (Real physical tank)
         $latestSync = \App\Models\SinkronisasiBbm::orderBy('created_at', 'desc')->first();

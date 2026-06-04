@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 
 class Setting extends Model
 {
@@ -10,6 +11,10 @@ class Setting extends Model
 
     public static function isSystemLocked(): bool
     {
+        if (!Schema::hasTable('settings')) {
+            return false;
+        }
+
         return self::where('key', 'system_lockdown')->where('value', '1')->exists();
     }
 }

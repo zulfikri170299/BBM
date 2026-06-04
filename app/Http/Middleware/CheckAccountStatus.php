@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 
 class CheckAccountStatus
 {
@@ -26,7 +27,9 @@ class CheckAccountStatus
                 return redirect()->route('login')->with('error', 'Akun Anda telah dinonaktifkan oleh Administrator. Silakan hubungi admin untuk aktivasi kembali.');
             }
 
-            $settings = Setting::all()->pluck('value', 'key');
+            $settings = Schema::hasTable('settings')
+                ? Setting::query()->pluck('value', 'key')
+                : collect();
             
             // Cek Akun Satker (Global)
             if ($user->role === 'admin_satker') {

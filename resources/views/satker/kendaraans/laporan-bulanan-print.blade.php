@@ -129,7 +129,7 @@
                     <td class="text-left">{{ strtoupper($row['jenis_kendaraan']) }}</td>
                     <td>{{ strtoupper($row['no_polisi']) }}</td>
                     <td style="font-size:6.5pt;">{{ strtoupper($row['jenis_bbm']) }}</td>
-                    <td>{{ $row['sisa_bulan_lalu'] > 0 ? number_format($row['sisa_bulan_lalu'], 0, ',', '.') : '' }}</td>
+                    <td>{{ $row['sisa_bulan_lalu'] != 0 ? number_format($row['sisa_bulan_lalu'], 0, ',', '.') : '' }}</td>
                     <td>{{ $row['topup_bulan_ini'] > 0 ? number_format($row['topup_bulan_ini'], 0, ',', '.') : '' }}</td>
                     <td>{{ $row['tm_bulan_ini'] > 0 ? number_format($row['tm_bulan_ini'], 0, ',', '.') : '' }}</td>
                     <td class="bold">

@@ -391,130 +391,129 @@
     </div>
 
     <script>
-        // Data stok tangki dari server
-        const stokTangkiData = @json($stokTangki);
+        (function() {
+            const stokTangkiData = @json($stokTangki);
 
-        document.addEventListener('turbo:load', function () {
-            const satkerSelect = document.getElementById('satker_id');
-            const kendaraanSelect = document.getElementById('kendaraan_select');
-            const inputJenisKendaraan = document.getElementById('jenis_kendaraan');
-            const inputNopol = document.getElementById('nopol');
-            const inputJenisBbm = document.getElementById('jenis_bbm');
-            const jumlahBonInput = document.getElementById('jumlah_bon');
-            const submitBtn = document.querySelector('#debtForm button[type="submit"]');
+            function initHutangForm() {
+                const satkerSelect = document.getElementById('satker_id');
+                const kendaraanSelect = document.getElementById('kendaraan_select');
+                const inputJenisKendaraan = document.getElementById('jenis_kendaraan');
+                const inputNopol = document.getElementById('nopol');
+                const inputJenisBbm = document.getElementById('jenis_bbm');
+                const jumlahBonInput = document.getElementById('jumlah_bon');
+                const submitBtn = document.querySelector('#debtForm button[type="submit"]');
 
-            // UI Elements
-            const vehicleLoader = document.getElementById('vehicle_loader');
-            const vehicleInfoCard = document.getElementById('vehicle_info_card');
-            const cardNopol = document.getElementById('card_nopol');
-            const cardBbm = document.getElementById('card_bbm');
-            const stokTangkiCard = document.getElementById('stok_tangki_card');
-            const stokTangkiJenis = document.getElementById('stok_tangki_jenis');
-            const stokTangkiNilai = document.getElementById('stok_tangki_nilai');
-            const stokErrorMsg = document.getElementById('stok_error_msg');
-            const stokErrorText = document.getElementById('stok_error_text');
+                if (!satkerSelect || !kendaraanSelect) return;
 
-            let currentStok = null; // Stok saat ini sesuai jenis BBM kendaraan
+                const vehicleLoader = document.getElementById('vehicle_loader');
+                const vehicleInfoCard = document.getElementById('vehicle_info_card');
+                const cardNopol = document.getElementById('card_nopol');
+                const cardBbm = document.getElementById('card_bbm');
+                const stokTangkiCard = document.getElementById('stok_tangki_card');
+                const stokTangkiJenis = document.getElementById('stok_tangki_jenis');
+                const stokTangkiNilai = document.getElementById('stok_tangki_nilai');
+                const stokErrorMsg = document.getElementById('stok_error_msg');
+                const stokErrorText = document.getElementById('stok_error_text');
 
-            function normalizeBbmKey(bbm) {
-                if (!bbm) return '';
-                let upper = bbm.toUpperCase();
-                if (upper.includes('DEX')) return 'Pertamina Dex';
-                if (upper.includes('PERTAMAX')) return 'Pertamax';
-                return bbm;
-            }
+                let currentStok = null;
 
-            function updateStokDisplay(jenisBbm) {
-                let normBbm = normalizeBbmKey(jenisBbm);
-                if (normBbm && stokTangkiData.hasOwnProperty(normBbm)) {
-                    currentStok = parseFloat(stokTangkiData[normBbm]);
-                    stokTangkiJenis.textContent = jenisBbm; // Keep original display format
-                    stokTangkiNilai.innerHTML = `<span class="text-2xl font-black">${currentStok.toLocaleString('id-ID', {minimumFractionDigits: 1, maximumFractionDigits: 1})}</span> <span class="text-sm font-bold">L</span>`;
+                function normalizeBbmKey(bbm) {
+                    if (!bbm) return '';
+                    const upper = bbm.toUpperCase();
+                    if (upper.includes('DEX')) return 'Pertamina Dex';
+                    if (upper.includes('PERTAMAX')) return 'Pertamax';
+                    return bbm;
+                }
+
+                function updateStokDisplay(jenisBbm) {
+                    const normBbm = normalizeBbmKey(jenisBbm);
+                    if (normBbm && stokTangkiData.hasOwnProperty(normBbm)) {
+                        currentStok = parseFloat(stokTangkiData[normBbm]);
+                    } else {
+                        currentStok = 0;
+                    }
+                    if (stokTangkiJenis) stokTangkiJenis.textContent = jenisBbm;
+                    if (stokTangkiNilai) stokTangkiNilai.innerHTML = '<span class="text-2xl font-black">' + currentStok.toLocaleString('id-ID', {minimumFractionDigits:1, maximumFractionDigits:1}) + '</span> <span class="text-sm font-bold">L</span>';
 
                     // Warna card berdasarkan stok
-                    stokTangkiCard.className = stokTangkiCard.className
-                        .replace(/border-\S+/, '').replace(/bg-\S+/, '').trim();
-                    if (currentStok <= 0) {
-                        stokTangkiCard.classList.add('border-rose-200', 'bg-rose-50');
-                        stokTangkiNilai.classList.add('text-rose-600');
-                        stokTangkiNilai.classList.remove('text-emerald-600', 'text-slate-800');
-                    } else if (currentStok < 100) {
-                        stokTangkiCard.classList.add('border-amber-200', 'bg-amber-50');
-                        stokTangkiNilai.classList.add('text-amber-600');
-                        stokTangkiNilai.classList.remove('text-rose-600', 'text-emerald-600', 'text-slate-800');
+                    if (stokTangkiCard) {
+                        stokTangkiCard.classList.remove('hidden', 'border-rose-200', 'bg-rose-50', 'border-amber-200', 'bg-amber-50', 'border-emerald-200', 'bg-emerald-50');
+                        if (stokTangkiNilai) stokTangkiNilai.classList.remove('text-rose-600', 'text-amber-600', 'text-emerald-600', 'text-slate-800');
+                        if (currentStok <= 0) {
+                            stokTangkiCard.classList.add('border-rose-200', 'bg-rose-50');
+                            if (stokTangkiNilai) stokTangkiNilai.classList.add('text-rose-600');
+                        } else if (currentStok < 100) {
+                            stokTangkiCard.classList.add('border-amber-200', 'bg-amber-50');
+                            if (stokTangkiNilai) stokTangkiNilai.classList.add('text-amber-600');
+                        } else {
+                            stokTangkiCard.classList.add('border-emerald-200', 'bg-emerald-50');
+                            if (stokTangkiNilai) stokTangkiNilai.classList.add('text-emerald-600');
+                        }
+                    }
+                    validateJumlah();
+                }
+
+                function validateJumlah() {
+                    const jumlah = parseFloat(jumlahBonInput ? jumlahBonInput.value : 0) || 0;
+                    if (currentStok !== null && jumlah > currentStok) {
+                        if (stokErrorMsg) stokErrorMsg.classList.remove('hidden');
+                        if (stokErrorText) stokErrorText.textContent = 'Melebihi stok tangki! Maks: ' + currentStok.toFixed(1) + ' L';
+                        if (submitBtn) {
+                            submitBtn.disabled = true;
+                            submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                        }
                     } else {
-                        stokTangkiCard.classList.add('border-emerald-200', 'bg-emerald-50');
-                        stokTangkiNilai.classList.add('text-emerald-600');
-                        stokTangkiNilai.classList.remove('text-rose-600', 'text-amber-600', 'text-slate-800');
+                        if (stokErrorMsg) stokErrorMsg.classList.add('hidden');
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                        }
                     }
-                    stokTangkiCard.classList.remove('hidden');
-                } else {
-                    currentStok = null;
-                    stokTangkiCard.classList.add('hidden');
                 }
-                validateJumlah();
-            }
 
-            function validateJumlah() {
-                const jumlah = parseFloat(jumlahBonInput.value) || 0;
-                if (currentStok !== null && jumlah > currentStok) {
-                    stokErrorText.textContent = `Jumlah bon (${jumlah} L) melebihi stok di tangki (${currentStok.toLocaleString('id-ID', {minimumFractionDigits: 1})} L)!`;
-                    stokErrorMsg.classList.remove('hidden');
-                    submitBtn.disabled = true;
-                    submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
-                    submitBtn.classList.remove('hover:from-indigo-700', 'hover:to-blue-700');
-                } else {
-                    stokErrorMsg.classList.add('hidden');
-                    submitBtn.disabled = false;
-                    submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                    submitBtn.classList.add('hover:from-indigo-700', 'hover:to-blue-700');
+                if (jumlahBonInput) {
+                    jumlahBonInput.addEventListener('input', validateJumlah);
                 }
-            }
 
-            if (jumlahBonInput) {
-                jumlahBonInput.addEventListener('input', validateJumlah);
-            }
-
-            if (satkerSelect) {
-                satkerSelect.addEventListener('change', function () {
-                    const satkerId = this.value;
-
+                // === Fetch kendaraan saat satker berubah ===
+                function fetchKendaraanData(satkerId) {
                     let ts = kendaraanSelect.tomselect;
-                    if (!ts) {
-                         window.initTomSelect();
-                         ts = kendaraanSelect.tomselect;
+                    if (!ts && window.initTomSelect) {
+                        window.initTomSelect();
+                        ts = kendaraanSelect.tomselect;
                     }
 
-                    inputJenisKendaraan.value = '';
-                    inputNopol.value = '';
-                    inputJenisBbm.value = '';
-                    vehicleInfoCard.classList.add('hidden');
-                    stokTangkiCard.classList.add('hidden');
+                    // Reset semua field
+                    if (inputJenisKendaraan) inputJenisKendaraan.value = '';
+                    if (inputNopol) inputNopol.value = '';
+                    if (inputJenisBbm) inputJenisBbm.value = '';
+                    if (vehicleInfoCard) vehicleInfoCard.classList.add('hidden');
+                    if (stokTangkiCard) stokTangkiCard.classList.add('hidden');
                     currentStok = null;
-                    stokErrorMsg.classList.add('hidden');
+                    if (stokErrorMsg) stokErrorMsg.classList.add('hidden');
 
                     if (ts) {
                         ts.clear();
                         ts.clearOptions();
                         ts.disable();
-                        vehicleLoader.classList.remove('hidden');
+                        if (vehicleLoader) vehicleLoader.classList.remove('hidden');
                         ts.addOption({value: '', text: 'Memuat kendaraan...'});
                         ts.refreshOptions(false);
                     }
 
                     if (satkerId) {
-                        fetch(`{{ route('petugas.hutang.get-kendaraan') }}?satker_id=${satkerId}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                vehicleLoader.classList.add('hidden');
+                        fetch('{{ route("petugas.hutang.get-kendaraan") }}?satker_id=' + satkerId)
+                            .then(function(response) { return response.json(); })
+                            .then(function(data) {
+                                if (vehicleLoader) vehicleLoader.classList.add('hidden');
                                 if (ts) {
                                     ts.clearOptions();
                                     ts.addOption({value: '', text: '-- Pilih Kendaraan --'});
                                     if (data.length > 0) {
-                                        data.forEach(kendaraan => {
+                                        data.forEach(function(kendaraan) {
                                             ts.addOption({
                                                 value: kendaraan.id,
-                                                text: `${kendaraan.no_polisi} - ${kendaraan.jenis_kendaraan}`,
+                                                text: kendaraan.no_polisi + ' - ' + kendaraan.jenis_kendaraan,
                                                 nopol: kendaraan.no_polisi,
                                                 jenis: kendaraan.jenis_kendaraan,
                                                 bbm: kendaraan.jenis_bbm
@@ -522,15 +521,15 @@
                                         });
                                         ts.enable();
                                     } else {
-                                        ts.addOption({value: '', text: 'Tidak ada kendaraan terdaftar'});
+                                        ts.addOption({value: '', text: 'Tidak ada kendaraan tersedia'});
                                         ts.disable();
                                     }
                                     ts.refreshOptions(false);
                                 }
                             })
-                            .catch(error => {
+                            .catch(function(error) {
                                 console.error('Error fetching kendaraan:', error);
-                                vehicleLoader.classList.add('hidden');
+                                if (vehicleLoader) vehicleLoader.classList.add('hidden');
                                 if (ts) {
                                     ts.clearOptions();
                                     ts.addOption({value: '', text: 'Gagal memuat data'});
@@ -539,7 +538,7 @@
                                 }
                             });
                     } else {
-                        vehicleLoader.classList.add('hidden');
+                        if (vehicleLoader) vehicleLoader.classList.add('hidden');
                         if (ts) {
                             ts.clearOptions();
                             ts.addOption({value: '', text: '-- Pilih Satker Terlebih Dahulu --'});
@@ -547,66 +546,87 @@
                             ts.refreshOptions(false);
                         }
                     }
-                });
+                }
+
+                // === Proses saat kendaraan dipilih ===
+                function processSelectedKendaraan(selectedValue) {
+                    if (stokErrorMsg) stokErrorMsg.classList.add('hidden');
+                    const ts = kendaraanSelect.tomselect;
+                    if (!ts) return;
+                    const optionData = ts.options[selectedValue];
+                    if (selectedValue && optionData) {
+                        if (inputNopol) inputNopol.value = optionData.nopol;
+                        if (inputJenisKendaraan) inputJenisKendaraan.value = optionData.jenis;
+                        if (inputJenisBbm) inputJenisBbm.value = optionData.bbm;
+                        if (cardNopol) cardNopol.textContent = optionData.nopol;
+                        if (cardBbm) cardBbm.textContent = optionData.bbm;
+                        if (vehicleInfoCard) vehicleInfoCard.classList.remove('hidden');
+                        updateStokDisplay(optionData.bbm);
+                    } else {
+                        if (inputNopol) inputNopol.value = '';
+                        if (inputJenisKendaraan) inputJenisKendaraan.value = '';
+                        if (inputJenisBbm) inputJenisBbm.value = '';
+                        if (vehicleInfoCard) vehicleInfoCard.classList.add('hidden');
+                        if (stokTangkiCard) stokTangkiCard.classList.add('hidden');
+                        currentStok = null;
+                    }
+                }
+
+                // === Bind events ===
+                // Pastikan TomSelect sudah terinisialisasi
+                if (!satkerSelect.tomselect && window.initTomSelect) {
+                    window.initTomSelect();
+                }
+
+                // Bind satker change
+                if (satkerSelect.tomselect) {
+                    satkerSelect.tomselect.on('change', function(value) {
+                        fetchKendaraanData(value);
+                    });
+                } else {
+                    satkerSelect.addEventListener('change', function() {
+                        fetchKendaraanData(this.value);
+                    });
+                }
+
+                // Bind kendaraan change
+                if (!kendaraanSelect.tomselect && window.initTomSelect) {
+                    window.initTomSelect();
+                }
+                if (kendaraanSelect.tomselect) {
+                    kendaraanSelect.tomselect.on('change', function(value) {
+                        processSelectedKendaraan(value);
+                    });
+                } else {
+                    kendaraanSelect.addEventListener('change', function() {
+                        processSelectedKendaraan(this.value);
+                    });
+                }
             }
 
-            if (kendaraanSelect) {
-                kendaraanSelect.addEventListener('change', function () {
-                    const ts = this.tomselect;
-                    if (ts) {
-                        const selectedValue = ts.getValue();
-                        const optionData = ts.options[selectedValue];
+            // Polling untuk memastikan TomSelect sudah diinisialisasi oleh app.blade.php
+            // Karena ini adalah SPA Turbo Drive, timing sangat krusial.
+            const maxWaitMs = 5000;
+            const intervalMs = 50;
+            let elapsed = 0;
 
-                        if (selectedValue && optionData) {
-                            const nopol = optionData.nopol;
-                            const bbm = optionData.bbm;
-                            const jenis = optionData.jenis;
+            const waitForTomSelect = setInterval(function() {
+                const satker = document.getElementById('satker_id');
+                elapsed += intervalMs;
 
-                            inputNopol.value = nopol;
-                            inputJenisKendaraan.value = jenis;
-                            inputJenisBbm.value = bbm;
-
-                            cardNopol.textContent = nopol;
-                            cardBbm.textContent = bbm;
-                            vehicleInfoCard.classList.remove('hidden');
-
-                            // Tampilkan stok tangki
-                            updateStokDisplay(bbm);
-                        } else {
-                            inputNopol.value = '';
-                            inputJenisKendaraan.value = '';
-                            inputJenisBbm.value = '';
-                            vehicleInfoCard.classList.add('hidden');
-                            stokTangkiCard.classList.add('hidden');
-                            currentStok = null;
-                            stokErrorMsg.classList.add('hidden');
-                        }
-                    } else {
-                        const selectedOption = this.options[this.selectedIndex];
-                        if (selectedOption && selectedOption.value) {
-                            const nopol = selectedOption.dataset.nopol;
-                            const bbm = selectedOption.dataset.bbm;
-                            const jenis = selectedOption.dataset.jenis;
-
-                            inputNopol.value = nopol;
-                            inputJenisKendaraan.value = jenis;
-                            inputJenisBbm.value = bbm;
-
-                            cardNopol.textContent = nopol;
-                            cardBbm.textContent = bbm;
-                            vehicleInfoCard.classList.remove('hidden');
-                            updateStokDisplay(bbm);
-                        } else {
-                            inputNopol.value = '';
-                            inputJenisKendaraan.value = '';
-                            inputJenisBbm.value = '';
-                            vehicleInfoCard.classList.add('hidden');
-                            stokTangkiCard.classList.add('hidden');
-                            currentStok = null;
-                            stokErrorMsg.classList.add('hidden');
-                        }
-                    }
-        });
+                // Jika elemen satker sudah memiliki properti .tomselect, artinya library
+                // sudah dimuat dan di-bind oleh global handler di app.blade.php
+                if (satker && satker.tomselect) {
+                    clearInterval(waitForTomSelect);
+                    initHutangForm();
+                } else if (elapsed > maxWaitMs) {
+                    // Timeout fallback - coba bind secara paksa atau beri fallback
+                    clearInterval(waitForTomSelect);
+                    if (window.initTomSelect) window.initTomSelect();
+                    initHutangForm();
+                    console.warn("Hutang BBM Form: TomSelect initialization timeout, forcing init.");
+                }
+            }, intervalMs);
+        })();
     </script>
 </x-app-layout>
-

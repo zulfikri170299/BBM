@@ -116,7 +116,10 @@ class TransaksiController extends Controller
             if ($request->wantsJson()) {
                 return response()->json(['success' => false, 'message' => 'SYSTEM ERROR: ' . $e->getMessage()], 500);
             }
-            die('SYSTEM ERROR: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+
+            report($e);
+
+            return back()->withErrors(['error' => 'Terjadi kesalahan sistem. Silakan coba lagi atau hubungi admin.']);
         }
     }
 

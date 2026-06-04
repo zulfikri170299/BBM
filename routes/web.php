@@ -255,7 +255,6 @@ Route::middleware(['auth', 'role:admin_satker'])->prefix('satker')->name('satker
     Route::get('/riwayat', [\App\Http\Controllers\Satker\RiwayatController::class, 'index'])->name('riwayat.index');
     Route::get('/laporan-hutang/print', [\App\Http\Controllers\Satker\LaporanHutangController::class, 'print'])->name('laporan-hutang.print');
     Route::get('/laporan-hutang', [\App\Http\Controllers\Satker\LaporanHutangController::class, 'index'])->name('laporan-hutang.index');
-    Route::get('/laporan-hutang', [\App\Http\Controllers\Satker\LaporanHutangController::class, 'index'])->name('laporan-hutang.index');
 
     // Laporan Saldo Dialihkan
     Route::get('/saldo-dialihkan', [\App\Http\Controllers\Satker\SaldoDialihkanController::class, 'index'])->name('saldo-dialihkan.index');

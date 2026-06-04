@@ -476,7 +476,6 @@ class KendaraanController extends Controller
 
             // Sisa BBM bulan lalu = (total top up masuk + total TM) - (total top up keluar + total pemakaian + total hutang + total transfer keluar)
             $sisaBulanLalu = ($totalTopupSampaiSebelumnyaMasuk + $totalTmSampaiSebelumnya) - ($totalTopupSampaiSebelumnyaKeluar + $totalPemakaianSampaiSebelumnya + $totalHutangSampaiSebelumnya + $totalTransferKeluarSebelumnya);
-            if ($sisaBulanLalu < 0) $sisaBulanLalu = 0;
 
             // Transfer Masuk (TM) bulan ini
             $tmBulanIni1 = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
@@ -1009,4 +1008,3 @@ class KendaraanController extends Controller
         return back()->with('success', "PIN Kendaraan {$kendaraan->no_polisi} berhasil direset menjadi: {$newPin}");
     }
 }
-

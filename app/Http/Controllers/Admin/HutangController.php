@@ -91,6 +91,14 @@ class HutangController extends Controller
 
         $kendaraan = \App\Models\Kendaraan::findOrFail($request->kendaraan_id);
 
+        if ($kendaraan->satker_id != $request->satker_id) {
+            return back()->with('error', 'Kendaraan tidak sesuai dengan Satker yang dipilih.');
+        }
+
+        if ((float) $kendaraan->saldo > 0) {
+            return back()->with('error', 'Kendaraan ' . $kendaraan->no_polisi . ' masih memiliki saldo ' . number_format($kendaraan->saldo, 0, ',', '.') . ' L. Hutang BBM hanya dapat dibuat jika saldo kendaraan kosong atau 0.');
+        }
+
         // Validasi Real Physical Tank Stock
         $latestSync = \App\Models\SinkronisasiBbm::orderBy('created_at', 'desc')->first();
         $saldoTangki = 0;

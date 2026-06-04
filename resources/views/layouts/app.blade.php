@@ -332,6 +332,7 @@
     @stack('scripts')
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/id.js"></script>
     <script>
         // Global TomSelect Initializer
         window.initTomSelect = window.initTomSelect || (() => {
@@ -354,58 +355,59 @@
 
         // Global Flatpickr Initializer
         window.initFlatpickr = window.initFlatpickr || (() => {
-            const inputs = document.querySelectorAll('input[type="date"]:not(.flatpickr-input), .flatpickr:not(.flatpickr-input)');
-            
-            inputs.forEach(el => {
-
-                // Determine if this is a "Dari" (Start) or "Sampai" (End) field
-                const isStart = el.name && (el.name.includes('start') || el.name.includes('dari'));
-                const isEnd = el.name && (el.name.includes('end') || el.name.includes('sampai'));
+            try {
+                const inputs = document.querySelectorAll('input[type="date"]:not(.flatpickr-input), .flatpickr:not(.flatpickr-input)');
                 
-                const config = {
-                    locale: "id",
-                    dateFormat: "Y-m-d",
-                    altInput: true,
-                    altFormat: "d F Y",
-                    placeholder: "Tgl",
-                    disableMobile: "true",
-                    monthSelectorType: "static",
-                    animate: true,
-                    appendTo: document.body,
-                    static: false,
-                    position: "auto",
-                    defaultDate: el.getAttribute('data-default-date') || el.value,
-                    prevArrow: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>',
-                    nextArrow: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>',
-                    onReady: function(selectedDates, dateStr, instance) {
-                        // Set placeholder explicitly on the altInput
-                        if (instance.altInput) {
-                            instance.altInput.setAttribute('placeholder', 'Tgl');
-                        }
-                    },
-                    onChange: function(selectedDates, dateStr, instance) {
-                        // Find potential paired inputs in the same form
-                        if (isStart || isEnd) {
-                            const form = el.closest('form');
-                            if (form) {
-                                if (isStart) {
-                                    const endInput = form.querySelector('[name*="end"], [name*="sampai"]');
-                                    if (endInput && endInput._flatpickr) {
-                                        endInput._flatpickr.set('minDate', dateStr);
-                                    }
-                                } else if (isEnd) {
-                                    const startInput = form.querySelector('[name*="start"], [name*="dari"]');
-                                    if (startInput && startInput._flatpickr) {
-                                        startInput._flatpickr.set('maxDate', dateStr);
+                inputs.forEach(el => {
+                    // Determine if this is a "Dari" (Start) or "Sampai" (End) field
+                    const isStart = el.name && (el.name.includes('start') || el.name.includes('dari'));
+                    const isEnd = el.name && (el.name.includes('end') || el.name.includes('sampai'));
+                    
+                    const config = {
+                        locale: typeof flatpickr !== 'undefined' && flatpickr.l10ns && flatpickr.l10ns.id ? 'id' : 'default',
+                        dateFormat: "Y-m-d",
+                        altInput: true,
+                        altFormat: "d F Y",
+                        placeholder: "Tgl",
+                        disableMobile: "true",
+                        monthSelectorType: "static",
+                        animate: true,
+                        appendTo: document.body,
+                        static: false,
+                        position: "auto",
+                        defaultDate: el.getAttribute('data-default-date') || el.value,
+                        prevArrow: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>',
+                        nextArrow: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>',
+                        onReady: function(selectedDates, dateStr, instance) {
+                            if (instance.altInput) {
+                                instance.altInput.setAttribute('placeholder', 'Tgl');
+                            }
+                        },
+                        onChange: function(selectedDates, dateStr, instance) {
+                            if (isStart || isEnd) {
+                                const form = el.closest('form');
+                                if (form) {
+                                    if (isStart) {
+                                        const endInput = form.querySelector('[name*="end"], [name*="sampai"]');
+                                        if (endInput && endInput._flatpickr) {
+                                            endInput._flatpickr.set('minDate', dateStr);
+                                        }
+                                    } else if (isEnd) {
+                                        const startInput = form.querySelector('[name*="start"], [name*="dari"]');
+                                        if (startInput && startInput._flatpickr) {
+                                            startInput._flatpickr.set('maxDate', dateStr);
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                };
+                    };
 
-                flatpickr(el, config);
-            });
+                    flatpickr(el, config);
+                });
+            } catch (e) {
+                console.warn('Flatpickr initialization error:', e.message);
+            }
         });
 
         if (!window.flatpickrBound) {

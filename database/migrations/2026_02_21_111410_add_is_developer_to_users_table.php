@@ -23,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('is_developer');
-        });
+        // No-op: an earlier migration already owns the is_developer column.
     }
 };
