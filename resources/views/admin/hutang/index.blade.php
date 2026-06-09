@@ -368,70 +368,21 @@
                             class="space-y-4">
                             @csrf
                             <div>
-                                <label for="kendaraan_id"
-                                    class="block text-sm font-black text-slate-700 mb-2 uppercase tracking-wide">PILIH
-                                    KENDARAAN PEMBAYAR</label>
-
-                                <div class="relative group">
-                                    <div
-                                        class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-indigo-600 transition-colors">
-                                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
-                                        </svg>
-                                    </div>
-                                    <select name="kendaraan_id" id="payment_kendaraan_id" x-model="selectedKendaraan"
-                                        class="tom-select-dynamic block w-full pl-11 pr-10 py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700 appearance-none"
-                                        :disabled="loadingKendaraan" required>
-                                        <option value="" disabled x-show="!loadingKendaraan">-- Pilih Kendaraan --
-                                        </option>
-                                        <option value="" disabled x-show="loadingKendaraan">Sedang mengambil data...
-                                        </option>
-                                        <template x-for="kend in filteredKendaraans" :key="kend.id">
-                                            <option :value="kend.id"
-                                                x-text="`${kend.no_polisi} (Saldo: ${kend.saldo} L)`"></option>
-                                        </template>
-                                    </select>
-
-                                    <div
-                                        class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-slate-400">
-                                        <template x-if="loadingKendaraan">
-                                            <svg class="animate-spin h-5 w-5 text-indigo-600" fill="none"
-                                                viewBox="0 0 24 24">
-                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                                    stroke-width="4"></circle>
-                                                <path class="opacity-75" fill="currentColor"
-                                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                                </path>
-                                            </svg>
-                                        </template>
-                                        <template x-if="!loadingKendaraan">
-                                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M19 9l-7 7-7-7" />
-                                            </svg>
-                                        </template>
-                                    </div>
-                                </div>
-
-                                <p x-show="!loadingKendaraan && filteredKendaraans.length === 0"
-                                    class="text-sm text-rose-600 mt-4 p-3 bg-rose-50 border border-rose-100 rounded-xl font-bold flex items-center gap-2"
-                                    style="display: none;">
-                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                <input type="hidden" name="nopol" :value="hutangData.nopol">
+                                <p class="text-sm font-bold text-slate-600 mb-4 bg-indigo-50 p-4 rounded-2xl border border-indigo-100/50 flex gap-3">
+                                    <svg class="h-6 w-6 text-indigo-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
                                     </svg>
-                                    Peringatan: Tidak ada kendaraan dengan jenis BBM <span x-text="selectedBbm"></span>
-                                    di Satker ini.
+                                    <span>
+                                        Pembayaran ini akan secara otomatis memotong saldo kendaraan dengan no. polisi <span class="font-black text-indigo-700" x-text="hutangData.nopol"></span>.
+                                    </span>
                                 </p>
                             </div>
                         </form>
                     </div>
 
                     <div class="bg-white px-6 py-5 flex flex-col sm:flex-row-reverse gap-3 rounded-b-3xl">
-                        <button type="submit" form="paymentForm" :disabled="!selectedKendaraan || loadingKendaraan"
+                        <button type="submit" form="paymentForm"
                             class="w-full sm:w-auto px-8 py-3.5 bg-indigo-600 text-white font-black rounded-2xl shadow-xl shadow-indigo-100 hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500/20 active:scale-95 transition-all text-sm uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none">
                             KONFIRMASI PEMBAYARAN
                         </button>
@@ -879,50 +830,7 @@
                     this.selectedSatker = satkerId;
                     this.selectedBbm = bbm;
                     this.hutangData = { nopol, bbm, jumlah };
-                    this.selectedKendaraan = '';
-                    this.kendaraans = [];
                     this.showModal = true;
-                    this.loadingKendaraan = true;
-                    
-                    try {
-                        const response = await fetch(`/admin/hutang/get-kendaraan?satker_id=${satkerId}`);
-                        this.kendaraans = await response.json();
-
-                        // Sync TomSelect after Alpine updates the DOM
-                        this.$nextTick(() => {
-                            const el = document.getElementById('payment_kendaraan_id');
-                            if (el) {
-                                if (el.tomselect) {
-                                    el.tomselect.clearOptions();
-                                    el.tomselect.addOptions(this.filteredKendaraans.map(k => ({
-                                        value: k.id,
-                                        text: `${k.no_polisi} (Saldo: ${k.saldo} L)`
-                                    })));
-                                    el.tomselect.refreshOptions(false);
-                                    el.tomselect.enable();
-                                } else {
-                                    new TomSelect(el, {
-                                        create: false,
-                                        dropdownParent: 'body',
-                                        onDropdownOpen: (dropdown) => {
-                                            dropdown.style.zIndex = "9999";
-                                        },
-                                        labelField: 'text',
-                                        valueField: 'value',
-                                        searchField: ['text'],
-                                        options: this.filteredKendaraans.map(k => ({
-                                            value: k.id,
-                                            text: `${k.no_polisi} (Saldo: ${k.saldo} L)`
-                                        }))
-                                    });
-                                }
-                            }
-                        });
-                    } catch (error) {
-                        console.error('Gagal mengambil data kendaraan:', error);
-                    } finally {
-                        this.loadingKendaraan = false;
-                    }
                 },
                 async openEditModal(hutang) {
                     this.editData = {

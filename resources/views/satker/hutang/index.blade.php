@@ -12,8 +12,6 @@
             openModal(id, nopol, bbm, jumlah) {
                 this.selectedHutang = id;
                 this.hutangData = { nopol, bbm, jumlah };
-                this.selectedBbm = bbm;
-                this.selectedKendaraan = '';
                 this.showModal = true;
             }
         }">
@@ -345,51 +343,20 @@
                         class="space-y-6">
                         @csrf
                         <div class="space-y-3">
-                            <label
-                                class="flex items-center gap-2 text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                        d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1" />
+                            <input type="hidden" name="nopol" :value="hutangData.nopol">
+                            <p class="text-sm font-bold text-slate-600 mb-4 bg-indigo-50 p-4 rounded-2xl border border-indigo-100/50 flex gap-3">
+                                <svg class="h-6 w-6 text-indigo-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
                                 </svg>
-                                Kendaraan Pembayar
-                            </label>
-                            <div class="relative">
-                                <select name="kendaraan_id" id="kendaraan_id" x-model="selectedKendaraan"
-                                    class="w-full pl-6 pr-12 py-4 bg-slate-50 border-slate-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-700 appearance-none"
-                                    required>
-                                    <option value="" disabled>-- Pilih Kendaraan --</option>
-                                    <template x-for="kend in filteredKendaraans" :key="kend.id">
-                                        <option :value="kend.id" x-text="`${kend.no_polisi} (Saldo: ${kend.saldo} L)`">
-                                        </option>
-                                    </template>
-                                </select>
-                                <div
-                                    class="absolute inset-y-0 right-5 flex items-center pointer-events-none text-slate-400">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                            d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </div>
-                            </div>
-
-                            <div x-show="filteredKendaraans.length === 0"
-                                class="p-4 bg-rose-50 rounded-2xl border border-rose-100 flex gap-3 group animate-pulse"
-                                x-cloak>
-                                <svg class="w-5 h-5 text-rose-500 shrink-0 mt-0.5" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                <p class="text-[11px] font-bold text-rose-600 leading-relaxed uppercase tracking-wider">
-                                    Tidak ada kendaraan <span class="underline" x-text="selectedBbm"></span> di Satker
-                                    ini.
-                                </p>
-                            </div>
+                                <span>
+                                    Pembayaran ini akan memotong saldo kendaraan <span class="font-black text-indigo-700" x-text="hutangData.nopol"></span>.
+                                </span>
+                            </p>
                         </div>
                     </form>
 
                     <div class="flex flex-col gap-3">
-                        <button type="submit" form="paymentForm" :disabled="!selectedKendaraan"
+                        <button type="submit" form="paymentForm"
                             class="w-full py-5 bg-indigo-600 text-white font-black rounded-2xl shadow-xl shadow-indigo-100 hover:bg-indigo-700 hover:shadow-indigo-200 focus:outline-none focus:ring-4 focus:ring-indigo-500/20 active:scale-[0.98] transition-all text-xs uppercase tracking-[0.2em] disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none">
                             Konfirmasi Pembayaran
                         </button>

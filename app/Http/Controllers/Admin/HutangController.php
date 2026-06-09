@@ -251,6 +251,7 @@ class HutangController extends Controller
         $request->validate(['satker_id' => 'required|exists:satkers,id']);
 
         $kendaraans = \App\Models\Kendaraan::where('satker_id', $request->satker_id)
+            ->where('saldo', '<=', 0)
             ->select('id', 'no_polisi', 'jenis_kendaraan', 'jenis_bbm', 'saldo')
             ->get();
 
@@ -265,11 +266,7 @@ class HutangController extends Controller
             return back()->with('error', 'Hutang ini sudah dibayar sebelumnya.');
         }
 
-        $request->validate([
-            'kendaraan_id' => 'required|exists:kendaraans,id'
-        ]);
-
-        $kendaraan = \App\Models\Kendaraan::where('id', $request->kendaraan_id)
+        $kendaraan = \App\Models\Kendaraan::where('no_polisi', $hutang->nopol)
             ->where('satker_id', $hutang->satker_id)
             ->firstOrFail();
 

@@ -112,13 +112,11 @@ class HutangController extends Controller
             return back()->with('error', 'Hutang ini sudah dibayar sebelumnya.');
         }
 
-        $request->validate([
-            'kendaraan_id' => 'required|exists:kendaraans,id'
-        ]);
-
-        $queryKendaraanCheck = \App\Models\Kendaraan::where('id', $request->kendaraan_id);
+        $queryKendaraanCheck = \App\Models\Kendaraan::where('no_polisi', $hutang->nopol);
         if ($user->role !== 'super_admin') {
             $queryKendaraanCheck->where('satker_id', $user->satker_id);
+        } else {
+            $queryKendaraanCheck->where('satker_id', $hutang->satker_id);
         }
         $kendaraan = $queryKendaraanCheck->firstOrFail();
 
