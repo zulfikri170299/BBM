@@ -40,6 +40,8 @@ class KendaraanExport implements FromCollection, WithHeadings, WithMapping, Shou
             'SATKER',
             'KODE',
             'JENIS KENDARAAN',
+            'RODA',
+            'CC',
             'NOPOL',
             'JENIS BBM',
         ];
@@ -52,6 +54,8 @@ class KendaraanExport implements FromCollection, WithHeadings, WithMapping, Shou
             $kendaraan->satker->nama_satker ?? '-',
             $kendaraan->kode_kendaraan ?? '-',
             $kendaraan->jenis_kendaraan,
+            $kendaraan->roda,
+            $kendaraan->cc,
             $kendaraan->no_polisi,
             $kendaraan->jenis_bbm,
         ];

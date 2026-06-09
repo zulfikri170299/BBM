@@ -53,6 +53,24 @@
                         @enderror
                     </div>
 
+                    <!-- Roda -->
+                    <div>
+                        <label for="roda" class="block text-sm font-semibold text-slate-700 mb-2">Roda Kendaraan</label>
+                        <select name="roda" id="roda" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all text-slate-800">
+                            <option value="">-- Pilih Jenis Roda --</option>
+                            <option value="R2" {{ old('roda', $kendaraan->roda) == 'R2' ? 'selected' : '' }}>R2</option>
+                            <option value="R4" {{ old('roda', $kendaraan->roda) == 'R4' ? 'selected' : '' }}>R4</option>
+                            <option value="R6" {{ old('roda', $kendaraan->roda) == 'R6' ? 'selected' : '' }}>R6</option>
+                            <option value="Non Kendaraan" {{ old('roda', $kendaraan->roda) == 'Non Kendaraan' ? 'selected' : '' }}>Non Kendaraan</option>
+                        </select>
+                    </div>
+
+                    <!-- CC Kendaraan -->
+                    <div>
+                        <label for="cc" class="block text-sm font-semibold text-slate-700 mb-2">CC Kendaraan</label>
+                        <input type="text" name="cc" id="cc" value="{{ old('cc', $kendaraan->cc) }}" placeholder="Contoh: 1500, 150 CC" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder-slate-400 text-slate-800">
+                    </div>
+
                     <!-- Jenis BBM -->
                     <div>
                         <label for="jenis_bbm" class="block text-sm font-semibold text-slate-700 mb-2">Jenis BBM</label>

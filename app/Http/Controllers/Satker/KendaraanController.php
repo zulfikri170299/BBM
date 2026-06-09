@@ -605,6 +605,8 @@ class KendaraanController extends Controller
             'no_polisi' => 'required|string|max:20|unique:kendaraans',
             'jenis_kendaraan' => 'required|string',
             'jenis_bbm' => 'required|string',
+            'roda' => 'nullable|string|in:R2,R4,R6,Non Kendaraan',
+            'cc' => 'nullable|string',
         ]);
 
         // Auto-generate unique barcode
@@ -629,6 +631,8 @@ class KendaraanController extends Controller
             'barcode' => $barcode,
             'pin' => $pin,
             'saldo' => 0,
+            'roda' => $request->roda,
+            'cc' => $request->cc,
         ]);
 
         LogAktivitas::create([
@@ -667,12 +671,16 @@ class KendaraanController extends Controller
             'no_polisi' => ['required', 'string', 'max:20', Rule::unique('kendaraans')->ignore($kendaraan->id)],
             'jenis_kendaraan' => 'required|string',
             'jenis_bbm' => 'required|string',
+            'roda' => 'nullable|string|in:R2,R4,R6,Non Kendaraan',
+            'cc' => 'nullable|string',
         ]);
 
         $kendaraan->update([
             'no_polisi' => $request->no_polisi,
             'jenis_kendaraan' => $request->jenis_kendaraan,
             'jenis_bbm' => $request->jenis_bbm,
+            'roda' => $request->roda,
+            'cc' => $request->cc,
         ]);
 
         LogAktivitas::create([
@@ -733,6 +741,10 @@ class KendaraanController extends Controller
                     $colMap['jenis_kendaraan'] = $col;
                 } elseif (in_array($val, ['jenis bbm', 'jenis_bbm', 'bbm', 'bahan bakar'])) {
                     $colMap['jenis_bbm'] = $col;
+                } elseif (in_array($val, ['roda'])) {
+                    $colMap['roda'] = $col;
+                } elseif (in_array($val, ['cc'])) {
+                    $colMap['cc'] = $col;
                 }
             }
 
@@ -747,6 +759,8 @@ class KendaraanController extends Controller
                 $nopol = isset($colMap['nopol']) ? trim((string) $sheet->getCell($colMap['nopol'] . $r)->getValue()) : '';
                 $jenisKendaraan = isset($colMap['jenis_kendaraan']) ? trim((string) $sheet->getCell($colMap['jenis_kendaraan'] . $r)->getValue()) : '';
                 $jenisBbm = isset($colMap['jenis_bbm']) ? trim((string) $sheet->getCell($colMap['jenis_bbm'] . $r)->getValue()) : '';
+                $roda = isset($colMap['roda']) ? trim((string) $sheet->getCell($colMap['roda'] . $r)->getValue()) : null;
+                $cc = isset($colMap['cc']) ? trim((string) $sheet->getCell($colMap['cc'] . $r)->getValue()) : null;
 
                 // Skip empty rows
                 if (empty($nopol) && empty($jenisKendaraan) && empty($jenisBbm)) {
@@ -773,13 +787,19 @@ class KendaraanController extends Controller
                     if ($existing->jenis_bbm !== $jenisBbm) {
                         $changes[] = ['field' => 'Jenis BBM', 'old' => $existing->jenis_bbm, 'new' => $jenisBbm];
                     }
+                    if ($existing->roda !== $roda) {
+                        $changes[] = ['field' => 'Roda', 'old' => $existing->roda, 'new' => $roda];
+                    }
+                    if ($existing->cc !== $cc) {
+                        $changes[] = ['field' => 'CC', 'old' => $existing->cc, 'new' => $cc];
+                    }
                     $duplicates[] = [
                         'row' => $r, 'no_polisi' => $nopol, 'changes' => $changes, 'has_changes' => count($changes) > 0,
                     ];
                 } else {
                     $newEntries[] = [
                         'row' => $r, 'no_polisi' => $nopol, 'jenis_kendaraan' => $jenisKendaraan,
-                        'jenis_bbm' => $jenisBbm, 'satker' => $satkerName,
+                        'jenis_bbm' => $jenisBbm, 'roda' => $roda, 'cc' => $cc, 'satker' => $satkerName,
                     ];
                     $successCount++;
                 }
@@ -858,6 +878,10 @@ class KendaraanController extends Controller
                     $colMap['jenis_kendaraan'] = $col;
                 } elseif (in_array($val, ['jenis bbm', 'jenis_bbm', 'bbm', 'bahan bakar'])) {
                     $colMap['jenis_bbm'] = $col;
+                } elseif (in_array($val, ['roda'])) {
+                    $colMap['roda'] = $col;
+                } elseif (in_array($val, ['cc'])) {
+                    $colMap['cc'] = $col;
                 }
             }
 
@@ -872,6 +896,8 @@ class KendaraanController extends Controller
                 $nopol = isset($colMap['nopol']) ? trim((string) $sheet->getCell($colMap['nopol'] . $r)->getValue()) : '';
                 $jenisKendaraan = isset($colMap['jenis_kendaraan']) ? trim((string) $sheet->getCell($colMap['jenis_kendaraan'] . $r)->getValue()) : '';
                 $jenisBbm = isset($colMap['jenis_bbm']) ? trim((string) $sheet->getCell($colMap['jenis_bbm'] . $r)->getValue()) : '';
+                $roda = isset($colMap['roda']) ? trim((string) $sheet->getCell($colMap['roda'] . $r)->getValue()) : null;
+                $cc = isset($colMap['cc']) ? trim((string) $sheet->getCell($colMap['cc'] . $r)->getValue()) : null;
 
                 // Skip empty rows
                 if (empty($nopol) && empty($jenisKendaraan) && empty($jenisBbm)) {
@@ -895,6 +921,8 @@ class KendaraanController extends Controller
                         $existing->update([
                             'jenis_kendaraan' => $jenisKendaraan,
                             'jenis_bbm' => $jenisBbm,
+                            'roda' => $roda,
+                            'cc' => $cc,
                             'satker_id' => $satkerId,
                         ]);
                         $updatedCount++;
@@ -917,6 +945,8 @@ class KendaraanController extends Controller
                         'no_polisi' => $nopol,
                         'jenis_kendaraan' => $jenisKendaraan,
                         'jenis_bbm' => $jenisBbm,
+                        'roda' => $roda,
+                        'cc' => $cc,
                         'barcode' => $barcode,
                         'pin' => $pin,
                         'saldo' => 0,

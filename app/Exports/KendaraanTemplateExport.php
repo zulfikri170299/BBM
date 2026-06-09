@@ -18,6 +18,8 @@ class KendaraanTemplateExport implements FromArray, WithHeadings, ShouldAutoSize
         return [
             'NO',
             'JENIS KENDARAAN',
+            'RODA',
+            'CC',
             'NOPOL',
             'JENIS BBM',
         ];
@@ -27,16 +29,16 @@ class KendaraanTemplateExport implements FromArray, WithHeadings, ShouldAutoSize
     {
         // Example data rows to guide user
         return [
-            [1, 'Mobil Patrol', 'DR 1234 AB', 'Pertamax'],
-            [2, 'Motor Dinas', 'DR 5678 CD', 'Pertamax'],
-            [3, 'Bus Dinas', 'DR 9012 EF', 'Pertamina Dex'],
+            [1, 'Mobil Patrol', 'R4', '1500', 'DR 1234 AB', 'Pertamax'],
+            [2, 'Motor Dinas', 'R2', '150', 'DR 5678 CD', 'Pertamax'],
+            [3, 'Bus Dinas', 'R6', '3000', 'DR 9012 EF', 'Pertamina Dex'],
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
         // Header style
-        $sheet->getStyle('A1:D1')->applyFromArray([
+        $sheet->getStyle('A1:F1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -59,7 +61,7 @@ class KendaraanTemplateExport implements FromArray, WithHeadings, ShouldAutoSize
         ]);
 
         // Data rows style (example rows 2-4)
-        $sheet->getStyle('A2:D4')->applyFromArray([
+        $sheet->getStyle('A2:F4')->applyFromArray([
             'font' => [
                 'italic' => true,
                 'color' => ['rgb' => '6B7280'], // gray

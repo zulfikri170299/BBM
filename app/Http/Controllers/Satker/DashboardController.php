@@ -31,6 +31,16 @@ class DashboardController extends Controller
         $totalPersonel = $queryPersonel->count();
         $totalTransaksi = $queryTransaksi->count();
 
+        // Rincian per jenis roda
+        $qRoda = Kendaraan::query();
+        if ($user->role !== 'super_admin') {
+            $qRoda->where('satker_id', $satkerId);
+        }
+        $rodaR2 = (clone $qRoda)->where('roda', 'R2')->count();
+        $rodaR4 = (clone $qRoda)->where('roda', 'R4')->count();
+        $rodaR6 = (clone $qRoda)->where('roda', 'R6')->count();
+        $rodaNon = (clone $qRoda)->where('roda', 'Non Kendaraan')->count();
+
         $querySaldoK = Kendaraan::query();
         $querySaldoP = Personel::query();
         $queryTransfer = \App\Models\RiwayatTransferSaldoPersonel::query();
@@ -100,7 +110,8 @@ class DashboardController extends Controller
             'totalTransfer', 'totalLiterTransfer',
             'recentTransfers', 'chartData',
             'saldoKendaraanPerBbm', 'saldoPersonelPerBbm', 'literTransferPerBbm',
-            'totalHutang', 'hutangPerBbm'
+            'totalHutang', 'hutangPerBbm',
+            'rodaR2', 'rodaR4', 'rodaR6', 'rodaNon'
         ));
     }
 }

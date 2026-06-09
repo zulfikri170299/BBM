@@ -66,6 +66,8 @@ class KendaraanController extends Controller
             'no_polisi' => 'required|string|max:20|unique:kendaraans',
             'jenis_kendaraan' => 'required|string',
             'jenis_bbm' => 'required|string',
+            'roda' => 'nullable|string|in:R2,R4,R6,Non Kendaraan',
+            'cc' => 'nullable|string',
         ]);
 
         $barcode = strtoupper(\Illuminate\Support\Str::random(10));
@@ -88,6 +90,8 @@ class KendaraanController extends Controller
             'barcode' => $barcode,
             'pin' => $pin,
             'saldo' => 0,
+            'roda' => $request->roda,
+            'cc' => $request->cc,
         ]);
 
         LogAktivitas::create([
@@ -319,24 +323,28 @@ class KendaraanController extends Controller
         $sheet->setCellValue('B2', 'SATKER');
         $sheet->setCellValue('C2', 'KODE KENDARAAN');
         $sheet->setCellValue('D2', 'JENIS KENDARAAN');
-        $sheet->setCellValue('E2', 'NOPOL');
-        $sheet->setCellValue('F2', 'JENIS BBM');
-        $sheet->setCellValue('G2', 'JUMLAH LITER');
+        $sheet->setCellValue('E2', 'RODA');
+        $sheet->setCellValue('F2', 'CC');
+        $sheet->setCellValue('G2', 'NOPOL');
+        $sheet->setCellValue('H2', 'JENIS BBM');
+        $sheet->setCellValue('I2', 'JUMLAH LITER');
 
         // Contoh data di Row 3
         $sheet->setCellValue('A3', 1);
         $sheet->setCellValue('B3', 'BIRO LOGISTIK');
         $sheet->setCellValue('C3', 'KND-00001');
         $sheet->setCellValue('D3', 'Mobil Dinas');
-        $sheet->setCellValue('E3', 'AB 1234 CD');
-        $sheet->setCellValue('F3', 'Pertamax');
-        $sheet->setCellValue('G3', 50);
+        $sheet->setCellValue('E3', 'R4');
+        $sheet->setCellValue('F3', '1500');
+        $sheet->setCellValue('G3', 'AB 1234 CD');
+        $sheet->setCellValue('H3', 'Pertamax');
+        $sheet->setCellValue('I3', 50);
 
         // Bold header
-        $sheet->getStyle('A2:G2')->getFont()->setBold(true);
+        $sheet->getStyle('A2:I2')->getFont()->setBold(true);
 
         // Auto-size columns
-        foreach (range('A', 'G') as $col) {
+        foreach (range('A', 'I') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
 
@@ -357,14 +365,14 @@ class KendaraanController extends Controller
         $sheet = $spreadsheet->getActiveSheet();
 
         // Header di Row 2 (Row 1 kosong sesuai format import)
-        $headers = ['NO', 'SATKER', 'KODE KENDARAAN', 'JENIS KENDARAAN', 'NOPOL', 'JENIS BBM', 'JUMLAH LITER'];
-        $columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+        $headers = ['NO', 'SATKER', 'KODE KENDARAAN', 'JENIS KENDARAAN', 'RODA', 'CC', 'NOPOL', 'JENIS BBM', 'JUMLAH LITER'];
+        $columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
         foreach ($headers as $i => $header) {
             $sheet->setCellValue($columns[$i] . '2', $header);
         }
 
         // Bold header
-        $sheet->getStyle('A2:G2')->getFont()->setBold(true);
+        $sheet->getStyle('A2:H2')->getFont()->setBold(true);
 
         // Isi data kendaraan (tanpa saldo & pin)
         $kendaraans = Kendaraan::with('satker')->orderBy('satker_id')->get();
@@ -375,8 +383,10 @@ class KendaraanController extends Controller
             $sheet->setCellValue('B' . $row, $k->satker->nama_satker ?? '-');
             $sheet->setCellValue('C' . $row, $k->kode_kendaraan ?? '-');
             $sheet->setCellValue('D' . $row, $k->jenis_kendaraan);
-            $sheet->setCellValue('E' . $row, $k->no_polisi);
-            $sheet->setCellValue('F' . $row, $k->jenis_bbm);
+            $sheet->setCellValue('E' . $row, $k->roda);
+            $sheet->setCellValue('F' . $row, $k->cc);
+            $sheet->setCellValue('G' . $row, $k->no_polisi);
+            $sheet->setCellValue('H' . $row, $k->jenis_bbm);
             // Kolom G (JUMLAH LITER) dikosongkan agar diisi user
             $row++;
             $no++;
@@ -408,6 +418,8 @@ class KendaraanController extends Controller
             'no_polisi' => ['required', 'string', 'max:20', Rule::unique('kendaraans')->ignore($kendaraan->id)],
             'jenis_kendaraan' => 'required|string',
             'jenis_bbm' => 'required|string',
+            'roda' => 'nullable|string|in:R2,R4,R6,Non Kendaraan',
+            'cc' => 'nullable|string',
             'pin' => 'nullable|numeric|digits:6',
         ]);
 

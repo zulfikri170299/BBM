@@ -33,6 +33,24 @@
                     </div>
                     <p class="text-2xl sm:text-3xl font-extrabold">{{ $totalKendaraan }}</p>
                     <p class="text-xs sm:text-sm text-blue-100 mt-0.5 sm:mt-1">Total Kendaraan</p>
+                    <div class="grid grid-cols-4 gap-1 mt-2 sm:mt-3">
+                        <div class="bg-white/15 rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
+                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80">R2</p>
+                            <p class="text-xs sm:text-sm font-black">{{ $rodaR2 }}</p>
+                        </div>
+                        <div class="bg-white/15 rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
+                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80">R4</p>
+                            <p class="text-xs sm:text-sm font-black">{{ $rodaR4 }}</p>
+                        </div>
+                        <div class="bg-white/15 rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
+                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80">R6</p>
+                            <p class="text-xs sm:text-sm font-black">{{ $rodaR6 }}</p>
+                        </div>
+                        <div class="bg-white/15 rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
+                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 leading-tight">Non</p>
+                            <p class="text-xs sm:text-sm font-black">{{ $rodaNon }}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 

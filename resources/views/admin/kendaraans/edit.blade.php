@@ -58,6 +58,24 @@
                     <input type="text" name="jenis_kendaraan" id="jenis_kendaraan" value="{{ old('jenis_kendaraan', $kendaraan->jenis_kendaraan) }}" required class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
                 </div>
 
+                <!-- Roda -->
+                <div>
+                    <label for="roda" class="block text-sm font-semibold text-slate-700 mb-2">Roda Kendaraan</label>
+                    <select name="roda" id="roda" class="tom-select w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
+                        <option value="">-- Pilih Jenis Roda --</option>
+                        <option value="R2" {{ old('roda', $kendaraan->roda) == 'R2' ? 'selected' : '' }}>R2</option>
+                        <option value="R4" {{ old('roda', $kendaraan->roda) == 'R4' ? 'selected' : '' }}>R4</option>
+                        <option value="R6" {{ old('roda', $kendaraan->roda) == 'R6' ? 'selected' : '' }}>R6</option>
+                        <option value="Non Kendaraan" {{ old('roda', $kendaraan->roda) == 'Non Kendaraan' ? 'selected' : '' }}>Non Kendaraan</option>
+                    </select>
+                </div>
+
+                <!-- CC Kendaraan -->
+                <div>
+                    <label for="cc" class="block text-sm font-semibold text-slate-700 mb-2">CC Kendaraan</label>
+                    <input type="text" name="cc" id="cc" value="{{ old('cc', $kendaraan->cc) }}" placeholder="Contoh: 1500, 150 CC" class="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all placeholder:text-slate-300 placeholder:font-normal">
+                </div>
+
                 <!-- Jenis BBM -->
                 <div>
                     <label for="jenis_bbm" class="block text-sm font-semibold text-slate-700 mb-2">Jenis BBM <span class="text-red-500">*</span></label>

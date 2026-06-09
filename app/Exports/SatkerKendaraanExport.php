@@ -36,6 +36,8 @@ class SatkerKendaraanExport implements FromCollection, WithHeadings, WithMapping
             'NO',
             'KODE KENDARAAN',
             'JENIS KENDARAAN',
+            'RODA',
+            'CC',
             'NOPOL',
             'JENIS BBM',
             'SALDO (LITER)',
@@ -51,6 +53,8 @@ class SatkerKendaraanExport implements FromCollection, WithHeadings, WithMapping
             $row,
             $kendaraan->kode_kendaraan ?? '-',
             $kendaraan->jenis_kendaraan,
+            $kendaraan->roda,
+            $kendaraan->cc,
             $kendaraan->no_polisi,
             $kendaraan->jenis_bbm,
             $kendaraan->saldo,
@@ -63,7 +67,7 @@ class SatkerKendaraanExport implements FromCollection, WithHeadings, WithMapping
         $highestRow = $sheet->getHighestRow();
         
         // Header style
-        $sheet->getStyle('A1:G1')->applyFromArray([
+        $sheet->getStyle('A1:I1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -80,7 +84,7 @@ class SatkerKendaraanExport implements FromCollection, WithHeadings, WithMapping
 
         // Border for whole table
         if ($highestRow > 1) {
-            $sheet->getStyle('A1:G' . $highestRow)->applyFromArray([
+            $sheet->getStyle('A1:I' . $highestRow)->applyFromArray([
                 'borders' => [
                     'allBorders' => [
                         'borderStyle' => Border::BORDER_THIN,
@@ -91,7 +95,7 @@ class SatkerKendaraanExport implements FromCollection, WithHeadings, WithMapping
             
             // Center alignment for some columns
             $sheet->getStyle('A2:A' . $highestRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-            $sheet->getStyle('D2:G' . $highestRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('D2:I' . $highestRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         }
 
         // Set row height for header
