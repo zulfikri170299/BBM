@@ -96,6 +96,25 @@ class LaporanTriwulanController extends Controller
             $pendapatan[$item->satker_id][$item->jenis_bbm] = $item->total;
         }
 
+        $tmPersonelRaw = \App\Models\RiwayatTransferSaldoPersonel::join('kendaraans', 'riwayat_transfer_saldo_personels.tujuan_kendaraan_id', '=', 'kendaraans.id')
+            ->select('riwayat_transfer_saldo_personels.satker_id', \Illuminate\Support\Facades\DB::raw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"), \Illuminate\Support\Facades\DB::raw('SUM(riwayat_transfer_saldo_personels.jumlah) as total'))
+            ->whereBetween('riwayat_transfer_saldo_personels.created_at', [$startUtc, $endUtc])
+            ->groupBy('riwayat_transfer_saldo_personels.satker_id', 'kendaraans.jenis_bbm')
+            ->get();
+
+        $tmAntarRaw = \App\Models\RiwayatTransferAntarPersonel::join('kendaraans', 'riwayat_transfer_antar_personels.target_kendaraan_id', '=', 'kendaraans.id')
+            ->select('riwayat_transfer_antar_personels.satker_id', \Illuminate\Support\Facades\DB::raw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"), \Illuminate\Support\Facades\DB::raw('SUM(riwayat_transfer_antar_personels.jumlah) as total'))
+            ->whereBetween('riwayat_transfer_antar_personels.created_at', [$startUtc, $endUtc])
+            ->groupBy('riwayat_transfer_antar_personels.satker_id', 'kendaraans.jenis_bbm')
+            ->get();
+
+        foreach($tmPersonelRaw as $item) {
+            $pendapatan[$item->satker_id][$item->jenis_bbm] = ($pendapatan[$item->satker_id][$item->jenis_bbm] ?? 0) + $item->total;
+        }
+        foreach($tmAntarRaw as $item) {
+            $pendapatan[$item->satker_id][$item->jenis_bbm] = ($pendapatan[$item->satker_id][$item->jenis_bbm] ?? 0) + $item->total;
+        }
+
         $pemakaianRaw = TransaksiBbm::select(
                 'satker_id',
                 DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
@@ -135,6 +154,16 @@ class LaporanTriwulanController extends Controller
             $pemakaian[$item->satker_id][$item->jenis_bbm] = ($pemakaian[$item->satker_id][$item->jenis_bbm] ?? 0) + $item->total;
         }
         foreach($hutangRaw as $item) {
+            $pemakaian[$item->satker_id][$item->jenis_bbm] = ($pemakaian[$item->satker_id][$item->jenis_bbm] ?? 0) + $item->total;
+        }
+
+        $tkPersonelRaw = \App\Models\RiwayatTransferSaldoPersonel::join('kendaraans', 'riwayat_transfer_saldo_personels.kendaraan_id', '=', 'kendaraans.id')
+            ->select('riwayat_transfer_saldo_personels.satker_id', \Illuminate\Support\Facades\DB::raw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"), \Illuminate\Support\Facades\DB::raw('SUM(riwayat_transfer_saldo_personels.jumlah) as total'))
+            ->whereBetween('riwayat_transfer_saldo_personels.created_at', [$startUtc, $endUtc])
+            ->groupBy('riwayat_transfer_saldo_personels.satker_id', 'kendaraans.jenis_bbm')
+            ->get();
+
+        foreach($tkPersonelRaw as $item) {
             $pemakaian[$item->satker_id][$item->jenis_bbm] = ($pemakaian[$item->satker_id][$item->jenis_bbm] ?? 0) + $item->total;
         }
 

@@ -115,6 +115,20 @@ class LaporanTriwulanController extends Controller
         foreach($pendapatanRaw as $item) {
             $pendapatan[$item->jenis_bbm] = $item->total;
         }
+        $queryTmP1 = \App\Models\RiwayatTransferSaldoPersonel::join('kendaraans', 'riwayat_transfer_saldo_personels.tujuan_kendaraan_id', '=', 'kendaraans.id')
+            ->select(\Illuminate\Support\Facades\DB::raw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"), \Illuminate\Support\Facades\DB::raw('SUM(riwayat_transfer_saldo_personels.jumlah) as total'))
+            ->whereBetween('riwayat_transfer_saldo_personels.created_at', [$startUtc, $endUtc]);
+        if (!$isSuperAdmin) { $queryTmP1->where('riwayat_transfer_saldo_personels.satker_id', $satker->id); }
+        $tmP1 = $queryTmP1->groupBy('kendaraans.jenis_bbm')->get();
+
+        $queryTmP2 = \App\Models\RiwayatTransferAntarPersonel::join('kendaraans', 'riwayat_transfer_antar_personels.target_kendaraan_id', '=', 'kendaraans.id')
+            ->select(\Illuminate\Support\Facades\DB::raw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"), \Illuminate\Support\Facades\DB::raw('SUM(riwayat_transfer_antar_personels.jumlah) as total'))
+            ->whereBetween('riwayat_transfer_antar_personels.created_at', [$startUtc, $endUtc]);
+        if (!$isSuperAdmin) { $queryTmP2->where('riwayat_transfer_antar_personels.satker_id', $satker->id); }
+        $tmP2 = $queryTmP2->groupBy('kendaraans.jenis_bbm')->get();
+
+        foreach($tmP1 as $item) { $pendapatan[$item->jenis_bbm] = ($pendapatan[$item->jenis_bbm] ?? 0) + $item->total; }
+        foreach($tmP2 as $item) { $pendapatan[$item->jenis_bbm] = ($pendapatan[$item->jenis_bbm] ?? 0) + $item->total; }
 
         $queryPemakaianRaw = TransaksiBbm::select(
                 DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
@@ -168,6 +182,14 @@ class LaporanTriwulanController extends Controller
         foreach($hutangRaw as $item) {
             $pemakaian[$item->jenis_bbm] = ($pemakaian[$item->jenis_bbm] ?? 0) + $item->total;
         }
+
+        $queryTkP1 = \App\Models\RiwayatTransferSaldoPersonel::join('kendaraans', 'riwayat_transfer_saldo_personels.kendaraan_id', '=', 'kendaraans.id')
+            ->select(\Illuminate\Support\Facades\DB::raw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"), \Illuminate\Support\Facades\DB::raw('SUM(riwayat_transfer_saldo_personels.jumlah) as total'))
+            ->whereBetween('riwayat_transfer_saldo_personels.created_at', [$startUtc, $endUtc]);
+        if (!$isSuperAdmin) { $queryTkP1->where('riwayat_transfer_saldo_personels.satker_id', $satker->id); }
+        $tkP1 = $queryTkP1->groupBy('kendaraans.jenis_bbm')->get();
+
+        foreach($tkP1 as $item) { $pemakaian[$item->jenis_bbm] = ($pemakaian[$item->jenis_bbm] ?? 0) + $item->total; }
 
         $sisaBbm = [];
         foreach($allBbmTypes as $jenis) {

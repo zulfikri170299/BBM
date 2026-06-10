@@ -76,8 +76,8 @@ class LaporanSisaController extends Controller
             $hutangP = Hutang::where('satker_id', $satker->id)->where('jenis_bbm', 'Pertamax')->where('status', 'belum_dibayar')->sum('jumlah_bon');
             $hutangD = Hutang::where('satker_id', $satker->id)->where('jenis_bbm', 'Pertamina Dex')->where('status', 'belum_dibayar')->sum('jumlah_bon');
 
-            $pertamax = $pendP - $pakaiP - $potongP - $hutangP;
-            $dex      = $pendD - $pakaiD - $potongD - $hutangD;
+            $pertamax = $pendP - $pakaiP - $potongP;
+            $dex      = $pendD - $pakaiD - $potongD;
 
             $rows[] = [
                 'satker'   => $satker->nama_satker,
@@ -129,8 +129,8 @@ class LaporanSisaController extends Controller
             $hutangP = Hutang::where('satker_id', $satker->id)->where('jenis_bbm', 'Pertamax')->where('status', 'belum_dibayar')->sum('jumlah_bon');
             $hutangD = Hutang::where('satker_id', $satker->id)->where('jenis_bbm', 'Pertamina Dex')->where('status', 'belum_dibayar')->sum('jumlah_bon');
 
-            $pertamax = $pendP - $pakaiP - $potongP - $hutangP;
-            $dex      = $pendD - $pakaiD - $potongD - $hutangD;
+            $pertamax = $pendP - $pakaiP - $potongP;
+            $dex      = $pendD - $pakaiD - $potongD;
 
             $rows[] = [
                 'satker'   => $satker->nama_satker,

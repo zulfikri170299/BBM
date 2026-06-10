@@ -146,8 +146,8 @@
                                 BBM<br>BULAN<br>{{ strtoupper($namaBulanSebelumnya) }}</th>
                             <th rowspan="2" style="width:70px;">TOP UP BBM<br>BULAN<br>{{ strtoupper($namaBulan) }}</th>
                             <th rowspan="2" style="width:50px;">TM</th>
-                            <th rowspan="2" style="width:50px;">TOTAL<br>BBM</th>
                             <th rowspan="2" style="width:50px;">TK</th>
+                            <th rowspan="2" style="width:50px;">TOTAL<br>BBM</th>
                             <th colspan="{{ $daysInMonth }}">LAPORAN PEMAKAIAN BULAN {{ strtoupper($namaBulan) }}</th>
                             <th rowspan="2" style="width:50px;">TOTAL<br>PAKAI</th>
                             <th rowspan="2" style="width:50px;">SISA<br>BBM</th>
@@ -174,10 +174,10 @@
                                     </td>
                                     <td>{{ $row['tm_bulan_ini'] > 0 ? number_format($row['tm_bulan_ini'], 0, ',', '.') : '' }}
                                     </td>
-                                    <td class="bold">
-                                        {{ number_format($row['total_bbm'], 0, ',', '.') }}</td>
                                     <td>{{ $row['tk_bulan_ini'] > 0 ? number_format($row['tk_bulan_ini'], 0, ',', '.') : '' }}
                                     </td>
+                                    <td class="bold">
+                                        {{ number_format($row['total_bbm'], 0, ',', '.') }}</td>
                                     @for($d = 1; $d <= $daysInMonth; $d++)
                                         <td style="font-size: 8px;">
                                             {{ $row['daily_usage'][$d] ? number_format($row['daily_usage'][$d], 0, ',', '.') : '' }}
@@ -203,8 +203,8 @@
                                 <td>{{ number_format($summary['sisa_bulan_lalu'], 0, ',', '.') }}</td>
                                 <td>{{ number_format($summary['topup_bulan_ini'], 0, ',', '.') }}</td>
                                 <td>{{ number_format($summary['tm_bulan_ini'], 0, ',', '.') }}</td>
-                                <td>{{ number_format($summary['total_bbm'], 0, ',', '.') }}</td>
                                 <td>{{ number_format($summary['tk_bulan_ini'], 0, ',', '.') }}</td>
+                                <td>{{ number_format($summary['total_bbm'], 0, ',', '.') }}</td>
                                 @for($d = 1; $d <= $daysInMonth; $d++)
                                     <td></td>
                                 @endfor

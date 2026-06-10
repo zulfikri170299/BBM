@@ -30,31 +30,34 @@ class LaporanTahunanController extends Controller
         $isDexTrans = function($q) { $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); };
 
         foreach ($satkers as $satker) {
-            $pendapatanPertamax = RiwayatTopup::where('satker_id', $satker->id)
-                ->where('tipe', 'masuk')->where($isPertamaxTopup)->whereYear('created_at', $year)->sum('jumlah');
+            // --- PENDAPATAN ---
+            $pendapatanPertamax = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'masuk')->where($isPertamaxTopup)->whereYear('created_at', $year)->sum('jumlah');
+            $pendapatanPertamax += \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satker->id)->whereHas('tujuanKendaraan', function($k) { $k->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })->whereYear('created_at', $year)->sum('jumlah')
+                + \App\Models\RiwayatTransferAntarPersonel::where('satker_id', $satker->id)->whereHas('targetKendaraan', function($k) { $k->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })->whereYear('created_at', $year)->sum('jumlah');
 
-            $pendapatanDex = RiwayatTopup::where('satker_id', $satker->id)
-                ->where('tipe', 'masuk')->where($isDexTopup)->whereYear('created_at', $year)->sum('jumlah');
+            $pendapatanDex = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'masuk')->where($isDexTopup)->whereYear('created_at', $year)->sum('jumlah');
+            $pendapatanDex += \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satker->id)->whereHas('tujuanKendaraan', function($k) { $k->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })->whereYear('created_at', $year)->sum('jumlah')
+                + \App\Models\RiwayatTransferAntarPersonel::where('satker_id', $satker->id)->whereHas('targetKendaraan', function($k) { $k->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })->whereYear('created_at', $year)->sum('jumlah');
 
-            $pemakaianPertamax = TransaksiBbm::where('satker_id', $satker->id)
-                ->where($isPertamaxTrans)->whereYear('tanggal', $year)->sum('liter');
+            // --- PEMAKAIAN ---
+            $pemakaianPertamax = TransaksiBbm::where('satker_id', $satker->id)->where($isPertamaxTrans)->whereYear('tanggal', $year)->sum('liter');
+            $pemakaianDex = TransaksiBbm::where('satker_id', $satker->id)->where($isDexTrans)->whereYear('tanggal', $year)->sum('liter');
+            
+            // Hutang
+            $hutangP = \App\Models\Hutang::where('satker_id', $satker->id)->where($isPertamaxTrans)->whereYear('tanggal_bon', $year)->sum('jumlah_bon');
+            $hutangD = \App\Models\Hutang::where('satker_id', $satker->id)->where($isDexTrans)->whereYear('tanggal_bon', $year)->sum('jumlah_bon');
 
-            $pemakaianDex = TransaksiBbm::where('satker_id', $satker->id)
-                ->where($isDexTrans)->whereYear('tanggal', $year)->sum('liter');
+            // Potong Saldo / Keluar
+            $psP = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'keluar')->where($isPertamaxTopup)->whereYear('created_at', $year)->sum('jumlah');
+            $psD = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'keluar')->where($isDexTopup)->whereYear('created_at', $year)->sum('jumlah');
+
+            // Transfer Keluar (Dari Kendaraan)
+            $tkP = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satker->id)->whereHas('kendaraan', function($k) { $k->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })->whereYear('created_at', $year)->sum('jumlah');
             
-            $potongSaldoPertamax = RiwayatTopup::where('satker_id', $satker->id)
-                ->where('tipe', 'keluar')->where($isPertamaxTopup)->whereYear('created_at', $year)->sum('jumlah');
+            $tkD = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satker->id)->whereHas('kendaraan', function($k) { $k->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })->whereYear('created_at', $year)->sum('jumlah');
             
-            $potongSaldoDex = RiwayatTopup::where('satker_id', $satker->id)
-                ->where('tipe', 'keluar')->where($isDexTopup)->whereYear('created_at', $year)->sum('jumlah');
-                
-            $hutangPertamax = \App\Models\Hutang::where('satker_id', $satker->id)
-                ->where($isPertamaxTrans)->whereYear('tanggal_bon', $year)->sum('jumlah_bon');
-            $hutangDex = \App\Models\Hutang::where('satker_id', $satker->id)
-                ->where($isDexTrans)->whereYear('tanggal_bon', $year)->sum('jumlah_bon');
-            
-            $pemakaianPertamax += $potongSaldoPertamax + $hutangPertamax;
-            $pemakaianDex += $potongSaldoDex + $hutangDex;
+            $pemakaianPertamax += $psP + $hutangP + $tkP;
+            $pemakaianDex += $psD + $hutangD + $tkD;
                 
             $sisaPertamax = $pendapatanPertamax - $pemakaianPertamax;
             $sisaDex = $pendapatanDex - $pemakaianDex;
@@ -103,19 +106,34 @@ class LaporanTahunanController extends Controller
         $isDexTrans = function($q) { $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); };
 
         foreach ($satkers as $satker) {
+            // --- PENDAPATAN ---
             $pendapatanPertamax = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'masuk')->where($isPertamaxTopup)->whereYear('created_at', $year)->sum('jumlah');
+            $pendapatanPertamax += \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satker->id)->whereHas('tujuanKendaraan', function($k) { $k->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })->whereYear('created_at', $year)->sum('jumlah')
+                + \App\Models\RiwayatTransferAntarPersonel::where('satker_id', $satker->id)->whereHas('targetKendaraan', function($k) { $k->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })->whereYear('created_at', $year)->sum('jumlah');
+
             $pendapatanDex = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'masuk')->where($isDexTopup)->whereYear('created_at', $year)->sum('jumlah');
+            $pendapatanDex += \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satker->id)->whereHas('tujuanKendaraan', function($k) { $k->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })->whereYear('created_at', $year)->sum('jumlah')
+                + \App\Models\RiwayatTransferAntarPersonel::where('satker_id', $satker->id)->whereHas('targetKendaraan', function($k) { $k->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })->whereYear('created_at', $year)->sum('jumlah');
+
+            // --- PEMAKAIAN ---
             $pemakaianPertamax = TransaksiBbm::where('satker_id', $satker->id)->where($isPertamaxTrans)->whereYear('tanggal', $year)->sum('liter');
             $pemakaianDex = TransaksiBbm::where('satker_id', $satker->id)->where($isDexTrans)->whereYear('tanggal', $year)->sum('liter');
             
-            $psP = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'keluar')->where($isPertamaxTopup)->whereYear('created_at', $year)->sum('jumlah');
-            $psD = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'keluar')->where($isDexTopup)->whereYear('created_at', $year)->sum('jumlah');
-            
+            // Hutang
             $hutangP = \App\Models\Hutang::where('satker_id', $satker->id)->where($isPertamaxTrans)->whereYear('tanggal_bon', $year)->sum('jumlah_bon');
             $hutangD = \App\Models\Hutang::where('satker_id', $satker->id)->where($isDexTrans)->whereYear('tanggal_bon', $year)->sum('jumlah_bon');
+
+            // Potong Saldo / Keluar
+            $psP = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'keluar')->where($isPertamaxTopup)->whereYear('created_at', $year)->sum('jumlah');
+            $psD = RiwayatTopup::where('satker_id', $satker->id)->where('tipe', 'keluar')->where($isDexTopup)->whereYear('created_at', $year)->sum('jumlah');
+
+            // Transfer Keluar (Dari Kendaraan)
+            $tkP = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satker->id)->whereHas('kendaraan', function($k) { $k->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })->whereYear('created_at', $year)->sum('jumlah');
             
-            $pemakaianPertamax += $psP + $hutangP;
-            $pemakaianDex += $psD + $hutangD;
+            $tkD = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satker->id)->whereHas('kendaraan', function($k) { $k->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })->whereYear('created_at', $year)->sum('jumlah');
+            
+            $pemakaianPertamax += $psP + $hutangP + $tkP;
+            $pemakaianDex += $psD + $hutangD + $tkD;
                 
             $sisaPertamax = $pendapatanPertamax - $pemakaianPertamax;
             $sisaDex = $pendapatanDex - $pemakaianDex;

@@ -477,6 +477,20 @@ class KendaraanController extends Controller
             // Sisa BBM bulan lalu = (total top up masuk + total TM) - (total top up keluar + total pemakaian + total hutang + total transfer keluar)
             $sisaBulanLalu = ($totalTopupSampaiSebelumnyaMasuk + $totalTmSampaiSebelumnya) - ($totalTopupSampaiSebelumnyaKeluar + $totalPemakaianSampaiSebelumnya + $totalHutangSampaiSebelumnya + $totalTransferKeluarSebelumnya);
 
+            // Jika sisa bulan lalu minus (karena hutang), cek apakah hutang bulan lalu sudah dibayar di bulan ini
+            // Jika sudah dibayar, kurangi nilai minus tersebut sesuai jumlah yang dibayar
+            if ($sisaBulanLalu < 0) {
+                $hutangDibayarBulanIni = \App\Models\Hutang::where('satker_id', $satkerId)
+                    ->where('nopol', $kendaraan->no_polisi)
+                    ->where('jenis_bbm', $kendaraan->jenis_bbm)
+                    ->where('tanggal_bon', '<', $startDateWita->format('Y-m-d'))
+                    ->where('status', 'sudah_dibayar')
+                    ->whereBetween('tanggal_bayar', [$startUtc, $endUtc])
+                    ->sum('jumlah_bon');
+                
+                $sisaBulanLalu += $hutangDibayarBulanIni;
+            }
+
             // Transfer Masuk (TM) bulan ini
             $tmBulanIni1 = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
                 ->where('tujuan_kendaraan_id', $kendaraan->id)
@@ -499,7 +513,7 @@ class KendaraanController extends Controller
             // Gabungkan transfer keluar dengan potong saldo (keluar)
             $tkBulanIni = $tkBulanIni + $topupKeluar;
 
-            $totalBbm = $sisaBulanLalu + $topupBulanIni + $tmBulanIni;
+            $totalBbm = $sisaBulanLalu + $topupBulanIni + $tmBulanIni - $tkBulanIni;
             
             // Pemakaian per hari bulan ini di Satker ini
             $dailyUsage = [];
@@ -527,8 +541,8 @@ class KendaraanController extends Controller
                 $totalPemakaian += $usage;
             }
 
-            // Total Pemakaian = Total Harian + Transfer Keluar (Transfer dianggap pemakaian)
-            $totalPemakaian += $tkBulanIni;
+            // Total Pemakaian = Total Harian
+            // Tidak memasukkan $tkBulanIni karena Total Pakai hanya dihitung dari pemakaian tanggal 1-30
 
             // Sisa BBM = Total BBM - Total Pemakaian
             $sisaBbm = $totalBbm - $totalPemakaian;
