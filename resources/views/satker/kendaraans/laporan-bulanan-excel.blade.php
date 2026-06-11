@@ -1,12 +1,12 @@
 <table>
     <thead>
         <tr>
-            <th colspan="{{ 9 + $daysInMonth + 2 }}" style="text-align: center; font-weight: bold; font-size: 14pt;">
+            <th colspan="{{ 8 + $daysInMonth + 2 }}" style="text-align: center; font-weight: bold; font-size: 14pt;">
                 LAPORAN BBM BULAN {{ strtoupper($namaBulan) }} TAHUN {{ $tahun }}
             </th>
         </tr>
         <tr>
-            <th colspan="{{ 9 + $daysInMonth + 2 }}" style="text-align: center; font-weight: bold; font-size: 12pt;">
+            <th colspan="{{ 8 + $daysInMonth + 2 }}" style="text-align: center; font-weight: bold; font-size: 12pt;">
                 {{ strtoupper($satkerName ?? $satker->nama_satker) }}
             </th>
         </tr>
@@ -35,9 +35,6 @@
             <th rowspan="2"
                 style="border: 1px solid #000000; font-weight: bold; text-align: center; vertical-align: middle;">
                 TK</th>
-            <th rowspan="2"
-                style="border: 1px solid #000000; font-weight: bold; text-align: center; vertical-align: middle;">
-                TOTAL<br>BBM</th>
             <th colspan="{{ $daysInMonth }}"
                 style="border: 1px solid #000000; font-weight: bold; text-align: center; vertical-align: middle;">
                 LAPORAN PEMAKAIAN BULAN {{ strtoupper($namaBulan) }}</th>
@@ -70,7 +67,6 @@
                 <td style="border: 1px solid #000000; text-align: center;">{{ $row['topup_bulan_ini'] }}</td>
                 <td style="border: 1px solid #000000; text-align: center;">{{ $row['tm_bulan_ini'] }}</td>
                 <td style="border: 1px solid #000000; text-align: center;">{{ $row['tk_bulan_ini'] }}</td>
-                <td style="border: 1px solid #000000; text-align: center;">{{ $row['total_bbm'] }}</td>
                 @for($d = 1; $d <= $daysInMonth; $d++)
                     <td style="border: 1px solid #000000; text-align: center;">{{ $row['daily_usage'][$d] ?? '' }}</td>
                 @endfor
@@ -91,8 +87,6 @@
                     {{ $summary['tm_bulan_ini'] }}</td>
                 <td style="border: 1px solid #000000; font-weight: bold; text-align: center;">
                     {{ $summary['tk_bulan_ini'] }}</td>
-                <td style="border: 1px solid #000000; font-weight: bold; text-align: center;">{{ $summary['total_bbm'] }}
-                </td>
                 @for($d = 1; $d <= $daysInMonth; $d++)
                     <td style="border: 1px solid #000000; background-color: #cccccc;"></td>
                 @endfor

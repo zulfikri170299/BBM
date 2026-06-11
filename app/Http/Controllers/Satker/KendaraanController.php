@@ -559,7 +559,7 @@ class KendaraanController extends Controller
                 'tk_bulan_ini' => round($tkBulanIni, 0), 
                 'has_transfer' => $tkBulanIni > 0,
                 'daily_usage' => $dailyUsage,
-                'total_pemakaian' => round($totalPemakaian, 0),
+                'total_pemakaian' => round($totalPemakaian + $tkBulanIni, 0),
                 'sisa_bbm' => round($sisaBbm, 0),
             ];
             $rows[] = $row;
