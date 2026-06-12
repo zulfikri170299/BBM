@@ -522,7 +522,7 @@ class KendaraanController extends Controller
                 'user_id' => $user->id,
                 'jumlah' => $jumlah,
                 'tipe' => 'keluar',
-                'metode' => 'potong_saldo',
+                'metode' => $kembalikanKeStok ? 'potong_saldo' : 'potong_saldo_hangus',
                 'status' => 'success',
                 'jenis_bbm' => $kendaraan->jenis_bbm ?: 'TANPA JENIS',
                 'keterangan' => $request->keterangan,
@@ -733,11 +733,13 @@ class KendaraanController extends Controller
                 ->whereBetween('created_at', [$startUtc, $endUtc])
                 ->sum('jumlah');
             
-            $topupKeluar = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
+            $topupKeluarAll = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
                 ->where('tipe', 'keluar')
                 ->whereBetween('created_at', [$startUtc, $endUtc])
-                ->sum('jumlah');
+                ->get();
+            $topupKeluar = $topupKeluarAll->whereNotIn('metode', ['potong_saldo_hangus', 'POTONG_SALDO_MASAL_HANGUS'])->sum('jumlah');
+            $hangusKeluar = $topupKeluarAll->whereIn('metode', ['potong_saldo_hangus', 'POTONG_SALDO_MASAL_HANGUS'])->sum('jumlah');
 
             $topupBulanIni = $topupMasuk; // Hanya saldo MASUK yang dihitung sebagai Top Up di laporan
 
@@ -855,11 +857,10 @@ class KendaraanController extends Controller
                 $totalPemakaian += $usage;
             }
 
-            // Total Pemakaian = Total Harian
-            // Tidak memasukkan $tkBulanIni karena Total Pakai hanya dihitung dari pemakaian tanggal 1-30
+            // Total Pemakaian = Total Harian (Tanpa Hangus)
 
-            // Sisa BBM = Total BBM - Total Pemakaian
-            $sisaBbm = $totalBbm - $totalPemakaian;
+            // Sisa BBM = Total BBM - Total Pemakaian - Hangus (Agar sisa riil tetap benar meski tidak masuk TK/Total Pakai)
+            $sisaBbm = $totalBbm - $totalPemakaian - $hangusKeluar;
 
             $row = [
                 'kode_kendaraan' => $kendaraan->kode_kendaraan ?? '-',

@@ -88,7 +88,7 @@ class BulkPotongSaldoController extends Controller
                     'user_id' => $user->id,
                     'jumlah' => $potong,
                     'tipe' => 'keluar',
-                    'metode' => 'POTONG_SALDO_MASAL',
+                    'metode' => $kembalikanKeStok ? 'POTONG_SALDO_MASAL' : 'POTONG_SALDO_MASAL_HANGUS',
                     'status' => 'success',
                     'jenis_bbm' => $entity->jenis_bbm ?: 'TANPA JENIS',
                     'keterangan' => $keterangan,

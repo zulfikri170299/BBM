@@ -155,6 +155,7 @@ class KendaraanController extends Controller
 
         $potonganQuery = \DB::table('riwayat_topups')
             ->where('satker_id', $satkerId)
+            ->whereNotIn('metode', ['potong_saldo_hangus', 'POTONG_SALDO_MASAL_HANGUS'])
             ->select(
                 'created_at', 
                 'kendaraan_id', 
@@ -208,6 +209,7 @@ class KendaraanController extends Controller
         $potonganSummaryQuery = \DB::table('riwayat_topups')
             ->where('riwayat_topups.satker_id', $satkerId)
             ->where('riwayat_topups.tipe', 'keluar')
+            ->whereNotIn('riwayat_topups.metode', ['potong_saldo_hangus', 'POTONG_SALDO_MASAL_HANGUS'])
             ->join('kendaraans', 'riwayat_topups.kendaraan_id', '=', 'kendaraans.id')
             ->selectRaw('kendaraans.jenis_bbm, SUM(riwayat_topups.jumlah) as total');
 
@@ -253,6 +255,7 @@ class KendaraanController extends Controller
 
         $potonganQuery = \DB::table('riwayat_topups')
             ->where('satker_id', $satkerId)
+            ->whereNotIn('metode', ['potong_saldo_hangus', 'POTONG_SALDO_MASAL_HANGUS'])
             ->select(
                 'created_at', 
                 'kendaraan_id', 
@@ -302,6 +305,7 @@ class KendaraanController extends Controller
         $potonganSummaryQuery = \DB::table('riwayat_topups')
             ->where('riwayat_topups.satker_id', $satkerId)
             ->where('riwayat_topups.tipe', 'keluar')
+            ->whereNotIn('riwayat_topups.metode', ['potong_saldo_hangus', 'POTONG_SALDO_MASAL_HANGUS'])
             ->join('kendaraans', 'riwayat_topups.kendaraan_id', '=', 'kendaraans.id')
             ->selectRaw('kendaraans.jenis_bbm, SUM(riwayat_topups.jumlah) as total');
 
@@ -419,11 +423,13 @@ class KendaraanController extends Controller
                 ->whereBetween('created_at', [$startUtc, $endUtc])
                 ->sum('jumlah');
             
-            $topupKeluar = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
+            $topupKeluarAll = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
                 ->where('tipe', 'keluar')
                 ->whereBetween('created_at', [$startUtc, $endUtc])
-                ->sum('jumlah');
+                ->get();
+            $topupKeluar = $topupKeluarAll->whereNotIn('metode', ['potong_saldo_hangus', 'POTONG_SALDO_MASAL_HANGUS'])->sum('jumlah');
+            $hangusKeluar = $topupKeluarAll->whereIn('metode', ['potong_saldo_hangus', 'POTONG_SALDO_MASAL_HANGUS'])->sum('jumlah');
 
             $topupBulanIni = $topupMasuk; // Hanya saldo MASUK yang dihitung sebagai Top Up di laporan
 
@@ -541,11 +547,10 @@ class KendaraanController extends Controller
                 $totalPemakaian += $usage;
             }
 
-            // Total Pemakaian = Total Harian
-            // Tidak memasukkan $tkBulanIni karena Total Pakai hanya dihitung dari pemakaian tanggal 1-30
+            // Total Pemakaian = Total Harian (Tanpa Hangus)
 
-            // Sisa BBM = Total BBM - Total Pemakaian
-            $sisaBbm = $totalBbm - $totalPemakaian;
+            // Sisa BBM = Total BBM - Total Pemakaian - Hangus (Agar sisa riil tetap benar meski tidak masuk TK/Total Pakai)
+            $sisaBbm = $totalBbm - $totalPemakaian - $hangusKeluar;
 
             $row = [
                 'kode_kendaraan' => $kendaraan->kode_kendaraan ?? '-',
