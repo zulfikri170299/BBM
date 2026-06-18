@@ -43,9 +43,10 @@ class CheckAccountStatus
             // Cek Akun Personel (Global)
             if ($user->role === 'personel') {
                 $isEnabled = $settings['is_personel_enabled'] ?? '1';
-                if ($isEnabled == '0') {
+                $personelAccessControl = $settings['personel_access_control'] ?? '1';
+                if ($isEnabled == '0' || $personelAccessControl == '0') {
                     Auth::logout();
-                    return redirect()->route('login')->with('error', 'Akses akun Personel sedang dinonaktifkan sementara oleh Super Admin.');
+                    return redirect()->route('login')->with('error', 'Akses Ditolak');
                 }
             }
         }

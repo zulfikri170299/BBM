@@ -14,7 +14,7 @@ class AdminController extends Controller
     {
         $stats = [
             'totalSatker' => \App\Models\Satker::count(),
-            'totalUsers' => \App\Models\User::count(),
+            'totalUsers' => \App\Models\User::where('role', '!=', 'personel')->count(),
             'totalKendaraan' => \App\Models\Kendaraan::count(),
             'totalTransaksi' => \App\Models\TransaksiBbm::count(),
             'totalPersonel' => \App\Models\Personel::count(),
@@ -41,6 +41,12 @@ class AdminController extends Controller
         $personelFuel = \App\Models\Personel::select('jenis_bbm', \Illuminate\Support\Facades\DB::raw('SUM(saldo) as total'))
             ->groupBy('jenis_bbm')
             ->get();
+
+        $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
+        if ($personelAccessControl == '0') {
+            $stats['totalPersonel'] = 0;
+            $personelFuel = collect();
+        }
 
         // Get Users with Location
         $usersWithLocation = \App\Models\User::select('id', 'name', 'role', 'last_latitude', 'last_longitude', 'last_activity_at')
@@ -103,7 +109,7 @@ class AdminController extends Controller
             $tankStock['dex'] = $latestSync->stok_awal_dex - $pemakaianDex;
         }
 
-        return view('admin.dashboard', compact('stats', 'recentTransactions', 'kendaraanFuel', 'personelFuel', 'usersWithLocation', 'satisfactionStats', 'adminStocks', 'tankStock'));
+        return view('admin.dashboard', compact('stats', 'recentTransactions', 'kendaraanFuel', 'personelFuel', 'usersWithLocation', 'satisfactionStats', 'adminStocks', 'tankStock', 'personelAccessControl'));
     }
 
     public function topup()

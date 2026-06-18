@@ -15,7 +15,7 @@
                     class="flex-1 py-1.5 text-[9px] font-black uppercase rounded-lg transition-all">Barcode</button>
                 <button @@click="tab = 'manual'; stopScanner();" 
                     :class="tab === 'manual' ? 'bg-white text-indigo-700 shadow-sm border border-slate-200' : 'text-slate-500'"
-                    class="flex-1 py-1.5 text-[9px] font-black uppercase rounded-lg transition-all">NOPOL / NRP</button>
+                    class="flex-1 py-1.5 text-[9px] font-black uppercase rounded-lg transition-all">{{ $personelAccessControl == '1' ? 'NOPOL / NRP' : 'NOPOL' }}</button>
             </div>
 
             <!-- Card Container -->
@@ -75,7 +75,7 @@
                     
                     <input type="text" x-model="manualValue" @@keyup.enter="checkData(tab, manualValue)"
                         class="w-full px-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-xl text-2xl text-center font-black text-slate-900 uppercase tracking-widest outline-none"
-                        autocomplete="off" spellcheck="false" :placeholder="'CARI ' + (tab === 'manual' ? 'NOPOL / NRP' : tab.toUpperCase())">
+                        autocomplete="off" spellcheck="false" :placeholder="'CARI ' + (tab === 'manual' ? ('{{ $personelAccessControl == '1' ? 'NOPOL / NRP' : 'NOPOL' }}') : tab.toUpperCase())">
                     <button @@click="checkData(tab, manualValue)" :disabled="isLoading"
                         class="w-full px-4 py-3.5 bg-indigo-600 hover:bg-black text-white font-black rounded-xl shadow-xl shadow-indigo-100 transition-all duration-300 flex items-center justify-center gap-3 active:scale-[0.98] disabled:opacity-50">
                         <svg x-show="!isLoading" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

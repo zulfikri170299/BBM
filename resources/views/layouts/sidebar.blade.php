@@ -6,6 +6,9 @@
     class="fixed inset-0 z-40 bg-black/60 lg:hidden"></div>
 
 {{-- Sidebar --}}
+@php
+    $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
+@endphp
     <style>
         .submenu-line {
             position: relative;
@@ -124,6 +127,7 @@
                 <span class="ml-3 font-medium">Kendaraan</span>
             </a>
 
+            @if($personelAccessControl == '1')
             <a href="{{ route('admin.personels.index') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('admin.personels.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -133,6 +137,7 @@
                 </svg>
                 <span class="ml-3 font-medium">Personel</span>
             </a>
+            @endif
 
             <div class="space-y-1">
                 <button @click="masterBbmOpen = !masterBbmOpen"
@@ -196,11 +201,13 @@
                             <div class="submenu-dot {{ request()->routeIs('admin.hutang.*') ? 'active-dot' : '' }}"></div>
                             Hutang BBM
                         </a>
+                        @if($personelAccessControl == '1')
                         <a href="{{ route('admin.transfer-saldo.index') }}"
                             class="group submenu-item flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.transfer-saldo.*') ? 'text-white active-submenu-item' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
                             <div class="submenu-dot {{ request()->routeIs('admin.transfer-saldo.*') ? 'active-dot' : '' }}"></div>
                             Transfer Saldo
                         </a>
+                        @endif
                         <a href="{{ route('admin.bulk-potong.index') }}"
                             class="group submenu-item flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.bulk-potong.*') ? 'text-white active-submenu-item' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
                             <div class="submenu-dot {{ request()->routeIs('admin.bulk-potong.*') ? 'active-dot' : '' }}"></div>
@@ -301,11 +308,13 @@
                         <div class="submenu-dot {{ request()->routeIs('admin.laporan-sisa.kendaraan') ? 'active-dot' : '' }}"></div>
                         Sisa BBM Kendaraan
                     </a>
+                    @if($personelAccessControl == '1')
                     <a href="{{ route('admin.laporan-sisa.personel') }}"
                         class="group submenu-item flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-sisa.personel') ? 'text-white active-submenu-item' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
                         <div class="submenu-dot {{ request()->routeIs('admin.laporan-sisa.personel') ? 'active-dot' : '' }}"></div>
                         Sisa BBM Personel
                     </a>
+                    @endif
                 </div>
             </div>
 
@@ -424,6 +433,7 @@
                 <span class="ml-3 font-medium">Kendaraan</span>
             </a>
 
+            @if($personelAccessControl == '1')
             <a href="{{ route('satker.personels.index') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('satker.personels.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -433,6 +443,7 @@
                 </svg>
                 <span class="ml-3 font-medium">Personel</span>
             </a>
+            @endif
 
             <a href="{{ route('satker.hutang.index') }}"
                 class="flex items-center px-4 py-2 text-sm text-gray-100 rounded-xl transition-all duration-200 active:scale-[0.98] {{ request()->routeIs('satker.hutang.*') ? 'bg-indigo-600 shadow-lg shadow-indigo-500/30' : 'hover:bg-slate-800' }}">
@@ -497,11 +508,13 @@
                         <div class="submenu-dot {{ request()->routeIs('satker.kendaraans.laporan-bulanan.*') ? 'active-dot' : '' }}"></div>
                         Laporan Bulanan
                     </a>
+                    @if($personelAccessControl == '1')
                     <a href="{{ route('satker.kendaraans.laporan-transfer') }}"
                         class="group submenu-item flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.kendaraans.laporan-transfer.*') ? 'text-white active-submenu-item' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
                         <div class="submenu-dot {{ request()->routeIs('satker.kendaraans.laporan-transfer.*') ? 'active-dot' : '' }}"></div>
                         Laporan Transfer
                     </a>
+                    @endif
                     <a href="{{ route('satker.saldo-dialihkan.index') }}"
                         class="group submenu-item flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.saldo-dialihkan.*') ? 'text-white active-submenu-item' : 'text-slate-400 hover:text-white hover:bg-slate-800/50' }}">
                         <div class="submenu-dot {{ request()->routeIs('satker.saldo-dialihkan.*') ? 'active-dot' : '' }}"></div>

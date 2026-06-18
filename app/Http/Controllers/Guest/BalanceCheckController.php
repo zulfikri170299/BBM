@@ -11,7 +11,8 @@ class BalanceCheckController extends Controller
 {
     public function index()
     {
-        return view('public.balance-check');
+        $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
+        return view('public.balance-check', compact('personelAccessControl'));
     }
 
     public function check(Request $request)
@@ -48,16 +49,22 @@ class BalanceCheckController extends Controller
             ]);
         }
 
-        // Cari di Personel (NRP atau Barcode)
-        // Coba cari yang persis dulu
-        $personel = Personel::where('nrp', '=', $identifier, 'and')
-            ->orWhere('barcode', '=', $identifier)
-            ->first();
+        $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
 
-        // Jika tidak ketemu, coba cari tanpa spasi
-        if (!$personel) {
-            $personel = Personel::whereRaw("REPLACE(nrp, ' ', '') = ?", [$identifierNoSpace], 'and')
+        if ($personelAccessControl == '1') {
+            // Cari di Personel (NRP atau Barcode)
+            // Coba cari yang persis dulu
+            $personel = Personel::where('nrp', '=', $identifier, 'and')
+                ->orWhere('barcode', '=', $identifier)
                 ->first();
+
+            // Jika tidak ketemu, coba cari tanpa spasi
+            if (!$personel) {
+                $personel = Personel::whereRaw("REPLACE(nrp, ' ', '') = ?", [$identifierNoSpace], 'and')
+                    ->first();
+            }
+        } else {
+            $personel = null;
         }
 
         if ($personel) {
@@ -73,6 +80,10 @@ class BalanceCheckController extends Controller
             ]);
         }
 
-        return back()->with('error', 'Data tidak ditemukan. Pastikan Nopol atau NRP yang Anda masukkan benar.');
+        if ($personelAccessControl == '1') {
+            return back()->with('error', 'Data tidak ditemukan. Pastikan Nopol atau NRP yang Anda masukkan benar.');
+        } else {
+            return back()->with('error', 'Data tidak ditemukan. Pastikan Nopol yang Anda masukkan benar.');
+        }
     }
 }

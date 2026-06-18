@@ -92,6 +92,13 @@ class DashboardController extends Controller
         $saldoPersonelPerBbm = $qSP->pluck('total', 'jenis_bbm');
         $literTransferPerBbm = $qLT->pluck('total', 'jenis_bbm');
 
+        $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
+        if ($personelAccessControl == '0') {
+            $totalPersonel = 0;
+            $totalSaldoPersonel = 0;
+            $saldoPersonelPerBbm = collect();
+        }
+
         // Hutang Stats
         $qH = \App\Models\Hutang::where('status', 'belum_dibayar');
         if ($user->role !== 'super_admin') {
@@ -111,7 +118,8 @@ class DashboardController extends Controller
             'recentTransfers', 'chartData',
             'saldoKendaraanPerBbm', 'saldoPersonelPerBbm', 'literTransferPerBbm',
             'totalHutang', 'hutangPerBbm',
-            'rodaR2', 'rodaR4', 'rodaR6', 'rodaNon'
+            'rodaR2', 'rodaR4', 'rodaR6', 'rodaNon',
+            'personelAccessControl'
         ));
     }
 }

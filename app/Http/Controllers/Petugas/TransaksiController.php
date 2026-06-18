@@ -13,7 +13,8 @@ class TransaksiController extends Controller
 {
     public function index()
     {
-        return view('petugas.transaksi.index');
+        $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
+        return view('petugas.transaksi.index', compact('personelAccessControl'));
     }
 
     public function check(Request $request)
@@ -85,6 +86,13 @@ class TransaksiController extends Controller
 
             // Validasi akun aktif untuk Personel
             if ($target instanceof Personel) {
+                $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
+                if ($personelAccessControl == '0') {
+                    $message = 'Kartu Anda Sedang di Nonaktifkan';
+                    if ($request->wantsJson()) return response()->json(['success' => false, 'message' => $message], 403);
+                    return back()->withErrors(['error' => $message]);
+                }
+
                 if ($target->user_id && (!$target->user || !($target->user->is_active ?? false))) {
                     $message = 'Akun Anda sedang dinonaktifkan. Silakan hubungi Super Admin.';
                     if ($request->wantsJson()) return response()->json(['success' => false, 'message' => $message], 403);
@@ -140,6 +148,10 @@ class TransaksiController extends Controller
         if ($request->kendaraan_id) {
             $target = Kendaraan::findOrFail($request->kendaraan_id);
         } else {
+            $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
+            if ($personelAccessControl == '0') {
+                return redirect()->route('petugas.transaksi.index')->withErrors(['error' => 'Kartu Anda Sedang di Nonaktifkan']);
+            }
             $target = Personel::findOrFail($request->personel_id);
         }
 

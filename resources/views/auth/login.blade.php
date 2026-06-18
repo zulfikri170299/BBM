@@ -101,7 +101,9 @@
                     </svg>
                     <div>
                         <p class="text-sm font-bold text-red-400">Akses Ditolak</p>
-                        <p class="text-xs font-medium text-red-200/80 leading-relaxed mt-1">{{ session('error') }}</p>
+                        @if(session('error') !== 'Akses Ditolak')
+                            <p class="text-xs font-medium text-red-200/80 leading-relaxed mt-1">{{ session('error') }}</p>
+                        @endif
                     </div>
                 </div>
             @endif
@@ -111,8 +113,7 @@
 
                 <!-- Email / NRP Address -->
                 <div class="space-y-2">
-                    <label for="email" class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Email /
-                        NRP</label>
+                    <label for="email" class="text-xs font-semibold text-slate-300 uppercase tracking-wider">{{ isset($personelAccessControl) && $personelAccessControl == '1' ? 'Email / NRP' : 'Email' }}</label>
                     <div class="relative group">
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-slate-500 group-focus-within:text-amber-500 transition-colors duration-300"

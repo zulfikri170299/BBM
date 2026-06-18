@@ -435,6 +435,9 @@
                     class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto max-h-[90vh] flex flex-col overflow-hidden">
                     <form action="{{ route('satker.kendaraans.transfer') }}" method="POST" class="flex flex-col h-full min-h-0">
                         @csrf
+                        @php
+                            $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
+                        @endphp
 
                         <!-- Header with Gradient -->
                         <div
@@ -554,11 +557,13 @@
 
                             <!-- Tipe Tujuan Selector -->
                             <div class="p-1 bg-slate-100 rounded-xl flex">
+                                @if($personelAccessControl == '1')
                                 <button type="button" @click="tipeTujuan = 'personel'"
                                     class="flex-1 px-4 py-2 text-xs font-bold rounded-lg transition-all"
                                     :class="tipeTujuan === 'personel' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'">
                                     Ke Personel
                                 </button>
+                                @endif
                                 <button type="button" @click="tipeTujuan = 'kendaraan'"
                                     class="flex-1 px-4 py-2 text-xs font-bold rounded-lg transition-all"
                                     :class="tipeTujuan === 'kendaraan' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'">
@@ -569,6 +574,7 @@
                             <input type="hidden" name="tipe_tujuan" :value="tipeTujuan">
 
                             <!-- Tujuan Personel (Searchable) -->
+                            @if($personelAccessControl == '1')
                             <div x-show="tipeTujuan === 'personel'">
                                 <label class="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
                                     <span
@@ -634,6 +640,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
 
                             <!-- Tujuan Kendaraan (Searchable) -->
                             <div x-show="tipeTujuan === 'kendaraan'">

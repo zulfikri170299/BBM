@@ -20,6 +20,10 @@ class RiwayatController extends Controller
 
         // 1. Ambil TransaksiBbm
         $queryTrx = TransaksiBbm::with(['kendaraan.satker', 'personel.satker', 'petugas']);
+        $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
+        if ($personelAccessControl == '0') {
+            $queryTrx->whereNull('personel_id');
+        }
         if ($user->role !== 'super_admin') {
             $queryTrx->where('satker_id', $satker->id);
         }
@@ -97,6 +101,10 @@ class RiwayatController extends Controller
 
         // Ambil TransaksiBbm
         $queryTrx = TransaksiBbm::with(['kendaraan.satker', 'personel.satker', 'petugas']);
+        $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
+        if ($personelAccessControl == '0') {
+            $queryTrx->whereNull('personel_id');
+        }
         if ($user->role !== 'super_admin') {
             $queryTrx->where('satker_id', $satker->id);
         }

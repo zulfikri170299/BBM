@@ -84,6 +84,11 @@ class TransferSaldoController extends Controller
             DB::beginTransaction();
 
             if ($request->tipe_tujuan === 'personel') {
+                $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
+                if ($personelAccessControl == '0') {
+                    return back()->with('error', 'Fitur transfer ke personel sedang dinonaktifkan.');
+                }
+
                 // KENDARAAN -> PERSONEL
                 $kendaraan = Kendaraan::findOrFail($request->kendaraan_id);
                 $personel = Personel::findOrFail($request->personel_id);

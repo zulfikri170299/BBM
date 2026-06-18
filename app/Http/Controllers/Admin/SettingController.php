@@ -34,7 +34,8 @@ class SettingController extends Controller
             'satker_can_edit_kendaraan',
             'satker_can_import_kendaraan',
             'is_satker_enabled',
-            'is_personel_enabled'
+            'is_personel_enabled',
+            'personel_access_control'
         ];
         foreach ($checkboxes as $key) {
             if (!$request->has($key)) {

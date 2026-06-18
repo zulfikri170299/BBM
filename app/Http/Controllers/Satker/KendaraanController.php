@@ -79,6 +79,11 @@ class KendaraanController extends Controller
         $tujuanKendaraanId = null;
 
         if ($request->tipe_tujuan === 'personel') {
+            $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
+            if ($personelAccessControl == '0') {
+                return back()->with('error', 'Fitur transfer ke personel sedang dinonaktifkan.');
+            }
+
             $personel = \App\Models\Personel::where('id', $request->personel_id)->where('satker_id', $satkerId)->firstOrFail();
             
             if ($personel->jenis_bbm && $personel->jenis_bbm !== $kendaraan->jenis_bbm) {

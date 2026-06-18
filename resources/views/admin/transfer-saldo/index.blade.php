@@ -8,6 +8,10 @@
             </div>
         </div>
 
+        @php
+            $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
+        @endphp
+
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6" x-data="{ tipeTujuan: 'kendaraan', selectedKendaraan: '' }">
             {{-- Transfer Form --}}
             <div class="lg:col-span-4">
@@ -47,6 +51,7 @@
                                             <span class="text-[11px] font-black uppercase tracking-wider">Pusat ke Kendaraan (TM)</span>
                                         </div>
                                     </label>
+                                    @if($personelAccessControl == '1')
                                     <label class="relative flex items-center justify-center p-2 rounded-xl border-2 cursor-pointer transition-all"
                                         :class="tipeTujuan === 'personel' ? 'border-indigo-500 bg-indigo-50 text-indigo-700' : 'border-slate-100 bg-white text-slate-400'">
                                         <input type="radio" name="tipe_tujuan" value="personel" x-model="tipeTujuan" class="sr-only">
@@ -55,9 +60,11 @@
                                             <span class="text-[11px] font-black uppercase tracking-wider">Kendaraan ke Anggota</span>
                                         </div>
                                     </label>
+                                    @endif
                                 </div>
                             </div>
 
+                            @if($personelAccessControl == '1')
                             {{-- Pilih Kendaraan Sumber (Jika Kendaraan -> Personel) --}}
                             <div x-show="tipeTujuan === 'personel'" x-transition>
                                 <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Kendaraan Sumber</label>
@@ -76,6 +83,7 @@
                                     <option value="">-- Pilih Anggota --</option>
                                 </select>
                             </div>
+                            @endif
 
                             {{-- Tujuan Kendaraan (Jika Pusat -> Kendaraan) --}}
                             <div x-show="tipeTujuan === 'kendaraan'" x-transition class="space-y-3">

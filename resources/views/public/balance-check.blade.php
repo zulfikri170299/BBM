@@ -12,7 +12,11 @@
                 <img src="{{ asset('rolog.png') }}" alt="Logo" class="w-16 h-16 object-contain drop-shadow-lg">
             </div>
             <h1 class="text-xl font-bold text-white mb-1">Cek Saldo BBM</h1>
-            <p class="text-slate-400 text-xs text-balance">Scan barcode atau masukkan Nopol/NRP untuk melihat sisa saldo.</p>
+            @if($personelAccessControl == '1')
+                <p class="text-slate-400 text-xs text-balance">Scan barcode atau masukkan Nopol/NRP untuk melihat sisa saldo.</p>
+            @else
+                <p class="text-slate-400 text-xs text-balance">Scan barcode atau masukkan Nopol untuk melihat sisa saldo.</p>
+            @endif
         </div>
 
         @if(session('error'))
@@ -50,7 +54,11 @@
                 <form action="{{ route('cek-saldo.check') }}" method="POST" class="space-y-4">
                     @csrf
                     <div class="space-y-2">
-                        <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Nopol / NRP</label>
+                        @if($personelAccessControl == '1')
+                            <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Nopol / NRP</label>
+                        @else
+                            <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Nopol</label>
+                        @endif
                         <div class="relative group">
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                 <svg class="h-5 w-5 text-slate-500 group-focus-within:text-amber-500 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -59,7 +67,7 @@
                             </div>
                             <input type="text" name="identifier" required
                                 class="w-full pl-11 pr-4 py-3.5 bg-slate-950/30 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all duration-300 placeholder-slate-600 text-sm uppercase tracking-widest"
-                                placeholder="Masukkan Nopol atau NRP">
+                                placeholder="{{ $personelAccessControl == '1' ? 'Masukkan Nopol atau NRP' : 'Masukkan Nopol' }}">
                         </div>
                     </div>
                     <button type="submit" class="w-full py-4 px-6 bg-gradient-to-r from-amber-700 to-amber-600 hover:from-amber-600 hover:to-amber-500 text-white font-bold rounded-xl shadow-lg shadow-amber-900/30 transform hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 text-sm uppercase tracking-widest border-t border-white/10">
@@ -86,7 +94,11 @@
                     <input type="hidden" name="identifier" id="identifier-input">
                 </form>
 
-                <p class="text-[10px] text-slate-500 text-center italic uppercase tracking-widest">Arahkan kamera ke barcode kartu kendaraan atau personel</p>
+                @if($personelAccessControl == '1')
+                    <p class="text-[10px] text-slate-500 text-center italic uppercase tracking-widest">Arahkan kamera ke barcode kartu kendaraan atau personel</p>
+                @else
+                    <p class="text-[10px] text-slate-500 text-center italic uppercase tracking-widest">Arahkan kamera ke barcode kartu kendaraan</p>
+                @endif
             </div>
 
             <!-- Back to Login -->

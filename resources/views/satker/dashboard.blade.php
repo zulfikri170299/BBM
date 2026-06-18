@@ -54,6 +54,7 @@
                 </div>
             </div>
 
+            @if($personelAccessControl == '1')
             <!-- Card: Total Personel -->
             <div
                 class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 p-4 sm:p-6 text-white shadow-xl group hover:shadow-emerald-500/40 transition-all duration-300 hover:-translate-y-1">
@@ -77,6 +78,7 @@
                     <p class="text-xs sm:text-sm text-emerald-100 mt-0.5 sm:mt-1">Total Personel</p>
                 </div>
             </div>
+            @endif
 
             <!-- Card: Total Transaksi BBM -->
             <div
@@ -150,6 +152,7 @@
                     </div>
                 </div>
             </div>
+            @if($personelAccessControl == '1')
             <div
                 class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/70 p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
                 <div class="flex items-center gap-3 sm:gap-4">
@@ -175,6 +178,7 @@
                     </div>
                 </div>
             </div>
+            @endif
             <div
                 class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/70 p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
                 <div class="flex items-center gap-3 sm:gap-4">

@@ -98,6 +98,20 @@
                                     </div>
                                 </label>
                             </div>
+
+                            <div
+                                class="flex items-center justify-between p-4 border border-slate-200 rounded-xl bg-white shadow-sm md:col-span-2">
+                                <div>
+                                    <h3 class="font-semibold text-slate-800">Kontrol Akses Personel</h3>
+                                    <p class="text-xs text-slate-500">Mematikan menu, login, dan semua data personel di seluruh aplikasi.</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" name="personel_access_control" value="1" class="sr-only peer" {{ ($settings['personel_access_control'] ?? '1') == '1' ? 'checked' : '' }}>
+                                    <div
+                                        class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-600">
+                                    </div>
+                                </label>
+                            </div>
                         </div>
                     </div>
 

@@ -249,6 +249,7 @@
                         </div>
                     </div>
 
+                    @if($personelAccessControl == '1')
                     <!-- Separator -->
                     <div class="border-t border-slate-100"></div>
 
@@ -280,6 +281,7 @@
                             @endif
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
 
