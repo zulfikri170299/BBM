@@ -15,9 +15,15 @@ class ChatController extends Controller
         
         // Ambil semua user kecuali diri sendiri
         // Sort by unread messages first, then by name
-        $users = User::with('satker')
-                    ->where('id', '!=', $user->id)
-                    ->withCount(['sentChats as unread_count' => function ($query) use ($user) {
+        $usersQuery = User::with('satker')
+                    ->where('id', '!=', $user->id);
+
+        $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
+        if ($personelAccessControl == '0') {
+            $usersQuery->where('role', '!=', 'personel');
+        }
+
+        $users = $usersQuery->withCount(['sentChats as unread_count' => function ($query) use ($user) {
                         $query->where('receiver_id', $user->id)
                               ->where('is_read', false);
                     }])

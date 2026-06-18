@@ -74,19 +74,27 @@
                     <!-- Jenis BBM -->
                     <div>
                         <label for="jenis_bbm" class="block text-sm font-semibold text-slate-700 mb-2">Jenis BBM</label>
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                            @foreach(['Pertamax', 'Pertamina Dex'] as $bbm)
-                            <label class="relative cursor-pointer">
-                                <input type="radio" name="jenis_bbm" value="{{ $bbm }}" class="peer sr-only" {{ old('jenis_bbm', $kendaraan->jenis_bbm) == $bbm ? 'checked' : '' }} required>
-                                <div class="flex items-center justify-center px-4 py-3 border-2 border-slate-200 rounded-xl text-sm font-medium text-slate-600 peer-checked:border-indigo-500 peer-checked:bg-indigo-50 peer-checked:text-indigo-700 hover:bg-slate-50 transition-all">
-                                    {{ $bbm }}
-                                </div>
-                            </label>
-                            @endforeach
-                        </div>
-                        @error('jenis_bbm')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+                        @if($kendaraan->saldo > 0)
+                            <div class="px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl text-slate-600 font-medium">
+                                {{ $kendaraan->jenis_bbm }}
+                            </div>
+                            <input type="hidden" name="jenis_bbm" value="{{ $kendaraan->jenis_bbm }}">
+                            <p class="mt-2 text-xs text-amber-600">Jenis BBM tidak dapat diubah karena kendaraan ini masih memiliki saldo.</p>
+                        @else
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                @foreach(['Pertamax', 'Pertamina Dex'] as $bbm)
+                                <label class="relative cursor-pointer">
+                                    <input type="radio" name="jenis_bbm" value="{{ $bbm }}" class="peer sr-only" {{ old('jenis_bbm', $kendaraan->jenis_bbm) == $bbm ? 'checked' : '' }} required>
+                                    <div class="flex items-center justify-center px-4 py-3 border-2 border-slate-200 rounded-xl text-sm font-medium text-slate-600 peer-checked:border-indigo-500 peer-checked:bg-indigo-50 peer-checked:text-indigo-700 hover:bg-slate-50 transition-all">
+                                        {{ $bbm }}
+                                    </div>
+                                </label>
+                                @endforeach
+                            </div>
+                            @error('jenis_bbm')
+                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        @endif
                     </div>
 
                     <!-- Submit -->
