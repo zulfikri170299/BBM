@@ -44,14 +44,14 @@ class LaporanTriwulanController extends Controller
         $startDate = Carbon::createFromFormat('Y-m-d', $startDateStr, 'Asia/Makassar')->startOfDay();
         $endDate = Carbon::createFromFormat('Y-m-d', $endDateStr, 'Asia/Makassar')->endOfDay();
 
-        $startUtc = $startDate->copy()->setTimezone('UTC')->format('Y-m-d H:i:s');
-        $endUtc = $endDate->copy()->setTimezone('UTC')->format('Y-m-d H:i:s');
+        $startLocal = $startDate->format('Y-m-d H:i:s');
+        $endLocal = $endDate->format('Y-m-d H:i:s');
 
         // RiwayatTopup uses created_at (timestamp)
         // TransaksiBbm uses tanggal (custom column)
 
         $bbmTypesTopup = RiwayatTopup::join('kendaraans', 'riwayat_topups.kendaraan_id', '=', 'kendaraans.id')
-            ->whereBetween('riwayat_topups.created_at', [$startUtc, $endUtc])
+            ->whereBetween('riwayat_topups.created_at', [$startLocal, $endLocal])
             ->whereIn('riwayat_topups.metode', ['manual', 'IMPORT', 'massal'])
             ->where('riwayat_topups.tipe', 'masuk')
             ->selectRaw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm")
@@ -86,7 +86,7 @@ class LaporanTriwulanController extends Controller
                 DB::raw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
                 DB::raw("SUM(riwayat_topups.jumlah) as total")
             )
-            ->whereBetween('riwayat_topups.created_at', [$startUtc, $endUtc])
+            ->whereBetween('riwayat_topups.created_at', [$startLocal, $endLocal])
             ->where('riwayat_topups.tipe', 'masuk')
             ->groupBy('riwayat_topups.satker_id', 'kendaraans.jenis_bbm')
             ->get();
@@ -96,24 +96,7 @@ class LaporanTriwulanController extends Controller
             $pendapatan[$item->satker_id][$item->jenis_bbm] = $item->total;
         }
 
-        $tmPersonelRaw = \App\Models\RiwayatTransferSaldoPersonel::join('kendaraans', 'riwayat_transfer_saldo_personels.tujuan_kendaraan_id', '=', 'kendaraans.id')
-            ->select('riwayat_transfer_saldo_personels.satker_id', \Illuminate\Support\Facades\DB::raw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"), \Illuminate\Support\Facades\DB::raw('SUM(riwayat_transfer_saldo_personels.jumlah) as total'))
-            ->whereBetween('riwayat_transfer_saldo_personels.created_at', [$startUtc, $endUtc])
-            ->groupBy('riwayat_transfer_saldo_personels.satker_id', 'kendaraans.jenis_bbm')
-            ->get();
 
-        $tmAntarRaw = \App\Models\RiwayatTransferAntarPersonel::join('kendaraans', 'riwayat_transfer_antar_personels.target_kendaraan_id', '=', 'kendaraans.id')
-            ->select('riwayat_transfer_antar_personels.satker_id', \Illuminate\Support\Facades\DB::raw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"), \Illuminate\Support\Facades\DB::raw('SUM(riwayat_transfer_antar_personels.jumlah) as total'))
-            ->whereBetween('riwayat_transfer_antar_personels.created_at', [$startUtc, $endUtc])
-            ->groupBy('riwayat_transfer_antar_personels.satker_id', 'kendaraans.jenis_bbm')
-            ->get();
-
-        foreach($tmPersonelRaw as $item) {
-            $pendapatan[$item->satker_id][$item->jenis_bbm] = ($pendapatan[$item->satker_id][$item->jenis_bbm] ?? 0) + $item->total;
-        }
-        foreach($tmAntarRaw as $item) {
-            $pendapatan[$item->satker_id][$item->jenis_bbm] = ($pendapatan[$item->satker_id][$item->jenis_bbm] ?? 0) + $item->total;
-        }
 
         $pemakaianRaw = TransaksiBbm::select(
                 'satker_id',
@@ -129,43 +112,7 @@ class LaporanTriwulanController extends Controller
             $pemakaian[$item->satker_id][$item->jenis_bbm] = ($pemakaian[$item->satker_id][$item->jenis_bbm] ?? 0) + $item->total;
         }
 
-        // Tambahan: Hitung SEMUA RiwayatTopup 'keluar' (Potong Saldo, POTONG_HUTANG, TRANSFER, dll) sebagai pemakaian
-        $potongSaldoRaw = RiwayatTopup::select(
-                'satker_id',
-                DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
-                DB::raw('SUM(jumlah) as total')
-            )
-            ->whereBetween('created_at', [$startUtc, $endUtc])
-            ->where('tipe', 'keluar')
-            ->groupBy('satker_id', 'jenis_bbm')
-            ->get();
 
-        // Tambahan: Hutang bulan ini dihitung sebagai pemakaian
-        $hutangRaw = \App\Models\Hutang::select(
-                'satker_id',
-                DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
-                DB::raw('SUM(jumlah_bon) as total')
-            )
-            ->whereBetween('tanggal_bon', [$startDate->format('Y-m-d H:i:s'), $endDate->format('Y-m-d H:i:s')])
-            ->groupBy('satker_id', 'jenis_bbm')
-            ->get();
-
-        foreach($potongSaldoRaw as $item) {
-            $pemakaian[$item->satker_id][$item->jenis_bbm] = ($pemakaian[$item->satker_id][$item->jenis_bbm] ?? 0) + $item->total;
-        }
-        foreach($hutangRaw as $item) {
-            $pemakaian[$item->satker_id][$item->jenis_bbm] = ($pemakaian[$item->satker_id][$item->jenis_bbm] ?? 0) + $item->total;
-        }
-
-        $tkPersonelRaw = \App\Models\RiwayatTransferSaldoPersonel::join('kendaraans', 'riwayat_transfer_saldo_personels.kendaraan_id', '=', 'kendaraans.id')
-            ->select('riwayat_transfer_saldo_personels.satker_id', \Illuminate\Support\Facades\DB::raw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"), \Illuminate\Support\Facades\DB::raw('SUM(riwayat_transfer_saldo_personels.jumlah) as total'))
-            ->whereBetween('riwayat_transfer_saldo_personels.created_at', [$startUtc, $endUtc])
-            ->groupBy('riwayat_transfer_saldo_personels.satker_id', 'kendaraans.jenis_bbm')
-            ->get();
-
-        foreach($tkPersonelRaw as $item) {
-            $pemakaian[$item->satker_id][$item->jenis_bbm] = ($pemakaian[$item->satker_id][$item->jenis_bbm] ?? 0) + $item->total;
-        }
 
         $sisaBbm = [];
         foreach($satkers as $satker) {

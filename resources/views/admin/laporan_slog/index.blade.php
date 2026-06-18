@@ -8,13 +8,7 @@
                 <p class="mt-1 text-sm text-gray-500 font-medium italic">Rekapitulasi persediaan, penerimaan, dan pengeluaran BBM {{ $jenisLaporan == 'harian' ? 'Per Hari (Harian)' : ($jenisLaporan == 'bulanan' ? 'Per Minggu (Bulanan)' : 'Per Bulan (Triwulan)') }}.</p>
             </div>
             
-            <div class="flex flex-wrap items-center gap-3">
-                <!-- PDF Export Button -->
-                <a href="{{ route('admin.laporan-slog.print', ['bulan' => $bulan, 'tw' => $tw ?? 1, 'tahun' => $tahun, 'jenis_laporan' => $jenisLaporan]) }}" target="_blank" class="inline-flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-xl transition-all duration-200 shadow-sm font-bold text-xs uppercase tracking-wider">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    Cetak PDF
-                </a>
-
+            <div class="flex flex-nowrap items-center justify-end gap-3 w-full md:w-auto overflow-visible pb-1">
                 <form action="{{ route('admin.laporan-slog.index') }}" method="GET" 
                     x-data="{ 
                         jenis: '{{ $jenisLaporan }}', 
@@ -54,7 +48,7 @@
                             <svg class="w-3 h-3 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
                         </button>
                         <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                            class="absolute left-0 mt-2 w-40 bg-white rounded-xl shadow-xl border border-gray-100 z-50 overflow-hidden max-h-60 overflow-y-auto py-1 custom-scrollbar">
+                            class="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-xl border border-gray-100 z-50 overflow-hidden max-h-60 overflow-y-auto py-1 custom-scrollbar">
                             @foreach(range(1, 12) as $m)
                                 @php $mStr = sprintf('%02d', $m); $mLabel = Carbon\Carbon::create()->month((int)$m)->translatedFormat('F'); @endphp
                                 <button type="button" @click="bulan = '{{ $mStr }}'; bulanLabel = '{{ $mLabel }}'; open = false" 
@@ -70,11 +64,11 @@
                     <div class="relative px-2 border-r border-gray-100" x-show="jenis === 'triwulan'" style="display: none;" x-data="{ open: false }">
                         <button type="button" @click="open = !open" @click.away="open = false" 
                             class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-gray-700 hover:bg-gray-50 rounded-xl transition-all">
-                            <span x-text="'TW ' + tw"></span>
-                            <svg class="w-3 h-3 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
+                            <span class="whitespace-nowrap" x-text="'TW ' + tw"></span>
+                            <svg class="w-3 h-3 transition-transform flex-shrink-0" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
                         </button>
                         <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                            class="absolute left-0 mt-2 w-32 bg-white rounded-xl shadow-xl border border-gray-100 z-50 overflow-hidden py-1">
+                            class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-xl border border-gray-100 z-50 overflow-hidden py-1">
                             @foreach(range(1, 4) as $t)
                                 <button type="button" @click="tw = '{{ $t }}'; open = false" 
                                     class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-gray-50 transition-colors"
@@ -93,7 +87,7 @@
                             <svg class="w-3 h-3 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
                         </button>
                         <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                            class="absolute left-0 mt-2 w-24 bg-white rounded-xl shadow-xl border border-gray-100 z-50 overflow-hidden py-1">
+                            class="absolute right-0 mt-2 w-24 bg-white rounded-xl shadow-xl border border-gray-100 z-50 overflow-hidden py-1">
                             @foreach(range(date('Y')-2, date('Y')) as $y)
                                 <button type="button" @click="tahun = '{{ $y }}'; open = false" 
                                     class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-gray-50 transition-colors"
@@ -108,6 +102,12 @@
                         Filter
                     </button>
                 </form>
+
+                <!-- PDF Export Button -->
+                <a href="{{ route('admin.laporan-slog.print', ['bulan' => $bulan, 'tw' => $tw ?? 1, 'tahun' => $tahun, 'jenis_laporan' => $jenisLaporan]) }}" target="_blank" class="flex-shrink-0 inline-flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-xl transition-all duration-200 shadow-sm font-bold text-xs uppercase tracking-wider">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    Cetak PDF
+                </a>
             </div>
         </div>
     </div>

@@ -50,11 +50,11 @@ class LaporanTriwulanController extends Controller
         $startDate = Carbon::createFromFormat('Y-m-d', $startDateStr, 'Asia/Makassar')->startOfDay();
         $endDate = Carbon::createFromFormat('Y-m-d', $endDateStr, 'Asia/Makassar')->endOfDay();
 
-        $startUtc = $startDate->copy()->setTimezone('UTC')->format('Y-m-d H:i:s');
-        $endUtc = $endDate->copy()->setTimezone('UTC')->format('Y-m-d H:i:s');
+        $startLocal = $startDate->format('Y-m-d H:i:s');
+        $endLocal = $endDate->format('Y-m-d H:i:s');
 
         $queryTopup = RiwayatTopup::join('kendaraans', 'riwayat_topups.kendaraan_id', '=', 'kendaraans.id')
-            ->whereBetween('riwayat_topups.created_at', [$startUtc, $endUtc])
+            ->whereBetween('riwayat_topups.created_at', [$startLocal, $endLocal])
             ->whereIn('riwayat_topups.metode', ['manual', 'IMPORT', 'massal'])
             ->where('riwayat_topups.tipe', 'masuk');
         
@@ -100,7 +100,7 @@ class LaporanTriwulanController extends Controller
                 DB::raw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
                 DB::raw("SUM(riwayat_topups.jumlah) as total")
             )
-            ->whereBetween('riwayat_topups.created_at', [$startUtc, $endUtc])
+            ->whereBetween('riwayat_topups.created_at', [$startLocal, $endLocal])
             ->where('riwayat_topups.tipe', 'masuk');
         
         if (!$isSuperAdmin) {
@@ -115,20 +115,7 @@ class LaporanTriwulanController extends Controller
         foreach($pendapatanRaw as $item) {
             $pendapatan[$item->jenis_bbm] = $item->total;
         }
-        $queryTmP1 = \App\Models\RiwayatTransferSaldoPersonel::join('kendaraans', 'riwayat_transfer_saldo_personels.tujuan_kendaraan_id', '=', 'kendaraans.id')
-            ->select(\Illuminate\Support\Facades\DB::raw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"), \Illuminate\Support\Facades\DB::raw('SUM(riwayat_transfer_saldo_personels.jumlah) as total'))
-            ->whereBetween('riwayat_transfer_saldo_personels.created_at', [$startUtc, $endUtc]);
-        if (!$isSuperAdmin) { $queryTmP1->where('riwayat_transfer_saldo_personels.satker_id', $satker->id); }
-        $tmP1 = $queryTmP1->groupBy('kendaraans.jenis_bbm')->get();
 
-        $queryTmP2 = \App\Models\RiwayatTransferAntarPersonel::join('kendaraans', 'riwayat_transfer_antar_personels.target_kendaraan_id', '=', 'kendaraans.id')
-            ->select(\Illuminate\Support\Facades\DB::raw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"), \Illuminate\Support\Facades\DB::raw('SUM(riwayat_transfer_antar_personels.jumlah) as total'))
-            ->whereBetween('riwayat_transfer_antar_personels.created_at', [$startUtc, $endUtc]);
-        if (!$isSuperAdmin) { $queryTmP2->where('riwayat_transfer_antar_personels.satker_id', $satker->id); }
-        $tmP2 = $queryTmP2->groupBy('kendaraans.jenis_bbm')->get();
-
-        foreach($tmP1 as $item) { $pendapatan[$item->jenis_bbm] = ($pendapatan[$item->jenis_bbm] ?? 0) + $item->total; }
-        foreach($tmP2 as $item) { $pendapatan[$item->jenis_bbm] = ($pendapatan[$item->jenis_bbm] ?? 0) + $item->total; }
 
         $queryPemakaianRaw = TransaksiBbm::select(
                 DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
@@ -147,49 +134,7 @@ class LaporanTriwulanController extends Controller
             $pemakaian[$item->jenis_bbm] = $item->total;
         }
 
-        // Tambahan: SEMUA RiwayatTopup 'keluar'
-        $queryPotongSaldoRaw = RiwayatTopup::select(
-                DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
-                DB::raw('SUM(jumlah) as total')
-            )
-            ->whereBetween('created_at', [$startUtc, $endUtc])
-            ->where('tipe', 'keluar');
-        
-        if (!$isSuperAdmin) {
-            $queryPotongSaldoRaw->where('satker_id', $satker->id);
-        }
 
-        $potongSaldoRaw = $queryPotongSaldoRaw->groupBy('jenis_bbm')->get();
-
-        // Tambahan: Hutang bulan ini dihitung sebagai pemakaian
-        $queryHutangRaw = \App\Models\Hutang::select(
-                DB::raw("COALESCE(NULLIF(jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"),
-                DB::raw('SUM(jumlah_bon) as total')
-            )
-            ->whereBetween('tanggal_bon', [$startDate->format('Y-m-d H:i:s'), $endDate->format('Y-m-d H:i:s')]);
-        
-        if (!$isSuperAdmin) {
-            $queryHutangRaw->where('satker_id', $satker->id);
-        }
-
-        $hutangRaw = $queryHutangRaw->groupBy('jenis_bbm')->get();
-
-        $potongSaldoRaw = $queryPotongSaldoRaw->groupBy('jenis_bbm')->get();
-
-        foreach($potongSaldoRaw as $item) {
-            $pemakaian[$item->jenis_bbm] = ($pemakaian[$item->jenis_bbm] ?? 0) + $item->total;
-        }
-        foreach($hutangRaw as $item) {
-            $pemakaian[$item->jenis_bbm] = ($pemakaian[$item->jenis_bbm] ?? 0) + $item->total;
-        }
-
-        $queryTkP1 = \App\Models\RiwayatTransferSaldoPersonel::join('kendaraans', 'riwayat_transfer_saldo_personels.kendaraan_id', '=', 'kendaraans.id')
-            ->select(\Illuminate\Support\Facades\DB::raw("COALESCE(NULLIF(kendaraans.jenis_bbm, ''), 'TANPA JENIS') as jenis_bbm"), \Illuminate\Support\Facades\DB::raw('SUM(riwayat_transfer_saldo_personels.jumlah) as total'))
-            ->whereBetween('riwayat_transfer_saldo_personels.created_at', [$startUtc, $endUtc]);
-        if (!$isSuperAdmin) { $queryTkP1->where('riwayat_transfer_saldo_personels.satker_id', $satker->id); }
-        $tkP1 = $queryTkP1->groupBy('kendaraans.jenis_bbm')->get();
-
-        foreach($tkP1 as $item) { $pemakaian[$item->jenis_bbm] = ($pemakaian[$item->jenis_bbm] ?? 0) + $item->total; }
 
         $sisaBbm = [];
         foreach($allBbmTypes as $jenis) {

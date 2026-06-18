@@ -83,27 +83,30 @@ class LaporanSlogController extends Controller
 
     private function getWeeksForMonth($bulan, $tahun)
     {
-        $startOfMonth = Carbon::createFromDate($tahun, $bulan, 1)->startOfMonth();
-        $endOfMonth = $startOfMonth->copy()->endOfMonth();
-
+        $startDate = Carbon::create($tahun, $bulan, 1)->startOfDay();
+        $endDate = $startDate->copy()->endOfMonth()->endOfDay();
+        
         $weeks = [];
-        // Mulai dari hari Senin pada minggu yang memuat tanggal 1
-        $currentStart = $startOfMonth->copy()->startOfWeek(Carbon::MONDAY);
+        $currentDate = $startDate->copy();
         
         $weekNumber = 1;
         $romanNumerals = [1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV', 5 => 'V', 6 => 'VI'];
-
-        while ($currentStart <= $endOfMonth) {
-            $currentEnd = $currentStart->copy()->endOfWeek(Carbon::SUNDAY)->endOfDay();
-            if ($currentEnd > $endOfMonth) {
-                $currentEnd = $endOfMonth->copy();
+        
+        while ($currentDate <= $endDate) {
+            $weekStart = $currentDate->copy();
+            $weekEnd = $currentDate->copy()->addDays(6)->endOfDay();
+            
+            if ($weekEnd > $endDate) {
+                $weekEnd = $endDate->copy();
             }
-
-            $weeks['MINGGU ' . $romanNumerals[$weekNumber]] = [$currentStart->copy(), $currentEnd->copy()];
-            $currentStart = $currentEnd->copy()->addSecond()->startOfDay();
+            
+            $weekName = 'MINGGU ' . ($romanNumerals[$weekNumber] ?? $weekNumber);
+            $weeks[$weekName] = [$weekStart, $weekEnd];
+            
+            $currentDate = $weekEnd->copy()->addDay()->startOfDay();
             $weekNumber++;
         }
-
+        
         return $weeks;
     }
 

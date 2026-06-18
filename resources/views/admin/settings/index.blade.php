@@ -84,8 +84,8 @@
                             <div
                                 class="flex items-center justify-between p-4 border border-slate-200 rounded-xl bg-white shadow-sm">
                                 <div>
-                                    <h3 class="font-semibold text-slate-800">Akses Akun Personel</h3>
-                                    <p class="text-xs text-slate-500">Kontrol login seluruh Personel.</p>
+                                    <h3 class="font-semibold text-slate-800">Akses User</h3>
+                                    <p class="text-xs text-slate-500">Kontrol login per individu.</p>
                                     <a href="{{ route('admin.users.index', ['role' => 'personel']) }}"
                                         class="text-[10px] font-bold text-indigo-600 hover:text-indigo-800 mt-2 inline-block uppercase tracking-wider">
                                         &rarr; Pilih Akun per Individu
@@ -100,12 +100,12 @@
                             </div>
 
                             <div
-                                class="flex items-center justify-between p-4 border border-slate-200 rounded-xl bg-white shadow-sm md:col-span-2">
+                                class="flex items-center justify-between p-3 border border-slate-100 rounded-lg bg-slate-50/50">
                                 <div>
-                                    <h3 class="font-semibold text-slate-800">Kontrol Akses Personel</h3>
-                                    <p class="text-xs text-slate-500">Mematikan menu, login, dan semua data personel di seluruh aplikasi.</p>
+                                    <h3 class="text-sm font-medium text-slate-600">Kontrol User</h3>
+                                    <p class="text-[10px] text-slate-400 mt-0.5">Matikan semua menu dan data user.</p>
                                 </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
+                                <label class="relative inline-flex items-center cursor-pointer scale-90 origin-right">
                                     <input type="checkbox" name="personel_access_control" value="1" class="sr-only peer" {{ ($settings['personel_access_control'] ?? '1') == '1' ? 'checked' : '' }}>
                                     <div
                                         class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-600">
