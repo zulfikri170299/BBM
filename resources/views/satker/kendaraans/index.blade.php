@@ -74,7 +74,7 @@
                     {{ Auth::user()->satker->nama_satker ?? '' }}
                 </p>
             </div>
-            <div class="flex gap-2 sm:gap-3">
+            <div class="flex flex-wrap items-center gap-2 sm:gap-3">
                 <a href="{{ route('satker.kendaraans.export') }}"
                     class="inline-flex items-center justify-center w-10 h-10 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 transition-all duration-200 hover:-translate-y-0.5 group relative"
                     title="Export Excel">
@@ -232,12 +232,12 @@
                     <thead>
                         <tr class="bg-slate-50/50 border-b border-slate-100">
                             <th colspan="8" class="px-6 py-3">
-                                <div class="flex items-center justify-between">
+                                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                                     <form action="{{ route('satker.kendaraans.index') }}" method="GET"
-                                        class="flex items-center gap-3">
+                                        class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
                                         <x-per-page :current="request('per_page', 10)" />
 
-                                        <div class="relative">
+                                        <div class="relative w-full sm:w-auto">
                                             <span
                                                 class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-slate-400">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
@@ -250,7 +250,7 @@
                                             </span>
                                             <input type="text" name="search" value="{{ request('search') }}"
                                                 placeholder="Cari nopol, jenis..."
-                                                class="block w-48 pl-8 pr-3 py-1.5 border border-slate-200 rounded-lg text-xs placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                                                class="block w-full sm:w-48 pl-8 pr-3 py-1.5 border border-slate-200 rounded-lg text-xs placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
                                         </div>
 
                                         @if(request('search'))

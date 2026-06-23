@@ -10,7 +10,7 @@
                 <h1 class="text-3xl font-bold text-slate-900">Data Kendaraan</h1>
                 <p class="mt-1 text-slate-500">Semua kendaraan dari seluruh Satuan Kerja.</p>
             </div>
-            <div class="flex gap-3">
+            <div class="flex flex-wrap items-center gap-2 sm:gap-3">
                 @if(auth()->user()->role === 'super_admin')
                     <button @click="$dispatch('open-import-kendaraan')"
                         class="inline-flex items-center justify-center w-10 h-10 bg-violet-600 text-white rounded-xl hover:bg-violet-700 shadow-lg shadow-violet-500/30 transition-all duration-200 hover:-translate-y-0.5 group relative"
@@ -193,15 +193,15 @@
                     <thead>
                         <tr class="bg-slate-50/50 border-b border-slate-100">
                             <th colspan="8" class="px-6 py-3">
-                                <div class="flex items-center justify-between">
+                                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                                     <form action="{{ route('admin.kendaraans.index') }}" method="GET"
-                                        class="flex items-center gap-3">
+                                        class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
                                         @if(request('satker_id'))
                                             <input type="hidden" name="satker_id" value="{{ request('satker_id') }}">
                                         @endif
                                         <x-per-page :current="request('per_page', 15)" />
 
-                                        <div class="relative">
+                                        <div class="relative w-full sm:w-auto">
                                             <span
                                                 class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-slate-400">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
@@ -214,7 +214,7 @@
                                             </span>
                                             <input type="text" name="search" value="{{ request('search') }}"
                                                 placeholder="Cari nopol, jenis kendaraan..."
-                                                class="block w-48 pl-8 pr-3 py-1.5 border border-slate-200 rounded-lg text-xs placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                                                class="block w-full sm:w-48 pl-8 pr-3 py-1.5 border border-slate-200 rounded-lg text-xs placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
                                         </div>
 
                                         @if(request('search'))
