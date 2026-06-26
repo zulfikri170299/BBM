@@ -8,8 +8,8 @@
             </svg>
         </div>
         <div>
-            <h2 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight"> Keamanan Akun </h2>
-            <p class="text-xs sm:text-sm text-slate-500 mt-0.5"> Perbarui kata sandi Anda untuk menjaga keamanan akun.
+            <h2 class="text-lg sm:text-xl font-bold text-white tracking-tight"> Keamanan Akun </h2>
+            <p class="text-xs sm:text-sm text-slate-400 mt-0.5"> Perbarui kata sandi Anda untuk menjaga keamanan akun.
             </p>
         </div>
     </header>
@@ -20,7 +20,7 @@
 
         <div>
             <label for="update_password_current_password"
-                class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1 sm:mb-2">Password Saat Ini</label>
+                class="block text-xs sm:text-sm font-semibold text-slate-300 mb-1 sm:mb-2">Password Saat Ini</label>
             <div class="relative group">
                 <span
                     class="absolute inset-y-0 left-0 flex items-center pl-3 sm:pl-4 text-slate-400 group-focus-within:text-indigo-500 transition-colors">
@@ -32,17 +32,17 @@
                 </span>
                 <input id="update_password_current_password" name="current_password" type="password" required
                     autocomplete="current-password"
-                    class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all placeholder-slate-400"
+                    class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm bg-slate-800/50 border border-white/10 rounded-xl text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all placeholder-slate-400"
                     placeholder="Masukkan password saat ini">
             </div>
             <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
         </div>
 
-        <div class="h-px bg-slate-100"></div>
+        <div class="h-px bg-slate-800"></div>
 
         <div>
             <label for="update_password_password"
-                class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1 sm:mb-2">Password Baru</label>
+                class="block text-xs sm:text-sm font-semibold text-slate-300 mb-1 sm:mb-2">Password Baru</label>
             <div class="relative group">
                 <span
                     class="absolute inset-y-0 left-0 flex items-center pl-3 sm:pl-4 text-slate-400 group-focus-within:text-indigo-500 transition-colors">
@@ -54,7 +54,7 @@
                 </span>
                 <input id="update_password_password" name="password" type="password" required
                     autocomplete="new-password"
-                    class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all placeholder-slate-400"
+                    class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm bg-slate-800/50 border border-white/10 rounded-xl text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all placeholder-slate-400"
                     placeholder="Buat password baru">
             </div>
             <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
@@ -62,7 +62,7 @@
 
         <div>
             <label for="update_password_password_confirmation"
-                class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1 sm:mb-2">Konfirmasi Password
+                class="block text-xs sm:text-sm font-semibold text-slate-300 mb-1 sm:mb-2">Konfirmasi Password
                 Baru</label>
             <div class="relative group">
                 <span
@@ -75,7 +75,7 @@
                 </span>
                 <input id="update_password_password_confirmation" name="password_confirmation" type="password" required
                     autocomplete="new-password"
-                    class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all placeholder-slate-400"
+                    class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm bg-slate-800/50 border border-white/10 rounded-xl text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all placeholder-slate-400"
                     placeholder="Ulangi password baru">
             </div>
             <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />

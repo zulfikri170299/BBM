@@ -1,9 +1,9 @@
 <x-app-layout>
-    <div class="p-6 lg:p-8 space-y-8">
+    <div class="p-2 sm:p-6 lg:p-8 space-y-8">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">Pembelian BBM</h1>
-                <p class="mt-1 text-sm text-slate-500">Catat dan pantau riwayat pembelian BBM Pertamax & Pertamina Dex.</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-white leading-tight">Pembelian BBM</h1>
+                <p class="mt-1 text-xs text-slate-400">Catat dan pantau riwayat pembelian BBM Pertamax & Pertamina Dex.</p>
             </div>
         </div>
 
@@ -31,9 +31,9 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Add Purchase Form -->
             <div class="lg:col-span-1">
-                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm sticky top-8">
-                    <div class="p-4 sm:p-6 border-b border-slate-100 bg-slate-50/50">
-                        <h3 class="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
+                <div class="bg-slate-900 border border-white/5 rounded-2xl border border-white/10 shadow-sm sticky top-8">
+                    <div class="p-4 sm:p-6 border-b border-white/5 bg-slate-800/50">
+                        <h3 class="text-base sm:text-lg font-bold text-slate-200 flex items-center gap-2">
                             <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                             Form Pembelian BBM
                         </h3>
@@ -41,20 +41,20 @@
                     <form action="{{ route('pembelian-bbm.store') }}" method="POST" class="p-4 sm:p-6 space-y-4" autocomplete="off">
                         @csrf
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">1. Pilih Tanggal</label>
-                            <input type="date" name="tanggal" value="{{ old('tanggal', $latestDate ?? date('Y-m-d')) }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none font-semibold text-sm" required>
+                            <label class="block text-sm font-semibold text-slate-300 mb-2">1. Pilih Tanggal</label>
+                            <input type="date" name="tanggal" value="{{ old('tanggal', $latestDate ?? date('Y-m-d')) }}" class="w-full px-4 py-2.5 bg-slate-800/50 border border-white/10 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none font-semibold text-sm" required>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">2. Jenis BBM</label>
-                            <select name="jenis_bbm" required class="tom-select w-full bg-slate-50 border-slate-200 rounded-xl transition-all font-semibold text-sm">
+                            <label class="block text-sm font-semibold text-slate-300 mb-2">2. Jenis BBM</label>
+                            <select name="jenis_bbm" required class="tom-select w-full bg-slate-800/50 border-white/10 rounded-xl transition-all font-semibold text-sm">
                                 <option value="">Pilih Jenis BBM</option>
                                 <option value="Pertamax" {{ old('jenis_bbm') == 'Pertamax' ? 'selected' : '' }}>Pertamax</option>
                                 <option value="Pertamina Dex" {{ old('jenis_bbm') == 'Pertamina Dex' ? 'selected' : '' }}>Pertamina Dex</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">3. Jumlah BBM (Liter)</label>
-                            <input type="number" name="jumlah" value="{{ old('jumlah') }}" step="0.01" min="0.01" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" placeholder="Masukkan jumlah liter..." required>
+                            <label class="block text-sm font-semibold text-slate-300 mb-2">3. Jumlah BBM (Liter)</label>
+                            <input type="number" name="jumlah" value="{{ old('jumlah') }}" step="1" min="1" class="w-full px-4 py-2.5 bg-slate-800/50 border border-white/10 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" placeholder="Masukkan jumlah liter..." required>
                         </div>
                         
                         <button type="submit" class="w-full py-3 mt-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-lg shadow-indigo-500/30 transition-all active:scale-95 flex items-center justify-center gap-2">
@@ -67,10 +67,10 @@
 
             <!-- History Table -->
             <div class="lg:col-span-2 space-y-6">
-                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                    <div class="p-4 sm:p-5 border-b border-slate-100 bg-slate-50/50 flex flex-col gap-4">
+                <div class="bg-slate-900 border border-white/5 rounded-2xl border border-white/10 shadow-sm overflow-hidden">
+                    <div class="p-4 sm:p-5 border-b border-white/5 bg-slate-800/50 flex flex-col gap-4">
                         <div class="flex items-center gap-3">
-                            <h3 class="text-base font-bold text-slate-800">Riwayat Pembelian BBM</h3>
+                            <h3 class="text-base font-bold text-slate-200">Riwayat Pembelian BBM</h3>
                         </div>
 
                         <!-- Compact Date Filter -->
@@ -80,7 +80,7 @@
                             <!-- Date Inputs -->
                             <div class="flex flex-wrap sm:flex-nowrap items-center gap-2 flex-1 sm:flex-none w-full sm:w-auto">
                                 <div class="relative group/input flex-1 sm:flex-none">
-                                    <select name="jenis_bbm" class="px-2 py-1.5 bg-white border-slate-200 rounded-lg text-[11px] font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/5 transition-all w-full min-w-[120px]">
+                                    <select name="jenis_bbm" class="px-2 py-1.5 bg-slate-900 border border-white/5 border-white/10 rounded-lg text-[11px] font-bold text-slate-300 focus:ring-4 focus:ring-indigo-500/5 transition-all w-full min-w-[120px]">
                                         <option value="">Semua BBM</option>
                                         <option value="Pertamax" {{ request('jenis_bbm') == 'Pertamax' ? 'selected' : '' }}>Pertamax</option>
                                         <option value="Pertamina Dex" {{ request('jenis_bbm') == 'Pertamina Dex' ? 'selected' : '' }}>Pertamina Dex</option>
@@ -88,11 +88,11 @@
                                 </div>
                                 <div class="relative group/input flex-1 sm:flex-none">
                                     <input type="date" name="start_date" value="{{ request('start_date') }}" 
-                                        class="flatpickr px-2 py-1.5 bg-white border-slate-200 rounded-lg text-[11px] font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/5 transition-all w-full min-w-[110px]" placeholder="Tgl Mulai">
+                                        class="flatpickr px-2 py-1.5 bg-slate-900 border border-white/5 border-white/10 rounded-lg text-[11px] font-bold text-slate-300 focus:ring-4 focus:ring-indigo-500/5 transition-all w-full min-w-[110px]" placeholder="Tgl Mulai">
                                 </div>
                                 <div class="relative group/input flex-1 sm:flex-none">
                                     <input type="date" name="end_date" value="{{ request('end_date') }}" 
-                                        class="flatpickr px-2 py-1.5 bg-white border-slate-200 rounded-lg text-[11px] font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/5 transition-all w-full min-w-[110px]" placeholder="Tgl Selesai">
+                                        class="flatpickr px-2 py-1.5 bg-slate-900 border border-white/5 border-white/10 rounded-lg text-[11px] font-bold text-slate-300 focus:ring-4 focus:ring-indigo-500/5 transition-all w-full min-w-[110px]" placeholder="Tgl Selesai">
                                 </div>
                             </div>
                             
@@ -102,7 +102,7 @@
                                     Filter
                                 </button>
                                 @if(request()->hasAny(['start_date', 'end_date', 'jenis_bbm']))
-                                    <a href="{{ route('pembelian-bbm.index', request()->only('per_page')) }}" class="flex-1 sm:flex-none px-3 py-1.5 bg-slate-100 text-slate-600 font-bold rounded-lg hover:bg-slate-200 transition-all text-[10px] uppercase tracking-widest leading-normal text-center">
+                                    <a href="{{ route('pembelian-bbm.index', request()->only('per_page')) }}" class="flex-1 sm:flex-none px-3 py-1.5 bg-slate-800 text-slate-400 font-bold rounded-lg hover:bg-slate-200 transition-all text-[10px] uppercase tracking-widest leading-normal text-center">
                                         Reset
                                     </a>
                                 @endif
@@ -117,8 +117,8 @@
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="bg-slate-50 border-b border-slate-100">
-                                    <th colspan="5" class="px-6 py-3">
+                                <tr class="bg-slate-800/50 border-b border-white/5">
+                                    <th colspan="5" class="px-4 py-3">
                                         <div class="flex items-center justify-between">
                                             <form action="{{ route('pembelian-bbm.index') }}" method="GET" class="flex items-center">
                                                 @foreach(request()->except('per_page') as $k => $v)
@@ -132,7 +132,7 @@
                                         </div>
                                     </th>
                                 </tr>
-                                <tr class="bg-slate-50 border-b border-slate-100">
+                                <tr class="bg-slate-800/50 border-b border-white/5">
                                     <th class="px-4 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">No</th>
                                     <th class="px-4 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tanggal</th>
                                     <th class="px-4 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">Jenis BBM</th>
@@ -140,7 +140,7 @@
                                     <th class="px-4 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100">
+                            <tbody class="divide-y divide-white/5">
                                 @forelse($pembelians as $index => $item)
                                     @php
                                         $bbmStyle = [
@@ -148,12 +148,12 @@
                                             'Pertamina Dex' => 'from-rose-500 to-red-600',
                                         ];
                                     @endphp
-                                    <tr class="hover:bg-slate-50 transition-colors">
+                                    <tr class="hover:bg-slate-800/50 transition-colors">
                                         <td class="px-4 py-3 text-center">
-                                            <p class="text-xs sm:text-sm font-medium text-slate-500">{{ ($pembelians->currentPage() - 1) * $pembelians->perPage() + $index + 1 }}</p>
+                                            <p class="text-xs sm:text-sm font-medium text-slate-400">{{ ($pembelians->currentPage() - 1) * $pembelians->perPage() + $index + 1 }}</p>
                                         </td>
                                         <td class="px-4 py-3">
-                                            <p class="text-xs sm:text-sm font-semibold text-slate-700">{{ \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') }}</p>
+                                            <p class="text-xs sm:text-sm font-semibold text-slate-300">{{ \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') }}</p>
                                             <p class="text-[10px] text-slate-400">Dibuat: {{ $item->created_at->format('d/m/Y H:i') }}</p>
                                         </td>
                                         <td class="px-4 py-3 text-center">
@@ -195,7 +195,7 @@
                         </table>
                     </div>
                     @if($pembelians->hasPages())
-                        <div class="px-6 py-4 bg-slate-50 border-t border-slate-100">
+                        <div class="px-3 sm:px-6 py-3 sm:py-4 bg-slate-800/50 border-t border-white/5">
                             {{ $pembelians->links() }}
                         </div>
                     @endif

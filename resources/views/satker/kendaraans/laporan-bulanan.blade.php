@@ -8,8 +8,8 @@
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <div>
-                <h1 class="text-2xl font-bold text-slate-900">Laporan Bulanan BBM</h1>
-                <p class="text-sm text-slate-500">Satker: <strong>{{ $satker->nama_satker ?? '-' }}</strong> | Periode:
+                <h1 class="text-2xl font-bold text-white">Laporan Bulanan BBM</h1>
+                <p class="text-xs text-slate-400">Satker: <strong>{{ $satker->nama_satker ?? '-' }}</strong> | Periode:
                     {{ $namaBulan }} {{ $tahun }}</p>
             </div>
             <div class="flex gap-2">
@@ -44,12 +44,12 @@
         </div>
 
         <!-- Filter -->
-        <div class="bg-white rounded-lg border border-slate-200 p-4">
+        <div class="bg-slate-900 border border-white/5 rounded-lg border border-white/10 p-4">
             <form action="{{ route('satker.kendaraans.laporan-bulanan') }}" method="GET"
                 class="flex flex-wrap gap-3 items-end">
                 <div>
-                    <label class="text-xs font-semibold text-slate-500 mb-1 block">Bulan</label>
-                    <select name="bulan" class="px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm">
+                    <label class="text-xs font-semibold text-slate-400 mb-1 block">Bulan</label>
+                    <select name="bulan" class="px-3 py-2 bg-slate-900 border border-white/5 border border-white/20 rounded-lg text-sm">
                         @for($m = 1; $m <= 12; $m++)
                             <option value="{{ $m }}" {{ $bulan == $m ? 'selected' : '' }}>
                                 {{ \Carbon\Carbon::create(null, $m, 1)->translatedFormat('F') }}</option>
@@ -57,8 +57,8 @@
                     </select>
                 </div>
                 <div>
-                    <label class="text-xs font-semibold text-slate-500 mb-1 block">Tahun</label>
-                    <select name="tahun" class="px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm">
+                    <label class="text-xs font-semibold text-slate-400 mb-1 block">Tahun</label>
+                    <select name="tahun" class="px-3 py-2 bg-slate-900 border border-white/5 border border-white/20 rounded-lg text-sm">
                         @for($y = now()->year; $y >= now()->year - 5; $y--)
                             <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>{{ $y }}</option>
                         @endfor
@@ -70,62 +70,72 @@
         </div>
 
         <!-- Table -->
-        <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+        <div class="bg-slate-900 border border-white/5 rounded-lg border border-white/10 overflow-hidden">
             <div class="overflow-x-auto">
                 <style>
                     .laporan-tbl {
-                        border-collapse: collapse;
+                        border-collapse: separate;
+                        border-spacing: 0;
                         width: 100%;
-                        font-size: 9px;
-                        font-family: Arial, sans-serif;
-                        background: #fff;
+                        font-size: 10px;
+                        font-family: 'Outfit', sans-serif;
+                        background: transparent;
+                        color: #cbd5e1;
                     }
-
                     .laporan-tbl th,
                     .laporan-tbl td {
-                        border: 1px solid #000;
-                        padding: 1px 2px;
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        padding: 6px 4px;
                         text-align: center;
                         vertical-align: middle;
                     }
-
                     .laporan-tbl th {
-                        font-weight: bold;
+                        background: rgba(30, 41, 59, 0.8);
+                        font-weight: 700;
+                        color: #94a3b8;
+                        text-transform: uppercase;
+                        letter-spacing: 0.05em;
                     }
-
+                    .laporan-tbl tbody tr:hover td {
+                        background: rgba(255, 255, 255, 0.05);
+                    }
                     .laporan-tbl .text-left {
                         text-align: left;
+                        padding-left: 12px;
                     }
-
                     .laporan-tbl .bold {
                         font-weight: bold;
+                        color: #f8fafc;
+                        background: rgba(30, 41, 59, 0.4);
                     }
-
                     .laporan-title {
                         text-align: center;
-                        padding: 12px 0 12px 0;
+                        padding: 24px 0;
+                        color: #f8fafc;
+                        background: rgba(15, 23, 42, 0.4);
+                        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
                     }
-
                     .laporan-title h2 {
-                        font-size: 15px;
-                        font-weight: bold;
+                        font-size: 16px;
+                        font-weight: 800;
                         text-transform: uppercase;
+                        letter-spacing: 0.1em;
                         margin: 0;
+                        color: #38bdf8;
                     }
-
                     .laporan-title h3 {
-                        font-size: 13px;
-                        font-weight: bold;
+                        font-size: 14px;
+                        font-weight: 700;
                         text-transform: uppercase;
-                        margin: 0;
+                        margin: 6px 0 0 0;
+                        color: #94a3b8;
                     }
-
                     .rotate-date {
-                        font-size: 8px;
-                        font-weight: bold;
+                        font-size: 10px;
+                        font-weight: 800;
                         display: block;
                         margin: 0 auto;
-                        padding: 2px 0;
+                        color: #e2e8f0;
                     }
                 </style>
 

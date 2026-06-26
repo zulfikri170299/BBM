@@ -1,11 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-lg sm:text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-lg sm:text-xl text-slate-200 leading-tight">
             {{ __('Transfer Saldo') }}
         </h2>
     </x-slot>
 
-    <div class="py-4 sm:py-12 bg-slate-50 min-h-screen">
+    <div class="py-4 sm:py-12 bg-slate-800/50 min-h-screen px-2 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 space-y-4 sm:space-y-8">
 
             <!-- Saldo Card with Gradient -->
@@ -29,7 +29,7 @@
                         </p>
                     </div>
                     <div
-                        class="p-2 sm:p-3 bg-white/10 rounded-full backdrop-blur-sm border border-white/20 hidden sm:block">
+                        class="p-2 sm:p-3 bg-slate-900 border border-white/5/10 rounded-full backdrop-blur-sm border border-white/20 hidden sm:block">
                         <svg class="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -40,7 +40,7 @@
                 </div>
                 <!-- Decorative Circles -->
                 <div
-                    class="absolute top-0 right-0 -mt-10 -mr-10 w-32 h-32 sm:w-40 sm:h-40 bg-white/10 rounded-full blur-3xl">
+                    class="absolute top-0 right-0 -mt-10 -mr-10 w-32 h-32 sm:w-40 sm:h-40 bg-slate-900 border border-white/5/10 rounded-full blur-3xl">
                 </div>
                 <div
                     class="absolute bottom-0 left-0 -mb-10 -ml-10 w-32 h-32 sm:w-40 sm:h-40 bg-indigo-500/30 rounded-full blur-3xl">
@@ -51,9 +51,9 @@
                 <!-- Form Transfer -->
                 <div class="lg:col-span-1">
                     <div
-                        class="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-slate-100 overflow-hidden sticky top-4 sm:top-8">
-                        <div class="p-4 sm:p-6 border-b border-slate-100 bg-slate-50/50">
-                            <h3 class="text-base sm:text-lg font-bold text-slate-800 flex items-center">
+                        class="bg-slate-900 border border-white/5 rounded-xl sm:rounded-2xl shadow-sm border border-white/5 overflow-hidden sticky top-4 sm:top-8">
+                        <div class="p-4 sm:p-6 border-b border-white/5 bg-slate-800/50">
+                            <h3 class="text-base sm:text-lg font-bold text-slate-200 flex items-center">
                                 <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-indigo-600" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -61,7 +61,7 @@
                                 </svg>
                                 Form Transfer
                             </h3>
-                            <p class="text-xs sm:text-sm text-slate-500 mt-1">Kirim saldo ke rekan satu Satker.</p>
+                            <p class="text-xs sm:text-xs text-slate-400 mt-1">Kirim saldo ke rekan satu Satker.</p>
                         </div>
 
                         <div class="p-4 sm:p-6" x-data="{
@@ -118,15 +118,15 @@
                                 @csrf
 
                                 <!-- Tipe Tujuan Selector -->
-                                <div class="p-1 bg-slate-100 rounded-xl flex mb-4">
+                                <div class="p-1 bg-slate-800 rounded-xl flex mb-4">
                                     <button type="button" @click="tipeTujuan = 'personel'"
                                         class="flex-1 px-4 py-2 text-xs font-bold rounded-lg transition-all"
-                                        :class="tipeTujuan === 'personel' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'">
+                                        :class="tipeTujuan === 'personel' ? 'bg-slate-900 border border-white/5 text-indigo-600 shadow-sm' : 'text-slate-400 hover:text-slate-300'">
                                         Ke Rekan
                                     </button>
                                     <button type="button" @click="tipeTujuan = 'kendaraan'"
                                         class="flex-1 px-4 py-2 text-xs font-bold rounded-lg transition-all"
-                                        :class="tipeTujuan === 'kendaraan' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'">
+                                        :class="tipeTujuan === 'kendaraan' ? 'bg-slate-900 border border-white/5 text-indigo-600 shadow-sm' : 'text-slate-400 hover:text-slate-300'">
                                         Ke Kendaraan
                                     </button>
                                 </div>
@@ -135,14 +135,14 @@
 
                                 <div x-show="tipeTujuan === 'personel'">
                                     <x-input-label for="receiver_id" :value="__('Penerima')"
-                                        class="text-xs sm:text-sm text-slate-700" />
+                                        class="text-xs sm:text-xs text-slate-300" />
                                     <input type="hidden" name="receiver_id" :value="receiverSelected" :required="tipeTujuan === 'personel'">
                                     <div class="relative mt-1" @click.outside="receiverOpen = false">
                                         <div @click="receiverOpen = !receiverOpen; $nextTick(() => { if(receiverOpen) $refs.receiverInput.focus() })"
-                                            class="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl border border-slate-300 text-xs sm:text-sm shadow-sm transition-all duration-200 cursor-pointer flex items-center justify-between bg-white"
+                                            class="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl border border-white/20 text-xs sm:text-sm shadow-sm transition-all duration-200 cursor-pointer flex items-center justify-between bg-slate-900 border border-white/5"
                                             :class="receiverOpen ? 'ring-2 ring-indigo-500 border-indigo-500' : ''">
                                             <span x-text="receiverLabel || '-- Pilih Rekan --'"
-                                                :class="receiverLabel ? 'text-slate-800' : 'text-slate-400'"
+                                                :class="receiverLabel ? 'text-slate-200' : 'text-slate-400'"
                                                 class="truncate"></span>
                                             <svg class="w-4 h-4 text-slate-400 transition-transform shrink-0"
                                                 :class="receiverOpen ? 'rotate-180' : ''" fill="none"
@@ -161,9 +161,9 @@
                                             </svg>
                                         </div>
                                         <div x-show="receiverOpen" x-transition.opacity.duration.150ms
-                                            class="absolute z-50 mt-1 w-full bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden"
+                                            class="absolute z-50 mt-1 w-full bg-slate-900 border border-white/5 border border-white/10 rounded-xl shadow-lg overflow-hidden"
                                             style="display:none;">
-                                            <div class="p-2 border-b border-slate-100">
+                                            <div class="p-2 border-b border-white/5">
                                                 <div class="relative">
                                                     <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
                                                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -173,13 +173,13 @@
                                                     </svg>
                                                     <input x-ref="receiverInput" x-model="receiverSearch" type="text"
                                                         placeholder="Cari nama / NRP..."
-                                                        class="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                                        class="w-full pl-9 pr-3 py-2 text-sm border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                                                 </div>
                                             </div>
                                             <div class="max-h-48 overflow-y-auto">
                                                 <template x-for="r in filteredReceivers" :key="r.id">
                                                     <div @click="selectReceiver(r)"
-                                                        class="px-4 py-2.5 text-xs sm:text-sm text-slate-700 hover:bg-indigo-50 cursor-pointer flex items-center justify-between transition-colors"
+                                                        class="px-4 py-2.5 text-xs sm:text-xs text-slate-300 hover:bg-indigo-50 cursor-pointer flex items-center justify-between transition-colors"
                                                         :class="receiverSelected === r.id ? 'bg-indigo-50 text-indigo-700 font-semibold' : ''">
                                                         <span
                                                             x-text="r.nama + ' (' + r.nrp + ')' + (r.bbm ? ' - ' + r.bbm : ' - Belum set BBM')"></span>
@@ -193,12 +193,12 @@
                                                     </div>
                                                 </template>
                                                 <div x-show="filteredReceivers.length === 0"
-                                                    class="px-4 py-3 text-sm text-slate-400 text-center">Tidak ditemukan
+                                                    class="px-4 py-3 text-xs text-slate-400 text-center">Tidak ditemukan
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <p class="mt-1.5 text-[10px] sm:text-xs text-slate-500 flex items-center">
+                                    <p class="mt-1.5 text-[10px] sm:text-xs text-slate-400 flex items-center">
                                         <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -210,14 +210,14 @@
 
                                 <div x-show="tipeTujuan === 'kendaraan'" style="display:none;">
                                     <x-input-label for="target_kendaraan_id" :value="__('Kendaraan Tujuan')"
-                                        class="text-xs sm:text-sm text-slate-700" />
+                                        class="text-xs sm:text-xs text-slate-300" />
                                     <input type="hidden" name="target_kendaraan_id" :value="kendaraanSelected" :required="tipeTujuan === 'kendaraan'">
                                     <div class="relative mt-1" @click.outside="kendaraanOpen = false">
                                         <div @click="kendaraanOpen = !kendaraanOpen; $nextTick(() => { if(kendaraanOpen) $refs.kendaraanInput.focus() })"
-                                            class="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl border border-slate-300 text-xs sm:text-sm shadow-sm transition-all duration-200 cursor-pointer flex items-center justify-between bg-white"
+                                            class="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl border border-white/20 text-xs sm:text-sm shadow-sm transition-all duration-200 cursor-pointer flex items-center justify-between bg-slate-900 border border-white/5"
                                             :class="kendaraanOpen ? 'ring-2 ring-indigo-500 border-indigo-500' : ''">
                                             <span x-text="kendaraanLabel || '-- Pilih Kendaraan --'"
-                                                :class="kendaraanLabel ? 'text-slate-800' : 'text-slate-400'"
+                                                :class="kendaraanLabel ? 'text-slate-200' : 'text-slate-400'"
                                                 class="truncate"></span>
                                             <svg class="w-4 h-4 text-slate-400 transition-transform shrink-0"
                                                 :class="kendaraanOpen ? 'rotate-180' : ''" fill="none"
@@ -237,9 +237,9 @@
                                             </svg>
                                         </div>
                                         <div x-show="kendaraanOpen" x-transition.opacity.duration.150ms
-                                            class="absolute z-50 mt-1 w-full bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden"
+                                            class="absolute z-50 mt-1 w-full bg-slate-900 border border-white/5 border border-white/10 rounded-xl shadow-lg overflow-hidden"
                                             style="display:none;">
-                                            <div class="p-2 border-b border-slate-100">
+                                            <div class="p-2 border-b border-white/5">
                                                 <div class="relative">
                                                     <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
                                                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -249,13 +249,13 @@
                                                     </svg>
                                                     <input x-ref="kendaraanInput" x-model="kendaraanSearch" type="text"
                                                         placeholder="Cari nopol kendaraan..."
-                                                        class="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                                        class="w-full pl-9 pr-3 py-2 text-sm border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                                                 </div>
                                             </div>
                                             <div class="max-h-48 overflow-y-auto">
                                                 <template x-for="k in filteredKendaraans" :key="k.id">
                                                     <div @click="selectKendaraan(k)"
-                                                        class="px-4 py-2.5 text-xs sm:text-sm text-slate-700 hover:bg-indigo-50 cursor-pointer flex items-center justify-between transition-colors"
+                                                        class="px-4 py-2.5 text-xs sm:text-xs text-slate-300 hover:bg-indigo-50 cursor-pointer flex items-center justify-between transition-colors"
                                                         :class="kendaraanSelected === k.id ? 'bg-indigo-50 text-indigo-700 font-semibold' : ''">
                                                         <span x-text="k.no_polisi + ' - ' + k.jenis_bbm"></span>
                                                         <svg x-show="kendaraanSelected === k.id"
@@ -268,12 +268,12 @@
                                                     </div>
                                                 </template>
                                                 <div x-show="filteredKendaraans.length === 0"
-                                                    class="px-4 py-3 text-sm text-slate-400 text-center">Tidak ditemukan atau BBM tidak cocok
+                                                    class="px-4 py-3 text-xs text-slate-400 text-center">Tidak ditemukan atau BBM tidak cocok
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <p class="mt-1.5 text-[10px] sm:text-xs text-slate-500 flex items-center">
+                                    <p class="mt-1.5 text-[10px] sm:text-xs text-slate-400 flex items-center">
                                         <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -287,10 +287,10 @@
 
                                 <div>
                                     <x-input-label for="jumlah" :value="__('Jumlah Transfer')"
-                                        class="text-xs sm:text-sm text-slate-700 font-medium" />
+                                        class="text-xs sm:text-xs text-slate-300 font-medium" />
                                     <div class="relative mt-1 sm:mt-2">
                                         <input id="jumlah" name="jumlah" type="number" x-model.number="jumlah"
-                                            class="w-full pl-4 pr-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 text-slate-800 font-bold text-base sm:text-lg shadow-sm transition-all duration-200"
+                                            class="w-full pl-4 pr-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border-white/10 bg-slate-800/50 focus:bg-slate-900 border border-white/5 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 text-slate-200 font-bold text-base sm:text-lg shadow-sm transition-all duration-200"
                                             :class="jumlah > userSaldo ? 'border-rose-500 ring-rose-500/10' : ''"
                                             required min="1" placeholder="0"
                                             autocomplete="off">
@@ -307,7 +307,7 @@
 
                                 <div>
                                     <x-input-label for="pin" :value="__('PIN Keamanan')"
-                                        class="text-xs sm:text-sm text-slate-700 font-medium" />
+                                        class="text-xs sm:text-xs text-slate-300 font-medium" />
                                     <div class="relative mt-1 sm:mt-2">
                                         <div
                                             class="absolute inset-y-0 left-0 flex items-center pl-3 sm:pl-4 pointer-events-none text-slate-400">
@@ -319,7 +319,7 @@
                                             </svg>
                                         </div>
                                         <input id="pin" name="pin" type="password"
-                                            class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 text-slate-800 font-bold text-base sm:text-lg shadow-sm transition-all duration-200 tracking-[0.5em]"
+                                            class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border-white/10 bg-slate-800/50 focus:bg-slate-900 border border-white/5 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 text-slate-200 font-bold text-base sm:text-lg shadow-sm transition-all duration-200 tracking-[0.5em]"
                                             required autocomplete="new-password" value="" placeholder="••••••">
                                     </div>
                                     <x-input-error :messages="$errors->get('pin')" class="mt-2" />
@@ -342,10 +342,10 @@
                 <!-- Riwayat Transfer -->
                 <div class="lg:col-span-2">
                     <div
-                        class="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-slate-100 overflow-hidden h-full">
+                        class="bg-slate-900 border border-white/5 rounded-xl sm:rounded-2xl shadow-sm border border-white/5 overflow-hidden h-full">
                         <div
-                            class="p-4 sm:p-6 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
-                            <h3 class="text-base sm:text-lg font-bold text-slate-800 flex items-center">
+                            class="p-4 sm:p-6 border-b border-white/5 bg-slate-800/50 flex justify-between items-center">
+                            <h3 class="text-base sm:text-lg font-bold text-slate-200 flex items-center">
                                 <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-indigo-600" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -361,7 +361,7 @@
                             <table class="w-full text-left border-collapse">
                                 <thead>
                                     <tr
-                                        class="bg-slate-50 text-slate-500 text-[10px] sm:text-xs font-bold uppercase tracking-wider border-b border-slate-200">
+                                        class="bg-slate-800/50 text-slate-400 text-[10px] sm:text-xs font-bold uppercase tracking-wider border-b border-white/10">
                                         <th class="p-3 sm:p-4">Waktu</th>
                                         <th class="p-3 sm:p-4">Jenis</th>
                                         <th class="p-3 sm:p-4">Lawan Transaksi</th>
@@ -369,13 +369,13 @@
                                         <th class="p-3 sm:p-4 hidden sm:table-cell">Ket</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-slate-100">
+                                <tbody class="divide-y divide-white/5">
                                     @forelse($riwayat as $item)
-                                        <tr class="hover:bg-slate-50/80 transition-colors duration-150">
+                                        <tr class="hover:bg-slate-800/50/80 transition-colors duration-150">
                                             <td class="p-3 sm:p-4 whitespace-nowrap">
                                                 <div class="flex flex-col">
                                                     <span
-                                                        class="text-xs sm:text-sm font-semibold text-slate-700">{{ $item->created_at->timezone('Asia/Makassar')->format('d M Y') }}</span>
+                                                        class="text-xs sm:text-sm font-semibold text-slate-300">{{ $item->created_at->timezone('Asia/Makassar')->format('d M Y') }}</span>
                                                     <span
                                                         class="text-[10px] sm:text-xs text-slate-400">{{ $item->created_at->timezone('Asia/Makassar')->format('H:i') }}
                                                         WITA</span>
@@ -406,32 +406,32 @@
                                             </td>
                                             <td class="p-3 sm:p-4 whitespace-nowrap">
                                                 @if($item->sender_id == $personel->id)
-                                                    <div class="text-xs sm:text-sm font-medium text-slate-900">
+                                                    <div class="text-xs sm:text-sm font-medium text-white">
                                                         @if($item->target_kendaraan_id)
                                                             <span class="text-indigo-600">Kendaraan: {{ $item->targetKendaraan->no_polisi ?? 'N/A' }}</span>
                                                         @else
                                                             {{ $item->receiver->nama ?? 'Tidak Diketahui' }}
                                                         @endif
                                                     </div>
-                                                    <div class="text-[10px] sm:text-xs text-slate-500">Penerima</div>
+                                                    <div class="text-[10px] sm:text-xs text-slate-400">Penerima</div>
                                                 @else
-                                                    <div class="text-xs sm:text-sm font-medium text-slate-900">
+                                                    <div class="text-xs sm:text-sm font-medium text-white">
                                                         {{ $item->sender->nama ?? 'Tidak Diketahui' }}
                                                     </div>
-                                                    <div class="text-[10px] sm:text-xs text-slate-500">Pengirim</div>
+                                                    <div class="text-[10px] sm:text-xs text-slate-400">Pengirim</div>
                                                 @endif
                                             </td>
                                             <td class="p-3 sm:p-4 whitespace-nowrap text-right">
                                                 @if($item->sender_id == $personel->id)
-                                                    <span class="text-xs sm:text-sm font-bold text-rose-600">-
+                                                    <span class="text-xs sm:text-xs font-semibold text-rose-500">-
                                                         {{ number_format($item->jumlah, 0, ',', '.') }} L</span>
                                                 @else
-                                                    <span class="text-xs sm:text-sm font-bold text-emerald-600">+
+                                                    <span class="text-xs sm:text-xs font-semibold text-emerald-500">+
                                                         {{ number_format($item->jumlah, 0, ',', '.') }} L</span>
                                                 @endif
                                             </td>
                                             <td
-                                                class="p-3 sm:p-4 text-xs sm:text-sm text-slate-500 truncate max-w-xs hidden sm:table-cell">
+                                                class="p-3 sm:p-4 text-xs sm:text-xs text-slate-400 truncate max-w-xs hidden sm:table-cell">
                                                 {{ $item->keterangan ?? '-' }}
                                             </td>
                                         </tr>
@@ -457,7 +457,7 @@
                         </div>
 
                         @if($riwayat->hasPages())
-                            <div class="p-3 sm:p-4 border-t border-slate-100 bg-slate-50">
+                            <div class="p-3 sm:p-4 border-t border-white/5 bg-slate-800/50">
                                 {{ $riwayat->links() }}
                             </div>
                         @endif

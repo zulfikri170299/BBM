@@ -1,11 +1,11 @@
 <x-app-layout>
-<div class="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/30 min-h-screen">
+<div class="py-8 px-2 sm:px-6 lg:px-8 bg-slate-800/50/30 min-h-screen">
     <!-- Clean & Professional Header -->
-    <div class="max-w-7xl mx-auto mb-8">
+    <div class="max-w-7xl mx-auto mb-8 px-2 sm:px-6 lg:px-8">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
-                <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Laporan Harian BBM</h1>
-                <p class="mt-1 text-sm text-gray-500 font-medium italic">Rekonsiliasi data pengisian fisik (pompa) vs pencatatan sistem digital.</p>
+                <h1 class="text-2xl font-bold text-white tracking-tight">Laporan Harian BBM</h1>
+                <p class="mt-1 text-xs text-slate-400 font-medium italic">Rekonsiliasi data pengisian fisik (pompa) vs pencatatan sistem digital.</p>
             </div>
             
             <div class="flex flex-wrap items-center gap-3">
@@ -15,9 +15,9 @@
                     Cetak PDF
                 </a>
 
-                <form action="{{ route('admin.laporan-harian.index') }}" method="GET" class="flex items-center gap-2 bg-white p-1 rounded-xl shadow-sm border border-gray-200 ring-1 ring-black/5">
-                    <div class="px-3 border-r border-gray-100">
-                        <select name="bulan" class="border-0 bg-transparent text-xs font-bold text-gray-700 focus:ring-0 cursor-pointer py-2 pl-0 pr-6 appearance-none">
+                <form action="{{ route('admin.laporan-harian.index') }}" method="GET" class="flex items-center gap-2 bg-slate-900 border border-white/5 p-1 rounded-xl shadow-sm border border-white/10 ring-1 ring-black/5">
+                    <div class="px-3 border-r border-white/5">
+                        <select name="bulan" class="border-0 bg-transparent text-xs font-bold text-slate-300 focus:ring-0 cursor-pointer py-2 pl-0 pr-6 appearance-none">
                             @foreach(range(1, 12) as $m)
                                 <option value="{{ sprintf('%02d', $m) }}" {{ $bulan == sprintf('%02d', $m) ? 'selected' : '' }}>
                                     {{ Carbon\Carbon::create()->month((int)$m)->translatedFormat('F') }}
@@ -26,7 +26,7 @@
                         </select>
                     </div>
                     <div class="px-3">
-                        <select name="tahun" class="border-0 bg-transparent text-xs font-bold text-gray-700 focus:ring-0 cursor-pointer py-2 pl-0 pr-6 appearance-none">
+                        <select name="tahun" class="border-0 bg-transparent text-xs font-bold text-slate-300 focus:ring-0 cursor-pointer py-2 pl-0 pr-6 appearance-none">
                             @foreach(range(date('Y')-2, date('Y')) as $y)
                                 <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>{{ $y }}</option>
                             @endforeach
@@ -42,31 +42,31 @@
 
     @if(session('success'))
     <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)" 
-         class="max-w-7xl mx-auto mb-6 p-3 bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-xl flex items-center shadow-sm animate-fade-in">
+         class="max-w-7xl mx-auto mb-6 p-3 bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-xl flex items-center shadow-sm animate-fade-in px-2 sm:px-6 lg:px-8">
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
         <span class="text-xs font-bold uppercase tracking-tight">{{ session('success') }}</span>
     </div>
     @endif
 
     <!-- Modern Data Grid Table -->
-    <div class="max-w-7xl mx-auto">
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden ring-1 ring-gray-100">
+    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+        <div class="bg-slate-900 border border-white/5 rounded-2xl shadow-sm border border-white/10 overflow-hidden ring-1 ring-gray-100">
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-100">
+                <table class="min-w-full divide-y divide-white/5">
                     <thead>
-                        <tr class="bg-gray-50/80">
-                            <th class="px-4 py-4 text-center text-[10px] font-bold text-gray-400 uppercase tracking-widest border-r border-gray-100 w-12">#</th>
-                            <th class="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest border-r border-gray-100">Tanggal Operasional</th>
-                            <th class="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest border-r border-gray-100 w-40">Jenis BBM</th>
-                            <th class="px-4 py-4 text-center text-[10px] font-bold text-indigo-600 uppercase tracking-widest border-r border-gray-100 bg-indigo-50/30">Meter Awal</th>
-                            <th class="px-4 py-4 text-center text-[10px] font-bold text-indigo-600 uppercase tracking-widest border-r border-gray-100 bg-indigo-50/30">Meter Akhir</th>
-                            <th class="px-4 py-4 text-center text-[10px] font-bold text-indigo-700 uppercase tracking-widest border-r border-gray-100 bg-indigo-50/50">Output Fisik</th>
-                            <th class="px-4 py-4 text-center text-[10px] font-bold text-gray-400 uppercase tracking-widest border-r border-gray-100 bg-gray-50/80">Log Aplikasi</th>
-                            <th class="px-6 py-4 text-center text-[10px] font-bold text-gray-400 uppercase tracking-widest border-r border-gray-100">Selisih (Audit)</th>
-                            <th class="px-4 py-4 text-center text-[10px] font-bold text-indigo-600 uppercase tracking-widest bg-indigo-50/20">Keterangan</th>
+                        <tr class="bg-slate-800/50/80">
+                            <th class="px-4 py-4 text-center text-[10px] font-bold text-gray-400 uppercase tracking-widest border-r border-white/5 w-12">#</th>
+                            <th class="px-4 py-3 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest border-r border-white/5">Tanggal Operasional</th>
+                            <th class="px-4 py-3 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest border-r border-white/5 w-40">Jenis BBM</th>
+                            <th class="px-4 py-4 text-center text-[10px] font-bold text-indigo-600 uppercase tracking-widest border-r border-white/5 bg-indigo-500/20/30">Meter Awal</th>
+                            <th class="px-4 py-4 text-center text-[10px] font-bold text-indigo-600 uppercase tracking-widest border-r border-white/5 bg-indigo-500/20/30">Meter Akhir</th>
+                            <th class="px-4 py-4 text-center text-[10px] font-bold text-indigo-700 uppercase tracking-widest border-r border-white/5 bg-indigo-500/20/50">Output Fisik</th>
+                            <th class="px-4 py-4 text-center text-[10px] font-bold text-gray-400 uppercase tracking-widest border-r border-white/5 bg-slate-800/50/80">Log Aplikasi</th>
+                            <th class="px-4 py-3 text-center text-[10px] font-bold text-gray-400 uppercase tracking-widest border-r border-white/5">Selisih (Audit)</th>
+                            <th class="px-4 py-4 text-center text-[10px] font-bold text-indigo-600 uppercase tracking-widest bg-indigo-500/20/20">Keterangan</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100">
+                    <tbody class="divide-y divide-white/5">
                         @php 
                             $i = 1;
                             $totalPertamaxManual = 0;
@@ -96,16 +96,16 @@
                                         $totalDexApp += $appTotal;
                                     }
                                     
-                                    $typeStyles = $type === 'PERTAMAX' ? 'text-emerald-600 bg-emerald-50 ring-emerald-100' : 'text-indigo-600 bg-indigo-50 ring-indigo-100';
+                                    $typeStyles = $type === 'PERTAMAX' ? 'text-emerald-600 bg-emerald-50 ring-emerald-100' : 'text-indigo-600 bg-indigo-500/20 ring-indigo-100';
                                 @endphp
-                                <tr class="hover:bg-gray-50/50 transition-colors">
+                                <tr class="hover:bg-slate-800/50 transition-colors">
                                     @if($loop->first)
-                                    <td rowspan="2" class="px-4 py-4 whitespace-nowrap text-[11px] font-bold text-center text-gray-300 border-r border-gray-100 align-middle">
+                                    <td rowspan="2" class="px-4 py-4 whitespace-nowrap text-[11px] font-bold text-center text-gray-300 border-r border-white/5 align-middle">
                                         {{ $i++ }}
                                     </td>
-                                    <td rowspan="2" class="px-6 py-4 whitespace-nowrap border-r border-gray-100 align-middle">
+                                    <td rowspan="2" class="px-4 py-3 whitespace-nowrap border-r border-white/5 align-middle">
                                         <div class="flex items-baseline gap-2">
-                                            <span class="text-sm font-bold text-gray-900 tracking-tight">{{ $carbonDate->format('d') }}</span>
+                                            <span class="text-sm font-bold text-white tracking-tight">{{ $carbonDate->format('d') }}</span>
                                             <span class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">{{ $carbonDate->translatedFormat('M Y') }}</span>
                                             <span class="ml-auto text-[9px] font-black uppercase tracking-tighter {{ $isWeekend ? 'text-rose-500' : 'text-gray-400' }}">
                                                 {{ $carbonDate->translatedFormat('D') }}
@@ -113,7 +113,7 @@
                                         </div>
                                     </td>
                                     @endif
-                                    <td class="px-6 py-3 whitespace-nowrap border-r border-gray-100">
+                                    <td class="px-4 py-3 whitespace-nowrap border-r border-white/5">
                                         <div class="inline-flex items-center px-2 py-0.5 rounded-md ring-1 ring-inset {{ $typeStyles }} text-[9px] font-black tracking-wide uppercase">
                                             {{ $type }}
                                         </div>
@@ -126,31 +126,31 @@
                                         <input type="hidden" name="jenis_bbm" value="{{ $type }}">
                                     </form>
 
-                                    <td class="px-2 py-2 border-r border-gray-100 bg-indigo-50/10">
-                                        <input type="number" step="0.01" name="meter_awal" form="{{ $formId }}" value="{{ $manual !== null && $manual->meter_awal != 0 ? $manual->meter_awal : '' }}" 
-                                            class="w-full text-center text-xs font-bold text-gray-700 bg-white/50 border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 p-1.5 transition-all outline-none h-8"
+                                    <td class="px-2 py-2 border-r border-white/5 bg-indigo-500/20/10">
+                                        <input type="number" step="1" name="meter_awal" form="{{ $formId }}" value="{{ $manual !== null && $manual->meter_awal != 0 ? $manual->meter_awal : '' }}" 
+                                            class="w-full text-center text-xs font-bold text-slate-300 bg-slate-900 border border-white/5/50 border-white/10 rounded-lg focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 p-1.5 transition-all outline-none h-8"
                                             onchange="this.form.submit()">
                                     </td>
-                                    <td class="px-2 py-2 border-r border-gray-100 bg-indigo-50/10">
-                                        <input type="number" step="0.01" name="meter_akhir" form="{{ $formId }}" value="{{ $manual !== null && $manual->meter_akhir != 0 ? $manual->meter_akhir : '' }}" 
-                                            class="w-full text-center text-xs font-bold text-gray-700 bg-white/50 border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 p-1.5 transition-all outline-none h-8"
+                                    <td class="px-2 py-2 border-r border-white/5 bg-indigo-500/20/10">
+                                        <input type="number" step="1" name="meter_akhir" form="{{ $formId }}" value="{{ $manual !== null && $manual->meter_akhir != 0 ? $manual->meter_akhir : '' }}" 
+                                            class="w-full text-center text-xs font-bold text-slate-300 bg-slate-900 border border-white/5/50 border-white/10 rounded-lg focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 p-1.5 transition-all outline-none h-8"
                                             onchange="this.form.submit()">
                                     </td>
 
-                                    <td class="px-4 py-3 whitespace-nowrap text-center bg-indigo-50/30 border-r border-gray-100 align-middle">
+                                    <td class="px-4 py-3 whitespace-nowrap text-center bg-indigo-500/20/30 border-r border-white/5 align-middle">
                                         <span class="text-xs font-black text-indigo-700">
                                             {{ $manual !== null && (float)$manualTotal != 0 ? number_format($manualTotal, 0, ',', '.') : '' }}
                                         </span>
                                     </td>
                                     
-                                    <td class="px-4 py-3 whitespace-nowrap text-center border-r border-gray-100 align-middle">
-                                        <span class="text-xs font-bold text-gray-700">
+                                    <td class="px-4 py-3 whitespace-nowrap text-center border-r border-white/5 align-middle">
+                                        <span class="text-xs font-bold text-slate-300">
                                             @php $hasAppData = $appData->get($date)?->where('bbm_alias', $type)->isNotEmpty(); @endphp
                                             {{ $hasAppData && (float)$appTotal != 0 ? number_format($appTotal, 0, ',', '.') : '' }}
                                         </span>
                                     </td>
                                     
-                                    <td class="px-6 py-3 whitespace-nowrap text-center align-middle border-r border-gray-100">
+                                    <td class="px-4 py-3 whitespace-nowrap text-center align-middle border-r border-white/5">
                                         <div class="inline-flex items-center gap-1.5">
                                             <div class="w-1.5 h-1.5 rounded-full {{ ($manual !== null || $hasAppData) && $diff != 0 ? 'bg-rose-500' : '' }}"></div>
                                             <span class="text-xs font-black tracking-tight {{ $diff != 0 ? 'text-rose-600' : 'text-emerald-600' }}">
@@ -159,39 +159,39 @@
                                         </div>
                                     </td>
 
-                                    <td class="px-2 py-2 border-r border-gray-100 bg-gray-50/10">
+                                    <td class="px-2 py-2 border-r border-white/5 bg-slate-800/50/10">
                                         <textarea name="keterangan" form="{{ $formId }}" 
-                                            class="w-full text-[10px] font-medium text-gray-600 bg-white/50 border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 p-1.5 transition-all outline-none resize-none h-8"
+                                            class="w-full text-[10px] font-medium text-slate-400 bg-slate-900 border border-white/5/50 border-white/10 rounded-lg focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 p-1.5 transition-all outline-none resize-none h-8"
                                             placeholder="..." onchange="this.form.submit()">{{ $manual !== null ? $manual->keterangan : '' }}</textarea>
                                     </td>
                                 </tr>
                             @endforeach
                         @endforeach
                     </tbody>
-                    <tfoot class="bg-gray-50/50 uppercase tracking-widest">
-                        <tr class="divide-x divide-gray-100 font-bold">
-                            <td colspan="5" class="px-6 py-4 text-right text-[10px] text-gray-400 border-b border-gray-100 italic">Total Audit: <span class="text-emerald-600 not-italic">PERTAMAX</span></td>
-                            <td class="px-4 py-4 text-center text-xs text-indigo-700 border-b border-gray-100">{{ $totalPertamaxManual != 0 ? number_format($totalPertamaxManual, 0, ',', '.') : '' }}</td>
-                            <td class="px-4 py-4 text-center text-xs text-gray-700 border-b border-gray-100">{{ $totalPertamaxApp != 0 ? number_format($totalPertamaxApp, 0, ',', '.') : '' }}</td>
-                            <td class="px-6 py-4 text-center align-middle border-b border-gray-100">
+                    <tfoot class="bg-slate-800/50 uppercase tracking-widest">
+                        <tr class="divide-x divide-white/5 font-bold">
+                            <td colspan="5" class="px-4 py-3 text-right text-[10px] text-gray-400 border-b border-white/5 italic">Total Audit: <span class="text-emerald-600 not-italic">PERTAMAX</span></td>
+                            <td class="px-4 py-4 text-center text-xs text-indigo-700 border-b border-white/5">{{ $totalPertamaxManual != 0 ? number_format($totalPertamaxManual, 0, ',', '.') : '' }}</td>
+                            <td class="px-4 py-4 text-center text-xs text-slate-300 border-b border-white/5">{{ $totalPertamaxApp != 0 ? number_format($totalPertamaxApp, 0, ',', '.') : '' }}</td>
+                            <td class="px-4 py-3 text-center align-middle border-b border-white/5">
                                 @php $pDiff = $totalPertamaxApp - $totalPertamaxManual; @endphp
                                 <span class="text-xs font-black {{ $pDiff != 0 ? 'text-rose-600' : 'text-emerald-600' }}">
                                     {{ $pDiff != 0 ? number_format($pDiff, 0, ',', '.') : '' }}
                                 </span>
                             </td>
-                            <td class="bg-white border-b border-gray-100"></td>
+                            <td class="bg-slate-900 border border-white/5 border-b border-white/5"></td>
                         </tr>
-                        <tr class="divide-x divide-gray-100 font-bold">
-                            <td colspan="5" class="px-6 py-4 text-right text-[10px] text-gray-400 italic">Total Audit: <span class="text-indigo-600 not-italic">PERTAMINA DEX</span></td>
+                        <tr class="divide-x divide-white/5 font-bold">
+                            <td colspan="5" class="px-4 py-3 text-right text-[10px] text-gray-400 italic">Total Audit: <span class="text-indigo-600 not-italic">PERTAMINA DEX</span></td>
                             <td class="px-4 py-4 text-center text-xs text-indigo-700">{{ $totalDexManual != 0 ? number_format($totalDexManual, 0, ',', '.') : '' }}</td>
-                            <td class="px-4 py-4 text-center text-xs text-gray-700">{{ $totalDexApp != 0 ? number_format($totalDexApp, 0, ',', '.') : '' }}</td>
-                            <td class="px-6 py-4 text-center align-middle">
+                            <td class="px-4 py-4 text-center text-xs text-slate-300">{{ $totalDexApp != 0 ? number_format($totalDexApp, 0, ',', '.') : '' }}</td>
+                            <td class="px-4 py-3 text-center align-middle">
                                 @php $dDiff = $totalDexApp - $totalDexManual; @endphp
                                 <span class="text-xs font-black {{ $dDiff != 0 ? 'text-rose-600' : 'text-emerald-600' }}">
                                     {{ $dDiff != 0 ? number_format($dDiff, 0, ',', '.') : '' }}
                                 </span>
                             </td>
-                            <td class="bg-white"></td>
+                            <td class="bg-slate-900 border border-white/5"></td>
                         </tr>
                     </tfoot>
                 </table>
@@ -209,7 +209,7 @@
                 <span>Terdapat Selisih Audit</span>
             </div>
             <div class="flex items-center gap-2">
-                <div class="w-2.5 h-2.5 rounded-lg bg-indigo-50/50 ring-1 ring-inset ring-indigo-200"></div>
+                <div class="w-2.5 h-2.5 rounded-lg bg-indigo-500/20/50 ring-1 ring-inset ring-indigo-200"></div>
                 <span>Bidang Audit Pompa Fisik</span>
             </div>
         </div>

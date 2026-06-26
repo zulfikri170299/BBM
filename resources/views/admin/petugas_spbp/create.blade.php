@@ -1,24 +1,24 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center space-x-4">
-            <a href="{{ route('admin.petugas-spbp.index') }}" class="text-gray-500 hover:text-gray-700">
+            <a href="{{ route('admin.petugas-spbp.index') }}" class="text-slate-400 hover:text-slate-300">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
             </a>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-slate-200 leading-tight">
                 {{ __('Tambah Petugas SPBP') }}
             </h2>
         </div>
     </x-slot>
 
-    <div class="py-12 bg-slate-50/50 min-h-screen">
+    <div class="py-12 bg-slate-800/50 min-h-screen px-2 sm:px-6 lg:px-8">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-2xl border border-slate-200">
+            <div class="bg-slate-900 border border-white/5 overflow-hidden shadow-sm sm:rounded-2xl border border-white/10">
                 <div class="p-8">
                     <div class="mb-8">
-                        <h3 class="text-lg font-bold text-slate-800">Informasi Petugas</h3>
-                        <p class="text-sm text-slate-500">Silakan lengkapi data petugas SPBP yang akan ditampilkan pada laporan PDF.</p>
+                        <h3 class="text-lg font-bold text-slate-200">Informasi Petugas</h3>
+                        <p class="text-xs text-slate-400">Silakan lengkapi data petugas SPBP yang akan ditampilkan pada laporan PDF.</p>
                     </div>
 
                     <form action="{{ route('admin.petugas-spbp.store') }}" method="POST">
@@ -27,7 +27,7 @@
                         <div class="space-y-6">
                             <!-- Nama -->
                             <div class="space-y-1.5">
-                                <label for="nama" class="block text-sm font-bold text-slate-700 ml-1">Nama Lengkap</label>
+                                <label for="nama" class="block text-sm font-bold text-slate-300 ml-1">Nama Lengkap</label>
                                 <div class="relative group">
                                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-indigo-500 transition-colors">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -35,7 +35,7 @@
                                         </svg>
                                     </div>
                                     <input type="text" name="nama" id="nama" value="{{ old('nama') }}" required
-                                        class="pl-11 block w-full rounded-xl border-slate-200 bg-slate-50/50 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all duration-200 sm:text-sm py-2.5"
+                                        class="pl-11 block w-full rounded-xl border-white/10 bg-slate-800/50 focus:bg-slate-900 border border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all duration-200 sm:text-sm py-2.5"
                                         placeholder="ZULFIKRI, S.Kom.">
                                 </div>
                                 @error('nama')
@@ -48,7 +48,7 @@
 
                             <!-- Pangkat/NRP -->
                             <div class="space-y-1.5">
-                                <label for="pangkat_nrp" class="block text-sm font-bold text-slate-700 ml-1">Pangkat / NRP / NIP</label>
+                                <label for="pangkat_nrp" class="block text-sm font-bold text-slate-300 ml-1">Pangkat / NRP / NIP</label>
                                 <div class="relative group">
                                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-indigo-500 transition-colors">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,7 +56,7 @@
                                         </svg>
                                     </div>
                                     <input type="text" name="pangkat_nrp" id="pangkat_nrp" value="{{ old('pangkat_nrp') }}" required
-                                        class="pl-11 block w-full rounded-xl border-slate-200 bg-slate-50/50 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all duration-200 sm:text-sm py-2.5"
+                                        class="pl-11 block w-full rounded-xl border-white/10 bg-slate-800/50 focus:bg-slate-900 border border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all duration-200 sm:text-sm py-2.5"
                                         placeholder="BRIPTU NRP 99101131">
                                 </div>
                                 @error('pangkat_nrp')
@@ -69,7 +69,7 @@
 
                             <!-- Urutan -->
                             <div class="space-y-1.5">
-                                <label for="urutan" class="block text-sm font-bold text-slate-700 ml-1">Urutan Tampilan</label>
+                                <label for="urutan" class="block text-sm font-bold text-slate-300 ml-1">Urutan Tampilan</label>
                                 <div class="relative group">
                                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-indigo-500 transition-colors">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,7 +77,7 @@
                                         </svg>
                                     </div>
                                     <input type="number" name="urutan" id="urutan" value="{{ old('urutan', 1) }}" required min="1"
-                                        class="pl-11 block w-full rounded-xl border-slate-200 bg-slate-50/50 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all duration-200 sm:text-sm py-2.5">
+                                        class="pl-11 block w-full rounded-xl border-white/10 bg-slate-800/50 focus:bg-slate-900 border border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all duration-200 sm:text-sm py-2.5">
                                 </div>
                                 <p class="text-[11px] text-slate-400 ml-1 flex items-center gap-1">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -91,12 +91,12 @@
                                 @enderror
                             </div>
 
-                            <div class="flex items-center justify-end gap-3 pt-6 border-t border-slate-100">
+                            <div class="flex items-center justify-end gap-3 pt-6 border-t border-white/5">
                                 <a href="{{ route('admin.petugas-spbp.index') }}" 
-                                    class="px-6 py-2.5 text-sm font-bold text-slate-600 hover:text-slate-800 transition-colors">
+                                    class="px-6 py-2.5 text-sm font-bold text-slate-400 hover:text-slate-200 transition-colors">
                                     Batal
                                 </a>
-                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-indigo-200 transition-all active:scale-95 flex items-center gap-2">
+                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-indigo-500/30 transition-all active:scale-95 flex items-center gap-2">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
                                     </svg>

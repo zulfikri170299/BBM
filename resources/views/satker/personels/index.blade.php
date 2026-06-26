@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-slate-200 leading-tight">
             {{ __('Manage Personel') }}
         </h2>
     </x-slot>
@@ -141,10 +141,10 @@
         </script>
     @endpush
 
-    <div class="py-12">
+    <div class="py-4 sm:py-12 px-2 sm:px-6 lg:px-8">
         <div class="max-w-[95rem] mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+            <div class="bg-slate-900 border border-white/5 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-white">
 
 
 
@@ -165,7 +165,7 @@
                             </button>
 
                             <a href="{{ route('satker.personels.export') }}"
-                                class="inline-flex items-center justify-center w-10 h-10 bg-indigo-600 text-white rounded-xl shadow-lg shadow-indigo-500/30 hover:bg-indigo-700 transition-all duration-200 hover:-translate-y-0.5 group relative"
+                        class="flex-1 lg:flex-none inline-flex items-center justify-center w-10 h-10 bg-indigo-600 text-white rounded-xl shadow-lg shadow-indigo-500/30 hover:bg-indigo-700 transition-all duration-200 hover:-translate-y-0.5 group relative"
                                 title="Export Excel">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -203,7 +203,7 @@
                                 </span>
                                 <input type="text" name="search" value="{{ request('search') }}"
                                     placeholder="Cari Nama / NRP..."
-                                    class="pl-10 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full transition-shadow bg-slate-50">
+                                    class="pl-10 pr-4 py-2.5 border border-white/10 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full transition-shadow bg-slate-800/50">
                             </div>
                             <button type="submit"
                                 class="inline-flex items-center justify-center w-10 h-10 bg-blue-600 text-white rounded-xl shadow-lg shadow-blue-500/30 hover:bg-blue-700 transition-all duration-200 hover:-translate-y-0.5 group relative">
@@ -291,10 +291,10 @@
                             <div id="bulkDeleteInputs"></div>
                         </form>
 
-                        <table class="min-w-full divide-y divide-slate-200">
+                        <table class="min-w-full divide-y divide-white/10">
                             <thead>
-                                <tr class="bg-slate-50/50 border-b border-slate-100">
-                                    <th colspan="6" class="px-6 py-3">
+                                <tr class="bg-slate-800/50 border-b border-white/5">
+                                    <th colspan="6" class="px-4 py-3">
                                         <div class="flex items-center justify-between">
                                             <form action="{{ route('satker.personels.index') }}" method="GET"
                                                 class="flex items-center">
@@ -309,40 +309,40 @@
                                         </div>
                                     </th>
                                 </tr>
-                                <tr class="bg-slate-50/50">
+                                <tr class="bg-slate-800/50">
                                     <th class="px-4 py-4 text-center w-10">
                                         <input type="checkbox" id="checkAll"
-                                            class="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500 cursor-pointer">
+                                            class="w-4 h-4 text-indigo-600 border-white/20 rounded focus:ring-indigo-500 cursor-pointer">
                                     </th>
                                     <th
-                                        class="px-6 py-4 text-center text-[10px] font-bold text-slate-500 uppercase tracking-widest w-12">
+                                        class="px-4 py-3 text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest w-12">
                                         No</th>
                                     <th
-                                        class="px-6 py-4 text-left text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                                        class="px-4 py-3 text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                                         Identitas Personel</th>
                                     <th
-                                        class="px-6 py-4 text-left text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                                        class="px-4 py-3 text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                                         Jenis BBM</th>
                                     <th
-                                        class="px-6 py-4 text-left text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                                        class="px-4 py-3 text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                                         Saldo</th>
                                     <th
-                                        class="px-6 py-4 text-right text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                                        class="px-4 py-3 text-right text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                                         Actions</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-slate-100">
+                            <tbody class="bg-slate-900 border border-white/5 divide-y divide-white/5">
                                 @foreach($personels as $personel)
-                                    <tr class="hover:bg-slate-50/80 transition-colors group">
+                                    <tr class="hover:bg-slate-800/50/80 transition-colors group">
                                         <td class="px-4 py-4 text-center">
                                             <input type="checkbox" name="item_ids[]" value="{{ $personel->id }}"
-                                                class="item-checkbox w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500 cursor-pointer">
+                                                class="item-checkbox w-4 h-4 text-indigo-600 border-white/20 rounded focus:ring-indigo-500 cursor-pointer">
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                        <td class="px-4 py-3 whitespace-nowrap text-center">
                                             <span
                                                 class="text-xs font-bold text-slate-400">{{ $loop->iteration + ($personels->currentPage() - 1) * $personels->perPage() }}</span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="px-4 py-3 whitespace-nowrap">
                                             <div class="flex items-center gap-3">
                                                 <div
                                                     class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-sm ring-2 ring-white">
@@ -350,16 +350,16 @@
                                                 </div>
                                                 <div>
                                                     <p
-                                                        class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                                                        class="text-sm font-bold text-white group-hover:text-indigo-600 transition-colors">
                                                         {{ $personel->nama }}
                                                     </p>
-                                                    <p class="text-[11px] font-medium text-slate-500 mt-0.5">NRP:
+                                                    <p class="text-[11px] font-medium text-slate-400 mt-0.5">NRP:
                                                         {{ $personel->nrp }}
                                                     </p>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="px-4 py-3 whitespace-nowrap">
                                             @php
                                                 $bbmColors = [
                                                     'Pertalite' => 'bg-emerald-50 text-emerald-600 border-emerald-100',
@@ -367,21 +367,21 @@
                                                     'Solar' => 'bg-orange-50 text-orange-600 border-orange-100',
                                                     'Pertamina Dex' => 'bg-rose-50 text-rose-600 border-rose-100',
                                                 ];
-                                                $colorClass = $bbmColors[$personel->jenis_bbm] ?? 'bg-slate-50 text-slate-600 border-slate-100';
+                                                $colorClass = $bbmColors[$personel->jenis_bbm] ?? 'bg-slate-800/50 text-slate-400 border-white/5';
                                             @endphp
                                             <span
                                                 class="inline-flex items-center w-fit px-2.5 py-1 rounded-md text-[10px] font-bold border {{ $colorClass }}">
                                                 {{ strtoupper($personel->jenis_bbm ?? '-') }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="px-4 py-3 whitespace-nowrap">
                                             <div class="flex items-baseline gap-1">
                                                 <span
-                                                    class="text-sm font-black text-slate-900">{{ number_format($personel->saldo, 0, ',', '.') }}</span>
+                                                    class="text-sm font-black text-white">{{ number_format($personel->saldo, 0, ',', '.') }}</span>
                                                 <span class="text-[10px] font-bold text-slate-400 uppercase">Liter</span>
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                                        <td class="px-4 py-3 whitespace-nowrap text-right text-sm">
                                             <div class="flex items-center justify-end gap-2">
                                                 <a href="{{ route('satker.personels.print', $personel) }}"
 
@@ -485,20 +485,20 @@
                 x-transition:leave="ease-in duration-200"
                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle w-full"
+                class="inline-block align-bottom bg-slate-900 border border-white/5 rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle w-full"
                 :class="step === 2 ? 'max-w-5xl' : 'max-w-xl'">
 
                 <!-- Modal Content -->
-                <div class="relative bg-white font-sans">
+                <div class="relative bg-slate-900 border border-white/5 font-sans">
                     <!-- Header -->
                     <div
-                        class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between bg-white relative overflow-hidden">
+                        class="px-5 py-3.5 border-b border-white/5 flex items-center justify-between bg-slate-900 border border-white/5 relative overflow-hidden">
                         <div
                             class="absolute top-0 left-0 w-20 h-20 bg-indigo-50/50 rounded-full -translate-x-10 -translate-y-10 blur-2xl">
                         </div>
                         <div class="relative flex items-center gap-3">
                             <div
-                                class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-violet-700 flex items-center justify-center text-white shadow-lg shadow-indigo-100 shrink-0 transform hover:rotate-6 transition-transform duration-300">
+                                class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-violet-700 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20 shrink-0 transform hover:rotate-6 transition-transform duration-300">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 4.354l1.1 3.383h3.558l-2.877 2.09 1.1 3.383-2.877-2.09-2.877 2.09 1.1-3.383-2.877-2.09h3.558l1.1-3.383z" />
@@ -507,7 +507,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="text-lg font-black text-slate-900 tracking-tight">Import Personel</h3>
+                                <h3 class="text-lg font-black text-white tracking-tight">Import Personel</h3>
                                 <div class="flex items-center gap-1.5 mt-0.5">
                                     <span class="w-1 h-1 rounded-full bg-emerald-500 animate-pulse"></span>
                                     <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Sistem
@@ -517,7 +517,7 @@
                             </div>
                         </div>
                         <button @click="closeModal()"
-                            class="relative w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-all duration-300 group">
+                            class="relative w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all duration-300 group">
                             <svg class="w-5 h-5 transform group-hover:rotate-90 transition-transform duration-300"
                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -527,13 +527,13 @@
                     </div>
 
                     <!-- Stepper -->
-                    <div class="px-6 py-4 bg-slate-50/30 border-b border-slate-50 relative">
+                    <div class="px-4 py-3 bg-slate-800/50/30 border-b border-slate-50 relative">
                         <div class="flex items-center justify-between max-w-md mx-auto">
                             <template x-for="(s, i) in ['Upload', 'Preview', 'Selesai']">
                                 <div class="flex items-center flex-1 last:flex-none">
                                     <div class="flex flex-col items-center gap-1.5 group cursor-default">
                                         <div class="w-8 h-8 rounded-xl flex items-center justify-center text-[10px] font-black transition-all duration-500 relative"
-                                            :class="step > i+1 ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-100' : (step === i+1 ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-100 ring-4 ring-indigo-50 scale-110' : 'bg-white border border-slate-200 text-slate-400')">
+                                            :class="step > i+1 ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : (step === i+1 ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-500/20 ring-4 ring-indigo-50 scale-110' : 'bg-slate-900 border border-white/5 border border-white/10 text-slate-400')">
                                             <template x-if="step > i+1">
                                                 <svg class="w-4 h-4 animate-bounce-subtle" fill="none"
                                                     stroke="currentColor" viewBox="0 0 24 24">
@@ -552,12 +552,12 @@
                                         </div>
                                         <span
                                             class="text-[9px] font-black uppercase tracking-[0.15em] transition-colors duration-300"
-                                            :class="step >= i+1 ? 'text-slate-900' : 'text-slate-400'"
+                                            :class="step >= i+1 ? 'text-white' : 'text-slate-400'"
                                             x-text="s"></span>
                                     </div>
                                     <template x-if="i < 2">
                                         <div
-                                            class="flex-1 h-0.5 mx-3 rounded-full transition-colors duration-500 overflow-hidden bg-slate-100">
+                                            class="flex-1 h-0.5 mx-3 rounded-full transition-colors duration-500 overflow-hidden bg-slate-800">
                                             <div class="h-full bg-emerald-500 transition-all duration-700"
                                                 :style="`width: ${step > i+1 ? '100' : '0'}%`"></div>
                                         </div>
@@ -573,21 +573,21 @@
                         x-transition:enter-end="opacity-100 translate-y-0" class="p-6">
                         <div class="mb-6 group/dropzone">
                             <label
-                                class="relative flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-slate-200 rounded-[2rem] bg-slate-50/50 hover:bg-white hover:border-indigo-400 hover:shadow-xl hover:shadow-indigo-100/50 transition-all duration-700 cursor-pointer overflow-hidden group">
+                                class="relative flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-white/10 rounded-[2rem] bg-slate-800/50 hover:bg-slate-900 border border-white/5 hover:border-indigo-400 hover:shadow-xl hover:shadow-indigo-500/20 transition-all duration-700 cursor-pointer overflow-hidden group">
                                 <div
                                     class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
                                 </div>
                                 <div
                                     class="relative flex flex-col items-center justify-center py-6 transition-all duration-700 group-hover:scale-105">
                                     <div
-                                        class="w-14 h-14 mb-4 rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-700 shadow-xl shadow-indigo-100 flex items-center justify-center text-white ring-4 ring-indigo-50 group-hover:rotate-[8deg] transition-all duration-500">
+                                        class="w-14 h-14 mb-4 rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-700 shadow-xl shadow-indigo-500/20 flex items-center justify-center text-white ring-4 ring-indigo-50 group-hover:rotate-[8deg] transition-all duration-500">
                                         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
                                             </path>
                                         </svg>
                                     </div>
-                                    <h4 class="text-base font-black text-slate-900 mb-1">Lepaskan berkas di sini</h4>
+                                    <h4 class="text-base font-black text-white mb-1">Lepaskan berkas di sini</h4>
                                     <p
                                         class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] group-hover:text-indigo-500 transition-colors">
                                         Atau klik untuk memilih file Excel/CSV</p>
@@ -595,9 +595,9 @@
                                 <input type="file" class="hidden" @change="handleFileUpload" accept=".xlsx,.xls,.csv" />
 
                                 <div x-show="uploading"
-                                    class="absolute inset-0 bg-white/98 backdrop-blur-xl flex flex-col items-center justify-center p-6 z-20">
+                                    class="absolute inset-0 bg-slate-900 border border-white/5/98 backdrop-blur-xl flex flex-col items-center justify-center p-6 z-20">
                                     <div
-                                        class="w-48 h-1.5 bg-slate-100 rounded-full overflow-hidden mb-4 ring-2 ring-indigo-50">
+                                        class="w-48 h-1.5 bg-slate-800 rounded-full overflow-hidden mb-4 ring-2 ring-indigo-50">
                                         <div class="h-full bg-gradient-to-r from-indigo-600 to-violet-600 transition-all duration-500"
                                             :style="`width: ${uploadProgress}%`"></div>
                                     </div>
@@ -610,7 +610,7 @@
 
                         <div class="flex flex-col sm:flex-row gap-4">
                             <div
-                                class="flex-1 p-5 rounded-[1.5rem] bg-gradient-to-br from-white to-slate-50 border border-slate-100 shadow-sm transition-all hover:shadow-md">
+                                class="flex-1 p-5 rounded-[1.5rem] bg-gradient-to-br from-white to-slate-50 border border-white/5 shadow-sm transition-all hover:shadow-md">
                                 <div class="flex items-start gap-4">
                                     <div
                                         class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
@@ -622,10 +622,10 @@
                                     </div>
                                     <div class="min-w-0">
                                         <h4
-                                            class="text-[11px] font-black text-slate-800 uppercase tracking-widest mb-1">
+                                            class="text-[11px] font-black text-slate-200 uppercase tracking-widest mb-1">
                                             Butuh
                                             Bantuan?</h4>
-                                        <p class="text-[10px] font-medium text-slate-500 leading-relaxed mb-3">Gunakan
+                                        <p class="text-[10px] font-medium text-slate-400 leading-relaxed mb-3">Gunakan
                                             template
                                             resmi untuk menghindari kesalahan format.</p>
                                         <a href="{{ route('satker.personels.download-template') }}"
@@ -640,7 +640,7 @@
                                 </div>
                             </div>
                             <div
-                                class="flex-1 p-5 rounded-[1.5rem] bg-gradient-to-br from-white to-slate-50 border border-slate-100 shadow-sm transition-all hover:shadow-md">
+                                class="flex-1 p-5 rounded-[1.5rem] bg-gradient-to-br from-white to-slate-50 border border-white/5 shadow-sm transition-all hover:shadow-md">
                                 <div class="flex items-start gap-4">
                                     <div
                                         class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
@@ -651,14 +651,14 @@
                                     </div>
                                     <div>
                                         <h4
-                                            class="text-[11px] font-black text-slate-800 uppercase tracking-widest mb-2">
+                                            class="text-[11px] font-black text-slate-200 uppercase tracking-widest mb-2">
                                             Kolom
                                             Wajib</h4>
                                         <div class="flex flex-wrap gap-x-3 gap-y-1">
                                             <template x-for="col in ['NAMA', 'NRP']">
                                                 <div class="flex items-center gap-1">
                                                     <div class="w-1 h-1 rounded-full bg-indigo-500"></div>
-                                                    <span class="text-[9px] font-black text-slate-500"
+                                                    <span class="text-[9px] font-black text-slate-400"
                                                         x-text="col"></span>
                                                 </div>
                                             </template>
@@ -673,11 +673,11 @@
                     <div x-show="step === 2" x-transition:enter="transition ease-out duration-500"
                         x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                         class="p-0 overflow-hidden">
-                        <div class="p-6 pb-3 grid grid-cols-3 gap-4 bg-white shrink-0">
+                        <div class="p-6 pb-3 grid grid-cols-3 gap-4 bg-slate-900 border border-white/5 shrink-0">
                             <div
-                                class="group p-4 rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-800 text-white shadow-lg shadow-indigo-100 relative overflow-hidden transform hover:-translate-y-1 transition-all duration-300">
+                                class="group p-4 rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-800 text-white shadow-lg shadow-indigo-500/20 relative overflow-hidden transform hover:-translate-y-1 transition-all duration-300">
                                 <div
-                                    class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    class="absolute inset-0 bg-slate-900 border border-white/5/10 opacity-0 group-hover:opacity-100 transition-opacity">
                                 </div>
                                 <div class="relative z-10">
                                     <p
@@ -721,7 +721,7 @@
 
                         <!-- Progress Bar for Final Confirmation -->
                         <div x-show="importing" class="px-8 mb-4">
-                            <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                            <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
                                 <div class="h-full bg-emerald-500 transition-all duration-300"
                                     :style="`width: ${importProgress}%`"></div>
                             </div>
@@ -731,40 +731,40 @@
                         </div>
 
                         <div
-                            class="px-7 py-3 bg-slate-50/50 border-y border-slate-100 flex items-center justify-between">
-                            <h4 class="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em]">Analisis Data
+                            class="px-7 py-3 bg-slate-800/50 border-y border-white/5 flex items-center justify-between">
+                            <h4 class="text-[10px] font-black text-white uppercase tracking-[0.2em]">Analisis Data
                             </h4>
                             <div class="flex items-center gap-4">
                                 <div class="flex items-center gap-1.5">
                                     <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
-                                    <span class="text-[9px] font-black text-slate-500 uppercase">Baru</span>
+                                    <span class="text-[9px] font-black text-slate-400 uppercase">Baru</span>
                                 </div>
                                 <div class="flex items-center gap-1.5">
                                     <div class="w-2 h-2 rounded-full bg-amber-500"></div>
-                                    <span class="text-[9px] font-black text-slate-500 uppercase">Update</span>
+                                    <span class="text-[9px] font-black text-slate-400 uppercase">Update</span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="max-h-[320px] overflow-auto border-b border-slate-100 scrollbar-thin">
+                        <div class="max-h-[320px] overflow-auto border-b border-white/5 scrollbar-thin">
                             <table class="w-full border-separate border-spacing-0">
-                                <thead class="bg-white/95 backdrop-blur-sm sticky top-0 z-20 shadow-sm text-center">
+                                <thead class="bg-slate-900 border border-white/5/95 backdrop-blur-sm sticky top-0 z-20 shadow-sm text-center">
                                     <tr>
                                         <th
-                                            class="pl-7 pr-3 py-3 text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100">
+                                            class="pl-7 pr-3 py-3 text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-white/5">
                                             Row</th>
                                         <th
-                                            class="px-4 py-3 text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100">
+                                            class="px-4 py-3 text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-white/5">
                                             Nama Personel</th>
                                         <th
-                                            class="pr-7 pl-3 py-3 text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100">
+                                            class="pr-7 pl-3 py-3 text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-white/5">
                                             JENIS BBM</th>
                                         <th
-                                            class="pr-7 pl-3 py-3 text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100">
+                                            class="pr-7 pl-3 py-3 text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-white/5">
                                             NRP/NIP</th>
                                     </tr>
                                 </thead>
-                                <tbody class="bg-white divide-y divide-slate-50">
+                                <tbody class="bg-slate-900 border border-white/5 divide-y divide-slate-50">
                                     <!-- Duplicates -->
                                     <template x-for="item in previewData.duplicates">
                                         <tr class="bg-amber-50/30">
@@ -772,7 +772,7 @@
                                                 x-text="item.row"></td>
                                             <td class="px-4 py-3 text-center">
                                                 <div class="flex flex-col items-center">
-                                                    <span class="text-[10px] font-bold text-slate-700"
+                                                    <span class="text-[10px] font-bold text-slate-300"
                                                         x-text="item.nama"></span>
                                                     <template x-if="item.changes.find(c => c.field === 'Nama')">
                                                         <span class="text-[8px] font-bold text-amber-600 italic mt-0.5"
@@ -787,7 +787,7 @@
                                             </td>
                                             <td class="px-4 py-3 whitespace-nowrap text-center">
                                                 <span
-                                                    class="px-2 py-0.5 rounded-lg bg-white border border-amber-200 text-amber-700 text-[9px] font-black"
+                                                    class="px-2 py-0.5 rounded-lg bg-slate-900 border border-white/5 border border-amber-200 text-amber-700 text-[9px] font-black"
                                                     x-text="item.nrp"></span>
                                             </td>
                                         </tr>
@@ -795,10 +795,10 @@
 
                                     <!-- New Entries -->
                                     <template x-for="item in previewData.new_entries">
-                                        <tr class="hover:bg-slate-50 transition-colors">
+                                        <tr class="hover:bg-slate-800/50 transition-colors">
                                             <td class="px-4 py-3 text-[10px] font-black text-slate-400"
                                                 x-text="item.row"></td>
-                                            <td class="px-4 py-3 text-[10px] font-bold text-slate-900 text-center"
+                                            <td class="px-4 py-3 text-[10px] font-bold text-white text-center"
                                                 x-text="item.nama"></td>
                                             <td class="px-4 py-3 whitespace-nowrap text-center">
                                                 <span
@@ -836,9 +836,9 @@
                             </div>
                         </template>
 
-                        <div class="px-6 py-5 bg-slate-50/30">
+                        <div class="px-6 py-5 bg-slate-800/50/30">
                             <div
-                                class="p-4 rounded-2xl bg-white border border-slate-100 shadow-lg shadow-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                class="p-4 rounded-2xl bg-slate-900 border border-white/5 shadow-lg shadow-black/20 flex flex-col sm:flex-row items-center justify-between gap-4">
                                 <div class="flex items-center gap-3">
                                     <div
                                         class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
@@ -852,21 +852,21 @@
                                             class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">
                                             Opsi
                                             Duplikat</p>
-                                        <p class="text-[11px] font-bold text-slate-900">Perlakuan jika NRP terdaftar</p>
+                                        <p class="text-[11px] font-bold text-white">Perlakuan jika NRP terdaftar</p>
                                     </div>
                                 </div>
-                                <div class="flex items-center p-1 bg-slate-50 rounded-xl border border-slate-100">
+                                <div class="flex items-center p-1 bg-slate-800/50 rounded-xl border border-white/5">
                                     <label class="relative flex items-center cursor-pointer group">
                                         <input type="radio" value="skip" x-model="duplicateAction" class="sr-only peer">
                                         <div
-                                            class="px-5 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all peer-checked:bg-white peer-checked:text-indigo-600 peer-checked:shadow-sm text-slate-400">
+                                            class="px-5 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all peer-checked:bg-slate-900 border border-white/5 peer-checked:text-indigo-600 peer-checked:shadow-sm text-slate-400">
                                             Lewati</div>
                                     </label>
                                     <label class="relative flex items-center cursor-pointer group">
                                         <input type="radio" value="update" x-model="duplicateAction"
                                             class="sr-only peer">
                                         <div
-                                            class="px-5 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all peer-checked:bg-white peer-checked:text-indigo-600 peer-checked:shadow-sm text-slate-400">
+                                            class="px-5 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all peer-checked:bg-slate-900 border border-white/5 peer-checked:text-indigo-600 peer-checked:shadow-sm text-slate-400">
                                             Update</div>
                                     </label>
                                 </div>
@@ -876,11 +876,11 @@
 
                     <!-- Footer Buttons -->
                     <div
-                        class="px-4 sm:px-6 py-4 bg-white border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        class="px-4 sm:px-6 py-4 bg-slate-900 border border-white/5 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
                         <template x-if="step === 1">
                             <div class="flex items-center gap-2 group">
                                 <div
-                                    class="w-6 h-6 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 transition-colors duration-500">
+                                    class="w-6 h-6 rounded-lg bg-slate-800/50 flex items-center justify-center text-slate-400 transition-colors duration-500">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -893,7 +893,7 @@
                         </template>
                         <template x-if="step === 2">
                             <button @click="backToStep1()" :disabled="importing"
-                                class="w-full sm:w-auto px-5 py-2.5 text-[10px] font-black text-slate-500 hover:text-slate-900 transition-all uppercase tracking-[0.2em] disabled:opacity-50 flex items-center justify-center sm:justify-start gap-2 group">
+                                class="w-full sm:w-auto px-5 py-2.5 text-[10px] font-black text-slate-400 hover:text-white transition-all uppercase tracking-[0.2em] disabled:opacity-50 flex items-center justify-center sm:justify-start gap-2 group">
                                 <svg class="w-3.5 h-3.5 transition-transform group-hover:-translate-x-1" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -905,11 +905,11 @@
 
                         <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                             <button @click="closeModal()" :disabled="importing"
-                                class="w-full sm:w-auto px-6 py-2.5 text-[10px] font-black text-slate-400 hover:text-slate-600 transition-all uppercase tracking-[0.2em] disabled:opacity-50">Batal</button>
+                                class="w-full sm:w-auto px-6 py-2.5 text-[10px] font-black text-slate-400 hover:text-slate-400 transition-all uppercase tracking-[0.2em] disabled:opacity-50">Batal</button>
                             <template x-if="step === 2">
                                 <button @click="confirmImport()"
                                     :disabled="importing || (previewData.new_count === 0 && previewData.duplicate_count === 0)"
-                                    class="relative w-full sm:w-auto px-8 py-2.5 bg-indigo-600 text-white rounded-xl text-[10px] font-black shadow-lg shadow-indigo-100 hover:bg-indigo-700 hover:scale-105 transition-all uppercase tracking-[0.2em] disabled:opacity-50 disabled:scale-100 group overflow-hidden">
+                                    class="relative w-full sm:w-auto px-8 py-2.5 bg-indigo-600 text-white rounded-xl text-[10px] font-black shadow-lg shadow-indigo-500/20 hover:bg-indigo-700 hover:scale-105 transition-all uppercase tracking-[0.2em] disabled:opacity-50 disabled:scale-100 group overflow-hidden">
                                     <div
                                         class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                                     </div>

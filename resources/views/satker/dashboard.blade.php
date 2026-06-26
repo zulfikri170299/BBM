@@ -1,9 +1,9 @@
 <x-app-layout>
-    <div class="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-8">
+    <div class="p-2 sm:p-6 lg:p-8 space-y-4 sm:space-y-8">
         <!-- Page Title -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4">
             <div>
-                <h1 class="text-xl sm:text-3xl font-bold text-slate-900">Dashboard</h1>
+                <h1 class="text-xl sm:text-3xl font-bold text-white">Dashboard</h1>
 
             </div>
         </div>
@@ -12,13 +12,12 @@
         <div class="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-6">
             <!-- Card: Total Kendaraan -->
             <div
-                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 p-4 sm:p-6 text-white shadow-xl group hover:shadow-blue-500/40 transition-all duration-300 hover:-translate-y-1">
-                <div
-                    class="absolute -top-4 -right-4 w-16 sm:w-24 h-16 sm:h-24 bg-white/10 rounded-full blur-lg group-hover:scale-150 transition-transform duration-500">
+                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-amber-500 to-amber-800 border border-amber-400 shadow-xl p-4 sm:p-6 text-white shadow-lg shadow-amber-500/5 group hover:shadow-amber-500/20 transition-all duration-300 hover:-translate-y-1">
+                <div class="absolute -top-4 -right-4 w-24 h-24 bg-slate-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500">
                 </div>
                 <div class="relative z-10">
                     <div class="flex items-center justify-between mb-2 sm:mb-4">
-                        <div class="p-2 sm:p-3 bg-white/20 rounded-lg sm:rounded-xl backdrop-blur-sm">
+                        <div class="p-2 sm:p-3 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl backdrop-blur-sm">
                             <svg class="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -28,25 +27,27 @@
                             </svg>
                         </div>
                         <a href="{{ route('satker.kendaraans.index') }}"
-                            class="text-[10px] sm:text-xs font-semibold bg-white/20 hover:bg-white/30 px-2 sm:px-3 py-1 rounded-lg transition">Kelola
+                            class="text-[10px] sm:text-xs font-semibold bg-white/20 hover:bg-white/30 border border-white/30 px-3 py-1.5 shadow-sm rounded-lg transition">Kelola
                             →</a>
                     </div>
-                    <p class="text-2xl sm:text-3xl font-extrabold">{{ $totalKendaraan }}</p>
-                    <p class="text-xs sm:text-sm text-blue-100 mt-0.5 sm:mt-1">Total Kendaraan</p>
+                    <div class="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-2 mt-1 sm:mt-0">
+                        <p class="text-xl sm:text-2xl font-black text-white">{{ $totalKendaraan }}</p>
+                        <p class="text-[9px] sm:text-[11px] text-white/90 font-medium truncate">Total Kendaraan</p>
+                    </div>
                     <div class="grid grid-cols-4 gap-1 mt-2 sm:mt-3">
-                        <div class="bg-white/15 rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
+                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
                             <p class="text-[8px] sm:text-[9px] font-bold opacity-80">R2</p>
                             <p class="text-xs sm:text-sm font-black">{{ $rodaR2 }}</p>
                         </div>
-                        <div class="bg-white/15 rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
+                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
                             <p class="text-[8px] sm:text-[9px] font-bold opacity-80">R4</p>
                             <p class="text-xs sm:text-sm font-black">{{ $rodaR4 }}</p>
                         </div>
-                        <div class="bg-white/15 rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
+                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
                             <p class="text-[8px] sm:text-[9px] font-bold opacity-80">R6</p>
                             <p class="text-xs sm:text-sm font-black">{{ $rodaR6 }}</p>
                         </div>
-                        <div class="bg-white/15 rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
+                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
                             <p class="text-[8px] sm:text-[9px] font-bold opacity-80 leading-tight">Non</p>
                             <p class="text-xs sm:text-sm font-black">{{ $rodaNon }}</p>
                         </div>
@@ -57,13 +58,12 @@
             @if($personelAccessControl == '1')
             <!-- Card: Total Personel -->
             <div
-                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 p-4 sm:p-6 text-white shadow-xl group hover:shadow-emerald-500/40 transition-all duration-300 hover:-translate-y-1">
-                <div
-                    class="absolute -top-4 -right-4 w-16 sm:w-24 h-16 sm:h-24 bg-white/10 rounded-full blur-lg group-hover:scale-150 transition-transform duration-500">
+                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-900 border border-emerald-400 shadow-xl p-4 sm:p-6 text-white shadow-lg shadow-emerald-500/5 group hover:shadow-emerald-500/20 transition-all duration-300 hover:-translate-y-1">
+                <div class="absolute -top-4 -right-4 w-24 h-24 bg-slate-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500">
                 </div>
                 <div class="relative z-10">
                     <div class="flex items-center justify-between mb-2 sm:mb-4">
-                        <div class="p-2 sm:p-3 bg-white/20 rounded-lg sm:rounded-xl backdrop-blur-sm">
+                        <div class="p-2 sm:p-3 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl backdrop-blur-sm">
                             <svg class="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
@@ -71,55 +71,59 @@
                             </svg>
                         </div>
                         <a href="{{ route('satker.personels.index') }}"
-                            class="text-[10px] sm:text-xs font-semibold bg-white/20 hover:bg-white/30 px-2 sm:px-3 py-1 rounded-lg transition">Kelola
+                            class="text-[10px] sm:text-xs font-semibold bg-white/20 hover:bg-white/30 border border-white/30 px-3 py-1.5 shadow-sm rounded-lg transition">Kelola
                             →</a>
                     </div>
-                    <p class="text-2xl sm:text-3xl font-extrabold">{{ $totalPersonel }}</p>
-                    <p class="text-xs sm:text-sm text-emerald-100 mt-0.5 sm:mt-1">Total Personel</p>
+                    <div class="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-2 mt-1 sm:mt-0">
+                        <p class="text-xl sm:text-2xl font-black text-white">{{ $totalPersonel }}</p>
+                        <p class="text-[9px] sm:text-[11px] text-white/90 font-medium truncate">Total Personel</p>
+                    </div>
                 </div>
             </div>
             @endif
 
             <!-- Card: Total Transaksi BBM -->
             <div
-                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-violet-500 to-purple-700 p-4 sm:p-6 text-white shadow-xl group hover:shadow-violet-500/40 transition-all duration-300 hover:-translate-y-1">
-                <div
-                    class="absolute -top-4 -right-4 w-16 sm:w-24 h-16 sm:h-24 bg-white/10 rounded-full blur-lg group-hover:scale-150 transition-transform duration-500">
+                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-rose-600 to-rose-900 border border-rose-400 shadow-xl p-4 sm:p-6 text-white shadow-lg shadow-rose-500/5 group hover:shadow-rose-500/20 transition-all duration-300 hover:-translate-y-1">
+                <div class="absolute -top-4 -right-4 w-24 h-24 bg-slate-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500">
                 </div>
                 <div class="relative z-10">
                     <div class="flex items-center justify-between mb-2 sm:mb-4">
-                        <div class="p-2 sm:p-3 bg-white/20 rounded-lg sm:rounded-xl backdrop-blur-sm">
+                        <div class="p-2 sm:p-3 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl backdrop-blur-sm">
                             <svg class="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
                             </svg>
                         </div>
                     </div>
-                    <p class="text-2xl sm:text-3xl font-extrabold">{{ $totalTransaksi }}</p>
-                    <p class="text-xs sm:text-sm text-violet-100 mt-0.5 sm:mt-1">Total Transaksi BBM</p>
+                    <div class="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-2 mt-1 sm:mt-0">
+                        <p class="text-xl sm:text-2xl font-black text-white">{{ $totalTransaksi }}</p>
+                        <p class="text-[9px] sm:text-[11px] text-white/90 font-medium truncate">Total Transaksi BBM</p>
+                    </div>
                 </div>
             </div>
 
             <!-- Card: Total Transfer -->
             <div
-                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 p-4 sm:p-6 text-white shadow-xl group hover:shadow-amber-500/40 transition-all duration-300 hover:-translate-y-1">
-                <div
-                    class="absolute -top-4 -right-4 w-16 sm:w-24 h-16 sm:h-24 bg-white/10 rounded-full blur-lg group-hover:scale-150 transition-transform duration-500">
+                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-900 border border-indigo-400 shadow-xl p-4 sm:p-6 text-white shadow-lg shadow-indigo-500/5 group hover:shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-1">
+                <div class="absolute -top-4 -right-4 w-24 h-24 bg-slate-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500">
                 </div>
                 <div class="relative z-10">
                     <div class="flex items-center justify-between mb-2 sm:mb-4">
-                        <div class="p-2 sm:p-3 bg-white/20 rounded-lg sm:rounded-xl backdrop-blur-sm">
+                        <div class="p-2 sm:p-3 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl backdrop-blur-sm">
                             <svg class="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
                             </svg>
                         </div>
                         <a href="{{ route('satker.kendaraans.laporan-transfer') }}"
-                            class="text-[10px] sm:text-xs font-semibold bg-white/20 hover:bg-white/30 px-2 sm:px-3 py-1 rounded-lg transition">Laporan
+                            class="text-[10px] sm:text-xs font-semibold bg-white/20 hover:bg-white/30 border border-white/30 px-3 py-1.5 shadow-sm rounded-lg transition">Laporan
                             →</a>
                     </div>
-                    <p class="text-2xl sm:text-3xl font-extrabold">{{ $totalTransfer }}</p>
-                    <p class="text-xs sm:text-sm text-amber-100 mt-0.5 sm:mt-1">Total Transfer</p>
+                    <div class="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-2 mt-1 sm:mt-0">
+                        <p class="text-xl sm:text-2xl font-black text-white">{{ $totalTransfer }}</p>
+                        <p class="text-[9px] sm:text-[11px] text-white/90 font-medium truncate">Total Transfer</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -127,9 +131,9 @@
         <!-- Secondary Stats -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             <div
-                class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/70 p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
+                class="bg-gradient-to-r from-sky-900/30 to-slate-900 rounded-xl sm:rounded-2xl border border-sky-500/20 p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow group hover:border-sky-500/40">
                 <div class="flex items-center gap-3 sm:gap-4">
-                    <div class="p-2 sm:p-3 bg-sky-100 text-sky-600 rounded-lg sm:rounded-xl">
+                    <div class="p-2 sm:p-3 bg-sky-100 text-sky-600 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
                         <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
@@ -137,8 +141,8 @@
                         </svg>
                     </div>
                     <div class="min-w-0">
-                        <p class="text-xs sm:text-sm text-slate-500">Saldo Kendaraan</p>
-                        <p class="text-lg sm:text-2xl font-bold text-slate-900 truncate">
+                        <p class="text-xs sm:text-xs text-slate-400">Saldo Kendaraan</p>
+                        <p class="text-lg sm:text-2xl font-bold text-white truncate">
                             {{ number_format($totalSaldoKendaraan, 0, ',', '.') }} <span
                                 class="text-xs sm:text-sm font-medium text-slate-400">L</span>
                         </p>
@@ -154,17 +158,17 @@
             </div>
             @if($personelAccessControl == '1')
             <div
-                class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/70 p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
+                class="bg-gradient-to-r from-pink-900/30 to-slate-900 rounded-xl sm:rounded-2xl border border-pink-500/20 p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow group hover:border-pink-500/40">
                 <div class="flex items-center gap-3 sm:gap-4">
-                    <div class="p-2 sm:p-3 bg-pink-100 text-pink-600 rounded-lg sm:rounded-xl">
+                    <div class="p-2 sm:p-3 bg-pink-100 text-pink-600 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
                         <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                         </svg>
                     </div>
                     <div class="min-w-0">
-                        <p class="text-xs sm:text-sm text-slate-500">Saldo Personel</p>
-                        <p class="text-lg sm:text-2xl font-bold text-slate-900 truncate">
+                        <p class="text-xs sm:text-xs text-slate-400">Saldo Personel</p>
+                        <p class="text-lg sm:text-2xl font-bold text-white truncate">
                             {{ number_format($totalSaldoPersonel, 0, ',', '.') }} <span
                                 class="text-xs sm:text-sm font-medium text-slate-400">L</span>
                         </p>
@@ -180,17 +184,17 @@
             </div>
             @endif
             <div
-                class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/70 p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
+                class="bg-gradient-to-r from-teal-900/30 to-slate-900 rounded-xl sm:rounded-2xl border border-teal-500/20 p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow group hover:border-teal-500/40">
                 <div class="flex items-center gap-3 sm:gap-4">
-                    <div class="p-2 sm:p-3 bg-teal-100 text-teal-600 rounded-lg sm:rounded-xl">
+                    <div class="p-2 sm:p-3 bg-teal-100 text-teal-600 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
                         <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
                         </svg>
                     </div>
                     <div class="min-w-0">
-                        <p class="text-xs sm:text-sm text-slate-500">Transfer</p>
-                        <p class="text-lg sm:text-2xl font-bold text-slate-900 truncate">
+                        <p class="text-xs sm:text-xs text-slate-400">Transfer</p>
+                        <p class="text-lg sm:text-2xl font-bold text-white truncate">
                             {{ number_format($totalLiterTransfer, 0, ',', '.') }} <span
                                 class="text-xs sm:text-sm font-medium text-slate-400">L</span>
                         </p>
@@ -205,9 +209,9 @@
                 </div>
             </div>
             <div
-                class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/70 p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
+                class="bg-gradient-to-r from-rose-900/30 to-slate-900 rounded-xl sm:rounded-2xl border border-rose-500/20 p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow group hover:border-rose-500/40">
                 <div class="flex items-center gap-3 sm:gap-4">
-                    <div class="p-2 sm:p-3 bg-rose-100 text-rose-600 rounded-lg sm:rounded-xl">
+                    <div class="p-2 sm:p-3 bg-rose-100 text-rose-600 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
                         <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
@@ -215,8 +219,8 @@
                         </svg>
                     </div>
                     <div class="min-w-0">
-                        <p class="text-xs sm:text-sm text-slate-500">Total Hutang (Bon)</p>
-                        <p class="text-lg sm:text-2xl font-bold text-slate-900 truncate">
+                        <p class="text-xs sm:text-xs text-slate-400">Total Hutang (Bon)</p>
+                        <p class="text-lg sm:text-2xl font-bold text-white truncate">
                             {{ number_format($totalHutang, 0, ',', '.') }} <span
                                 class="text-xs sm:text-sm font-medium text-slate-400">L</span>
                         </p>
@@ -236,33 +240,33 @@
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-3 sm:gap-6">
             <!-- Chart Area -->
             <div
-                class="xl:col-span-2 bg-white rounded-xl sm:rounded-2xl border border-slate-200/70 shadow-sm p-4 sm:p-6">
-                <h3 class="text-base sm:text-lg font-bold text-slate-800 mb-2 sm:mb-4">Transfer 7 Hari Terakhir</h3>
+                class="xl:col-span-2 bg-slate-900 border border-white/5 rounded-xl sm:rounded-2xl border border-white/10/70 shadow-sm p-4 sm:p-6">
+                <h3 class="text-base sm:text-lg font-bold text-slate-200 mb-2 sm:mb-4">Transfer 7 Hari Terakhir</h3>
                 <div id="transferChart"></div>
             </div>
 
             <!-- Recent Transfers -->
-            <div class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/70 shadow-sm">
-                <div class="p-4 sm:p-6 border-b border-slate-100">
-                    <h3 class="text-base sm:text-lg font-bold text-slate-800">Aktivitas Terbaru</h3>
+            <div class="bg-slate-900 border border-white/5 rounded-xl sm:rounded-2xl border border-white/10/70 shadow-sm">
+                <div class="p-4 sm:p-6 border-b border-white/5">
+                    <h3 class="text-base sm:text-lg font-bold text-slate-200">Aktivitas Terbaru</h3>
                 </div>
-                <div class="divide-y divide-slate-100 max-h-[300px] sm:max-h-[400px] overflow-y-auto">
+                <div class="divide-y divide-white/5 max-h-[300px] sm:max-h-[400px] overflow-y-auto">
                     @forelse($recentTransfers as $trx)
-                        <div class="px-4 py-3 sm:px-6 sm:py-4 hover:bg-slate-50 transition-colors">
+                        <div class="px-4 py-3 sm:px-6 sm:py-4 hover:bg-slate-800/50 transition-colors">
                             <div class="flex items-center gap-2 sm:gap-3">
                                 <div
                                     class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold text-xs sm:text-sm">
                                     {{ substr($trx->kendaraan->no_polisi ?? '?', 0, 2) }}
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <p class="text-xs sm:text-sm font-semibold text-slate-800 truncate">
+                                    <p class="text-xs sm:text-xs font-medium text-slate-200 truncate">
                                         {{ $trx->kendaraan->no_polisi ?? '-' }} → {{ $trx->personel->nama ?? '-' }}
                                     </p>
                                     <p class="text-[10px] sm:text-xs text-slate-400">{{ $trx->created_at->diffForHumans() }}
                                     </p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-xs sm:text-sm font-bold text-emerald-600">
+                                    <p class="text-xs sm:text-xs font-semibold text-emerald-500">
                                         {{ number_format($trx->jumlah, 0, ',', '.') }} L
                                     </p>
                                 </div>
@@ -270,7 +274,7 @@
                         </div>
                     @empty
                         <div class="px-6 py-12 text-center">
-                            <p class="text-sm text-slate-400">Belum ada aktivitas transfer</p>
+                            <p class="text-xs text-slate-400">Belum ada aktivitas transfer</p>
                         </div>
                     @endforelse
                 </div>

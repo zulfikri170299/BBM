@@ -48,12 +48,12 @@
             <tr>
                 <td>{{ $sync->created_at->format('d/m/Y H:i') }}</td>
                 <td>{{ $sync->petugas->name ?? '-' }}</td>
-                <td>{{ rtrim(rtrim(number_format($sync->stok_awal_pertamax, 2, '.', ''), '0'), '.') }}</td>
-                <td>{{ rtrim(rtrim(number_format($sync->stok_awal_dex, 2, '.', ''), '0'), '.') }}</td>
-                <td>{{ rtrim(rtrim(number_format($sync->pemakaian_pertamax, 2, '.', ''), '0'), '.') }}</td>
-                <td>{{ rtrim(rtrim(number_format($sync->pemakaian_dex, 2, '.', ''), '0'), '.') }}</td>
-                <td>{{ rtrim(rtrim(number_format($sync->sisa_pertamax, 2, '.', ''), '0'), '.') }}</td>
-                <td>{{ rtrim(rtrim(number_format($sync->sisa_dex, 2, '.', ''), '0'), '.') }}</td>
+                <td>{{ number_format($sync->stok_awal_pertamax, 0, ',', '.') }}</td>
+                <td>{{ number_format($sync->stok_awal_dex, 0, ',', '.') }}</td>
+                <td>{{ number_format($sync->pemakaian_pertamax, 0, ',', '.') }}</td>
+                <td>{{ number_format($sync->pemakaian_dex, 0, ',', '.') }}</td>
+                <td>{{ number_format($sync->sisa_pertamax, 0, ',', '.') }}</td>
+                <td>{{ number_format($sync->sisa_dex, 0, ',', '.') }}</td>
             </tr>
             @endforeach
         </tbody>

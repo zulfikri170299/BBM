@@ -74,8 +74,8 @@
 
         <!-- Hero Section -->
         <main class="relative z-10 flex-grow flex items-center justify-center px-6 py-12">
-            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <div class="space-y-8">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center px-2 sm:px-6 lg:px-8">
+                <div class="space-y-4 sm:space-y-8">
                     <div class="space-y-4">
                         <div
                             class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-900/50 text-red-200 text-sm font-semibold border border-red-800 backdrop-blur-sm">
@@ -135,7 +135,7 @@
                         class="absolute inset-0 bg-gradient-to-tr from-red-500 to-orange-500 rounded-2xl transform rotate-3 opacity-20 blur-lg">
                     </div>
                     <div
-                        class="relative bg-white/5 border border-white/10 rounded-2xl shadow-2xl overflow-hidden p-2 backdrop-blur-sm">
+                        class="relative bg-slate-900 border border-white/5/5 border border-white/10 rounded-2xl shadow-2xl overflow-hidden p-2 backdrop-blur-sm">
                         <div
                             class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl overflow-hidden aspect-[4/3] flex items-center justify-center relative">
                             <!-- Mockup UI -->

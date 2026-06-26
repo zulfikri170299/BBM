@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="py-6 sm:py-10 bg-slate-50 min-h-screen">
+    <div class="py-6 sm:py-10 bg-slate-800/50 min-h-screen px-2 sm:px-6 lg:px-8">
         <div class="max-w-lg mx-auto px-4 sm:px-6">
             <!-- Breadcrumb / Back Link -->
             <div class="mb-4">
@@ -14,10 +14,10 @@
             </div>
 
             <div
-                class="bg-white rounded-[1.5rem] shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
+                class="bg-slate-900 border border-white/5 rounded-[1.5rem] shadow-xl shadow-slate-200/50 border border-white/5 overflow-hidden">
                 <!-- Header Section -->
-                <div class="p-5 sm:p-6 bg-slate-50/50 border-b border-slate-100">
-                    <h2 class="text-xl font-black text-slate-800 tracking-tight">Edit Personel</h2>
+                <div class="p-5 sm:p-6 bg-slate-800/50 border-b border-white/5">
+                    <h2 class="text-xl font-black text-slate-200 tracking-tight">Edit Personel</h2>
                     <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">Perbarui data personel
                         secara ringkas</p>
                 </div>
@@ -36,7 +36,7 @@
                                 class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Satuan
                                 Kerja</label>
                             <select name="satker_id"
-                                class="tom-select w-full rounded-xl border-slate-200 bg-slate-50/50 text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                                class="tom-select w-full rounded-xl border-white/10 bg-slate-800/50 text-xs font-bold text-slate-300 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
                                 required>
                                 @foreach($satkers as $satker)
                                     <option value="{{ $satker->id }}" {{ old('satker_id', $personel->satker_id) == $satker->id ? 'selected' : '' }}>
@@ -54,7 +54,7 @@
                                 class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Nama
                                 Lengkap</label>
                             <input type="text" name="nama" value="{{ old('nama', $personel->nama) }}"
-                                class="w-full h-11 px-4 rounded-xl border-slate-200 bg-slate-50/50 text-xs font-bold text-slate-700 placeholder:text-slate-300 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                                class="w-full h-11 px-4 rounded-xl border-white/10 bg-slate-800/50 text-xs font-bold text-slate-300 placeholder:text-slate-300 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
                                 placeholder="Contoh: Budi Santoso" required>
                             @error('nama') <p class="mt-1 text-[10px] text-rose-500 font-bold ml-1">{{ $message }}</p>
                             @enderror
@@ -66,7 +66,7 @@
                                 class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">NRP
                                 / NIP</label>
                             <input type="text" name="nrp" value="{{ old('nrp', $personel->nrp) }}"
-                                class="w-full h-11 px-4 rounded-xl border-slate-200 bg-slate-50/50 text-xs font-bold text-slate-700 placeholder:text-slate-300 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                                class="w-full h-11 px-4 rounded-xl border-white/10 bg-slate-800/50 text-xs font-bold text-slate-300 placeholder:text-slate-300 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
                                 placeholder="Masukkan NRP/NIP" 
                                 inputmode="numeric"
                                 oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -83,7 +83,7 @@
                                 class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Jenis
                                 BBM</label>
                             <select name="jenis_bbm"
-                                class="tom-select w-full rounded-xl border-slate-200 bg-slate-50/50 text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all {{ auth()->user()->role !== 'super_admin' && $personel->saldo > 0 ? 'bg-slate-100 cursor-not-allowed' : '' }}"
+                                class="tom-select w-full rounded-xl border-white/10 bg-slate-800/50 text-xs font-bold text-slate-300 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all {{ auth()->user()->role !== 'super_admin' && $personel->saldo > 0 ? 'bg-slate-800 cursor-not-allowed' : '' }}"
                                 {{ auth()->user()->role !== 'super_admin' && $personel->saldo > 0 ? 'disabled' : 'required' }}>
                                 <option value="">Pilih Jenis BBM...</option>
                                 <option value="Pertamax" {{ old('jenis_bbm', $personel->jenis_bbm) == 'Pertamax' ? 'selected' : '' }}>Pertamax</option>
@@ -106,7 +106,7 @@
                                 PIN Keamanan <span class="text-slate-300 normal-case font-medium">(Isi untuk mengubah)</span>
                             </label>
                             <input type="text" name="pin" 
-                                class="w-full h-11 px-4 rounded-xl border-slate-200 bg-slate-50/50 text-xs font-mono font-black text-slate-700 placeholder:text-slate-200 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all tracking-[0.3em]"
+                                class="w-full h-11 px-4 rounded-xl border-white/10 bg-slate-800/50 text-xs font-mono font-black text-slate-300 placeholder:text-slate-200 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all tracking-[0.3em]"
                                 placeholder="••••••"
                                 maxlength="6"
                                 inputmode="numeric"
@@ -119,7 +119,7 @@
                         <!-- Action Button -->
                         <div class="pt-2">
                             <button type="submit"
-                                class="w-full h-11 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-indigo-200 flex items-center justify-center gap-2 group">
+                                class="w-full h-11 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-indigo-500/30 flex items-center justify-center gap-2 group">
                                 <svg class="w-4 h-4 group-hover:scale-110 transition-transform" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

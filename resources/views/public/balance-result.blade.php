@@ -29,17 +29,17 @@
         <!-- Details Card -->
         <div class="bg-slate-950/50 rounded-2xl border border-white/5 p-4 mb-6 text-left space-y-3">
             <div class="flex items-center justify-between group">
-                <span class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">{{ $id_label }}</span>
+                <span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">{{ $id_label }}</span>
                 <span class="text-white text-xs font-bold tracking-widest group-hover:text-amber-500 transition-colors uppercase">{{ $id_value }}</span>
             </div>
-            <div class="w-full h-px bg-white/5"></div>
+            <div class="w-full h-px bg-slate-900 border border-white/5/5"></div>
             <div class="flex items-center justify-between group">
-                <span class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Jenis BBM</span>
-                <span class="px-2 py-0.5 bg-amber-500 text-slate-900 text-[9px] font-black rounded-lg uppercase tracking-wider group-hover:scale-110 transition-transform">{{ $jenis_bbm ?? 'BELUM SET' }}</span>
+                <span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Jenis BBM</span>
+                <span class="px-2 py-0.5 bg-amber-500 text-white text-[9px] font-black rounded-lg uppercase tracking-wider group-hover:scale-110 transition-transform">{{ $jenis_bbm ?? 'BELUM SET' }}</span>
             </div>
-            <div class="w-full h-px bg-white/5"></div>
+            <div class="w-full h-px bg-slate-900 border border-white/5/5"></div>
             <div class="flex items-center justify-between group">
-                <span class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Waktu Pengecekan</span>
+                <span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Waktu Pengecekan</span>
                 <span class="text-slate-300 text-[10px] font-semibold uppercase">{{ now()->isoFormat('HH:mm - D MMMM Y') }}</span>
             </div>
         </div>
@@ -63,7 +63,7 @@
         </div>
 
         <!-- Disclaimer -->
-        <p class="mt-6 text-[9px] text-slate-500 leading-relaxed uppercase tracking-wider italic">
+        <p class="mt-6 text-[9px] text-slate-400 leading-relaxed uppercase tracking-wider italic">
             * Data ini diambil secara realtime. Untuk rincian transaksi lengkap, silakan login ke dashboard.
         </p>
 

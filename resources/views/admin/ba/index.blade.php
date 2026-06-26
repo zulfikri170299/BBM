@@ -1,18 +1,18 @@
 <x-app-layout>
-    <div class="py-12">
+    <div class="py-4 sm:py-12 px-2 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+            <div class="bg-slate-900 border border-white/5 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-white">
                     <div class="flex justify-between items-center mb-6">
                         <div>
                             <h2 class="text-2xl font-bold">Riwayat Berita Acara</h2>
-                            <p class="text-gray-600">Daftar dokumen yang dibuat otomatis setelah Import Saldo.</p>
+                            <p class="text-slate-400">Daftar dokumen yang dibuat otomatis setelah Import Saldo.</p>
                         </div>
                     </div>
 
                     <!-- Pihak Kesatu Configuration Form -->
-                    <div class="mb-8 p-6 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm">
-                        <h3 class="font-bold text-slate-800 flex items-center gap-2 mb-4">
+                    <div class="mb-8 p-6 bg-slate-800/50 rounded-2xl border border-white/10 shadow-sm">
+                        <h3 class="font-bold text-slate-200 flex items-center gap-2 mb-4">
                             <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
@@ -24,31 +24,31 @@
                             @csrf
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                                 <div class="space-y-1">
-                                    <label class="text-xs font-bold text-slate-500 uppercase">Nama</label>
+                                    <label class="text-xs font-bold text-slate-400 uppercase">Nama</label>
                                     <input type="text" name="ba_pihak_1_nama"
                                         value="{{ $settings['ba_pihak_1_nama'] ?? '' }}"
-                                        class="w-full px-4 py-2 rounded-xl border-slate-200 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                                        class="w-full px-4 py-2 rounded-xl border-white/10 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
                                         placeholder="Nama Lengkap">
                                 </div>
                                 <div class="space-y-1">
-                                    <label class="text-xs font-bold text-slate-500 uppercase">Pangkat</label>
+                                    <label class="text-xs font-bold text-slate-400 uppercase">Pangkat</label>
                                     <input type="text" name="ba_pihak_1_pangkat"
                                         value="{{ $settings['ba_pihak_1_pangkat'] ?? '' }}"
-                                        class="w-full px-4 py-2 rounded-xl border-slate-200 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                                        class="w-full px-4 py-2 rounded-xl border-white/10 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
                                         placeholder="Pangkat">
                                 </div>
                                 <div class="space-y-1">
-                                    <label class="text-xs font-bold text-slate-500 uppercase">NRP</label>
+                                    <label class="text-xs font-bold text-slate-400 uppercase">NRP</label>
                                     <input type="text" name="ba_pihak_1_nrp"
                                         value="{{ $settings['ba_pihak_1_nrp'] ?? '' }}"
-                                        class="w-full px-4 py-2 rounded-xl border-slate-200 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                                        class="w-full px-4 py-2 rounded-xl border-white/10 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
                                         placeholder="NRP">
                                 </div>
                                 <div class="space-y-1">
-                                    <label class="text-xs font-bold text-slate-500 uppercase">Jabatan</label>
+                                    <label class="text-xs font-bold text-slate-400 uppercase">Jabatan</label>
                                     <input type="text" name="ba_pihak_1_jabatan"
                                         value="{{ $settings['ba_pihak_1_jabatan'] ?? '' }}"
-                                        class="w-full px-4 py-2 rounded-xl border-slate-200 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                                        class="w-full px-4 py-2 rounded-xl border-white/10 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
                                         placeholder="Jabatan">
                                 </div>
                             </div>
@@ -73,16 +73,16 @@
                         </div>
                     @endif
 
-                    <div class="overflow-x-auto bg-white rounded-xl shadow-sm border border-gray-100">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr class="border-b border-slate-100">
-                                    <th colspan="7" class="px-6 py-3">
+                    <div class="overflow-x-auto bg-slate-900 border border-white/5 rounded-xl shadow-sm border border-white/5">
+                        <table class="min-w-full divide-y divide-white/10">
+                            <thead class="bg-slate-800/50">
+                                <tr class="border-b border-white/5">
+                                    <th colspan="7" class="px-4 py-3">
                                         <div class="flex items-center justify-between">
                                             <form action="{{ route('admin.ba.index') }}" method="GET"
                                                 class="flex items-center space-x-3">
                                                 <x-per-page :current="request('per_page', 15)" />
-                                                <select name="tahun" onchange="this.form.submit()" class="text-xs border-slate-300 rounded-lg shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 py-1.5 pl-3 pr-8">
+                                                <select name="tahun" onchange="this.form.submit()" class="text-xs border-white/20 rounded-lg shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 py-1.5 pl-3 pr-8">
                                                     @foreach($tahunList as $t)
                                                         <option value="{{ $t }}" {{ $tahun == $t ? 'selected' : '' }}>Tahun {{ $t }}</option>
                                                     @endforeach
@@ -98,54 +98,54 @@
                                 </tr>
                                 <tr>
                                     <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        class="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
                                         No</th>
                                     <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        class="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
                                         Satker</th>
                                     <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        class="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
                                         Periode</th>
                                     <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        class="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
                                         Pertamax (L)</th>
                                     <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        class="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
                                         Dex (L)</th>
                                     <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        class="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
                                         Terakhir Diperbarui</th>
                                     <th
-                                        class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        class="px-4 py-3 text-right text-xs font-medium text-slate-400 uppercase tracking-wider">
                                         Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
+                            <tbody class="bg-slate-900 border border-white/5 divide-y divide-white/10">
                                 @forelse($logs as $index => $log)
-                                    <tr class="hover:bg-gray-50 transition-colors">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <tr class="hover:bg-slate-800/50 transition-colors">
+                                        <td class="px-4 py-3 whitespace-nowrap text-xs text-slate-400">
                                             {{ $logs->firstItem() + $index }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="font-medium text-gray-900">{{ $log->satker->nama_satker }}</div>
+                                        <td class="px-4 py-3 whitespace-nowrap">
+                                            <div class="font-medium text-white">{{ $log->satker->nama_satker }}</div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="px-4 py-3 whitespace-nowrap">
                                             <span
-                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-blue-100 text-blue-800">
                                                 {{ \Carbon\Carbon::create()->month($log->bulan)->translatedFormat('F') }}
                                                 {{ $log->tahun }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                        <td class="px-4 py-3 whitespace-nowrap text-xs text-slate-400">
                                             {{ number_format($log->total_pertamax, 0, ',', '.') }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                        <td class="px-4 py-3 whitespace-nowrap text-xs text-slate-400">
                                             {{ number_format($log->total_dex, 0, ',', '.') }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-4 py-3 whitespace-nowrap text-xs text-slate-400">
                                             {{ $log->updated_at->format('d/m/Y H:i') }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                                        <td class="px-4 py-3 whitespace-nowrap text-right text-sm font-medium space-x-2">
                                             <a href="{{ route('admin.ba.download-log', $log) }}"
                                                 class="inline-flex items-center px-3 py-1.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm" title="Download Word (DOCX)">
                                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor"
@@ -191,7 +191,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="px-6 py-10 text-center text-gray-500">
+                                        <td colspan="7" class="px-6 py-10 text-center text-slate-400">
                                             <div class="flex flex-col items-center">
                                                 <svg class="w-12 h-12 text-gray-300 mb-2" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">

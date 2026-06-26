@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="flex flex-col h-[calc(100vh-64px)] bg-[#F8FAFC]">
         <!-- Header Chat -->
-        <div class="bg-white/80 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex items-center justify-between shrink-0 sticky top-0 z-50">
+        <div class="bg-slate-900 border border-white/5/80 backdrop-blur-md border-b border-white/5 px-6 py-4 flex items-center justify-between shrink-0 sticky top-0 z-50">
             <div class="flex items-center">
                 <a href="{{ route('chat.index') }}" class="mr-4 text-slate-400 hover:text-indigo-600 transition-all p-2 hover:bg-indigo-50 rounded-full group">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -20,7 +20,7 @@
                         @endif
                     </div>
                     <div class="ml-3">
-                        <h1 class="text-base font-bold text-slate-800 leading-tight">
+                        <h1 class="text-base font-bold text-slate-200 leading-tight">
                             {{ $receiver->name }}
                         </h1>
                         <p class="text-[11px] text-indigo-500 font-semibold tracking-wide uppercase mt-0.5">
@@ -34,7 +34,7 @@
             </div>
             
             <div class="flex items-center space-x-1">
-                <button title="Info" class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-slate-50 rounded-full transition-colors">
+                <button title="Info" class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-slate-800/50 rounded-full transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -60,14 +60,14 @@
         </div>
 
         <!-- Input Area -->
-        <div class="bg-white p-4 shrink-0 z-20">
+        <div class="bg-slate-900 border border-white/5 p-4 shrink-0 z-20">
             <div class="max-w-4xl mx-auto">
-                <form id="chat-form" class="relative flex items-end gap-3 bg-slate-50 p-2 rounded-3xl border border-slate-200 shadow-sm focus-within:ring-2 focus-within:ring-indigo-100 focus-within:border-indigo-300 transition-all duration-300">
+                <form id="chat-form" class="relative flex items-end gap-3 bg-slate-800/50 p-2 rounded-3xl border border-white/10 shadow-sm focus-within:ring-2 focus-within:ring-indigo-100 focus-within:border-indigo-300 transition-all duration-300">
                     <div class="flex-1">
                         <textarea 
                             id="message-input" 
                             name="message" 
-                            class="w-full pl-4 pr-4 py-3 bg-transparent border-0 focus:ring-0 focus:outline-none text-slate-700 placeholder:text-slate-400 resize-none max-h-32 text-[15px] leading-relaxed" 
+                            class="w-full pl-4 pr-4 py-3 bg-transparent border-0 focus:ring-0 focus:outline-none text-slate-300 placeholder:text-slate-400 resize-none max-h-32 text-[15px] leading-relaxed" 
                             rows="1"
                             placeholder="Ketik pesan Anda..." 
                             required
@@ -158,13 +158,13 @@
             if (messages.length === 0) {
                 chatContainer.innerHTML = `
                     <div class="flex flex-col items-center justify-center h-full text-slate-400">
-                        <div class="w-20 h-20 bg-white rounded-3xl flex items-center justify-center shadow-sm mb-6 relative overflow-hidden group">
+                        <div class="w-20 h-20 bg-slate-900 border border-white/5 rounded-3xl flex items-center justify-center shadow-sm mb-6 relative overflow-hidden group">
                            <div class="absolute inset-0 bg-indigo-50 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-indigo-200 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                             </svg>
                         </div>
-                        <p class="font-semibold text-slate-600 mb-1">Mulai obrolan baru</p>
+                        <p class="font-semibold text-slate-400 mb-1">Mulai obrolan baru</p>
                         <p class="text-xs text-slate-400 max-w-xs text-center">Kirim pesan pertama Anda kepada {{ $receiver->name }} sekarang.</p>
                     </div>
                 `;
@@ -184,7 +184,7 @@
                 if (msgDate !== lastDate) {
                     html += `
                         <div class="flex justify-center my-8">
-                            <span class="px-4 py-1.5 bg-slate-200/60 backdrop-blur-sm rounded-full text-[11px] text-slate-500 font-semibold tracking-wide uppercase shadow-sm">${msgDate}</span>
+                            <span class="px-4 py-1.5 bg-slate-200/60 backdrop-blur-sm rounded-full text-[11px] text-slate-400 font-semibold tracking-wide uppercase shadow-sm">${msgDate}</span>
                         </div>
                     `;
                     lastDate = msgDate;
@@ -196,7 +196,7 @@
                 
                 const bubbleClass = isMe 
                     ? 'bg-gradient-to-br from-indigo-500 to-indigo-600 text-white rounded-[20px] rounded-br-[4px] shadow-sm shadow-indigo-500/10' 
-                    : 'bg-white text-slate-700 border border-slate-100 rounded-[20px] rounded-bl-[4px] shadow-sm';
+                    : 'bg-slate-900 border border-white/5 text-slate-300 border border-white/5 rounded-[20px] rounded-bl-[4px] shadow-sm';
                 
                 const alignClass = isMe ? 'justify-end' : 'justify-start';
                 const containerClass = isMe ? 'items-end' : 'items-start';

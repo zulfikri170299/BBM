@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="p-6 lg:p-8 space-y-8">
+    <div class="p-2 sm:p-6 lg:p-8 space-y-8">
         <!-- Page Title Removed -->
 
         <div class="max-w-xl mx-auto mt-8">

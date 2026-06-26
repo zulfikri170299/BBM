@@ -7,8 +7,8 @@
             </svg>
         </div>
         <div>
-            <h2 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight"> Informasi Profil </h2>
-            <p class="text-xs sm:text-sm text-slate-500 mt-0.5"> Perbarui informasi dasar akun dan alamat email Anda.
+            <h2 class="text-lg sm:text-xl font-bold text-white tracking-tight"> Informasi Profil </h2>
+            <p class="text-xs sm:text-sm text-slate-400 mt-0.5"> Perbarui informasi dasar akun dan alamat email Anda.
             </p>
         </div>
     </header>
@@ -22,7 +22,7 @@
         @method('patch')
 
         <div>
-            <label for="name" class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1 sm:mb-2">Nama
+            <label for="name" class="block text-xs sm:text-sm font-semibold text-slate-300 mb-1 sm:mb-2">Nama
                 Lengkap</label>
             <div class="relative group">
                 <span
@@ -33,7 +33,7 @@
                     </svg>
                 </span>
                 <input id="name" name="name" type="text" value="{{ old('name', $user->name) }}" required autofocus
-                    class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder-slate-400"
+                    class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm bg-slate-800/50 border border-white/10 rounded-xl text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder-slate-400"
                     placeholder="Masukkan nama lengkap">
             </div>
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
@@ -43,7 +43,7 @@
 
         @if(auth()->user()->role !== 'personel')
             <div>
-                <label for="email" class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1 sm:mb-2">Alamat Email /
+                <label for="email" class="block text-xs sm:text-sm font-semibold text-slate-300 mb-1 sm:mb-2">Alamat Email /
                     Identitas</label>
                 <div class="relative group">
                     <span
@@ -55,7 +55,7 @@
                         </svg>
                     </span>
                     <input id="email" name="email" type="email" value="{{ old('email', $user->email) }}" required
-                        class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder-slate-400"
+                        class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm bg-slate-800/50 border border-white/10 rounded-xl text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder-slate-400"
                         placeholder="Masukkan alamat email">
                 </div>
                 <x-input-error class="mt-2" :messages="$errors->get('email')" />
@@ -66,7 +66,7 @@
 
         <div>
             @if(auth()->user()->role !== 'admin_satker' && auth()->user()->role !== 'super_admin' && auth()->user()->role !== 'personel')
-                <label for="otp_email" class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1 sm:mb-2">Email
+                <label for="otp_email" class="block text-xs sm:text-sm font-semibold text-slate-300 mb-1 sm:mb-2">Email
                     Penerima OTP (Khusus Top-up)</label>
                 <div class="relative group">
                     <span
@@ -78,7 +78,7 @@
                         </svg>
                     </span>
                     <input id="otp_email" name="otp_email" type="email" value="{{ old('otp_email', $user->otp_email) }}"
-                        class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder-slate-400"
+                        class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm bg-slate-800/50 border border-white/10 rounded-xl text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder-slate-400"
                         placeholder="Masukkan email khusus untuk menerima OTP">
                 </div>
                 <p class="mt-1.5 text-[10px] sm:text-[11px] text-slate-400 italic font-medium">* Kosongkan jika ingin

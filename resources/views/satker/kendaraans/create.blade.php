@@ -1,19 +1,19 @@
 <x-app-layout>
-    <div class="p-6 lg:p-8 space-y-6">
+    <div class="p-2 sm:p-6 lg:p-8 space-y-6">
         <!-- Page Header -->
         <div class="flex items-center gap-4">
-            <a href="{{ route('satker.kendaraans.index') }}" class="p-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-600 transition">
+            <a href="{{ route('satker.kendaraans.index') }}" class="p-2 bg-slate-800 hover:bg-slate-200 rounded-xl text-slate-400 transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
             </a>
             <div>
-                <h1 class="text-3xl font-bold text-slate-900">Tambah Kendaraan</h1>
-                <p class="mt-1 text-slate-500">Barcode & PIN akan di-generate secara otomatis.</p>
+                <h1 class="text-3xl font-bold text-white">Tambah Kendaraan</h1>
+                <p class="mt-1 text-slate-400">Barcode & PIN akan di-generate secara otomatis.</p>
             </div>
         </div>
 
         <!-- Form Card -->
         <div class="max-w-2xl">
-            <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm p-8">
+            <div class="bg-slate-900 rounded-2xl border border-white/10 shadow-sm p-8">
                 <!-- Auto-generate Info -->
                 <div class="mb-6 p-4 bg-indigo-50 border border-indigo-100 rounded-xl">
                     <div class="flex items-center gap-3">
@@ -32,9 +32,9 @@
 
                     <!-- No Polisi -->
                     <div>
-                        <label for="no_polisi" class="block text-sm font-semibold text-slate-700 mb-2">Nomor Polisi</label>
+                        <label for="no_polisi" class="block text-sm font-semibold text-slate-300 mb-2">Nomor Polisi</label>
                         <input type="text" name="no_polisi" id="no_polisi" value="{{ old('no_polisi') }}"
-                            class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder-slate-400 text-slate-800"
+                            class="w-full px-4 py-3 bg-slate-800/50 border border-white/10 rounded-xl focus:outline-none focus:bg-slate-900 border border-white/5 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder-slate-400 text-slate-200"
                             placeholder="contoh: B 1234 XYZ" required>
                         @error('no_polisi')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -43,9 +43,9 @@
 
                     <!-- Jenis Kendaraan -->
                     <div>
-                        <label for="jenis_kendaraan" class="block text-sm font-semibold text-slate-700 mb-2">Jenis Kendaraan</label>
+                        <label for="jenis_kendaraan" class="block text-sm font-semibold text-slate-300 mb-2">Jenis Kendaraan</label>
                         <input type="text" name="jenis_kendaraan" id="jenis_kendaraan" value="{{ old('jenis_kendaraan') }}"
-                            class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder-slate-400 text-slate-800"
+                            class="w-full px-4 py-3 bg-slate-800/50 border border-white/10 rounded-xl focus:outline-none focus:bg-slate-900 border border-white/5 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder-slate-400 text-slate-200"
                             placeholder="contoh: Toyota Fortuner, Isuzu Panther" required>
                         @error('jenis_kendaraan')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -54,8 +54,8 @@
 
                     <!-- Roda -->
                     <div>
-                        <label for="roda" class="block text-sm font-semibold text-slate-700 mb-2">Roda Kendaraan</label>
-                        <select name="roda" id="roda" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all text-slate-800">
+                        <label for="roda" class="block text-sm font-semibold text-slate-300 mb-2">Roda Kendaraan</label>
+                        <select name="roda" id="roda" class="w-full px-4 py-3 bg-slate-800/50 border border-white/10 rounded-xl focus:outline-none focus:bg-slate-900 border border-white/5 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all text-slate-200">
                             <option value="">-- Pilih Jenis Roda --</option>
                             <option value="R2" {{ old('roda') == 'R2' ? 'selected' : '' }}>R2</option>
                             <option value="R4" {{ old('roda') == 'R4' ? 'selected' : '' }}>R4</option>
@@ -66,18 +66,18 @@
 
                     <!-- CC Kendaraan -->
                     <div>
-                        <label for="cc" class="block text-sm font-semibold text-slate-700 mb-2">CC Kendaraan</label>
-                        <input type="text" name="cc" id="cc" value="{{ old('cc') }}" placeholder="Contoh: 1500, 150 CC" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder-slate-400 text-slate-800">
+                        <label for="cc" class="block text-sm font-semibold text-slate-300 mb-2">CC Kendaraan</label>
+                        <input type="text" name="cc" id="cc" value="{{ old('cc') }}" placeholder="Contoh: 1500, 150 CC" class="w-full px-4 py-3 bg-slate-800/50 border border-white/10 rounded-xl focus:outline-none focus:bg-slate-900 border border-white/5 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder-slate-400 text-slate-200">
                     </div>
 
                     <!-- Jenis BBM -->
                     <div>
-                        <label for="jenis_bbm" class="block text-sm font-semibold text-slate-700 mb-2">Jenis BBM</label>
+                        <label for="jenis_bbm" class="block text-sm font-semibold text-slate-300 mb-2">Jenis BBM</label>
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                             @foreach(['Pertamax', 'Pertamina Dex'] as $bbm)
                             <label class="relative cursor-pointer">
                                 <input type="radio" name="jenis_bbm" value="{{ $bbm }}" class="peer sr-only" {{ old('jenis_bbm', 'Pertamax') == $bbm ? 'checked' : '' }} required>
-                                <div class="flex items-center justify-center px-4 py-3 border-2 border-slate-200 rounded-xl text-sm font-medium text-slate-600 peer-checked:border-indigo-500 peer-checked:bg-indigo-50 peer-checked:text-indigo-700 hover:bg-slate-50 transition-all">
+                                <div class="flex items-center justify-center px-4 py-3 border-2 border-white/10 rounded-xl text-sm font-medium text-slate-400 peer-checked:border-indigo-500 peer-checked:bg-indigo-50 peer-checked:text-indigo-700 hover:bg-slate-800/50 transition-all">
                                     {{ $bbm }}
                                 </div>
                             </label>
@@ -90,13 +90,13 @@
 
                     <!-- Submit -->
                     <div class="flex items-center gap-3 pt-4">
-                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 transition-all duration-300 hover:-translate-y-0.5">
+                        <button type="submit" class="px-4 py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 transition-all duration-300 hover:-translate-y-0.5">
                             <span class="flex items-center gap-2">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                                 Tambah Kendaraan
                             </span>
                         </button>
-                        <a href="{{ route('satker.kendaraans.index') }}" class="px-6 py-3 bg-slate-100 text-slate-600 font-semibold rounded-xl hover:bg-slate-200 transition">
+                        <a href="{{ route('satker.kendaraans.index') }}" class="px-4 py-3 bg-slate-800 text-slate-400 font-semibold rounded-xl hover:bg-slate-200 transition">
                             Batal
                         </a>
                     </div>

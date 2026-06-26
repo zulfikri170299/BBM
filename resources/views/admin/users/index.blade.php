@@ -1,13 +1,13 @@
 <x-app-layout>
-    <div class="p-6 lg:p-8 space-y-6">
+    <div class="p-2 sm:p-6 lg:p-8 space-y-4 sm:space-y-6">
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-slate-900">Manajemen User</h1>
-                <p class="mt-1 text-slate-500">Kelola semua akun pengguna dan peran dalam sistem.</p>
+                <h1 class="text-3xl font-bold text-white">Manajemen User</h1>
+                <p class="mt-1 text-slate-400">Kelola semua akun pengguna dan peran dalam sistem.</p>
             </div>
             <a href="{{ route('admin.users.create') }}"
-                class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-semibold text-sm hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all duration-200 hover:-translate-y-0.5">
+                        class="flex-1 lg:flex-none inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-semibold text-sm hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all duration-200 hover:-translate-y-0.5">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                 </svg>
@@ -56,7 +56,7 @@
         @endif
 
         <!-- Filter Bar -->
-        <div class="bg-white p-4 rounded-2xl border border-slate-200/70 shadow-sm">
+        <div class="bg-slate-900 border border-white/5 p-3 sm:p-4 rounded-2xl border border-white/10/70 shadow-sm">
             <form action="{{ route('admin.users.index') }}" method="GET" class="flex flex-col lg:flex-row items-stretch lg:items-center gap-4">
                 <div class="flex-1">
                     <div class="relative group">
@@ -68,13 +68,13 @@
                         </span>
                         <input type="text" name="search" value="{{ request('search') }}"
                             placeholder="Cari nama atau email..."
-                            class="block w-full pl-11 pr-4 py-2.5 bg-slate-50 border-slate-200 rounded-xl text-sm placeholder-slate-400 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium">
+                            class="block w-full pl-11 pr-4 py-2.5 bg-slate-800/50 border-white/10 rounded-xl text-sm placeholder-slate-400 focus:bg-slate-900 border border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium">
                     </div>
                 </div>
 
                 <div class="w-full lg:w-72">
                     <select name="satker_id"
-                        class="tom-select block w-full bg-slate-50 border border-slate-200 rounded-xl text-sm transition-all">
+                        class="tom-select block w-full bg-slate-800/50 border border-white/10 rounded-xl text-sm transition-all">
                         <option value="">Semua Satker</option>
                         @foreach($satkers as $satker)
                             <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
@@ -84,13 +84,13 @@
                     </select>
                 </div>
 
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 w-full lg:w-auto">
                     <button type="submit"
                         class="flex-1 lg:flex-none inline-flex items-center justify-center px-6 py-2.5 bg-indigo-600 text-white rounded-xl font-bold text-sm hover:bg-indigo-700 transition shadow-lg shadow-indigo-500/20 active:scale-95">
                         Filter
                     </button>
                     <a href="{{ route('admin.users.index') }}"
-                        class="inline-flex items-center justify-center px-6 py-2.5 bg-slate-100 text-slate-600 rounded-xl font-bold text-sm hover:bg-slate-200 transition active:scale-95">
+                        class="flex-1 lg:flex-none inline-flex items-center justify-center px-6 py-2.5 bg-slate-800 text-slate-400 rounded-xl font-bold text-sm hover:bg-slate-200 transition active:scale-95">
                         Reset
                     </a>
                 </div>
@@ -98,9 +98,9 @@
         </div>
 
         <!-- Table Card -->
-        <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm overflow-hidden">
+        <div class="bg-slate-900 rounded-2xl border border-white/10 shadow-sm overflow-hidden">
             <!-- Table Header Info -->
-            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <div class="px-4 py-3 border-b border-white/5 flex items-center justify-between bg-slate-800/50">
                 <div class="flex items-center gap-3">
                     <div class="p-2 bg-indigo-100 text-indigo-600 rounded-lg">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -110,7 +110,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="font-semibold text-slate-800">Daftar Pengguna</h3>
+                        <h3 class="font-semibold text-slate-200">Daftar Pengguna</h3>
                         <p class="text-xs text-slate-400">{{ $users->total() }} user terdaftar dalam sistem</p>
                     </div>
                 </div>
@@ -153,8 +153,8 @@
             <div class="overflow-x-auto">
                 <table class="min-w-full">
                     <thead>
-                        <tr class="bg-slate-50/50 border-b border-slate-100">
-                            <th colspan="6" class="px-6 py-3">
+                        <tr class="bg-slate-800/50 border-b border-white/5">
+                            <th colspan="6" class="px-4 py-3">
                                 <div class="flex items-center justify-between">
                                     <form action="{{ route('admin.users.index') }}" method="GET"
                                         class="flex items-center">
@@ -173,52 +173,52 @@
                                 </div>
                             </th>
                         </tr>
-                        <tr class="bg-slate-50/30">
+                        <tr class="bg-slate-800/50/30">
                             <th class="w-10 px-6 py-3.5">
                                 <input type="checkbox" id="checkAll"
-                                    class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
+                                    class="rounded border-white/20 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
                             </th>
-                            <th class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">
+                            <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">
                                 Identitas User</th>
-                            <th class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">
+                            <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">
                                 NRP / Email</th>
-                            <th class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">
+                            <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">
                                 Role & Unit</th>
                             <th
-                                class="px-6 py-3.5 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">
+                                class="px-4 py-3 text-center text-xs font-bold text-slate-400 uppercase tracking-wider">
                                 Status</th>
                             <th
-                                class="px-6 py-3.5 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">
+                                class="px-4 py-3 text-right text-xs font-bold text-slate-400 uppercase tracking-wider">
                                 Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody class="divide-y divide-white/5">
                         @foreach($users as $user)
-                            <tr class="hover:bg-slate-50/50 transition-colors group">
-                                <td class="px-6 py-4 whitespace-nowrap">
+                            <tr class="hover:bg-slate-800/50 transition-colors group">
+                                <td class="px-4 py-3 whitespace-nowrap">
                                     @if(auth()->id() !== $user->id)
                                         <input type="checkbox" name="user_ids[]" value="{{ $user->id }}"
-                                            class="user-checkbox rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
+                                            class="user-checkbox rounded border-white/20 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 py-3 whitespace-nowrap">
                                     <div class="flex items-center gap-3">
                                         <div
                                             class="w-10 h-10 rounded-xl bg-gradient-to-br {{ $loop->index % 2 == 0 ? 'from-indigo-500 to-purple-600' : 'from-emerald-500 to-teal-600' }} flex items-center justify-center text-white font-bold text-sm shadow-md ring-2 ring-white">
                                             {{ strtoupper(substr($user->name, 0, 2)) }}
                                         </div>
                                         <div>
-                                            <p class="text-sm font-bold text-slate-900">{{ $user->name }}</p>
+                                            <p class="text-sm font-bold text-white">{{ $user->name }}</p>
                                             <p class="text-[11px] font-medium text-slate-400 mt-0.5">ID: #{{ $user->id }}
                                             </p>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <p class="text-sm font-semibold text-slate-700">{{ $user->email }}</p>
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    <p class="text-sm font-semibold text-slate-300">{{ $user->email }}</p>
                                     <p class="text-[11px] text-slate-400">Username: {{ $user->username ?? '-' }}</p>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-4 py-3 whitespace-nowrap">
                                     <div class="flex flex-col gap-1.5">
                                         @php
                                             $roleColors = [
@@ -228,33 +228,33 @@
                                                 'personel' => 'bg-blue-50 text-blue-700 border-blue-100',
                                                 'petugas_bbm' => 'bg-amber-50 text-amber-700 border-amber-100',
                                             ];
-                                            $colorClass = $roleColors[$user->role] ?? 'bg-slate-50 text-slate-700 border-slate-100';
+                                            $colorClass = $roleColors[$user->role] ?? 'bg-slate-800/50 text-slate-300 border-white/5';
                                         @endphp
                                         <span
                                             class="inline-flex items-center w-fit px-2 py-0.5 rounded-md text-[10px] font-bold border {{ $colorClass }} uppercase tracking-wider">
                                             {{ str_replace('_', ' ', $user->role) }}
                                         </span>
-                                        <p class="text-xs font-medium text-slate-500 truncate max-w-[150px]">
+                                        <p class="text-xs font-medium text-slate-400 truncate max-w-[150px]">
                                             {{ $user->satker ? $user->satker->nama_satker : 'Pusat / SuperAdmin' }}
                                         </p>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                <td class="px-4 py-3 whitespace-nowrap text-center">
                                     @if($user->is_active)
                                         <span
-                                            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">
+                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">
                                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
                                             Aktif
                                         </span>
                                     @else
                                         <span
-                                            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-700">
+                                            class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700">
                                             <span class="w-1.5 h-1.5 rounded-full bg-rose-500 mr-1.5"></span>
                                             Nonaktif
                                         </span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right">
+                                <td class="px-4 py-3 whitespace-nowrap text-right">
                                     <div class="flex items-center justify-end gap-2">
                                         @if(auth()->id() !== $user->id)
                                             <form action="{{ route('admin.users.toggle', $user) }}" method="POST"
@@ -332,7 +332,7 @@
 
             <!-- Pagination -->
             @if($users->hasPages())
-                <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/30">
+                <div class="px-4 py-3 border-t border-white/5 bg-slate-800/50/30">
                     {{ $users->links() }}
                 </div>
             @endif

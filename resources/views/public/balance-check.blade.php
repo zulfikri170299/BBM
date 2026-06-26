@@ -61,7 +61,7 @@
                         @endif
                         <div class="relative group">
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-slate-500 group-focus-within:text-amber-500 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="h-5 w-5 text-slate-400 group-focus-within:text-amber-500 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                 </svg>
                             </div>
@@ -80,7 +80,7 @@
             <div x-show="mode === 'scan'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" class="space-y-4">
                 <div class="relative rounded-2xl overflow-hidden bg-slate-950/50 border border-white/5 min-h-[300px] flex flex-col items-center justify-center">
                     <div id="reader" class="w-full"></div>
-                    <div id="scanner-placeholder" class="py-12 flex flex-col items-center justify-center text-slate-500">
+                    <div id="scanner-placeholder" class="py-12 flex flex-col items-center justify-center text-slate-400">
                         <svg class="w-16 h-16 mb-4 opacity-20 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -95,15 +95,15 @@
                 </form>
 
                 @if($personelAccessControl == '1')
-                    <p class="text-[10px] text-slate-500 text-center italic uppercase tracking-widest">Arahkan kamera ke barcode kartu kendaraan atau personel</p>
+                    <p class="text-[10px] text-slate-400 text-center italic uppercase tracking-widest">Arahkan kamera ke barcode kartu kendaraan atau personel</p>
                 @else
-                    <p class="text-[10px] text-slate-500 text-center italic uppercase tracking-widest">Arahkan kamera ke barcode kartu kendaraan</p>
+                    <p class="text-[10px] text-slate-400 text-center italic uppercase tracking-widest">Arahkan kamera ke barcode kartu kendaraan</p>
                 @endif
             </div>
 
             <!-- Back to Login -->
             <div class="pt-6 text-center border-t border-white/5">
-                <a href="{{ route('login') }}" class="text-xs font-semibold text-slate-500 hover:text-amber-500 transition-colors uppercase tracking-widest flex items-center justify-center gap-2">
+                <a href="{{ route('login') }}" class="text-xs font-semibold text-slate-400 hover:text-amber-500 transition-colors uppercase tracking-widest flex items-center justify-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
@@ -148,7 +148,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                             </svg>
                             <p class="text-xs text-red-400 font-bold uppercase tracking-widest">Gagal Mengakses Kamera</p>
-                            <p class="text-[10px] text-slate-500 mt-1">Pastikan Anda telah memberikan izin kamera pada browser.</p>
+                            <p class="text-[10px] text-slate-400 mt-1">Pastikan Anda telah memberikan izin kamera pada browser.</p>
                         </div>
                     `;
                 });

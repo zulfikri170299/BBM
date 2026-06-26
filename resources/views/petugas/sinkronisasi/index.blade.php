@@ -1,16 +1,16 @@
 <x-app-layout>
-    <div class="p-4 sm:p-6 lg:p-8 space-y-8">
+    <div class="p-2 sm:p-6 lg:p-8 space-y-8">
         <!-- Header Section -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div class="flex items-center gap-4">
-                <div class="p-3 bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-200 text-white">
+                <div class="p-3 bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-500/30 text-white">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-3xl font-black text-slate-900 tracking-tight">Input Stok Tangki</h1>
-                    <p class="text-slate-500 text-sm font-medium mt-1 uppercase tracking-widest flex items-center gap-2">
+                    <h1 class="text-3xl font-black text-white tracking-tight">Input Stok Tangki</h1>
+                    <p class="text-slate-400 text-sm font-medium mt-1 uppercase tracking-widest flex items-center gap-2">
                         <span class="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></span>
                         Update Stok Fisik BBM Lapangan
                     </p>
@@ -32,10 +32,10 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Form Card -->
             <div class="lg:col-span-1">
-                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden sticky top-8">
-                    <div class="p-8 bg-slate-50/50 border-b border-slate-100">
-                        <h3 class="text-xl font-black text-slate-900">Form Input Fisik</h3>
-                        <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest mt-1">Masukkan angka dari tongkat ukur</p>
+                <div class="bg-slate-900 border border-white/5 rounded-3xl shadow-sm border border-white/10 overflow-hidden sticky top-8">
+                    <div class="p-8 bg-slate-800/50 border-b border-white/5">
+                        <h3 class="text-xl font-black text-white">Form Input Fisik</h3>
+                        <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-1">Masukkan angka dari tongkat ukur</p>
                     </div>
                     <form action="{{ route('petugas.sinkronisasi.store') }}" method="POST" class="p-8 space-y-6">
                         @csrf
@@ -48,8 +48,8 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                                         </svg>
                                     </div>
-                                    <input type="number" name="stok_awal_pertamax" step="0.01" min="0"
-                                        class="w-full pl-12 pr-12 py-4 bg-slate-50 border {{ $errors->has('stok_awal_pertamax') ? 'border-red-500' : 'border-slate-200' }} rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-black text-slate-900 text-lg placeholder:text-slate-300"
+                                    <input type="number" name="stok_awal_pertamax" step="1" min="0"
+                                        class="w-full pl-12 pr-12 py-4 bg-slate-800/50 border {{ $errors->has('stok_awal_pertamax') ? 'border-red-500' : 'border-white/10' }} rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-black text-white text-lg placeholder:text-slate-300"
                                         placeholder="0.00" value="{{ old('stok_awal_pertamax') }}">
                                     <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-black text-[10px]">LITER</span>
                                 </div>
@@ -66,8 +66,8 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                                         </svg>
                                     </div>
-                                    <input type="number" name="stok_awal_dex" step="0.01" min="0"
-                                        class="w-full pl-12 pr-12 py-4 bg-slate-50 border {{ $errors->has('stok_awal_dex') ? 'border-red-500' : 'border-slate-200' }} rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-black text-slate-900 text-lg placeholder:text-slate-300"
+                                    <input type="number" name="stok_awal_dex" step="1" min="0"
+                                        class="w-full pl-12 pr-12 py-4 bg-slate-800/50 border {{ $errors->has('stok_awal_dex') ? 'border-red-500' : 'border-white/10' }} rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-black text-white text-lg placeholder:text-slate-300"
                                         placeholder="0.00" value="{{ old('stok_awal_dex') }}">
                                     <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-black text-[10px]">LITER</span>
                                 </div>
@@ -86,7 +86,7 @@
                         <button type="submit" 
                             data-confirm="Apakah Anda yakin data stok sudah benar? Tindakan ini akan mereset nilai pemakaian."
                             data-confirm-type="warning"
-                            class="w-full py-4 bg-indigo-600 hover:bg-slate-900 text-white rounded-2xl font-black shadow-lg shadow-indigo-200 hover:shadow-slate-200 transition-all active:scale-[0.98] flex items-center justify-center gap-3 group">
+                            class="w-full py-4 bg-indigo-600 hover:bg-slate-900 text-white rounded-2xl font-black shadow-lg shadow-indigo-500/30 hover:shadow-slate-200 transition-all active:scale-[0.98] flex items-center justify-center gap-3 group">
                             <svg class="w-6 h-6 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
                             </svg>
@@ -98,70 +98,70 @@
 
             <!-- List Card -->
             <div class="lg:col-span-2">
-                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="p-8 border-b border-slate-100 flex justify-between items-center">
+                <div class="bg-slate-900 border border-white/5 rounded-3xl shadow-sm border border-white/10 overflow-hidden">
+                    <div class="p-8 border-b border-white/5 flex justify-between items-center">
                         <div>
-                            <h3 class="text-xl font-black text-slate-900">Riwayat Sinkronisasi</h3>
-                            <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest mt-1">Daftar input stok fisik terakhir</p>
+                            <h3 class="text-xl font-black text-white">Riwayat Sinkronisasi</h3>
+                            <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-1">Daftar input stok fisik terakhir</p>
                         </div>
                     </div>
 
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="bg-slate-50/50">
-                                    <th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Waktu & Petugas</th>
-                                    <th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Stok Awal Fisik</th>
-                                    <th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100 text-center">Sisa Stok Akhir</th>
+                                <tr class="bg-white/5 backdrop-blur-sm">
+                                    <th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-white/5">Waktu & Petugas</th>
+                                    <th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-white/5 text-center">Stok Awal Fisik</th>
+                                    <th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-white/5 text-center">Sisa Stok Akhir</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100">
+                            <tbody class="divide-y divide-white/5">
                                 @forelse($syncs as $index => $sync)
                                     <!-- Pertamax Row -->
-                                    <tr class="group hover:bg-indigo-50/30 transition-colors {{ $index === 0 ? 'bg-indigo-50/20' : '' }}">
+                                    <tr class="group hover:bg-white/5 transition-colors {{ $index === 0 ? 'bg-indigo-900/20' : '' }}">
                                         <td class="px-8 py-6" rowspan="2">
                                             <div class="flex items-start gap-4">
-                                                <div class="p-2.5 bg-white border border-slate-200 rounded-xl shadow-sm">
-                                                    <div class="font-black text-slate-900 text-lg leading-none text-center">{{ $sync->created_at->format('d') }}</div>
+                                                <div class="p-2.5 bg-white/10 border border-white/20 rounded-xl backdrop-blur-md shadow-lg shadow-black/20">
+                                                    <div class="font-black text-white text-lg leading-none text-center">{{ $sync->created_at->format('d') }}</div>
                                                     <div class="text-[9px] font-black text-slate-400 uppercase tracking-tighter text-center mt-1">{{ $sync->created_at->format('M Y') }}</div>
                                                 </div>
                                                 <div>
-                                                    <div class="text-sm font-black text-slate-800">{{ $sync->created_at->format('H:i') }} <span class="text-slate-400 font-bold">WITA</span></div>
+                                                    <div class="text-sm font-black text-slate-200">{{ $sync->created_at->format('H:i') }} <span class="text-slate-400 font-bold">WITA</span></div>
                                                     <div class="mt-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                                                         {{ $sync->petugas->name ?? '-' }}
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="px-8 py-6 border-l border-slate-100">
+                                        <td class="px-8 py-6 border-l border-white/5">
                                             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                                                <span class="text-[9px] font-black text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100 whitespace-nowrap">PERTAMAX</span>
-                                                <span class="font-black text-slate-900 text-lg pl-2 border-l-2 border-slate-100">{{ number_format($sync->stok_awal_pertamax, 0, ',', '.') }} L</span>
+                                                <span class="text-[9px] font-black text-blue-400 bg-blue-500/20 px-3 py-1 rounded-full border border-blue-500/30 shadow-[0_0_10px_rgba(59,130,246,0.2)] whitespace-nowrap">PERTAMAX</span>
+                                                <span class="font-black text-white text-lg pl-2 border-l-2 border-white/5">{{ number_format($sync->stok_awal_pertamax, 0, ',', '.') }} L</span>
                                             </div>
                                         </td>
-                                        <td class="px-8 py-6 text-center bg-slate-50/50">
-                                            <div class="font-black text-slate-900 text-xl">{{ number_format($sync->sisa_pertamax, 0, ',', '.') }} L</div>
-                                            <div class="text-[9px] font-bold text-rose-500 uppercase tracking-widest mt-2 bg-rose-50 inline-block px-2 py-1 rounded-md">PEMAKAIAN: {{ number_format($sync->pemakaian_pertamax, 0, ',', '.') }} L</div>
+                                        <td class="px-8 py-6 text-center bg-white/[0.02]">
+                                            <div class="font-black text-white text-xl">{{ number_format($sync->sisa_pertamax, 0, ',', '.') }} L</div>
+                                            <div class="text-[9px] font-bold text-rose-400 border border-rose-500/30 uppercase tracking-widest mt-2 bg-rose-500/20 inline-block px-2 py-1 rounded-md">PEMAKAIAN: {{ number_format($sync->pemakaian_pertamax, 0, ',', '.') }} L</div>
                                         </td>
                                     </tr>
                                     <!-- Dex Row -->
-                                    <tr class="group hover:bg-indigo-50/30 transition-colors {{ $index === 0 ? 'bg-indigo-50/20' : '' }} border-b border-slate-100">
-                                        <td class="px-8 py-6 border-l border-slate-100">
+                                    <tr class="group hover:bg-white/5 transition-colors {{ $index === 0 ? 'bg-indigo-900/20' : '' }} border-b border-white/5">
+                                        <td class="px-8 py-6 border-l border-white/5">
                                             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                                                <span class="text-[9px] font-black text-rose-600 bg-rose-50 px-3 py-1 rounded-full border border-rose-100 whitespace-nowrap">P. DEX</span>
-                                                <span class="font-black text-slate-900 text-lg pl-2 border-l-2 border-slate-100">{{ number_format($sync->stok_awal_dex, 0, ',', '.') }} L</span>
+                                                <span class="text-[9px] font-black text-rose-400 bg-rose-500/20 px-3 py-1 rounded-full border border-rose-500/30 shadow-[0_0_10px_rgba(244,63,94,0.2)] whitespace-nowrap">P. DEX</span>
+                                                <span class="font-black text-white text-lg pl-2 border-l-2 border-white/5">{{ number_format($sync->stok_awal_dex, 0, ',', '.') }} L</span>
                                             </div>
                                         </td>
-                                        <td class="px-8 py-6 text-center bg-slate-50/50">
-                                            <div class="font-black text-slate-900 text-xl">{{ number_format($sync->sisa_dex, 0, ',', '.') }} L</div>
-                                            <div class="text-[9px] font-bold text-rose-500 uppercase tracking-widest mt-2 bg-rose-50 inline-block px-2 py-1 rounded-md">PEMAKAIAN: {{ number_format($sync->pemakaian_dex, 0, ',', '.') }} L</div>
+                                        <td class="px-8 py-6 text-center bg-white/[0.02]">
+                                            <div class="font-black text-white text-xl">{{ number_format($sync->sisa_dex, 0, ',', '.') }} L</div>
+                                            <div class="text-[9px] font-bold text-rose-400 border border-rose-500/30 uppercase tracking-widest mt-2 bg-rose-500/20 inline-block px-2 py-1 rounded-md">PEMAKAIAN: {{ number_format($sync->pemakaian_dex, 0, ',', '.') }} L</div>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
                                         <td colspan="3" class="px-8 py-20 text-center">
                                             <div class="flex flex-col items-center">
-                                                <div class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mb-4 text-slate-200">
+                                                <div class="w-16 h-16 bg-slate-800/50 rounded-2xl flex items-center justify-center mb-4 text-slate-200">
                                                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
                                                     </svg>
@@ -175,7 +175,7 @@
                         </table>
                     </div>
                     @if($syncs->hasPages())
-                        <div class="px-8 py-6 border-t border-slate-100 bg-slate-50/50">
+                        <div class="px-8 py-6 border-t border-white/5 bg-slate-800/50">
                             {{ $syncs->links() }}
                         </div>
                     @endif

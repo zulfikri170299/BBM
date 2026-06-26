@@ -1,15 +1,15 @@
 <x-app-layout>
-    <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6" x-data="hutangComponent">
+    <div class="max-w-7xl mx-auto p-2 sm:p-6 lg:p-8 space-y-6 px-2 sm:px-6 lg:px-8" x-data="hutangComponent">
         <!-- Page Title -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 border-b-4 border-indigo-600 pb-2 inline-block">
+            <h1 class="text-2xl sm:text-3xl font-bold text-white border-b-2 border-indigo-500/50 pb-2 inline-block">
                 Monitoring Hutang BBM</h1>
 
             <!-- Summary Outstanding per BBM (Dynamic) -->
             <div class="flex flex-wrap gap-3">
                 @forelse($summaryHutang as $bbm => $total)
                     <div
-                        class="bg-white px-4 py-2 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3 animate-in fade-in slide-in-from-right-4 duration-500">
+                        class="bg-slate-900 border border-white/5 px-4 py-2 rounded-2xl border border-white/10 shadow-sm flex items-center gap-3 animate-in fade-in slide-in-from-right-4 duration-500">
                         <div class="w-2 h-8 bg-rose-500 rounded-full"></div>
                         <div>
                             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">
@@ -26,7 +26,7 @@
                         <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
-                        <span class="text-sm font-bold text-emerald-600">Semua Terbayar</span>
+                        <span class="text-xs font-semibold text-emerald-500">Semua Terbayar</span>
                     </div>
                 @endforelse
             </div>
@@ -47,17 +47,17 @@
         @endif
 
         <!-- Condensed Filter & Action Bar -->
-        <div class="bg-white rounded-3xl border border-slate-200/60 shadow-lg shadow-slate-100 p-4 mb-6 relative overflow-hidden group">
+        <div class="bg-slate-900 border border-white/5 rounded-3xl border border-white/10/60 shadow-lg shadow-black/20 p-4 mb-6 relative overflow-hidden group">
             <!-- Subtle Decorative Flare -->
             <div class="absolute -right-4 -top-4 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl"></div>
             
-            <form action="{{ route('admin.hutang.index') }}" method="GET" class="relative z-10 flex flex-wrap lg:flex-nowrap items-end gap-3 lg:gap-4">
+            <form action="{{ route('admin.hutang.index') }}" method="GET" class="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:flex items-end gap-3 lg:gap-4">
                 <!-- Satker -->
-                <div class="w-full sm:flex-1 lg:min-w-[200px]">
+                <div class="w-full lg:flex-1 lg:min-w-[200px]">
                     <x-input-label for="filter_satker_id" value="Satker" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-1" />
                     <div class="relative group/input">
                         <select name="satker_id" id="filter_satker_id"
-                            class="tom-select block w-full bg-slate-50 border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700">
+                            class="tom-select block w-full bg-slate-800/50 border-white/10 focus:bg-slate-900 border border-white/5 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-300">
                             <option value="">Semua Satker</option>
                             @foreach($satkers as $satker)
                                 <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
@@ -69,11 +69,11 @@
                 </div>
 
                 <!-- Status -->
-                <div class="w-[calc(50%-0.5rem)] sm:w-44">
+                <div class="w-full sm:w-44">
                     <x-input-label for="filter_status" value="Status" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-1" />
                     <div class="relative group/input">
                         <select name="status" id="filter_status"
-                            class="tom-select block w-full bg-slate-50 border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700">
+                            class="tom-select block w-full bg-slate-800/50 border-white/10 focus:bg-slate-900 border border-white/5 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-300">
                             <option value="">Semua Status</option>
                             <option value="belum_dibayar" {{ request('status') === 'belum_dibayar' ? 'selected' : '' }}>BELUM</option>
                             <option value="sudah_dibayar" {{ request('status') === 'sudah_dibayar' ? 'selected' : '' }}>LUNAS</option>
@@ -82,13 +82,13 @@
                 </div>
 
                 <!-- Date Range Group -->
-                <div class="w-[calc(50%-0.5rem)] sm:w-auto flex items-end gap-3 sm:gap-4">
+                <div class="w-full sm:w-auto flex items-end gap-3 sm:gap-4">
                     <!-- Start Date -->
                     <div class="flex-1 sm:w-40">
                         <x-input-label for="start_date" value="Dari" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-1" />
                         <div class="relative group/input">
                             <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}"
-                                class="flatpickr block w-full py-2 bg-slate-50 border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700" />
+                                class="flatpickr block w-full py-2 bg-slate-800/50 border-white/10 focus:bg-slate-900 border border-white/5 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-300" />
                         </div>
                     </div>
 
@@ -97,15 +97,15 @@
                         <x-input-label for="end_date" value="Sampai" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-1" />
                         <div class="relative group/input">
                             <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}"
-                                class="flatpickr block w-full py-2 bg-slate-50 border-slate-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700" />
+                                class="flatpickr block w-full py-2 bg-slate-800/50 border-white/10 focus:bg-slate-900 border border-white/5 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-300" />
                         </div>
                     </div>
                 </div>
 
                 <!-- Buttons Group -->
-                <div class="w-full lg:w-auto flex flex-nowrap items-center gap-2">
+                <div class="w-full lg:w-auto grid grid-cols-2 lg:flex items-center gap-2 sm:col-span-2 lg:col-span-1">
                     <button type="submit"
-                        class="flex-1 lg:flex-none px-4 py-2.5 bg-indigo-600 text-white font-black rounded-xl shadow-lg shadow-indigo-100 hover:bg-indigo-700 active:scale-95 transition-all text-[10px] uppercase tracking-widest flex items-center justify-center gap-2">
+                        class="flex-1 lg:flex-none px-4 py-2.5 bg-indigo-600 text-white font-black rounded-xl shadow-lg shadow-indigo-500/20 hover:bg-indigo-700 active:scale-95 transition-all text-[10px] uppercase tracking-widest flex items-center justify-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                         </svg>
@@ -114,7 +114,7 @@
                     
                     @if(request()->hasAny(['satker_id', 'status', 'start_date', 'end_date']))
                         <a href="{{ route('admin.hutang.index') }}"
-                            class="flex-1 lg:flex-none px-4 py-2.5 bg-slate-100 text-slate-600 font-black rounded-xl hover:bg-slate-200 active:scale-95 transition-all text-[10px] uppercase tracking-widest flex items-center justify-center gap-2" title="Reset Filter">
+                            class="flex-1 lg:flex-none px-4 py-2.5 bg-slate-800 text-slate-400 font-black rounded-xl hover:bg-slate-200 active:scale-95 transition-all text-[10px] uppercase tracking-widest flex items-center justify-center gap-2" title="Reset Filter">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
@@ -123,7 +123,7 @@
                     @endif
 
                     <button type="button" @click="openCreateModal()"
-                        class="flex-1 lg:flex-none px-4 py-2.5 bg-emerald-600 text-white font-black rounded-xl shadow-lg shadow-emerald-100 hover:bg-emerald-700 active:scale-95 transition-all text-[10px] uppercase tracking-widest flex items-center justify-center group/btn gap-2">
+                        class="flex-1 lg:flex-none px-4 py-2.5 bg-emerald-600 text-white font-black rounded-xl shadow-lg shadow-emerald-500/20 hover:bg-emerald-700 active:scale-95 transition-all text-[10px] uppercase tracking-widest flex items-center justify-center group/btn gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" />
                         </svg>
@@ -134,9 +134,9 @@
         </div>
 
         <!-- Table Data -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider">Data Hutang BBM</h3>
+        <div class="bg-slate-900 border border-white/5 rounded-2xl border border-white/10 shadow-sm overflow-hidden">
+            <div class="px-4 py-3 border-b border-white/5 flex justify-between items-center bg-slate-800/50">
+                <h3 class="text-sm font-bold text-slate-300 uppercase tracking-wider">Data Hutang BBM</h3>
                 <div class="flex items-center gap-2">
                     <span class="text-[10px] uppercase font-bold text-slate-400">Tampilkan</span>
                     <form action="{{ route('admin.hutang.index') }}" method="GET" class="inline">
@@ -144,7 +144,7 @@
                             <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                         @endforeach
                         <select name="per_page" onchange="this.form.submit()"
-                            class="block border-slate-200 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm text-xs py-1.5 font-bold text-slate-700">
+                            class="block border-white/10 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm text-xs py-1.5 font-bold text-slate-300">
                             <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
                             <option value="15" {{ request('per_page') == 15 || !request('per_page') ? 'selected' : '' }}>
                                 15</option>
@@ -157,7 +157,7 @@
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-sm text-left">
-                    <thead class="text-[10px] text-slate-500 uppercase bg-slate-50/80 border-b border-slate-200">
+                    <thead class="text-[10px] text-slate-400 uppercase bg-slate-800/50/80 border-b border-white/10">
                         <tr>
                             <th class="px-4 py-3 font-bold">Tanggal</th>
                             <th class="px-4 py-3 font-bold">Satker</th>
@@ -167,24 +167,24 @@
                             <th class="px-4 py-3 font-bold">Petugas Pencatat</th>
                             <th class="px-4 py-3 font-bold">Status</th>
                             @if(auth()->user()->role !== 'kasubbag')
-                                <th class="px-4 py-3 font-bold text-center border-l border-slate-200 bg-slate-100/30">
+                                <th class="px-4 py-3 font-bold text-center border-l border-white/10 bg-slate-800/30">
                                     Pembayaran</th>
-                                <th class="px-4 py-3 font-bold text-center border-l border-slate-200">Kelola</th>
+                                <th class="px-4 py-3 font-bold text-center border-l border-white/10">Kelola</th>
                             @endif
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody class="divide-y divide-white/5">
                         @forelse($hutangs as $hutang)
-                            <tr class="hover:bg-slate-50/50 transition">
+                            <tr class="hover:bg-slate-800/50 transition">
                                 <td class="px-4 py-2">
-                                    <div class="text-[10px] sm:text-xs font-bold text-slate-900">
+                                    <div class="text-[10px] sm:text-xs font-bold text-white">
                                         @if($hutang->tanggal_bon)
                                             {{ \Carbon\Carbon::parse($hutang->tanggal_bon)->format('d-m-Y') }}
                                         @else
                                             {{ \Carbon\Carbon::parse($hutang->created_at)->timezone('Asia/Makassar')->format('d-m-Y') }}
                                         @endif
                                     </div>
-                                    <div class="text-[9px] sm:text-[10px] text-slate-500 uppercase tracking-tight">
+                                    <div class="text-[9px] sm:text-[10px] text-slate-400 uppercase tracking-tight">
                                         @if($hutang->tanggal_bon)
                                             CATATAN MANUAL
                                         @else
@@ -193,13 +193,13 @@
                                         @endif
                                     </div>
                                 </td>
-                                <td class="px-4 py-2 text-[10px] sm:text-xs font-semibold text-slate-800 leading-tight">{{ $hutang->satker->nama_satker }}</td>
+                                <td class="px-4 py-2 text-[10px] sm:text-xs font-semibold text-slate-200 leading-tight">{{ $hutang->satker->nama_satker }}</td>
                                 <td class="px-4 py-2">
-                                    <div class="text-[11px] sm:text-xs font-black text-slate-900 leading-tight uppercase">{{ $hutang->nopol }}</div>
-                                    <div class="text-[9px] sm:text-[10px] text-slate-500">{{ $hutang->jenis_kendaraan }}</div>
+                                    <div class="text-[11px] sm:text-xs font-black text-white leading-tight uppercase">{{ $hutang->nopol }}</div>
+                                    <div class="text-[9px] sm:text-[10px] text-slate-400">{{ $hutang->jenis_kendaraan }}</div>
                                 </td>
                                 <td class="px-4 py-2">
-                                    <div class="font-bold text-slate-800">{{ $hutang->nama_driver ?? '-' }}</div>
+                                    <div class="font-bold text-slate-200">{{ $hutang->nama_driver ?? '-' }}</div>
                                 </td>
                                 <td class="px-4 py-2">
                                     @php
@@ -213,7 +213,7 @@
                                         {{ number_format($hutang->jumlah_bon, 0, ',', '.') }} L {{ $hutang->jenis_bbm }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-2 text-slate-700 text-xs">{{ $hutang->petugas->name ?? '-' }}</td>
+                                <td class="px-4 py-2 text-slate-300 text-xs">{{ $hutang->petugas->name ?? '-' }}</td>
                                 <td class="px-4 py-2">
                                     @if($hutang->status === 'belum_dibayar')
                                         <span
@@ -223,16 +223,16 @@
                                         <div class="flex flex-col gap-0.5">
                                             <span
                                                 class="px-2 py-0.5 bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg text-[10px] font-bold uppercase w-fit">LUNAS</span>
-                                            <span class="text-[9px] text-slate-500">Oleh:
+                                            <span class="text-[9px] text-slate-400">Oleh:
                                                 {{ $hutang->adminBayar->name ?? '-' }}</span>
                                             <span
-                                                class="text-[9px] text-slate-500">{{ \Carbon\Carbon::parse($hutang->tanggal_bayar)->timezone('Asia/Makassar')->format('d-m-Y') }}
+                                                class="text-[9px] text-slate-400">{{ \Carbon\Carbon::parse($hutang->tanggal_bayar)->timezone('Asia/Makassar')->format('d-m-Y') }}
                                             </span>
                                         </div>
                                     @endif
                                 </td>
                                 @if(auth()->user()->role !== 'kasubbag')
-                                    <td class="px-4 py-2 border-l border-slate-100 bg-slate-50/20">
+                                    <td class="px-4 py-2 border-l border-white/5 bg-slate-800/50/20">
                                         <div class="flex items-center justify-center">
                                             @if($hutang->status === 'belum_dibayar')
                                                 <button
@@ -245,7 +245,7 @@
                                             @endif
                                         </div>
                                     </td>
-                                    <td class="px-4 py-2 border-l border-slate-100">
+                                    <td class="px-4 py-2 border-l border-white/5">
                                         <div class="flex items-center justify-center gap-2">
                                             @php
                                                 $editData = [
@@ -291,7 +291,7 @@
                         @empty
                             <tr>
                                 <td colspan="{{ auth()->user()->role === 'kasubbag' ? 7 : 9 }}"
-                                    class="px-6 py-8 text-center text-slate-500 italic">Tidak ada data hutang
+                                    class="px-6 py-8 text-center text-slate-400 italic">Tidak ada data hutang
                                     ditemukan.</td>
                             </tr>
                         @endforelse
@@ -299,7 +299,7 @@
                 </table>
             </div>
             @if($hutangs->hasPages())
-                <div class="p-4 border-t border-slate-200">
+                <div class="p-4 border-t border-white/10">
                     {{ $hutangs->links() }}
                 </div>
             @endif
@@ -317,13 +317,13 @@
                 <div x-show="showModal" x-transition:enter="ease-out duration-300"
                     x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                    class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl w-full">
+                    class="inline-block align-bottom bg-slate-900 border border-white/5 rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl w-full">
 
                     <!-- Modal Header -->
                     <div
                         class="bg-indigo-600 px-6 py-4 text-white flex justify-between items-center bg-gradient-to-r from-indigo-600 to-indigo-700">
                         <div class="flex items-center gap-3">
-                            <div class="bg-white/20 p-2 rounded-xl">
+                            <div class="bg-slate-900 border border-white/5/20 p-2 rounded-xl">
                                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                         d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -339,12 +339,12 @@
                         </button>
                     </div>
 
-                    <div class="bg-white px-6 pt-6 pb-6 border-b border-slate-100">
+                    <div class="bg-slate-900 border border-white/5 px-6 pt-6 pb-6 border-b border-white/5">
                         <div class="mb-6">
                             <!-- Summary Card -->
-                            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col gap-3">
-                                <div class="flex justify-between items-center border-b border-slate-200 pb-2">
-                                    <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Detail
+                            <div class="bg-slate-800/50 border border-white/10 rounded-2xl p-4 flex flex-col gap-3">
+                                <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                                    <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Detail
                                         Hutang</span>
                                     <span
                                         class="text-indigo-600 font-bold text-xs bg-indigo-50 px-2 py-0.5 rounded-lg border border-indigo-100 uppercase"
@@ -353,7 +353,7 @@
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
                                         <p class="text-[10px] font-bold text-slate-400 uppercase">No. Polisi</p>
-                                        <p class="text-lg font-black text-slate-800" x-text="hutangData.nopol"></p>
+                                        <p class="text-lg font-black text-slate-200" x-text="hutangData.nopol"></p>
                                     </div>
                                     <div class="text-right">
                                         <p class="text-[10px] font-bold text-slate-400 uppercase">Jumlah Bon</p>
@@ -369,7 +369,7 @@
                             @csrf
                             <div>
                                 <input type="hidden" name="nopol" :value="hutangData.nopol">
-                                <p class="text-sm font-bold text-slate-600 mb-4 bg-indigo-50 p-4 rounded-2xl border border-indigo-100/50 flex gap-3">
+                                <p class="text-sm font-bold text-slate-400 mb-4 bg-indigo-50 p-4 rounded-2xl border border-indigo-100/50 flex gap-3">
                                     <svg class="h-6 w-6 text-indigo-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
                                     </svg>
@@ -381,13 +381,13 @@
                         </form>
                     </div>
 
-                    <div class="bg-white px-6 py-5 flex flex-col sm:flex-row-reverse gap-3 rounded-b-3xl">
+                    <div class="bg-slate-900 border border-white/5 px-6 py-5 flex flex-col sm:flex-row-reverse gap-3 rounded-b-3xl">
                         <button type="submit" form="paymentForm"
-                            class="w-full sm:w-auto px-8 py-3.5 bg-indigo-600 text-white font-black rounded-2xl shadow-xl shadow-indigo-100 hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500/20 active:scale-95 transition-all text-sm uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none">
+                            class="w-full sm:w-auto px-8 py-3.5 bg-indigo-600 text-white font-black rounded-2xl shadow-xl shadow-indigo-500/20 hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500/20 active:scale-95 transition-all text-sm uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none">
                             KONFIRMASI PEMBAYARAN
                         </button>
                         <button type="button" @click="showModal = false"
-                            class="w-full sm:w-auto px-8 py-3.5 bg-slate-100 text-slate-600 font-bold rounded-2xl hover:bg-slate-200 transition-all text-sm uppercase tracking-widest">
+                            class="w-full sm:w-auto px-8 py-3.5 bg-slate-800 text-slate-400 font-bold rounded-2xl hover:bg-slate-200 transition-all text-sm uppercase tracking-widest">
                             BATAL
                         </button>
                     </div>
@@ -407,13 +407,13 @@
                 <div x-show="showEditModal" x-transition:enter="ease-out duration-300"
                     x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                    class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl w-full border border-slate-200">
+                    class="inline-block align-bottom bg-slate-900 border border-white/5 rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl w-full border border-white/10">
 
                     <!-- Modal Header -->
                     <div
                         class="bg-blue-600 px-6 py-4 text-white flex justify-between items-center bg-gradient-to-r from-blue-600 to-blue-700">
                         <div class="flex items-center gap-3">
-                            <div class="bg-white/20 p-2 rounded-xl">
+                            <div class="bg-slate-900 border border-white/5/20 p-2 rounded-xl">
                                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                         d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -443,7 +443,7 @@
                                     </svg>
                                 </div>
                                 <select name="satker_id" id="edit_satker_id" x-model="editData.satker_id" @change="fetchFormKendaraans($event.target.value); editData.kendaraan_id = ''"
-                                    class="tom-select block w-full pl-11 pr-10 py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700 appearance-none">
+                                    class="tom-select block w-full pl-11 pr-10 py-2.5 bg-slate-800/50 border-white/10 focus:bg-slate-900 border border-white/5 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-300 appearance-none">
                                     @foreach($satkers as $satker)
                                         <option value="{{ $satker->id }}">{{ $satker->nama_satker }}</option>
                                     @endforeach
@@ -463,7 +463,7 @@
                                 </div>
                                 <select name="kendaraan_id" id="edit_kendaraan_id" x-model="editData.kendaraan_id" required
                                     :disabled="loadingFormKendaraan || !editData.satker_id"
-                                    class="tom-select-dynamic block w-full pl-11 pr-10 py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700 appearance-none disabled:opacity-50">
+                                    class="tom-select-dynamic block w-full pl-11 pr-10 py-2.5 bg-slate-800/50 border-white/10 focus:bg-slate-900 border border-white/5 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-300 appearance-none disabled:opacity-50">
                                     <option value="" disabled x-text="loadingFormKendaraan ? 'Sedang mengambil data...' : '-- Pilih Kendaraan --'"></option>
                                     <template x-for="kend in formKendaraans" :key="kend.id">
                                         <option :value="kend.id" x-text="`${kend.no_polisi} - ${kend.jenis_kendaraan} (${kend.jenis_bbm})`"></option>
@@ -494,7 +494,7 @@
                                     </svg>
                                 </div>
                                 <input id="edit_nama_driver" name="nama_driver" type="text" x-model="editData.nama_driver" 
-                                    class="block w-full pl-11 pr-4 py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700" 
+                                    class="block w-full pl-11 pr-4 py-2.5 bg-slate-800/50 border-white/10 focus:bg-slate-900 border border-white/5 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-300" 
                                     placeholder="Masukkan nama pengemudi" required />
                             </div>
                         </div>
@@ -505,7 +505,7 @@
                                 <label for="edit_tanggal_bon" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Tanggal Bon</label>
                                 <div class="relative group">
                                     <input id="edit_tanggal_bon" name="tanggal_bon" type="date" x-model="editData.tanggal_bon" 
-                                        class="flatpickr block w-full py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700" 
+                                        class="flatpickr block w-full py-2.5 bg-slate-800/50 border-white/10 focus:bg-slate-900 border border-white/5 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-300" 
                                         required />
                                 </div>
                             </div>
@@ -514,7 +514,7 @@
                                 <div class="flex justify-between items-end">
                                     <label for="edit_jumlah_bon" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Jumlah Bon (Liter)</label>
                                     <span x-show="editCurrentStock !== null" class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
-                                        Max: <span x-text="(parseFloat(editCurrentStock) + parseFloat(editData.original_jumlah_bon || 0)).toFixed(1)"></span> L
+                                        Max: <span x-text="(parseFloat(editCurrentStock) + parseFloat(editData.original_jumlah_bon || 0)).toFixed(0)"></span> L
                                     </span>
                                 </div>
                                 <div class="relative group">
@@ -523,23 +523,23 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L7.05 15.12a2 2 0 00-1.022.547l-2.387 2.387a2 2 0 000 2.828l.141.141a2 2 0 002.828 0l2.628-2.628a2 2 0 012.33-.213l.317.158a2 2 0 002.33-.213l2.628-2.628a2 2 0 000-2.828l-.141-.141z" />
                                         </svg>
                                     </div>
-                                    <input id="edit_jumlah_bon" name="jumlah_bon" type="number" step="0.1" x-model="editData.jumlah_bon" 
-                                        :max="(parseFloat(editCurrentStock) + parseFloat(editData.original_jumlah_bon || 0)).toFixed(1)"
-                                        class="block w-full pl-11 pr-4 py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl transition-all shadow-sm font-black text-rose-600 text-xs" 
+                                    <input id="edit_jumlah_bon" name="jumlah_bon" type="number" step="1" x-model="editData.jumlah_bon" 
+                                        :max="(parseFloat(editCurrentStock) + parseFloat(editData.original_jumlah_bon || 0)).toFixed(0)"
+                                        class="block w-full pl-11 pr-4 py-2.5 bg-slate-800/50 border-white/10 focus:bg-slate-900 border border-white/5 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl transition-all shadow-sm font-black text-rose-600 text-xs" 
                                         placeholder="0.0" required />
                                 </div>
                                 <p x-show="editCurrentStock !== null && editData.jumlah_bon > (parseFloat(editCurrentStock) + parseFloat(editData.original_jumlah_bon || 0))" class="text-[10px] text-rose-500 font-bold ml-1 mt-1">Melebihi maksimal limit!</p>
                             </div>
                         </div>
 
-                        <div class="pt-6 flex flex-col sm:flex-row-reverse gap-3 border-t border-slate-100">
+                        <div class="pt-6 flex flex-col sm:flex-row-reverse gap-3 border-t border-white/5">
                             <button type="submit"
                                 :disabled="editCurrentStock !== null && editData.jumlah_bon > (parseFloat(editCurrentStock) + parseFloat(editData.original_jumlah_bon || 0))"
-                                class="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-black rounded-2xl shadow-xl shadow-blue-100 hover:shadow-blue-200 active:scale-95 transition-all text-sm uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed">
+                                class="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-black rounded-2xl shadow-xl shadow-blue-500/20 hover:shadow-blue-200 active:scale-95 transition-all text-sm uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed">
                                 SIMPAN PERUBAHAN
                             </button>
                             <button type="button" @click="showEditModal = false"
-                                class="w-full sm:w-auto px-10 py-4 bg-slate-100 text-slate-500 font-bold rounded-2xl hover:bg-slate-200 transition-all text-sm uppercase tracking-widest">
+                                class="w-full sm:w-auto px-10 py-4 bg-slate-800 text-slate-400 font-bold rounded-2xl hover:bg-slate-200 transition-all text-sm uppercase tracking-widest">
                                 BATAL
                             </button>
                         </div>
@@ -560,13 +560,13 @@
                 <div x-show="showCreateModal" x-transition:enter="ease-out duration-300"
                     x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                    class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl w-full border border-slate-200">
+                    class="inline-block align-bottom bg-slate-900 border border-white/5 rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl w-full border border-white/10">
 
                     <!-- Modal Header -->
                     <div
                         class="bg-emerald-600 px-6 py-4 text-white flex justify-between items-center bg-gradient-to-r from-emerald-600 to-emerald-700">
                         <div class="flex items-center gap-3">
-                            <div class="bg-white/20 p-2 rounded-xl">
+                            <div class="bg-slate-900 border border-white/5/20 p-2 rounded-xl">
                                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                         d="M12 4v16m8-8H4" />
@@ -596,7 +596,7 @@
                                     </svg>
                                 </div>
                                 <select name="satker_id" id="create_satker_id" x-model="createData.satker_id" @change="fetchFormKendaraans($event.target.value); createData.kendaraan_id = ''"
-                                    class="tom-select block w-full pl-11 pr-10 py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700 appearance-none" required>
+                                    class="tom-select block w-full pl-11 pr-10 py-2.5 bg-slate-800/50 border-white/10 focus:bg-slate-900 border border-white/5 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-300 appearance-none" required>
                                     <option value="">-- Pilih Satker --</option>
                                     @foreach($satkers as $satker)
                                         <option value="{{ $satker->id }}">{{ $satker->nama_satker }}</option>
@@ -617,7 +617,7 @@
                                 </div>
                                 <select name="kendaraan_id" id="create_kendaraan_id" x-model="createData.kendaraan_id" required
                                     :disabled="loadingFormKendaraan || !createData.satker_id"
-                                    class="tom-select-dynamic block w-full pl-11 pr-10 py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700 appearance-none disabled:opacity-50">
+                                    class="tom-select-dynamic block w-full pl-11 pr-10 py-2.5 bg-slate-800/50 border-white/10 focus:bg-slate-900 border border-white/5 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-300 appearance-none disabled:opacity-50">
                                     <option value="" disabled x-text="loadingFormKendaraan ? 'Sedang mengambil data...' : '-- Pilih Kendaraan --'"></option>
                                     <template x-for="kend in formKendaraans" :key="kend.id">
                                         <option :value="kend.id" x-text="`${kend.no_polisi} - ${kend.jenis_kendaraan} (${kend.jenis_bbm})`"></option>
@@ -636,7 +636,7 @@
                                     </svg>
                                 </div>
                                 <input id="create_nama_driver" name="nama_driver" type="text" x-model="createData.nama_driver" 
-                                    class="block w-full pl-11 pr-4 py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700" 
+                                    class="block w-full pl-11 pr-4 py-2.5 bg-slate-800/50 border-white/10 focus:bg-slate-900 border border-white/5 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-300" 
                                     placeholder="Nama personil yang membon" required />
                             </div>
                         </div>
@@ -647,7 +647,7 @@
                                 <label for="create_tanggal_bon" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Tanggal Bon</label>
                                 <div class="relative group">
                                     <input id="create_tanggal_bon" name="tanggal_bon" type="date" x-model="createData.tanggal_bon" 
-                                        class="flatpickr block w-full py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-700" 
+                                        class="flatpickr block w-full py-2.5 bg-slate-800/50 border-white/10 focus:bg-slate-900 border border-white/5 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-300" 
                                         required />
                                 </div>
                             </div>
@@ -665,24 +665,24 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L7.05 15.12a2 2 0 00-1.022.547l-2.387 2.387a2 2 0 000 2.828l.141.141a2 2 0 002.828 0l2.628-2.628a2 2 0 012.33-.213l.317.158a2 2 0 002.33-.213l2.628-2.628a2 2 0 000-2.828l-.141-.141z" />
                                         </svg>
                                     </div>
-                                    <input id="create_jumlah_bon" name="jumlah_bon" type="number" step="0.1" x-model="createData.jumlah_bon" 
+                                    <input id="create_jumlah_bon" name="jumlah_bon" type="number" step="1" x-model="createData.jumlah_bon" 
                                         :max="createCurrentStock"
                                         :disabled="!createData.kendaraan_id || createVehicleHasSaldo"
-                                        class="block w-full pl-11 pr-4 py-2.5 bg-slate-50 border-slate-200 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-xl transition-all shadow-sm font-black text-rose-600 text-xs disabled:opacity-50" 
+                                        class="block w-full pl-11 pr-4 py-2.5 bg-slate-800/50 border-white/10 focus:bg-slate-900 border border-white/5 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-xl transition-all shadow-sm font-black text-rose-600 text-xs disabled:opacity-50" 
                                         placeholder="0.0" required />
                                 </div>
                                 <p x-show="createCurrentStock !== null && createData.jumlah_bon > createCurrentStock" class="text-[10px] text-rose-500 font-bold ml-1 mt-1">Melebihi stok tangki!</p>
                             </div>
                         </div>
 
-                        <div class="pt-6 flex flex-col sm:flex-row-reverse gap-3 border-t border-slate-100">
+                        <div class="pt-6 flex flex-col sm:flex-row-reverse gap-3 border-t border-white/5">
                             <button type="submit"
                                 :disabled="createSubmitDisabled"
-                                class="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-black rounded-2xl shadow-xl shadow-emerald-100 hover:shadow-emerald-200 active:scale-95 transition-all text-sm uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed">
+                                class="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-black rounded-2xl shadow-xl shadow-emerald-500/20 hover:shadow-emerald-200 active:scale-95 transition-all text-sm uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed">
                                 SIMPAN DATA HUTANG
                             </button>
                             <button type="button" @click="showCreateModal = false"
-                                class="w-full sm:w-auto px-10 py-4 bg-slate-100 text-slate-500 font-bold rounded-2xl hover:bg-slate-200 transition-all text-sm uppercase tracking-widest">
+                                class="w-full sm:w-auto px-10 py-4 bg-slate-800 text-slate-400 font-bold rounded-2xl hover:bg-slate-200 transition-all text-sm uppercase tracking-widest">
                                 BATAL
                             </button>
                         </div>
@@ -722,7 +722,7 @@
                 },
                 formatLiter(value) {
                     const number = Number(value || 0);
-                    return new Intl.NumberFormat('id-ID', { maximumFractionDigits: 1 }).format(number);
+                    return new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(number);
                 },
                 get createSelectedKendaraan() {
                     if (!this.createData.kendaraan_id || !this.formKendaraans.length) return null;

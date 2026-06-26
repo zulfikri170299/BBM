@@ -9,12 +9,12 @@
         </div>
         <div>
             @if(auth()->user()->topup_password)
-                <h2 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight"> Ubah Password Top Up </h2>
-                <p class="text-xs sm:text-sm text-slate-500 mt-0.5"> Masukkan password Top Up lama Anda, lalu buat
+                <h2 class="text-lg sm:text-xl font-bold text-white tracking-tight"> Ubah Password Top Up </h2>
+                <p class="text-xs sm:text-sm text-slate-400 mt-0.5"> Masukkan password Top Up lama Anda, lalu buat
                     password baru. </p>
             @else
-                <h2 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight"> Buat Password Top Up </h2>
-                <p class="text-xs sm:text-sm text-slate-500 mt-0.5"> Atur password khusus untuk otorisasi transaksi Top Up.
+                <h2 class="text-lg sm:text-xl font-bold text-white tracking-tight"> Buat Password Top Up </h2>
+                <p class="text-xs sm:text-sm text-slate-400 mt-0.5"> Atur password khusus untuk otorisasi transaksi Top Up.
                     (Cukup sekali) </p>
             @endif
         </div>
@@ -27,7 +27,7 @@
         <!-- Password Verification -->
         <div>
             <label for="current_password_topup"
-                class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1 sm:mb-2">
+                class="block text-xs sm:text-sm font-semibold text-slate-300 mb-1 sm:mb-2">
                 @if(auth()->user()->topup_password)
                     Password Top Up Lama
                 @else
@@ -45,14 +45,14 @@
                 </span>
                 <input id="current_password_topup" name="password" type="password" required
                     autocomplete="current-password"
-                    class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all placeholder-slate-400"
+                    class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm bg-slate-800/50 border border-white/10 rounded-xl text-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all placeholder-slate-400"
                     placeholder="{{ auth()->user()->topup_password ? 'Masukkan password Top Up lama' : 'Masukkan password login akun ini' }}">
             </div>
             <x-input-error :messages="$errors->updateTopupPassword->get('password')" class="mt-2" />
         </div>
 
         <div>
-            <label for="topup_password" class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1 sm:mb-2">
+            <label for="topup_password" class="block text-xs sm:text-sm font-semibold text-slate-300 mb-1 sm:mb-2">
                 {{ auth()->user()->topup_password ? 'Password Top Up Baru' : 'Buat Password Top Up' }}
             </label>
             <div class="relative group">
@@ -65,7 +65,7 @@
                     </svg>
                 </span>
                 <input id="topup_password" name="topup_password" type="password" required autocomplete="new-password"
-                    class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all placeholder-slate-400"
+                    class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm bg-slate-800/50 border border-white/10 rounded-xl text-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all placeholder-slate-400"
                     placeholder="Minimal 6 karakter">
             </div>
             <x-input-error :messages="$errors->updateTopupPassword->get('topup_password')" class="mt-2" />
@@ -73,7 +73,7 @@
 
         <div>
             <label for="topup_password_confirmation"
-                class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1 sm:mb-2">Konfirmasi Password</label>
+                class="block text-xs sm:text-sm font-semibold text-slate-300 mb-1 sm:mb-2">Konfirmasi Password</label>
             <div class="relative group">
                 <span
                     class="absolute inset-y-0 left-0 flex items-center pl-3 sm:pl-4 text-slate-400 group-focus-within:text-indigo-500 transition-colors">
@@ -85,7 +85,7 @@
                 </span>
                 <input id="topup_password_confirmation" name="topup_password_confirmation" type="password" required
                     autocomplete="new-password"
-                    class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all placeholder-slate-400"
+                    class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 text-sm bg-slate-800/50 border border-white/10 rounded-xl text-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all placeholder-slate-400"
                     placeholder="Ulangi password di atas">
             </div>
             <x-input-error :messages="$errors->updateTopupPassword->get('topup_password_confirmation')" class="mt-2" />
@@ -118,10 +118,10 @@
 </section>
 
 {{-- Reset Password Top Up Section --}}
-<div class="mt-6 pt-6 border-t border-slate-200 max-w-xl" x-data="{ showResetModal: false }">
+<div class="mt-6 pt-6 border-t border-white/10 max-w-xl" x-data="{ showResetModal: false }">
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
-            <h3 class="text-sm font-bold text-slate-700">Reset Password Top Up</h3>
+            <h3 class="text-sm font-bold text-slate-300">Reset Password Top Up</h3>
             <p class="text-xs text-slate-400 mt-0.5">Reset ke password default yang sudah ditentukan</p>
         </div>
         <button type="button" @click="showResetModal = true"
@@ -157,7 +157,7 @@
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" @click="showResetModal = false"></div>
 
         {{-- Modal Card --}}
-        <div class="relative w-full max-w-sm bg-white rounded-3xl shadow-2xl overflow-hidden" x-show="showResetModal"
+        <div class="relative w-full max-w-sm bg-slate-900 border border-white/5 rounded-3xl shadow-2xl overflow-hidden" x-show="showResetModal"
             x-transition:enter="transition ease-out duration-300 delay-100"
             x-transition:enter-start="opacity-0 scale-90 translate-y-4"
             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
@@ -180,17 +180,17 @@
                 </div>
 
                 {{-- Title --}}
-                <h3 class="text-lg font-bold text-slate-900 mb-2">Reset Password Top Up?</h3>
+                <h3 class="text-lg font-bold text-white mb-2">Reset Password Top Up?</h3>
 
                 {{-- Description --}}
-                <p class="text-sm text-slate-500 mb-6">Password Top Up Anda akan direset ke password default yang sudah
+                <p class="text-sm text-slate-400 mb-6">Password Top Up Anda akan direset ke password default yang sudah
                     ditentukan. Apakah Anda yakin?</p>
             </div>
 
             {{-- Actions --}}
-            <div class="flex border-t border-slate-100">
+            <div class="flex border-t border-white/5">
                 <button type="button" @click="showResetModal = false"
-                    class="flex-1 py-4 text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-700 transition-colors border-r border-slate-100">
+                    class="flex-1 py-4 text-sm font-bold text-slate-400 hover:bg-slate-800/50 hover:text-slate-300 transition-colors border-r border-white/5">
                     Batal
                 </button>
                 <form method="POST" action="{{ route('profile.topup-password.reset') }}" class="flex-1">

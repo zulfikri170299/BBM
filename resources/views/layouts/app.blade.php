@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-slate-950">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'SPBP Rolog Polda NTB') }}</title>
@@ -12,12 +12,11 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Inter:wght@100..900&display=swap" rel="stylesheet">
 
     <!-- Hotwire Turbo Drive (SPA Navigation) -->
     <script type="module" data-turbo-track="reload">
         import * as Turbo from 'https://cdn.jsdelivr.net/npm/@hotwired/turbo@8.0.12/+esm';
-        // Only intercept link clicks for SPA navigation, NOT form submissions
         Turbo.config.forms.mode = "optin";
     </script>
 
@@ -27,16 +26,21 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Outfit', 'sans-serif'],
-                    },
                     colors: {
-                        primary: '#4338ca',
-                        secondary: '#64748B',
-                        dark: '#0f172a',
+                        'brand-primary': '#0062ff',
+                        'brand-dark': '#0a0a0b',
+                        'slate': { 
+                            800: '#1e293b',
+                            900: '#0f172a', 
+                            950: '#020617' 
+                        }
                     },
-                },
-            },
+                    fontFamily: { 
+                        sans: ['Inter', 'sans-serif'],
+                        outfit: ['Outfit', 'sans-serif']
+                    }
+                }
+            }
         }
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
@@ -54,36 +58,53 @@
     @stack('head')
 
     <style>
-        [x-cloak] {
-            display: none !important;
+        [x-cloak] { display: none !important; }
+        @keyframes shimmerText {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
         }
-
+        .desktop-shimmer {
+            background: linear-gradient(to right, #dc2626 0%, #eab308 40%, #ffffff 50%, #eab308 60%, #dc2626 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: shimmerText 4s linear infinite;
+        }
+        @keyframes desktopFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-3px) rotate(3deg) scale(1.05); }
+        }
+        .desktop-float {
+            animation: desktopFloat 3s ease-in-out infinite;
+        }
+        @keyframes contentFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .content-animate {
+            animation: contentFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        
         body {
-            /* body { font-family: 'Outfit', sans-serif; } - Handled by font-sans class */
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .glass {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
 
-        .sidebar-active {
-            background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
-            color: white;
-            box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.4);
-        }
-
-        /* TomSelect Premium Styling */
+        /* Dark Theme overrides for TomSelect */
         .ts-wrapper .ts-control {
-            border: 2px solid #f1f5f9;
-            background-color: #f8fafc;
-            border-radius: 0.75rem;
-            padding: 0.5rem 0.75rem;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #334155;
-            box-shadow: none;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            background-color: rgba(15, 23, 42, 0.6) !important;
+            border-radius: 0.75rem !important;
+            padding: 0.5rem 0.75rem !important;
+            font-size: 0.75rem !important;
+            font-weight: 500 !important;
+            color: #f1f5f9 !important;
+            box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05) !important;
             transition: all 0.2s;
             min-height: 38px;
             display: flex;
@@ -91,123 +112,97 @@
         }
 
         .ts-wrapper.focus .ts-control {
-            border-color: #6366f1;
-            background-color: #ffffff;
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            border-color: #0062ff !important;
+            background-color: rgba(15, 23, 42, 0.9) !important;
+            box-shadow: 0 0 0 2px rgba(0, 98, 255, 0.2) !important;
         }
 
-        .ts-wrapper .ts-dropdown {
+        .ts-dropdown, .ts-wrapper .ts-dropdown {
+            position: absolute;
             border-radius: 1rem;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            background-color: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            color: #f1f5f9;
             font-size: 0.75rem;
             overflow: hidden;
             padding: 0.5rem;
-            z-index: 100;
+            z-index: 99999;
+            transform-origin: top;
+            animation: dropdownFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .ts-wrapper .ts-dropdown .option {
+        @keyframes dropdownFadeIn {
+            from { opacity: 0; transform: scaleY(0.95) translateY(-5px); }
+            to { opacity: 1; transform: scaleY(1) translateY(0); }
+        }
+
+        .ts-dropdown .option, .ts-wrapper .ts-dropdown .option {
             padding: 0.625rem 0.75rem;
             border-radius: 0.5rem;
-            font-weight: 600;
+            font-weight: 500;
         }
 
-        .ts-wrapper .ts-dropdown .active {
-            background-color: #f1f5f9;
-            color: #4338ca;
+        .ts-dropdown .active, .ts-wrapper .ts-dropdown .active {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #38bdf8;
         }
         
         .ts-wrapper .ts-control .item {
-            font-weight: 700;
-            color: #1e293b;
-            text-transform: uppercase;
-            letter-spacing: 0.025em;
+            font-weight: 600;
+            color: #f8fafc;
         }
 
-        /* Flatpickr Premium Indigo Styling */
+        .ts-wrapper .ts-control input {
+            color: #f8fafc !important;
+        }
+
+        /* Dark Theme overrides for Flatpickr */
         .flatpickr-calendar {
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            border-radius: 2rem;
-            border: 1px solid #e2e8f0;
-            padding: 0.5rem;
-            font-family: 'Outfit', sans-serif;
-            background: #ffffff;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+            border-radius: 1.5rem !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            padding: 0.5rem !important;
+            font-family: 'Inter', sans-serif !important;
+            background: #0f172a !important;
+            color: #f8fafc !important;
             z-index: 99999 !important;
-            max-width: none !important;
-            /* width: 315px; */ /* Removed custom width to prevent clipping on mobile */
-        }
-        .flatpickr-months {
-            margin-bottom: 0.5rem;
-        }
-        .flatpickr-month {
-            height: 40px;
         }
         .flatpickr-day {
-            border-radius: 12px;
-            font-weight: 600;
-            height: 38px;
-            line-height: 38px;
-            margin: 2px;
+            border-radius: 0.5rem !important;
+            color: #cbd5e1 !important;
         }
-        .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, 
-        .flatpickr-day.selected.inRange, .flatpickr-day.startRange.inRange, 
-        .flatpickr-day.endRange.inRange, .flatpickr-day.selected:focus, 
-        .flatpickr-day.startRange:focus, .flatpickr-day.endRange:focus, 
-        .flatpickr-day.selected:hover, .flatpickr-day.startRange:hover, 
-        .flatpickr-day.endRange:hover, .flatpickr-day.selected.prevMonthDay, 
-        .flatpickr-day.startRange.prevMonthDay, .flatpickr-day.endRange.prevMonthDay, 
-        .flatpickr-day.selected.nextMonthDay, .flatpickr-day.startRange.nextMonthDay, 
-        .flatpickr-day.endRange.nextMonthDay {
-            background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%) !important;
+        .flatpickr-day:hover, .flatpickr-day.prevMonthDay:hover, .flatpickr-day.nextMonthDay:hover, .flatpickr-day:focus, .flatpickr-day.prevMonthDay:focus, .flatpickr-day.nextMonthDay:focus {
+            background: rgba(255,255,255,0.1) !important;
             border-color: transparent !important;
-            box-shadow: 0 4px 12px rgba(67, 56, 202, 0.3);
+            color: #fff !important;
         }
         .flatpickr-day.today {
-            border-color: #4338ca;
-            color: #4338ca;
+            border-color: rgba(255,255,255,0.2) !important;
+            color: #38bdf8 !important;
         }
-        .flatpickr-day.today:hover {
-            background: #f1f5f9;
-        }
-        .flatpickr-current-month .flatpickr-monthDropdown-months {
-            font-weight: 800 !important;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .flatpickr-weekday {
-            font-weight: 800;
-            color: #94a3b8;
-            text-transform: uppercase;
-            font-size: 10px;
-        }
-        /* Style for the input itself - add a nice icon */
-        .flatpickr-input-container {
-            position: relative;
+        .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange {
+            background: #0062ff !important;
+            border-color: #0062ff !important;
+            color: #fff !important;
         }
         .flatpickr-months .flatpickr-month {
-            color: #1e293b;
-            fill: #1e293b;
+            color: #f8fafc !important;
+            fill: #f8fafc !important;
         }
         .flatpickr-current-month .flatpickr-monthDropdown-months {
-            font-weight: 700;
+            background: #0f172a !important;
+            color: #f8fafc !important;
         }
-        .flatpickr-calendar .flatpickr-innerContainer {
-            margin-top: 0.5rem;
+        .flatpickr-current-month .flatpickr-monthDropdown-months .flatpickr-monthDropdown-month {
+            background-color: #0f172a !important;
         }
-        .flatpickr-day {
-            border-radius: 0.75rem;
-            font-weight: 600;
-            color: #475569;
+        span.flatpickr-weekday {
+            color: #94a3b8 !important;
         }
-        .flatpickr-day.today {
-            border-color: #4338ca;
-            color: #4338ca;
-        }
-        .flatpickr-day:hover {
-            background: #f1f5f9;
-        }
-
-        /* Mobile Table Scrolling Improvements */
+        
         @media (max-width: 768px) {
             .overflow-x-auto {
                 -webkit-overflow-scrolling: touch;
@@ -215,19 +210,26 @@
             }
             .overflow-x-auto table.min-w-full,
             .overflow-x-auto .min-w-full {
-                min-width: 800px !important; /* Ensure table doesn't squash on small screens */
+                min-width: 800px !important;
             }
         }
     </style>
     @stack('styles')
 </head>
 
-<body class="font-sans antialiased bg-slate-50 text-slate-900">
-    <div x-data="{ sidebarOpen: false }" @sidebar-close.window="sidebarOpen = false"
-        class="flex h-[100dvh] bg-slate-50 overflow-hidden">
+<body class="h-full font-sans antialiased text-slate-200 overflow-hidden bg-slate-950 relative selection:bg-brand-primary/30 selection:text-white" x-data="{ sidebarOpen: false }" @sidebar-close.window="sidebarOpen = false" @sidebar-open.window="sidebarOpen = true">
+    <!-- Ambient Background Effects -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
+        <div class="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-brand-primary/10 blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-600/10 blur-[120px]"></div>
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-10"></div>
+    </div>
+
+    <div class="flex h-full min-h-full">
         @include('layouts.sidebar')
 
-        <div class="relative flex flex-col flex-1 overflow-y-auto pt-1">
+        <!-- Main Content Wrapper -->
+        <div class="flex flex-1 flex-col overflow-hidden relative z-0">
             @include('layouts.header')
 
             <!-- Global Notification Modals -->
@@ -235,13 +237,13 @@
                 <div x-data="{ show: true }" x-show="show" x-cloak
                     class="fixed inset-0 z-[9999] flex flex-col items-center justify-center p-4 sm:p-0 gap-4 pointer-events-none">
                     <!-- Backdrop -->
-                    <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity pointer-events-auto" @click="show = false"
+                    <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm transition-opacity pointer-events-auto" @click="show = false"
                         x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
                         x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
                         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"></div>
 
                     @if(session('success'))
-                        <div class="relative w-full max-w-sm bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center p-8 text-center pointer-events-auto"
+                        <div class="relative w-full max-w-sm bg-slate-900 border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center p-8 text-center pointer-events-auto"
                             @click.stop x-transition:enter="transition ease-out duration-300 transform"
                             x-transition:enter-start="opacity-0 translate-y-8 scale-95"
                             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
@@ -249,24 +251,22 @@
                             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
                             x-transition:leave-end="opacity-0 translate-y-4 scale-95">
 
-                            <div class="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mb-6">
-                                <svg class="w-10 h-10 text-emerald-500" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                                    </path>
+                            <div class="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mb-6 border border-emerald-500/30">
+                                <svg class="w-10 h-10 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                 </svg>
                             </div>
 
-                            <h3 class="text-[22px] font-bold text-slate-800 mb-2">Berhasil!</h3>
-                            <div class="text-[15px] font-medium text-slate-500 mb-8">{!! session('success') !!}</div>
+                            <h3 class="text-[22px] font-bold text-white mb-2">Berhasil!</h3>
+                            <div class="text-[15px] font-medium text-slate-400 mb-8">{!! session('success') !!}</div>
 
                             <button @click="show = false"
-                                class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-[1rem] font-semibold transition-colors">OK, Mengerti</button>
+                                class="w-full py-3.5 bg-brand-primary hover:bg-blue-600 text-white rounded-[1rem] font-bold transition-colors shadow-[0_0_15px_rgba(0,98,255,0.4)]">OK, Mengerti</button>
                         </div>
                     @endif
 
                     @if(session('error'))
-                        <div class="relative w-full max-w-sm bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center p-8 text-center pointer-events-auto"
+                        <div class="relative w-full max-w-sm bg-slate-900 border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center p-8 text-center pointer-events-auto"
                             @click.stop x-transition:enter="transition ease-out duration-300 transform"
                             x-transition:enter-start="opacity-0 translate-y-8 scale-95"
                             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
@@ -274,25 +274,23 @@
                             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
                             x-transition:leave-end="opacity-0 translate-y-4 scale-95">
 
-                            <div class="w-20 h-20 bg-rose-50 rounded-full flex items-center justify-center mb-6">
-                                <svg class="w-10 h-10 text-rose-500" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-20 h-20 bg-rose-500/20 rounded-full flex items-center justify-center mb-6 border border-rose-500/30">
+                                <svg class="w-10 h-10 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
-                                    </path>
+                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                                 </svg>
                             </div>
 
-                            <h3 class="text-[22px] font-bold text-slate-800 mb-2">Oops, Terjadi Kesalahan!</h3>
-                            <div class="text-[15px] font-medium text-slate-500 mb-8">{!! session('error') !!}</div>
+                            <h3 class="text-[22px] font-bold text-white mb-2">Oops, Terjadi Kesalahan!</h3>
+                            <div class="text-[15px] font-medium text-slate-400 mb-8">{!! session('error') !!}</div>
 
                             <button @click="show = false"
-                                class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-[1rem] font-semibold transition-colors">OK, Mengerti</button>
+                                class="w-full py-3.5 bg-slate-800 hover:bg-slate-700 border border-white/5 text-white rounded-[1rem] font-bold transition-colors">OK, Mengerti</button>
                         </div>
                     @endif
 
                     @if ($errors->any())
-                        <div class="relative w-full max-w-sm bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center p-8 text-center pointer-events-auto"
+                        <div class="relative w-full max-w-sm bg-slate-900 border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center p-8 text-center pointer-events-auto"
                             @click.stop x-transition:enter="transition ease-out duration-300 transform"
                             x-transition:enter-start="opacity-0 translate-y-8 scale-95"
                             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
@@ -300,16 +298,14 @@
                             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
                             x-transition:leave-end="opacity-0 translate-y-4 scale-95">
 
-                            <div class="w-20 h-20 bg-amber-50 rounded-full flex items-center justify-center mb-6">
-                                <svg class="w-10 h-10 text-amber-500" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            <div class="w-20 h-20 bg-amber-500/20 rounded-full flex items-center justify-center mb-6 border border-amber-500/30">
+                                <svg class="w-10 h-10 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
 
-                            <h3 class="text-[22px] font-bold text-slate-800 mb-3">Periksa Inputan Anda</h3>
-                            <div class="text-[14px] font-medium text-slate-500 w-full mb-8">
+                            <h3 class="text-[22px] font-bold text-white mb-3">Periksa Inputan Anda</h3>
+                            <div class="text-[14px] font-medium text-slate-400 w-full mb-8">
                                 <ul class="space-y-1">
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
@@ -318,13 +314,14 @@
                             </div>
 
                             <button @click="show = false"
-                                class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-[1rem] font-semibold transition-colors">Tutup & Perbaiki</button>
+                                class="w-full py-3.5 bg-slate-800 hover:bg-slate-700 border border-white/5 text-white rounded-[1rem] font-bold transition-colors">Tutup & Perbaiki</button>
                         </div>
                     @endif
                 </div>
             @endif
 
-            <main>
+            <!-- Main Content Area -->
+            <main class="flex-1 overflow-y-auto content-animate custom-scrollbar relative z-0">
                 {{ $slot }}
             </main>
         </div>
@@ -345,6 +342,16 @@
                     }
                 });
             });
+            
+            const scrollContainer = document.querySelector('main');
+            if (scrollContainer && !scrollContainer.dataset.tomSelectScrollBound) {
+                scrollContainer.dataset.tomSelectScrollBound = 'true';
+                scrollContainer.addEventListener('scroll', () => {
+                    document.querySelectorAll('.tom-select.tomselected').forEach(el => {
+                        if (el.tomselect && el.tomselect.isOpen) el.tomselect.blur();
+                    });
+                }, { passive: true });
+            }
         });
 
         if (!window.tomSelectBound) {
@@ -357,9 +364,7 @@
         window.initFlatpickr = window.initFlatpickr || (() => {
             try {
                 const inputs = document.querySelectorAll('input[type="date"]:not(.flatpickr-input), .flatpickr:not(.flatpickr-input)');
-                
                 inputs.forEach(el => {
-                    // Determine if this is a "Dari" (Start) or "Sampai" (End) field
                     const isStart = el.name && (el.name.includes('start') || el.name.includes('dari'));
                     const isEnd = el.name && (el.name.includes('end') || el.name.includes('sampai'));
                     
@@ -369,7 +374,7 @@
                         altInput: true,
                         altFormat: "d F Y",
                         placeholder: "Tgl",
-                        disableMobile: "true",
+                        disableMobile: true,
                         monthSelectorType: "static",
                         animate: true,
                         appendTo: document.body,
@@ -389,24 +394,19 @@
                                 if (form) {
                                     if (isStart) {
                                         const endInput = form.querySelector('[name*="end"], [name*="sampai"]');
-                                        if (endInput && endInput._flatpickr) {
-                                            endInput._flatpickr.set('minDate', dateStr);
-                                        }
+                                        if (endInput && endInput._flatpickr) endInput._flatpickr.set('minDate', dateStr);
                                     } else if (isEnd) {
                                         const startInput = form.querySelector('[name*="start"], [name*="dari"]');
-                                        if (startInput && startInput._flatpickr) {
-                                            startInput._flatpickr.set('maxDate', dateStr);
-                                        }
+                                        if (startInput && startInput._flatpickr) startInput._flatpickr.set('maxDate', dateStr);
                                     }
                                 }
                             }
                         }
                     };
-
                     flatpickr(el, config);
                 });
             } catch (e) {
-                console.warn('Flatpickr initialization error:', e.message);
+                console.warn('Flatpickr init error:', e.message);
             }
         });
 
@@ -416,23 +416,29 @@
             document.addEventListener('turbo:render', window.initFlatpickr);
         }
         
-        // Global helper definitions (Only define once)
         window.showAlert = window.showAlert || ((title, text, icon = 'info') => {
+            let iconColor = '#38bdf8';
+            if (icon === 'error') iconColor = '#f43f5e';
+            if (icon === 'success') iconColor = '#10b981';
+            if (icon === 'warning') iconColor = '#f59e0b';
+
             Swal.fire({
                 title, text, icon,
-                confirmButtonColor: '#4338ca',
+                background: '#0f172a',
+                color: '#f8fafc',
+                confirmButtonColor: '#0062ff',
                 confirmButtonText: 'Tutup',
                 customClass: {
-                    popup: 'rounded-[2rem] border-none shadow-2xl',
-                    title: 'text-2xl font-bold text-slate-800',
-                    confirmButton: 'rounded-xl px-10 py-3 font-bold uppercase tracking-wider text-sm'
+                    popup: 'border border-white/10 rounded-[2rem] shadow-2xl',
+                    title: 'text-2xl font-bold text-white',
+                    confirmButton: 'rounded-xl px-10 py-3 font-bold uppercase tracking-wider text-sm shadow-[0_0_15px_rgba(0,98,255,0.4)]'
                 }
             });
         });
 
         window.confirmDialog = window.confirmDialog || ((options, callback) => {
             const type = options.type || 'question';
-            let confirmColor = '#4338ca';
+            let confirmColor = '#0062ff';
             if (type === 'error' || type === 'danger') confirmColor = '#e11d48';
             if (type === 'warning') confirmColor = '#f59e0b';
 
@@ -440,18 +446,20 @@
                 title: options.title || 'Konfirmasi',
                 text: options.message,
                 icon: type,
+                background: '#0f172a',
+                color: '#cbd5e1',
                 showCancelButton: true,
                 confirmButtonColor: confirmColor,
-                cancelButtonColor: '#94a3b8',
+                cancelButtonColor: '#1e293b',
                 confirmButtonText: options.confirmText || 'Ya, Lanjutkan!',
                 cancelButtonText: options.cancelText || 'Batal',
                 reverseButtons: true,
                 customClass: {
-                    popup: 'rounded-[2rem] border-none shadow-2xl p-8',
-                    title: 'text-2xl font-black text-slate-800 mb-2',
-                    htmlContainer: 'text-slate-500 font-medium mb-6',
-                    confirmButton: 'rounded-2xl px-8 py-3.5 font-black uppercase tracking-widest text-xs shadow-lg shadow-indigo-200 ml-3',
-                    cancelButton: 'rounded-2xl px-8 py-3.5 font-bold uppercase tracking-widest text-xs text-slate-600 hover:bg-slate-100'
+                    popup: 'border border-white/10 rounded-[2rem] shadow-2xl p-8',
+                    title: 'text-2xl font-black text-white mb-2',
+                    htmlContainer: 'text-slate-400 font-medium mb-6',
+                    confirmButton: 'rounded-2xl px-8 py-3.5 font-black uppercase tracking-widest text-xs shadow-lg ml-3',
+                    cancelButton: 'rounded-2xl px-8 py-3.5 font-bold uppercase tracking-widest text-xs text-slate-300 border border-white/10 hover:bg-white/5'
                 },
                 buttonsStyling: true
             }).then((result) => {
@@ -459,43 +467,35 @@
             });
         });
 
-        // Chat Polling (Initialize once)
         if (!window.chatPollingActive) {
             window.chatPollingActive = true;
-            let lastUnreadCount = 0;
-            let isFirstCheck = true;
-            let userInteracted = false;
+            let lastUnreadCount = 0, isFirstCheck = true, userInteracted = false;
             const notificationSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3');
-
             document.addEventListener('click', () => { userInteracted = true; notificationSound.load(); }, { once: true });
-
             function checkUnreadMessages() {
                 const sidebarBadge = document.getElementById('sidebar-chat-badge');
                 if (!sidebarBadge) return;
                 @auth
-                    fetch("{{ route('chat.unread.count') }}")
-                        .then(r => r.json()).then(data => {
-                            const count = data.count;
-                            if (count > 0) {
-                                sidebarBadge.textContent = count > 99 ? '99+' : count;
-                                sidebarBadge.classList.remove('hidden');
-                                sidebarBadge.classList.add('flex');
-                                if (count > lastUnreadCount && !isFirstCheck && userInteracted) {
-                                    notificationSound.currentTime = 0;
-                                    notificationSound.play().catch(e => console.log('Audio play failed:', e));
-                                }
-                            } else {
-                                sidebarBadge.classList.add('hidden'); sidebarBadge.classList.remove('flex');
+                    fetch("{{ route('chat.unread.count') }}").then(r => r.json()).then(data => {
+                        const count = data.count;
+                        if (count > 0) {
+                            sidebarBadge.textContent = count > 99 ? '99+' : count;
+                            sidebarBadge.classList.remove('hidden');
+                            sidebarBadge.classList.add('flex');
+                            if (count > lastUnreadCount && !isFirstCheck && userInteracted) {
+                                notificationSound.currentTime = 0;
+                                notificationSound.play().catch(e => console.log('Audio play failed:', e));
                             }
-                            lastUnreadCount = count; isFirstCheck = false;
-                        }).catch(err => console.error('Error checking unread messages:', err));
+                        } else {
+                            sidebarBadge.classList.add('hidden'); sidebarBadge.classList.remove('flex');
+                        }
+                        lastUnreadCount = count; isFirstCheck = false;
+                    }).catch(err => console.error('Error checking unread messages:', err));
                 @endauth
             }
-            setInterval(checkUnreadMessages, 30000);
-            checkUnreadMessages();
+            setInterval(checkUnreadMessages, 30000); checkUnreadMessages();
         }
 
-        // Global Confirmation Handler (Bind once on document)
         if (!window.confirmHandlerBound) {
             window.confirmHandlerBound = true;
             document.addEventListener('click', function (e) {
@@ -510,84 +510,75 @@
                     }, () => {
                         const form = target.closest('form');
                         if (form) form.submit();
-                        else if (target.tagName === 'A') window.location.href = target.href;
+                        else if (target.tagName === 'A') typeof Turbo !== 'undefined' ? Turbo.visit(target.href) : window.location.href = target.href;
                     });
                 }
             });
         }
 
-        // Sidebar logic to run on EVERY Turbo visit
         if (!window.sidebarLogicBound) {
             window.sidebarLogicBound = true;
             document.addEventListener('turbo:load', function () {
-                // 1. Snappily close sidebar on mobile navigation
-                if (window.innerWidth < 1024) {
-                    window.dispatchEvent(new CustomEvent('sidebar-close'));
-                }
+                if (window.innerWidth < 1024) window.dispatchEvent(new CustomEvent('sidebar-close'));
                 window.dispatchEvent(new CustomEvent('close-reports'));
 
                 const currentPath = window.location.pathname;
-                const sidebar = document.getElementById('sidebar');
-                if (!sidebar) return;
+                const sidebar = document.getElementById('sidebar-nav') || document;
+                const allLinks = sidebar.querySelectorAll('nav a[href]');
+                
+                const mainActive = ['bg-brand-primary', 'text-white', 'shadow-lg', 'shadow-brand-primary/20'];
+                const mainInactive = ['text-slate-400', 'hover:text-white', 'hover:bg-white/5'];
+                const subActive = ['text-white', 'bg-white/10'];
+                const subInactive = ['text-slate-400', 'hover:text-white', 'hover:bg-white/5'];
 
-            const allLinks = sidebar.querySelectorAll('a[href]');
-            const mainActive = ['bg-indigo-600', 'shadow-lg', 'shadow-indigo-500/30'], mainInactive = ['hover:bg-slate-800'];
-            const subActive = ['text-white', 'bg-indigo-600/50'], subInactive = ['text-slate-400', 'hover:text-white', 'hover:bg-slate-800'];
+                let activeSubmenuDropdown = null, bestMatchLink = null, bestMatchLength = 0;
 
-            let activeSubmenuDropdown = null, bestMatchLink = null, bestMatchLength = 0;
+                allLinks.forEach(link => {
+                    const isInsideSubmenu = !!link.closest('div[x-show]');
+                    if (isInsideSubmenu) { link.classList.remove(...subActive); link.classList.add(...subInactive); }
+                    else { link.classList.remove(...mainActive); link.classList.add(...mainInactive); }
 
-            allLinks.forEach(link => {
-                const isInsideSubmenu = !!link.closest('div[x-show]');
-                if (isInsideSubmenu) { link.classList.remove(...subActive); link.classList.add(...subInactive); }
-                else { link.classList.remove(...mainActive); if (!link.classList.contains('hover:bg-slate-800')) link.classList.add(...mainInactive); }
-
-                const href = link.getAttribute('href');
-                if (!href || href === '#' || href.startsWith('javascript:')) return;
-                try {
-                    const linkPath = new URL(href, window.location.origin).pathname;
-                    if (currentPath.startsWith(linkPath)) {
-                        if (linkPath.length > bestMatchLength) { bestMatchLength = linkPath.length; bestMatchLink = link; }
-                    }
-                } catch (e) {}
-            });
-
-            if (bestMatchLink) {
-                const isInsideSubmenu = !!bestMatchLink.closest('div[x-show]');
-                if (isInsideSubmenu) {
-                    bestMatchLink.classList.remove(...subInactive); bestMatchLink.classList.add(...subActive);
-                    activeSubmenuDropdown = bestMatchLink.closest('div[x-show]');
-                } else {
-                    bestMatchLink.classList.remove(...mainInactive); bestMatchLink.classList.add(...mainActive);
-                }
-            }
-
-                if (activeSubmenuDropdown) {
-                    const dropdownContainer = activeSubmenuDropdown.closest('.space-y-1');
-                    if (dropdownContainer) {
-                        const button = dropdownContainer.querySelector('button');
-                        if (button) {
-                            const evt = button.getAttribute('@click').includes('satkerReportsOpen') ? 'open-satker-reports' : 'open-admin-reports';
-                            window.dispatchEvent(new CustomEvent(evt));
+                    const href = link.getAttribute('href');
+                    if (!href || href === '#' || href.startsWith('javascript:')) return;
+                    try {
+                        const linkPath = new URL(href, window.location.origin).pathname;
+                        if (currentPath.startsWith(linkPath)) {
+                            if (linkPath.length > bestMatchLength) { bestMatchLength = linkPath.length; bestMatchLink = link; }
                         }
+                    } catch (e) {}
+                });
+
+                if (bestMatchLink) {
+                    const isInsideSubmenu = !!bestMatchLink.closest('div[x-show]');
+                    if (isInsideSubmenu) {
+                        bestMatchLink.classList.remove(...subInactive); bestMatchLink.classList.add(...subActive);
+                        activeSubmenuDropdown = bestMatchLink.closest('div[x-show]');
+                    } else {
+                        bestMatchLink.classList.remove(...mainInactive); bestMatchLink.classList.add(...mainActive);
+                    }
+                }
+                
+                if (activeSubmenuDropdown) {
+                    // Open the dropdown if Alpine hasn't already.
+                    // Instead of managing Alpine state externally, we usually bind it or click the button.
+                    const button = activeSubmenuDropdown.previousElementSibling;
+                    if (button && activeSubmenuDropdown.style.display === 'none') {
+                        // Alpine handles clicks, so we can dispatch click
+                        // button.click(); 
                     }
                 }
             });
         }
 
-        // GeoLocation Logic (Run once per session or day)
-        if (!window.geoLocChecked) {
-            window.geoLocChecked = true;
-            const lastLocationUpdate = localStorage.getItem('lastLocationUpdate');
-            if ("geolocation" in navigator && (!lastLocationUpdate || (Date.now() - parseInt(lastLocationUpdate)) > 86400000)) {
-                navigator.geolocation.getCurrentPosition(function (p) {
-                    fetch("{{ route('profile.location.update') }}", {
-                        method: "POST", headers: { "Content-Type": "application/json", "X-CSRF-TOKEN": "{{ csrf_token() }}" },
-                        body: JSON.stringify({ latitude: p.coords.latitude, longitude: p.coords.longitude })
-                    }).then(() => localStorage.setItem('lastLocationUpdate', Date.now().toString()));
-                });
-            }
+        if (!window.turboCacheBound) {
+            window.turboCacheBound = true;
+            document.addEventListener("turbo:before-cache", function() {
+                document.querySelectorAll('.tomselected').forEach(el => { if (el.tomselect) el.tomselect.destroy(); });
+                document.querySelectorAll('.flatpickr-input').forEach(el => { if (el._flatpickr) el._flatpickr.destroy(); });
+                window.dispatchEvent(new CustomEvent('sidebar-close'));
+                if (Swal.isVisible()) Swal.close();
+            });
         }
     </script>
 </body>
-
 </html>

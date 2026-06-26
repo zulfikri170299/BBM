@@ -1,10 +1,10 @@
 <x-app-layout>
-    <div class="p-6 lg:p-8 space-y-6">
+    <div class="p-2 sm:p-6 lg:p-8 space-y-6">
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-slate-900">Pesan Siaran (Broadcast)</h1>
-                <p class="mt-1 text-slate-500">Kirimkan notifikasi penting ke seluruh pengguna aplikasi.</p>
+                <h1 class="text-3xl font-bold text-white">Pesan Siaran (Broadcast)</h1>
+                <p class="mt-1 text-slate-400">Kirimkan notifikasi penting ke seluruh pengguna aplikasi.</p>
             </div>
         </div>
 
@@ -22,9 +22,9 @@
         @endif
 
         <div class="max-w-3xl">
-            <div class="bg-white rounded-2xl border border-slate-200/70 shadow-sm overflow-hidden">
-                <div class="p-6 border-b border-slate-100 bg-slate-50/50">
-                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
+            <div class="bg-slate-900 rounded-2xl border border-white/10 shadow-sm overflow-hidden">
+                <div class="p-6 border-b border-white/5 bg-slate-800/50">
+                    <h3 class="font-bold text-slate-200 flex items-center gap-2">
                         <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z">
@@ -38,18 +38,18 @@
                     @csrf
 
                     <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-2">Judul Informasi</label>
+                        <label class="block text-sm font-bold text-slate-300 mb-2">Judul Informasi</label>
                         <input type="text" name="title" required
                             placeholder="Contoh: Pemeliharaan Sistem / Update Harga BBM"
-                            class="w-full px-4 py-3 bg-slate-50 border-slate-200 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 transition-all text-sm">
+                            class="w-full px-4 py-3 bg-slate-800/50 border-white/10 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 transition-all text-sm">
                         @error('title') <p class="mt-1 text-xs text-rose-500">{{ $message }}</p> @enderror
                     </div>
 
                     <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-2">Isi Pesan</label>
+                        <label class="block text-sm font-bold text-slate-300 mb-2">Isi Pesan</label>
                         <textarea name="message" rows="5" required
                             placeholder="Tuliskan informasi detail yang ingin disampaikan..."
-                            class="w-full px-4 py-3 bg-slate-50 border-slate-200 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 transition-all text-sm"></textarea>
+                            class="w-full px-4 py-3 bg-slate-800/50 border-white/10 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 transition-all text-sm"></textarea>
                         @error('message') <p class="mt-1 text-xs text-rose-500">{{ $message }}</p> @enderror
                         <p class="mt-2 text-xs text-slate-400">Pesan ini akan muncul di menu notifikasi (lonceng) pada
                             semua akun pengguna.</p>

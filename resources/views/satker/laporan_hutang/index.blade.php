@@ -1,12 +1,12 @@
 <x-app-layout>
-    <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+    <div class="max-w-7xl mx-auto p-2 sm:p-6 lg:p-8 space-y-6 px-2 sm:px-6 lg:px-8">
         <!-- Page Title -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
                 <h1
-                    class="text-2xl sm:text-3xl font-bold text-slate-900 border-b-4 border-indigo-600 pb-2 inline-block">
+                    class="text-2xl sm:text-3xl font-bold text-white border-b-4 border-indigo-600 pb-2 inline-block">
                     Laporan Hutang BBM</h1>
-                <p class="text-slate-500 mt-2 text-sm font-medium">Daftar riwayat hutang bon BBM satker (Lunas & Belum Lunas).</p>
+                <p class="text-slate-400 mt-2 text-sm font-medium">Daftar riwayat hutang bon BBM satker (Lunas & Belum Lunas).</p>
             </div>
 
             <a href="{{ route('satker.laporan-hutang.print', request()->all()) }}" target="_blank"
@@ -19,7 +19,7 @@
             </a>
         </div>
 
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-6 mb-6">
+        <div class="bg-slate-900 border border-white/5 rounded-2xl border border-white/10 shadow-sm p-4 sm:p-6 mb-6">
             <form action="{{ route('satker.laporan-hutang.index') }}" method="GET"
                 class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
@@ -36,7 +36,7 @@
 
                 <div>
                     <x-input-label for="status" value="Status" class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1" />
-                    <select name="status" id="status" class="tom-select w-full rounded-xl border-slate-200 bg-slate-50 text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all">
+                    <select name="status" id="status" class="tom-select w-full rounded-xl border-white/10 bg-slate-800/50 text-xs font-bold text-slate-300 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all">
                         <option value="">Semua Status</option>
                         <option value="sudah_dibayar" {{ request('status') === 'sudah_dibayar' ? 'selected' : '' }}>Lunas</option>
                         <option value="belum_dibayar" {{ request('status') === 'belum_dibayar' ? 'selected' : '' }}>Belum Lunas</option>
@@ -50,7 +50,7 @@
                     </button>
                     @if(request()->hasAny(['start_date', 'end_date', 'status']))
                         <a href="{{ route('satker.laporan-hutang.index') }}"
-                            class="px-4 py-2.5 bg-slate-100 text-slate-700 font-semibold rounded-lg hover:bg-slate-200 transition">
+                            class="px-4 py-2.5 bg-slate-800 text-slate-300 font-semibold rounded-lg hover:bg-slate-200 transition">
                             Reset
                         </a>
                     @endif
@@ -59,62 +59,62 @@
         </div>
 
         <!-- Table Data -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="bg-slate-900 border border-white/5 rounded-2xl border border-white/10 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-sm text-left">
-                    <thead class="text-xs text-slate-500 uppercase bg-slate-50/80 border-b border-slate-200">
+                    <thead class="text-xs text-slate-400 uppercase bg-slate-800/50/80 border-b border-white/10">
                         <tr>
-                            <th class="px-6 py-4 font-bold">No</th>
-                            <th class="px-6 py-4 font-bold">Tgl Bon</th>
-                            <th class="px-6 py-4 font-bold">Tgl Bayar</th>
-                            <th class="px-6 py-4 font-bold">Kendaraan</th>
-                            <th class="px-6 py-4 font-bold">Driver</th>
-                            <th class="px-6 py-4 font-bold text-center">Jumlah</th>
-                            <th class="px-6 py-4 font-bold text-center">Status</th>
+                            <th class="px-4 py-3 font-bold">No</th>
+                            <th class="px-4 py-3 font-bold">Tgl Bon</th>
+                            <th class="px-4 py-3 font-bold">Tgl Bayar</th>
+                            <th class="px-4 py-3 font-bold">Kendaraan</th>
+                            <th class="px-4 py-3 font-bold">Driver</th>
+                            <th class="px-4 py-3 font-bold text-center">Jumlah</th>
+                            <th class="px-4 py-3 font-bold text-center">Status</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody class="divide-y divide-white/5">
                         @forelse($hutangs as $index => $hutang)
-                            <tr class="hover:bg-slate-50/50 transition">
-                                <td class="px-6 py-4 font-medium text-slate-400">
+                            <tr class="hover:bg-slate-800/50 transition">
+                                <td class="px-4 py-3 font-medium text-slate-400">
                                     {{ ($hutangs->currentPage() - 1) * $hutangs->perPage() + $index + 1 }}
                                 </td>
-                                <td class="px-6 py-4">
-                                    <div class="text-xs text-slate-600 font-bold">
+                                <td class="px-4 py-3">
+                                    <div class="text-xs text-slate-400 font-bold">
                                         {{ \Carbon\Carbon::parse($hutang->created_at)->timezone('Asia/Makassar')->translatedFormat('d M Y') }}
                                     </div>
                                     <div class="text-[10px] text-slate-400">
                                         {{ $hutang->petugas->name ?? '-' }}
                                     </div>
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-4 py-3">
                                     @if($hutang->tanggal_bayar)
-                                        <div class="font-bold text-slate-900">
+                                        <div class="font-bold text-white">
                                             {{ \Carbon\Carbon::parse($hutang->tanggal_bayar)->timezone('Asia/Makassar')->translatedFormat('d M Y') }}
                                         </div>
-                                        <div class="text-[10px] text-slate-500 font-medium">
+                                        <div class="text-[10px] text-slate-400 font-medium">
                                             {{ \Carbon\Carbon::parse($hutang->tanggal_bayar)->timezone('Asia/Makassar')->format('H:i') }} WITA
                                         </div>
                                     @else
                                         <div class="text-[10px] text-rose-400 font-bold italic">BELUM DIBAYAR</div>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-4 py-3">
                                     <div class="font-black text-indigo-600 uppercase">{{ $hutang->nopol }}</div>
                                     <div class="text-[10px] text-slate-400 font-medium uppercase">
                                         {{ $hutang->jenis_kendaraan }}
                                     </div>
                                 </td>
-                                <td class="px-6 py-4">
-                                    <div class="font-bold text-slate-800">{{ $hutang->nama_driver ?? '-' }}</div>
+                                <td class="px-4 py-3">
+                                    <div class="font-bold text-slate-200">{{ $hutang->nama_driver ?? '-' }}</div>
                                 </td>
-                                <td class="px-6 py-4 text-center">
+                                <td class="px-4 py-3 text-center">
                                     <div class="flex flex-col items-center">
-                                        <span class="text-sm font-black text-slate-900">{{ number_format($hutang->jumlah_bon, 0) }} L</span>
+                                        <span class="text-sm font-black text-white">{{ number_format($hutang->jumlah_bon, 0) }} L</span>
                                         <span class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">{{ $hutang->jenis_bbm }}</span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 text-center">
+                                <td class="px-4 py-3 text-center">
                                     @if($hutang->status === 'sudah_dibayar')
                                         <span class="inline-flex items-center px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-[10px] font-black uppercase tracking-wider">
                                             Lunas
@@ -142,16 +142,16 @@
                         @endforelse
                     </tbody>
                     @if($hutangs->count() > 0)
-                        <tfoot class="bg-slate-50 font-black border-t-2 border-slate-200">
+                        <tfoot class="bg-slate-800/50 font-black border-t-2 border-white/10">
                             <tr>
-                                <td colspan="5" class="px-6 py-4 text-right text-slate-500 uppercase tracking-widest text-[10px]">TOTAL HUTANG</td>
-                                <td class="px-6 py-4">
+                                <td colspan="5" class="px-4 py-3 text-right text-slate-400 uppercase tracking-widest text-[10px]">TOTAL HUTANG</td>
+                                <td class="px-4 py-3">
                                     <div class="flex flex-col items-center gap-1">
                                         <div class="flex items-center gap-2">
                                             <span class="text-indigo-600 text-xs">{{ number_format($totalPertamax, 0) }} L</span>
                                             <span class="text-[8px] bg-indigo-100 text-indigo-600 px-1 rounded">PERTAMAX</span>
                                         </div>
-                                        <div class="flex items-center gap-2 border-t border-slate-200 pt-1">
+                                        <div class="flex items-center gap-2 border-t border-white/10 pt-1">
                                             <span class="text-amber-600 text-xs">{{ number_format($totalDex, 0) }} L</span>
                                             <span class="text-[8px] bg-amber-100 text-amber-600 px-1 rounded">P. DEX</span>
                                         </div>
@@ -164,7 +164,7 @@
                 </table>
             </div>
             @if($hutangs->hasPages())
-                <div class="p-4 border-t border-slate-200">
+                <div class="p-4 border-t border-white/10">
                     {{ $hutangs->links() }}
                 </div>
             @endif

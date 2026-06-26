@@ -1,9 +1,9 @@
 <x-app-layout>
-    <div class="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-8">
+    <div class="p-2 sm:p-6 lg:p-8 space-y-4 sm:space-y-8">
         <!-- Page Title -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4">
             <div>
-                <h1 class="text-xl sm:text-3xl font-bold text-slate-900">Dashboard</h1>
+                <h1 class="text-xl sm:text-3xl font-bold text-white">Dashboard</h1>
 
             </div>
             <div class="flex items-center gap-3">
@@ -14,25 +14,24 @@
         <div class="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
             <!-- Card: Total Satker -->
             <div
-                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-700 p-4 sm:p-5 text-white shadow-lg group hover:shadow-indigo-500/40 transition-all duration-300 hover:-translate-y-1">
-                <div
-                    class="absolute -top-4 -right-4 w-16 sm:w-24 h-16 sm:h-24 bg-white/10 rounded-full blur-lg group-hover:scale-150 transition-transform duration-500">
+                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-900 border border-indigo-400 shadow-xl p-4 sm:p-5 text-white shadow-lg shadow-indigo-500/5 group hover:shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-1">
+                <div class="absolute -top-4 -right-4 w-24 h-24 bg-indigo-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500">
                 </div>
                 <div class="relative z-10">
                     <div class="flex items-center justify-between mb-2 sm:mb-3">
-                        <div class="p-2 sm:p-2.5 bg-white/20 rounded-lg sm:rounded-xl backdrop-blur-sm">
-                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="p-2 sm:p-2.5 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl backdrop-blur-sm">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
                                 </path>
                             </svg>
                         </div>
                         <a href="{{ route('admin.satkers.index') }}"
-                            class="text-[9px] sm:text-[10px] font-semibold bg-white/20 hover:bg-white/30 px-2 py-1 rounded-lg transition uppercase tracking-wider">Kelola</a>
+                            class="text-[9px] sm:text-[10px] font-semibold bg-white/20 border border-white/30 hover:bg-slate-900 border border-white/5/30 px-2 py-1 rounded-lg transition uppercase tracking-wider text-white/90">Kelola</a>
                     </div>
-                    <div class="flex items-baseline gap-1 sm:gap-2">
-                        <p class="text-xl sm:text-2xl font-black">{{ number_format($stats['totalSatker'], 0, ',', '.') }}</p>
-                        <p class="text-[9px] sm:text-[11px] text-indigo-100 opacity-80 font-medium truncate">Total
+                    <div class="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-2 mt-1 sm:mt-0">
+                        <p class="text-xl sm:text-2xl font-black text-white">{{ number_format($stats['totalSatker'], 0, ',', '.') }}</p>
+                        <p class="text-[9px] sm:text-[11px] text-white/90 opacity-80 font-medium truncate">Total
                             Satker</p>
                     </div>
                 </div>
@@ -40,25 +39,24 @@
 
             <!-- Card: Total Users -->
             <div
-                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 p-4 sm:p-5 text-white shadow-lg group hover:shadow-emerald-500/40 transition-all duration-300 hover:-translate-y-1">
-                <div
-                    class="absolute -top-4 -right-4 w-16 sm:w-24 h-16 sm:h-24 bg-white/10 rounded-full blur-lg group-hover:scale-150 transition-transform duration-500">
+                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-900 border border-emerald-400 shadow-xl p-4 sm:p-5 text-white shadow-lg shadow-emerald-500/5 group hover:shadow-emerald-500/20 transition-all duration-300 hover:-translate-y-1">
+                <div class="absolute -top-4 -right-4 w-24 h-24 bg-emerald-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500">
                 </div>
                 <div class="relative z-10">
                     <div class="flex items-center justify-between mb-2 sm:mb-3">
-                        <div class="p-2 sm:p-2.5 bg-white/20 rounded-lg sm:rounded-xl backdrop-blur-sm">
-                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="p-2 sm:p-2.5 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl backdrop-blur-sm">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
                                 </path>
                             </svg>
                         </div>
                         <a href="{{ route('admin.users.index') }}"
-                            class="text-[9px] sm:text-[10px] font-semibold bg-white/20 hover:bg-white/30 px-2 py-1 rounded-lg transition uppercase tracking-wider">Kelola</a>
+                            class="text-[9px] sm:text-[10px] font-semibold bg-white/20 border border-white/30 hover:bg-slate-900 border border-white/5/30 px-2 py-1 rounded-lg transition uppercase tracking-wider text-white/90">Kelola</a>
                     </div>
-                    <div class="flex items-baseline gap-1 sm:gap-2">
-                        <p class="text-xl sm:text-2xl font-black">{{ number_format($stats['totalUsers'], 0, ',', '.') }}</p>
-                        <p class="text-[9px] sm:text-[11px] text-emerald-100 opacity-80 font-medium truncate">Total
+                    <div class="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-2 mt-1 sm:mt-0">
+                        <p class="text-xl sm:text-2xl font-black text-white">{{ number_format($stats['totalUsers'], 0, ',', '.') }}</p>
+                        <p class="text-[9px] sm:text-[11px] text-white/90 opacity-80 font-medium truncate">Total
                             Users</p>
                     </div>
                 </div>
@@ -66,14 +64,13 @@
 
             <!-- Card: Total Kendaraan -->
             <div
-                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 p-4 sm:p-5 text-white shadow-lg group hover:shadow-amber-500/40 transition-all duration-300 hover:-translate-y-1">
-                <div
-                    class="absolute -top-4 -right-4 w-16 sm:w-24 h-16 sm:h-24 bg-white/10 rounded-full blur-lg group-hover:scale-150 transition-transform duration-500">
+                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-amber-500 to-amber-800 border border-amber-400 shadow-xl p-4 sm:p-5 text-white shadow-lg shadow-amber-500/5 group hover:shadow-amber-500/20 transition-all duration-300 hover:-translate-y-1">
+                <div class="absolute -top-4 -right-4 w-24 h-24 bg-amber-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500">
                 </div>
                 <div class="relative z-10">
                     <div class="flex items-center justify-between mb-2 sm:mb-3">
-                        <div class="p-2 sm:p-2.5 bg-white/20 rounded-lg sm:rounded-xl backdrop-blur-sm">
-                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="p-2 sm:p-2.5 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl backdrop-blur-sm">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -82,29 +79,29 @@
                             </svg>
                         </div>
                         <a href="{{ route('admin.kendaraans.index') }}"
-                            class="text-[9px] sm:text-[10px] font-semibold bg-white/20 hover:bg-white/30 px-2 py-1 rounded-lg transition uppercase tracking-wider">Kelola</a>
+                            class="text-[9px] sm:text-[10px] font-semibold bg-white/20 border border-white/30 hover:bg-slate-900 border border-white/5/30 px-2 py-1 rounded-lg transition uppercase tracking-wider text-white/90">Kelola</a>
                     </div>
-                    <div class="flex items-baseline gap-1 sm:gap-2">
-                        <p class="text-xl sm:text-2xl font-black">{{ number_format($stats['totalKendaraan'], 0, ',', '.') }}</p>
-                        <p class="text-[9px] sm:text-[11px] text-amber-100 opacity-80 font-medium truncate">Total
+                    <div class="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-2 mt-1 sm:mt-0">
+                        <p class="text-xl sm:text-2xl font-black text-white">{{ number_format($stats['totalKendaraan'], 0, ',', '.') }}</p>
+                        <p class="text-[9px] sm:text-[11px] text-white/90 opacity-80 font-medium truncate">Total
                             Kendaraan</p>
                     </div>
                     <div class="grid grid-cols-4 gap-1 mt-2 sm:mt-3">
-                        <div class="bg-white/15 rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
-                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80">R2</p>
-                            <p class="text-xs sm:text-sm font-black">{{ $stats['rodaR2'] }}</p>
+                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
+                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90">R2</p>
+                            <p class="text-xs sm:text-sm font-black text-white">{{ $stats['rodaR2'] }}</p>
                         </div>
-                        <div class="bg-white/15 rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
-                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80">R4</p>
-                            <p class="text-xs sm:text-sm font-black">{{ $stats['rodaR4'] }}</p>
+                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
+                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90">R4</p>
+                            <p class="text-xs sm:text-sm font-black text-white">{{ $stats['rodaR4'] }}</p>
                         </div>
-                        <div class="bg-white/15 rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
-                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80">R6</p>
-                            <p class="text-xs sm:text-sm font-black">{{ $stats['rodaR6'] }}</p>
+                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
+                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90">R6</p>
+                            <p class="text-xs sm:text-sm font-black text-white">{{ $stats['rodaR6'] }}</p>
                         </div>
-                        <div class="bg-white/15 rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
-                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 leading-tight">Non</p>
-                            <p class="text-xs sm:text-sm font-black">{{ $stats['rodaNon'] }}</p>
+                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
+                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90 leading-tight">Non</p>
+                            <p class="text-xs sm:text-sm font-black text-white">{{ $stats['rodaNon'] }}</p>
                         </div>
                     </div>
                 </div>
@@ -112,24 +109,23 @@
 
             <!-- Card: Total Transaksi -->
             <div
-                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-rose-500 to-pink-600 p-4 sm:p-5 text-white shadow-lg group hover:shadow-rose-500/40 transition-all duration-300 hover:-translate-y-1">
-                <div
-                    class="absolute -top-4 -right-4 w-16 sm:w-24 h-16 sm:h-24 bg-white/10 rounded-full blur-lg group-hover:scale-150 transition-transform duration-500">
+                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-rose-600 to-rose-900 border border-rose-400 shadow-xl p-4 sm:p-5 text-white shadow-lg shadow-rose-500/5 group hover:shadow-rose-500/20 transition-all duration-300 hover:-translate-y-1">
+                <div class="absolute -top-4 -right-4 w-24 h-24 bg-rose-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500">
                 </div>
                 <div class="relative z-10">
                     <div class="flex items-center justify-between mb-2 sm:mb-3">
-                        <div class="p-2 sm:p-2.5 bg-white/20 rounded-lg sm:rounded-xl backdrop-blur-sm">
-                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="p-2 sm:p-2.5 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl backdrop-blur-sm">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
                             </svg>
                         </div>
                         <a href="{{ route('admin.riwayat.index') }}"
-                            class="text-[9px] sm:text-[10px] font-semibold bg-white/20 hover:bg-white/30 px-2 py-1 rounded-lg transition uppercase tracking-wider">Riwayat</a>
+                            class="text-[9px] sm:text-[10px] font-semibold bg-white/20 border border-white/30 hover:bg-slate-900 border border-white/5/30 px-2 py-1 rounded-lg transition uppercase tracking-wider text-white/90">Riwayat</a>
                     </div>
-                    <div class="flex items-baseline gap-1 sm:gap-2">
-                        <p class="text-xl sm:text-2xl font-black">{{ number_format($stats['totalTransaksi'], 0, ',', '.') }}</p>
-                        <p class="text-[9px] sm:text-[11px] text-rose-100 opacity-80 font-medium truncate">Total
+                    <div class="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-2 mt-1 sm:mt-0">
+                        <p class="text-xl sm:text-2xl font-black text-white">{{ number_format($stats['totalTransaksi'], 0, ',', '.') }}</p>
+                        <p class="text-[9px] sm:text-[11px] text-white/90 opacity-80 font-medium truncate">Total
                             Transaksi</p>
                     </div>
                 </div>
@@ -140,36 +136,36 @@
         <!-- Tank Stock Section (Sinkronisasi) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             <!-- Card: Pertamax -->
-            <div class="bg-gradient-to-br from-indigo-600 to-indigo-800 rounded-2xl shadow-lg p-5 text-white flex items-center gap-4 group hover:shadow-indigo-500/40 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
-                <div class="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full blur-lg group-hover:scale-150 transition-transform duration-500"></div>
-                <div class="p-3 bg-white/20 rounded-xl backdrop-blur-sm group-hover:scale-110 transition-transform shrink-0">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-slate-900/60 border border-white/10 backdrop-blur-xl rounded-2xl shadow-lg p-5 text-white flex items-center gap-4 group hover:shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                <div class="absolute -top-4 -right-4 w-24 h-24 bg-indigo-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="p-3 bg-white/20 border border-white/30 rounded-xl backdrop-blur-sm group-hover:scale-110 transition-transform shrink-0">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                     </svg>
                 </div>
                 <div class="relative z-10 flex-1 min-w-0 pr-12">
-                    <p class="text-[10px] sm:text-[11px] font-black text-indigo-100 uppercase tracking-widest mb-1 opacity-80 leading-tight">Stok BBM di Tangki (Pertamax)</p>
-                    <h3 class="text-xl sm:text-2xl font-black truncate">{{ number_format($tankStock['pertamax'], 0, ',', '.') }} <span class="text-xs font-bold text-indigo-200">L</span></h3>
+                    <p class="text-[10px] sm:text-[11px] font-black text-white/90 uppercase tracking-widest mb-1 opacity-80 leading-tight">Stok BBM di Tangki (Pertamax)</p>
+                    <h3 class="text-xl sm:text-2xl font-black truncate text-white">{{ number_format($tankStock['pertamax'], 0, ',', '.') }} <span class="text-xs font-bold text-white/90">L</span></h3>
                 </div>
                 <div class="absolute bottom-4 right-4 relative z-20">
-                    <a href="{{ route('admin.laporan-stok-bbm.index') }}" class="text-[10px] font-bold bg-white/20 hover:bg-white/40 px-3 py-1.5 rounded-lg transition-all uppercase tracking-wider backdrop-blur-sm">Laporan</a>
+                    <a href="{{ route('admin.laporan-stok-bbm.index') }}" class="text-[10px] font-bold bg-white/20 border border-white/30 hover:bg-slate-900 hover:border-white/5/40 px-3 py-1.5 rounded-lg transition-all uppercase tracking-wider backdrop-blur-sm text-white/90">Laporan</a>
                 </div>
             </div>
 
             <!-- Card: Dex -->
-            <div class="{{ $tankStock['dex'] < 0 ? 'bg-gradient-to-br from-red-600 to-red-800 ring-2 ring-red-500 ring-opacity-50 shadow-2xl scale-[1.02]' : 'bg-gradient-to-br from-rose-600 to-rose-800' }} rounded-2xl shadow-lg p-5 text-white flex items-center gap-4 group hover:shadow-rose-500/40 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
-                <div class="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full blur-lg group-hover:scale-150 transition-transform duration-500"></div>
-                <div class="p-3 bg-white/20 rounded-xl backdrop-blur-sm group-hover:scale-110 transition-transform shrink-0">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="{{ $tankStock['dex'] < 0 ? 'bg-slate-900/60 border-2 border-rose-500/50 backdrop-blur-xl shadow-2xl scale-[1.02]' : 'bg-slate-900/60 border border-white/10 backdrop-blur-xl' }} rounded-2xl shadow-lg p-5 text-white flex items-center gap-4 group hover:shadow-rose-500/20 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                <div class="absolute -top-4 -right-4 w-24 h-24 bg-rose-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="p-3 bg-white/20 border border-white/30 rounded-xl backdrop-blur-sm group-hover:scale-110 transition-transform shrink-0">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                     </svg>
                 </div>
                 <div class="relative z-10 flex-1 min-w-0 pr-12">
-                    <p class="text-[10px] sm:text-[11px] font-black text-rose-100 uppercase tracking-widest mb-1 opacity-80 leading-tight">Stok BBM di Tangki (Dex)</p>
-                    <h3 class="text-xl sm:text-2xl font-black truncate">{{ number_format($tankStock['dex'], 0, ',', '.') }} <span class="text-xs font-bold text-rose-200">L</span></h3>
+                    <p class="text-[10px] sm:text-[11px] font-black text-white/90 uppercase tracking-widest mb-1 opacity-80 leading-tight">Stok BBM di Tangki (Dex)</p>
+                    <h3 class="text-xl sm:text-2xl font-black truncate text-white">{{ number_format($tankStock['dex'], 0, ',', '.') }} <span class="text-xs font-bold text-white/90">L</span></h3>
                 </div>
                 <div class="absolute bottom-4 right-4 relative z-20">
-                    <a href="{{ route('admin.laporan-stok-bbm.index') }}" class="text-[10px] font-bold bg-white/20 hover:bg-white/40 px-3 py-1.5 rounded-lg transition-all uppercase tracking-wider backdrop-blur-sm">Laporan</a>
+                    <a href="{{ route('admin.laporan-stok-bbm.index') }}" class="text-[10px] font-bold bg-white/20 border border-white/30 hover:bg-slate-900 hover:border-white/5/40 px-3 py-1.5 rounded-lg transition-all uppercase tracking-wider backdrop-blur-sm text-white/90">Laporan</a>
                 </div>
             </div>
         </div>
@@ -177,7 +173,7 @@
 
         <!-- Hutang Stats Row -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="bg-white rounded-2xl border border-rose-100 shadow-sm p-5 flex items-center gap-4 group hover:shadow-md transition-all">
+            <div class="bg-gradient-to-r from-rose-900/30 to-slate-900 rounded-2xl border border-rose-500/20 shadow-sm p-5 flex items-center gap-4 group hover:shadow-md transition-all">
                 <div class="p-3 bg-rose-50 rounded-xl text-rose-500 group-hover:bg-rose-100 transition-colors">
                     <svg class="w-8 h-8 font-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -185,11 +181,11 @@
                 </div>
                 <div>
                     <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Hutang Pertamax (Belum Bayar)</p>
-                    <p class="text-2xl font-black text-slate-900 leading-none">{{ number_format($stats['totalHutangPertamax'], 0, ',', '.') }} <span class="text-sm font-bold text-slate-400">Liter</span></p>
+                    <p class="text-2xl font-black text-white leading-none">{{ number_format($stats['totalHutangPertamax'], 0, ',', '.') }} <span class="text-sm font-bold text-slate-400">Liter</span></p>
                 </div>
             </div>
             
-            <div class="bg-white rounded-2xl border border-rose-100 shadow-sm p-5 flex items-center gap-4 group hover:shadow-md transition-all">
+            <div class="bg-gradient-to-r from-rose-900/30 to-slate-900 rounded-2xl border border-rose-500/20 shadow-sm p-5 flex items-center gap-4 group hover:shadow-md transition-all">
                 <div class="p-3 bg-rose-50 rounded-xl text-rose-500 group-hover:bg-rose-100 transition-colors">
                     <svg class="w-8 h-8 font-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -197,7 +193,7 @@
                 </div>
                 <div>
                     <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Hutang Dex (Belum Bayar)</p>
-                    <p class="text-2xl font-black text-slate-900 leading-none">{{ number_format($stats['totalHutangDex'], 0, ',', '.') }} <span class="text-sm font-bold text-slate-400">Liter</span></p>
+                    <p class="text-2xl font-black text-white leading-none">{{ number_format($stats['totalHutangDex'], 0, ',', '.') }} <span class="text-sm font-bold text-slate-400">Liter</span></p>
                 </div>
             </div>
         </div>
@@ -205,7 +201,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8 mt-2 sm:mt-4">
             <!-- Left Column: Unit & Personel Balance -->
             <div
-                class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/70 shadow-sm p-4 sm:p-6 overflow-hidden relative">
+                class="bg-slate-900 border border-white/5 rounded-xl sm:rounded-2xl border border-white/10/70 shadow-sm p-4 sm:p-6 overflow-hidden relative">
                 <div class="absolute top-0 right-0 p-4 opacity-5">
                     <svg class="w-20 h-20 sm:w-32 sm:h-32" fill="currentColor" viewBox="0 0 24 24">
                         <path
@@ -216,7 +212,7 @@
                 <div class="grid grid-cols-1 gap-4 sm:gap-8 relative z-10">
                     <!-- Unit Section -->
                     <div>
-                        <h3 class="text-xs sm:text-sm font-bold text-slate-800 mb-2 sm:mb-4 flex items-center gap-2">
+                        <h3 class="text-xs sm:text-xs font-semibold text-slate-200 mb-2 sm:mb-4 flex items-center gap-2">
                             <div class="w-1 h-3 sm:w-1.5 sm:h-4 bg-amber-500 rounded-full"></div>
                             Total Saldo Kendaraan
                         </h3>
@@ -251,11 +247,11 @@
 
                     @if($personelAccessControl == '1')
                     <!-- Separator -->
-                    <div class="border-t border-slate-100"></div>
+                    <div class="border-t border-white/5"></div>
 
                     <!-- Personel Section -->
                     <div>
-                        <h3 class="text-xs sm:text-sm font-bold text-slate-800 mb-2 sm:mb-4 flex items-center gap-2">
+                        <h3 class="text-xs sm:text-xs font-semibold text-slate-200 mb-2 sm:mb-4 flex items-center gap-2">
                             <div class="w-1 h-3 sm:w-1.5 sm:h-4 bg-indigo-500 rounded-full"></div>
                             Total Saldo Personel
                         </h3>
@@ -287,27 +283,27 @@
 
             <!-- Right Column: Stok Pembelian BBM (Belum Distribusi) (Super Admin) -->
             <div
-                class="bg-indigo-600 rounded-xl sm:rounded-2xl border border-indigo-400 shadow-xl p-4 sm:p-6 overflow-hidden relative">
-                <div class="absolute -top-12 -right-12 w-32 h-32 sm:w-48 sm:h-48 bg-white/10 rounded-full blur-3xl">
+                class="bg-slate-900/60 border border-white/10 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 overflow-hidden relative group">
+                <div class="absolute -top-12 -right-12 w-32 h-32 sm:w-48 sm:h-48 bg-indigo-500/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-500">
                 </div>
                 <h3 class="text-sm sm:text-lg font-bold text-white mb-4 sm:mb-6 flex items-center gap-2 relative z-10">
-                    <div class="w-1.5 h-4 sm:w-2 sm:h-6 bg-white rounded-full"></div>
+                    <div class="w-1.5 h-4 sm:w-2 sm:h-6 bg-indigo-500 rounded-full"></div>
                     Saldo BBM (Belum Distribusi)
                 </h3>
                 <div class="grid grid-cols-1 gap-2 sm:gap-4 relative z-10">
                     @foreach($adminStocks as $aStock)
                         <div
-                            class="bg-white/10 backdrop-blur-md rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/20">
+                            class="bg-white/20 border border-white/30 backdrop-blur-md rounded-lg sm:rounded-xl p-3 sm:p-4 hover:border-white/20 transition-all">
                             <p
-                                class="text-[8px] sm:text-[10px] font-bold text-white/70 uppercase tracking-widest leading-tight mb-0.5 sm:mb-1">
+                                class="text-[8px] sm:text-[10px] font-bold text-white/90 uppercase tracking-widest leading-tight mb-0.5 sm:mb-1">
                                 {{ $aStock->jenis_bbm }}</p>
                             <div class="flex items-baseline justify-between mt-0.5 sm:mt-1">
                                 <span
                                     class="text-2xl sm:text-3xl font-black text-white">{{ number_format($aStock->saldo, 0, ',', '.') }}
-                                    <span class="text-xs sm:text-sm font-bold text-white/50">L</span></span>
+                                    <span class="text-xs sm:text-sm font-bold text-white/90 opacity-70">L</span></span>
                                 <div
-                                    class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/10 flex items-center justify-center">
-                                    <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white/50" fill="none" stroke="currentColor"
+                                    class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-800 border border-white/5/20 flex items-center justify-center">
+                                    <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
@@ -320,7 +316,7 @@
                 </div>
                 <div class="mt-4 sm:mt-8 text-right relative z-10">
                     <a href="{{ route('admin.stok.index') }}"
-                        class="text-xs sm:text-sm font-bold text-white bg-indigo-500 hover:bg-white hover:text-indigo-600 px-4 py-2 sm:px-6 sm:py-3 rounded-xl transition-all shadow-lg active:scale-95 flex items-center gap-2 inline-flex">
+                        class="text-xs sm:text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-500 border border-transparent px-4 py-2 sm:px-6 sm:py-3 rounded-xl transition-all shadow-lg active:scale-95 flex items-center gap-2 inline-flex">
                         Kelola Saldo
                         <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -336,9 +332,9 @@
             <div class="xl:col-span-2 space-y-4 sm:space-y-6">
                 <!-- Satisfaction Index Chart -->
                 <div
-                    class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/70 shadow-sm p-4 sm:p-6 overflow-hidden relative">
+                    class="bg-slate-900 border border-white/5 rounded-xl sm:rounded-2xl border border-white/10/70 shadow-sm p-4 sm:p-6 overflow-hidden relative">
                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-2">
-                        <h3 class="text-base sm:text-lg font-bold text-slate-800">Indeks Kepuasan Petugas</h3>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-200">Indeks Kepuasan Petugas</h3>
                         <div
                             class="flex items-center gap-2 text-[8px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                             <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Sangat
@@ -400,8 +396,8 @@
                 </div>
 
                 <!-- Transaction Chart Area -->
-                <div class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/70 shadow-sm p-4 sm:p-6">
-                    <h3 class="text-base sm:text-lg font-bold text-slate-800 mb-2 sm:mb-4">Transaksi 7 Hari Terakhir
+                <div class="bg-slate-900 border border-white/5 rounded-xl sm:rounded-2xl border border-white/10/70 shadow-sm p-4 sm:p-6">
+                    <h3 class="text-base sm:text-lg font-bold text-slate-200 mb-2 sm:mb-4">Transaksi 7 Hari Terakhir
                     </h3>
                     <div id="transactionChart"></div>
                 </div>
@@ -411,26 +407,26 @@
             <div class="space-y-4 sm:space-y-6">
 
                 <!-- Recent Transactions -->
-                <div class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/70 shadow-sm">
-                    <div class="p-4 sm:p-6 border-b border-slate-100">
-                        <h3 class="text-base sm:text-lg font-bold text-slate-800">Aktivitas Terbaru</h3>
+                <div class="bg-slate-900 border border-white/5 rounded-xl sm:rounded-2xl border border-white/10/70 shadow-sm">
+                    <div class="p-4 sm:p-6 border-b border-white/5">
+                        <h3 class="text-base sm:text-lg font-bold text-slate-200">Aktivitas Terbaru</h3>
                     </div>
-                    <div class="divide-y divide-slate-100 max-h-[300px] sm:max-h-[400px] overflow-y-auto">
+                    <div class="divide-y divide-white/5 max-h-[300px] sm:max-h-[400px] overflow-y-auto">
                         @foreach($recentTransactions as $trx)
-                            <div class="px-4 py-3 sm:px-6 sm:py-4 hover:bg-slate-50 transition-colors">
+                            <div class="px-4 py-3 sm:px-6 sm:py-4 hover:bg-slate-800/50 transition-colors">
                                 <div class="flex items-center gap-2 sm:gap-3">
                                     <div
                                         class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-xs sm:text-sm">
                                         {{ substr($trx->kendaraan->no_polisi ?? ($trx->personel->nrp ?? '?'), 0, 2) }}
                                     </div>
                                     <div class="flex-1 min-w-0">
-                                        <p class="text-xs sm:text-sm font-semibold text-slate-800 truncate">
+                                        <p class="text-xs sm:text-xs font-medium text-slate-200 truncate">
                                             {{ $trx->kendaraan->no_polisi ?? ($trx->personel->nama ?? 'Personel') }}</p>
                                         <p class="text-[10px] sm:text-xs text-slate-400">
                                             {{ $trx->created_at->diffForHumans() }}</p>
                                     </div>
                                     <div class="text-right">
-                                        <p class="text-xs sm:text-sm font-bold text-slate-700">
+                                        <p class="text-xs sm:text-sm font-bold text-slate-300">
                                             {{ number_format($trx->liter, 0, ',', '.') }} L</p>
                                         <p class="text-[10px] sm:text-xs text-slate-400">Total:
                                             {{ number_format($trx->liter, 0, ',', '.') }} L</p>
@@ -445,7 +441,7 @@
 
         <!-- Map Section -->
         <div id="userMap"
-            class="w-full h-[300px] sm:h-[400px] rounded-xl z-0 bg-slate-100 flex items-center justify-center text-slate-400"
+            class="w-full h-[300px] sm:h-[400px] rounded-xl z-0 bg-slate-800 flex items-center justify-center text-slate-400"
             style="height: 300px; min-height: 300px;">
             Memuat Peta...
         </div>
@@ -546,11 +542,11 @@
                                     <div class="flex items-center gap-2 mb-2">
                                         <span class="w-8 h-8 rounded-full ${roleColor} flex items-center justify-center text-white text-xs font-bold shadow-sm">${initials}</span>
                                         <div>
-                                            <h4 class="font-bold text-slate-800 text-sm leading-tight">${user.name}</h4>
+                                            <h4 class="font-bold text-slate-200 text-sm leading-tight">${user.name}</h4>
                                             <p class="text-[10px] text-indigo-600 font-bold tracking-wide">${roleLabel}</p>
                                         </div>
                                     </div>
-                                    <div class="text-xs text-slate-500 border-t border-slate-100 pt-2 space-y-1">
+                                    <div class="text-xs text-slate-400 border-t border-white/5 pt-2 space-y-1">
                                         <p class="flex items-center gap-1.5">
                                             <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                             <span class="font-medium">Aktif:</span> ${lastActive}
