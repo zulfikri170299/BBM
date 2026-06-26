@@ -61,7 +61,7 @@
                 <!-- Preview Susut -->
                 <div class="p-4 bg-slate-800 rounded-xl flex items-center justify-between border border-white/5">
                     <span class="text-slate-400 font-bold uppercase text-sm">Estimasi Susut:</span>
-                    <span id="preview_susut" class="text-2xl font-black text-white">0.00 <span class="text-sm">Ltr</span></span>
+                    <span id="preview_susut" class="text-2xl font-black text-white">0 <span class="text-sm">Ltr</span></span>
                 </div>
 
                 <div>
@@ -123,7 +123,7 @@
 
             const susut = awal - pengeluaran - akhir;
             
-            previewSusut.innerHTML = `${susut.toFixed(2)} <span class="text-sm">Ltr</span>`;
+            previewSusut.innerHTML = `${susut.toLocaleString('id-ID', { maximumFractionDigits: 0 })} <span class="text-sm">Ltr</span>`;
             if(susut > 0) previewSusut.className = "text-2xl font-black text-emerald-400";
             else if(susut < 0) previewSusut.className = "text-2xl font-black text-rose-400";
             else previewSusut.className = "text-2xl font-black text-slate-300";
