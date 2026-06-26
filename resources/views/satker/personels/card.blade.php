@@ -38,6 +38,8 @@
 
         /* === CARD DESIGN === */
         .card {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
             width: 1000px;
             height: 620px;
             position: absolute;

@@ -35,6 +35,8 @@
                 font-family: 'Outfit', sans-serif;
                 background-size: cover !important;
                 background-position: center !important;
+                -webkit-text-size-adjust: 100%;
+                text-size-adjust: 100%;
             }
 
             .bbm-card-design::before {
