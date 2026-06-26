@@ -57,7 +57,7 @@
                     <x-input-label for="filter_satker_id" value="Satker" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-1" />
                     <div class="relative group/input">
                         <select name="satker_id" id="filter_satker_id"
-                            class="tom-select block w-full bg-slate-800/50 border-white/10 focus:bg-slate-900 border border-white/5 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-300">
+                            class="tom-select w-full">
                             <option value="">Semua Satker</option>
                             @foreach($satkers as $satker)
                                 <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
@@ -73,7 +73,7 @@
                     <x-input-label for="filter_status" value="Status" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-1" />
                     <div class="relative group/input">
                         <select name="status" id="filter_status"
-                            class="tom-select block w-full bg-slate-800/50 border-white/10 focus:bg-slate-900 border border-white/5 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-300">
+                            class="tom-select w-full">
                             <option value="">Semua Status</option>
                             <option value="belum_dibayar" {{ request('status') === 'belum_dibayar' ? 'selected' : '' }}>BELUM</option>
                             <option value="sudah_dibayar" {{ request('status') === 'sudah_dibayar' ? 'selected' : '' }}>LUNAS</option>
@@ -443,7 +443,7 @@
                                     </svg>
                                 </div>
                                 <select name="satker_id" id="edit_satker_id" x-model="editData.satker_id" @change="fetchFormKendaraans($event.target.value); editData.kendaraan_id = ''"
-                                    class="tom-select block w-full pl-11 pr-10 py-2.5 bg-slate-800/50 border-white/10 focus:bg-slate-900 border border-white/5 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-300 appearance-none">
+                                    class="tom-select w-full">
                                     @foreach($satkers as $satker)
                                         <option value="{{ $satker->id }}">{{ $satker->nama_satker }}</option>
                                     @endforeach
@@ -463,7 +463,7 @@
                                 </div>
                                 <select name="kendaraan_id" id="edit_kendaraan_id" x-model="editData.kendaraan_id" required
                                     :disabled="loadingFormKendaraan || !editData.satker_id"
-                                    class="tom-select-dynamic block w-full pl-11 pr-10 py-2.5 bg-slate-800/50 border-white/10 focus:bg-slate-900 border border-white/5 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-300 appearance-none disabled:opacity-50">
+                                    class="tom-select-dynamic w-full disabled:opacity-50">
                                     <option value="" disabled x-text="loadingFormKendaraan ? 'Sedang mengambil data...' : '-- Pilih Kendaraan --'"></option>
                                     <template x-for="kend in formKendaraans" :key="kend.id">
                                         <option :value="kend.id" x-text="`${kend.no_polisi} - ${kend.jenis_kendaraan} (${kend.jenis_bbm})`"></option>
@@ -596,7 +596,7 @@
                                     </svg>
                                 </div>
                                 <select name="satker_id" id="create_satker_id" x-model="createData.satker_id" @change="fetchFormKendaraans($event.target.value); createData.kendaraan_id = ''"
-                                    class="tom-select block w-full pl-11 pr-10 py-2.5 bg-slate-800/50 border-white/10 focus:bg-slate-900 border border-white/5 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-300 appearance-none" required>
+                                    class="tom-select w-full" required>
                                     <option value="">-- Pilih Satker --</option>
                                     @foreach($satkers as $satker)
                                         <option value="{{ $satker->id }}">{{ $satker->nama_satker }}</option>
@@ -617,7 +617,7 @@
                                 </div>
                                 <select name="kendaraan_id" id="create_kendaraan_id" x-model="createData.kendaraan_id" required
                                     :disabled="loadingFormKendaraan || !createData.satker_id"
-                                    class="tom-select-dynamic block w-full pl-11 pr-10 py-2.5 bg-slate-800/50 border-white/10 focus:bg-slate-900 border border-white/5 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-300 appearance-none disabled:opacity-50">
+                                    class="tom-select-dynamic w-full disabled:opacity-50">
                                     <option value="" disabled x-text="loadingFormKendaraan ? 'Sedang mengambil data...' : '-- Pilih Kendaraan --'"></option>
                                     <template x-for="kend in formKendaraans" :key="kend.id">
                                         <option :value="kend.id" x-text="`${kend.no_polisi} - ${kend.jenis_kendaraan} (${kend.jenis_bbm})`"></option>
@@ -693,9 +693,8 @@
     </div>
 
     <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('hutangComponent', () => ({
-                showModal: false,
+        const hutangComponentData = () => ({
+            showModal: false,
                 showEditModal: false,
                 showCreateModal: false,
                 selectedHutang: null,
@@ -863,9 +862,15 @@
                         if (el && el.tomselect) el.tomselect.clear();
                     });
 
-                    this.showCreateModal = true;
                 }
-            }));
-        });
+            });
+            
+        if (typeof window.Alpine !== 'undefined') {
+            window.Alpine.data('hutangComponent', hutangComponentData);
+        } else {
+            document.addEventListener('alpine:init', () => {
+                window.Alpine.data('hutangComponent', hutangComponentData);
+            });
+        }
     </script>
 </x-app-layout>

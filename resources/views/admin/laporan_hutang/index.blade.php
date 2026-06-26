@@ -38,7 +38,7 @@
                     <div>
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Filter Satker</label>
                         <select name="satker_id" id="filter_satker_id"
-                            class="tom-select w-full rounded-xl border-white/10 bg-slate-800/50 text-xs font-bold text-slate-300 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all">
+                            class="tom-select w-full">
                             <option value="">Semua Satker</option>
                             @foreach($satkers as $satker)
                                 <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
@@ -51,7 +51,7 @@
                     <div>
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Jenis BBM</label>
                         <select name="jenis_bbm" id="filter_jenis_bbm"
-                            class="tom-select w-full rounded-xl border-white/10 bg-slate-800/50 text-xs font-bold text-slate-300 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all">
+                            class="tom-select w-full">
                             <option value="">Semua Jenis</option>
                             @foreach($jenisBbm as $jenis)
                                 <option value="{{ $jenis }}" {{ request('jenis_bbm') == $jenis ? 'selected' : '' }}>
@@ -64,7 +64,7 @@
                     <div>
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Status</label>
                         <select name="status" id="filter_status"
-                            class="tom-select w-full rounded-xl border-white/10 bg-slate-800/50 text-xs font-bold text-slate-300 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all">
+                            class="tom-select w-full">
                             <option value="">Semua Status</option>
                             <option value="sudah_dibayar" {{ request('status') === 'sudah_dibayar' ? 'selected' : '' }}>Lunas</option>
                             <option value="belum_dibayar" {{ request('status') === 'belum_dibayar' ? 'selected' : '' }}>Belum Lunas</option>
@@ -143,8 +143,12 @@
                                     <div class="font-bold text-slate-200">{{ $hutang->nama_driver ?? '-' }}</div>
                                 </td>
                                 <td class="px-4 py-3 text-center">
+                                    @php
+                                        $isDex = stripos($hutang->jenis_bbm, 'dex') !== false;
+                                        $badgeColor = $isDex ? 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30' : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
+                                    @endphp
                                     <span
-                                        class="inline-flex items-center px-2.5 py-1 bg-amber-50 text-amber-700 border border-amber-200 rounded-lg text-xs font-black">
+                                        class="inline-flex items-center px-2.5 py-1 border {{ $badgeColor }} rounded-lg text-xs font-black uppercase">
                                         {{ $hutang->jumlah_bon }} L {{ $hutang->jenis_bbm }}
                                     </span>
                                 </td>

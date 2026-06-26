@@ -72,7 +72,7 @@
                         <form action="{{ route('admin.nominatif.index') }}" method="GET" class="flex items-end gap-3 min-w-max">
                             <div class="space-y-1">
                                 <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Tahun</label>
-                                <select name="tahun" class="tom-select w-28 px-3 py-1.5 rounded-xl border-white/10 text-xs font-bold">
+                                <select name="tahun" class="tom-select w-28">
                                     @php $currentYear = date('Y'); @endphp
                                     @for($i = $currentYear; $i >= $currentYear - 5; $i--)
                                         <option value="{{ $i }}" {{ request('tahun', $tahun) == $i ? 'selected' : '' }}>{{ $i }}</option>
@@ -81,7 +81,7 @@
                             </div>
                             <div class="space-y-1">
                                 <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Bulan</label>
-                                <select name="bulan" class="tom-select w-40 px-3 py-1.5 rounded-xl border-white/10 text-xs font-bold">
+                                <select name="bulan" class="tom-select w-40">
                                     @foreach(range(1, 12) as $m)
                                         <option value="{{ $m }}" {{ request('bulan', $bulan) == $m ? 'selected' : '' }}>
                                             {{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}

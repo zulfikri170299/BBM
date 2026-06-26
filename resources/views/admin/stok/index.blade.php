@@ -47,7 +47,7 @@
 
                         <div>
                             <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Jenis BBM</label>
-                            <select name="jenis_bbm" id="filter_jenis_bbm" required class="tom-select w-full bg-slate-800/50 border-white/10 rounded-xl transition-all font-semibold text-sm">
+                            <select name="jenis_bbm" id="filter_jenis_bbm" required class="tom-select w-full">
                                 <option value="">Pilih Jenis BBM</option>
                                 @foreach(['Pertamax', 'Pertamina Dex'] as $bbm)
                                     <option value="{{ $bbm }}">{{ $bbm }}</option>

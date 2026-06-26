@@ -36,7 +36,7 @@
                                 class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Satuan
                                 Kerja</label>
                             <select name="satker_id"
-                                class="tom-select w-full rounded-xl border-white/10 bg-slate-800/50 text-xs font-bold text-slate-300 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                                class="tom-select w-full"
                                 required>
                                 @foreach($satkers as $satker)
                                     <option value="{{ $satker->id }}" {{ old('satker_id', $personel->satker_id) == $satker->id ? 'selected' : '' }}>
@@ -83,7 +83,7 @@
                                 class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Jenis
                                 BBM</label>
                             <select name="jenis_bbm"
-                                class="tom-select w-full rounded-xl border-white/10 bg-slate-800/50 text-xs font-bold text-slate-300 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all {{ auth()->user()->role !== 'super_admin' && $personel->saldo > 0 ? 'bg-slate-800 cursor-not-allowed' : '' }}"
+                                class="tom-select w-full {{ auth()->user()->role !== 'super_admin' && $personel->saldo > ? 'bg-slate-800 cursor-not-allowed' : '' }}"
                                 {{ auth()->user()->role !== 'super_admin' && $personel->saldo > 0 ? 'disabled' : 'required' }}>
                                 <option value="">Pilih Jenis BBM...</option>
                                 <option value="Pertamax" {{ old('jenis_bbm', $personel->jenis_bbm) == 'Pertamax' ? 'selected' : '' }}>Pertamax</option>

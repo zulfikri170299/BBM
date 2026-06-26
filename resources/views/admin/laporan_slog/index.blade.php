@@ -34,9 +34,9 @@
             </button>
             <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
               class="absolute left-0 mt-2 w-32 bg-slate-900 border border-white/5 rounded-xl shadow-xl border border-white/5 z-50 overflow-hidden py-1">
-              <button type="button" @click="jenis = 'harian'; jenisLabel = 'Harian'; open = false" class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-indigo-50 text-slate-300 transition-colors">Harian</button>
-              <button type="button" @click="jenis = 'bulanan'; jenisLabel = 'Bulanan'; open = false" class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-indigo-50 text-slate-300 transition-colors">Bulanan</button>
-              <button type="button" @click="jenis = 'triwulan'; jenisLabel = 'Triwulan'; open = false" class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-indigo-50 text-slate-300 transition-colors">Triwulan</button>
+              <button type="button" @click="jenis = 'harian'; jenisLabel = 'Harian'; open = false" class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-slate-800/50 text-slate-300 transition-colors">Harian</button>
+              <button type="button" @click="jenis = 'bulanan'; jenisLabel = 'Bulanan'; open = false" class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-slate-800/50 text-slate-300 transition-colors">Bulanan</button>
+              <button type="button" @click="jenis = 'triwulan'; jenisLabel = 'Triwulan'; open = false" class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-slate-800/50 text-slate-300 transition-colors">Triwulan</button>
             </div>
           </div>
 
@@ -53,7 +53,7 @@
                 @php $mStr = sprintf('%02d', $m); $mLabel = Carbon\Carbon::create()->month((int)$m)->translatedFormat('F'); @endphp
                 <button type="button" @click="bulan = '{{ $mStr }}'; bulanLabel = '{{ $mLabel }}'; open = false" 
                   class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-slate-800/50 transition-colors"
-                  :class="bulan === '{{ $mStr }}' ? 'text-indigo-400 bg-indigo-50/50' : 'text-slate-300'">
+                  :class="bulan === '{{ $mStr }}' ? 'text-indigo-400 bg-indigo-500/20' : 'text-slate-300'">
                   {{ $mLabel }}
                 </button>
               @endforeach
@@ -72,7 +72,7 @@
               @foreach(range(1, 4) as $t)
                 <button type="button" @click="tw = '{{ $t }}'; open = false" 
                   class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-slate-800/50 transition-colors"
-                  :class="tw === '{{ $t }}' ? 'text-indigo-400 bg-indigo-50/50' : 'text-slate-300'">
+                  :class="tw === '{{ $t }}' ? 'text-indigo-400 bg-indigo-500/20' : 'text-slate-300'">
                   TW {{ $t }}
                 </button>
               @endforeach
@@ -91,7 +91,7 @@
               @foreach(range(date('Y')-2, date('Y')) as $y)
                 <button type="button" @click="tahun = '{{ $y }}'; open = false" 
                   class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-slate-800/50 transition-colors"
-                  :class="tahun === '{{ $y }}' ? 'text-indigo-400 bg-indigo-50/50' : 'text-slate-300'">
+                  :class="tahun === '{{ $y }}' ? 'text-indigo-400 bg-indigo-500/20' : 'text-slate-300'">
                   {{ $y }}
                 </button>
               @endforeach

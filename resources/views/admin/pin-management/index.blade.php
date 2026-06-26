@@ -88,7 +88,7 @@
                             </div>
 
                             <select name="satker_id" onchange="this.form.submit()"
-                                class="tom-select h-11 min-w-[200px] rounded-xl border-white/10 bg-slate-900 border border-white/5 text-xs font-bold text-slate-300 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all">
+                                class="tom-select h-11 min-w-[200px]">
                                 <option value="">Semua Satker</option>
                                 @foreach($satkers as $satker)
                                     <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>

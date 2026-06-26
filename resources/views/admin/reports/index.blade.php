@@ -22,7 +22,7 @@
                             </div>
                             <div>
                                 <label for="type" class="block text-slate-300 text-sm font-bold mb-2">Format:</label>
-                                <select name="type" id="type" class="tom-select border-2 border-white/10 rounded-xl w-full py-2 px-3 text-slate-300 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all font-medium" required>
+                                <select name="type" id="type" class="tom-select w-full" required>
                                     <option value="pdf">PDF</option>
                                     <option value="excel">Excel</option>
                                 </select>

@@ -42,7 +42,7 @@
                 
                 <div>
                     <label class="block text-sm font-semibold text-slate-300 mb-2">2. Jenis BBM</label>
-                    <select name="jenis_bbm" required class="tom-select w-full bg-slate-800/50 border-white/10 rounded-xl transition-all font-semibold text-sm">
+                    <select name="jenis_bbm" required class="tom-select w-full">
                         <option value="">Pilih Jenis BBM</option>
                         <option value="Pertamax" {{ old('jenis_bbm', $pembelianBbm->jenis_bbm) == 'Pertamax' ? 'selected' : '' }}>Pertamax</option>
                         <option value="Pertamina Dex" {{ old('jenis_bbm', $pembelianBbm->jenis_bbm) == 'Pertamina Dex' ? 'selected' : '' }}>Pertamina Dex</option>

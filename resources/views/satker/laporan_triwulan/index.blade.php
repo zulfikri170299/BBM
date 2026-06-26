@@ -26,7 +26,7 @@
                 <div class="flex-1 w-full">
                     <label class="block text-sm font-semibold text-slate-300 mb-2">Tahun</label>
                     <select name="tahun" id="filter_tahun" required onchange="this.form.submit()"
-                        class="tom-select w-full bg-slate-800/50 border-white/10 rounded-xl transition-all font-semibold text-sm">
+                        class="tom-select w-full">
                         @php
                             $currentYear = date('Y');
                         @endphp
@@ -40,7 +40,7 @@
                 <div class="flex-1 w-full">
                     <label class="block text-sm font-semibold text-slate-300 mb-2">Triwulan</label>
                     <select name="triwulan" id="filter_triwulan" required onchange="this.form.submit()"
-                        class="tom-select w-full bg-slate-800/50 border-white/10 rounded-xl transition-all font-semibold text-sm">
+                        class="tom-select w-full">
                         <option value="1" {{ request('triwulan', 1) == 1 ? 'selected' : '' }}>Triwulan I (Jan-Mar)
                         </option>
                         <option value="2" {{ request('triwulan') == 2 ? 'selected' : '' }}>Triwulan II (Apr-Jun)</option>

@@ -33,7 +33,7 @@
                     <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Filter
                         Satker</label>
                     <select name="satker_id" id="filter_satker_id"
-                        class="tom-select w-full bg-slate-800/50 border-white/10 rounded-xl text-sm transition-all">
+                        class="tom-select w-full">
                         <option value="">Semua Satker</option>
                         @foreach($satkers as $satker)
                             <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>

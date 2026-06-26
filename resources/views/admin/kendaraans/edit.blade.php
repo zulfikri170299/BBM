@@ -61,7 +61,7 @@
                 <!-- Roda -->
                 <div>
                     <label for="roda" class="block text-sm font-semibold text-slate-300 mb-2">Roda Kendaraan</label>
-                    <select name="roda" id="roda" class="tom-select w-full px-4 py-3 bg-slate-900 border-2 border-white/10 rounded-xl text-xs font-medium text-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
+                    <select name="roda" id="roda" class="tom-select w-full">
                         <option value="">-- Pilih Jenis Roda --</option>
                         <option value="R2" {{ old('roda', $kendaraan->roda) == 'R2' ? 'selected' : '' }}>R2</option>
                         <option value="R4" {{ old('roda', $kendaraan->roda) == 'R4' ? 'selected' : '' }}>R4</option>
@@ -79,7 +79,7 @@
                 <!-- Jenis BBM -->
                 <div>
                     <label for="jenis_bbm" class="block text-sm font-semibold text-slate-300 mb-2">Jenis BBM <span class="text-red-500">*</span></label>
-                    <select name="jenis_bbm" id="jenis_bbm" required class="tom-select w-full px-4 py-3 bg-slate-900 border-2 border-white/10 rounded-xl text-xs font-medium text-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
+                    <select name="jenis_bbm" id="jenis_bbm" required class="tom-select w-full">
                         <option value="Pertamax" {{ old('jenis_bbm', $kendaraan->jenis_bbm) == 'Pertamax' ? 'selected' : '' }}>Pertamax</option>
                         <option value="Pertamina Dex" {{ old('jenis_bbm', $kendaraan->jenis_bbm) == 'Pertamina Dex' ? 'selected' : '' }}>Pertamina Dex</option>
                     </select>

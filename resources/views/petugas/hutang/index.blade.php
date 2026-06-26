@@ -58,7 +58,7 @@
                                 class="text-slate-300 font-bold ml-1" />
                             <div class="relative">
                                 <select id="satker_id" name="satker_id"
-                                    class="tom-select block w-full bg-slate-800/50 border-white/10 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-2xl shadow-sm transition-all duration-300 font-medium text-slate-300"
+                                    class="tom-select w-full duration-300"
                                     required>
                                     <option value="">-- Pilih Satker --</option>
                                     @foreach($satkers as $sat)
@@ -74,7 +74,7 @@
                                 class="text-slate-300 font-bold ml-1" />
                             <div class="relative">
                                 <select id="kendaraan_select"
-                                    class="tom-select block w-full bg-slate-800/50 border-white/10 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-2xl shadow-sm transition-all duration-300 disabled:bg-slate-800 disabled:cursor-not-allowed font-medium text-slate-300"
+                                    class="tom-select w-full duration-300 disabled:bg-slate-800 disabled:cursor-not-allowed"
                                     required disabled>
                                     <option value="">-- Pilih Satker Dahulu --</option>
                                 </select>
@@ -253,7 +253,7 @@
                                 <x-input-label for="filter_satker" value="Filter Satker"
                                     class="text-xs font-bold text-slate-400 mb-1" />
                                 <select name="satker_id" id="filter_satker"
-                                    class="tom-select block w-full text-xs border-white/10 focus:border-indigo-500 focus:ring-indigo-500 rounded-xl bg-slate-900 border border-white/5 shadow-sm transition-all">
+                                    class="tom-select w-full">
                                     <option value="">Semua Satker</option>
                                     @foreach($satkers as $sat)
                                         <option value="{{ $sat->id }}" {{ request('satker_id') == $sat->id ? 'selected' : '' }}>
@@ -266,7 +266,7 @@
                                 <x-input-label for="filter_status" value="Filter Status"
                                     class="text-xs font-bold text-slate-400 mb-1" />
                                 <select name="status" id="filter_status"
-                                    class="tom-select block w-full text-xs border-white/10 focus:border-indigo-500 focus:ring-indigo-500 rounded-xl bg-slate-900 border border-white/5 shadow-sm transition-all">
+                                    class="tom-select w-full">
                                     <option value="">Semua Status</option>
                                     <option value="belum_dibayar" {{ request('status') === 'belum_dibayar' ? 'selected' : '' }}>
                                         BELUM BAYAR</option>

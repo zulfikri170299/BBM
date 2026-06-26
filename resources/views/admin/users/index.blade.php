@@ -74,7 +74,7 @@
 
                 <div class="w-full lg:w-72">
                     <select name="satker_id"
-                        class="tom-select block w-full bg-slate-800/50 border border-white/10 rounded-xl text-sm transition-all">
+                        class="tom-select w-full">
                         <option value="">Semua Satker</option>
                         @foreach($satkers as $satker)
                             <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>

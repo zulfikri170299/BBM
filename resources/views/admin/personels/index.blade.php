@@ -20,7 +20,7 @@
                                 <div class="w-full sm:w-64">
                                     <select name="satker_id" id="filter_satker_id"
                                         onchange="this.form.submit()"
-                                        class="tom-select block w-full bg-slate-800/50 border-white/10 focus:bg-slate-900 border border-white/5 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-300">
+                                        class="tom-select w-full">
                                         <option value="">Semua Satker</option>
                                         @foreach($satkers as $satker)
                                             <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>

@@ -60,7 +60,7 @@
                 <div class="flex-1 min-w-[180px]">
                     <label class="block text-xs font-semibold text-slate-400 mb-1.5">Kendaraan</label>
                     <select name="kendaraan_id"
-                        class="tom-select w-full border-2 border-white/10 rounded-xl text-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
+                        class="tom-select w-full">
                         <option value="">Semua Kendaraan</option>
                         @foreach($kendaraans as $k)
                             <option value="{{ $k->id }}" {{ request('kendaraan_id') == $k->id ? 'selected' : '' }}>

@@ -47,7 +47,7 @@ class LaporanHarianController extends Controller
             ->groupBy('tgl');
 
         // Ambil data meteran manual
-        $manualData = DailyMeterReading::whereBetween('tanggal', [$startDate, $endDate])
+        $manualData = DailyMeterReading::whereBetween('tanggal', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
             ->get()
             ->groupBy('tanggal');
 
@@ -108,7 +108,7 @@ class LaporanHarianController extends Controller
             ->get()
             ->groupBy('tgl');
 
-        $manualData = DailyMeterReading::whereBetween('tanggal', [$startDate->startOfDay(), $endDate->endOfDay()])
+        $manualData = DailyMeterReading::whereBetween('tanggal', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
             ->get()
             ->groupBy('tanggal');
 

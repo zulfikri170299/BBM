@@ -53,7 +53,7 @@
                             BBM
                         </label>
                         <select name="jenis_bbm"
-                            class="tom-select w-full bg-slate-800/50 border-white/5 rounded-2xl focus:bg-slate-900 border border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-300 text-xs">
+                            class="tom-select w-full">
                             <option value="">Semua BBM</option>
                             <option value="Pertamax" {{ request('jenis_bbm') == 'Pertamax' ? 'selected' : '' }}>Pertamax
                             </option>
@@ -67,7 +67,7 @@
                             Status
                         </label>
                         <select name="status"
-                            class="tom-select w-full bg-slate-800/50 border-white/5 rounded-2xl focus:bg-slate-900 border border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-bold text-slate-300 text-xs">
+                            class="tom-select w-full">
                             <option value="">Semua Status</option>
                             <option value="belum_dibayar" {{ request('status') == 'belum_dibayar' ? 'selected' : '' }}>BELUM
                             </option>

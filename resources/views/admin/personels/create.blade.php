@@ -30,7 +30,7 @@
                         <div>
                             <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Satuan Kerja</label>
                             <select name="satker_id"
-                                class="tom-select w-full rounded-xl border-white/10 bg-slate-800/50 text-xs font-bold text-slate-300 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                                class="tom-select w-full"
                                 required>
                                 <option value="">Pilih Satuan Kerja...</option>
                                 @foreach($satkers as $satker)
@@ -67,7 +67,7 @@
                         <div>
                             <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Jenis BBM</label>
                             <select name="jenis_bbm"
-                                class="tom-select w-full rounded-xl border-white/10 bg-slate-800/50 text-xs font-bold text-slate-300 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                                class="tom-select w-full"
                                 required>
                                 <option value="">Pilih Jenis BBM...</option>
                                 <option value="Pertamax" {{ old('jenis_bbm', 'Pertamax') == 'Pertamax' ? 'selected' : '' }}>Pertamax</option>

@@ -50,7 +50,7 @@
                 <input type="hidden" name="satker_id" value="{{ $satkerId }}">
                 <div>
                     <label class="text-xs font-semibold text-slate-400 mb-1 block">Bulan</label>
-                    <select name="bulan" class="tom-select w-32 px-3 py-2 bg-slate-900 border border-white/5 border border-white/20 rounded-lg text-sm">
+                    <select name="bulan" class="tom-select w-32">
                         @for($m = 1; $m <= 12; $m++)
                             <option value="{{ $m }}" {{ $bulan == $m ? 'selected' : '' }}>
                                 {{ \Carbon\Carbon::create(null, $m, 1)->translatedFormat('F') }}</option>
@@ -59,7 +59,7 @@
                 </div>
                 <div>
                     <label class="text-xs font-semibold text-slate-400 mb-1 block">Tahun</label>
-                    <select name="tahun" class="tom-select w-28 px-3 py-2 bg-slate-900 border border-white/5 border border-white/20 rounded-lg text-sm">
+                    <select name="tahun" class="tom-select w-28">
                         @for($y = now()->year; $y >= now()->year - 5; $y--)
                             <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>{{ $y }}</option>
                         @endfor

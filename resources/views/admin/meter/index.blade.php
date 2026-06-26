@@ -54,12 +54,12 @@
                         class="absolute top-0 right-0 w-12 h-12 sm:w-32 sm:h-32 bg-{{ $colorClass }}-500/5 rounded-bl-3xl sm:rounded-bl-[10rem] transition-all group-hover:w-16 group-hover:h-16 sm:group-hover:w-36 sm:group-hover:h-36">
                     </div>
 
-                    <form action="{{ route('admin.meter.store') }}" method="POST" class="p-3 sm:p-10 relative z-10">
+                    <form action="{{ route('admin.meter.store') }}" method="POST" class="p-3 sm:p-6 relative z-10">
                         @csrf
                         <input type="hidden" name="tanggal" value="{{ $today }}">
                         <input type="hidden" name="jenis_bbm" value="{{ $type['name'] }}">
 
-                        <div class="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-8">
+                        <div class="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
                             <div
                                 class="p-2 sm:p-3 bg-{{ $colorClass }}-500/20 rounded-lg sm:rounded-2xl text-{{ $colorClass }}-400 transition-transform group-hover:scale-110">
                                 <svg class="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -76,7 +76,7 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-3 sm:gap-6 mb-3 sm:mb-8">
+                        <div class="grid grid-cols-2 gap-3 sm:gap-4 mb-3 sm:mb-4">
                             <div class="space-y-1 sm:space-y-2">
                                 <label
                                     class="block text-[8px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Meter
@@ -84,7 +84,7 @@
                                 <div class="relative group/input">
                                     <input type="number" step="1" name="meter_awal" id="meter_awal_{{ $loop->index }}"
                                         value="{{ old('meter_awal') }}" oninput="calculateTotal({{ $loop->index }})"
-                                        class="w-full text-sm sm:text-lg font-black text-slate-300 bg-slate-800/50 border-2 border-transparent group-hover/input:border-{{ $colorClass }}-500/50 rounded-lg sm:rounded-2xl focus:ring-4 focus:ring-{{ $colorClass }}-500/30 focus:border-{{ $colorClass }}-500 p-2 sm:p-4 transition-all outline-none"
+                                        class="w-full text-sm sm:text-lg font-black text-slate-300 bg-slate-800/50 border-2 border-transparent group-hover/input:border-{{ $colorClass }}-500/50 rounded-lg sm:rounded-2xl focus:ring-4 focus:ring-{{ $colorClass }}-500/30 focus:border-{{ $colorClass }}-500 p-2 sm:p-3 transition-all outline-none"
                                         placeholder="0.00">
                                 </div>
                             </div>
@@ -95,7 +95,7 @@
                                 <div class="relative group/input">
                                     <input type="number" step="1" name="meter_akhir" id="meter_akhir_{{ $loop->index }}"
                                         value="{{ old('meter_akhir') }}" oninput="calculateTotal({{ $loop->index }})"
-                                        class="w-full text-sm sm:text-lg font-black text-slate-300 bg-slate-800/50 border-2 border-transparent group-hover/input:border-{{ $colorClass }}-500/50 rounded-lg sm:rounded-2xl focus:ring-4 focus:ring-{{ $colorClass }}-500/30 focus:border-{{ $colorClass }}-500 p-2 sm:p-4 transition-all outline-none"
+                                        class="w-full text-sm sm:text-lg font-black text-slate-300 bg-slate-800/50 border-2 border-transparent group-hover/input:border-{{ $colorClass }}-500/50 rounded-lg sm:rounded-2xl focus:ring-4 focus:ring-{{ $colorClass }}-500/30 focus:border-{{ $colorClass }}-500 p-2 sm:p-3 transition-all outline-none"
                                         placeholder="0.00">
                                 </div>
                             </div>
@@ -103,7 +103,7 @@
 
                         <!-- Calculation Result Display -->
                         <div
-                            class="mb-3 sm:mb-8 bg-slate-800/50 rounded-lg sm:rounded-2xl p-2.5 sm:p-5 border border-white/5 flex items-center justify-between">
+                            class="mb-3 sm:mb-4 bg-slate-800/50 rounded-lg sm:rounded-2xl p-2.5 sm:p-4 border border-white/5 flex items-center justify-between">
                             <div>
                                 <span
                                     class="block text-[8px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest">Total
@@ -116,19 +116,19 @@
                             </div>
                         </div>
 
-                        <div class="mb-3 sm:mb-8">
+                        <div class="mb-3 sm:mb-4">
                             <label
                                 class="block text-[8px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-1 sm:mb-2">Keterangan
                                 (Opsional)</label>
                             <div class="relative group/input">
                                 <textarea name="keterangan" rows="1"
-                                    class="w-full text-[10px] sm:text-sm font-bold text-slate-300 bg-slate-800/50 border-2 border-transparent group-hover/input:border-{{ $colorClass }}-500/50 rounded-lg sm:rounded-2xl focus:ring-4 focus:ring-{{ $colorClass }}-500/30 focus:border-{{ $colorClass }}-500 p-2 sm:p-4 transition-all outline-none resize-none"
+                                    class="w-full text-[10px] sm:text-sm font-bold text-slate-300 bg-slate-800/50 border-2 border-transparent group-hover/input:border-{{ $colorClass }}-500/50 rounded-lg sm:rounded-2xl focus:ring-4 focus:ring-{{ $colorClass }}-500/30 focus:border-{{ $colorClass }}-500 p-2 sm:p-3 transition-all outline-none resize-none"
                                     placeholder="Catatan...">{{ old('keterangan') }}</textarea>
                             </div>
                         </div>
 
                         <button type="submit"
-                            class="w-full bg-{{ $colorClass }}-600 hover:bg-{{ $colorClass }}-700 text-white p-2.5 sm:p-5 rounded-lg sm:rounded-2xl transition-all duration-300 shadow-lg shadow-{{ $colorClass }}-500/20 font-black text-[10px] sm:text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-2 sm:gap-3 group/btn">
+                            class="w-full bg-{{ $colorClass }}-600 hover:bg-{{ $colorClass }}-700 text-white p-2.5 sm:p-4 rounded-lg sm:rounded-2xl transition-all duration-300 shadow-lg shadow-{{ $colorClass }}-500/20 font-black text-[10px] sm:text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-2 sm:gap-3 group/btn">
                             <span>Simpan</span>
                             <svg class="w-3.5 h-3.5 sm:w-5 sm:h-5 transition-transform group-hover/btn:translate-x-1"
                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">

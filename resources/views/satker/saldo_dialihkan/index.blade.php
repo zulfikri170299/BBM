@@ -72,9 +72,12 @@
                                 <div class="text-[10px] font-black text-indigo-600 uppercase tracking-wider">{{ $item->kendaraan->no_polisi ?? '-' }}</div>
                             </td>
                             <td class="px-4 py-3 text-center">
-                                <span class="inline-flex items-center px-2.5 py-1 bg-amber-50 text-amber-700 border border-amber-200 rounded-lg text-xs font-black">
-                                    {{ $item->jumlah }} L <br>
-                                    <span class="text-[9px] font-black uppercase">{{ $item->jenis_bbm }}</span>
+                                @php
+                                    $isDex = stripos($item->jenis_bbm, 'dex') !== false;
+                                    $badgeColor = $isDex ? 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30' : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
+                                @endphp
+                                <span class="inline-flex items-center px-2.5 py-1 border {{ $badgeColor }} rounded-lg text-xs font-black">
+                                    {{ $item->jumlah }} L <span class="text-[9px] font-black uppercase ml-1">{{ $item->jenis_bbm }}</span>
                                 </span>
                             </td>
                             <td class="px-4 py-3">

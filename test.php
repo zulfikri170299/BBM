@@ -1,0 +1,1 @@
+<?php \ = Illuminate\Http\Request::create('/admin/meter-reading', 'POST', ['tanggal' => '2026-06-01', 'jenis_bbm' => 'PERTAMINA DEX', 'meter_awal' => 200, 'meter_akhir' => 220, 'keterangan' => 'tes bro']); echo \->input('jenis_bbm');

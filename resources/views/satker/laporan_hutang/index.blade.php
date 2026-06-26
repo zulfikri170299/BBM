@@ -36,7 +36,7 @@
 
                 <div>
                     <x-input-label for="status" value="Status" class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1" />
-                    <select name="status" id="status" class="tom-select w-full rounded-xl border-white/10 bg-slate-800/50 text-xs font-bold text-slate-300 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all">
+                    <select name="status" id="status" class="tom-select w-full">
                         <option value="">Semua Status</option>
                         <option value="sudah_dibayar" {{ request('status') === 'sudah_dibayar' ? 'selected' : '' }}>Lunas</option>
                         <option value="belum_dibayar" {{ request('status') === 'belum_dibayar' ? 'selected' : '' }}>Belum Lunas</option>

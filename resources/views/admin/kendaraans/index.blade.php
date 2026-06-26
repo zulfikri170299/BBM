@@ -124,7 +124,7 @@
                         </div>
                         <form action="{{ route('admin.kendaraans.index') }}" method="GET">
                             <select name="satker_id" id="filter_satker_id" onchange="this.form.submit()"
-                                class="tom-select block w-full bg-slate-800/50 border-white/10 rounded-xl transition-all shadow-sm font-semibold text-sm">
+                                class="tom-select w-full">
                                 <option value="">Semua Satker</option>
                                 @foreach($satkers as $satker)
                                     <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
@@ -1900,7 +1900,7 @@
                     <div>
                         <label class="block text-sm font-semibold text-slate-300 mb-2">1. Pilih Satuan Kerja</label>
                         <select name="satker_id" id="report_satker_id" x-model="satkerId" required
-                            class="tom-select w-full px-4 py-3 bg-slate-900 border-2 border-white/10 rounded-xl text-xs font-medium text-slate-200 transition-all">
+                            class="tom-select w-full">
                             <option value="">-- Pilih Satker --</option>
                             @foreach($satkers as $s)
                                 <option value="{{ $s->id }}">{{ $s->nama_satker }}</option>

@@ -202,6 +202,13 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     Route::put('/laporan-stok-bbm/{sinkronisasi}', [\App\Http\Controllers\Admin\LaporanStokBbmController::class, 'update'])->name('laporan-stok-bbm.update');
     Route::delete('/laporan-stok-bbm/{sinkronisasi}', [\App\Http\Controllers\Admin\LaporanStokBbmController::class, 'destroy'])->name('laporan-stok-bbm.destroy');
     
+    // Sounding
+    Route::get('/sounding/get-awal', [\App\Http\Controllers\SoundingController::class, 'getAwal'])->name('sounding.get-awal');
+    Route::post('/sounding/store-akhir', [\App\Http\Controllers\SoundingController::class, 'storeAkhir'])->name('sounding.store-akhir');
+    Route::get('/sounding/get-pengeluaran', [\App\Http\Controllers\SoundingController::class, 'getPengeluaran'])->name('sounding.get-pengeluaran');
+    Route::get('/sounding/pdf', [\App\Http\Controllers\SoundingController::class, 'exportPdf'])->name('sounding.pdf');
+    Route::resource('sounding', \App\Http\Controllers\SoundingController::class);
+    
     // Transaksi BBM (Scan Barcode)
     Route::get('/transaksi', [\App\Http\Controllers\Admin\TransaksiController::class, 'index'])->name('transaksi.index');
     Route::post('/transaksi/check', [\App\Http\Controllers\Admin\TransaksiController::class, 'check'])->name('transaksi.check');
@@ -303,6 +310,13 @@ Route::middleware(['auth', 'role:petugas_bbm'])->prefix('petugas')->name('petuga
     // Hutang
     Route::get('hutang/get-kendaraan', [\App\Http\Controllers\Petugas\HutangController::class, 'getKendaraan'])->name('hutang.get-kendaraan');
     Route::resource('hutang', \App\Http\Controllers\Petugas\HutangController::class)->only(['index', 'store']);
+
+    // Sounding
+    Route::get('/sounding/get-awal', [\App\Http\Controllers\SoundingController::class, 'getAwal'])->name('sounding.get-awal');
+    Route::post('/sounding/store-akhir', [\App\Http\Controllers\SoundingController::class, 'storeAkhir'])->name('sounding.store-akhir');
+    Route::get('/sounding/get-pengeluaran', [\App\Http\Controllers\SoundingController::class, 'getPengeluaran'])->name('sounding.get-pengeluaran');
+    Route::get('/sounding/pdf', [\App\Http\Controllers\SoundingController::class, 'exportPdf'])->name('sounding.pdf');
+    Route::resource('sounding', \App\Http\Controllers\SoundingController::class);
 });
 
 Route::middleware(['auth', 'role:super_admin,petugas_bbm'])->prefix('pembelian-bbm')->name('pembelian-bbm.')->group(function () {
