@@ -106,7 +106,7 @@
             @foreach($summaryBbm as $jenis => $total)
             <tr>
                 <td>{{ $jenis }}</td>
-                <td class="text-right" style="font-weight: bold;">{{ number_format($total, 0, ',', '.') }} L</td>
+                <td class="text-right" style="font-weight: bold;">{{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }} L</td>
             </tr>
             @endforeach
         </table>

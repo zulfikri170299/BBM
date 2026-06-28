@@ -143,14 +143,14 @@
                     <div class="min-w-0">
                         <p class="text-xs sm:text-xs text-slate-400">Saldo Kendaraan</p>
                         <p class="text-lg sm:text-2xl font-bold text-white truncate">
-                            {{ number_format($totalSaldoKendaraan, 0, ',', '.') }} <span
+                            {{ rtrim(rtrim(number_format($totalSaldoKendaraan, 2, ',', '.'), '0'), ',') }} <span
                                 class="text-xs sm:text-sm font-medium text-slate-400">L</span>
                         </p>
                         <div class="mt-1 sm:mt-2 flex flex-wrap gap-1">
                             @foreach($saldoKendaraanPerBbm as $bbm => $total)
                                 <span
                                     class="text-[8px] sm:text-[9px] font-bold bg-sky-50 text-sky-700 px-1.5 py-0.5 rounded border border-sky-100 uppercase">{{ $bbm }}:
-                                    {{ number_format($total, 0, ',', '.') }} L</span>
+                                    {{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }} L</span>
                             @endforeach
                         </div>
                     </div>
@@ -169,14 +169,14 @@
                     <div class="min-w-0">
                         <p class="text-xs sm:text-xs text-slate-400">Saldo Personel</p>
                         <p class="text-lg sm:text-2xl font-bold text-white truncate">
-                            {{ number_format($totalSaldoPersonel, 0, ',', '.') }} <span
+                            {{ rtrim(rtrim(number_format($totalSaldoPersonel, 2, ',', '.'), '0'), ',') }} <span
                                 class="text-xs sm:text-sm font-medium text-slate-400">L</span>
                         </p>
                         <div class="mt-1 sm:mt-2 flex flex-wrap gap-1">
                             @foreach($saldoPersonelPerBbm as $bbm => $total)
                                 <span
                                     class="text-[8px] sm:text-[9px] font-bold bg-pink-50 text-pink-700 px-1.5 py-0.5 rounded border border-pink-100 uppercase">{{ $bbm }}:
-                                    {{ number_format($total, 0, ',', '.') }} L</span>
+                                    {{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }} L</span>
                             @endforeach
                         </div>
                     </div>
@@ -195,14 +195,14 @@
                     <div class="min-w-0">
                         <p class="text-xs sm:text-xs text-slate-400">Transfer</p>
                         <p class="text-lg sm:text-2xl font-bold text-white truncate">
-                            {{ number_format($totalLiterTransfer, 0, ',', '.') }} <span
+                            {{ rtrim(rtrim(number_format($totalLiterTransfer, 2, ',', '.'), '0'), ',') }} <span
                                 class="text-xs sm:text-sm font-medium text-slate-400">L</span>
                         </p>
                         <div class="mt-1 sm:mt-2 flex flex-wrap gap-1">
                             @foreach($literTransferPerBbm as $bbm => $total)
                                 <span
                                     class="text-[8px] sm:text-[9px] font-bold bg-teal-50 text-teal-700 px-1.5 py-0.5 rounded border border-teal-100 uppercase">{{ $bbm }}:
-                                    {{ number_format($total, 0, ',', '.') }} L</span>
+                                    {{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }} L</span>
                             @endforeach
                         </div>
                     </div>
@@ -221,14 +221,14 @@
                     <div class="min-w-0">
                         <p class="text-xs sm:text-xs text-slate-400">Total Hutang (Bon)</p>
                         <p class="text-lg sm:text-2xl font-bold text-white truncate">
-                            {{ number_format($totalHutang, 0, ',', '.') }} <span
+                            {{ rtrim(rtrim(number_format($totalHutang, 2, ',', '.'), '0'), ',') }} <span
                                 class="text-xs sm:text-sm font-medium text-slate-400">L</span>
                         </p>
                         <div class="mt-1 sm:mt-2 flex flex-wrap gap-1">
                             @foreach($hutangPerBbm as $bbm => $total)
                                 <span
                                     class="text-[8px] sm:text-[9px] font-bold bg-rose-50 text-rose-700 px-1.5 py-0.5 rounded border border-rose-100 uppercase">{{ $bbm }}:
-                                    {{ number_format($total, 0, ',', '.') }} L</span>
+                                    {{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }} L</span>
                             @endforeach
                         </div>
                     </div>

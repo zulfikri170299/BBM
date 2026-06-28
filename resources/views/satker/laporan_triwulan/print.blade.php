@@ -101,7 +101,7 @@
                     @php
                         $sisa = $sisaBbm[$jenis] ?? 0;
                     @endphp
-                    <td class="font-bold">{{ number_format($sisa, 0, ',', '.') }}</td>
+                    <td class="font-bold">{{ rtrim(rtrim(number_format($sisa, 2, ',', '.'), '0'), ',') }}</td>
                 @endforeach
             </tr>
         </tbody>

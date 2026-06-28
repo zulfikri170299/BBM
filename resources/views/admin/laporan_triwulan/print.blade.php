@@ -139,7 +139,7 @@
                             $valP = $pendapatan[$satker->id][$jenis] ?? 0;
                             $sumPendapatan[$jenis] += $valP;
                         @endphp
-                        <td class="text-center">{{ number_format($valP, 0, ',', '.') }}</td>
+                        <td class="text-center">{{ rtrim(rtrim(number_format($valP, 2, ',', '.'), '0'), ',') }}</td>
                     @endforeach
 
                     @foreach($allBbmTypes as $jenis)
@@ -147,7 +147,7 @@
                             $valM = $pemakaian[$satker->id][$jenis] ?? 0;
                             $sumPemakaian[$jenis] += $valM;
                         @endphp
-                        <td class="text-center">{{ number_format($valM, 0, ',', '.') }}</td>
+                        <td class="text-center">{{ rtrim(rtrim(number_format($valM, 2, ',', '.'), '0'), ',') }}</td>
                     @endforeach
 
                     @foreach($allBbmTypes as $jenis)
@@ -156,7 +156,7 @@
                             $sumSisa[$jenis] += $sisa;
                         @endphp
                         <td class="text-center font-bold {{ $sisa < 0 ? 'text-red' : '' }}">
-                            {{ number_format($sisa, 0, ',', '.') }}
+                            {{ rtrim(rtrim(number_format($sisa, 2, ',', '.'), '0'), ',') }}
                         </td>
                     @endforeach
                 </tr>

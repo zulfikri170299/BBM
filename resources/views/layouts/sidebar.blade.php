@@ -12,7 +12,7 @@
          x-transition:leave="transition-opacity ease-linear duration-300" 
          x-transition:leave-start="opacity-100" 
          x-transition:leave-end="opacity-0" 
-         class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm" @click="sidebarOpen = false"></div>
+         class="fixed inset-0 bg-slate-950/80" @click="sidebarOpen = false"></div>
          
     <div x-show="sidebarOpen" 
          x-transition:enter="transition ease-in-out duration-300 transform" 

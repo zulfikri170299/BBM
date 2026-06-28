@@ -66,7 +66,7 @@
         <!-- Table Card -->
         <div class="bg-slate-900 rounded-2xl border border-white/10 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="min-w-full">
+                <table class="min-w-full whitespace-nowrap">
                     <thead>
                         <tr class="bg-slate-800/50/70">
                             <th class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider w-12">No</th>

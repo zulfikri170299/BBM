@@ -74,8 +74,8 @@
             @endforeach
             <tr class="font-bold">
                 <td colspan="2" class="text-center">JUMLAH</td>
-                <td class="text-center">{{ number_format($totalP, 0, ',', '.') }}</td>
-                <td class="text-center">{{ number_format($totalD, 0, ',', '.') }}</td>
+                <td class="text-center">{{ rtrim(rtrim(number_format($totalP, 2, ',', '.'), '0'), ',') }}</td>
+                <td class="text-center">{{ rtrim(rtrim(number_format($totalD, 2, ',', '.'), '0'), ',') }}</td>
                 <td></td>
                 <td colspan="2"></td>
             </tr>

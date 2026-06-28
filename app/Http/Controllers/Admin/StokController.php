@@ -96,7 +96,7 @@ class StokController extends Controller
     {
         $request->validate([
             'jenis_bbm' => 'required|in:Pertamax,Pertamina Dex',
-            'jumlah' => 'required|numeric|min:0.01',
+            'jumlah' => 'required|integer|min:1',
             'keterangan' => 'nullable|string|max:255',
             'topup_password' => 'required|string',
         ]);

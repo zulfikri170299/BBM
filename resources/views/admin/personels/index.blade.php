@@ -47,8 +47,8 @@
                                             placeholder="Cari Nama atau NRP...">
                                     </div>
 
-                                    <div class="flex items-center gap-2 w-full lg:w-auto">
-                    <button type="submit"
+                                    <div class="flex items-center gap-2 shrink-0">
+                                        <button type="submit"
                                             class="inline-flex items-center justify-center w-10 h-10 bg-indigo-600 text-white rounded-xl shadow-lg shadow-indigo-500/30 hover:bg-indigo-700 transition-all duration-200 hover:-translate-y-0.5 group relative"
                                             title="Cari Data">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -62,7 +62,7 @@
 
                                         @if(request('search') || request('satker_id'))
                                             <a href="{{ route('admin.personels.index') }}"
-                        class="flex-1 lg:flex-none inline-flex items-center justify-center w-10 h-10 bg-slate-800 text-slate-400 rounded-xl hover:bg-slate-200 transition-all duration-200 group relative"
+                                                class="inline-flex items-center justify-center w-10 h-10 bg-slate-800 text-slate-400 rounded-xl hover:bg-slate-200 transition-all duration-200 group relative"
                                                 title="Reset Filter">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -93,7 +93,7 @@
                                     </button>
                                 @endif
                                 <a href="{{ route('admin.personels.export', request()->all()) }}"
-                        class="flex-1 lg:flex-none inline-flex items-center justify-center w-10 h-10 bg-amber-500 text-white rounded-xl shadow-lg shadow-amber-500/30 hover:bg-amber-600 transition-all duration-200 hover:-translate-y-0.5 group relative"
+                                    class="inline-flex items-center justify-center w-10 h-10 bg-amber-500 text-white rounded-xl shadow-lg shadow-amber-500/30 hover:bg-amber-600 transition-all duration-200 hover:-translate-y-0.5 group relative"
                                     title="Export Excel">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -251,7 +251,7 @@
                                         <td class="px-4 py-3 whitespace-nowrap">
                                             <div class="flex items-baseline gap-1">
                                                 <span
-                                                    class="text-sm font-black text-white">{{ number_format($personel->saldo, 0, ',', '.') }}</span>
+                                                    class="text-sm font-black text-white">{{ rtrim(rtrim(number_format($personel->saldo, 2, ',', '.'), '0'), ',') }}</span>
                                                 <span class="text-[10px] font-bold text-slate-400 uppercase">Liter</span>
                                             </div>
                                         </td>
@@ -266,7 +266,7 @@
                                                     @if(auth()->user()->role !== 'super_admin' && $personel->saldo > 0)
                                                         <span
                                                             class="inline-flex items-center p-2 bg-slate-800/50 text-slate-200 rounded-lg cursor-not-allowed group/edit"
-                                                            title="Saldo masih {{ number_format($personel->saldo, 0, ',', '.') }} L">
+                                                            title="Saldo masih {{ rtrim(rtrim(number_format($personel->saldo, 2, ',', '.'), '0'), ',') }} L">
                                                             <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                                 viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -344,7 +344,7 @@
 
                                                     @if(auth()->user()->role !== 'super_admin' && $personel->saldo > 0)
                                                         <span class="p-2 text-slate-200 cursor-not-allowed"
-                                                            title="Saldo masih {{ number_format($personel->saldo, 0, ',', '.') }} L">
+                                                            title="Saldo masih {{ rtrim(rtrim(number_format($personel->saldo, 2, ',', '.'), '0'), ',') }} L">
                                                             <svg class="w-5 h-5" fill="none" stroke="currentColor"
                                                                 viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"

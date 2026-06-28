@@ -63,7 +63,7 @@ class PinManagementController extends Controller
         }
 
         $request->validate([
-            'pin' => 'required|numeric|digits:6',
+            'pin' => 'required|integer|digits:6',
         ]);
 
         $personel->update(['pin' => $request->pin]);
@@ -83,7 +83,7 @@ class PinManagementController extends Controller
         }
 
         $request->validate([
-            'pin' => 'required|numeric|digits:6',
+            'pin' => 'required|integer|digits:6',
         ]);
 
         $kendaraan->update(['pin' => $request->pin]);

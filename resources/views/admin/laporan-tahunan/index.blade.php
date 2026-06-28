@@ -97,12 +97,12 @@
                             @if(count($reportData) > 0)
                                 <tr class="bg-indigo-50/50 font-bold border-t-2 border-white/10">
                                     <td colspan="2" class="px-4 py-3 border-r border-white/10 text-center text-indigo-900">TOTAL</td>
-                                    <td class="px-4 py-3 border-r border-white/10 text-center text-indigo-900">{{ number_format($total_pendapatan_pertamax, 0, ',', '.') }}</td>
-                                    <td class="px-4 py-3 border-r border-white/10 text-center text-indigo-900">{{ number_format($total_pendapatan_dex, 0, ',', '.') }}</td>
-                                    <td class="px-4 py-3 border-r border-white/10 text-center text-indigo-900">{{ number_format($total_pemakaian_pertamax, 0, ',', '.') }}</td>
-                                    <td class="px-4 py-3 border-r border-white/10 text-center text-indigo-900">{{ number_format($total_pemakaian_dex, 0, ',', '.') }}</td>
-                                    <td class="px-4 py-3 border-r border-white/10 text-center {{ $total_sisa_pertamax < 0 ? 'text-rose-600' : 'text-indigo-900' }}">{{ number_format($total_sisa_pertamax, 0, ',', '.') }}</td>
-                                    <td class="px-4 py-3 text-center {{ $total_sisa_dex < 0 ? 'text-rose-600' : 'text-indigo-900' }}">{{ number_format($total_sisa_dex, 0, ',', '.') }}</td>
+                                    <td class="px-4 py-3 border-r border-white/10 text-center text-indigo-900">{{ rtrim(rtrim(number_format($total_pendapatan_pertamax, 2, ',', '.'), '0'), ',') }}</td>
+                                    <td class="px-4 py-3 border-r border-white/10 text-center text-indigo-900">{{ rtrim(rtrim(number_format($total_pendapatan_dex, 2, ',', '.'), '0'), ',') }}</td>
+                                    <td class="px-4 py-3 border-r border-white/10 text-center text-indigo-900">{{ rtrim(rtrim(number_format($total_pemakaian_pertamax, 2, ',', '.'), '0'), ',') }}</td>
+                                    <td class="px-4 py-3 border-r border-white/10 text-center text-indigo-900">{{ rtrim(rtrim(number_format($total_pemakaian_dex, 2, ',', '.'), '0'), ',') }}</td>
+                                    <td class="px-4 py-3 border-r border-white/10 text-center {{ $total_sisa_pertamax < 0 ? 'text-rose-600' : 'text-indigo-900' }}">{{ rtrim(rtrim(number_format($total_sisa_pertamax, 2, ',', '.'), '0'), ',') }}</td>
+                                    <td class="px-4 py-3 text-center {{ $total_sisa_dex < 0 ? 'text-rose-600' : 'text-indigo-900' }}">{{ rtrim(rtrim(number_format($total_sisa_dex, 2, ',', '.'), '0'), ',') }}</td>
                                 </tr>
                             @endif
                         </tbody>

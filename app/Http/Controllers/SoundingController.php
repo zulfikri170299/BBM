@@ -119,7 +119,7 @@ class SoundingController extends Controller
         $request->validate([
             'tanggal' => 'required|date',
             'jenis_bbm' => 'required|string',
-            'stok_awal' => 'required|numeric',
+            'stok_awal' => 'required|integer',
             'dokumentasi' => 'nullable|image|mimes:jpeg,png,jpg|max:10240', // max 10MB
         ]);
 
@@ -160,8 +160,8 @@ class SoundingController extends Controller
     {
         $request->validate([
             'sounding_id' => 'required|exists:soundings,id',
-            'stok_akhir' => 'required|numeric',
-            'pengeluaran_aplikasi' => 'required|numeric',
+            'stok_akhir' => 'required|integer',
+            'pengeluaran_aplikasi' => 'required|integer',
             'dokumentasi' => 'nullable|image|mimes:jpeg,png,jpg|max:10240',
         ]);
 
@@ -208,9 +208,9 @@ class SoundingController extends Controller
         $request->validate([
             'tanggal' => 'required|date',
             'jenis_bbm' => 'required|string',
-            'stok_awal' => 'required|numeric',
-            'stok_akhir' => 'required|numeric',
-            'pengeluaran_aplikasi' => 'required|numeric',
+            'stok_awal' => 'required|integer',
+            'stok_akhir' => 'required|integer',
+            'pengeluaran_aplikasi' => 'required|integer',
             'dokumentasi' => 'nullable|image|mimes:jpeg,png,jpg|max:10240',
         ]);
 

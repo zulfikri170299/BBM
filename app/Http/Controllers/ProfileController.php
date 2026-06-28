@@ -126,8 +126,8 @@ class ProfileController extends Controller
     public function updateLocation(Request $request)
     {
         $validated = $request->validate([
-            'latitude' => ['required', 'numeric', 'between:-90,90'],
-            'longitude' => ['required', 'numeric', 'between:-180,180'],
+            'latitude' => ['required', 'integer', 'between:-90,90'],
+            'longitude' => ['required', 'integer', 'between:-180,180'],
         ]);
 
         $request->user()->update([

@@ -228,7 +228,7 @@
             </form>
 
             <div class="overflow-x-auto">
-                <table class="min-w-full">
+                <table class="min-w-full whitespace-nowrap">
                     <thead>
                         <tr class="bg-slate-800/50 border-b border-white/5">
                             <th colspan="8" class="px-4 py-3">
@@ -330,7 +330,7 @@
                                 <td class="px-4 py-3 text-right">
                                     <span
                                         class="text-xs font-bold whitespace-nowrap {{ $kendaraan->saldo < 10 ? 'text-red-600' : 'text-slate-200' }}">
-                                        {{ number_format($kendaraan->saldo, 0, ',', '.') }} Liter
+                                        {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
                                     </span>
                                     @if($kendaraan->saldo < 10)
                                         <span class="block text-xs text-red-500 font-medium mt-0.5">Saldo rendah</span>

@@ -76,21 +76,21 @@
             @if(request('jenis_bbm') == 'Pertamax')
             <tr>
                 <th colspan="3" style="text-align: right; background-color: #f8f9fa;">Total Pertamax</th>
-                <th style="text-align: right; background-color: #f8f9fa;">{{ number_format($totalPertamax, 0, ',', '.') }} L</th>
+                <th style="text-align: right; background-color: #f8f9fa;">{{ rtrim(rtrim(number_format($totalPertamax, 2, ',', '.'), '0'), ',') }} L</th>
             </tr>
             @elseif(request('jenis_bbm') == 'Pertamina Dex')
             <tr>
                 <th colspan="3" style="text-align: right; background-color: #f8f9fa;">Total Pertamina Dex</th>
-                <th style="text-align: right; background-color: #f8f9fa;">{{ number_format($totalDex, 0, ',', '.') }} L</th>
+                <th style="text-align: right; background-color: #f8f9fa;">{{ rtrim(rtrim(number_format($totalDex, 2, ',', '.'), '0'), ',') }} L</th>
             </tr>
             @else
             <tr>
                 <th colspan="3" style="text-align: right; background-color: #f8f9fa;">Total Pertamax</th>
-                <th style="text-align: right; background-color: #f8f9fa;">{{ number_format($totalPertamax, 0, ',', '.') }} L</th>
+                <th style="text-align: right; background-color: #f8f9fa;">{{ rtrim(rtrim(number_format($totalPertamax, 2, ',', '.'), '0'), ',') }} L</th>
             </tr>
             <tr>
                 <th colspan="3" style="text-align: right; background-color: #f8f9fa;">Total Pertamina Dex</th>
-                <th style="text-align: right; background-color: #f8f9fa;">{{ number_format($totalDex, 0, ',', '.') }} L</th>
+                <th style="text-align: right; background-color: #f8f9fa;">{{ rtrim(rtrim(number_format($totalDex, 2, ',', '.'), '0'), ',') }} L</th>
             </tr>
             <tr>
                 <th colspan="3" style="text-align: right; background-color: #f8f9fa;">Total Keseluruhan</th>

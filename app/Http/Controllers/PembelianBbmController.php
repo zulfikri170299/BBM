@@ -64,7 +64,7 @@ class PembelianBbmController extends Controller
         $request->validate([
             'tanggal' => 'required|date',
             'jenis_bbm' => 'required|in:Pertamax,Pertamina Dex',
-            'jumlah' => 'required|numeric|min:1',
+            'jumlah' => 'required|integer|min:1',
         ]);
 
         PembelianBbm::create($request->all());
@@ -82,7 +82,7 @@ class PembelianBbmController extends Controller
         $request->validate([
             'tanggal' => 'required|date',
             'jenis_bbm' => 'required|in:Pertamax,Pertamina Dex',
-            'jumlah' => 'required|numeric|min:1',
+            'jumlah' => 'required|integer|min:1',
         ]);
 
         $pembelianBbm->update($request->all());

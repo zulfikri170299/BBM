@@ -16,7 +16,7 @@
                                 {{ $bbm }}
                             </p>
                             <p class="text-lg font-black text-rose-600 leading-none">
-                                {{ number_format($total, 0, ',', '.') }} <span
+                                {{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }} <span
                                     class="text-xs font-bold text-slate-400">L</span>
                             </p>
                         </div>

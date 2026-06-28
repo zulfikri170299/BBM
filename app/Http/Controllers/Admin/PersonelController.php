@@ -50,7 +50,7 @@ class PersonelController extends Controller
             'nama' => 'required|string|max:255',
             'nrp' => 'required|regex:/^[0-9]+$/|unique:personels,nrp',
             'jenis_bbm' => 'required|in:Pertamax,Pertamina Dex',
-            'saldo' => 'required|numeric|min:0',
+            'saldo' => 'required|integer|min:0',
         ]);
 
         $user = \App\Models\User::create([
@@ -102,8 +102,8 @@ class PersonelController extends Controller
             'nama' => 'required|string|max:255',
             'nrp' => 'required|regex:/^[0-9]+$/|unique:personels,nrp,' . $personel->id,
             'jenis_bbm' => 'required|in:Pertamax,Pertamina Dex',
-            'saldo' => 'required|numeric|min:0',
-            'pin' => 'nullable|numeric|digits:6',
+            'saldo' => 'required|integer|min:0',
+            'pin' => 'nullable|integer|digits:6',
         ]);
 
         $data = $request->only(['satker_id', 'nama', 'nrp', 'saldo']);

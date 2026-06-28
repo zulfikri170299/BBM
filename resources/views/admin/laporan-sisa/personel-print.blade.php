@@ -114,8 +114,8 @@
         <tfoot>
             <tr>
                 <td colspan="2" class="bold">JUMLAH</td>
-                <td class="bold">{{ number_format($totalPertamax, 0, ',', '.') }}</td>
-                <td class="bold">{{ number_format($totalDex, 0, ',', '.') }}</td>
+                <td class="bold">{{ rtrim(rtrim(number_format($totalPertamax, 2, ',', '.'), '0'), ',') }}</td>
+                <td class="bold">{{ rtrim(rtrim(number_format($totalDex, 2, ',', '.'), '0'), ',') }}</td>
             </tr>
         </tfoot>
     </table>

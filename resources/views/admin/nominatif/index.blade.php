@@ -180,8 +180,8 @@
                             <tfoot class="bg-slate-800/50 font-bold border-t-2 border-white/10">
                                 <tr>
                                     <td class="px-4 py-3 text-center" colspan="3">JUMLAH</td>
-                                    <td class="px-4 py-3 text-right font-black text-indigo-700 leading-none">{{ number_format($total_p, 0, ',', '.') }}</td>
-                                    <td class="px-4 py-3 text-right font-black text-rose-700 leading-none">{{ number_format($total_d, 0, ',', '.') }}</td>
+                                    <td class="px-4 py-3 text-right font-black text-indigo-700 leading-none">{{ rtrim(rtrim(number_format($total_p, 2, ',', '.'), '0'), ',') }}</td>
+                                    <td class="px-4 py-3 text-right font-black text-rose-700 leading-none">{{ rtrim(rtrim(number_format($total_d, 2, ',', '.'), '0'), ',') }}</td>
                                     <td class="px-4 py-3"></td>
                                     <td class="px-4 py-3"></td>
                                 </tr>

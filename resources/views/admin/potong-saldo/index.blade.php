@@ -219,7 +219,7 @@
                                                     </div>
                                                 </td>
                                                 <td class="px-4 py-2.5 text-right">
-                                                    <span class="text-xs font-black {{ $k->saldo > 0 ? 'text-indigo-600' : 'text-slate-300' }}">{{ number_format($k->saldo, 0) }} L</span>
+                                                    <span class="text-xs font-black {{ $k->saldo > 0 ? 'text-indigo-600' : 'text-slate-300' }}">{{ rtrim(rtrim(number_format($k->saldo, 2, ',', '.'), '0'), ',') }} L</span>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -266,7 +266,7 @@
                                                     </div>
                                                 </td>
                                                 <td class="px-4 py-2.5 text-right">
-                                                    <span class="text-xs font-black {{ $p->saldo > 0 ? 'text-indigo-600' : 'text-slate-300' }}">{{ number_format($p->saldo, 0) }} L</span>
+                                                    <span class="text-xs font-black {{ $p->saldo > 0 ? 'text-indigo-600' : 'text-slate-300' }}">{{ rtrim(rtrim(number_format($p->saldo, 2, ',', '.'), '0'), ',') }} L</span>
                                                 </td>
                                             </tr>
                                         @endforeach

@@ -142,8 +142,8 @@ class LaporanTriwulanController extends Controller
     public function export(Request $request)
     {
         $request->validate([
-            'tahun' => 'required|numeric',
-            'triwulan' => 'required|numeric|in:1,2,3,4',
+            'tahun' => 'required|integer',
+            'triwulan' => 'required|integer|in:1,2,3,4',
         ]);
 
         $data = $this->getLaporanData($request);
@@ -302,8 +302,8 @@ class LaporanTriwulanController extends Controller
     public function print(Request $request)
     {
         $request->validate([
-            'tahun' => 'required|numeric',
-            'triwulan' => 'required|numeric|in:1,2,3,4',
+            'tahun' => 'required|integer',
+            'triwulan' => 'required|integer|in:1,2,3,4',
         ]);
 
         $data = $this->getLaporanData($request);

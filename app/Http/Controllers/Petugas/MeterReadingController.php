@@ -22,8 +22,8 @@ class MeterReadingController extends Controller
         $request->validate([
             'tanggal' => 'required|date',
             'jenis_bbm' => 'required|string',
-            'meter_awal' => 'nullable|numeric|min:0',
-            'meter_akhir' => 'nullable|numeric|min:0',
+            'meter_awal' => 'nullable|integer|min:0',
+            'meter_akhir' => 'nullable|integer|min:0',
             'keterangan' => 'nullable|string',
         ]);
 

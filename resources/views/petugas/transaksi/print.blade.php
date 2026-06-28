@@ -97,7 +97,7 @@
                         <p class="text-xs text-emerald-600 font-medium">Sisa Saldo
                             {{ $isKendaraan ? 'Kendaraan' : 'Personel' }}</p>
                         <p class="text-xl font-bold text-emerald-700 mt-0.5">
-                            {{ number_format($target->saldo, 0, ',', '.') }} Liter</p>
+                            {{ rtrim(rtrim(number_format($target->saldo, 2, ',', '.'), '0'), ',') }} Liter</p>
                     </div>
                 </div>
 

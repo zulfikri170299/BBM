@@ -21,7 +21,7 @@
                     <div class="relative z-10">
                         <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest opacity-80">{{ $stock->jenis_bbm }}</p>
                         <div class="flex items-baseline gap-1 mt-1 sm:mt-2">
-                            <span class="text-2xl sm:text-3xl font-black">{{ number_format($stock->saldo, 0, ',', '.') }}</span>
+                            <span class="text-2xl sm:text-3xl font-black">{{ rtrim(rtrim(number_format($stock->saldo, 2, ',', '.'), '0'), ',') }}</span>
                             <span class="text-[10px] sm:text-sm font-bold opacity-70">Liter</span>
                         </div>
                     </div>

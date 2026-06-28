@@ -16,7 +16,7 @@
                     <div class="text-center sm:text-left">
                         <p class="text-indigo-100 font-medium text-sm sm:text-lg">Saldo Anda Saat Ini</p>
                         <h3 class="text-3xl sm:text-5xl font-bold mt-1 sm:mt-2">
-                            {{ number_format($personel->saldo, 0, ',', '.') }} Liter
+                            {{ rtrim(rtrim(number_format($personel->saldo, 2, ',', '.'), '0'), ',') }} Liter
                         </h3>
                         <p
                             class="mt-2 text-indigo-200 text-xs sm:text-sm flex items-center justify-center sm:justify-start">

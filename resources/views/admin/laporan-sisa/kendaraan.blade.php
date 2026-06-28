@@ -60,10 +60,10 @@
             <tr>
               <td colspan="2" class="px-6 py-5 text-right uppercase tracking-[0.2em] text-xs text-slate-400">TOTAL KESELURUHAN</td>
               <td class="px-6 py-5 border-l border-white/5 font-black tracking-tighter text-emerald-600">
-                {{ number_format($totalPertamax, 0, ',', '.') }} <span class="text-[10px] text-emerald-600/50 ml-1">L</span>
+                {{ rtrim(rtrim(number_format($totalPertamax, 2, ',', '.'), '0'), ',') }} <span class="text-[10px] text-emerald-600/50 ml-1">L</span>
               </td>
               <td class="px-6 py-5 border-l border-white/5 font-black tracking-tighter text-indigo-600">
-                {{ number_format($totalDex, 0, ',', '.') }} <span class="text-[10px] text-indigo-600/50 ml-1">L</span>
+                {{ rtrim(rtrim(number_format($totalDex, 2, ',', '.'), '0'), ',') }} <span class="text-[10px] text-indigo-600/50 ml-1">L</span>
               </td>
             </tr>
           </tfoot>
@@ -113,14 +113,14 @@
             <div class="flex justify-between items-center">
               <span class="text-xs font-bold text-slate-400">Pertamax</span>
               <div class="flex items-baseline gap-1">
-                <span class="text-xl font-black text-emerald-600 tracking-tighter">{{ number_format($totalPertamax, 0, ',', '.') }}</span>
+                <span class="text-xl font-black text-emerald-600 tracking-tighter">{{ rtrim(rtrim(number_format($totalPertamax, 2, ',', '.'), '0'), ',') }}</span>
                 <span class="text-[10px] font-bold text-emerald-600/40">L</span>
               </div>
             </div>
             <div class="flex justify-between items-center">
               <span class="text-xs font-bold text-slate-400">Pertamina Dex</span>
               <div class="flex items-baseline gap-1">
-                <span class="text-xl font-black text-indigo-600 tracking-tighter">{{ number_format($totalDex, 0, ',', '.') }}</span>
+                <span class="text-xl font-black text-indigo-600 tracking-tighter">{{ rtrim(rtrim(number_format($totalDex, 2, ',', '.'), '0'), ',') }}</span>
                 <span class="text-[10px] font-bold text-indigo-600/40">L</span>
               </div>
             </div>

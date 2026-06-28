@@ -97,7 +97,7 @@ class HutangController extends Controller
             'nopol' => 'required|string',
             'nama_driver' => 'required|string',
             'jenis_bbm' => 'required|string',
-            'jumlah_bon' => 'required|numeric|min:0.1',
+            'jumlah_bon' => 'required|integer|min:1',
             'tanggal_bon' => 'required|date',
         ]);
 

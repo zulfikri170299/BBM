@@ -82,7 +82,7 @@
 
             <!-- Table -->
             <div class="overflow-x-auto">
-                <table class="min-w-full">
+                <table class="min-w-full whitespace-nowrap">
                     <thead>
                         <tr class="bg-slate-800/50 border-b border-white/5">
                             <th colspan="4" class="px-4 py-3">

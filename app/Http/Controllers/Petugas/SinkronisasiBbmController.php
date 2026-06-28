@@ -72,8 +72,8 @@ class SinkronisasiBbmController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'stok_awal_pertamax' => 'nullable|numeric|min:0',
-            'stok_awal_dex' => 'nullable|numeric|min:0',
+            'stok_awal_pertamax' => 'nullable|integer|min:0',
+            'stok_awal_dex' => 'nullable|integer|min:0',
         ]);
 
         if ($request->stok_awal_pertamax === null && $request->stok_awal_dex === null) {

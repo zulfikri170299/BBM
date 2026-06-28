@@ -124,7 +124,7 @@
                         </div>
                         <p class="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1 leading-none">{{ $jenis ?: 'Lainnya' }}</p>
                         <div class="flex items-baseline gap-1">
-                            <span class="text-xl font-black">{{ number_format($total, 0, ',', '.') }}</span>
+                            <span class="text-xl font-black">{{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }}</span>
                             <span class="text-xs font-bold opacity-60">Liter</span>
                         </div>
                     </div>
@@ -162,7 +162,7 @@
             </div>
 
             <div class="overflow-x-auto">
-                <table class="min-w-full">
+                <table class="min-w-full whitespace-nowrap">
                     <thead>
                         <tr class="bg-slate-800/50 border-b border-white/5">
                             <th colspan="8" class="px-4 py-3">

@@ -59,8 +59,8 @@ class LaporanHarianController extends Controller
         $request->validate([
             'tanggal' => 'required|date',
             'jenis_bbm' => 'required|string',
-            'meter_awal' => 'required|numeric|min:0',
-            'meter_akhir' => 'required|numeric|min:0',
+            'meter_awal' => 'required|integer|min:0',
+            'meter_akhir' => 'required|integer|min:0',
             'keterangan' => 'nullable|string',
         ]);
 

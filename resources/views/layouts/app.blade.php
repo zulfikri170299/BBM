@@ -579,6 +579,21 @@
                 if (Swal.isVisible()) Swal.close();
             });
         }
+
+        // Custom validation message for number inputs to prevent long overflow messages on mobile
+        document.addEventListener('invalid', function (e) {
+            if (e.target.tagName === 'INPUT' && e.target.type === 'number' && e.target.step === '1') {
+                if (e.target.validity.stepMismatch || e.target.validity.badInput) {
+                    e.target.setCustomValidity('Hanya angka bulat');
+                }
+            }
+        }, true);
+        
+        document.addEventListener('input', function (e) {
+            if (e.target.tagName === 'INPUT' && e.target.type === 'number' && e.target.step === '1') {
+                e.target.setCustomValidity('');
+            }
+        });
     </script>
 </body>
 </html>

@@ -110,7 +110,7 @@ class KendaraanController extends Controller
     public function sendOtp(Request $request, OtpService $otpService)
     {
         $request->validate([
-            'nominal' => 'required|numeric|min:1',
+            'nominal' => 'required|integer|min:1',
         ]);
 
         $user = auth()->user();
@@ -139,12 +139,12 @@ class KendaraanController extends Controller
     {
         $request->validate([
             'kendaraan_id' => 'required|exists:kendaraans,id',
-            'jumlah' => 'required|numeric|min:0.1',
+            'jumlah' => 'required|integer|min:1',
             'topup_password' => 'required|string',
             'tanggal_topup' => 'required|date',
         ], [
             'jumlah.required' => 'Jumlah top up wajib diisi.',
-            'jumlah.numeric' => 'Jumlah top up harus berupa angka.',
+            'jumlah.integer' => 'Jumlah top up harus berupa angka.',
             'jumlah.min' => 'Jumlah top up minimal 0.1 Liter.',
             'topup_password.required' => 'Password Top Up wajib diisi.',
             'tanggal_topup.required' => 'Tanggal Top Up wajib diisi.',
@@ -420,7 +420,7 @@ class KendaraanController extends Controller
             'jenis_bbm' => 'required|string',
             'roda' => 'nullable|string|in:R2,R4,R6,Non Kendaraan',
             'cc' => 'nullable|string',
-            'pin' => 'nullable|numeric|digits:6',
+            'pin' => 'nullable|integer|digits:6',
         ]);
 
         $data = $request->except('pin');
@@ -488,7 +488,7 @@ class KendaraanController extends Controller
     public function potongSaldo(Request $request, Kendaraan $kendaraan)
     {
         $request->validate([
-            'jumlah' => 'required|numeric|min:0.1|max:' . $kendaraan->saldo,
+            'jumlah' => 'required|integer|min:1|max:' . $kendaraan->saldo,
             'kembalikan_ke_stok' => 'required|in:ya,tidak',
             'keterangan' => 'required|string|max:255',
             'topup_password' => 'required|string',

@@ -133,14 +133,14 @@
 
                                     <td class="px-4 py-3 whitespace-nowrap text-center bg-slate-800/30 border-r border-white/5 align-middle">
                                         <span class="text-xs font-black text-indigo-400">
-                                            {{ $manual !== null && (float)$manualTotal != 0 ? number_format($manualTotal, 0, ',', '.') : '' }}
+                                            {{ $manual !== null && (float)$manualTotal != 0 ? rtrim(rtrim(number_format($manualTotal, 2, ',', '.'), '0'), ',') : '' }}
                                         </span>
                                     </td>
                                     
                                     <td class="px-4 py-3 whitespace-nowrap text-center border-r border-white/5 align-middle">
                                         <span class="text-xs font-bold text-slate-300">
                                             @php $hasAppData = $appData->get($date)?->where('bbm_alias', $type)->isNotEmpty(); @endphp
-                                            {{ $hasAppData && (float)$appTotal != 0 ? number_format($appTotal, 0, ',', '.') : '' }}
+                                            {{ $hasAppData && (float)$appTotal != 0 ? rtrim(rtrim(number_format($appTotal, 2, ',', '.'), '0'), ',') : '' }}
                                         </span>
                                     </td>
                                     
@@ -148,7 +148,7 @@
                                         <div class="inline-flex items-center justify-center gap-1.5 w-full">
                                             <div class="w-1.5 h-1.5 rounded-full {{ ($manual !== null || $hasAppData) && $diff != 0 ? 'bg-rose-500' : '' }}"></div>
                                             <span class="text-xs font-black tracking-tight {{ $diff != 0 ? 'text-rose-400' : 'text-emerald-400' }}">
-                                                {{ ($manual !== null || $hasAppData) && (float)$diff != 0 ? number_format($diff, 0, ',', '.') : '' }}
+                                                {{ ($manual !== null || $hasAppData) && (float)$diff != 0 ? rtrim(rtrim(number_format($diff, 2, ',', '.'), '0'), ',') : '' }}
                                             </span>
                                         </div>
                                     </td>
@@ -165,24 +165,24 @@
                     <tfoot class="bg-slate-800/50 uppercase tracking-widest">
                         <tr class="divide-x divide-white/5 font-bold">
                             <td colspan="5" class="px-4 py-3 text-right text-[10px] text-slate-400 border-b border-white/5 italic">Total Audit: <span class="text-emerald-400 font-black not-italic">PERTAMAX</span></td>
-                            <td class="px-4 py-4 text-center text-xs text-indigo-400 border-b border-white/5 bg-slate-800/30">{{ $totalPertamaxManual != 0 ? number_format($totalPertamaxManual, 0, ',', '.') : '' }}</td>
-                            <td class="px-4 py-4 text-center text-xs text-slate-300 border-b border-white/5">{{ $totalPertamaxApp != 0 ? number_format($totalPertamaxApp, 0, ',', '.') : '' }}</td>
+                            <td class="px-4 py-4 text-center text-xs text-indigo-400 border-b border-white/5 bg-slate-800/30">{{ $totalPertamaxManual != 0 ? rtrim(rtrim(number_format($totalPertamaxManual, 2, ',', '.'), '0'), ',') : '' }}</td>
+                            <td class="px-4 py-4 text-center text-xs text-slate-300 border-b border-white/5">{{ $totalPertamaxApp != 0 ? rtrim(rtrim(number_format($totalPertamaxApp, 2, ',', '.'), '0'), ',') : '' }}</td>
                             <td class="px-4 py-3 text-center align-middle border-b border-white/5 bg-slate-800/30">
                                 @php $pDiff = $totalPertamaxApp - $totalPertamaxManual; @endphp
                                 <span class="text-xs font-black {{ $pDiff != 0 ? 'text-rose-400' : 'text-emerald-400' }}">
-                                    {{ $pDiff != 0 ? number_format($pDiff, 0, ',', '.') : '' }}
+                                    {{ $pDiff != 0 ? rtrim(rtrim(number_format($pDiff, 2, ',', '.'), '0'), ',') : '' }}
                                 </span>
                             </td>
                             <td class="bg-slate-900 border-b border-white/5"></td>
                         </tr>
                         <tr class="divide-x divide-white/5 font-bold">
                             <td colspan="5" class="px-4 py-3 text-right text-[10px] text-slate-400 italic">Total Audit: <span class="text-indigo-400 font-black not-italic">PERTAMINA DEX</span></td>
-                            <td class="px-4 py-4 text-center text-xs text-indigo-400 bg-slate-800/30">{{ $totalDexManual != 0 ? number_format($totalDexManual, 0, ',', '.') : '' }}</td>
-                            <td class="px-4 py-4 text-center text-xs text-slate-300">{{ $totalDexApp != 0 ? number_format($totalDexApp, 0, ',', '.') : '' }}</td>
+                            <td class="px-4 py-4 text-center text-xs text-indigo-400 bg-slate-800/30">{{ $totalDexManual != 0 ? rtrim(rtrim(number_format($totalDexManual, 2, ',', '.'), '0'), ',') : '' }}</td>
+                            <td class="px-4 py-4 text-center text-xs text-slate-300">{{ $totalDexApp != 0 ? rtrim(rtrim(number_format($totalDexApp, 2, ',', '.'), '0'), ',') : '' }}</td>
                             <td class="px-4 py-3 text-center align-middle bg-slate-800/30">
                                 @php $dDiff = $totalDexApp - $totalDexManual; @endphp
                                 <span class="text-xs font-black {{ $dDiff != 0 ? 'text-rose-400' : 'text-emerald-400' }}">
-                                    {{ $dDiff != 0 ? number_format($dDiff, 0, ',', '.') : '' }}
+                                    {{ $dDiff != 0 ? rtrim(rtrim(number_format($dDiff, 2, ',', '.'), '0'), ',') : '' }}
                                 </span>
                             </td>
                             <td class="bg-slate-900 border border-white/5"></td>

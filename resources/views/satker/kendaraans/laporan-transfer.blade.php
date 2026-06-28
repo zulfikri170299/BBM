@@ -86,7 +86,7 @@
 
             <!-- Table -->
             <div class="overflow-x-auto">
-                <table class="min-w-full">
+                <table class="min-w-full whitespace-nowrap">
                     <thead>
                         <tr class="bg-slate-800/50 border-b border-white/5">
                             <th colspan="8" class="px-4 py-3">
@@ -281,7 +281,7 @@
                                     </span>
                                 </td>
                                 <td class="py-3 text-right">
-                                    <span class="text-sm font-bold text-white">{{ number_format($total, 0, ',', '.') }}
+                                    <span class="text-sm font-bold text-white">{{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }}
                                         Liter</span>
                                 </td>
                             </tr>

@@ -107,9 +107,9 @@ class TransaksiController extends Controller
         $request->validate([
             'kendaraan_id' => 'nullable|exists:kendaraans,id',
             'personel_id' => 'nullable|exists:personels,id',
-            'liter' => 'required|numeric|min:0.1',
+            'liter' => 'required|integer|min:1',
             'nama_driver' => 'required|string|max:255',
-            'pin' => 'required|numeric',
+            'pin' => 'required|integer',
         ]);
 
         if (!$request->kendaraan_id && !$request->personel_id) {

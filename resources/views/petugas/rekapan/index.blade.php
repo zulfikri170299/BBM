@@ -52,7 +52,7 @@
                         class="block text-[8px] sm:text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-0.5 sm:mb-1">Total
                         Pertamax</span>
                     <h3 class="text-lg sm:text-2xl font-black text-emerald-400 truncate">
-                        {{ number_format($totalPertamax, 0, ',', '.') }} L</h3>
+                        {{ rtrim(rtrim(number_format($totalPertamax, 2, ',', '.'), '0'), ',') }} L</h3>
                 </div>
                 <div
                     class="w-8 h-8 sm:w-12 sm:h-12 bg-emerald-500/20 border border-emerald-500/30 rounded-lg sm:rounded-xl flex items-center justify-center text-emerald-400 self-end sm:self-center">
@@ -69,7 +69,7 @@
                         class="block text-[8px] sm:text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-0.5 sm:mb-1">Total
                         Dex</span>
                     <h3 class="text-lg sm:text-2xl font-black text-indigo-400 truncate">
-                        {{ number_format($totalDex, 0, ',', '.') }} L</h3>
+                        {{ rtrim(rtrim(number_format($totalDex, 2, ',', '.'), '0'), ',') }} L</h3>
                 </div>
                 <div
                     class="w-8 h-8 sm:w-12 sm:h-12 bg-indigo-500/20 border border-indigo-500/30 rounded-lg sm:rounded-xl flex items-center justify-center text-indigo-400 self-end sm:self-center">
@@ -150,7 +150,7 @@
                                     <td class="px-3 py-3 sm:px-6 sm:py-5 whitespace-nowrap text-right">
                                         <div class="flex flex-col items-end">
                                             <span
-                                                class="font-black text-slate-200 text-xs sm:text-sm">{{ number_format($totalLiter, 0, ',', '.') }}
+                                                class="font-black text-slate-200 text-xs sm:text-sm">{{ rtrim(rtrim(number_format($totalLiter, 2, ',', '.'), '0'), ',') }}
                                                 L</span>
                                             <!-- Mobile only meter detail -->
                                             <span class="sm:hidden text-[9px] text-slate-400">

@@ -37,7 +37,7 @@
                     <div>
                         <label class="block text-xs font-black text-slate-400 uppercase mb-2">Stok Awal</label>
                         <div class="relative">
-                            <input type="number" step="0.01" id="stok_awal" readonly
+                            <input type="number" step="1" id="stok_awal" readonly
                                    class="w-full bg-slate-800/50 border border-white/5 rounded-xl text-slate-400 pl-4 pr-12 py-3 focus:ring-0 cursor-not-allowed" placeholder="0">
                             <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-bold">Ltr</span>
                         </div>
@@ -45,7 +45,7 @@
                     <div>
                         <label class="block text-xs font-black text-slate-400 uppercase mb-2">Pengeluaran Aplikasi</label>
                         <div class="relative">
-                            <input type="number" step="0.01" name="pengeluaran_aplikasi" id="pengeluaran_aplikasi" required readonly
+                            <input type="number" step="1" name="pengeluaran_aplikasi" id="pengeluaran_aplikasi" required readonly
                                    class="w-full bg-rose-900/30 border border-rose-500/30 rounded-xl text-rose-300 pl-4 pr-12 py-3 focus:ring-0 cursor-not-allowed font-bold" placeholder="0">
                             <span class="absolute right-4 top-1/2 -translate-y-1/2 text-rose-400 text-xs font-bold">Ltr</span>
                         </div>
@@ -54,7 +54,7 @@
                     <div>
                         <label class="block text-xs font-black text-slate-400 uppercase mb-2">Stok Akhir</label>
                         <div class="relative">
-                            <input type="number" step="0.01" name="stok_akhir" id="stok_akhir" required
+                            <input type="number" step="1" name="stok_akhir" id="stok_akhir" required
                                    class="w-full bg-slate-800 border border-white/10 rounded-xl text-white pl-4 pr-12 py-3 focus:ring-2 focus:ring-rose-500" placeholder="0">
                             <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs font-bold">Ltr</span>
                         </div>

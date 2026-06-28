@@ -58,7 +58,7 @@ class TransferSaldoController extends Controller
             'kendaraan_id' => 'required_if:tipe_tujuan,personel|nullable|exists:kendaraans,id',
             'personel_id' => 'required_if:tipe_tujuan,personel|nullable|exists:personels,id',
             'tujuan_kendaraan_id' => 'required_if:tipe_tujuan,kendaraan|nullable|exists:kendaraans,id',
-            'jumlah' => 'required|numeric|min:0.1',
+            'jumlah' => 'required|integer|min:1',
             'topup_password' => 'required|string',
             'keterangan' => 'nullable|string|max:255',
         ], [

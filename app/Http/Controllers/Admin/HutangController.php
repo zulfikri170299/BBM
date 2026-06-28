@@ -85,7 +85,7 @@ class HutangController extends Controller
             'satker_id' => 'required|exists:satkers,id',
             'kendaraan_id' => 'required|exists:kendaraans,id',
             'nama_driver' => 'required|string',
-            'jumlah_bon' => 'required|numeric|min:0.1',
+            'jumlah_bon' => 'required|integer|min:1',
             'tanggal_bon' => 'required|date',
         ]);
 
@@ -185,7 +185,7 @@ class HutangController extends Controller
             'satker_id' => 'required|exists:satkers,id',
             'kendaraan_id' => 'required|exists:kendaraans,id',
             'nama_driver' => 'required|string',
-            'jumlah_bon' => 'required|numeric|min:0.1',
+            'jumlah_bon' => 'required|integer|min:1',
             'tanggal_bon' => 'required|date',
         ]);
 

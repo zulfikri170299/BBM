@@ -208,13 +208,13 @@
                             <span
                                 class="badge {{ $jenis == 'Pertamina Dex' ? 'badge-green' : 'badge-blue' }}">{{ $jenis }}</span>
                         </td>
-                        <td class="text-right font-bold">{{ number_format($total, 0, ',', '.') }} L</td>
+                        <td class="text-right font-bold">{{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }} L</td>
                     </tr>
                     @php $grandTotal += $total; @endphp
                 @endforeach
                 <tr style="border-top: 2px solid #333;">
                     <td class="font-bold">GRAND TOTAL</td>
-                    <td class="text-right font-bold">{{ number_format($grandTotal, 0, ',', '.') }} L</td>
+                    <td class="text-right font-bold">{{ rtrim(rtrim(number_format($grandTotal, 2, ',', '.'), '0'), ',') }} L</td>
                 </tr>
             </tbody>
         </table>

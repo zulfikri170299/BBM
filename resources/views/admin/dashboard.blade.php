@@ -299,7 +299,7 @@
                                 {{ $aStock->jenis_bbm }}</p>
                             <div class="flex items-baseline justify-between mt-0.5 sm:mt-1">
                                 <span
-                                    class="text-2xl sm:text-3xl font-black text-white">{{ number_format($aStock->saldo, 0, ',', '.') }}
+                                    class="text-2xl sm:text-3xl font-black text-white">{{ rtrim(rtrim(number_format($aStock->saldo, 2, ',', '.'), '0'), ',') }}
                                     <span class="text-xs sm:text-sm font-bold text-white/90 opacity-70">L</span></span>
                                 <div
                                     class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-800 border border-white/5/20 flex items-center justify-center">

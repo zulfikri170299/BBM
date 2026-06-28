@@ -74,10 +74,10 @@
                         <td class="text-left font-bold">{{ $type }}</td>
                         <td>{{ $manual !== null && $manual->meter_awal != 0 ? number_format($manual->meter_awal, 0, ',', '.') : '' }}</td>
                         <td>{{ $manual !== null && $manual->meter_akhir != 0 ? number_format($manual->meter_akhir, 0, ',', '.') : '' }}</td>
-                        <td class="bg-gray font-bold">{{ $manual !== null ? number_format($manualTotal, 0, ',', '.') : '' }}</td>
+                        <td class="bg-gray font-bold">{{ $manual !== null ? rtrim(rtrim(number_format($manualTotal, 2, ',', '.'), '0'), ',') : '' }}</td>
                         @php $hasAppData = $appData->get($date)?->where('bbm_alias', $type)->isNotEmpty(); @endphp
-                        <td>{{ $hasAppData ? number_format($appTotal, 0, ',', '.') : '' }}</td>
-                        <td class="font-bold {{ $diff != 0 ? 'color: red' : '' }}">{{ ($manual !== null || $hasAppData) ? number_format($diff, 0, ',', '.') : '' }}</td>
+                        <td>{{ $hasAppData ? rtrim(rtrim(number_format($appTotal, 2, ',', '.'), '0'), ',') : '' }}</td>
+                        <td class="font-bold {{ $diff != 0 ? 'color: red' : '' }}">{{ ($manual !== null || $hasAppData) ? rtrim(rtrim(number_format($diff, 2, ',', '.'), '0'), ',') : '' }}</td>
                         <td class="text-left" style="font-size: 8px;">{{ $manual ? $manual->keterangan : '' }}</td>
                     </tr>
                 @endforeach
@@ -97,14 +97,14 @@
         <tbody>
             <tr>
                 <td colspan="2" class="text-left font-bold">PERTAMAX</td>
-                <td class="font-bold">{{ number_format($totalPertamaxManual, 0, ',', '.') }}</td>
-                <td class="font-bold">{{ number_format($totalPertamaxApp, 0, ',', '.') }}</td>
+                <td class="font-bold">{{ rtrim(rtrim(number_format($totalPertamaxManual, 2, ',', '.'), '0'), ',') }}</td>
+                <td class="font-bold">{{ rtrim(rtrim(number_format($totalPertamaxApp, 2, ',', '.'), '0'), ',') }}</td>
                 <td class="font-bold">{{ number_format($totalPertamaxApp - $totalPertamaxManual, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td colspan="2" class="text-left font-bold">PERTAMINA DEX</td>
-                <td class="font-bold">{{ number_format($totalDexManual, 0, ',', '.') }}</td>
-                <td class="font-bold">{{ number_format($totalDexApp, 0, ',', '.') }}</td>
+                <td class="font-bold">{{ rtrim(rtrim(number_format($totalDexManual, 2, ',', '.'), '0'), ',') }}</td>
+                <td class="font-bold">{{ rtrim(rtrim(number_format($totalDexApp, 2, ',', '.'), '0'), ',') }}</td>
                 <td class="font-bold">{{ number_format($totalDexApp - $totalDexManual, 0, ',', '.') }}</td>
             </tr>
         </tbody>

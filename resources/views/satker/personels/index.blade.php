@@ -377,7 +377,7 @@
                                         <td class="px-4 py-3 whitespace-nowrap">
                                             <div class="flex items-baseline gap-1">
                                                 <span
-                                                    class="text-sm font-black text-white">{{ number_format($personel->saldo, 0, ',', '.') }}</span>
+                                                    class="text-sm font-black text-white">{{ rtrim(rtrim(number_format($personel->saldo, 2, ',', '.'), '0'), ',') }}</span>
                                                 <span class="text-[10px] font-bold text-slate-400 uppercase">Liter</span>
                                             </div>
                                         </td>
@@ -397,7 +397,7 @@
                                                 </a>
                                                 @if(auth()->user()->role !== 'super_admin' && $personel->saldo > 0)
                                                     <span class="p-2 text-slate-200 cursor-not-allowed group/edit"
-                                                        title="Saldo masih {{ number_format($personel->saldo, 0, ',', '.') }} L">
+                                                        title="Saldo masih {{ rtrim(rtrim(number_format($personel->saldo, 2, ',', '.'), '0'), ',') }} L">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                             viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -421,7 +421,7 @@
                                                 @endif
                                                 @if(auth()->user()->role !== 'super_admin' && $personel->saldo > 0)
                                                     <span class="p-2 text-slate-200 cursor-not-allowed"
-                                                        title="Saldo masih {{ number_format($personel->saldo, 0, ',', '.') }} L">
+                                                        title="Saldo masih {{ rtrim(rtrim(number_format($personel->saldo, 2, ',', '.'), '0'), ',') }} L">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                             viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round"

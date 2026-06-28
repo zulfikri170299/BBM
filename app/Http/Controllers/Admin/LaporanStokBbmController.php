@@ -137,8 +137,8 @@ class LaporanStokBbmController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'stok_awal_pertamax' => 'nullable|numeric|min:0',
-            'stok_awal_dex' => 'nullable|numeric|min:0',
+            'stok_awal_pertamax' => 'nullable|integer|min:0',
+            'stok_awal_dex' => 'nullable|integer|min:0',
         ]);
 
         if ($request->stok_awal_pertamax === null && $request->stok_awal_dex === null) {
@@ -215,8 +215,8 @@ class LaporanStokBbmController extends Controller
     public function update(Request $request, SinkronisasiBbm $sinkronisasi)
     {
         $request->validate([
-            'stok_awal_pertamax' => 'required|numeric|min:0',
-            'stok_awal_dex' => 'required|numeric|min:0',
+            'stok_awal_pertamax' => 'required|integer|min:0',
+            'stok_awal_dex' => 'required|integer|min:0',
             'created_at' => 'required|date',
         ]);
 

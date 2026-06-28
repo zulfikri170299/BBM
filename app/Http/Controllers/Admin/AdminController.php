@@ -120,7 +120,7 @@ class AdminController extends Controller
     public function processTopup(Request $request)
     {
         $request->validate([
-            'amount' => 'required|numeric|min:0.1',
+            'amount' => 'required|integer|min:1',
             'topup_password' => 'required|string',
         ], [
             'amount.required' => 'Jumlah top up wajib diisi.',

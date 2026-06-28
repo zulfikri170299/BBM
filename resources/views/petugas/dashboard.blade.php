@@ -69,7 +69,7 @@
                         </svg>
                     </div>
                     <div class="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-2 mt-1 sm:mt-0">
-                        <p class="text-xl sm:text-2xl font-black text-white">{{ number_format($todayTransactions, 0, ',', '.') }}</p>
+                        <p class="text-xl sm:text-2xl font-black text-white">{{ rtrim(rtrim(number_format($todayTransactions, 2, ',', '.'), '0'), ',') }}</p>
                         <p class="text-[9px] sm:text-[11px] text-white/90 font-medium truncate">Transaksi Hari Ini</p>
                     </div>
                 </div>
@@ -100,7 +100,7 @@
                             </svg>
                         </div>
                         <div class="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-2 mt-1 sm:mt-0">
-                            <p class="text-xl sm:text-2xl font-black text-white">{{ number_format($total, 0, ',', '.') }} <span class="text-sm font-semibold opacity-80">L</span></p>
+                            <p class="text-xl sm:text-2xl font-black text-white">{{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }} <span class="text-sm font-semibold opacity-80">L</span></p>
                             <p class="text-[9px] sm:text-[11px] font-bold text-white/90 uppercase tracking-wider truncate">{{ $jenis }} Hari Ini</p>
                         </div>
                     </div>
@@ -180,7 +180,7 @@
                         <div>
                             <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">{{ $jenis }}</p>
                             <p class="text-xl sm:text-2xl font-black text-rose-600 leading-none">
-                                {{ number_format($total, 0, ',', '.') }} <span
+                                {{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }} <span
                                     class="text-sm font-bold text-slate-300">L</span>
                             </p>
                         </div>

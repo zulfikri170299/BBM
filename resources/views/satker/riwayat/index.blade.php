@@ -110,7 +110,7 @@
             </div>
 
             <div class="overflow-x-auto">
-                <table class="min-w-full">
+                <table class="min-w-full whitespace-nowrap">
                     <thead>
                         <tr class="bg-slate-800/50 border-b border-white/5">
                             <th colspan="6" class="px-4 py-3">
@@ -278,7 +278,7 @@
                     @endphp
                     <div class="p-4 rounded-xl border {{ $style }}">
                         <p class="text-xs font-semibold opacity-70 mb-1 uppercase tracking-wider">{{ $jenis ?: 'LAINNYA' }}</p>
-                        <p class="text-xl font-bold">{{ number_format($total, 0, ',', '.') }} <span
+                        <p class="text-xl font-bold">{{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }} <span
                                 class="text-sm font-medium opacity-70">L</span></p>
                     </div>
                 @endforeach

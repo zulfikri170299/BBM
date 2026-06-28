@@ -56,7 +56,7 @@
                 </div>
                 <p class="text-[9px] text-emerald-100/70 font-bold uppercase tracking-[0.2em] mb-1">Sisa Saldo Anda</p>
                 <div class="flex items-baseline justify-center gap-1">
-                    <span class="text-white text-4xl font-black tracking-tight">{{ number_format($saldo, 0, ',', '.') }}</span>
+                    <span class="text-white text-4xl font-black tracking-tight">{{ rtrim(rtrim(number_format($saldo, 2, ',', '.'), '0'), ',') }}</span>
                     <span class="text-emerald-100 text-base font-bold">LITER</span>
                 </div>
             </div>

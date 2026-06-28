@@ -44,7 +44,7 @@
                     <div>
                         <label class="block text-xs font-black text-slate-400 uppercase mb-2">Stok Awal</label>
                         <div class="relative">
-                            <input type="number" step="0.01" name="stok_awal" id="stok_awal" required value="{{ old('stok_awal') }}"
+                            <input type="number" step="1" name="stok_awal" id="stok_awal" required value="{{ old('stok_awal') }}"
                                    class="w-full bg-slate-800 border border-white/10 rounded-xl text-white pl-4 pr-12 py-3 focus:ring-2 focus:ring-indigo-500" placeholder="0">
                             <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs font-bold">Ltr</span>
                         </div>

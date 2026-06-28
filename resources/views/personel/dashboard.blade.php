@@ -312,7 +312,7 @@
                                     class="text-[8px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5 sm:mb-1">
                                     Sisa Kuota</div>
                                 <div class="text-lg sm:text-xl font-extrabold text-slate-200">
-                                    {{ number_format($p->saldo, 0, ',', '.') }} L
+                                    {{ rtrim(rtrim(number_format($p->saldo, 2, ',', '.'), '0'), ',') }} L
                                 </div>
                             </div>
 
@@ -389,7 +389,7 @@
                     </div>
                 @else
                     <div class="overflow-x-auto">
-                        <table class="min-w-full">
+                        <table class="min-w-full whitespace-nowrap">
                             <thead>
                                 <tr class="bg-slate-800/50/70">
                                     <th

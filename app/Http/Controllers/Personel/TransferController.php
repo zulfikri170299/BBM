@@ -56,7 +56,7 @@ class TransferController extends Controller
             'tipe_tujuan' => 'required|in:personel,kendaraan',
             'receiver_id' => 'nullable|required_if:tipe_tujuan,personel|exists:personels,id',
             'target_kendaraan_id' => 'nullable|required_if:tipe_tujuan,kendaraan|exists:kendaraans,id',
-            'jumlah' => 'required|numeric|min:1',
+            'jumlah' => 'required|integer|min:1',
             'pin' => 'required|string',
             'keterangan' => 'nullable|string|max:255',
         ]);

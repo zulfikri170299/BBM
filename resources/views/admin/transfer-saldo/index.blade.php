@@ -71,7 +71,7 @@
                                 <select name="kendaraan_id" id="transfer_kendaraan_id" :required="tipeTujuan === 'personel'" class="w-full" x-model="selectedKendaraan" x-ref="kendaraanSelect">
                                     <option value="">-- Pilih Kendaraan --</option>
                                     @foreach($kendaraans as $k)
-                                        <option value="{{ $k->id }}">{{ $k->no_polisi }} ({{ $k->jenis_bbm }} - {{ number_format($k->saldo, 0, ',', '.') }} L)</option>
+                                        <option value="{{ $k->id }}">{{ $k->no_polisi }} ({{ $k->jenis_bbm }} - {{ rtrim(rtrim(number_format($k->saldo, 2, ',', '.'), '0'), ',') }} L)</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -95,7 +95,7 @@
                                         @foreach($adminStocks as $stock)
                                         <div class="bg-slate-900 border border-indigo-500/20 rounded-lg py-1.5 px-2 text-center shadow-sm hover:border-indigo-400/50 transition-colors">
                                             <div class="text-[9px] font-bold text-slate-400 uppercase">{{ $stock->jenis_bbm }}</div>
-                                            <div class="text-xs font-bold text-indigo-400">{{ number_format($stock->saldo, 0, ',', '.') }} L</div>
+                                            <div class="text-xs font-bold text-indigo-400">{{ rtrim(rtrim(number_format($stock->saldo, 2, ',', '.'), '0'), ',') }} L</div>
                                         </div>
                                         @endforeach
                                     </div>
@@ -107,7 +107,7 @@
                                     <select name="tujuan_kendaraan_id" id="transfer_tujuan_kendaraan_id" :required="tipeTujuan === 'kendaraan'" class="w-full" x-ref="tujuanKendaraanSelect">
                                         <option value="">-- Pilih Kendaraan Tujuan --</option>
                                         @foreach($kendaraans as $k)
-                                            <option value="{{ $k->id }}">{{ $k->no_polisi }} ({{ $k->jenis_bbm }} - {{ number_format($k->saldo, 0, ',', '.') }} L)</option>
+                                            <option value="{{ $k->id }}">{{ $k->no_polisi }} ({{ $k->jenis_bbm }} - {{ rtrim(rtrim(number_format($k->saldo, 2, ',', '.'), '0'), ',') }} L)</option>
                                         @endforeach
                                     </select>
                                 </div>

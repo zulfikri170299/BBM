@@ -150,7 +150,7 @@
                                     @endphp
                                     <td
                                         class="px-4 py-3 whitespace-nowrap text-center text-xs text-slate-400 border-r border-white/5">
-                                        {{ number_format($valP, 0, ',', '.') }}
+                                        {{ rtrim(rtrim(number_format($valP, 2, ',', '.'), '0'), ',') }}
                                     </td>
                                 @endforeach
 
@@ -161,7 +161,7 @@
                                     @endphp
                                     <td
                                         class="px-4 py-3 whitespace-nowrap text-center text-xs text-slate-400 border-r border-white/5">
-                                        {{ number_format($valM, 0, ',', '.') }}
+                                        {{ rtrim(rtrim(number_format($valM, 2, ',', '.'), '0'), ',') }}
                                     </td>
                                 @endforeach
 
@@ -172,7 +172,7 @@
                                     @endphp
                                     <td
                                         class="px-4 py-3 whitespace-nowrap text-center text-sm font-bold {{ $sisa < 0 ? 'text-red-600' : 'text-emerald-600' }} border-r border-white/5">
-                                        {{ number_format($sisa, 0, ',', '.') }}
+                                        {{ rtrim(rtrim(number_format($sisa, 2, ',', '.'), '0'), ',') }}
                                     </td>
                                 @endforeach
                             </tr>

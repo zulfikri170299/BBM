@@ -170,7 +170,7 @@
                         <td class="text-center">{{ $reading->jenis_bbm }}</td>
                         <td class="text-right">{{ number_format($reading->meter_awal, 0, ',', '.') }}</td>
                         <td class="text-right">{{ number_format($reading->meter_akhir, 0, ',', '.') }}</td>
-                        <td class="text-right">{{ number_format($totalLiter, 0, ',', '.') }}</td>
+                        <td class="text-right">{{ rtrim(rtrim(number_format($totalLiter, 2, ',', '.'), '0'), ',') }}</td>
                     </tr>
                 @endforeach
             @empty
@@ -186,12 +186,12 @@
             <tr>
                 <td class="label">Total Pertamax</td>
                 <td>:</td>
-                <td class="value">{{ number_format($totalPertamax, 0, ',', '.') }} Liter</td>
+                <td class="value">{{ rtrim(rtrim(number_format($totalPertamax, 2, ',', '.'), '0'), ',') }} Liter</td>
             </tr>
             <tr>
                 <td class="label">Total Pertamina Dex</td>
                 <td>:</td>
-                <td class="value">{{ number_format($totalDex, 0, ',', '.') }} Liter</td>
+                <td class="value">{{ rtrim(rtrim(number_format($totalDex, 2, ',', '.'), '0'), ',') }} Liter</td>
             </tr>
             <tr>
                 <td class="label">TOTAL KESELURUHAN</td>

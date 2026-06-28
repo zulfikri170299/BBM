@@ -33,7 +33,7 @@
                                 {{ $jenis }}
                             </p>
                             <p class="text-2xl font-black text-rose-600 leading-none tracking-tight">
-                                {{ number_format($total, 0, ',', '.') }}
+                                {{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }}
                                 <span class="text-sm font-bold text-slate-300 ml-0.5">L</span>
                             </p>
                         </div>

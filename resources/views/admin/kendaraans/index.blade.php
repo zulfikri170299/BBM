@@ -189,7 +189,7 @@
 
             <!-- Table -->
             <div class="overflow-x-auto">
-                <table class="min-w-full">
+                <table class="min-w-full whitespace-nowrap">
                     <thead>
                         <tr class="bg-slate-800/50 border-b border-white/5">
                             <th colspan="8" class="px-4 py-3">
@@ -304,7 +304,7 @@
                                 <td class="px-4 sm:px-6 py-4 text-right">
                                     <span
                                         class="text-xs font-bold whitespace-nowrap {{ $kendaraan->saldo < 10 ? 'text-red-600' : 'text-slate-200' }}">
-                                        {{ number_format($kendaraan->saldo, 0, ',', '.') }} Liter
+                                        {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
                                     </span>
                                     @if($kendaraan->saldo < 10)
                                         <span class="block text-xs text-red-500 font-medium mt-0.5">Saldo rendah</span>
@@ -476,7 +476,7 @@
                                                                                                                                     ],
                                                                                                                                     allKendaraans: [
                                                                                                                                         @foreach($allKendaraans as $k)
-                                                                                                                                            { id: {{ $k->id }}, satker_id: {{ $k->satker_id }}, satker_nama: '{{ $k->satker->nama_satker ?? '-' }}', nopol: '{{ $k->no_polisi }}', jenis_bbm: '{{ $k->jenis_bbm }}', saldo: '{{ number_format($k->saldo, 0, ',', '.') }}', saldoRaw: {{ $k->saldo }} },
+                                                                                                                                            { id: {{ $k->id }}, satker_id: {{ $k->satker_id }}, satker_nama: '{{ $k->satker->nama_satker ?? '-' }}', nopol: '{{ $k->no_polisi }}', jenis_bbm: '{{ $k->jenis_bbm }}', saldo: '{{ rtrim(rtrim(number_format($k->saldo, 2, ',', '.'), '0'), ',') }}', saldoRaw: {{ $k->saldo }} },
                                                                                                                                         @endforeach
                                                                                                                                     ],
                                                                                                                                     get currentAdminStock() {
@@ -1101,7 +1101,7 @@
                                     <div class="bg-slate-900 border border-white/5 p-2 rounded-lg border border-indigo-100">
                                         <p class="text-[9px] font-bold text-slate-400 uppercase">{{ $as->jenis_bbm }}</p>
                                         <p class="text-sm font-black text-indigo-700">
-                                            {{ number_format($as->saldo, 0, ',', '.') }} L
+                                            {{ rtrim(rtrim(number_format($as->saldo, 2, ',', '.'), '0'), ',') }} L
                                         </p>
                                     </div>
                                 @endforeach
