@@ -231,7 +231,7 @@
                 <table class="min-w-full whitespace-nowrap">
                     <thead>
                         <tr class="bg-slate-800/50 border-b border-white/5">
-                            <th colspan="8" class="px-4 py-3">
+                            <th colspan="9" class="px-4 py-3">
                                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                                     <form action="{{ route('satker.kendaraans.index') }}" method="GET"
                                         class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
@@ -283,6 +283,9 @@
                                 class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
                                 Nopol</th>
                             <th
+                                class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
+                                Roda</th>
+                            <th
                                 class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
                                 Jenis BBM</th>
                             <th
@@ -313,6 +316,11 @@
                                 </td>
                                 <td class="px-4 py-3">
                                     <span class="text-xs font-bold text-slate-200">{{ $kendaraan->no_polisi }}</span>
+                                </td>
+                                <td class="px-4 py-3 text-center">
+                                    <span class="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-lg text-[10px] font-bold bg-slate-800 border border-white/5 text-slate-300">
+                                        {{ $kendaraan->roda ?? '-' }}
+                                    </span>
                                 </td>
                                 <td class="px-4 py-3">
                                     @php
