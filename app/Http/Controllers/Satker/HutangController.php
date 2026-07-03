@@ -46,17 +46,28 @@ class HutangController extends Controller
         $kendaraans = $queryKendaraan->get();
 
         // Calculate unpaid hutang per BBM type
-        $queryHutangSum = \App\Models\Hutang::where('status', 'belum_dibayar');
+        $queryBelumDibayar = \App\Models\Hutang::where('status', 'belum_dibayar');
+        $querySudahDibayar = \App\Models\Hutang::where('status', 'sudah_dibayar');
+        
         if ($user->role !== 'super_admin') {
-            $queryHutangSum->where('satker_id', $satkerId);
+            $queryBelumDibayar->where('satker_id', $satkerId);
+            $querySudahDibayar->where('satker_id', $satkerId);
         }
-        $hutangPerBbm = $queryHutangSum
-            ->where('status', 'belum_dibayar')
+        
+        $belumDibayar = $queryBelumDibayar
             ->selectRaw('jenis_bbm, sum(jumlah_bon) as total')
             ->groupBy('jenis_bbm')
             ->pluck('total', 'jenis_bbm');
+            
+        $sudahDibayar = $querySudahDibayar
+            ->selectRaw('jenis_bbm, sum(jumlah_bon) as total')
+            ->groupBy('jenis_bbm')
+            ->pluck('total', 'jenis_bbm');
+            
+        // For backwards compatibility or loop structure if needed
+        $hutangPerBbm = $belumDibayar;
 
-        return view('satker.hutang.index', compact('hutangs', 'kendaraans', 'hutangPerBbm'));
+        return view('satker.hutang.index', compact('hutangs', 'kendaraans', 'hutangPerBbm', 'belumDibayar', 'sudahDibayar'));
     }
 
     public function downloadPDF(Request $request)

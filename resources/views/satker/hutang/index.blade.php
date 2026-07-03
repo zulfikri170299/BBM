@@ -24,21 +24,50 @@
 
             <div class="flex flex-wrap items-center gap-3">
                 <!-- Hutang Stats Pill Style -->
-                @foreach($hutangPerBbm as $jenis => $total)
-                    <div
-                        class="bg-slate-900 border border-white/5 px-5 py-3 rounded-[1.5rem] border border-slate-50 flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
-                        <div class="w-2 h-10 bg-rose-500 rounded-full shadow-sm shadow-rose-200"></div>
-                        <div>
-                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] mb-1.5">
-                                {{ $jenis }}
-                            </p>
-                            <p class="text-2xl font-black text-rose-600 leading-none tracking-tight">
-                                {{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }}
-                                <span class="text-sm font-bold text-slate-300 ml-0.5">L</span>
-                            </p>
+                @php $hasData = false; @endphp
+                @foreach(['Pertamax', 'Pertamina Dex'] as $jenis)
+                    @php
+                        $totalBelum = $belumDibayar[$jenis] ?? 0;
+                        $totalSudah = $sudahDibayar[$jenis] ?? 0;
+                    @endphp
+                    @if($totalBelum > 0 || $totalSudah > 0)
+                        @php $hasData = true; @endphp
+                        <div class="flex gap-2">
+                            <!-- Belum Dibayar -->
+                            <div
+                                class="bg-slate-900 border border-white/5 px-4 py-3 rounded-[1.5rem] border border-slate-50 flex items-center gap-3 shadow-sm hover:shadow-md transition-shadow">
+                                <div class="w-1.5 h-10 bg-rose-500 rounded-full shadow-sm shadow-rose-200"></div>
+                                <div>
+                                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.1em] mb-1">
+                                        BELUM DIBAYAR ({{ $jenis }})
+                                    </p>
+                                    <p class="text-xl font-black text-rose-600 leading-none tracking-tight">
+                                        {{ rtrim(rtrim(number_format($totalBelum, 2, ',', '.'), '0'), ',') ?: '0' }}
+                                        <span class="text-xs font-bold text-slate-300 ml-0.5">L</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Sudah Dibayar -->
+                            <div
+                                class="bg-slate-900 border border-white/5 px-4 py-3 rounded-[1.5rem] border border-slate-50 flex items-center gap-3 shadow-sm hover:shadow-md transition-shadow">
+                                <div class="w-1.5 h-10 bg-emerald-500 rounded-full shadow-sm shadow-emerald-200"></div>
+                                <div>
+                                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.1em] mb-1">
+                                        SUDAH DIBAYAR ({{ $jenis }})
+                                    </p>
+                                    <p class="text-xl font-black text-emerald-600 leading-none tracking-tight">
+                                        {{ rtrim(rtrim(number_format($totalSudah, 2, ',', '.'), '0'), ',') ?: '0' }}
+                                        <span class="text-xs font-bold text-slate-300 ml-0.5">L</span>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    @endif
                 @endforeach
+                @if(!$hasData)
+                    <div class="text-slate-400 text-xs italic font-bold">Belum ada catatan hutang.</div>
+                @endif
             </div>
         </div>
 

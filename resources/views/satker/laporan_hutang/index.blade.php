@@ -144,16 +144,32 @@
                     @if($hutangs->count() > 0)
                         <tfoot class="bg-slate-800/50 font-black border-t-2 border-white/10">
                             <tr>
-                                <td colspan="5" class="px-4 py-3 text-right text-slate-400 uppercase tracking-widest text-[10px]">TOTAL HUTANG</td>
+                                <td colspan="5" class="px-4 py-3 text-right text-slate-400 uppercase tracking-widest text-[10px]">TOTAL SUDAH DIBAYAR</td>
                                 <td class="px-4 py-3">
                                     <div class="flex flex-col items-center gap-1">
                                         <div class="flex items-center gap-2">
-                                            <span class="text-indigo-600 text-xs">{{ number_format($totalPertamax, 0) }} L</span>
-                                            <span class="text-[8px] bg-indigo-100 text-indigo-600 px-1 rounded">PERTAMAX</span>
+                                            <span class="text-emerald-600 text-xs">{{ number_format($totalPertamaxSudah, 0) }} L</span>
+                                            <span class="text-[8px] bg-emerald-100 text-emerald-600 px-1 rounded">PERTAMAX</span>
                                         </div>
                                         <div class="flex items-center gap-2 border-t border-white/10 pt-1">
-                                            <span class="text-amber-600 text-xs">{{ number_format($totalDex, 0) }} L</span>
-                                            <span class="text-[8px] bg-amber-100 text-amber-600 px-1 rounded">P. DEX</span>
+                                            <span class="text-emerald-600 text-xs">{{ number_format($totalDexSudah, 0) }} L</span>
+                                            <span class="text-[8px] bg-emerald-100 text-emerald-600 px-1 rounded">P. DEX</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr class="border-t border-white/10">
+                                <td colspan="5" class="px-4 py-3 text-right text-slate-400 uppercase tracking-widest text-[10px]">TOTAL BELUM DIBAYAR</td>
+                                <td class="px-4 py-3">
+                                    <div class="flex flex-col items-center gap-1">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-rose-600 text-xs">{{ number_format($totalPertamaxBelum, 0) }} L</span>
+                                            <span class="text-[8px] bg-rose-100 text-rose-600 px-1 rounded">PERTAMAX</span>
+                                        </div>
+                                        <div class="flex items-center gap-2 border-t border-white/10 pt-1">
+                                            <span class="text-rose-600 text-xs">{{ number_format($totalDexBelum, 0) }} L</span>
+                                            <span class="text-[8px] bg-rose-100 text-rose-600 px-1 rounded">P. DEX</span>
                                         </div>
                                     </div>
                                 </td>

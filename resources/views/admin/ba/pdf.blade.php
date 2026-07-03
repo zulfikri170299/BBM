@@ -54,7 +54,7 @@
                 <div style="border-bottom: 1.5px solid black; padding-bottom: 5px; line-height: 1.15; font-size: 10.5pt;">
                     KEPOLISIAN NEGARA REPUBLIK INDONESIA<br>
                     DAERAH NUSA TENGGARA BARAT<br>
-                    {{ strtoupper($satker) }}
+                    BIRO LOGISTIK
                 </div>
             </td>
             <td>&nbsp;</td>

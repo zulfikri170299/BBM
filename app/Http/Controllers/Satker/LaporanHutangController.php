@@ -42,13 +42,15 @@ class LaporanHutangController extends Controller
 
         $perPage = $this->getPerPage($request);
         
-        // Hitung total per jenis BBM sebelum paginasi
-        $totalPertamax = (clone $query)->where('jenis_bbm', 'Pertamax')->sum('jumlah_bon');
-        $totalDex = (clone $query)->where('jenis_bbm', 'Pertamina Dex')->sum('jumlah_bon');
+        // Hitung total per jenis BBM sebelum paginasi (pisahkan sudah/belum dibayar)
+        $totalPertamaxSudah = (clone $query)->where('jenis_bbm', 'Pertamax')->where('status', 'sudah_dibayar')->sum('jumlah_bon');
+        $totalPertamaxBelum = (clone $query)->where('jenis_bbm', 'Pertamax')->where('status', 'belum_dibayar')->sum('jumlah_bon');
+        $totalDexSudah = (clone $query)->where('jenis_bbm', 'Pertamina Dex')->where('status', 'sudah_dibayar')->sum('jumlah_bon');
+        $totalDexBelum = (clone $query)->where('jenis_bbm', 'Pertamina Dex')->where('status', 'belum_dibayar')->sum('jumlah_bon');
         
         $hutangs = $query->orderBy('created_at', 'desc')->paginate($perPage)->withQueryString();
 
-        return view('satker.laporan_hutang.index', compact('hutangs', 'totalPertamax', 'totalDex'));
+        return view('satker.laporan_hutang.index', compact('hutangs', 'totalPertamaxSudah', 'totalPertamaxBelum', 'totalDexSudah', 'totalDexBelum'));
     }
 
     public function print(Request $request)
