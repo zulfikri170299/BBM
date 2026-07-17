@@ -8,7 +8,7 @@
         <p class="mt-1 text-xs text-slate-400 font-medium italic">Rekapitulasi persediaan, penerimaan, dan pengeluaran BBM {{ $jenisLaporan == 'harian' ? 'Per Hari (Harian)' : ($jenisLaporan == 'bulanan' ? 'Per Minggu (Bulanan)' : 'Per Bulan (Triwulan)') }}.</p>
       </div>
       
-      <div class="flex flex-nowrap items-center justify-end gap-3 w-full md:w-auto overflow-visible pb-1">
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 w-full md:w-auto overflow-visible">
         <form action="{{ route('admin.laporan-slog.index') }}" method="GET" 
           x-data="{ 
             jenis: '{{ $jenisLaporan }}', 
@@ -18,7 +18,7 @@
             jenisLabel: '{{ $jenisLaporan == 'harian' ? 'Harian' : ($jenisLaporan == 'bulanan' ? 'Bulanan' : 'Triwulan') }}',
             bulanLabel: '{{ Carbon\Carbon::create()->month((int)$bulan)->translatedFormat('F') }}'
           }" 
-          class="flex items-center gap-2 bg-slate-900 border border-white/5 p-1 rounded-2xl shadow-sm border border-white/10 ring-1 ring-black/5">
+          class="flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-start gap-2 bg-slate-900 border p-1 border-white/10 rounded-2xl shadow-sm ring-1 ring-black/5 w-full sm:w-auto">
           
           <input type="hidden" name="jenis_laporan" x-model="jenis">
           <input type="hidden" name="bulan" x-model="bulan">
@@ -98,16 +98,18 @@
             </div>
           </div>
 
-          <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl transition-all duration-200 font-bold text-xs uppercase tracking-wider ml-2 shadow-sm active:scale-95">
-            Filter
-          </button>
+          <div class="flex items-center ml-2 gap-1.5 w-full sm:w-auto">
+            <button type="submit" class="flex-1 sm:flex-none justify-center items-center flex bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl transition-all duration-200 font-bold text-xs uppercase tracking-wider shadow-sm active:scale-95">
+              Filter
+            </button>
+            
+            <!-- PDF Export Button -->
+            <a href="{{ route('admin.laporan-slog.print', ['bulan' => $bulan, 'tw' => $tw ?? 1, 'tahun' => $tahun, 'jenis_laporan' => $jenisLaporan]) }}" target="_blank" class="flex-1 sm:flex-none justify-center inline-flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-xl transition-all duration-200 shadow-sm font-bold text-xs uppercase tracking-wider">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+              Cetak PDF
+            </a>
+          </div>
         </form>
-
-        <!-- PDF Export Button -->
-        <a href="{{ route('admin.laporan-slog.print', ['bulan' => $bulan, 'tw' => $tw ?? 1, 'tahun' => $tahun, 'jenis_laporan' => $jenisLaporan]) }}" target="_blank" class="flex-shrink-0 inline-flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-xl transition-all duration-200 shadow-sm font-bold text-xs uppercase tracking-wider">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-          Cetak PDF
-        </a>
       </div>
     </div>
   </div>
@@ -316,15 +318,15 @@
             <table class="min-w-full divide-y divide-white/5">
               <thead>
                 <tr class="bg-slate-800/50/80">
-                  <th rowspan="2" class="px-4 py-4 text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest border-r border-white/5 w-12">No</th>
-                  <th rowspan="2" class="px-4 py-3 text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest border-r border-white/5">Tanggal</th>
-                  <th rowspan="2" class="px-4 py-3 text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest border-r border-white/5">Uraian</th>
-                  <th colspan="2" class="px-4 py-4 text-center text-[10px] font-bold text-indigo-400 uppercase tracking-widest border-r border-white/5 ">Jenis dan Kuantum BMP</th>
-                  <th rowspan="2" class="px-4 py-4 text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest border-r border-white/5">Satuan</th>
+                  <th rowspan="2" class="px-2 sm:px-4 py-3 sm:py-4 text-center text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest border-r border-white/5 w-8 sm:w-12">No</th>
+                  <th rowspan="2" class="px-2 sm:px-4 py-3 text-left text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest border-r border-white/5">Tanggal</th>
+                  <th rowspan="2" class="px-2 sm:px-4 py-3 text-left text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest border-r border-white/5">Uraian</th>
+                  <th colspan="2" class="px-2 sm:px-4 py-3 sm:py-4 text-center text-[9px] sm:text-[10px] font-bold text-indigo-400 uppercase tracking-widest border-r border-white/5 ">Jenis dan Kuantum BMP</th>
+                  <th rowspan="2" class="px-2 sm:px-4 py-4 text-center text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest border-r border-white/5">Satuan</th>
                 </tr>
                 <tr class="bg-slate-800/50/80">
-                  <th class="px-4 py-2 text-center text-[10px] font-bold text-indigo-400 uppercase tracking-widest border-r border-white/5 ">Pertamax</th>
-                  <th class="px-4 py-2 text-center text-[10px] font-bold text-indigo-400 uppercase tracking-widest border-r border-white/5 ">Pertamina Dex</th>
+                  <th class="px-2 sm:px-4 py-2 text-center text-[9px] sm:text-[10px] font-bold text-indigo-400 uppercase tracking-widest border-r border-white/5 ">Pertamax</th>
+                  <th class="px-2 sm:px-4 py-2 text-center text-[9px] sm:text-[10px] font-bold text-indigo-400 uppercase tracking-widest border-r border-white/5 ">P. Dex</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-white/5">
@@ -332,40 +334,50 @@
                 @foreach($weekData['days'] as $day)
                   <!-- Persediaan Awal -->
                   <tr class="hover:bg-slate-800/50 transition-colors">
-                    <td rowspan="5" class="px-4 py-4 text-[11px] font-bold text-center text-slate-400 border-r border-white/5 align-top">{{ $i++ }}.</td>
-                    <td rowspan="5" class="px-4 py-3 text-sm font-bold text-white border-r border-white/5 align-top whitespace-nowrap">{{ $day['nama_hari'] }}</td>
-                    <td class="px-6 py-2 text-xs font-semibold text-slate-400 border-r border-white/5">Persediaan awal</td>
-                    <td class="px-4 py-2 text-xs text-center text-slate-300 border-r border-white/5">{{ number_format($day['awal_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                    <td class="px-4 py-2 text-xs text-center text-slate-300 border-r border-white/5">{{ number_format($day['awal_dex'], 0, ',', '.') ?: '-' }}</td>
-                    <td class="px-4 py-2 text-xs text-center text-slate-400">Liter</td>
+                    <td rowspan="5" class="px-2 sm:px-4 py-3 sm:py-4 text-[10px] sm:text-[11px] font-bold text-center text-slate-400 border-r border-white/5 align-top">{{ $i++ }}.</td>
+                    <td rowspan="5" class="px-2 sm:px-4 py-3 text-xs sm:text-sm font-bold text-white border-r border-white/5 align-top whitespace-nowrap">
+                        @php
+                            $parts = explode(' ', $day['nama_hari'], 2);
+                        @endphp
+                        <div class="flex flex-col gap-0.5">
+                            <span>{{ $parts[0] }}</span>
+                            @if(isset($parts[1]))
+                                <span>{{ $parts[1] }}</span>
+                            @endif
+                        </div>
+                    </td>
+                    <td class="px-3 sm:px-6 py-2 text-[10px] sm:text-xs font-semibold text-slate-400 border-r border-white/5">Persediaan awal</td>
+                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-300 border-r border-white/5">{{ number_format($day['awal_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-300 border-r border-white/5">{{ number_format($day['awal_dex'], 0, ',', '.') ?: '-' }}</td>
+                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-400">Liter</td>
                   </tr>
                   <!-- Penerimaan -->
                   <tr class="hover:bg-slate-800/50 transition-colors">
-                    <td class="px-6 py-2 text-xs font-semibold text-emerald-400 border-r border-white/5">Penerimaan</td>
-                    <td class="px-4 py-2 text-xs text-center text-emerald-400 font-bold border-r border-white/5">{{ number_format($day['terima_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                    <td class="px-4 py-2 text-xs text-center text-emerald-400 font-bold border-r border-white/5">{{ number_format($day['terima_dex'], 0, ',', '.') ?: '-' }}</td>
-                    <td class="px-4 py-2 text-xs text-center text-slate-400">Liter</td>
+                    <td class="px-3 sm:px-6 py-2 text-[10px] sm:text-xs font-semibold text-emerald-400 border-r border-white/5">Penerimaan</td>
+                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-emerald-400 font-bold border-r border-white/5">{{ number_format($day['terima_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-emerald-400 font-bold border-r border-white/5">{{ number_format($day['terima_dex'], 0, ',', '.') ?: '-' }}</td>
+                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-400">Liter</td>
                   </tr>
                   <!-- Jumlah -->
                   <tr class="hover:bg-slate-800/50 transition-colors ">
-                    <td class="px-6 py-2 text-xs font-bold text-indigo-400 border-r border-white/5">Jumlah</td>
-                    <td class="px-4 py-2 text-xs text-center text-indigo-400 font-bold border-r border-white/5">{{ number_format($day['jumlah_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                    <td class="px-4 py-2 text-xs text-center text-indigo-400 font-bold border-r border-white/5">{{ number_format($day['jumlah_dex'], 0, ',', '.') ?: '-' }}</td>
-                    <td class="px-4 py-2 text-xs text-center text-slate-400">Liter</td>
+                    <td class="px-3 sm:px-6 py-2 text-[10px] sm:text-xs font-bold text-indigo-400 border-r border-white/5">Jumlah</td>
+                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-indigo-400 font-bold border-r border-white/5">{{ number_format($day['jumlah_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-indigo-400 font-bold border-r border-white/5">{{ number_format($day['jumlah_dex'], 0, ',', '.') ?: '-' }}</td>
+                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-400">Liter</td>
                   </tr>
                   <!-- Pengeluaran -->
                   <tr class="hover:bg-slate-800/50 transition-colors">
-                    <td class="px-6 py-2 text-xs font-semibold text-rose-400 border-r border-white/5">Pengeluaran</td>
-                    <td class="px-4 py-2 text-xs text-center text-rose-400 font-bold border-r border-white/5">{{ number_format($day['keluar_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                    <td class="px-4 py-2 text-xs text-center text-rose-400 font-bold border-r border-white/5">{{ number_format($day['keluar_dex'], 0, ',', '.') ?: '-' }}</td>
-                    <td class="px-4 py-2 text-xs text-center text-slate-400">Liter</td>
+                    <td class="px-3 sm:px-6 py-2 text-[10px] sm:text-xs font-semibold text-rose-400 border-r border-white/5">Pengeluaran</td>
+                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-rose-400 font-bold border-r border-white/5">{{ number_format($day['keluar_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-rose-400 font-bold border-r border-white/5">{{ number_format($day['keluar_dex'], 0, ',', '.') ?: '-' }}</td>
+                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-400">Liter</td>
                   </tr>
                   <!-- Persediaan Akhir -->
                   <tr class="hover:bg-slate-800/50 transition-colors bg-slate-800/50">
-                    <td class="px-6 py-2 text-xs font-bold text-slate-200 border-r border-white/5">Persediaan akhir</td>
-                    <td class="px-4 py-2 text-xs text-center text-slate-200 font-black border-r border-white/5">{{ number_format($day['akhir_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                    <td class="px-4 py-2 text-xs text-center text-slate-200 font-black border-r border-white/5">{{ number_format($day['akhir_dex'], 0, ',', '.') ?: '-' }}</td>
-                    <td class="px-4 py-2 text-xs text-center text-slate-400">Liter</td>
+                    <td class="px-3 sm:px-6 py-2 text-[10px] sm:text-xs font-bold text-slate-200 border-r border-white/5">Persediaan akhir</td>
+                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-200 font-black border-r border-white/5">{{ number_format($day['akhir_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-200 font-black border-r border-white/5">{{ number_format($day['akhir_dex'], 0, ',', '.') ?: '-' }}</td>
+                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-400">Liter</td>
                   </tr>
                 @endforeach
               </tbody>

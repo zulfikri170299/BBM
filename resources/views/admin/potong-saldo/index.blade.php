@@ -77,8 +77,8 @@
                 <div class="lg:col-span-8">
                     <div class="bg-slate-900 border border-white/5 rounded-3xl shadow-lg shadow-black/20">
                         <!-- Toolbar Compact -->
-                        <div class="p-3 border-b border-white/5 flex items-center justify-between gap-4 ">
-                            <div class="relative max-w-xs w-full">
+                        <div class="p-3 border-b border-white/5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 ">
+                            <div class="relative w-full sm:max-w-xs sm:flex-1">
                                 <input type="text" 
                                     x-model="tab === 'kendaraan' ? searchKendaraan : searchPersonel"
                                     :placeholder="tab === 'kendaraan' ? 'Cari nopol...' : 'Cari nama/nrp...'" 
@@ -88,9 +88,9 @@
                                 </div>
                             </div>
                             
-                            <div class="flex items-center gap-2 flex-1 justify-end">
+                            <div class="flex flex-wrap sm:flex-nowrap items-center gap-2 flex-1 justify-between sm:justify-end">
                                 <!-- Custom Dropdown Satker -->
-                                <div class="relative" x-data="{ 
+                                <div class="relative flex-1 sm:flex-none" x-data="{ 
                                     open: false,
                                     search: '',
                                     get selectedLabel() {
@@ -100,16 +100,16 @@
                                     }
                                 }" @click.away="open = false">
                                     <button @click="open = !open" type="button" 
-                                        class="flex items-center justify-between gap-2 px-3 py-1.5 bg-slate-900 border border-white/5 border border-white/10 rounded-lg text-[10px] font-black text-slate-300 hover:border-indigo-300 hover:bg-indigo-500/10 text-slate-300 transition-all min-w-[160px]">
-                                        <span x-text="selectedLabel" class="truncate"></span>
-                                        <svg class="w-3 h-3 text-slate-400 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                        class="flex w-full items-center justify-between gap-2 px-3 py-1.5 bg-slate-900 border border-white/5 border border-white/10 rounded-lg text-[10px] font-black text-slate-300 hover:border-indigo-300 hover:bg-indigo-500/10 text-slate-300 transition-all sm:min-w-[160px]">
+                                        <span x-text="selectedLabel" class="truncate line-clamp-1 text-left"></span>
+                                        <svg class="w-3 h-3 text-slate-400 transition-transform shrink-0" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                     </button>
 
                                     <div x-show="open" 
                                         x-transition:enter="transition ease-out duration-100"
                                         x-transition:enter-start="opacity-0 scale-95"
                                         x-transition:enter-end="opacity-100 scale-100"
-                                        class="absolute right-0 mt-2 w-64 bg-slate-900 border border-white/5 rounded-xl shadow-xl border border-white/5 z-[100] overflow-hidden">
+                                        class="absolute left-0 sm:right-0 sm:left-auto mt-2 w-64 bg-slate-900 border border-white/5 rounded-xl shadow-xl border border-white/5 z-[100] overflow-hidden">
                                         
                                         <!-- Search Satker inside dropdown -->
                                         <div class="p-2 border-b border-gray-50 bg-slate-800/50">
@@ -141,11 +141,11 @@
                                 </div>
 
                                 <!-- Custom Dropdown BBM -->
-                                <div class="relative" x-data="{ open: false }" @click.away="open = false">
+                                <div class="relative flex-1 sm:flex-none" x-data="{ open: false }" @click.away="open = false">
                                     <button @click="open = !open" type="button" 
-                                        class="flex items-center justify-between gap-2 px-3 py-1.5 bg-slate-900 border border-white/5 border border-white/10 rounded-lg text-[10px] font-black text-slate-300 hover:border-indigo-300 hover:bg-indigo-500/10 text-slate-300 transition-all min-w-[120px]">
-                                        <span x-text="filterBbm === '' ? 'Semua BBM' : filterBbm"></span>
-                                        <svg class="w-3 h-3 text-slate-400 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                        class="flex w-full items-center justify-between gap-2 px-3 py-1.5 bg-slate-900 border border-white/5 border border-white/10 rounded-lg text-[10px] font-black text-slate-300 hover:border-indigo-300 hover:bg-indigo-500/10 text-slate-300 transition-all sm:min-w-[120px]">
+                                        <span x-text="filterBbm === '' ? 'Semua BBM' : filterBbm" class="truncate line-clamp-1 text-left"></span>
+                                        <svg class="w-3 h-3 text-slate-400 transition-transform shrink-0" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                     </button>
 
                                     <div x-show="open" 
@@ -172,9 +172,12 @@
                                 </div>
                             </div>
 
-                            <div class="flex items-center gap-2 shrink-0">
-                                <span class="px-2.5 py-0.5 bg-indigo-600 text-white text-[10px] font-black rounded-full" x-text="tab === 'kendaraan' ? selectedKendaraan.length : selectedPersonel.length">0</span>
-                                <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Item Terpilih</span>
+                            <div class="flex items-center justify-between sm:justify-start gap-2 shrink-0 border-t border-white/5 pt-2 sm:pt-0 sm:border-0 w-full sm:w-auto">
+                                <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest sm:hidden">Item Terpilih</span>
+                                <div class="flex items-center gap-1.5">
+                                    <span class="px-2.5 py-0.5 bg-indigo-600 text-white text-[10px] font-black rounded-full" x-text="tab === 'kendaraan' ? selectedKendaraan.length : selectedPersonel.length">0</span>
+                                    <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest hidden sm:inline">Item Terpilih</span>
+                                </div>
                             </div>
                         </div>
 

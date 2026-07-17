@@ -51,9 +51,9 @@
             <!-- Subtle Decorative Flare -->
             <div class="absolute -right-4 -top-4 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl"></div>
             
-            <form action="{{ route('admin.hutang.index') }}" method="GET" class="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:flex items-end gap-3 lg:gap-4">
+            <form action="{{ route('admin.hutang.index') }}" method="GET" class="relative z-10 grid grid-cols-2 sm:grid-cols-2 lg:flex items-end gap-3 lg:gap-4">
                 <!-- Satker -->
-                <div class="w-full lg:flex-1 lg:min-w-[200px]">
+                <div class="col-span-1 w-full lg:flex-1 lg:min-w-[200px]">
                     <x-input-label for="filter_satker_id" value="Satker" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-1" />
                     <div class="relative group/input">
                         <select name="satker_id" id="filter_satker_id"
@@ -69,7 +69,7 @@
                 </div>
 
                 <!-- Status -->
-                <div class="w-full sm:w-44">
+                <div class="col-span-1 w-full lg:w-44">
                     <x-input-label for="filter_status" value="Status" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-1" />
                     <div class="relative group/input">
                         <select name="status" id="filter_status"
@@ -82,7 +82,7 @@
                 </div>
 
                 <!-- Date Range Group -->
-                <div class="w-full sm:w-auto flex items-end gap-3 sm:gap-4">
+                <div class="col-span-2 sm:col-span-1 w-full lg:w-auto flex items-end gap-3 sm:gap-4">
                     <!-- Start Date -->
                     <div class="flex-1 sm:w-40">
                         <x-input-label for="start_date" value="Dari" class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-1" />
@@ -103,7 +103,7 @@
                 </div>
 
                 <!-- Buttons Group -->
-                <div class="w-full lg:w-auto grid grid-cols-2 lg:flex items-center gap-2 sm:col-span-2 lg:col-span-1">
+                <div class="col-span-2 sm:col-span-1 w-full lg:w-auto grid grid-cols-2 lg:flex items-center gap-2">
                     <button type="submit"
                         class="flex-1 lg:flex-none px-4 py-2.5 bg-indigo-600 text-white font-black rounded-xl shadow-lg shadow-indigo-500/20 hover:bg-indigo-700 active:scale-95 transition-all text-[10px] uppercase tracking-widest flex items-center justify-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -159,24 +159,24 @@
                 <table class="w-full text-sm text-left">
                     <thead class="text-[10px] text-slate-400 uppercase bg-slate-800/50/80 border-b border-white/10">
                         <tr>
-                            <th class="px-4 py-3 font-bold">Tanggal</th>
+                            <th class="px-4 py-3 font-bold hidden lg:table-cell">Tanggal</th>
                             <th class="px-4 py-3 font-bold">Satker</th>
                             <th class="px-4 py-3 font-bold">Kendaraan</th>
-                            <th class="px-4 py-3 font-bold">Driver</th>
-                            <th class="px-4 py-3 font-bold">Jumlah Bon</th>
-                            <th class="px-4 py-3 font-bold">Petugas Pencatat</th>
+                            <th class="px-4 py-3 font-bold hidden lg:table-cell">Driver</th>
+                            <th class="px-4 py-3 font-bold hidden lg:table-cell">Jumlah Bon</th>
+                            <th class="px-4 py-3 font-bold hidden lg:table-cell">Petugas Pencatat</th>
                             <th class="px-4 py-3 font-bold">Status</th>
                             @if(auth()->user()->role !== 'kasubbag')
-                                <th class="px-4 py-3 font-bold text-center border-l border-white/10 bg-slate-800/30">
+                                <th class="px-4 py-3 font-bold text-center border-l border-white/10 bg-slate-800/30 hidden lg:table-cell">
                                     Pembayaran</th>
-                                <th class="px-4 py-3 font-bold text-center border-l border-white/10">Kelola</th>
+                                <th class="px-4 py-3 font-bold text-center border-l border-white/10">DETAIL</th>
                             @endif
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-white/5">
                         @forelse($hutangs as $hutang)
                             <tr class="hover:bg-slate-800/50 transition">
-                                <td class="px-4 py-2">
+                                <td class="px-4 py-2 hidden lg:table-cell">
                                     <div class="text-[10px] sm:text-xs font-bold text-white">
                                         @if($hutang->tanggal_bon)
                                             {{ \Carbon\Carbon::parse($hutang->tanggal_bon)->format('d-m-Y') }}
@@ -198,10 +198,10 @@
                                     <div class="text-[11px] sm:text-xs font-black text-white leading-tight uppercase">{{ $hutang->nopol }}</div>
                                     <div class="text-[9px] sm:text-[10px] text-slate-400">{{ $hutang->jenis_kendaraan }}</div>
                                 </td>
-                                <td class="px-4 py-2">
+                                <td class="px-4 py-2 hidden lg:table-cell">
                                     <div class="font-bold text-slate-200">{{ $hutang->nama_driver ?? '-' }}</div>
                                 </td>
-                                <td class="px-4 py-2">
+                                <td class="px-4 py-2 hidden lg:table-cell">
                                     @php
                                         $bbmUpper = strtoupper($hutang->jenis_bbm);
                                         $bbmColorClass = str_contains($bbmUpper, 'DEX')
@@ -213,7 +213,7 @@
                                         {{ number_format($hutang->jumlah_bon, 0, ',', '.') }} L {{ $hutang->jenis_bbm }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-2 text-slate-300 text-xs">{{ $hutang->petugas->name ?? '-' }}</td>
+                                <td class="px-4 py-2 text-slate-300 text-xs hidden lg:table-cell">{{ $hutang->petugas->name ?? '-' }}</td>
                                 <td class="px-4 py-2">
                                     @if($hutang->status === 'belum_dibayar')
                                         <span
@@ -232,7 +232,7 @@
                                     @endif
                                 </td>
                                 @if(auth()->user()->role !== 'kasubbag')
-                                    <td class="px-4 py-2 border-l border-white/5 bg-slate-800/50/20">
+                                    <td class="px-4 py-2 border-l border-white/5 bg-slate-800/50/20 hidden lg:table-cell">
                                         <div class="flex items-center justify-center">
                                             @if($hutang->status === 'belum_dibayar')
                                                 <button
@@ -246,7 +246,8 @@
                                         </div>
                                     </td>
                                     <td class="px-4 py-2 border-l border-white/5">
-                                        <div class="flex items-center justify-center gap-2">
+                                        <!-- Desktop actions -->
+                                        <div class="hidden lg:flex items-center justify-center gap-2">
                                             @php
                                                 $editData = [
                                                     'id' => $hutang->id,
@@ -285,6 +286,77 @@
                                                 <span class="text-[10px] font-bold text-slate-400 italic">No Actions</span>
                                             @endif
                                         </div>
+
+                                        <!-- Mobile Detail Button & Modal -->
+                                        <div x-data="{ showDetail: false }" class="lg:hidden flex justify-center">
+                                            <button type="button" @click="showDetail = true" class="inline-flex items-center p-2 bg-indigo-600/10 text-indigo-400 rounded-lg border border-indigo-600/20 shadow-sm" title="Lihat Detail">
+                                                <svg class="w-5 h-5 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                                </svg>
+                                            </button>
+                                            
+                                            <template x-teleport="body">
+                                                <div x-show="showDetail" class="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center p-4" style="display: none;">
+                                                    <div x-show="showDetail" x-transition.opacity @click="showDetail = false" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm"></div>
+                                                    <div x-show="showDetail" x-transition.translate.y @click.outside="showDetail = false" class="relative w-full max-w-sm bg-slate-900 border border-white/10 rounded-2xl shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
+                                                        <div class="p-4 border-b border-white/10 flex justify-between items-center bg-slate-800/50">
+                                                            <div class="text-left">
+                                                                <h3 class="text-white font-bold text-lg leading-tight">{{ $hutang->nopol }}</h3>
+                                                                <p class="text-slate-400 text-xs">{{ $hutang->satker->nama_satker }}</p>
+                                                            </div>
+                                                            <button type="button" @click="showDetail = false" class="p-2 bg-slate-800 text-slate-400 hover:text-white rounded-xl border border-white/5 shadow-sm">
+                                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                            </button>
+                                                        </div>
+                                                        <div class="p-4 overflow-y-auto w-full custom-scrollbar text-left text-sm space-y-4">
+                                                            <div class="grid grid-cols-2 gap-4">
+                                                                <div>
+                                                                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Tanggal</span>
+                                                                    <span class="font-bold text-white uppercase">{{ $hutang->tanggal_bon ? \Carbon\Carbon::parse($hutang->tanggal_bon)->format('d-m-Y') : \Carbon\Carbon::parse($hutang->created_at)->timezone('Asia/Makassar')->format('d-m-Y') }}</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Jenis BBM</span>
+                                                                    <span class="font-bold text-white">{{ strtoupper($hutang->jenis_bbm) }}</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Jumlah Bon</span>
+                                                                    <span class="font-bold text-emerald-400">{{ number_format($hutang->jumlah_bon, 0, ',', '.') }} L</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Driver</span>
+                                                                    <span class="font-bold text-white">{{ $hutang->nama_driver ?? '-' }}</span>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="pt-4 border-t border-white/10 flex flex-col gap-2">
+                                                                @if($hutang->status === 'belum_dibayar')
+                                                                    <button type="button" @click="showDetail = false; openModal({{ $hutang->id }}, {{ $hutang->satker_id }}, '{{ $hutang->jenis_bbm }}', '{{ $hutang->nopol }}', {{ $hutang->jumlah_bon }})" class="flex items-center gap-3 w-full p-3 bg-indigo-600 rounded-xl text-white hover:bg-indigo-700 transition">
+                                                                        <div class="p-1.5 bg-indigo-500/20 text-indigo-100 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 9v-1m0 1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                                                                        <span class="font-black text-xs uppercase tracking-wider">Bayar Hutang</span>
+                                                                    </button>
+
+                                                                    <button type="button" @click="showDetail = false; openEditModal(@js($editData))" class="flex items-center gap-3 w-full p-3 bg-slate-800 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700 transition">
+                                                                        <div class="p-1.5 bg-blue-500/20 text-blue-400 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></div>
+                                                                        <span class="font-semibold text-xs">Edit Hutang</span>
+                                                                    </button>
+
+                                                                    <form action="{{ route('admin.hutang.destroy', $hutang) }}" method="POST" class="w-full">
+                                                                        @csrf @method('DELETE')
+                                                                        <button type="button" data-confirm="Apakah Anda yakin ingin menghapus data hutang ini?" data-confirm-type="warning" class="flex items-center w-full gap-3 p-3 bg-slate-800 rounded-xl text-slate-300 hover:text-rose-500 hover:bg-slate-700 transition text-left">
+                                                                            <div class="p-1.5 bg-rose-500/20 text-rose-400 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></div>
+                                                                            <span class="font-semibold text-xs">Hapus</span>
+                                                                        </button>
+                                                                    </form>
+                                                                @else
+                                                                    <span class="block text-center text-xs font-bold text-slate-500 py-3">Pembayaran Selesai (Tidak ada aksi)</span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
                                     </td>
                                 @endif
                             </tr>
@@ -308,16 +380,15 @@
         <!-- Payment Modal -->
         <div x-show="showModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;"
             aria-labelledby="modal-title" role="dialog" aria-modal="true">
-            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="flex items-center justify-center min-h-screen p-4">
                 <div x-show="showModal" x-transition.opacity
                     class="fixed inset-0 bg-slate-900/60 transition-opacity backdrop-blur-sm" aria-hidden="true"
                     @click="showModal = false"></div>
-                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
                 <div x-show="showModal" x-transition:enter="ease-out duration-300"
                     x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                    class="inline-block align-bottom bg-slate-900 border border-white/5 rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl w-full">
+                    class="relative bg-slate-900 border border-white/5 rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-xl w-full">
 
                     <!-- Modal Header -->
                     <div
@@ -357,8 +428,14 @@
                                     </div>
                                     <div class="text-right">
                                         <p class="text-[10px] font-bold text-slate-400 uppercase">Jumlah Bon</p>
-                                        <p class="text-lg font-black text-rose-600" x-text="`${hutangData.jumlah} L`">
+                                        <p class="text-lg font-black text-rose-600" x-text="`${formatLiter(hutangData.jumlah)} L`">
                                         </p>
+                                    </div>
+                                    <div class="col-span-2 pt-2 mt-2 border-t border-white/5 border-dashed">
+                                        <div class="flex justify-between items-center">
+                                            <p class="text-[10px] font-bold text-slate-400 uppercase">Sisa Saldo Kendaraan</p>
+                                            <p class="text-sm font-black text-emerald-500" x-text="hutangData.saldo !== 'Tidak ada' ? `${formatLiter(hutangData.saldo)} L` : 'Memuat...'"></p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -398,16 +475,15 @@
         <!-- Edit Modal -->
         <div x-show="showEditModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;"
             aria-labelledby="modal-title" role="dialog" aria-modal="true">
-            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="flex items-center justify-center min-h-screen p-4">
                 <div x-show="showEditModal" x-transition.opacity
                     class="fixed inset-0 bg-slate-900/60 transition-opacity backdrop-blur-sm" aria-hidden="true"
                     @click="showEditModal = false"></div>
-                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
                 <div x-show="showEditModal" x-transition:enter="ease-out duration-300"
                     x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                    class="inline-block align-bottom bg-slate-900 border border-white/5 rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl w-full border border-white/10">
+                    class="relative bg-slate-900 border border-white/5 rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-xl w-full border border-white/10">
 
                     <!-- Modal Header -->
                     <div
@@ -551,16 +627,15 @@
         <!-- Create Modal -->
         <div x-show="showCreateModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;"
             aria-labelledby="modal-title" role="dialog" aria-modal="true">
-            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="flex items-center justify-center min-h-screen p-4">
                 <div x-show="showCreateModal" x-transition.opacity
                     class="fixed inset-0 bg-slate-900/60 transition-opacity backdrop-blur-sm" aria-hidden="true"
                     @click="showCreateModal = false"></div>
-                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
                 <div x-show="showCreateModal" x-transition:enter="ease-out duration-300"
                     x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                    class="inline-block align-bottom bg-slate-900 border border-white/5 rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl w-full border border-white/10">
+                    class="relative bg-slate-900 border border-white/5 rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-xl w-full border border-white/10">
 
                     <!-- Modal Header -->
                     <div
@@ -700,7 +775,7 @@
                 selectedHutang: null,
                 selectedSatker: null,
                 stocks: @json($stocks ?? []),
-                hutangData: { nopol: '', bbm: '', jumlah: 0 },
+                hutangData: { nopol: '', bbm: '', jumlah: 0, saldo: 'Tidak ada' },
                 editData: { id: '', satker_id: '', kendaraan_id: '', nama_driver: '', jumlah_bon: '', tanggal_bon: '', original_jumlah_bon: 0 },
                 createData: { satker_id: '', kendaraan_id: '', nama_driver: '', jumlah_bon: '', tanggal_bon: '{{ date('Y-m-d') }}' },
                 selectedKendaraan: '',
@@ -828,8 +903,16 @@
                     this.selectedHutang = id;
                     this.selectedSatker = satkerId;
                     this.selectedBbm = bbm;
-                    this.hutangData = { nopol, bbm, jumlah };
+                    this.hutangData = { nopol, bbm, jumlah, saldo: 'Tidak ada' };
                     this.showModal = true;
+                    
+                    if (!this.formKendaraans.some(k => k.no_polisi === nopol)) {
+                        await this.fetchFormKendaraans(satkerId);
+                    }
+                    const foundKend = this.formKendaraans.find(k => k.no_polisi === nopol);
+                    if (foundKend) {
+                        this.hutangData.saldo = foundKend.saldo;
+                    }
                 },
                 async openEditModal(hutang) {
                     this.editData = {

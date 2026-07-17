@@ -208,21 +208,14 @@
                 -webkit-overflow-scrolling: touch;
                 scrollbar-width: thin;
             }
-            .overflow-x-auto table.min-w-full,
-            .overflow-x-auto .min-w-full {
-                min-width: 800px !important;
-            }
         }
     </style>
     @stack('styles')
 </head>
 
 <body class="h-full font-sans antialiased text-slate-200 overflow-hidden bg-slate-950 relative selection:bg-brand-primary/30 selection:text-white" x-data="{ sidebarOpen: false }" @sidebar-close.window="sidebarOpen = false" @sidebar-open.window="sidebarOpen = true">
-    <!-- Ambient Background Effects -->
-    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
-        <div class="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-brand-primary/10 blur-[120px]"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-600/10 blur-[120px]"></div>
-        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-10"></div>
+    <!-- Solid clean background instead of blur -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none bg-slate-950">
     </div>
 
     <div class="flex h-full min-h-full">
@@ -414,6 +407,19 @@
             window.flatpickrBound = true;
             document.addEventListener('turbo:load', window.initFlatpickr);
             document.addEventListener('turbo:render', window.initFlatpickr);
+            
+            // Clean up instances before Turbo caches to prevent duplicates and sluggishness on mobile
+            document.addEventListener('turbo:before-cache', () => {
+                // Destroy TomSelect
+                document.querySelectorAll('.tomselected').forEach(el => {
+                    if (el.tomselect) el.tomselect.destroy();
+                });
+                
+                // Destroy Flatpickr
+                document.querySelectorAll('.flatpickr-input').forEach(el => {
+                    if (el._flatpickr) el._flatpickr.destroy();
+                });
+            });
         }
         
         window.showAlert = window.showAlert || ((title, text, icon = 'info') => {

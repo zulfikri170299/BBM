@@ -195,13 +195,13 @@
                             <th colspan="9" class="px-4 py-3">
                                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                                     <form action="{{ route('admin.kendaraans.index') }}" method="GET"
-                                        class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
+                                        class="flex flex-row items-center gap-3 w-full sm:w-auto">
                                         @if(request('satker_id'))
                                             <input type="hidden" name="satker_id" value="{{ request('satker_id') }}">
                                         @endif
                                         <x-per-page :current="request('per_page', 15)" />
 
-                                        <div class="relative w-full sm:w-auto">
+                                        <div class="relative flex-1 w-full sm:w-auto">
                                             <span
                                                 class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-slate-400">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
@@ -243,26 +243,26 @@
                                 class="px-4 sm:px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
                                 Satker</th>
                             <th
-                                class="px-4 sm:px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
+                                class="px-4 sm:px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider hidden lg:table-cell">
                                 Jenis Kendaraan</th>
                             <th
                                 class="px-4 sm:px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
                                 Nopol</th>
                             <th
-                                class="px-4 sm:px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
+                                class="px-4 sm:px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider hidden lg:table-cell">
                                 Roda</th>
                             <th
-                                class="px-4 sm:px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
+                                class="px-4 sm:px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider hidden lg:table-cell">
                                 Jenis BBM</th>
                             <th
-                                class="px-4 sm:px-4 py-3 text-right text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
+                                class="px-4 sm:px-4 py-3 text-right text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider hidden lg:table-cell">
                                 Saldo</th>
                             <th
-                                class="px-4 sm:px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
+                                class="px-4 sm:px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider hidden lg:table-cell">
                                 PIN</th>
                             <th
                                 class="px-4 sm:px-4 py-3 text-right text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
-                                Aksi</th>
+                                DETAIL</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-white/5">
@@ -284,19 +284,19 @@
                                             class="text-xs font-medium text-slate-300">{{ $kendaraan->satker->nama_satker ?? '-' }}</span>
                                     </div>
                                 </td>
-                                <td class="px-4 sm:px-6 py-4">
+                                <td class="px-4 sm:px-6 py-4 hidden lg:table-cell">
                                     <span
                                         class="text-xs font-semibold text-slate-200">{{ $kendaraan->jenis_kendaraan }}</span>
                                 </td>
                                 <td class="px-4 sm:px-6 py-4">
                                     <span class="text-xs font-bold text-slate-200">{{ $kendaraan->no_polisi }}</span>
                                 </td>
-                                <td class="px-4 sm:px-6 py-4 text-center">
+                                <td class="px-4 sm:px-6 py-4 text-center hidden lg:table-cell">
                                     <span class="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-lg text-[10px] font-bold bg-slate-800 border border-white/5 text-slate-300">
                                         {{ $kendaraan->roda ?? '-' }}
                                     </span>
                                 </td>
-                                <td class="px-4 sm:px-6 py-4">
+                                <td class="px-4 sm:px-6 py-4 hidden lg:table-cell">
                                     @php
                                         $bbmColors = [
                                             'Pertamax' => 'bg-blue-100 text-blue-700',
@@ -309,7 +309,7 @@
                                         {{ $kendaraan->jenis_bbm }}
                                     </span>
                                 </td>
-                                <td class="px-4 sm:px-6 py-4 text-right">
+                                <td class="px-4 sm:px-6 py-4 text-right hidden lg:table-cell">
                                     <span
                                         class="text-xs font-bold whitespace-nowrap {{ $kendaraan->saldo < 10 ? 'text-red-600' : 'text-slate-200' }}">
                                         {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
@@ -318,12 +318,12 @@
                                         <span class="block text-xs text-red-500 font-medium mt-0.5">Saldo rendah</span>
                                     @endif
                                 </td>
-                                <td class="px-4 sm:px-6 py-4 text-center">
+                                <td class="px-4 sm:px-6 py-4 text-center hidden lg:table-cell">
                                     <code
                                         class="px-2.5 py-1 bg-amber-50 text-amber-700 rounded-lg text-xs font-mono font-bold tracking-widest">{{ $kendaraan->pin }}</code>
                                 </td>
                                 <td class="px-4 sm:px-6 py-4 text-right">
-                                    <div class="flex items-center justify-end gap-1.5">
+                                    <div class="hidden lg:flex items-center justify-end gap-1.5">
                                         <a href="{{ route('admin.kendaraans.print', $kendaraan) }}"
                         class="flex-1 lg:flex-none inline-flex items-center p-2 bg-slate-800 hover:bg-indigo-100 text-slate-400 hover:text-indigo-600 rounded-lg transition-colors"
                                             title="Print Kartu Kendaraan">
@@ -394,6 +394,89 @@
                                             </form>
                                         @endif
                                     </div>
+                                    <!-- Mobile detail button/modal start -->
+                                    <div x-data="{ showDetail: false }" class="lg:hidden flex justify-end">
+                                        <button type="button" @click="showDetail = true" class="inline-flex items-center p-2 bg-indigo-600/10 text-indigo-400 rounded-lg border border-indigo-600/20 shadow-sm" title="Lihat Detail">
+                                            <svg class="w-5 h-5 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                            </svg>
+                                        </button>
+                                        
+                                        <template x-teleport="body">
+                                            <div x-show="showDetail" class="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center p-4" style="display: none;">
+                                                <div x-show="showDetail" x-transition.opacity @click="showDetail = false" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm"></div>
+                                                <div x-show="showDetail" x-transition.translate.y @click.outside="showDetail = false" class="relative w-full max-w-sm bg-slate-900 border border-white/10 rounded-2xl shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
+                                                    <div class="p-4 border-b border-white/10 flex justify-between items-center bg-slate-800/50">
+                                                        <div class="text-left">
+                                                            <h3 class="text-white font-bold text-lg leading-tight">{{ $kendaraan->no_polisi }}</h3>
+                                                            <p class="text-slate-400 text-xs">{{ $kendaraan->jenis_kendaraan }}</p>
+                                                        </div>
+                                                        <button type="button" @click="showDetail = false" class="p-2 bg-slate-800 text-slate-400 hover:text-white rounded-xl border border-white/5 shadow-sm">
+                                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                        </button>
+                                                    </div>
+                                                    <div class="p-4 overflow-y-auto w-full custom-scrollbar text-left text-sm space-y-4">
+                                                        <div class="grid grid-cols-2 gap-4">
+                                                            <div>
+                                                                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Roda</span>
+                                                                <span class="font-bold text-white">{{ $kendaraan->roda ?? '-' }}</span>
+                                                            </div>
+                                                            <div>
+                                                                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Jenis BBM</span>
+                                                                <span class="font-bold text-white">{{ $kendaraan->jenis_bbm }}</span>
+                                                            </div>
+                                                            <div>
+                                                                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Saldo</span>
+                                                                <span class="font-bold text-emerald-400">{{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} L</span>
+                                                            </div>
+                                                            <div>
+                                                                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">PIN</span>
+                                                                <code class="bg-amber-400/20 text-amber-500 px-2 py-0.5 rounded font-bold">{{ $kendaraan->pin }}</code>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="pt-4 border-t border-white/10 flex flex-col gap-2">
+                                                            <a href="{{ route('admin.kendaraans.print', $kendaraan) }}" class="flex items-center gap-3 w-full p-3 bg-slate-800 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700 transition">
+                                                                <div class="p-1.5 bg-blue-500/20 text-blue-400 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg></div>
+                                                                <span class="font-semibold text-xs">Print Kartu</span>
+                                                            </a>
+                                                            @if(auth()->user()->role !== 'kasubbag')
+                                                                <button type="button" @click="showDetail = false; $dispatch('open-transfer', {id: {{ $kendaraan->id }}, nopol: '{{ $kendaraan->no_polisi }}', current_satker: '{{ $kendaraan->satker->nama_satker ?? '-' }}'})" class="flex items-center gap-3 w-full p-3 bg-slate-800 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700 transition">
+                                                                    <div class="p-1.5 bg-violet-500/20 text-violet-400 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg></div>
+                                                                    <span class="font-semibold text-xs">Pindah Satker</span>
+                                                                </button>
+                                                                <form action="{{ route('admin.kendaraans.reset-pin', $kendaraan) }}" method="POST" class="w-full">
+                                                                    @csrf
+                                                                    <button type="submit" data-confirm="Reset PIN kendaraan {{ $kendaraan->no_polisi }}?" data-confirm-type="warning" class="flex items-center w-full gap-3 p-3 bg-slate-800 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700 transition text-left">
+                                                                        <div class="p-1.5 bg-amber-500/20 text-amber-400 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg></div>
+                                                                        <span class="font-semibold text-xs">Reset PIN</span>
+                                                                    </button>
+                                                                </form>
+                                                                <button type="button" @click="showDetail = false; $dispatch('open-potong-saldo', {id: {{ $kendaraan->id }}, nopol: '{{ $kendaraan->no_polisi }}', saldo: {{ $kendaraan->saldo }}, jenis_bbm: '{{ $kendaraan->jenis_bbm }}'})" class="flex items-center gap-3 w-full p-3 bg-slate-800 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700 transition">
+                                                                    <div class="p-1.5 bg-rose-500/20 text-rose-400 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg></div>
+                                                                    <span class="font-semibold text-xs">Potong Saldo</span>
+                                                                </button>
+                                                                <a href="{{ route('admin.kendaraans.edit', $kendaraan) }}" class="flex items-center gap-3 w-full p-3 bg-slate-800 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700 transition">
+                                                                    <div class="p-1.5 bg-indigo-500/20 text-indigo-400 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></div>
+                                                                    <span class="font-semibold text-xs">Edit</span>
+                                                                </a>
+                                                                <form action="{{ route('admin.kendaraans.destroy', $kendaraan) }}" method="POST" class="w-full">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" data-confirm="Yakin ingin menghapus kendaraan ini?" data-confirm-type="error" class="flex items-center gap-3 w-full p-3 bg-rose-900/20 text-rose-400 border border-rose-900/50 rounded-xl hover:text-white hover:bg-rose-600 transition text-left">
+                                                                        <div class="p-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></div>
+                                                                        <span class="font-bold text-xs">Hapus Kendaraan</span>
+                                                                    </button>
+                                                                </form>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <!-- Mobile detail button/modal end -->
                                 </td>
                             </tr>
                         @empty

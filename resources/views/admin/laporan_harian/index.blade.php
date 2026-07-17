@@ -8,17 +8,11 @@
                 <p class="mt-1 text-xs text-slate-400 font-medium italic">Rekonsiliasi data pengisian fisik (pompa) vs pencatatan sistem digital.</p>
             </div>
             
-            <div class="flex flex-wrap items-center gap-3">
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 w-full md:w-auto pb-1 mt-4 md:mt-0">
 
-                <!-- PDF Export Button -->
-                <a href="{{ route('admin.laporan-harian.pdf', ['bulan' => $bulan, 'tahun' => $tahun]) }}" class="inline-flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-xl transition-all duration-200 shadow-sm font-bold text-xs uppercase tracking-wider">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    Cetak PDF
-                </a>
-
-                <form action="{{ route('admin.laporan-harian.index') }}" method="GET" class="flex items-center gap-2 bg-slate-900 border border-white/5 p-1 rounded-xl shadow-sm border border-white/10 ring-1 ring-black/5">
-                    <div class="px-3 border-r border-white/5">
-                        <select name="bulan" class="border-0 bg-transparent text-xs font-bold text-slate-300 focus:ring-0 cursor-pointer py-2 pl-0 pr-6 appearance-none">
+                <form action="{{ route('admin.laporan-harian.index') }}" method="GET" class="flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-start gap-2 bg-slate-900 border border-white/5 p-1 rounded-2xl shadow-sm border border-white/10 ring-1 ring-black/5 w-full sm:w-auto">
+                    <div class="px-3 border-r border-white/5 flex-1 sm:flex-none">
+                        <select name="bulan" class="w-full border-0 bg-transparent text-[11px] sm:text-xs font-bold text-slate-300 focus:ring-0 cursor-pointer py-1.5 sm:py-2 pl-0 pr-6 appearance-none">
                             @foreach(range(1, 12) as $m)
                                 <option value="{{ sprintf('%02d', $m) }}" {{ $bulan == sprintf('%02d', $m) ? 'selected' : '' }}>
                                     {{ Carbon\Carbon::create()->month((int)$m)->translatedFormat('F') }}
@@ -26,16 +20,24 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="px-3">
-                        <select name="tahun" class="border-0 bg-transparent text-xs font-bold text-slate-300 focus:ring-0 cursor-pointer py-2 pl-0 pr-6 appearance-none">
+                    <div class="px-3 flex-1 sm:flex-none">
+                        <select name="tahun" class="w-full border-0 bg-transparent text-[11px] sm:text-xs font-bold text-slate-300 focus:ring-0 cursor-pointer py-1.5 sm:py-2 pl-0 pr-6 appearance-none">
                             @foreach(range(date('Y')-2, date('Y')) as $y)
                                 <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>{{ $y }}</option>
                             @endforeach
                         </select>
                     </div>
-                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-all duration-200 font-bold text-xs uppercase tracking-wider">
-                        Filter
-                    </button>
+                    <div class="flex items-center ml-2 gap-1.5 w-full sm:w-auto">
+                        <button type="submit" class="flex-1 sm:flex-none justify-center items-center flex bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl transition-all duration-200 font-bold text-xs uppercase tracking-wider shadow-sm active:scale-95">
+                            Filter
+                        </button>
+                        
+                        <!-- PDF Export Button -->
+                        <a href="{{ route('admin.laporan-harian.pdf', ['bulan' => $bulan, 'tahun' => $tahun]) }}" target="_blank" class="flex-1 sm:flex-none justify-center inline-flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-xl transition-all duration-200 shadow-sm font-bold text-[10px] sm:text-xs uppercase tracking-wider h-full">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            Cetak PDF
+                        </a>
+                    </div>
                 </form>
             </div>
         </div>

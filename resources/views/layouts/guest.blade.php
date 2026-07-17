@@ -54,8 +54,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(1px);
+            background: rgba(15, 23, 42, 0.7); /* Darker overlay without blur */
             pointer-events: none;
             z-index: 1;
         }

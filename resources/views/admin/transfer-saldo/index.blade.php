@@ -157,72 +157,72 @@
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-slate-800/50 border-b border-white/5">
-                                    <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">Tgl</th>
-                                    <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">Sumber</th>
-                                    <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">Tujuan</th>
-                                    <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Jumlah</th>
-                                    <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest">Ket</th>
+                                    <th class="px-2 py-2 sm:px-4 sm:py-3 text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest">Tgl</th>
+                                    <th class="px-2 py-2 sm:px-4 sm:py-3 text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest">Sumber</th>
+                                    <th class="px-2 py-2 sm:px-4 sm:py-3 text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest">Tujuan</th>
+                                    <th class="px-2 py-2 sm:px-4 sm:py-3 text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Jumlah</th>
+                                    <th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase tracking-widest hidden md:table-cell">Ket</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-white/5">
                                 @forelse($riwayat as $item)
                                     <tr class="hover:bg-slate-800/50 transition-colors">
-                                        <td class="px-4 py-3 align-top">
-                                            <p class="text-xs font-bold text-slate-200 whitespace-nowrap mb-0.5">{{ $item->created_at->format('d M Y') }}</p>
-                                            <p class="text-[10px] font-bold text-slate-400 uppercase">{{ $item->created_at->format('H:i') }}</p>
+                                        <td class="px-2 py-2 sm:px-4 sm:py-3 align-top">
+                                            <p class="text-[10px] sm:text-xs font-bold text-slate-200 whitespace-nowrap mb-0.5">{{ $item->created_at->format('d M y') }}</p>
+                                            <p class="text-[8px] sm:text-[10px] font-bold text-slate-400 uppercase">{{ $item->created_at->format('H:i') }}</p>
                                         </td>
-                                        <td class="px-4 py-3 align-top">
+                                        <td class="px-2 py-2 sm:px-4 sm:py-3 align-top max-w-[100px] sm:max-w-none truncate">
                                             @if($item->kendaraan_id)
-                                                <div class="flex items-center gap-2">
-                                                    <div class="w-9 h-9 bg-indigo-500/20 border border-indigo-500/30 rounded-xl flex items-center justify-center text-indigo-400">
-                                                        <i class="fas fa-car text-xs"></i>
+                                                <div class="flex items-center gap-1.5 sm:gap-2">
+                                                    <div class="w-6 h-6 sm:w-9 sm:h-9 shrink-0 bg-indigo-500/20 border border-indigo-500/30 rounded-lg sm:rounded-xl flex items-center justify-center text-indigo-400">
+                                                        <i class="fas fa-car text-[10px] sm:text-xs"></i>
                                                     </div>
-                                                    <div>
-                                                        <p class="text-xs font-bold text-slate-200 whitespace-nowrap mb-0.5">{{ $item->kendaraan->no_polisi ?? '-' }}</p>
-                                                        <p class="text-[10px] font-bold text-slate-400 uppercase">KENDARAAN</p>
+                                                    <div class="truncate">
+                                                        <p class="text-[10px] sm:text-xs font-bold text-slate-200 truncate mb-0.5" title="{{ $item->kendaraan->no_polisi ?? '-' }}">{{ $item->kendaraan->no_polisi ?? '-' }}</p>
+                                                        <p class="text-[8px] sm:text-[10px] font-bold text-slate-400 uppercase hidden sm:block">KENDARAAN</p>
                                                     </div>
                                                 </div>
                                             @else
-                                                <div class="flex items-center gap-2">
-                                                    <div class="w-9 h-9 bg-rose-500/20 border border-rose-500/30 rounded-xl flex items-center justify-center text-rose-400">
-                                                        <i class="fas fa-gas-pump text-xs"></i>
+                                                <div class="flex items-center gap-1.5 sm:gap-2">
+                                                    <div class="w-6 h-6 sm:w-9 sm:h-9 shrink-0 bg-rose-500/20 border border-rose-500/30 rounded-lg sm:rounded-xl flex items-center justify-center text-rose-400">
+                                                        <i class="fas fa-gas-pump text-[10px] sm:text-xs"></i>
                                                     </div>
-                                                    <div>
-                                                        <p class="text-xs font-bold text-rose-500 uppercase mb-0.5">Stok Pusat</p>
-                                                        <p class="text-[10px] font-bold text-slate-400 uppercase">SYSTEM</p>
+                                                    <div class="truncate">
+                                                        <p class="text-[10px] sm:text-xs font-bold text-rose-500 uppercase truncate mb-0.5">Stok Pusat</p>
+                                                        <p class="text-[8px] sm:text-[10px] font-bold text-slate-400 uppercase hidden sm:block">SYSTEM</p>
                                                     </div>
                                                 </div>
                                             @endif
                                         </td>
-                                        <td class="px-4 py-3 align-top">
-                                            <div class="flex items-center gap-2">
+                                        <td class="px-2 py-2 sm:px-4 sm:py-3 align-top max-w-[100px] sm:max-w-none truncate">
+                                            <div class="flex items-center gap-1.5 sm:gap-2">
                                                 @if($item->personel_id)
-                                                    <div class="w-9 h-9 bg-amber-500/20 border border-amber-500/30 rounded-xl flex items-center justify-center text-amber-400">
-                                                        <i class="fas fa-user-tag text-xs"></i>
+                                                    <div class="w-6 h-6 sm:w-9 sm:h-9 shrink-0 bg-amber-500/20 border border-amber-500/30 rounded-lg sm:rounded-xl flex items-center justify-center text-amber-400">
+                                                        <i class="fas fa-user-tag text-[10px] sm:text-xs"></i>
                                                     </div>
-                                                    <div>
-                                                        <p class="text-xs font-bold text-slate-200 whitespace-nowrap mb-0.5">{{ $item->personel->nama ?? '-' }}</p>
-                                                        <p class="text-[10px] font-bold text-slate-400 uppercase">PERSONEL</p>
+                                                    <div class="truncate">
+                                                        <p class="text-[10px] sm:text-xs font-bold text-slate-200 truncate mb-0.5" title="{{ $item->personel->nama ?? '-' }}">{{ $item->personel->nama ?? '-' }}</p>
+                                                        <p class="text-[8px] sm:text-[10px] font-bold text-slate-400 uppercase hidden sm:block">PERSONEL</p>
                                                     </div>
                                                 @elseif(isset($item->tujuan_kendaraan_id))
-                                                    <div class="w-9 h-9 bg-emerald-500/20 border border-emerald-500/30 rounded-xl flex items-center justify-center text-emerald-400">
-                                                        <i class="fas fa-car-side text-xs"></i>
+                                                    <div class="w-6 h-6 sm:w-9 sm:h-9 shrink-0 bg-emerald-500/20 border border-emerald-500/30 rounded-lg sm:rounded-xl flex items-center justify-center text-emerald-400">
+                                                        <i class="fas fa-car-side text-[10px] sm:text-xs"></i>
                                                     </div>
-                                                    <div>
-                                                        <p class="text-xs font-bold text-slate-200 whitespace-nowrap mb-0.5">{{ $item->tujuanKendaraan->no_polisi ?? '-' }}</p>
-                                                        <p class="text-[10px] font-bold text-slate-400 uppercase">KENDARAAN</p>
+                                                    <div class="truncate">
+                                                        <p class="text-[10px] sm:text-xs font-bold text-slate-200 truncate mb-0.5" title="{{ $item->tujuanKendaraan->no_polisi ?? '-' }}">{{ $item->tujuanKendaraan->no_polisi ?? '-' }}</p>
+                                                        <p class="text-[8px] sm:text-[10px] font-bold text-slate-400 uppercase hidden sm:block">KENDARAAN</p>
                                                     </div>
                                                 @else
                                                     -
                                                 @endif
                                             </div>
                                         </td>
-                                        <td class="px-4 py-3 text-center align-top">
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-indigo-500/20 border border-indigo-500/30 text-indigo-300">
+                                        <td class="px-2 py-2 sm:px-4 sm:py-3 text-center align-top">
+                                            <span class="inline-flex items-center px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded-full text-[10px] sm:text-xs font-bold bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 whitespace-nowrap">
                                                 {{ number_format($item->jumlah, 0, ',', '.') }} L
                                             </span>
                                         </td>
-                                        <td class="px-4 py-3 align-top">
+                                        <td class="px-4 py-3 align-top hidden md:table-cell">
                                             <p class="text-xs font-bold text-slate-400 line-clamp-1 italic">{{ $item->keterangan ?: '-' }}</p>
                                         </td>
                                     </tr>
