@@ -41,9 +41,7 @@
 
         .login-gradient {
             background-color: #0f172a;
-            background-image:
-                linear-gradient(135deg, rgba(15, 23, 42, 0.4) 0%, rgba(15, 23, 42, 0.3) 100%),
-                url('/polda.jpg');
+            background-image: url('/polda.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -51,12 +49,7 @@
         }
 
         .login-gradient::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(15, 23, 42, 0.7); /* Darker overlay without blur */
-            pointer-events: none;
-            z-index: 1;
+            display: none;
         }
 
         /* Custom Scrollbar */

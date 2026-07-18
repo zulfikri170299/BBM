@@ -160,7 +160,7 @@
     </div>
 
     {{-- Modal Edit --}}
-    <div id="editModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div id="editModal" class="fixed inset-0 z-[9999] hidden overflow-y-auto">
         <div class="flex items-center justify-center min-h-screen p-4 text-center sm:block sm:p-0">
             <div class="fixed inset-0 transition-opacity bg-slate-900/40 backdrop-blur-sm" onclick="closeEditModal()"></div>
             

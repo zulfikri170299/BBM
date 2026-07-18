@@ -511,6 +511,16 @@
                 Rekapan Pengisian
             </a>
 
+            <a href="{{ route('petugas.riwayat.index') }}"
+                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('petugas.riwayat.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                    </path>
+                </svg>
+                Riwayat BBM
+            </a>
+
             <a href="{{ route('petugas.sounding.index') }}"
                 class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('petugas.sounding.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
                 <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">

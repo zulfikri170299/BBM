@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-slate-950">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-slate-900">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -58,6 +58,7 @@
     @stack('head')
 
     <style>
+        .swal2-container { z-index: 99999 !important; }
         [x-cloak] { display: none !important; }
         @keyframes shimmerText {
             0% { background-position: -200% center; }
@@ -199,6 +200,17 @@
         .flatpickr-current-month .flatpickr-monthDropdown-months .flatpickr-monthDropdown-month {
             background-color: #0f172a !important;
         }
+        .flatpickr-months .flatpickr-prev-month,
+        .flatpickr-months .flatpickr-next-month {
+            color: #94a3b8 !important;
+            fill: #94a3b8 !important;
+            transition: all 0.2s ease;
+        }
+        .flatpickr-months .flatpickr-prev-month:hover,
+        .flatpickr-months .flatpickr-next-month:hover {
+            color: #fff !important;
+            fill: #fff !important;
+        }
         span.flatpickr-weekday {
             color: #94a3b8 !important;
         }
@@ -213,9 +225,9 @@
     @stack('styles')
 </head>
 
-<body class="h-full font-sans antialiased text-slate-200 overflow-hidden bg-slate-950 relative selection:bg-brand-primary/30 selection:text-white" x-data="{ sidebarOpen: false }" @sidebar-close.window="sidebarOpen = false" @sidebar-open.window="sidebarOpen = true">
+<body class="h-full font-sans antialiased text-slate-200 overflow-hidden bg-slate-900 relative selection:bg-brand-primary/30 selection:text-white" x-data="{ sidebarOpen: false }" @sidebar-close.window="sidebarOpen = false" @sidebar-open.window="sidebarOpen = true">
     <!-- Solid clean background instead of blur -->
-    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none bg-slate-950">
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none bg-slate-900">
     </div>
 
     <div class="flex h-full min-h-full">
@@ -314,7 +326,7 @@
             @endif
 
             <!-- Main Content Area -->
-            <main class="flex-1 overflow-y-auto content-animate custom-scrollbar relative z-0">
+            <main class="flex-1 overflow-y-auto content-animate custom-scrollbar">
                 {{ $slot }}
             </main>
         </div>
@@ -368,7 +380,7 @@
                         altFormat: "d F Y",
                         placeholder: "Tgl",
                         disableMobile: true,
-                        monthSelectorType: "static",
+                        monthSelectorType: "dropdown",
                         animate: true,
                         appendTo: document.body,
                         static: false,

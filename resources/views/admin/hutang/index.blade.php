@@ -378,8 +378,9 @@
         </div>
 
         <!-- Payment Modal -->
-        <div x-show="showModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;"
-            aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <template x-teleport="body">
+            <div x-show="showModal" class="fixed inset-0 z-[9999] overflow-y-auto" style="display: none;"
+                aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <div class="flex items-center justify-center min-h-screen p-4">
                 <div x-show="showModal" x-transition.opacity
                     class="fixed inset-0 bg-slate-900/60 transition-opacity backdrop-blur-sm" aria-hidden="true"
@@ -471,10 +472,12 @@
                 </div>
             </div>
         </div>
+        </template>
 
         <!-- Edit Modal -->
-        <div x-show="showEditModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;"
-            aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <template x-teleport="body">
+            <div x-show="showEditModal" class="fixed inset-0 z-[9999] overflow-y-auto" style="display: none;"
+                aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <div class="flex items-center justify-center min-h-screen p-4">
                 <div x-show="showEditModal" x-transition.opacity
                     class="fixed inset-0 bg-slate-900/60 transition-opacity backdrop-blur-sm" aria-hidden="true"
@@ -623,10 +626,12 @@
                 </div>
             </div>
         </div>
+        </template>
 
         <!-- Create Modal -->
-        <div x-show="showCreateModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;"
-            aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <template x-teleport="body">
+            <div x-show="showCreateModal" class="fixed inset-0 z-[9999] overflow-y-auto" style="display: none;"
+                aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <div class="flex items-center justify-center min-h-screen p-4">
                 <div x-show="showCreateModal" x-transition.opacity
                     class="fixed inset-0 bg-slate-900/60 transition-opacity backdrop-blur-sm" aria-hidden="true"
@@ -765,6 +770,7 @@
                 </div>
             </div>
         </div>
+        </template>
     </div>
 
     <script>

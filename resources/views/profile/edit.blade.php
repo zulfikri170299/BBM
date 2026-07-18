@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="p-3 sm:p-6 lg:p-8 space-y-4 sm:space-y-6">
+    <div class="p-2 sm:p-6 lg:p-8 space-y-4 sm:space-y-6">
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>

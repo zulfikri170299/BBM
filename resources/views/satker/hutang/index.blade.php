@@ -286,7 +286,8 @@
         </div>
 
         <!-- Payment Modal -->
-        <div x-show="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" x-cloak>
+        <div x-show="showModal" class="fixed inset-0 z-[9999] flex items-center justify-center p-4" x-cloak>
+    <template x-teleport="body">
             <!-- Backdrop -->
             <div x-show="showModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
                 x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
@@ -396,6 +397,7 @@
                     </div>
                 </div>
             </div>
+    </template>
         </div>
     </div>
 </x-app-layout>

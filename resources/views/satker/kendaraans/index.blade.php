@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="p-3 sm:p-6 lg:p-8 space-y-4 sm:space-y-6" x-data="{ 
+    <div class="p-2 sm:p-6 lg:p-8 space-y-4 sm:space-y-6" x-data="{ 
         showTransferModal: false, 
         showMonthlyReportModal: false,
         selectedBbm: '',
@@ -76,7 +76,7 @@
             </div>
             <div class="flex flex-wrap items-center gap-2 sm:gap-3">
                 <a href="{{ route('satker.kendaraans.export') }}"
-                        class="flex-1 lg:flex-none inline-flex items-center justify-center w-10 h-10 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 transition-all duration-200 hover:-translate-y-0.5 group relative"
+                        class="inline-flex items-center justify-center w-10 h-10 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 transition-all duration-200 hover:-translate-y-0.5 group relative"
                     title="Export Excel">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -192,7 +192,7 @@
 
         <!-- Table Card -->
         <div class="bg-slate-900 rounded-2xl border border-white/10 shadow-sm overflow-hidden">
-            <div class="px-4 sm:px-6 py-3 sm:py-4 border-b border-white/5 flex items-center justify-between">
+            <div class="hidden sm:flex px-4 sm:px-6 py-3 sm:py-4 border-b border-white/5 items-center justify-between">
                 <div class="flex items-center gap-2 sm:gap-3">
                     <div>
                         <h3 class="text-sm sm:text-base font-semibold text-slate-200">Daftar Kendaraan</h3>
@@ -234,10 +234,10 @@
                             <th colspan="9" class="px-4 py-3">
                                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                                     <form action="{{ route('satker.kendaraans.index') }}" method="GET"
-                                        class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
+                                        class="flex flex-row items-center gap-3 w-full sm:w-auto">
                                         <x-per-page :current="request('per_page', 10)" />
 
-                                        <div class="relative w-full sm:w-auto">
+                                        <div class="relative flex-1 sm:flex-none w-full sm:w-auto">
                                             <span
                                                 class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-slate-400">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
@@ -250,7 +250,7 @@
                                             </span>
                                             <input type="text" name="search" value="{{ request('search') }}"
                                                 placeholder="Cari nopol, jenis..."
-                                                class="block w-full sm:w-48 pl-8 pr-3 py-1.5 border border-white/10 rounded-lg text-xs placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                                                class="block w-full sm:w-48 pl-8 pr-3 py-1.5 bg-transparent border border-white/10 rounded-lg text-xs placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
                                         </div>
 
                                         @if(request('search'))
@@ -277,22 +277,22 @@
                                 class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider w-12">
                                 No</th>
                             <th
-                                class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
-                                Jenis Kendaraan</th>
+                                class="px-2 sm:px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
+                                Kendaraan</th>
                             <th
                                 class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
                                 Nopol</th>
                             <th
-                                class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
+                                class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider hidden lg:table-cell">
                                 Roda</th>
                             <th
-                                class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
+                                class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider hidden lg:table-cell">
                                 Jenis BBM</th>
                             <th
-                                class="px-4 py-3 text-right text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
+                                class="px-4 py-3 text-right text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider hidden lg:table-cell">
                                 Saldo</th>
                             <th
-                                class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
+                                class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider hidden lg:table-cell">
                                 PIN</th>
                             <th
                                 class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
@@ -310,19 +310,19 @@
                                     <span
                                         class="text-xs font-semibold text-slate-400">{{ $loop->iteration + ($kendaraans->currentPage() - 1) * $kendaraans->perPage() }}</span>
                                 </td>
-                                <td class="px-4 py-3">
+                                <td class="px-2 sm:px-4 py-3 max-w-[55px] sm:max-w-none whitespace-normal break-words">
                                     <span
-                                        class="text-xs font-semibold text-slate-200">{{ $kendaraan->jenis_kendaraan }}</span>
+                                        class="text-[11px] sm:text-xs font-semibold text-slate-200 leading-tight">{{ $kendaraan->jenis_kendaraan }}</span>
                                 </td>
                                 <td class="px-4 py-3">
                                     <span class="text-xs font-bold text-slate-200">{{ $kendaraan->no_polisi }}</span>
                                 </td>
-                                <td class="px-4 py-3 text-center">
+                                <td class="px-4 py-3 text-center hidden lg:table-cell">
                                     <span class="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-lg text-[10px] font-bold bg-slate-800 border border-white/5 text-slate-300">
                                         {{ $kendaraan->roda ?? '-' }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-3">
+                                <td class="px-4 py-3 hidden lg:table-cell">
                                     @php
                                         $bbmColors = [
                                             'Pertamax' => 'bg-blue-100 text-blue-700',
@@ -335,7 +335,7 @@
                                         {{ $kendaraan->jenis_bbm }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-3 text-right">
+                                <td class="px-4 py-3 text-right hidden lg:table-cell">
                                     <span
                                         class="text-xs font-bold whitespace-nowrap {{ $kendaraan->saldo < 10 ? 'text-red-600' : 'text-slate-200' }}">
                                         {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
@@ -344,12 +344,12 @@
                                         <span class="block text-xs text-red-500 font-medium mt-0.5">Saldo rendah</span>
                                     @endif
                                 </td>
-                                <td class="px-4 py-3 text-center">
+                                <td class="px-4 py-3 text-center hidden lg:table-cell">
                                     <code
                                         class="px-2.5 py-1 bg-amber-50 text-amber-700 rounded-lg text-xs font-mono font-bold tracking-widest">{{ $kendaraan->pin }}</code>
                                 </td>
                                 <td class="px-4 py-3 text-center">
-                                    <div class="flex items-center justify-center gap-2">
+                                    <div class="hidden lg:flex items-center justify-center gap-2">
                                         <a href="{{ route('satker.kendaraans.print', $kendaraan) }}"
 
                                             class="p-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-600 hover:text-indigo-700 rounded-lg transition-colors group"
@@ -370,6 +370,7 @@
                                                     </path>
                                                 </svg>
                                             </a>
+                                        @endif
                                             <form action="{{ route('satker.kendaraans.reset-pin', $kendaraan) }}"
                                                 method="POST">
                                                 @csrf
@@ -387,7 +388,72 @@
                                                     </svg>
                                                 </button>
                                             </form>
-                                        @endif
+                                    </div>
+                                    <!-- Mobile detail button/modal start -->
+                                    <div x-data="{ showDetail: false }" class="lg:hidden flex justify-end">
+                                        <button type="button" @click="showDetail = true" class="inline-flex items-center p-2 bg-indigo-600/10 text-indigo-400 rounded-lg border border-indigo-600/20 shadow-sm" title="Lihat Detail">
+                                            <svg class="w-5 h-5 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                            </svg>
+                                        </button>
+                                        
+                                        <template x-teleport="body">
+                                            <div x-show="showDetail" class="fixed inset-0 z-[9000] flex items-end sm:items-center justify-center p-4" style="display: none;">
+                                                <div x-show="showDetail" x-transition.opacity @click="showDetail = false" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm"></div>
+                                                <div x-show="showDetail" x-transition.translate.y @click.outside="showDetail = false" class="relative w-full max-w-sm bg-slate-900 border border-white/10 rounded-2xl shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
+                                                    <div class="p-4 border-b border-white/10 flex justify-between items-center bg-slate-800/50">
+                                                        <div class="text-left">
+                                                            <h3 class="text-white font-bold text-lg leading-tight">{{ $kendaraan->no_polisi }}</h3>
+                                                            <p class="text-slate-400 text-xs">{{ $kendaraan->jenis_kendaraan }}</p>
+                                                        </div>
+                                                        <button type="button" @click="showDetail = false" class="p-2 bg-slate-800 text-slate-400 hover:text-white rounded-xl border border-white/5 shadow-sm">
+                                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                        </button>
+                                                    </div>
+                                                    <div class="p-4 overflow-y-auto w-full custom-scrollbar text-left text-sm space-y-4">
+                                                        <div class="grid grid-cols-2 gap-4">
+                                                            <div>
+                                                                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Roda</span>
+                                                                <span class="font-bold text-white">{{ $kendaraan->roda ?? '-' }}</span>
+                                                            </div>
+                                                            <div>
+                                                                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Jenis BBM</span>
+                                                                <span class="font-bold text-white">{{ $kendaraan->jenis_bbm }}</span>
+                                                            </div>
+                                                            <div>
+                                                                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Saldo</span>
+                                                                <span class="font-bold text-emerald-400">{{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} L</span>
+                                                            </div>
+                                                            <div>
+                                                                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">PIN</span>
+                                                                <code class="bg-amber-400/20 text-amber-500 px-2 py-0.5 rounded font-bold">{{ $kendaraan->pin }}</code>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="pt-4 border-t border-white/10 flex flex-col gap-2">
+                                                            <a href="{{ route('satker.kendaraans.print', $kendaraan) }}" class="flex items-center gap-3 w-full p-3 bg-slate-800 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700 transition">
+                                                                <div class="p-1.5 bg-blue-500/20 text-blue-400 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg></div>
+                                                                <span class="font-semibold text-xs">Print Barcode</span>
+                                                            </a>
+                                                            @if(\App\Models\Setting::where('key', 'satker_can_edit_kendaraan')->value('value') ?? 1)
+                                                                <a href="{{ route('satker.kendaraans.edit', $kendaraan) }}" class="flex items-center gap-3 w-full p-3 bg-slate-800 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700 transition">
+                                                                    <div class="p-1.5 bg-amber-500/20 text-amber-400 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></div>
+                                                                    <span class="font-semibold text-xs">Edit Kendaraan</span>
+                                                                </a>
+                                                            @endif
+                                                            <form action="{{ route('satker.kendaraans.reset-pin', $kendaraan) }}" method="POST" class="w-full">
+                                                                @csrf
+                                                                <button type="submit" data-confirm="Apakah Anda yakin ingin mereset PIN kendaraan ini?" data-confirm-type="warning" class="flex items-center gap-3 w-full p-3 bg-slate-800 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700 transition text-left">
+                                                                    <div class="p-1.5 bg-red-500/20 text-red-400 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg></div>
+                                                                    <span class="font-semibold text-xs">Reset PIN</span>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
                                     </div>
                                 </td>
                             </tr>
@@ -424,9 +490,10 @@
         </div>
 
         <!-- Transfer Modal -->
-        <div x-show="showTransferModal" x-cloak style="display: none;" class="fixed inset-0 z-50 overflow-y-auto"
+        <div x-show="showTransferModal" x-cloak style="display: none;" class="fixed inset-0 z-[9999] overflow-y-auto"
             aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <div class="flex items-center justify-center min-h-screen px-4 py-6">
+    <template x-teleport="body">
                 <!-- Backdrop -->
                 <div x-show="showTransferModal" x-transition:enter="ease-out duration-300"
                     x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
@@ -789,12 +856,14 @@
                         </div>
                     </form>
                 </div>
+    </template>
             </div>
         </div>
         <!-- Monthly Report Modal -->
-        <div x-show="showMonthlyReportModal" x-cloak style="display: none;" class="fixed inset-0 z-50 overflow-y-auto"
+        <div x-show="showMonthlyReportModal" x-cloak style="display: none;" class="fixed inset-0 z-[9999] overflow-y-auto"
             aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <div class="flex items-center justify-center min-h-screen px-4 py-6">
+    <template x-teleport="body">
                 <!-- Backdrop -->
                 <div x-show="showMonthlyReportModal" x-transition:enter="ease-out duration-300"
                     x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
@@ -877,6 +946,7 @@
                         </div>
                     </form>
                 </div>
+    </template>
             </div>
         </div>
 
@@ -884,11 +954,12 @@
         @if((\App\Models\Setting::where('key', 'satker_can_import_kendaraan')->value('value') ?? '1') == '1')
             <div x-cloak x-data="importKendaraanModal()" @open-import-kendaraan.window="openModal()"
                 @turbo:before-cache.window="showModal = false">
+    <template x-teleport="body">
                 <!-- Backdrop -->
                 <div x-show="showModal" style="display: none;" x-transition:enter="transition ease-out duration-200"
                     x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                     x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50"
+                    x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[9999]"
                     @click="closeModal()"></div>
 
                 <!-- Modal -->
@@ -898,7 +969,7 @@
                     x-transition:leave="transition ease-in duration-200"
                     x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                     x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-                    class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4" @click.self="closeModal()">
+                    class="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4" @click.self="closeModal()">
                     <div class="bg-slate-900 border border-white/5 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden"
                         @click.stop>
                         <!-- Modal Header -->
@@ -1348,6 +1419,7 @@
                         </div>
                     </div>
                 </div>
+    </template>
             </div>
 
             <script>

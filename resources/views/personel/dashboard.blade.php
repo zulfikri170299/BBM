@@ -229,7 +229,7 @@
         </style>
     @endpush
 
-    <div class="p-3 sm:p-6 lg:p-8 space-y-4 sm:space-y-8">
+    <div class="p-2 sm:p-6 lg:p-8 space-y-4 sm:space-y-8">
         <!-- Page Title -->
         <div>
             <h1 class="text-xl sm:text-3xl font-bold text-white">Dashboard</h1>

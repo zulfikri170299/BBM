@@ -307,6 +307,10 @@ Route::middleware(['auth', 'role:petugas_bbm'])->prefix('petugas')->name('petuga
     Route::get('/rekapan/print', [\App\Http\Controllers\Petugas\RekapanController::class, 'print'])->name('rekapan.print');
     Route::get('/rekapan', [\App\Http\Controllers\Petugas\RekapanController::class, 'index'])->name('rekapan.index');
 
+    // Riwayat BBM
+    Route::get('/riwayat/print', [\App\Http\Controllers\Petugas\RiwayatController::class, 'print'])->name('riwayat.print');
+    Route::get('/riwayat', [\App\Http\Controllers\Petugas\RiwayatController::class, 'index'])->name('riwayat.index');
+
     // Hutang
     Route::get('hutang/get-kendaraan', [\App\Http\Controllers\Petugas\HutangController::class, 'getKendaraan'])->name('hutang.get-kendaraan');
     Route::resource('hutang', \App\Http\Controllers\Petugas\HutangController::class)->only(['index', 'store']);

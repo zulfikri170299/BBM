@@ -174,7 +174,7 @@
 
         <!-- Modal Edit PIN -->
         <div x-show="showModal" 
-             class="fixed inset-0 z-[100] overflow-y-auto" 
+             class="fixed inset-0 z-[9999] overflow-y-auto" 
              x-cloak
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0"

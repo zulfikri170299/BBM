@@ -6,7 +6,7 @@
                 <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight">Riwayat Pengisian BBM</h1>
                 <p class="mt-1 text-xs sm:text-sm font-medium text-slate-400">Histori pengisian BBM seluruh kendaraan dari semua Satuan Kerja.</p>
             </div>
-            <a href="{{ route('admin.riwayat.print', request()->all()) }}" target="_blank"
+            <a href="{{ route('petugas.riwayat.print', request()->all()) }}" target="_blank"
                 class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2.5 bg-rose-600 text-white rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-rose-700 shadow-lg shadow-rose-500/30 transition-all active:scale-95 gap-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
@@ -55,7 +55,7 @@
 
         <!-- Filter -->
         <div class="bg-slate-900 border border-white/5 rounded-2xl border border-white/10 shadow-sm p-4 sm:p-5">
-            <form method="GET" action="{{ route('admin.riwayat.index') }}" class="space-y-4">
+            <form method="GET" action="{{ route('petugas.riwayat.index') }}" class="space-y-4">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                     <div>
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Dari Tanggal</label>
@@ -92,7 +92,7 @@
                             </svg>
                             Filter
                         </button>
-                        <a href="{{ route('admin.riwayat.index') }}"
+                        <a href="{{ route('petugas.riwayat.index') }}"
                             class="flex-1 h-11 bg-slate-800 text-slate-400 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-200 transition-all active:scale-95 flex items-center justify-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -172,7 +172,7 @@
                         <tr class="bg-slate-800/50 border-b border-white/5">
                             <th colspan="8" class="px-4 py-3">
                                 <div class="flex items-center justify-between">
-                                    <form action="{{ route('admin.riwayat.index') }}" method="GET"
+                                    <form action="{{ route('petugas.riwayat.index') }}" method="GET"
                                         class="flex items-center">
                                         <x-per-page :current="request('per_page', 15)" />
                                     </form>
@@ -209,9 +209,6 @@
                             <th
                                 class="px-4 py-3 text-right text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
                                 Jumlah Liter</th>
-                            <th
-                                class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
-                                Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-white/5">
@@ -289,31 +286,6 @@
                                         {{ $isPotong ? '-' : '' }}{{ number_format($trx->liter, 0, ',', '.') }} L
                                     </span>
                                 </td>
-                                <td class="px-4 py-3 text-center">
-                                    @if(!$isPotong)
-                                        <form id="delete-form-{{ $trx->id }}"
-                                            action="{{ route('admin.riwayat.destroy', $trx->id) }}" method="POST"
-                                            class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <input type="hidden" name="topup_password_confirm" id="pwd-{{ $trx->id }}">
-                                            <button type="button"
-                                                class="text-rose-500 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 p-2 rounded-lg transition-colors"
-                                                onclick="confirmDelete('{{ $trx->id }}', '{{ number_format($trx->liter, 0, ',', '.') }}')"
-                                                title="Batalkan Transaksi">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"
-                                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <path d="M3 6h18"></path>
-                                                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                                                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                                                </svg>
-                                            </button>
-                                        </form>
-                                    @else
-                                        <span class="text-xs text-slate-400 font-medium italic">Fixed</span>
-                                    @endif
-                                </td>
                             </tr>
                         @empty
                             <tr>
@@ -345,7 +317,6 @@
                                     {{ number_format($stats['total_liter'], 0, ',', '.') }} L
                                 </span>
                             </th>
-                            <th></th>
                         </tr>
                     </tfoot>
                 </table>
@@ -360,37 +331,5 @@
 
     </div>
     @push('scripts')
-        <script>
-            function confirmDelete(transaksiId, liter) {
-                Swal.fire({
-                    title: 'Batalkan Transaksi?',
-                    html: 'Saldo sebesar <b>' + liter + ' Liter</b> akan dikembalikan secara otomatis.<br><br>Masukkan PIN Top Up Anda untuk melanjutkan:',
-                    icon: 'warning',
-                    input: 'password',
-                    inputAttributes: {
-                        autocapitalize: 'off',
-                        placeholder: 'Masukkan 6 digit PIN'
-                    },
-                    showCancelButton: true,
-                    confirmButtonColor: '#ef4444',
-                    cancelButtonColor: '#64748b',
-                    confirmButtonText: 'Ya, Batalkan!',
-                    cancelButtonText: 'Batal',
-                    preConfirm: (password) => {
-                        if (!password) {
-                            Swal.showValidationMessage('PIN Top Up wajib diisi')
-                        }
-                        return password
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Set the hidden input value
-                        document.getElementById('pwd-' + transaksiId).value = result.value;
-                        // Submit the form
-                        document.getElementById('delete-form-' + transaksiId).submit();
-                    }
-                })
-            }
-        </script>
     @endpush
 </x-app-layout>

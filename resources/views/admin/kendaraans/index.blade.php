@@ -143,7 +143,7 @@
         <!-- Table Card -->
         <div class="bg-slate-900 rounded-2xl border border-white/10 shadow-sm overflow-hidden">
             <!-- Table Header Info -->
-            <div class="px-4 sm:px-6 py-4 border-b border-white/5 flex items-center justify-between">
+            <div class="hidden sm:flex px-4 sm:px-6 py-4 border-b border-white/5 items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="p-2 bg-blue-100 text-blue-600 rounded-lg">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -404,7 +404,7 @@
                                         </button>
                                         
                                         <template x-teleport="body">
-                                            <div x-show="showDetail" class="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center p-4" style="display: none;">
+                                            <div x-show="showDetail" class="fixed inset-0 z-[9000] flex items-end sm:items-center justify-center p-4" style="display: none;">
                                                 <div x-show="showDetail" x-transition.opacity @click="showDetail = false" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm"></div>
                                                 <div x-show="showDetail" x-transition.translate.y @click.outside="showDetail = false" class="relative w-full max-w-sm bg-slate-900 border border-white/10 rounded-2xl shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
                                                     <div class="p-4 border-b border-white/10 flex justify-between items-center bg-slate-800/50">
@@ -626,11 +626,12 @@
             @open-topup.window="topupId = $event.detail.id; topupNopol = $event.detail.nopol; topupSaldo = $event.detail.saldo; jumlah = ''; topupPassword = ''; selectMode = false; showTopup = true"
             @open-topup-select.window="topupId = null; topupNopol = ''; topupSaldo = ''; jumlah = ''; topupPassword = ''; selectMode = true; showTopup = true"
             @turbo:before-cache.window="showTopup = false">
+    <template x-teleport="body">
             <!-- Backdrop -->
             <div x-show="showTopup" style="display: none;" x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                 x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50"
+                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[9999]"
                 @click="showTopup = false"></div>
 
             <!-- Modal -->
@@ -640,7 +641,7 @@
                 x-transition:leave="transition ease-in duration-200"
                 x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                 x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-                class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4" @click.self="showTopup = false">
+                class="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4" @click.self="showTopup = false">
                 <div class="bg-slate-900 border border-white/5 rounded-2xl shadow-2xl w-full max-w-lg max-h-[95vh] flex flex-col overflow-hidden"
                     @click.stop>
                     <!-- Modal Header -->
@@ -905,6 +906,7 @@
                     </form>
                 </div>
             </div>
+    </template>
 
             <!-- Potong Saldo Modal -->
             <div x-cloak x-show="showPotong" style="display: none;" x-transition:enter="transition ease-out duration-300"
@@ -913,7 +915,7 @@
                 x-transition:leave="transition ease-in duration-200"
                 x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                 x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-                class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4" @click.self="reset()">
+                class="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4" @click.self="reset()">
                 <div class="bg-slate-900 border border-white/5 rounded-2xl shadow-2xl w-full max-w-lg max-h-[95vh] flex flex-col overflow-hidden"
                     @click.stop>
                     <!-- Modal Header -->
@@ -1103,11 +1105,12 @@
             }
         }" @open-import.window="showImport = true"
             @turbo:before-cache.window="showImport = false">
+    <template x-teleport="body">
             <!-- Backdrop -->
             <div x-show="showImport" style="display: none;" x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                 x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50"
+                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[9999]"
                 @click="showImport = false"></div>
 
             <!-- Modal -->
@@ -1117,7 +1120,7 @@
                 x-transition:leave="transition ease-in duration-200"
                 x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                 x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-                class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4" @click.self="showImport = false">
+                class="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4" @click.self="showImport = false">
                 <div class="bg-slate-900 border border-white/5 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden"
                     @click.stop>
                     <!-- Modal Header -->
@@ -1300,6 +1303,7 @@
                     </form>
                 </div>
             </div>
+    </template>
         </div>
     @endif
 
@@ -1307,11 +1311,12 @@
     @if(auth()->user()->role === 'super_admin')
         <div x-cloak x-data="importKendaraanModal()" @open-import-kendaraan.window="openModal()"
             @turbo:before-cache.window="showModal = false">
+    <template x-teleport="body">
             <!-- Backdrop -->
             <div x-show="showModal" style="display: none;" x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                 x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50"
+                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[9999]"
                 @click="closeModal()"></div>
 
             <!-- Modal -->
@@ -1321,7 +1326,7 @@
                 x-transition:leave="transition ease-in duration-200"
                 x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                 x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-                class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4" @click.self="closeModal()">
+                class="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4" @click.self="closeModal()">
                 <div class="bg-slate-900 border border-white/5 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden"
                     @click.stop>
                     <!-- Modal Header -->
@@ -1780,6 +1785,7 @@
                     </div>
                 </div>
             </div>
+    </template>
         </div>
 
         <script>
@@ -1944,11 +1950,12 @@
     <div x-cloak
         x-data="{ showMonthlyReport: false, satkerId: '', bulan: '{{ now()->month }}', tahun: '{{ now()->year }}' }"
         @open-monthly-report.window="showMonthlyReport = true" @turbo:before-cache.window="showMonthlyReport = false">
+    <template x-teleport="body">
         <!-- Backdrop -->
         <div x-show="showMonthlyReport" style="display: none;" x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
             x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-            x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50"
+            x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[9999]"
             @click="showMonthlyReport = false"></div>
 
         <!-- Modal -->
@@ -1958,7 +1965,7 @@
             x-transition:leave="transition ease-in duration-200"
             x-transition:leave-start="opacity-100 scale-100 translate-y-0"
             x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-            class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showMonthlyReport = false">
+            class="fixed inset-0 z-[9999] flex items-center justify-center p-4" @click.self="showMonthlyReport = false">
             <div class="bg-slate-900 border border-white/5 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden" @click.stop>
                 <!-- Modal Header -->
                 <div class="px-6 py-5 bg-gradient-to-r from-rose-500 to-rose-600">
@@ -2035,6 +2042,7 @@
                 </form>
             </div>
         </div>
+    </template>
     </div>
 
     @push('scripts')
@@ -2129,136 +2137,136 @@
             @open-transfer.window="transferId = $event.detail.id; transferNopol = $event.detail.nopol; currentSatker = $event.detail.current_satker; showTransfer = true"
             @turbo:before-cache.window="showTransfer = false">
 
-            <div x-show="showTransfer" style="display: none;" x-transition:enter="transition ease-out duration-200"
-                x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50" @click="reset()"></div>
+            <template x-teleport="body">
+                <div x-show="showTransfer" style="display: none;" class="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4">
+                    <div x-show="showTransfer" x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                        class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm" @click="reset()"></div>
 
-            <div x-show="showTransfer" style="display: none;" x-transition:enter="transition ease-out duration-300"
-                x-transition:enter-start="opacity-0 scale-95 translate-y-4"
-                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4">
-                <div class="bg-slate-900 border border-white/5 rounded-2xl shadow-2xl w-full max-w-md flex flex-col max-h-[90vh]" @click.stop>
-                    <div class="px-6 py-5 bg-gradient-to-r from-violet-600 to-indigo-600 shrink-0 rounded-t-2xl">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-3">
-                                <div class="p-2 bg-slate-900 border border-white/5/20 rounded-xl text-white">
+                    <div x-show="showTransfer" x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+                        x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                        class="relative bg-slate-900 border border-white/5 rounded-2xl shadow-2xl w-full max-w-md flex flex-col max-h-[90vh] overflow-hidden" @click.stop>
+                        <div class="px-6 py-5 bg-gradient-to-r from-violet-600 to-indigo-600 shrink-0">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-2 bg-slate-900 border border-white/5/20 rounded-xl text-white">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-bold text-white">Pindah Satker</h3>
+                                        <p class="text-sm text-violet-100" x-text="transferNopol"></p>
+                                    </div>
+                                </div>
+                                <button @click="reset()" class="text-white/70 hover:text-white transition">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+                                            d="M6 18L18 6M6 6l12 12"></path>
                                     </svg>
-                                </div>
-                                <div>
-                                    <h3 class="text-lg font-bold text-white">Pindah Satker</h3>
-                                    <p class="text-sm text-violet-100" x-text="transferNopol"></p>
-                                </div>
+                                </button>
                             </div>
-                            <button @click="reset()" class="text-white/70 hover:text-white transition">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                            </button>
                         </div>
-                    </div>
 
-                    <form action="{{ route('admin.kendaraans.transfer') }}" method="POST"
-                        class="flex flex-col flex-1 overflow-hidden">
-                        @csrf
-                        <input type="hidden" name="kendaraan_id" :value="transferId">
+                        <form action="{{ route('admin.kendaraans.transfer') }}" method="POST"
+                            class="flex flex-col flex-1 overflow-hidden">
+                            @csrf
+                            <input type="hidden" name="kendaraan_id" :value="transferId">
 
-                        <div class="p-6 space-y-6 overflow-y-auto flex-1">
-                            <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl space-y-2">
-                                <div
-                                    class="flex items-center gap-2 text-amber-700 font-bold text-sm uppercase tracking-wider">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
-                                        </path>
-                                    </svg>
-                                    Penting
-                                </div>
-                                <p class="text-xs text-amber-600 leading-relaxed font-medium">
-                                    Memindahkan kendaraan akan secara otomatis:
-                                <ul class="list-disc list-inside mt-1 ml-1">
-                                    <li>Mereset PIN kendaraan</li>
-                                    <li>Memindahkan seluruh saldo ke Satker baru</li>
-                                    <li>Mencatat riwayat keluar di Satker asal</li>
-                                    <li>Mencatat riwayat masuk di Satker tujuan</li>
-                                </ul>
-                                </p>
-                            </div>
-
-                            <div class="space-y-4">
-                                <div>
-                                    <label
-                                        class="block text-xs font-bold text-slate-400 uppercase mb-2 tracking-wider">Satker
-                                        Saat Ini</label>
-                                    <div class="px-4 py-3 bg-slate-800/50 border border-white/10 rounded-xl text-slate-300 font-semibold italic"
-                                        x-text="currentSatker"></div>
+                            <div class="p-6 space-y-6 overflow-y-auto flex-1">
+                                <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl space-y-2">
+                                    <div
+                                        class="flex items-center gap-2 text-amber-700 font-bold text-sm uppercase tracking-wider">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                                            </path>
+                                        </svg>
+                                        Penting
+                                    </div>
+                                    <div class="text-xs text-amber-600 leading-relaxed font-medium">
+                                        Memindahkan kendaraan akan secara otomatis:
+                                        <ul class="list-disc list-inside mt-1 ml-1">
+                                            <li>Mereset PIN kendaraan</li>
+                                            <li>Memindahkan seluruh saldo ke Satker baru</li>
+                                            <li>Mencatat riwayat keluar di Satker asal</li>
+                                            <li>Mencatat riwayat masuk di Satker tujuan</li>
+                                        </ul>
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <label
-                                        class="block text-xs font-bold text-slate-400 uppercase mb-2 tracking-wider">Pilih
-                                        Satker Tujuan</label>
-                                    <div class="relative" @click.outside="satkerOpen = false">
-                                        <div @click="satkerOpen = !satkerOpen; $nextTick(() => { if(satkerOpen) $refs.transferSatkerInput.focus() })"
-                                            class="w-full px-4 py-3 bg-slate-900 border-2 border-white/10 rounded-xl text-xs font-medium text-slate-200 flex items-center justify-between cursor-pointer transition-all"
-                                            :class="satkerOpen ? 'border-violet-500 ring-4 ring-violet-500/10' : ''">
-                                            <span x-text="satkerLabel || '-- Pilih Satker Tujuan --'"
-                                                :class="satkerLabel ? 'text-slate-200' : 'text-slate-400'"></span>
-                                            <input type="hidden" name="satker_id" :value="selectedSatkerId">
-                                            <svg class="w-5 h-5 text-slate-400 transition-transform"
-                                                :class="satkerOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M19 9l-7 7-7-7"></path>
-                                            </svg>
-                                        </div>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label
+                                            class="block text-xs font-bold text-slate-400 uppercase mb-2 tracking-wider">Satker Saat Ini</label>
+                                        <div class="px-4 py-3 bg-slate-800/50 border border-white/10 rounded-xl text-slate-300 font-semibold italic"
+                                            x-text="currentSatker"></div>
+                                    </div>
 
-                                        <div x-show="satkerOpen" style="display:none;" x-transition
-                                            class="absolute z-50 mt-1 w-full bg-slate-900 border border-white/5 border border-white/10 rounded-xl shadow-xl overflow-hidden">
-                                            <div class="p-2 border-b border-white/5">
-                                                <input x-ref="transferSatkerInput" x-model="satkerSearch" type="text"
-                                                    placeholder="Cari Satker..."
-                                                    class="w-full px-3 py-2 text-sm border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 border-none bg-slate-800/50">
+                                    <div>
+                                        <label
+                                            class="block text-xs font-bold text-slate-400 uppercase mb-2 tracking-wider">Pilih Satker Tujuan</label>
+                                        <div class="relative" @click.outside="satkerOpen = false">
+                                            <div @click="satkerOpen = !satkerOpen; $nextTick(() => { if(satkerOpen) $refs.transferSatkerInput.focus() })"
+                                                class="w-full px-4 py-3 bg-slate-900 border-2 rounded-xl text-xs font-medium flex items-center justify-between cursor-pointer transition-all"
+                                                :class="satkerOpen ? 'border-violet-500 ring-4 ring-violet-500/10 text-slate-200' : 'border-white/10 text-slate-300 hover:border-violet-300/50'">
+                                                <span x-text="satkerLabel || '-- Pilih Satker Tujuan --'"
+                                                    :class="satkerLabel ? 'text-slate-200' : 'text-slate-400'"></span>
+                                                <input type="hidden" name="satker_id" :value="selectedSatkerId">
+                                                <svg class="w-5 h-5 text-slate-400 transition-transform"
+                                                    :class="satkerOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M19 9l-7 7-7-7"></path>
+                                                </svg>
                                             </div>
-                                            <div class="max-h-48 overflow-y-auto py-1">
-                                                <template x-for="s in filteredSatkers" :key="s.id">
-                                                    <div @click="selectSatker(s)"
-                                                        class="px-4 py-2.5 text-xs text-slate-300 hover:bg-violet-50 cursor-pointer flex items-center justify-between transition-colors"
-                                                        :class="selectedSatkerId == s.id ? 'bg-violet-50 text-violet-700 font-bold' : ''">
-                                                        <span x-text="s.nama"></span>
-                                                        <svg x-show="selectedSatkerId == s.id"
-                                                            class="w-4 h-4 text-violet-500" fill="currentColor"
-                                                            viewBox="0 0 20 20">
-                                                            <path fill-rule="evenodd"
-                                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                                clip-rule="evenodd"></path>
-                                                        </svg>
-                                                    </div>
-                                                </template>
+
+                                            <div x-show="satkerOpen" style="display:none;" x-transition
+                                                class="absolute z-50 mt-1 w-full bg-slate-900 border border-white/10 rounded-xl shadow-xl overflow-hidden">
+                                                <div class="p-2 border-b border-white/5 bg-slate-800/50">
+                                                    <input x-ref="transferSatkerInput" x-model="satkerSearch" type="text"
+                                                        placeholder="Cari Satker..."
+                                                        class="w-full px-3 py-2 text-sm border-none rounded-lg focus:outline-none focus:ring-0 bg-slate-900 text-slate-200">
+                                                </div>
+                                                <div class="max-h-48 overflow-y-auto py-1">
+                                                    <template x-for="s in filteredSatkers" :key="s.id">
+                                                        <div @click="selectSatker(s)"
+                                                            class="px-4 py-2.5 text-xs text-slate-300 hover:bg-violet-900/30 cursor-pointer flex items-center justify-between transition-colors"
+                                                            :class="selectedSatkerId == s.id ? 'bg-violet-900/50 text-violet-300 font-bold' : ''">
+                                                            <span x-text="s.nama"></span>
+                                                            <svg x-show="selectedSatkerId == s.id"
+                                                                class="w-4 h-4 text-violet-500" fill="currentColor"
+                                                                viewBox="0 0 20 20">
+                                                                <path fill-rule="evenodd"
+                                                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                                    clip-rule="evenodd"></path>
+                                                            </svg>
+                                                        </div>
+                                                    </template>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div
-                            class="px-4 sm:px-6 py-4 bg-slate-800/50 border-t border-white/5 flex items-center gap-3 shrink-0 rounded-b-2xl">
-                            <button type="button" @click="reset()"
-                                class="flex-1 px-4 py-2.5 bg-slate-900 border border-white/5 text-slate-300 font-bold rounded-xl border border-white/10 hover:bg-slate-800/50 transition">
-                                Batal
-                            </button>
-                            <button type="submit" :disabled="!selectedSatkerId"
-                                class="flex-[2] px-4 py-2.5 bg-violet-600 text-white font-bold rounded-xl hover:bg-violet-700 transition shadow-lg shadow-violet-500/30 disabled:opacity-50 disabled:shadow-none">
-                                Pindahkan Sekarang
-                            </button>
-                        </div>
-                    </form>
+                            <div
+                                class="px-4 sm:px-6 py-4 bg-slate-800/50 border-t border-white/5 flex items-center gap-3 shrink-0">
+                                <button type="button" @click="reset()"
+                                    class="flex-1 px-4 py-2.5 bg-slate-900 border border-white/10 text-slate-300 font-bold rounded-xl hover:bg-slate-800 transition">
+                                    Batal
+                                </button>
+                                <button type="submit" :disabled="!selectedSatkerId"
+                                    class="flex-[2] px-4 py-2.5 bg-violet-600 text-white font-bold rounded-xl hover:bg-violet-700 transition shadow-lg shadow-violet-500/30 disabled:opacity-50 disabled:shadow-none">
+                                    Pindahkan Sekarang
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
+            </template>
         </div>
     @endif
 
@@ -2290,76 +2298,79 @@
     @open-potong-saldo.window="id = $event.detail.id; nopol = $event.detail.nopol; saldo = $event.detail.saldo; show = true"
     @turbo:before-cache.window="show = false">
 
-    <!-- Backdrop -->
-    <div x-show="show" style="display: none;"
-        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50"></div>
+    <template x-teleport="body">
+        <div x-show="show" style="display: none;" class="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+            <!-- Backdrop -->
+            <div x-show="show" x-transition.opacity @click="show = false"
+                class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm"></div>
 
-    <!-- Modal -->
-    <div x-show="show" style="display: none;"
-        class="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-white/5 rounded-2xl shadow-xl w-full max-w-md mx-auto flex flex-col overflow-hidden" @click.stop>
-            <!-- Header -->
-            <div class="px-4 sm:px-6 py-4 bg-rose-600">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-lg font-bold text-white">Potong Saldo Kendaraan</h3>
-                    <button @click="reset()" class="text-white/70 hover:text-white">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                    </button>
-                </div>
-                <p class="text-rose-100 text-sm mt-1" x-text="nopol"></p>
-            </div>
-
-            <!-- Form -->
-            <form :action="'{{ route('admin.kendaraans.index') }}/' + id + '/potong-saldo'" method="POST" class="p-6 space-y-4">
-                @csrf
-                <!-- Info Saldo -->
-                <div class="flex items-center justify-between p-3 bg-rose-50 border border-rose-100 rounded-xl">
-                    <span class="text-xs font-bold text-rose-600 uppercase">Saldo Saat Ini</span>
-                    <span class="text-lg font-black text-rose-700 font-mono" x-text="saldo + ' L'"></span>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wide">Jumlah Potongan (Liter)</label>
-                    <input type="number" name="jumlah" x-model="jumlah" step="1" min="1" :max="saldo" required
-                        class="w-full px-3 py-2 bg-slate-800/50 border border-white/10 rounded-xl text-sm focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all font-mono" placeholder="0.0">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wide">Tindakan Untuk Saldo</label>
-                    <div class="grid grid-cols-2 gap-3">
-                        <label class="relative flex flex-col items-start p-3 bg-slate-900 border border-white/5 border-2 rounded-xl cursor-pointer transition-all"
-                            :class="kembalikan_ke_stok === 'ya' ? 'border-indigo-500 bg-indigo-50/50' : 'border-white/10 hover:border-indigo-200'">
-                            <input type="radio" name="kembalikan_ke_stok" value="ya" x-model="kembalikan_ke_stok" class="sr-only">
-                            <span class="text-xs font-semibold text-slate-200" :class="kembalikan_ke_stok === 'ya' ? 'text-indigo-700' : ''">Kembalikan ke Stok BBM</span>
-                            <span class="text-xs text-slate-400 mt-1">Saldo kembali ke pusat</span>
-                        </label>
-                        <label class="relative flex flex-col items-start p-3 bg-slate-900 border border-white/5 border-2 rounded-xl cursor-pointer transition-all"
-                            :class="kembalikan_ke_stok === 'tidak' ? 'border-rose-500 bg-rose-50/50' : 'border-white/10 hover:border-rose-200'">
-                            <input type="radio" name="kembalikan_ke_stok" value="tidak" x-model="kembalikan_ke_stok" class="sr-only">
-                            <span class="text-xs font-semibold text-slate-200" :class="kembalikan_ke_stok === 'tidak' ? 'text-rose-700' : ''">Hangus (Void)</span>
-                            <span class="text-xs text-slate-400 mt-1">Saldo dihapus permanen</span>
-                        </label>
+            <!-- Modal -->
+            <div x-show="show" x-transition.translate.y @click.outside="show = false"
+                class="relative bg-slate-900 border border-white/5 rounded-2xl shadow-xl w-full max-w-md mx-auto flex flex-col max-h-[90vh] overflow-hidden" @click.stop>
+                <!-- Header -->
+                <div class="px-4 sm:px-6 py-4 bg-rose-600 shrink-0">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-white">Potong Saldo Kendaraan</h3>
+                        <button type="button" @click="reset()" class="text-white/70 hover:text-white">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
                     </div>
+                    <p class="text-rose-100 text-sm mt-1" x-text="nopol"></p>
                 </div>
 
-                <div>
-                    <label class="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wide">Keterangan</label>
-                    <textarea name="keterangan" rows="2" required
-                        class="w-full px-3 py-2 bg-slate-800/50 border border-white/10 rounded-xl text-sm focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all" placeholder="Alasan pemotongan saldo..."></textarea>
-                </div>
+                <!-- Form -->
+                <form :action="'{{ route('admin.kendaraans.index') }}/' + id + '/potong-saldo'" method="POST" class="p-6 space-y-4 overflow-y-auto">
+                    @csrf
+                    <!-- Info Saldo -->
+                    <div class="flex items-center justify-between p-3 bg-rose-50 border border-rose-100 rounded-xl">
+                        <span class="text-xs font-bold text-rose-600 uppercase">Saldo Saat Ini</span>
+                        <span class="text-lg font-black text-rose-700 font-mono" x-text="saldo + ' L'"></span>
+                    </div>
 
-                <div>
-                    <label class="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wide text-center">Masukkan PIN</label>
-                    <input type="password" name="topup_password" x-model="topup_password" required autocomplete="new-password"
-                        class="w-full px-3 py-2 bg-slate-800/50 border border-white/10 rounded-xl text-sm focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all text-center font-bold tracking-widest" placeholder="••••••">
-                </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wide">Jumlah Potongan (Liter)</label>
+                        <input type="number" name="jumlah" x-model="jumlah" step="1" min="1" :max="saldo" required
+                            class="w-full px-3 py-2 bg-slate-800/50 border border-white/10 rounded-xl text-sm focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all font-mono text-white" placeholder="0.0">
+                    </div>
 
-                <div class="pt-2 flex justify-end gap-2">
-                    <button type="button" @click="reset()" class="px-4 py-2 text-sm font-bold text-slate-400 hover:bg-slate-800 rounded-xl transition">Batal</button>
-                    <button type="submit" class="px-4 py-2 text-sm font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-lg shadow-rose-500/30 transition disabled:opacity-50" :disabled="!jumlah || jumlah <= 0 || jumlah > saldo || !topup_password">Simpan</button>
-                </div>
-            </form>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wide">Tindakan Untuk Saldo</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="relative flex flex-col items-start p-3 bg-slate-900 border border-white/5 border-2 rounded-xl cursor-pointer transition-all"
+                                :class="kembalikan_ke_stok === 'ya' ? 'border-indigo-500 bg-indigo-50/50' : 'border-white/10 hover:border-indigo-200'">
+                                <input type="radio" name="kembalikan_ke_stok" value="ya" x-model="kembalikan_ke_stok" class="sr-only">
+                                <span class="text-xs font-semibold" :class="kembalikan_ke_stok === 'ya' ? 'text-indigo-700' : 'text-slate-200'">Kembalikan ke Stok BBM</span>
+                                <span class="text-xs text-slate-400 mt-1">Saldo kembali ke pusat</span>
+                            </label>
+                            <label class="relative flex flex-col items-start p-3 bg-slate-900 border border-white/5 border-2 rounded-xl cursor-pointer transition-all"
+                                :class="kembalikan_ke_stok === 'tidak' ? 'border-rose-500 bg-rose-50/50' : 'border-white/10 hover:border-rose-200'">
+                                <input type="radio" name="kembalikan_ke_stok" value="tidak" x-model="kembalikan_ke_stok" class="sr-only">
+                                <span class="text-xs font-semibold" :class="kembalikan_ke_stok === 'tidak' ? 'text-rose-700' : 'text-slate-200'">Hangus (Void)</span>
+                                <span class="text-xs text-slate-400 mt-1">Saldo dihapus permanen</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wide">Keterangan</label>
+                        <textarea name="keterangan" rows="2" required
+                            class="w-full px-3 py-2 bg-slate-800/50 border border-white/10 rounded-xl text-sm focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all text-white" placeholder="Alasan pemotongan saldo..."></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wide text-center">Masukkan PIN</label>
+                        <input type="password" name="topup_password" x-model="topup_password" required autocomplete="new-password"
+                            class="w-full px-3 py-2 bg-slate-800/50 border border-white/10 rounded-xl text-sm focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all text-center font-bold tracking-widest text-white" placeholder="••••••">
+                    </div>
+
+                    <div class="pt-2 flex justify-end gap-2">
+                        <button type="button" @click="reset()" class="px-4 py-2 text-sm font-bold text-slate-400 hover:bg-slate-800 rounded-xl transition">Batal</button>
+                        <button type="submit" class="px-4 py-2 text-sm font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-lg shadow-rose-500/30 transition disabled:opacity-50" :disabled="!jumlah || jumlah <= 0 || jumlah > saldo || !topup_password">Simpan</button>
+                    </div>
+                </form>
+            </div>
         </div>
+    </template>
     </div>
 </div>
 </x-app-layout>

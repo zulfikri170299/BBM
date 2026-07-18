@@ -1,8 +1,9 @@
 <x-app-layout>
-    <div class="py-4 sm:py-12 px-2 sm:px-6 lg:px-8">
-        <div class="max-w-[95rem] mx-auto sm:px-6 lg:px-8">
-            <div class="bg-slate-900 border border-white/5 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-white">
+    <div class="p-1 sm:p-6 lg:p-8 space-y-4 sm:space-y-6">
+        <div class="max-w-[95rem] mx-auto">
+            <div class="bg-slate-900 border border-white/5 overflow-hidden sm:shadow-sm sm:rounded-xl">
+                <div class="p-2 sm:p-6 text-white">
+
 
                     <!-- Header & Filter -->
                     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
@@ -15,7 +16,10 @@
 
                         <form action="{{ route('admin.personels.index') }}" method="GET"
                             class="w-full flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
+                            
+                            <!-- Search & Action Controls Container -->
+                            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full shrink-0">
+                                
                                 <!-- Filter Satker TomSelect -->
                                 <div class="w-full sm:w-64">
                                     <select name="satker_id" id="filter_satker_id"
@@ -30,9 +34,9 @@
                                     </select>
                                 </div>
 
-                                <!-- Combined Search & Filter Controls -->
-                                <div class="flex items-center gap-2 w-full lg:w-auto">
-                                    <div class="relative flex-1 sm:w-64">
+                                <!-- Input Pencarian & Tombol Cari -->
+                                <div class="flex items-center gap-2 w-full sm:flex-1">
+                                    <div class="relative flex-1">
                                         <div
                                             class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                             <svg class="w-4 h-4 text-slate-400" aria-hidden="true"
@@ -43,22 +47,24 @@
                                             </svg>
                                         </div>
                                         <input type="text" name="search" value="{{ request('search') }}"
-                                            class="block w-full p-2.5 pl-10 text-sm text-white border border-white/20 rounded-lg bg-slate-800/50 focus:ring-indigo-500 focus:border-indigo-500"
+                                            class="block w-full p-2.5 pl-10 text-sm text-white border-2 border-white/10 rounded-xl bg-slate-900 focus:ring-indigo-500 focus:border-indigo-500 transition-colors placeholder-slate-500"
                                             placeholder="Cari Nama atau NRP...">
                                     </div>
+                                    <button type="submit"
+                                        class="inline-flex items-center justify-center shrink-0 w-[42px] h-[42px] bg-indigo-600 border border-indigo-500 text-white rounded-xl shadow-lg shadow-indigo-500/30 hover:bg-indigo-700 transition-all duration-200"
+                                        title="Cari Data">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                        </svg>
+                                    </button>
+                                </div>
 
-                                     <div class="flex items-center gap-2 shrink-0 overflow-x-auto custom-scrollbar pb-1">
-                                        <button type="submit"
-                                            class="inline-flex items-center justify-center shrink-0 w-10 h-10 bg-indigo-600 text-white rounded-xl shadow-lg shadow-indigo-500/30 hover:bg-indigo-700 transition"
-                                            title="Cari Data">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                                            </svg>
-                                        </button>
-
+                                <!-- Row Action Buttons -->
+                                <div class="flex items-center justify-between sm:justify-end gap-2 shrink-0 pt-1 sm:pt-0">
+                                    <div class="flex items-center gap-2">
                                         @if(request('search') || request('satker_id'))
                                             <a href="{{ route('admin.personels.index') }}"
-                                                class="inline-flex items-center justify-center shrink-0 w-10 h-10 bg-slate-800 text-slate-400 rounded-xl hover:bg-slate-700 transition"
+                                                class="inline-flex items-center justify-center shrink-0 w-10 h-10 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-xl hover:bg-rose-500/20 hover:text-rose-300 transition-all duration-200"
                                                 title="Reset Filter">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -69,23 +75,25 @@
                                         <!-- Actions grouped immediately to the right -->
                                         @if(auth()->user()->role !== 'kasubbag')
                                             <button type="button" @click="$dispatch('open-import-modal')"
-                                                class="inline-flex items-center justify-center shrink-0 w-10 h-10 bg-emerald-600 text-white rounded-xl shadow-lg shadow-emerald-500/30 hover:bg-emerald-700 transition"
+                                                class="inline-flex items-center justify-center shrink-0 w-10 h-10 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl hover:bg-emerald-500/20 hover:text-emerald-300 transition-all duration-200"
                                                 title="Import Excel">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
                                                 </svg>
                                             </button>
                                         @endif
-                                        <a href="{{ route('admin.personels.export', request()->all()) }}"
-                                            class="inline-flex items-center justify-center shrink-0 w-10 h-10 bg-amber-500 text-white rounded-xl shadow-lg shadow-amber-500/30 hover:bg-amber-600 transition"
+                                        
+                                        <a href="{{ route('admin.personels.export', request()->all()) }}" target="_blank"
+                                            class="inline-flex items-center justify-center shrink-0 w-10 h-10 bg-amber-500/10 border border-amber-500/20 text-amber-500 rounded-xl hover:bg-amber-500/20 hover:text-amber-400 transition-all duration-200"
                                             title="Export Excel">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                                             </svg>
                                         </a>
+                                        
                                         @if(auth()->user()->role !== 'kasubbag')
                                             <a href="{{ route('admin.personels.create') }}"
-                                                class="inline-flex items-center justify-center shrink-0 w-10 h-10 bg-indigo-600 text-white rounded-xl shadow-lg shadow-indigo-500/30 hover:bg-indigo-700 transition"
+                                                class="inline-flex items-center justify-center shrink-0 w-10 h-10 bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 rounded-xl hover:bg-indigo-500/30 hover:text-indigo-300 transition-all duration-200"
                                                 title="Tambah Personel">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -472,7 +480,7 @@
 
     <!-- Import Modal -->
     <div x-data="personelImportModal()" @open-import-modal.window="openModal()" x-show="show"
-        class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
+        class="fixed inset-0 z-[9999] overflow-y-auto" style="display: none;">
         <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             <div x-show="show" x-transition.opacity class="fixed inset-0 transition-opacity" aria-hidden="true">
                 <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>

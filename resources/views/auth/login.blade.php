@@ -1,6 +1,6 @@
 <x-guest-layout maxWidth="max-w-5xl">
     <div
-        class="bg-slate-900/80 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row w-full">
+        class="bg-slate-900 backdrop-blur-none border border-white/10 rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row w-full">
 
         <!-- Left Side: Branding & Visuals -->
         <div class="hidden md:flex md:w-1/2 bg-slate-800 relative items-center justify-center overflow-hidden">
@@ -12,7 +12,7 @@
             <div class="relative z-10 p-12 flex flex-col items-center text-center">
                 <div class="mb-8 relative group">
                     <div
-                        class="absolute inset-0 bg-amber-500/30 blur-2xl rounded-full group-hover:bg-amber-500/40 transition-all duration-500">
+                        class="absolute inset-0 bg-amber-500/10 rounded-full group-hover:bg-amber-500/20 transition-all duration-500">
                     </div>
                     <img src="{{ asset('rolog.png') }}" alt="Logo"
                         class="w-32 h-32 object-contain relative drop-shadow-2xl transform group-hover:scale-105 transition-transform duration-500">
