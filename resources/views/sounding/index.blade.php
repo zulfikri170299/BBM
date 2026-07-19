@@ -9,7 +9,7 @@
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-3xl font-black text-white tracking-tight">Data Sounding BBM</h1>
+                    <h1 class="text-2xl font-black text-white tracking-tight">Data Sounding BBM</h1>
                     <p class="text-slate-400 text-sm font-medium mt-1 uppercase tracking-widest flex items-center gap-2">
                         Monitoring Stok Fisik dan Pengeluaran
                     </p>

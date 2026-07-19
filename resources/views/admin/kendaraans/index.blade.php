@@ -627,21 +627,22 @@
             @open-topup-select.window="topupId = null; topupNopol = ''; topupSaldo = ''; jumlah = ''; topupPassword = ''; selectMode = true; showTopup = true"
             @turbo:before-cache.window="showTopup = false">
     <template x-teleport="body">
+        <div x-show="showTopup" style="display: none;" class="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4" @click.self="showTopup = false">
             <!-- Backdrop -->
-            <div x-show="showTopup" style="display: none;" x-transition:enter="transition ease-out duration-200"
+            <div x-show="showTopup" x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                 x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[9999]"
+                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm"
                 @click="showTopup = false"></div>
 
             <!-- Modal -->
-            <div x-show="showTopup" style="display: none;" x-transition:enter="transition ease-out duration-300"
+            <div x-show="showTopup" x-transition:enter="transition ease-out duration-300"
                 x-transition:enter-start="opacity-0 scale-95 translate-y-4"
                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
                 x-transition:leave="transition ease-in duration-200"
                 x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                 x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-                class="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4" @click.self="showTopup = false">
+                class="relative">
                 <div class="bg-slate-900 border border-white/5 rounded-2xl shadow-2xl w-full max-w-lg max-h-[95vh] flex flex-col overflow-hidden"
                     @click.stop>
                     <!-- Modal Header -->
@@ -906,120 +907,8 @@
                     </form>
                 </div>
             </div>
+        </div>
     </template>
-
-            <!-- Potong Saldo Modal -->
-            <div x-cloak x-show="showPotong" style="display: none;" x-transition:enter="transition ease-out duration-300"
-                x-transition:enter-start="opacity-0 scale-95 translate-y-4"
-                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                x-transition:leave="transition ease-in duration-200"
-                x-transition:leave-start="opacity-100 scale-100 translate-y-0"
-                x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-                class="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4" @click.self="reset()">
-                <div class="bg-slate-900 border border-white/5 rounded-2xl shadow-2xl w-full max-w-lg max-h-[95vh] flex flex-col overflow-hidden"
-                    @click.stop>
-                    <!-- Modal Header -->
-                    <div class="px-4 sm:px-4 sm:px-6 py-4 sm:py-5 bg-gradient-to-r from-rose-500 to-red-600 shrink-0">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2 sm:gap-3">
-                                <div class="p-1.5 sm:p-2 bg-slate-900 border border-white/5/20 rounded-xl">
-                                    <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 class="text-base sm:text-lg font-bold text-white">Potong Saldo (Hutang)</h3>
-                                    <p class="text-xs sm:text-sm text-rose-100" x-text="topupNopol"></p>
-                                </div>
-                            </div>
-                            <button @click="reset()"
-                                class="p-1 text-white/70 hover:text-white rounded-lg hover:bg-slate-900 border border-white/5/10 transition">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Modal Body & Form -->
-                    <form :action="'/admin/kendaraans/' + topupId + '/potong-saldo'" method="POST"
-                        class="flex flex-col flex-1 overflow-hidden">
-                        @csrf
-                        <div class="p-3 sm:p-5 space-y-4 overflow-y-auto flex-1 bg-slate-800/50/30">
-                            <!-- Info Saldo -->
-                            <div class="p-3 bg-rose-50 border border-rose-100 rounded-xl flex items-center justify-between">
-                                <span class="text-xs font-semibold text-rose-600 uppercase tracking-wider">Saldo Saat
-                                    Ini</span>
-                                <span class="text-lg font-black text-rose-700" x-text="topupSaldo + ' L'"></span>
-                            </div>
-
-                            <!-- Input Jumlah -->
-                            <div class="space-y-1.5">
-                                <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Jumlah
-                                    Potongan
-                                    (Liter)</label>
-                                <div class="relative group">
-                                    <input type="number" step="1" name="jumlah" x-model.number="jumlah"
-                                        class="w-full pl-4 pr-12 py-3 bg-slate-900 border-2 border-white/10 rounded-xl focus:border-rose-500 focus:ring-0 transition-all font-black text-lg"
-                                        placeholder="0.00" required>
-                                    <div class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">L</div>
-                                </div>
-                                <p x-show="jumlah > 0 && topupId"
-                                    class="text-[10px] sm:text-xs text-slate-400 font-medium italic">
-                                    * Saldo akan berkurang menjadi <span class="font-bold text-rose-600"
-                                        x-text="number_format((allKendaraans.find(x => x.id == topupId)?.saldoRaw || 0) - jumlah, 0, ',', '.')"></span>
-                                    L
-                                </p>
-                            </div>
-
-                            <!-- Input Keterangan -->
-                            <div class="space-y-1.5">
-                                <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Keterangan
-                                    (Opsional)</label>
-                                <textarea name="keterangan" x-model="keterangan"
-                                    class="w-full px-4 py-2.5 bg-slate-900 border-2 border-white/10 rounded-xl focus:border-rose-500 focus:ring-0 transition-all text-sm"
-                                    placeholder="Alasan pemotongan saldo..." rows="2"></textarea>
-                            </div>
-
-                            <!-- Security Password -->
-                            <div class="space-y-1.5">
-                                <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Password
-                                    Keamanan</label>
-                                <div class="relative">
-                                    <input type="password" name="topup_password" x-model="topupPassword"
-                                        class="w-full pl-10 pr-4 py-3 bg-slate-900 border-2 border-white/10 rounded-xl focus:border-rose-500 focus:ring-0 transition-all text-sm"
-                                        placeholder="Masukkan Password Top Up" required>
-                                    <div class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Footer Buttons -->
-                        <div class="px-4 sm:px-4 sm:px-6 py-4 bg-slate-900 border border-white/5 border-t border-white/5 flex gap-3 shrink-0">
-                            <button type="button" @click="reset()"
-                                class="flex-1 px-4 py-3 bg-slate-800 text-slate-400 font-bold rounded-xl hover:bg-slate-200 transition-all active:scale-95 text-xs sm:text-sm uppercase tracking-wider">Batal</button>
-                            <button type="submit"
-                                class="flex-[2] px-4 py-3 bg-gradient-to-r from-rose-500 to-red-600 text-white font-black rounded-xl hover:from-rose-600 hover:to-red-700 shadow-lg shadow-rose-500/30 hover:shadow-rose-500/40 transition-all hover:-translate-y-0.5 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:grayscale text-xs sm:text-sm uppercase tracking-widest flex items-center justify-center gap-2"
-                                :disabled="!canSubmitPotong">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                <span>Potong Saldo</span>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
         </div>
     @endif
 
@@ -1106,21 +995,22 @@
         }" @open-import.window="showImport = true"
             @turbo:before-cache.window="showImport = false">
     <template x-teleport="body">
+        <div x-show="showImport" style="display: none;" class="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4" @click.self="showImport = false">
             <!-- Backdrop -->
-            <div x-show="showImport" style="display: none;" x-transition:enter="transition ease-out duration-200"
+            <div x-show="showImport" x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                 x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[9999]"
+                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm"
                 @click="showImport = false"></div>
 
             <!-- Modal -->
-            <div x-show="showImport" style="display: none;" x-transition:enter="transition ease-out duration-300"
+            <div x-show="showImport" x-transition:enter="transition ease-out duration-300"
                 x-transition:enter-start="opacity-0 scale-95 translate-y-4"
                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
                 x-transition:leave="transition ease-in duration-200"
                 x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                 x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-                class="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4" @click.self="showImport = false">
+                class="relative">
                 <div class="bg-slate-900 border border-white/5 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden"
                     @click.stop>
                     <!-- Modal Header -->
@@ -1303,6 +1193,7 @@
                     </form>
                 </div>
             </div>
+        </div>
     </template>
         </div>
     @endif
@@ -1312,21 +1203,22 @@
         <div x-cloak x-data="importKendaraanModal()" @open-import-kendaraan.window="openModal()"
             @turbo:before-cache.window="showModal = false">
     <template x-teleport="body">
+        <div x-show="showModal" style="display: none;" class="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4" @click.self="closeModal()">
             <!-- Backdrop -->
-            <div x-show="showModal" style="display: none;" x-transition:enter="transition ease-out duration-200"
+            <div x-show="showModal" x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                 x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[9999]"
+                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm"
                 @click="closeModal()"></div>
 
             <!-- Modal -->
-            <div x-show="showModal" style="display: none;" x-transition:enter="transition ease-out duration-300"
+            <div x-show="showModal" x-transition:enter="transition ease-out duration-300"
                 x-transition:enter-start="opacity-0 scale-95 translate-y-4"
                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
                 x-transition:leave="transition ease-in duration-200"
                 x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                 x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-                class="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4" @click.self="closeModal()">
+                class="relative">
                 <div class="bg-slate-900 border border-white/5 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden"
                     @click.stop>
                     <!-- Modal Header -->
@@ -1782,9 +1674,9 @@
                                     </svg> Memproses...</span>
                             </button>
                         </div>
-                    </div>
                 </div>
             </div>
+        </div>
     </template>
         </div>
 
@@ -1951,21 +1843,22 @@
         x-data="{ showMonthlyReport: false, satkerId: '', bulan: '{{ now()->month }}', tahun: '{{ now()->year }}' }"
         @open-monthly-report.window="showMonthlyReport = true" @turbo:before-cache.window="showMonthlyReport = false">
     <template x-teleport="body">
-        <!-- Backdrop -->
-        <div x-show="showMonthlyReport" style="display: none;" x-transition:enter="transition ease-out duration-200"
-            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-            x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-            x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[9999]"
-            @click="showMonthlyReport = false"></div>
+        <div x-show="showMonthlyReport" style="display: none;" class="fixed inset-0 z-[9999] flex items-center justify-center p-4" @click.self="showMonthlyReport = false">
+            <!-- Backdrop -->
+            <div x-show="showMonthlyReport" x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm"
+                @click="showMonthlyReport = false"></div>
 
-        <!-- Modal -->
-        <div x-show="showMonthlyReport" style="display: none;" x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 scale-95 translate-y-4"
-            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 scale-100 translate-y-0"
-            x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-            class="fixed inset-0 z-[9999] flex items-center justify-center p-4" @click.self="showMonthlyReport = false">
+            <!-- Modal -->
+            <div x-show="showMonthlyReport" x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-200"
+                x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                x-transition:leave-end="opacity-0 scale-95 translate-y-4"
+                class="relative">
             <div class="bg-slate-900 border border-white/5 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden" @click.stop>
                 <!-- Modal Header -->
                 <div class="px-6 py-5 bg-gradient-to-r from-rose-500 to-rose-600">
@@ -2041,6 +1934,7 @@
                     </div>
                 </form>
             </div>
+        </div>
         </div>
     </template>
     </div>

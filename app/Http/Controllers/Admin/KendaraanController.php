@@ -646,6 +646,7 @@ class KendaraanController extends Controller
 
         $data = $this->buildLaporanBulananData($satkerId, $bulan, $tahun);
         $data['satker'] = Satker::findOrFail($satkerId);
+        $data['satkers'] = Satker::orderBy('nama_satker')->get();
 
         return view('admin.kendaraans.laporan-bulanan', $data);
     }

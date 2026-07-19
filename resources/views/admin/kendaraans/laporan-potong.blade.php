@@ -109,9 +109,7 @@
                                     </span>
                                 </td>
                                 <td class="px-4 py-3 text-right">
-                                    <span class="text-xs font-bold text-rose-500">
-                                        -{{ number_format($r->jumlah, 0, ',', '.') }} L
-                                    </span>
+                                        {{ number_format($r->jumlah, 0, ',', '.') }} L
                                 </td>
                                 <td class="px-4 py-3">
                                     <p class="text-xs text-slate-400 max-w-xs truncate" title="{{ $r->keterangan }}">

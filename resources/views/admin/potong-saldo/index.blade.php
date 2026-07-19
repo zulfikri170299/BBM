@@ -59,7 +59,7 @@
             <!-- Header Compact -->
             <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-wide border-b-2 border-indigo-500/50 pb-2 inline-block">Potong Saldo Masal</h1>
+                    <h1 class="text-2xl sm:text-2xl font-bold text-white tracking-wide border-b-2 border-indigo-500/50 pb-2 inline-block">Potong Saldo Masal</h1>
                     <p class="text-xs sm:text-[11px] font-bold text-slate-400 uppercase tracking-widest mt-1">Pengosongan Saldo Serentak</p>
                 </div>
                 <div class="flex items-center gap-1 p-1 bg-slate-900 border border-white/5 rounded-xl shadow-lg">

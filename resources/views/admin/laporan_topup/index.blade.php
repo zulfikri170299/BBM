@@ -3,7 +3,7 @@
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight">Laporan Top Up</h1>
+                <h1 class="text-xl sm:text-2xl font-bold text-white tracking-tight">Laporan Top Up</h1>
                 <p class="mt-1 text-xs sm:text-sm font-medium text-slate-400">Riwayat pengisian saldo kendaraan.</p>
             </div>
             <a href="{{ route('admin.laporan-topup.print', request()->query()) }}" target="_blank"
@@ -181,7 +181,7 @@
                                 <td class="px-4 py-3 text-right">
                                     <span
                                         class="text-sm font-bold {{ $riwayat->tipe == 'masuk' ? 'text-emerald-600' : 'text-rose-600' }}">
-                                        {{ $riwayat->tipe == 'masuk' ? '+' : '-' }}{{ number_format($riwayat->jumlah, 0, ',', '.') }}
+                                        {{ number_format($riwayat->jumlah, 0, ',', '.') }}
                                         L
                                     </span>
                                 </td>
@@ -228,7 +228,7 @@
                             <tr>
                                 <td class="py-3 text-sm font-medium text-slate-400">{{ $jenis }}</td>
                                 <td class="py-3 text-sm font-bold text-white text-right">
-                                    {{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }} Liter
+                                    {{ rtrim(rtrim(number_format(abs($total), 2, ',', '.'), '0'), ',') }} Liter
                                 </td>
                             </tr>
                         @endforeach

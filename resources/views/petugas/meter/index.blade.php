@@ -3,7 +3,7 @@
         <!-- Header Section -->
         <div class="mb-3 sm:mb-10 flex flex-col md:flex-row md:items-center md:justify-between gap-2 sm:gap-6">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-wide border-b-2 border-indigo-500/50 pb-2 inline-block">Input Meter Pompa</h1>
+                <h1 class="text-2xl sm:text-2xl font-bold text-white tracking-wide border-b-2 border-indigo-500/50 pb-2 inline-block">Input Meter Pompa</h1>
                 <p class="text-slate-400 font-medium mt-0.5 text-xs sm:text-base">Pencatatan harian meteran awal dan
                     akhir
                     untuk audit BBM.</p>

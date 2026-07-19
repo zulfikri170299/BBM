@@ -2,7 +2,7 @@
     <div class="px-2 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
         <div class="mb-8 flex justify-between items-center">
             <div>
-                <h1 class="text-3xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
                     Chat & Konsultasi</h1>
                 <p class="text-slate-400 mt-1">Hubungi rekan kerja atau admin untuk konsultasi.</p>
             </div>

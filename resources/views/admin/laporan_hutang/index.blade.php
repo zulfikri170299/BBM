@@ -3,7 +3,7 @@
         <!-- Page Title -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight">Laporan Hutang BBM</h1>
+                <h1 class="text-xl sm:text-2xl font-bold text-white tracking-tight">Laporan Hutang BBM</h1>
                 <p class="mt-1 text-xs sm:text-sm font-medium text-slate-400">Monitoring riwayat hutang bon BBM oleh Satker.</p>
             </div>
 

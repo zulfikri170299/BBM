@@ -23,14 +23,14 @@ class LaporanPotongController extends Controller
 
         // Filter Tanggal
         if ($request->filled('start_date')) {
-            $startUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->start_date, 'Asia/Makassar')
-                ->startOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
-            $query->where('created_at', '>=', $startUtc);
+            $startDate = \Carbon\Carbon::createFromFormat('Y-m-d', $request->start_date, 'Asia/Makassar')
+                ->startOfDay()->format('Y-m-d H:i:s');
+            $query->where('created_at', '>=', $startDate);
         }
         if ($request->filled('end_date')) {
-            $endUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->end_date, 'Asia/Makassar')
-                ->endOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
-            $query->where('created_at', '<=', $endUtc);
+            $endDate = \Carbon\Carbon::createFromFormat('Y-m-d', $request->end_date, 'Asia/Makassar')
+                ->endOfDay()->format('Y-m-d H:i:s');
+            $query->where('created_at', '<=', $endDate);
         }
 
         $riwayat = $query->paginate(20)->withQueryString();
@@ -52,14 +52,14 @@ class LaporanPotongController extends Controller
 
         // Filter Tanggal
         if ($request->filled('start_date')) {
-            $startUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->start_date, 'Asia/Makassar')
-                ->startOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
-            $query->where('created_at', '>=', $startUtc);
+            $startDate = \Carbon\Carbon::createFromFormat('Y-m-d', $request->start_date, 'Asia/Makassar')
+                ->startOfDay()->format('Y-m-d H:i:s');
+            $query->where('created_at', '>=', $startDate);
         }
         if ($request->filled('end_date')) {
-            $endUtc = \Carbon\Carbon::createFromFormat('Y-m-d', $request->end_date, 'Asia/Makassar')
-                ->endOfDay()->setTimezone('UTC')->format('Y-m-d H:i:s');
-            $query->where('created_at', '<=', $endUtc);
+            $endDate = \Carbon\Carbon::createFromFormat('Y-m-d', $request->end_date, 'Asia/Makassar')
+                ->endOfDay()->format('Y-m-d H:i:s');
+            $query->where('created_at', '<=', $endDate);
         }
 
         $riwayat = $query->get();

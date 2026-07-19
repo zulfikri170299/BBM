@@ -6,7 +6,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
             </a>
-            <h1 class="text-3xl font-black text-white tracking-tight">Tambah Data Sounding Akhir</h1>
+            <h1 class="text-2xl font-black text-white tracking-tight">Tambah Data Sounding Akhir</h1>
         </div>
 
         <div class="bg-slate-900 border border-white/10 rounded-3xl p-8">

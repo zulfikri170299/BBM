@@ -2,7 +2,7 @@
     <div class="max-w-7xl mx-auto p-2 sm:p-6 lg:p-8 space-y-6 px-2 sm:px-6 lg:px-8" x-data="hutangComponent">
         <!-- Page Title -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <h1 class="text-2xl sm:text-3xl font-bold text-white border-b-2 border-indigo-500/50 pb-2 inline-block">
+            <h1 class="text-2xl sm:text-2xl font-bold text-white border-b-2 border-indigo-500/50 pb-2 inline-block">
                 Monitoring Hutang BBM</h1>
 
             <!-- Summary Outstanding per BBM (Dynamic) -->

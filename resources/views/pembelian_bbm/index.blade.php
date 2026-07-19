@@ -2,7 +2,7 @@
     <div class="p-2 sm:p-6 lg:p-8 space-y-8">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-white leading-tight">Pembelian BBM</h1>
+                <h1 class="text-2xl sm:text-2xl font-bold text-white leading-tight">Pembelian BBM</h1>
                 <p class="mt-1 text-xs text-slate-400">Catat dan pantau riwayat pembelian BBM Pertamax & Pertamina Dex.</p>
             </div>
         </div>

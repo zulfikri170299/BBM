@@ -3,7 +3,7 @@
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-white">Laporan Per 3 Bulan</h1>
+                <h1 class="text-2xl font-bold text-white">Laporan Per 3 Bulan</h1>
                 <p class="mt-1 text-slate-400">Rekapitulasi total pendapatan, pemakaian, dan sisa BBM Satker {{ $satker->nama_satker }}.</p>
             </div>
             <!-- Print Button -->

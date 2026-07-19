@@ -9,7 +9,7 @@
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-3xl font-black text-white tracking-tight">Data BBM Pada Tangki</h1>
+                    <h1 class="text-2xl font-black text-white tracking-tight">Data BBM Pada Tangki</h1>
                     <p class="text-slate-400 text-sm font-medium mt-1 uppercase tracking-widest flex items-center gap-2">
                         <span class="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></span>
                         Sinkronisasi Fisik Tangki (Pertamax & Dex)

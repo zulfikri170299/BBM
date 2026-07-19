@@ -3,7 +3,7 @@
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-white">Edit Kendaraan</h1>
+                <h1 class="text-2xl font-bold text-white">Edit Kendaraan</h1>
                 <p class="mt-1 text-slate-400">Perbarui data kendaraan <strong>{{ $kendaraan->no_polisi }}</strong></p>
             </div>
             <a href="{{ route('admin.kendaraans.index') }}" class="inline-flex items-center px-4 py-2 bg-slate-800 text-slate-400 rounded-xl font-semibold text-sm hover:bg-slate-200 transition-colors">

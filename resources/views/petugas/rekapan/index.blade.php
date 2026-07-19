@@ -3,7 +3,7 @@
         <!-- Header Section -->
         <div class="mb-5 sm:mb-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4 sm:gap-6">
             <div>
-                <h1 class="text-xl sm:text-3xl font-extrabold text-white tracking-tight">Rekapan Pengisian</h1>
+                <h1 class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">Rekapan Pengisian</h1>
                 <p class="text-slate-400 font-medium mt-1 text-xs sm:text-base">Laporan total pengisian berdasarkan
                     input meteran.</p>
             </div>

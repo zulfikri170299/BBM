@@ -106,7 +106,7 @@
                     <td>{{ $riwayat->kendaraan->jenis_bbm ?? '-' }}</td>
                     <td style="text-align: center;">{{ $riwayat->metode }}</td>
                     <td style="text-align: right; color: {{ $riwayat->tipe == 'masuk' ? '#059669' : '#e11d48' }};">
-                        {{ $riwayat->tipe == 'masuk' ? '+' : '-' }}{{ number_format($riwayat->jumlah, 0, ',', '.') }}
+                        {{ number_format($riwayat->jumlah, 0, ',', '.') }}
                     </td>
                     <td>{{ $riwayat->user->name ?? '-' }}</td>
                 </tr>
@@ -124,7 +124,7 @@
                 @foreach($summary as $jenis => $total)
                     <tr>
                         <td>{{ $jenis }}</td>
-                        <td style="text-align: right; font-weight: bold;">{{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }} L</td>
+                        <td style="text-align: right; font-weight: bold;">{{ rtrim(rtrim(number_format(abs($total), 2, ',', '.'), '0'), ',') }} L</td>
                     </tr>
                 @endforeach
             </table>

@@ -2,7 +2,7 @@
     <div class="p-2 sm:p-6 lg:p-8 space-y-6">
         <!-- Page Header -->
         <div>
-            <h1 class="text-3xl font-bold text-white">Riwayat Pengisian BBM</h1>
+            <h1 class="text-2xl font-bold text-white">Riwayat Pengisian BBM</h1>
             <p class="mt-1 text-slate-400">Histori pengisian BBM kendaraan
                 {{ auth()->user()->satker->nama_satker ?? '' }}.
             </p>

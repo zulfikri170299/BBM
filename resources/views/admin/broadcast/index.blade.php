@@ -3,7 +3,7 @@
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-white">Pesan Siaran (Broadcast)</h1>
+                <h1 class="text-2xl font-bold text-white">Pesan Siaran (Broadcast)</h1>
                 <p class="mt-1 text-slate-400">Kirimkan notifikasi penting ke seluruh pengguna aplikasi.</p>
             </div>
         </div>

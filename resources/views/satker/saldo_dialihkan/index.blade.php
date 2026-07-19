@@ -3,7 +3,7 @@
         <!-- Page Title -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/10 pb-5">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight">Saldo Yang di Alihkan</h1>
+                <h1 class="text-xl sm:text-2xl font-bold text-white tracking-tight">Saldo Yang di Alihkan</h1>
                 <p class="mt-1 text-xs sm:text-sm font-medium text-slate-400">Laporan pemotongan saldo kendaraan oleh Admin.</p>
             </div>
         </div>

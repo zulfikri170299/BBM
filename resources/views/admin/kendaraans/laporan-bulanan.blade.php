@@ -47,7 +47,16 @@
         <div class="bg-slate-900 border border-white/5 rounded-lg border border-white/10 p-4">
             <form action="{{ route('admin.kendaraans.laporan-bulanan') }}" method="GET"
                 class="flex flex-wrap gap-3 items-end">
-                <input type="hidden" name="satker_id" value="{{ $satkerId }}">
+                <div>
+                    <label class="text-xs font-semibold text-slate-400 mb-1 block">Satker</label>
+                    <select name="satker_id" class="tom-select w-56 sm:w-64" required>
+                        @foreach($satkers as $s)
+                            <option value="{{ $s->id }}" {{ $satker->id == $s->id ? 'selected' : '' }}>
+                                {{ $s->nama_satker }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
                 <div>
                     <label class="text-xs font-semibold text-slate-400 mb-1 block">Bulan</label>
                     <select name="bulan" class="tom-select w-32">

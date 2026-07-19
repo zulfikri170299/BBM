@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <h1 class="text-3xl font-bold tracking-tight">403 | Forbidden</h1>
+        <h1 class="text-2xl font-bold tracking-tight">403 | Forbidden</h1>
         <p class="text-slate-400 text-lg">
             Maaf Anda Tidak Ada Akses Untuk Halaman Tersebut
         </p>

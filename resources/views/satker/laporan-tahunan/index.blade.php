@@ -3,7 +3,7 @@
         <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
                 <div>
-                    <h1 class="text-3xl font-bold text-white tracking-tight">Laporan Tahunan</h1>
+                    <h1 class="text-2xl font-bold text-white tracking-tight">Laporan Tahunan</h1>
                     <p class="text-slate-400 mt-1">Rekapitulasi BBM Tahunan</p>
                 </div>
 

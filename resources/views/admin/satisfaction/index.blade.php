@@ -3,7 +3,7 @@
         <!-- Page Title -->
         <div class="flex justify-between items-center">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-white leading-tight">Indeks Kepuasan</h1>
+                <h1 class="text-2xl sm:text-2xl font-bold text-white leading-tight">Indeks Kepuasan</h1>
                 <p class="mt-1 text-xs text-slate-400">Laporan kepuasan pelayanan dari Satker dan Personel.</p>
             </div>
         </div>

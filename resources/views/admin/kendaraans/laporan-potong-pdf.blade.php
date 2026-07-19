@@ -86,7 +86,7 @@
                     <td>{{ $r->kendaraan->jenis_kendaraan ?? '-' }}</td>
                     <td class="text-center font-bold">{{ $r->kendaraan->no_polisi ?? '-' }}</td>
                     <td class="text-center">{{ $r->jenis_bbm }}</td>
-                    <td class="text-right font-bold">-{{ number_format($r->jumlah, 0, ',', '.') }} L</td>
+                    <td class="text-right font-bold">{{ number_format($r->jumlah, 0, ',', '.') }} L</td>
                     <td>{{ $r->keterangan ?? '-' }}</td>
                 </tr>
             @empty
@@ -96,6 +96,27 @@
             @endforelse
         </tbody>
     </table>
+
+    @if($riwayat->isNotEmpty())
+        <div style="margin-top: 30px; width: 40%; margin-left: auto;">
+            <table style="border: 1px solid #ddd;">
+                <tr style="background-color: #f9f9f9;">
+                    <td colspan="2" style="font-weight: bold; text-align: center;">Total per Jenis BBM</td>
+                </tr>
+                @php
+                    $summary = $riwayat->groupBy('jenis_bbm')->map(function ($group) {
+                        return $group->sum('jumlah');
+                    });
+                @endphp
+                @foreach($summary as $jenis => $total)
+                    <tr>
+                        <td>{{ $jenis }}</td>
+                        <td style="text-align: right; font-weight: bold;">{{ rtrim(rtrim(number_format(abs($total), 2, ',', '.'), '0'), ',') }} L</td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+    @endif
 
     @include('components.pdf-signature')
 </body>

@@ -2,7 +2,7 @@
     <div class="p-2 sm:p-6 lg:p-8 space-y-8">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-white">Monitoring Aktivitas User</h1>
+                <h1 class="text-2xl font-bold text-white">Monitoring Aktivitas User</h1>
                 <p class="mt-1 text-slate-400">Pantau status aktif, lokasi terakhir, dan riwayat perubahan akun
                     pengguna.</p>
             </div>

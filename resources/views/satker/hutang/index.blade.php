@@ -18,7 +18,7 @@
         <!-- Page Title & Summary Cards -->
         <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
             <div class="space-y-1">
-                <h1 class="text-3xl font-black text-white tracking-tight">Daftar Hutang BBM Satker</h1>
+                <h1 class="text-2xl font-black text-white tracking-tight">Daftar Hutang BBM Satker</h1>
                 <div class="h-1.5 w-20 bg-indigo-600 rounded-full"></div>
             </div>
 

@@ -69,7 +69,7 @@
         <!-- Page Header -->
         <div class="flex flex-col gap-3 sm:gap-4">
             <div>
-                <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Kendaraan</h1>
+                <h1 class="text-xl sm:text-2xl lg:text-2xl font-bold text-white">Kendaraan</h1>
                 <p class="mt-0.5 sm:mt-1 text-xs sm:text-xs text-slate-400">Kelola armada kendaraan
                     {{ Auth::user()->satker->nama_satker ?? '' }}
                 </p>

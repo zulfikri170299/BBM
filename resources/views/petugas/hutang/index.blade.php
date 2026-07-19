@@ -2,7 +2,7 @@
     <div class="max-w-7xl mx-auto p-2 sm:p-6 lg:p-8 space-y-6 px-2 sm:px-6 lg:px-8">
         <!-- Page Title -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <h1 class="text-2xl sm:text-3xl font-bold text-white border-b-4 border-indigo-600 pb-2 inline-block">
+            <h1 class="text-2xl sm:text-2xl font-bold text-white border-b-4 border-indigo-600 pb-2 inline-block">
                 Rekapan Hutang BBM</h1>
         </div>
 

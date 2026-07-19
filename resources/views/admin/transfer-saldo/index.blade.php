@@ -3,7 +3,7 @@
         {{-- Page Header --}}
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
             <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-wide border-b-2 border-indigo-500/200/50 pb-2 inline-block">Transfer Saldo</h1>
+                <h1 class="text-2xl sm:text-2xl font-bold text-white tracking-wide border-b-2 border-indigo-500/200/50 pb-2 inline-block">Transfer Saldo</h1>
                 <p class="text-xs sm:text-[11px] font-bold text-slate-400 uppercase tracking-widest mt-1">Manajemen Perpindahan BBM antar Unit</p>
             </div>
         </div>

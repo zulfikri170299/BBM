@@ -3,7 +3,7 @@
         <!-- Page Title -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4">
             <div>
-                <h1 class="text-xl sm:text-3xl font-bold text-white">Dashboard</h1>
+                <h1 class="text-xl sm:text-2xl font-bold text-white">Dashboard</h1>
 
             </div>
         </div>

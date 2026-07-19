@@ -3,7 +3,7 @@
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-white">Laporan Transfer Saldo</h1>
+                <h1 class="text-2xl font-bold text-white">Laporan Transfer Saldo</h1>
                 <p class="mt-1 text-slate-400">Riwayat transfer saldo kendaraan ke personel.</p>
             </div>
             <div class="flex gap-2">

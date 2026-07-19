@@ -3,7 +3,7 @@
     <!-- Page Header -->
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
       <div>
-        <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight">{{ $title }}</h1>
+        <h1 class="text-xl sm:text-2xl font-bold text-white tracking-tight">{{ $title }}</h1>
         <p class="mt-1 text-xs sm:text-sm font-medium text-slate-400">{{ $periode }}</p>
       </div>
       <div class="flex flex-row gap-2 w-full sm:w-auto">

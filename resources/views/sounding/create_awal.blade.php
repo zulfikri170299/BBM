@@ -6,7 +6,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
             </a>
-            <h1 class="text-3xl font-black text-white tracking-tight">Tambah Data Sounding Awal</h1>
+            <h1 class="text-2xl font-black text-white tracking-tight">Tambah Data Sounding Awal</h1>
         </div>
 
         @if(session('error'))

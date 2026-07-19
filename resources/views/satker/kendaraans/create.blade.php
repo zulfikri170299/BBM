@@ -6,7 +6,7 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
             </a>
             <div>
-                <h1 class="text-3xl font-bold text-white">Tambah Kendaraan</h1>
+                <h1 class="text-2xl font-bold text-white">Tambah Kendaraan</h1>
                 <p class="mt-1 text-slate-400">Barcode & PIN akan di-generate secara otomatis.</p>
             </div>
         </div>

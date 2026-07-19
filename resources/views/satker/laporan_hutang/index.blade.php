@@ -4,7 +4,7 @@
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
                 <h1
-                    class="text-2xl sm:text-3xl font-bold text-white border-b-4 border-indigo-600 pb-2 inline-block">
+                    class="text-2xl sm:text-2xl font-bold text-white border-b-4 border-indigo-600 pb-2 inline-block">
                     Laporan Hutang BBM</h1>
                 <p class="text-slate-400 mt-2 text-sm font-medium">Daftar riwayat hutang bon BBM satker (Lunas & Belum Lunas).</p>
             </div>
