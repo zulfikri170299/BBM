@@ -1047,30 +1047,30 @@
 
                         <!-- Info -->
                         <div
-                            class="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 bg-blue-50 rounded-xl border border-blue-200">
-                            <div class="p-1 sm:p-1.5 bg-blue-100 text-blue-600 rounded-lg mt-0.5 shrink-0">
+                            class="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 bg-blue-500/10 rounded-xl border border-blue-500/20">
+                            <div class="p-1 sm:p-1.5 bg-blue-500/20 text-blue-400 rounded-lg mt-0.5 shrink-0">
                                 <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
-                            <div class="text-[10px] sm:text-xs text-blue-700">
-                                <p class="font-semibold mb-1">Format file Excel (header di baris ke-2):</p>
-                                <ul class="list-disc list-inside space-y-0.5">
-                                    <li>Kolom <strong>NO</strong> â€” Nomor urut</li>
-                                    <li>Kolom <strong>SATKER</strong> â€” Nama satuan kerja</li>
-                                    <li>Kolom <strong>KODE KENDARAAN</strong> â€” Kode unik kendaraan</li>
-                                    <li>Kolom <strong>JENIS KENDARAAN</strong> â€” Tipe kendaraan</li>
-                                    <li>Kolom <strong>NOPOL</strong> â€” Nomor polisi kendaraan</li>
-                                    <li>Kolom <strong>JENIS BBM</strong> â€” Tipe BBM</li>
-                                    <li>Kolom <strong>JUMLAH LITER</strong> â€” Jumlah liter top up</li>
+                            <div class="text-[10px] sm:text-xs text-blue-200">
+                                <p class="font-semibold mb-1 text-blue-400">Format file Excel (header di baris ke-2):</p>
+                                <ul class="list-disc list-inside space-y-0.5 text-blue-200/80">
+                                    <li>Kolom <strong>NO</strong> - Nomor urut</li>
+                                    <li>Kolom <strong>SATKER</strong> - Nama satuan kerja</li>
+                                    <li>Kolom <strong>KODE KENDARAAN</strong> - Kode unik kendaraan</li>
+                                    <li>Kolom <strong>JENIS KENDARAAN</strong> - Tipe kendaraan</li>
+                                    <li>Kolom <strong>NOPOL</strong> - Nomor polisi kendaraan</li>
+                                    <li>Kolom <strong>JENIS BBM</strong> - Tipe BBM</li>
+                                    <li>Kolom <strong>JUMLAH LITER</strong> - Jumlah liter top up</li>
                                 </ul>
                             </div>
                         </div>
 
                         <!-- Mass Import Admin Stock Info -->
-                        <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-3 sm:p-4">
+                        <div class="bg-indigo-500/10 border border-indigo-500/20 rounded-xl p-3 sm:p-4">
                             <p
                                 class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-2 sm:mb-3 flex items-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1281,22 +1281,22 @@
                         <div x-show="step === 1" x-transition>
                             <!-- Info -->
                             <div
-                                class="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 bg-violet-50 rounded-xl border border-violet-200 mb-4">
-                                <div class="p-1 sm:p-1.5 bg-violet-100 text-violet-600 rounded-lg mt-0.5 shrink-0">
+                                class="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 bg-violet-500/10 rounded-xl border border-violet-500/20 mb-4">
+                                <div class="p-1 sm:p-1.5 bg-violet-500/20 text-violet-400 rounded-lg mt-0.5 shrink-0">
                                     <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
                                 </div>
-                                <div class="text-[10px] sm:text-xs text-violet-700">
-                                    <p class="font-semibold mb-1">Format file Excel (header di baris ke-2):</p>
-                                    <ul class="list-disc list-inside space-y-0.5">
-                                        <li>Kolom <strong>NO</strong> â€” Nomor urut</li>
-                                        <li>Kolom <strong>SATKER</strong> â€” Nama satuan kerja</li>
-                                        <li>Kolom <strong>JENIS KENDARAAN</strong> â€” Tipe kendaraan</li>
-                                        <li>Kolom <strong>NOPOL</strong> â€” Nomor polisi kendaraan</li>
-                                        <li>Kolom <strong>JENIS BBM</strong> â€” Pertamax / Pertamina Dex</li>
+                                <div class="text-[10px] sm:text-xs text-violet-200">
+                                    <p class="font-semibold mb-1 text-violet-400">Format file Excel (header di baris ke-2):</p>
+                                    <ul class="list-disc list-inside space-y-0.5 text-violet-200/80">
+                                        <li>Kolom <strong>NO</strong> - Nomor urut</li>
+                                        <li>Kolom <strong>SATKER</strong> - Nama satuan kerja</li>
+                                        <li>Kolom <strong>JENIS KENDARAAN</strong> - Tipe kendaraan</li>
+                                        <li>Kolom <strong>NOPOL</strong> - Nomor polisi kendaraan</li>
+                                        <li>Kolom <strong>JENIS BBM</strong> - Pertamax / Pertamina Dex</li>
                                     </ul>
                                 </div>
                             </div>

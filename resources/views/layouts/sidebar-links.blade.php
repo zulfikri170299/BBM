@@ -306,6 +306,11 @@
                             <div class="submenu-dot {{ request()->routeIs('admin.settings.*') ? 'active-dot' : '' }}"></div>
                             Sistem
                         </a>
+                        <a href="{{ route('admin.backup.index') }}"
+                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.backup.*') ? 'text-white active-' : 'text-slate-400 hover:text-white text-slate-400 hover:text-white hover:bg-white/5/50' }}">
+                            <div class="submenu-dot {{ request()->routeIs('admin.backup.*') ? 'active-dot' : '' }}"></div>
+                            Backup Database
+                        </a>
                     </div>
                 </div>
             @endif

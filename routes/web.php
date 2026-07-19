@@ -192,7 +192,10 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index')->middleware('role:super_admin');
     Route::post('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update')->middleware('role:super_admin');
 
-
+    // Backup Database
+    Route::get('/backup', [\App\Http\Controllers\Admin\BackupDatabaseController::class, 'index'])->name('backup.index')->middleware('role:super_admin');
+    Route::post('/backup/export', [\App\Http\Controllers\Admin\BackupDatabaseController::class, 'export'])->name('backup.export')->middleware('role:super_admin');
+    Route::post('/backup/import', [\App\Http\Controllers\Admin\BackupDatabaseController::class, 'import'])->name('backup.import')->middleware('role:super_admin');
     // Stok BBM
     Route::get('/stok/print', [\App\Http\Controllers\Admin\StokController::class, 'print'])->name('stok.print');
     Route::get('/stok', [\App\Http\Controllers\Admin\StokController::class, 'index'])->name('stok.index');
