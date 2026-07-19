@@ -1,6 +1,6 @@
 <x-guest-layout maxWidth="max-w-5xl">
     <div
-        class="bg-slate-900 backdrop-blur-none border border-white/10 rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row w-full">
+        class="bg-slate-900 backdrop-blur-none border-0 md:border md:border-white/10 rounded-none md:rounded-3xl shadow-none md:shadow-2xl overflow-hidden flex flex-col md:flex-row w-full flex-1 md:flex-auto">
 
         <!-- Left Side: Branding & Visuals -->
         <div class="hidden md:flex md:w-1/2 bg-slate-800 relative items-center justify-center overflow-hidden">
@@ -15,7 +15,7 @@
                         class="absolute inset-0 bg-amber-500/10 rounded-full group-hover:bg-amber-500/20 transition-all duration-500">
                     </div>
                     <img src="{{ asset('rolog.png') }}" alt="Logo"
-                        class="w-32 h-32 object-contain relative drop-shadow-2xl transform group-hover:scale-105 transition-transform duration-500">
+                        class="w-32 h-32 object-contain relative drop-shadow-2xl transform group-hover:scale-105 transition-transform duration-500 animate-float">
                 </div>
 
                 <h2 class="text-3xl font-bold text-white mb-2 tracking-tight">SIM-BBM</h2>
@@ -76,7 +76,7 @@
 
             <div class="mb-10 mt-4 text-center md:text-left">
                 <div class="flex justify-center mb-6 md:hidden">
-                    <img src="{{ asset('rolog.png') }}" alt="Logo" class="w-16 h-16 object-contain drop-shadow-lg">
+                    <img src="{{ asset('rolog.png') }}" alt="Logo" class="w-16 h-16 object-contain drop-shadow-lg animate-float">
                 </div>
                 <div class="md:hidden">
                     <h4 class="text-2xl font-bold text-white mb-1">SIM-BBM</h4>

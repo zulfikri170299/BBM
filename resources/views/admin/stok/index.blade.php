@@ -91,15 +91,15 @@
                                 <h4 class="text-xs font-black text-slate-300 uppercase tracking-widest">{{ $bbm }}</h4>
                             </div>
                             <div class="grid grid-cols-2 gap-4">
-                                <div class="bg-emerald-50/50 p-2.5 rounded-xl border border-emerald-100/50">
-                                    <p class="text-[9px] font-black text-emerald-600/60 uppercase tracking-wider mb-0.5">Total Masuk</p>
-                                    <p class="text-xs font-bold text-emerald-500">
+                                <div class="bg-emerald-500/10 p-2.5 rounded-xl border border-emerald-500/20">
+                                    <p class="text-[9px] font-black text-emerald-400/80 uppercase tracking-wider mb-0.5">Total Masuk</p>
+                                    <p class="text-xs font-bold text-emerald-400">
                                         + {{ number_format($summary[$bbm]['masuk'] ?? 0, 0, ',', '.') }} <span class="text-[10px]">L</span>
                                     </p>
                                 </div>
-                                <div class="bg-rose-50/50 p-2.5 rounded-xl border border-rose-100/50">
-                                    <p class="text-[9px] font-black text-rose-600/60 uppercase tracking-wider mb-0.5">Total Keluar</p>
-                                    <p class="text-xs font-bold text-rose-500">
+                                <div class="bg-rose-500/10 p-2.5 rounded-xl border border-rose-500/20">
+                                    <p class="text-[9px] font-black text-rose-400/80 uppercase tracking-wider mb-0.5">Total Keluar</p>
+                                    <p class="text-xs font-bold text-rose-400">
                                         - {{ number_format($summary[$bbm]['keluar'] ?? 0, 0, ',', '.') }} <span class="text-[10px]">L</span>
                                     </p>
                                 </div>

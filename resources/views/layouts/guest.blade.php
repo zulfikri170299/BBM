@@ -31,6 +31,15 @@
                     fontFamily: {
                         sans: ['Outfit', 'sans-serif'],
                     },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
                 },
             },
         }
@@ -41,11 +50,16 @@
 
         .login-gradient {
             background-color: #0f172a;
-            background-image: url('/polda.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
             position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .login-gradient {
+                background-image: url('/polda.jpg');
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
+            }
         }
 
         .login-gradient::before {
@@ -68,12 +82,12 @@
     </style>
 </head>
 
-<body class="font-sans antialiased text-slate-200">
-    <div class="min-h-screen flex items-center justify-center p-4 login-gradient">
-        <div class="w-full {{ $maxWidth }} relative z-20">
+<body class="font-sans antialiased text-slate-200 bg-slate-900">
+    <div class="min-h-screen flex flex-col items-center justify-center p-0 md:p-4 login-gradient">
+        <div class="w-full {{ $maxWidth }} relative z-20 flex-1 flex flex-col justify-center">
             {{ $slot }}
 
-            <p class="text-center text-xs text-slate-400 mt-8 font-medium">
+            <p class="text-center text-xs text-slate-400 mt-8 mb-8 md:mb-0 font-medium">
                 &copy; {{ date('Y') }} BIRO LOGISTIK. Polda Nusa Tenggara Barat.
             </p>
         </div>

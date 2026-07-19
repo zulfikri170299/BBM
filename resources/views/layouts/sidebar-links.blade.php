@@ -166,6 +166,11 @@
                         <div class="submenu-dot {{ request()->routeIs('admin.laporan-potong.*') ? 'active-dot' : '' }}"></div>
                         Laporan Potong Saldo
                     </a>
+                    <a href="{{ route('admin.laporan-transfer-saldo.index') }}"
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-transfer-saldo.*') ? 'text-white active-' : 'text-slate-400 hover:text-white text-slate-400 hover:text-white hover:bg-white/5/50' }}">
+                        <div class="submenu-dot {{ request()->routeIs('admin.laporan-transfer-saldo.*') ? 'active-dot' : '' }}"></div>
+                        Laporan Transfer Saldo
+                    </a>
                     <a href="{{ route('admin.saldo-dialihkan.index') }}"
                         class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.saldo-dialihkan.*') ? 'text-white active-' : 'text-slate-400 hover:text-white text-slate-400 hover:text-white hover:bg-white/5/50' }}">
                         <div class="submenu-dot {{ request()->routeIs('admin.saldo-dialihkan.*') ? 'active-dot' : '' }}"></div>

@@ -74,40 +74,40 @@
                         </div>
 
                         <!-- Compact Date Filter -->
-                        <form action="{{ route('pembelian-bbm.index') }}" method="GET" class="flex flex-wrap items-center gap-2 w-full">
+                        <form action="{{ route('pembelian-bbm.index') }}" method="GET" class="flex flex-wrap xl:flex-nowrap items-center gap-2 w-full">
                             <input type="hidden" name="per_page" value="{{ request('per_page', 15) }}">
                             
                             <!-- Date Inputs -->
-                            <div class="flex flex-wrap sm:flex-nowrap items-center gap-2 flex-1 sm:flex-none w-full sm:w-auto">
-                                <div class="relative group/input flex-1 sm:flex-none">
-                                    <select name="jenis_bbm" class="px-2 py-1.5 bg-slate-900 border border-white/5 border-white/10 rounded-lg text-[11px] font-bold text-slate-300 focus:ring-4 focus:ring-indigo-500/5 transition-all w-full min-w-[120px]">
+                            <div class="flex flex-nowrap items-center gap-2 flex-grow min-w-0">
+                                <div class="relative group/input w-1/3">
+                                    <select name="jenis_bbm" class="px-2 py-1.5 bg-slate-900 border border-white/5 border-white/10 rounded-lg text-[10px] sm:text-[11px] font-bold text-slate-300 focus:ring-4 focus:ring-indigo-500/5 transition-all w-full">
                                         <option value="">Semua BBM</option>
                                         <option value="Pertamax" {{ request('jenis_bbm') == 'Pertamax' ? 'selected' : '' }}>Pertamax</option>
                                         <option value="Pertamina Dex" {{ request('jenis_bbm') == 'Pertamina Dex' ? 'selected' : '' }}>Pertamina Dex</option>
                                     </select>
                                 </div>
-                                <div class="relative group/input flex-1 sm:flex-none">
+                                <div class="relative group/input w-1/3">
                                     <input type="date" name="start_date" value="{{ request('start_date') }}" 
-                                        class="flatpickr px-2 py-1.5 bg-slate-900 border border-white/5 border-white/10 rounded-lg text-[11px] font-bold text-slate-300 focus:ring-4 focus:ring-indigo-500/5 transition-all w-full min-w-[110px]" placeholder="Tgl Mulai">
+                                        class="flatpickr px-2 py-1.5 bg-slate-900 border border-white/5 border-white/10 rounded-lg text-[10px] sm:text-[11px] font-bold text-slate-300 focus:ring-4 focus:ring-indigo-500/5 transition-all w-full" placeholder="Tgl Mulai">
                                 </div>
-                                <div class="relative group/input flex-1 sm:flex-none">
+                                <div class="relative group/input w-1/3">
                                     <input type="date" name="end_date" value="{{ request('end_date') }}" 
-                                        class="flatpickr px-2 py-1.5 bg-slate-900 border border-white/5 border-white/10 rounded-lg text-[11px] font-bold text-slate-300 focus:ring-4 focus:ring-indigo-500/5 transition-all w-full min-w-[110px]" placeholder="Tgl Selesai">
+                                        class="flatpickr px-2 py-1.5 bg-slate-900 border border-white/5 border-white/10 rounded-lg text-[10px] sm:text-[11px] font-bold text-slate-300 focus:ring-4 focus:ring-indigo-500/5 transition-all w-full" placeholder="Tgl Selesai">
                                 </div>
                             </div>
                             
                             <!-- Action Buttons -->
-                            <div class="flex flex-wrap sm:flex-nowrap items-center gap-2 w-full sm:w-auto mt-2 sm:mt-0">
-                                <button type="submit" class="flex-1 sm:flex-none px-3 py-1.5 bg-indigo-600 text-white font-black rounded-lg hover:bg-indigo-700 transition-all text-[10px] uppercase tracking-widest shadow-sm">
+                            <div class="flex flex-nowrap items-center gap-1 sm:gap-2 flex-shrink-0 mt-2 xl:mt-0 w-full xl:w-auto justify-end">
+                                <button type="submit" class="flex-1 xl:flex-none px-3 py-1.5 bg-indigo-600 text-white font-black rounded-lg hover:bg-indigo-700 transition-all text-[10px] uppercase tracking-widest shadow-sm">
                                     Filter
                                 </button>
                                 @if(request()->hasAny(['start_date', 'end_date', 'jenis_bbm']))
-                                    <a href="{{ route('pembelian-bbm.index', request()->only('per_page')) }}" class="flex-1 sm:flex-none px-3 py-1.5 bg-slate-800 text-slate-400 font-bold rounded-lg hover:bg-slate-200 transition-all text-[10px] uppercase tracking-widest leading-normal text-center">
+                                    <a href="{{ route('pembelian-bbm.index', request()->only('per_page')) }}" class="flex-1 xl:flex-none px-3 py-1.5 bg-slate-800 text-slate-400 font-bold rounded-lg hover:bg-slate-200 transition-all text-[10px] uppercase tracking-widest leading-normal text-center">
                                         Reset
                                     </a>
                                 @endif
                                 <div class="h-6 w-px bg-slate-200 mx-1 hidden sm:block"></div>
-                                <a href="{{ route('pembelian-bbm.print', request()->all()) }}" target="_blank" class="flex-1 sm:flex-none px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-[10px] font-black rounded-lg shadow-sm transition-all flex items-center justify-center gap-1.5 uppercase tracking-widest">
+                                <a href="{{ route('pembelian-bbm.print', request()->all()) }}" target="_blank" class="flex-1 xl:flex-none px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-[10px] font-black rounded-lg shadow-sm transition-all flex items-center justify-center gap-1.5 uppercase tracking-widest">
                                     <svg class="w-3.5 h-3.5 font-bold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
                                     Cetak PDF
                                 </a>
