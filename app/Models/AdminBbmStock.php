@@ -13,4 +13,8 @@ class AdminBbmStock extends Model
         'jenis_bbm',
         'saldo',
     ];
+
+    protected $casts = [
+        'saldo' => 'integer',
+    ];
 }

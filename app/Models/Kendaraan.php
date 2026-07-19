@@ -11,6 +11,10 @@ class Kendaraan extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'saldo' => 'integer',
+    ];
+
     public function satker()
     {
         return $this->belongsTo(Satker::class);

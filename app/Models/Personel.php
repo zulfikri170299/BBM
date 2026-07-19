@@ -20,6 +20,10 @@ class Personel extends Model
         'barcode',
     ];
 
+    protected $casts = [
+        'saldo' => 'integer',
+    ];
+
     public function satker()
     {
         return $this->belongsTo(Satker::class);
