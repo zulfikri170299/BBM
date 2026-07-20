@@ -59,9 +59,19 @@
                         </div>
                     </div>
 
-                    <form action="{{ route('admin.backup.export') }}" method="POST" class="mt-auto">
+                    <form action="{{ route('admin.backup.export') }}" method="POST" class="space-y-3 mt-auto">
                         @csrf
-                        <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-xl font-bold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 transition-all hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 text-sm uppercase tracking-wider">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1.5">PIN Keamanan Verifikasi</label>
+                            <input type="password" name="topup_password" class="w-full px-3 py-2 bg-slate-900 border-2 border-white/10 rounded-xl text-xs sm:text-xs font-medium text-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-400" placeholder="Masukkan PIN" required autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+                            @if(!auth()->user()->topup_password)
+                                <p class="text-[10px] text-red-500 mt-1">
+                                    <svg class="w-2.5 h-2.5 inline mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                    Anda belum mengatur PIN keamanan. <a href="{{ route('profile.edit') }}" class="underline hover:text-blue-400">Atur di Profil</a>.
+                                </p>
+                            @endif
+                        </div>
+                        <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-xl font-bold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 transition-all hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 text-sm uppercase tracking-wider mt-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                             Export Sekarang
                         </button>
@@ -107,7 +117,7 @@
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-300 mb-1.5">PIN Keamanan Verifikasi</label>
-                            <input type="password" name="topup_password" class="w-full px-3 py-2 bg-slate-900 border-2 border-white/10 rounded-xl text-xs sm:text-xs font-medium text-slate-200 focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all placeholder:text-slate-400" placeholder="Masukkan PIN Top-up..." required autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+                            <input type="password" name="topup_password" class="w-full px-3 py-2 bg-slate-900 border-2 border-white/10 rounded-xl text-xs sm:text-xs font-medium text-slate-200 focus:border-red-500 focus:ring-4 focus:ring-red-500/10 transition-all placeholder:text-slate-400" placeholder="Masukkan PIN" required autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
                             @if(!auth()->user()->topup_password)
                                 <p class="text-[10px] text-red-500 mt-1">
                                     <svg class="w-2.5 h-2.5 inline mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>

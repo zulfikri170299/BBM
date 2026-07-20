@@ -15,8 +15,27 @@ class BackupDatabaseController extends Controller
         return view('admin.backup.index');
     }
 
-    public function export()
+    public function export(Request $request)
     {
+        $request->validate([
+            'topup_password' => 'required|string',
+        ], [
+            'topup_password.required' => 'PIN Wajib diisi.',
+            'topup_password.string' => 'Format PIN tidak valid.'
+        ]);
+
+        $user = auth()->user();
+
+        // Cek apakah user sudah mengatur password topup
+        if (!$user->topup_password) {
+            return back()->withErrors(['message' => 'Anda belum mengatur PIN Keamanan. Silakan atur di menu Profil terlebih dahulu.']);
+        }
+
+        // Verifikasi password topup
+        if (!\Illuminate\Support\Facades\Hash::check($request->topup_password, $user->topup_password)) {
+            return back()->withErrors(['message' => 'PIN Keamanan salah! Proses dibatalkan demi keamanan.']);
+        }
+
         $connection = config('database.default');
         $storagePath = storage_path('app/temp');
         
@@ -85,6 +104,10 @@ class BackupDatabaseController extends Controller
         $request->validate([
             'backup_file' => 'required|file',
             'topup_password' => 'required|string',
+        ], [
+            'backup_file.required' => 'File Backup wajib diisi.',
+            'topup_password.required' => 'PIN Wajib diisi.',
+            'topup_password.string' => 'Format PIN tidak valid.'
         ]);
 
         $user = auth()->user();
