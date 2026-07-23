@@ -13,7 +13,7 @@
             <div class="flex flex-wrap items-center gap-2 sm:gap-3">
                 @if(auth()->user()->role === 'super_admin')
                     <button @click="$dispatch('open-import-kendaraan')"
-                        class="inline-flex items-center justify-center w-10 h-10 bg-slate-800/80 border border-white/10 text-violet-400 rounded-xl hover:bg-slate-700 hover:text-violet-300 shadow-sm backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
+                        class="inline-flex items-center justify-center w-10 h-10 bg-slate-800/80 border border-white/10 text-violet-400 rounded-xl hover:bg-slate-700 hover:text-violet-300 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
                         title="Import Data Kendaraan">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -25,7 +25,7 @@
                             Data Kendaraan</span>
                     </button>
                     <button @click="$dispatch('open-import')"
-                        class="inline-flex items-center justify-center w-10 h-10 bg-slate-800/80 border border-white/10 text-blue-400 rounded-xl hover:bg-slate-700 hover:text-blue-300 shadow-sm backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
+                        class="inline-flex items-center justify-center w-10 h-10 bg-slate-800/80 border border-white/10 text-blue-400 rounded-xl hover:bg-slate-700 hover:text-blue-300 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
                         title="Import Top Up">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -37,7 +37,7 @@
                             Top Up</span>
                     </button>
                     <button @click="$dispatch('open-topup-select')"
-                        class="inline-flex items-center justify-center w-10 h-10 bg-slate-800/80 border border-white/10 text-emerald-400 rounded-xl hover:bg-slate-700 hover:text-emerald-300 shadow-sm backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
+                        class="inline-flex items-center justify-center w-10 h-10 bg-slate-800/80 border border-white/10 text-emerald-400 rounded-xl hover:bg-slate-700 hover:text-emerald-300 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
                         title="Top Up Saldo">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -52,7 +52,7 @@
                 @endif
                 <a href="{{ route('admin.kendaraans.export', ['satker_id' => request('satker_id')]) }}" target="_blank"
                     rel="nofollow"
-                    class="inline-flex items-center justify-center w-10 h-10 bg-slate-800/80 border border-white/10 text-amber-400 rounded-xl hover:bg-slate-700 hover:text-amber-300 shadow-sm backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
+                    class="inline-flex items-center justify-center w-10 h-10 bg-slate-800/80 border border-white/10 text-amber-400 rounded-xl hover:bg-slate-700 hover:text-amber-300 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
                     title="Export Excel">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -64,7 +64,7 @@
                         Excel</span>
                 </a>
                 <button @click="$dispatch('open-monthly-report')"
-                    class="inline-flex items-center justify-center w-10 h-10 bg-slate-800/80 border border-white/10 text-rose-400 rounded-xl hover:bg-slate-700 hover:text-rose-300 shadow-sm backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
+                    class="inline-flex items-center justify-center w-10 h-10 bg-slate-800/80 border border-white/10 text-rose-400 rounded-xl hover:bg-slate-700 hover:text-rose-300 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
                     title="Laporan Bulanan">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -78,7 +78,7 @@
                 </button>
                 @if(auth()->user()->role !== 'kasubbag')
                     <a href="{{ route('admin.kendaraans.create') }}"
-                        class="flex-1 lg:flex-none inline-flex items-center justify-center w-10 h-10 bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 rounded-xl hover:bg-indigo-500/30 hover:text-indigo-200 shadow-sm backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
+                        class="flex-1 lg:flex-none inline-flex items-center justify-center w-10 h-10 bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 rounded-xl hover:bg-indigo-500/30 hover:text-indigo-200 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
                         title="Tambah Kendaraan">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -405,7 +405,7 @@
                                         
                                         <template x-teleport="body">
                                             <div x-show="showDetail" class="fixed inset-0 z-[9000] flex items-end sm:items-center justify-center p-4" style="display: none;">
-                                                <div x-show="showDetail" x-transition.opacity @click="showDetail = false" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm"></div>
+                                                <div x-show="showDetail" x-transition.opacity @click="showDetail = false" class="fixed inset-0 bg-slate-950/80"></div>
                                                 <div x-show="showDetail" x-transition.translate.y @click.outside="showDetail = false" class="relative w-full max-w-sm bg-slate-900 border border-white/10 rounded-2xl shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
                                                     <div class="p-4 border-b border-white/10 flex justify-between items-center bg-slate-800/50">
                                                         <div class="text-left">
@@ -489,6 +489,9 @@
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z">
+                                                </path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1">
                                                 </path>
                                             </svg>
                                         </div>
@@ -632,7 +635,7 @@
             <div x-show="showTopup" x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                 x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm"
+                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60"
                 @click="showTopup = false"></div>
 
             <!-- Modal -->
@@ -1000,7 +1003,7 @@
             <div x-show="showImport" x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                 x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm"
+                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60"
                 @click="showImport = false"></div>
 
             <!-- Modal -->
@@ -1208,7 +1211,7 @@
             <div x-show="showModal" x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                 x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm"
+                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60"
                 @click="closeModal()"></div>
 
             <!-- Modal -->
@@ -1848,7 +1851,7 @@
             <div x-show="showMonthlyReport" x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                 x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm"
+                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60"
                 @click="showMonthlyReport = false"></div>
 
             <!-- Modal -->
@@ -2035,7 +2038,7 @@
                 <div x-show="showTransfer" style="display: none;" class="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4">
                     <div x-show="showTransfer" x-transition:enter="transition ease-out duration-200"
                         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                        class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm" @click="reset()"></div>
+                        class="fixed inset-0 bg-slate-900/80" @click="reset()"></div>
 
                     <div x-show="showTransfer" x-transition:enter="transition ease-out duration-300"
                         x-transition:enter-start="opacity-0 scale-95 translate-y-4"
@@ -2196,7 +2199,7 @@
         <div x-show="show" style="display: none;" class="fixed inset-0 z-[9999] flex items-center justify-center p-4">
             <!-- Backdrop -->
             <div x-show="show" x-transition.opacity @click="show = false"
-                class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm"></div>
+                class="fixed inset-0 bg-slate-900/80"></div>
 
             <!-- Modal -->
             <div x-show="show" x-transition.translate.y @click.outside="show = false"

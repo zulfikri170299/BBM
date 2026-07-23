@@ -19,7 +19,7 @@
                 </div>
                 <div class="relative z-10">
                     <div class="flex items-center justify-between mb-2 sm:mb-3">
-                        <div class="p-2 sm:p-2.5 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl backdrop-blur-sm">
+                        <div class="p-2 sm:p-2.5 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl">
                             <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
@@ -31,8 +31,20 @@
                     </div>
                     <div class="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-2 mt-1 sm:mt-0">
                         <p class="text-xl sm:text-2xl font-black text-white">{{ number_format($stats['totalSatker'], 0, ',', '.') }}</p>
-                        <p class="text-[9px] sm:text-[11px] text-white/90 opacity-80 font-medium truncate">Total
-                            Satker</p>
+                        <p class="text-[9px] sm:text-[11px] text-white/90 opacity-80 font-medium truncate">Total Satker</p>
+                    </div>
+                    <div class="mt-2 sm:mt-3 flex gap-2">
+                        <div class="flex-1 bg-white/20 border border-white/30 shadow-sm rounded-lg px-2 py-1 text-center flex flex-col justify-center">
+                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90 uppercase">Terdaftar</p>
+                            <p class="text-xs sm:text-sm font-black text-white leading-tight mt-0.5">{{ number_format($stats['totalSatker'], 0, ',', '.') }}</p>
+                        </div>
+                        <div class="flex-1 bg-white/20 border border-white/30 shadow-sm rounded-lg px-2 py-1 flex flex-col items-center justify-center">
+                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90 uppercase">Status</p>
+                            <p class="text-[10px] sm:text-xs font-black text-emerald-300 flex items-center gap-1.5 mt-0.5">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>
+                                AKTIF
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -44,7 +56,7 @@
                 </div>
                 <div class="relative z-10">
                     <div class="flex items-center justify-between mb-2 sm:mb-3">
-                        <div class="p-2 sm:p-2.5 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl backdrop-blur-sm">
+                        <div class="p-2 sm:p-2.5 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl">
                             <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
@@ -56,8 +68,17 @@
                     </div>
                     <div class="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-2 mt-1 sm:mt-0">
                         <p class="text-xl sm:text-2xl font-black text-white">{{ number_format($stats['totalUsers'], 0, ',', '.') }}</p>
-                        <p class="text-[9px] sm:text-[11px] text-white/90 opacity-80 font-medium truncate">Total
-                            Users</p>
+                        <p class="text-[9px] sm:text-[11px] text-white/90 opacity-80 font-medium truncate">Total Users</p>
+                    </div>
+                    <div class="mt-2 sm:mt-3 flex gap-2">
+                        <div class="flex-1 bg-white/20 border border-white/30 shadow-sm rounded-lg px-2 py-1 text-center flex flex-col justify-center">
+                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90 uppercase">Hak Akses</p>
+                            <p class="text-[10px] sm:text-xs font-black text-white mt-0.5 truncate">Terverifikasi</p>
+                        </div>
+                        <div class="flex-1 bg-white/20 border border-white/30 shadow-sm rounded-lg px-2 py-1 text-center flex flex-col justify-center">
+                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90 uppercase">Sistem</p>
+                            <p class="text-[10px] sm:text-xs font-black text-white mt-0.5">Online</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -69,7 +90,7 @@
                 </div>
                 <div class="relative z-10">
                     <div class="flex items-center justify-between mb-2 sm:mb-3">
-                        <div class="p-2 sm:p-2.5 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl backdrop-blur-sm">
+                        <div class="p-2 sm:p-2.5 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl">
                             <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -87,19 +108,19 @@
                             Kendaraan</p>
                     </div>
                     <div class="grid grid-cols-4 gap-1 mt-2 sm:mt-3">
-                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
+                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center">
                             <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90">R2</p>
                             <p class="text-xs sm:text-sm font-black text-white">{{ $stats['rodaR2'] }}</p>
                         </div>
-                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
+                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center">
                             <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90">R4</p>
                             <p class="text-xs sm:text-sm font-black text-white">{{ $stats['rodaR4'] }}</p>
                         </div>
-                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
+                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center">
                             <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90">R6</p>
                             <p class="text-xs sm:text-sm font-black text-white">{{ $stats['rodaR6'] }}</p>
                         </div>
-                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
+                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center">
                             <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90 leading-tight">Non</p>
                             <p class="text-xs sm:text-sm font-black text-white">{{ $stats['rodaNon'] }}</p>
                         </div>
@@ -114,7 +135,7 @@
                 </div>
                 <div class="relative z-10">
                     <div class="flex items-center justify-between mb-2 sm:mb-3">
-                        <div class="p-2 sm:p-2.5 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl backdrop-blur-sm">
+                        <div class="p-2 sm:p-2.5 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl">
                             <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
@@ -125,8 +146,17 @@
                     </div>
                     <div class="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-2 mt-1 sm:mt-0">
                         <p class="text-xl sm:text-2xl font-black text-white">{{ number_format($stats['totalTransaksi'], 0, ',', '.') }}</p>
-                        <p class="text-[9px] sm:text-[11px] text-white/90 opacity-80 font-medium truncate">Total
-                            Transaksi</p>
+                        <p class="text-[9px] sm:text-[11px] text-white/90 opacity-80 font-medium truncate">Total Transaksi</p>
+                    </div>
+                    <div class="mt-2 sm:mt-3 flex gap-2">
+                        <div class="flex-1 bg-white/20 border border-white/30 shadow-sm rounded-lg px-2 py-1 text-center flex flex-col justify-center">
+                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90 uppercase truncate">Volume Disalurkan</p>
+                            <p class="text-xs sm:text-sm font-black text-white mt-0.5">{{ number_format($stats['totalLiter'] ?? 0, 0, ',', '.') }} <span class="text-[9px] font-bold opacity-80">L</span></p>
+                        </div>
+                        <div class="flex-1 bg-white/20 border border-white/30 shadow-sm rounded-lg px-2 py-1 text-center flex flex-col justify-center">
+                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90 uppercase truncate">Total Bon</p>
+                            <p class="text-xs sm:text-sm font-black text-white mt-0.5">{{ number_format(($stats['totalHutangPertamax'] ?? 0) + ($stats['totalHutangDex'] ?? 0), 0, ',', '.') }} <span class="text-[9px] font-bold opacity-80">L</span></p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -136,9 +166,9 @@
         <!-- Tank Stock Section (Sinkronisasi) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             <!-- Card: Pertamax -->
-            <div class="bg-slate-900/60 border border-white/10 backdrop-blur-xl rounded-2xl shadow-lg p-5 text-white flex items-center gap-4 group hover:shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+            <div class="bg-slate-900/60 border border-white/10 rounded-2xl shadow-lg p-5 text-white flex items-center gap-4 group hover:shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
                 <div class="absolute -top-4 -right-4 w-24 h-24 bg-indigo-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
-                <div class="p-3 bg-white/20 border border-white/30 rounded-xl backdrop-blur-sm group-hover:scale-110 transition-transform shrink-0">
+                <div class="p-3 bg-white/20 border border-white/30 rounded-xl group-hover:scale-110 transition-transform shrink-0">
                     <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                     </svg>
@@ -148,14 +178,14 @@
                     <h3 class="text-xl sm:text-2xl font-black truncate text-white">{{ number_format($tankStock['pertamax'], 0, ',', '.') }} <span class="text-xs font-bold text-white/90">L</span></h3>
                 </div>
                 <div class="absolute bottom-4 right-4 relative z-20">
-                    <a href="{{ route('admin.laporan-stok-bbm.index') }}" class="text-[10px] font-bold bg-white/20 border border-white/30 hover:bg-slate-900 hover:border-white/5/40 px-3 py-1.5 rounded-lg transition-all uppercase tracking-wider backdrop-blur-sm text-white/90">Laporan</a>
+                    <a href="{{ route('admin.laporan-stok-bbm.index') }}" class="text-[10px] font-bold bg-white/20 border border-white/30 hover:bg-slate-900 hover:border-white/5/40 px-3 py-1.5 rounded-lg transition-all uppercase tracking-wider text-white/90">Laporan</a>
                 </div>
             </div>
 
             <!-- Card: Dex -->
-            <div class="{{ $tankStock['dex'] < 0 ? 'bg-slate-900/60 border-2 border-rose-500/50 backdrop-blur-xl shadow-2xl scale-[1.02]' : 'bg-slate-900/60 border border-white/10 backdrop-blur-xl' }} rounded-2xl shadow-lg p-5 text-white flex items-center gap-4 group hover:shadow-rose-500/20 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+            <div class="{{ $tankStock['dex'] < 0 ? 'bg-slate-900/60 border-2 border-rose-500/50 shadow-2xl scale-[1.02]' : 'bg-slate-900/60 border border-white/10' }} rounded-2xl shadow-lg p-5 text-white flex items-center gap-4 group hover:shadow-rose-500/20 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
                 <div class="absolute -top-4 -right-4 w-24 h-24 bg-rose-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
-                <div class="p-3 bg-white/20 border border-white/30 rounded-xl backdrop-blur-sm group-hover:scale-110 transition-transform shrink-0">
+                <div class="p-3 bg-white/20 border border-white/30 rounded-xl group-hover:scale-110 transition-transform shrink-0">
                     <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                     </svg>
@@ -165,7 +195,7 @@
                     <h3 class="text-xl sm:text-2xl font-black truncate text-white">{{ number_format($tankStock['dex'], 0, ',', '.') }} <span class="text-xs font-bold text-white/90">L</span></h3>
                 </div>
                 <div class="absolute bottom-4 right-4 relative z-20">
-                    <a href="{{ route('admin.laporan-stok-bbm.index') }}" class="text-[10px] font-bold bg-white/20 border border-white/30 hover:bg-slate-900 hover:border-white/5/40 px-3 py-1.5 rounded-lg transition-all uppercase tracking-wider backdrop-blur-sm text-white/90">Laporan</a>
+                    <a href="{{ route('admin.laporan-stok-bbm.index') }}" class="text-[10px] font-bold bg-white/20 border border-white/30 hover:bg-slate-900 hover:border-white/5/40 px-3 py-1.5 rounded-lg transition-all uppercase tracking-wider text-white/90">Laporan</a>
                 </div>
             </div>
         </div>
@@ -198,10 +228,11 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8 mt-2 sm:mt-4">
-            <!-- Left Column: Unit & Personel Balance -->
-            <div
-                class="bg-slate-900 border border-white/5 rounded-xl sm:rounded-2xl border border-white/10/70 shadow-sm p-4 sm:p-6 overflow-hidden relative">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 mt-2 sm:mt-4">
+            <!-- Left Column: Unit Balance & Satisfaction Index -->
+            <div class="space-y-4 sm:space-y-8">
+                <div
+                    class="bg-slate-900 border border-white/5 rounded-xl sm:rounded-2xl border border-white/10/70 shadow-sm p-4 sm:p-6 overflow-hidden relative">
                 <div class="absolute top-0 right-0 p-4 opacity-5">
                     <svg class="w-20 h-20 sm:w-32 sm:h-32" fill="currentColor" viewBox="0 0 24 24">
                         <path
@@ -245,91 +276,10 @@
                         </div>
                     </div>
 
-                    @if($personelAccessControl == '1')
-                    <!-- Separator -->
-                    <div class="border-t border-white/5"></div>
 
-                    <!-- Personel Section -->
-                    <div>
-                        <h3 class="text-xs sm:text-xs font-semibold text-slate-200 mb-2 sm:mb-4 flex items-center gap-2">
-                            <div class="w-1 h-3 sm:w-1.5 sm:h-4 bg-indigo-500 rounded-full"></div>
-                            Total Saldo Personel
-                        </h3>
-                        <div class="grid grid-cols-2 gap-2 sm:gap-4">
-                            @foreach($personelFuel as $pFuel)
-                                @if(in_array(strtoupper($pFuel->jenis_bbm), ['PERTAMAX', 'PERTAMINA DEX']))
-                                    <div
-                                        class="bg-gradient-to-br {{ $bbmStyle[$pFuel->jenis_bbm] ?? 'from-slate-500 to-slate-600' }} p-3 sm:p-4 rounded-lg sm:rounded-xl text-white shadow-md">
-                                        <p
-                                            class="text-[8px] sm:text-[9px] font-bold uppercase tracking-widest opacity-80 truncate">
-                                            {{ $pFuel->jenis_bbm }}</p>
-                                        <div class="flex items-baseline gap-1 mt-0.5 sm:mt-1">
-                                            <span
-                                                class="text-base sm:text-xl font-black">{{ number_format($pFuel->total, 0, ',', '.') }}</span>
-                                            <span class="text-[9px] sm:text-[10px] font-bold opacity-70">L</span>
-                                        </div>
-                                    </div>
-                                @endif
-                            @endforeach
-                            @if(count($personelFuel) == 0)
-                                <p class="col-span-2 text-center text-slate-400 py-4 italic text-sm">Belum ada data saldo
-                                    personel.</p>
-                            @endif
-                        </div>
-                    </div>
-                    @endif
                 </div>
-            </div>
-
-            <!-- Right Column: Stok Pembelian BBM (Belum Distribusi) (Super Admin) -->
-            <div
-                class="bg-slate-900/60 border border-white/10 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 overflow-hidden relative group">
-                <div class="absolute -top-12 -right-12 w-32 h-32 sm:w-48 sm:h-48 bg-indigo-500/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-500">
                 </div>
-                <h3 class="text-sm sm:text-lg font-bold text-white mb-4 sm:mb-6 flex items-center gap-2 relative z-10">
-                    <div class="w-1.5 h-4 sm:w-2 sm:h-6 bg-indigo-500 rounded-full"></div>
-                    Saldo BBM (Belum Distribusi)
-                </h3>
-                <div class="grid grid-cols-1 gap-2 sm:gap-4 relative z-10">
-                    @foreach($adminStocks as $aStock)
-                        <div
-                            class="bg-white/20 border border-white/30 backdrop-blur-md rounded-lg sm:rounded-xl p-3 sm:p-4 hover:border-white/20 transition-all">
-                            <p
-                                class="text-[8px] sm:text-[10px] font-bold text-white/90 uppercase tracking-widest leading-tight mb-0.5 sm:mb-1">
-                                {{ $aStock->jenis_bbm }}</p>
-                            <div class="flex items-baseline justify-between mt-0.5 sm:mt-1">
-                                <span
-                                    class="text-xl sm:text-2xl font-bold text-white">{{ rtrim(rtrim(number_format($aStock->saldo, 2, ',', '.'), '0'), ',') }}
-                                    <span class="text-xs sm:text-sm font-bold text-white/90 opacity-70">L</span></span>
-                                <div
-                                    class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-800 border border-white/5/20 flex items-center justify-center">
-                                    <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
-                                        </path>
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-                <div class="mt-4 sm:mt-8 text-right relative z-10">
-                    <a href="{{ route('admin.stok.index') }}"
-                        class="text-xs sm:text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-500 border border-transparent px-4 py-2 sm:px-6 sm:py-3 rounded-xl transition-all shadow-lg active:scale-95 flex items-center gap-2 inline-flex">
-                        Kelola Saldo
-                        <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-6 mt-2 sm:mt-4">
-            <!-- Left Column: Charts -->
-            <div class="xl:col-span-2 space-y-4 sm:space-y-6">
+                
                 <!-- Satisfaction Index Chart -->
                 <div
                     class="bg-slate-900 border border-white/5 rounded-xl sm:rounded-2xl border border-white/10/70 shadow-sm p-4 sm:p-6 overflow-hidden relative">
@@ -394,29 +344,64 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Transaction Chart Area -->
-                <div class="bg-slate-900 border border-white/5 rounded-xl sm:rounded-2xl border border-white/10/70 shadow-sm p-4 sm:p-6">
-                    <h3 class="text-base sm:text-lg font-bold text-slate-200 mb-2 sm:mb-4">Transaksi 7 Hari Terakhir
+            <!-- Item 2: Stok Pembelian BBM (Belum Distribusi) (Super Admin) -->
+            <div class="space-y-4 sm:space-y-8">
+                <div class="bg-slate-900/60 border border-white/10 rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 overflow-hidden relative group h-full">
+                    <div class="absolute -top-12 -right-12 w-32 h-32 sm:w-48 sm:h-48 bg-indigo-500/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-500">
+                    </div>
+                    <h3 class="text-sm sm:text-lg font-bold text-white mb-4 sm:mb-6 flex items-center gap-2 relative z-10">
+                        <div class="w-1.5 h-4 sm:w-2 sm:h-6 bg-indigo-500 rounded-full"></div>
+                        Saldo BBM (Belum Distribusi)
                     </h3>
+                    <div class="grid grid-cols-1 gap-2 sm:gap-4 relative z-10">
+                        @foreach($adminStocks as $aStock)
+                            <div class="bg-white/20 border border-white/30 rounded-lg sm:rounded-xl p-3 sm:p-4 hover:border-white/20 transition-all">
+                                <p class="text-[8px] sm:text-[10px] font-bold text-white/90 uppercase tracking-widest leading-tight mb-0.5 sm:mb-1">
+                                    {{ $aStock->jenis_bbm }}</p>
+                                <div class="flex items-baseline justify-between mt-0.5 sm:mt-1">
+                                    <span class="text-xl sm:text-2xl font-bold text-white">{{ rtrim(rtrim(number_format($aStock->saldo, 2, ',', '.'), '0'), ',') }}
+                                        <span class="text-xs sm:text-sm font-bold text-white/90 opacity-70">L</span></span>
+                                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-slate-800 border border-white/5/20 flex items-center justify-center">
+                                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="mt-4 sm:mt-8 text-right relative z-10">
+                        <a href="{{ route('admin.stok.index') }}" class="text-xs sm:text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-500 border border-transparent px-4 py-2 sm:px-6 sm:py-3 rounded-xl transition-all shadow-lg active:scale-95 flex items-center gap-2 inline-flex">
+                            Kelola Saldo
+                            <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 3: Transaction Chart Area -->
+            <div class="space-y-4 sm:space-y-8">
+                <div class="bg-slate-900 border border-white/5 rounded-xl sm:rounded-2xl border border-white/10/70 shadow-sm p-4 sm:p-6 h-full">
+                    <h3 class="text-base sm:text-lg font-bold text-slate-200 mb-2 sm:mb-4">Transaksi 7 Hari Terakhir</h3>
                     <div id="transactionChart"></div>
                 </div>
             </div>
 
-            <!-- Right Column: Recent Transactions & Stats -->
-            <div class="space-y-4 sm:space-y-6">
-
-                <!-- Recent Transactions -->
-                <div class="bg-slate-900 border border-white/5 rounded-xl sm:rounded-2xl border border-white/10/70 shadow-sm">
-                    <div class="p-4 sm:p-6 border-b border-white/5">
+            <!-- Item 4: Recent Transactions -->
+            <div class="space-y-4 sm:space-y-8">
+                <div class="bg-slate-900 border border-white/5 rounded-xl sm:rounded-2xl border border-white/10/70 shadow-sm h-full flex flex-col">
+                    <div class="p-4 sm:p-6 border-b border-white/5 shrink-0">
                         <h3 class="text-base sm:text-lg font-bold text-slate-200">Aktivitas Terbaru</h3>
                     </div>
-                    <div class="divide-y divide-white/5 max-h-[300px] sm:max-h-[400px] overflow-y-auto">
+                    <div class="divide-y divide-white/5 flex-1 overflow-y-auto" style="max-height: 400px;">
                         @foreach($recentTransactions as $trx)
                             <div class="px-4 py-3 sm:px-6 sm:py-4 hover:bg-slate-800/50 transition-colors">
                                 <div class="flex items-center gap-2 sm:gap-3">
-                                    <div
-                                        class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-xs sm:text-sm">
+                                    <div class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-xs sm:text-sm">
                                         {{ substr($trx->kendaraan->no_polisi ?? ($trx->personel->nrp ?? '?'), 0, 2) }}
                                     </div>
                                     <div class="flex-1 min-w-0">

@@ -1,5 +1,5 @@
 <x-guest-layout maxWidth="max-w-md">
-    <div class="bg-slate-900/80 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden p-6 md:p-8 relative text-center">
+    <div class="bg-slate-900/80 border border-white/10 rounded-3xl shadow-2xl overflow-hidden p-6 md:p-8 relative text-center">
         <!-- Decoration -->
         <div class="absolute top-0 right-0 p-4">
             <div class="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[10px] font-bold tracking-wider uppercase">

@@ -465,7 +465,7 @@
                                                 
                                                 <template x-teleport="body">
                                                     <div x-show="showDetail" class="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center p-4" style="display: none;">
-                                                        <div x-show="showDetail" x-transition.opacity @click="showDetail = false" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm"></div>
+                                                        <div x-show="showDetail" x-transition.opacity @click="showDetail = false" class="fixed inset-0 bg-slate-950/80"></div>
                                                         <div x-show="showDetail" x-transition.translate.y @click.outside="showDetail = false" class="relative w-full max-w-sm bg-slate-900 border border-white/10 rounded-2xl shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
                                                             <div class="p-4 border-b border-white/10 flex justify-between items-center bg-slate-800/50">
                                                                 <div class="text-left">
@@ -555,7 +555,7 @@
         class="fixed inset-0 z-[9999] overflow-y-auto">
         <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             <div x-show="show" x-transition.opacity class="fixed inset-0 transition-opacity" aria-hidden="true">
-                <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
+                <div class="absolute inset-0 bg-slate-900/60"></div>
             </div>
 
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
@@ -676,7 +676,7 @@
                                 <input type="file" class="hidden" @change="handleFileUpload" accept=".xlsx,.xls,.csv" />
 
                                 <div x-show="uploading"
-                                    class="absolute inset-0 bg-slate-900 border border-white/5/98 backdrop-blur-xl flex flex-col items-center justify-center p-6 z-20">
+                                    class="absolute inset-0 bg-slate-900 border border-white/5/98 flex flex-col items-center justify-center p-6 z-20">
                                     <div
                                         class="w-48 h-1.5 bg-slate-800 rounded-full overflow-hidden mb-4 ring-2 ring-indigo-50">
                                         <div class="h-full bg-gradient-to-r from-indigo-600 to-violet-600 transition-all duration-500"
@@ -829,7 +829,7 @@
 
                         <div class="max-h-[320px] overflow-auto border-b border-white/5 scrollbar-thin">
                             <table class="w-full border-separate border-spacing-0">
-                                <thead class="bg-slate-900 border border-white/5/95 backdrop-blur-sm sticky top-0 z-20 shadow-sm text-center">
+                                <thead class="bg-slate-900 border border-white/5/95 sticky top-0 z-20 shadow-sm text-center">
                                     <tr>
                                         <th
                                             class="pl-7 pr-3 py-3 text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-white/5">

@@ -209,8 +209,7 @@
             align-items: center;
             gap: 12px;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(8px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         }
 
         .dot-status {
@@ -265,8 +264,7 @@
             font-size: 20px;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+box-shadow: 0 4px 12px rgba(0,0,0,0.4);
             transition: background 0.2s;
         }
         
@@ -331,8 +329,7 @@
                 top: 75px;
                 right: 20px;
                 background: rgba(15, 23, 42, 0.95);
-                backdrop-filter: blur(10px);
-                padding: 15px;
+padding: 15px;
                 border-radius: 16px;
                 flex-direction: column;
                 gap: 10px;

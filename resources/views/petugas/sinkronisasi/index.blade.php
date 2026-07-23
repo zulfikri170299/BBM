@@ -109,7 +109,7 @@
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="bg-white/5 backdrop-blur-sm">
+                                <tr class="bg-white/5">
                                     <th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-white/5">Waktu & Petugas</th>
                                     <th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-white/5 text-center">Stok Awal Fisik</th>
                                     <th class="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-white/5 text-center">Sisa Stok Akhir</th>
@@ -121,7 +121,7 @@
                                     <tr class="group hover:bg-white/5 transition-colors {{ $index === 0 ? 'bg-indigo-900/20' : '' }}">
                                         <td class="px-8 py-6" rowspan="2">
                                             <div class="flex items-start gap-4">
-                                                <div class="p-2.5 bg-white/10 border border-white/20 rounded-xl backdrop-blur-md shadow-lg shadow-black/20">
+                                                <div class="p-2.5 bg-white/10 border border-white/20 rounded-xl shadow-lg shadow-black/20">
                                                     <div class="font-black text-white text-lg leading-none text-center">{{ $sync->created_at->format('d') }}</div>
                                                     <div class="text-[9px] font-black text-slate-400 uppercase tracking-tighter text-center mt-1">{{ $sync->created_at->format('M Y') }}</div>
                                                 </div>

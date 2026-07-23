@@ -8,8 +8,8 @@
             </div>
         </div>
 
-        <!-- Stats Cards Row 1 -->
-        <div class="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-6">
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-6">
             <!-- Card: Total Kendaraan -->
             <div
                 class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-amber-500 to-amber-800 border border-amber-400 shadow-xl p-4 sm:p-6 text-white shadow-lg shadow-amber-500/5 group hover:shadow-amber-500/20 transition-all duration-300 hover:-translate-y-1">
@@ -17,7 +17,7 @@
                 </div>
                 <div class="relative z-10">
                     <div class="flex items-center justify-between mb-2 sm:mb-4">
-                        <div class="p-2 sm:p-3 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl backdrop-blur-sm">
+                        <div class="p-2 sm:p-3 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl">
                             <svg class="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -35,52 +35,25 @@
                         <p class="text-[9px] sm:text-[11px] text-white/90 font-medium truncate">Total Kendaraan</p>
                     </div>
                     <div class="grid grid-cols-4 gap-1 mt-2 sm:mt-3">
-                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
+                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center">
                             <p class="text-[8px] sm:text-[9px] font-bold opacity-80">R2</p>
                             <p class="text-xs sm:text-sm font-black">{{ $rodaR2 }}</p>
                         </div>
-                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
+                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center">
                             <p class="text-[8px] sm:text-[9px] font-bold opacity-80">R4</p>
                             <p class="text-xs sm:text-sm font-black">{{ $rodaR4 }}</p>
                         </div>
-                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
+                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center">
                             <p class="text-[8px] sm:text-[9px] font-bold opacity-80">R6</p>
                             <p class="text-xs sm:text-sm font-black">{{ $rodaR6 }}</p>
                         </div>
-                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center backdrop-blur-sm">
+                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center">
                             <p class="text-[8px] sm:text-[9px] font-bold opacity-80 leading-tight">Non</p>
                             <p class="text-xs sm:text-sm font-black">{{ $rodaNon }}</p>
                         </div>
                     </div>
                 </div>
             </div>
-
-            @if($personelAccessControl == '1')
-            <!-- Card: Total Personel -->
-            <div
-                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-900 border border-emerald-400 shadow-xl p-4 sm:p-6 text-white shadow-lg shadow-emerald-500/5 group hover:shadow-emerald-500/20 transition-all duration-300 hover:-translate-y-1">
-                <div class="absolute -top-4 -right-4 w-24 h-24 bg-slate-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500">
-                </div>
-                <div class="relative z-10">
-                    <div class="flex items-center justify-between mb-2 sm:mb-4">
-                        <div class="p-2 sm:p-3 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl backdrop-blur-sm">
-                            <svg class="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
-                                </path>
-                            </svg>
-                        </div>
-                        <a href="{{ route('satker.personels.index') }}"
-                            class="text-[10px] sm:text-xs font-semibold bg-white/20 hover:bg-white/30 border border-white/30 px-3 py-1.5 shadow-sm rounded-lg transition">Kelola
-                            →</a>
-                    </div>
-                    <div class="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-2 mt-1 sm:mt-0">
-                        <p class="text-xl sm:text-2xl font-black text-white">{{ $totalPersonel }}</p>
-                        <p class="text-[9px] sm:text-[11px] text-white/90 font-medium truncate">Total Personel</p>
-                    </div>
-                </div>
-            </div>
-            @endif
 
             <!-- Card: Total Transaksi BBM -->
             <div
@@ -89,7 +62,7 @@
                 </div>
                 <div class="relative z-10">
                     <div class="flex items-center justify-between mb-2 sm:mb-4">
-                        <div class="p-2 sm:p-3 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl backdrop-blur-sm">
+                        <div class="p-2 sm:p-3 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl">
                             <svg class="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
@@ -100,158 +73,100 @@
                         <p class="text-xl sm:text-2xl font-black text-white">{{ $totalTransaksi }}</p>
                         <p class="text-[9px] sm:text-[11px] text-white/90 font-medium truncate">Total Transaksi BBM</p>
                     </div>
+                    <div class="mt-2 sm:mt-3 flex gap-2">
+                        <div class="flex-1 bg-white/20 border border-white/30 shadow-sm rounded-lg px-2 py-1 text-center flex flex-col justify-center">
+                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90 uppercase">Sistem Pencatatan</p>
+                            <p class="text-[10px] sm:text-xs font-black text-emerald-300 mt-0.5 truncate flex items-center justify-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span> Realtime
+                            </p>
+                        </div>
+                        <div class="flex-1 bg-white/20 border border-white/30 shadow-sm rounded-lg px-2 py-1 text-center flex flex-col justify-center">
+                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90 uppercase">Validasi</p>
+                            <p class="text-[10px] sm:text-xs font-black text-white mt-0.5">Sistem</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Card: Total Transfer -->
+
+            <!-- Card: Saldo Kendaraan -->
             <div
-                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-900 border border-indigo-400 shadow-xl p-4 sm:p-6 text-white shadow-lg shadow-indigo-500/5 group hover:shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-1">
+                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-sky-500 to-sky-800 border border-sky-400 shadow-xl p-4 sm:p-6 text-white shadow-lg shadow-sky-500/5 group hover:shadow-sky-500/20 transition-all duration-300 hover:-translate-y-1">
                 <div class="absolute -top-4 -right-4 w-24 h-24 bg-slate-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500">
                 </div>
                 <div class="relative z-10">
                     <div class="flex items-center justify-between mb-2 sm:mb-4">
-                        <div class="p-2 sm:p-3 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl backdrop-blur-sm">
+                        <div class="p-2 sm:p-3 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl">
                             <svg class="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+                                    d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
+                                </path>
                             </svg>
                         </div>
-                        <a href="{{ route('satker.kendaraans.laporan-transfer') }}"
-                            class="text-[10px] sm:text-xs font-semibold bg-white/20 hover:bg-white/30 border border-white/30 px-3 py-1.5 shadow-sm rounded-lg transition">Laporan
-                            →</a>
                     </div>
                     <div class="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-2 mt-1 sm:mt-0">
-                        <p class="text-xl sm:text-2xl font-black text-white">{{ $totalTransfer }}</p>
-                        <p class="text-[9px] sm:text-[11px] text-white/90 font-medium truncate">Total Transfer</p>
+                        <p class="text-xl sm:text-2xl font-black text-white">{{ rtrim(rtrim(number_format($totalSaldoKendaraan, 2, ',', '.'), '0'), ',') }} <span class="text-xs sm:text-sm font-medium opacity-80">L</span></p>
+                        <p class="text-[9px] sm:text-[11px] text-white/90 font-medium truncate">Saldo Kendaraan</p>
+                    </div>
+                    <div class="mt-2 sm:mt-3 flex gap-2">
+                        @foreach($saldoKendaraanPerBbm as $bbm => $total)
+                            <div class="flex-1 bg-white/20 border border-white/30 shadow-sm rounded-lg px-2 py-1 text-center flex flex-col justify-center">
+                                <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90 uppercase truncate">{{ $bbm }}</p>
+                                <p class="text-[10px] sm:text-xs font-black text-white mt-0.5">{{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }} <span class="text-[8px] font-bold opacity-80">L</span></p>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Secondary Stats -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+            <!-- Card: Total Hutang (Bon) -->
             <div
-                class="bg-gradient-to-r from-sky-900/30 to-slate-900 rounded-xl sm:rounded-2xl border border-sky-500/20 p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow group hover:border-sky-500/40">
-                <div class="flex items-center gap-3 sm:gap-4">
-                    <div class="p-2 sm:p-3 bg-sky-100 text-sky-600 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
-                            </path>
-                        </svg>
-                    </div>
-                    <div class="min-w-0">
-                        <p class="text-xs sm:text-xs text-slate-400">Saldo Kendaraan</p>
-                        <p class="text-lg sm:text-2xl font-bold text-white truncate">
-                            {{ rtrim(rtrim(number_format($totalSaldoKendaraan, 2, ',', '.'), '0'), ',') }} <span
-                                class="text-xs sm:text-sm font-medium text-slate-400">L</span>
-                        </p>
-                        <div class="mt-1 sm:mt-2 flex flex-wrap gap-1">
-                            @foreach($saldoKendaraanPerBbm as $bbm => $total)
-                                <span
-                                    class="text-[8px] sm:text-[9px] font-bold bg-sky-50 text-sky-700 px-1.5 py-0.5 rounded border border-sky-100 uppercase">{{ $bbm }}:
-                                    {{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }} L</span>
-                            @endforeach
-                        </div>
-                    </div>
+                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-800 border border-indigo-400 shadow-xl p-4 sm:p-6 text-white shadow-lg shadow-indigo-500/5 group hover:shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-1">
+                <div class="absolute -top-4 -right-4 w-24 h-24 bg-slate-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500">
                 </div>
-            </div>
-            @if($personelAccessControl == '1')
-            <div
-                class="bg-gradient-to-r from-pink-900/30 to-slate-900 rounded-xl sm:rounded-2xl border border-pink-500/20 p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow group hover:border-pink-500/40">
-                <div class="flex items-center gap-3 sm:gap-4">
-                    <div class="p-2 sm:p-3 bg-pink-100 text-pink-600 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                        </svg>
-                    </div>
-                    <div class="min-w-0">
-                        <p class="text-xs sm:text-xs text-slate-400">Saldo Personel</p>
-                        <p class="text-lg sm:text-2xl font-bold text-white truncate">
-                            {{ rtrim(rtrim(number_format($totalSaldoPersonel, 2, ',', '.'), '0'), ',') }} <span
-                                class="text-xs sm:text-sm font-medium text-slate-400">L</span>
-                        </p>
-                        <div class="mt-1 sm:mt-2 flex flex-wrap gap-1">
-                            @foreach($saldoPersonelPerBbm as $bbm => $total)
-                                <span
-                                    class="text-[8px] sm:text-[9px] font-bold bg-pink-50 text-pink-700 px-1.5 py-0.5 rounded border border-pink-100 uppercase">{{ $bbm }}:
-                                    {{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }} L</span>
-                            @endforeach
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between mb-2 sm:mb-4">
+                        <div class="p-2 sm:p-3 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl">
+                            <svg class="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                                </path>
+                            </svg>
                         </div>
                     </div>
-                </div>
-            </div>
-            @endif
-            <div
-                class="bg-gradient-to-r from-teal-900/30 to-slate-900 rounded-xl sm:rounded-2xl border border-teal-500/20 p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow group hover:border-teal-500/40">
-                <div class="flex items-center gap-3 sm:gap-4">
-                    <div class="p-2 sm:p-3 bg-teal-100 text-teal-600 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
-                        </svg>
+                    <div class="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-2 mt-1 sm:mt-0">
+                        <p class="text-xl sm:text-2xl font-black text-white">{{ rtrim(rtrim(number_format($totalHutang, 2, ',', '.'), '0'), ',') }} <span class="text-xs sm:text-sm font-medium opacity-80">L</span></p>
+                        <p class="text-[9px] sm:text-[11px] text-white/90 font-medium truncate">Total Hutang (Bon)</p>
                     </div>
-                    <div class="min-w-0">
-                        <p class="text-xs sm:text-xs text-slate-400">Transfer</p>
-                        <p class="text-lg sm:text-2xl font-bold text-white truncate">
-                            {{ rtrim(rtrim(number_format($totalLiterTransfer, 2, ',', '.'), '0'), ',') }} <span
-                                class="text-xs sm:text-sm font-medium text-slate-400">L</span>
-                        </p>
-                        <div class="mt-1 sm:mt-2 flex flex-wrap gap-1">
-                            @foreach($literTransferPerBbm as $bbm => $total)
-                                <span
-                                    class="text-[8px] sm:text-[9px] font-bold bg-teal-50 text-teal-700 px-1.5 py-0.5 rounded border border-teal-100 uppercase">{{ $bbm }}:
-                                    {{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }} L</span>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div
-                class="bg-gradient-to-r from-rose-900/30 to-slate-900 rounded-xl sm:rounded-2xl border border-rose-500/20 p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow group hover:border-rose-500/40">
-                <div class="flex items-center gap-3 sm:gap-4">
-                    <div class="p-2 sm:p-3 bg-rose-100 text-rose-600 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
-                            </path>
-                        </svg>
-                    </div>
-                    <div class="min-w-0">
-                        <p class="text-xs sm:text-xs text-slate-400">Total Hutang (Bon)</p>
-                        <p class="text-lg sm:text-2xl font-bold text-white truncate">
-                            {{ rtrim(rtrim(number_format($totalHutang, 2, ',', '.'), '0'), ',') }} <span
-                                class="text-xs sm:text-sm font-medium text-slate-400">L</span>
-                        </p>
-                        <div class="mt-1 sm:mt-2 flex flex-wrap gap-1">
-                            @foreach($hutangPerBbm as $bbm => $total)
-                                <span
-                                    class="text-[8px] sm:text-[9px] font-bold bg-rose-50 text-rose-700 px-1.5 py-0.5 rounded border border-rose-100 uppercase">{{ $bbm }}:
-                                    {{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }} L</span>
-                            @endforeach
-                        </div>
+                    <div class="mt-2 sm:mt-3 flex gap-2">
+                        @foreach($hutangPerBbm as $bbm => $total)
+                            <div class="flex-1 bg-white/20 border border-white/30 shadow-sm rounded-lg px-2 py-1 text-center flex flex-col justify-center">
+                                <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90 uppercase truncate">{{ $bbm }}</p>
+                                <p class="text-[10px] sm:text-xs font-black text-white mt-0.5">{{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }} <span class="text-[8px] font-bold opacity-80">L</span></p>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Chart & Recent Activity -->
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-3 sm:gap-6">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-3 sm:gap-6 mt-2 sm:mt-4">
             <!-- Chart Area -->
             <div
                 class="xl:col-span-2 bg-slate-900 border border-white/5 rounded-xl sm:rounded-2xl border border-white/10/70 shadow-sm p-4 sm:p-6">
-                <h3 class="text-base sm:text-lg font-bold text-slate-200 mb-2 sm:mb-4">Transfer 7 Hari Terakhir</h3>
-                <div id="transferChart"></div>
+                <h3 class="text-base sm:text-lg font-bold text-slate-200 mb-2 sm:mb-4">Transaksi 7 Hari Terakhir
+                </h3>
+                <div id="transactionChart"></div>
             </div>
 
-            <!-- Recent Transfers -->
+            <!-- Recent Transactions -->
             <div class="bg-slate-900 border border-white/5 rounded-xl sm:rounded-2xl border border-white/10/70 shadow-sm">
                 <div class="p-4 sm:p-6 border-b border-white/5">
                     <h3 class="text-base sm:text-lg font-bold text-slate-200">Aktivitas Terbaru</h3>
                 </div>
                 <div class="divide-y divide-white/5 max-h-[300px] sm:max-h-[400px] overflow-y-auto">
-                    @forelse($recentTransfers as $trx)
+                    @forelse($recentTransactions as $trx)
                         <div class="px-4 py-3 sm:px-6 sm:py-4 hover:bg-slate-800/50 transition-colors">
                             <div class="flex items-center gap-2 sm:gap-3">
                                 <div
@@ -260,26 +175,26 @@
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <p class="text-xs sm:text-xs font-medium text-slate-200 truncate">
-                                        {{ $trx->kendaraan->no_polisi ?? '-' }} → {{ $trx->personel->nama ?? '-' }}
+                                        {{ $trx->kendaraan->no_polisi ?? '-' }}
                                     </p>
-                                    <p class="text-[10px] sm:text-xs text-slate-400">{{ $trx->created_at->diffForHumans() }}
-                                    </p>
+                                    <p class="text-[10px] sm:text-xs text-slate-400">
+                                        {{ $trx->created_at->diffForHumans() }}</p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-xs sm:text-xs font-semibold text-emerald-500">
-                                        {{ number_format($trx->jumlah, 0, ',', '.') }} L
-                                    </p>
+                                    <p class="text-xs sm:text-sm font-bold text-slate-300">
+                                        {{ number_format($trx->liter, 0, ',', '.') }} L</p>
                                 </div>
                             </div>
                         </div>
                     @empty
                         <div class="px-6 py-12 text-center">
-                            <p class="text-xs text-slate-400">Belum ada aktivitas transfer</p>
+                            <p class="text-xs text-slate-400">Belum ada aktivitas transaksi</p>
                         </div>
                     @endforelse
                 </div>
             </div>
         </div>
+
     </div>
 
     <!-- Chart Script -->
@@ -294,10 +209,10 @@
                     zoom: { enabled: false },
                 },
                 series: [{
-                    name: 'Liter Transfer',
+                    name: 'Liter Transaksi',
                     data: {!! json_encode(array_column($chartData, 'liter')) !!}
                 }, {
-                    name: 'Jumlah Transfer',
+                    name: 'Jumlah Transaksi',
                     data: {!! json_encode(array_column($chartData, 'count')) !!}
                 }],
                 xaxis: {
@@ -330,7 +245,7 @@
                     horizontalAlign: 'right',
                 }
             };
-            var chart = new ApexCharts(document.querySelector("#transferChart"), options);
+            var chart = new ApexCharts(document.querySelector("#transactionChart"), options);
             chart.render();
         });
     </script>

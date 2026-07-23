@@ -56,12 +56,11 @@
 </div>
 
 <!-- Desktop Sidebar -->
-<div class="hidden lg:flex lg:w-72 lg:flex-col bg-slate-900/40 backdrop-blur-xl border-r border-white/5 relative z-10 transition-all duration-300" id="sidebar-nav">
+<div class="hidden lg:flex lg:w-72 lg:flex-col bg-slate-900 border-r border-white/5 relative z-10 transition-all duration-300" id="sidebar-nav">
     <div class="flex h-24 shrink-0 items-center px-8 border-b border-white/5">
         <div class="flex items-center gap-4">
             <div class="relative">
                 <img src="{{ asset('rolog.png') }}" class="h-10 w-auto desktop-float relative z-10" alt="Logo">
-                <div class="absolute inset-0 bg-brand-primary/20 blur-xl rounded-full"></div>
             </div>
             <div class="flex flex-col justify-center">
                 <span class="text-2xl font-black italic leading-none font-outfit uppercase tracking-[0.2em] desktop-shimmer">SPBP</span>

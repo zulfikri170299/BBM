@@ -292,7 +292,7 @@
             <div x-show="showModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
                 x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
                 x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                class="fixed inset-0 bg-slate-900/60 backdrop-blur-md" aria-hidden="true" @click="showModal = false">
+                class="fixed inset-0 bg-slate-900/60" aria-hidden="true" @click="showModal = false">
             </div>
 
             <!-- Modal Panel -->
@@ -314,7 +314,7 @@
                     <div class="relative flex justify-between items-center">
                         <div class="flex items-center gap-4">
                             <div
-                                class="w-12 h-12 bg-slate-900 border border-white/5/20 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/30 shadow-inner">
+                                class="w-12 h-12 bg-slate-900 border border-white/5/20 rounded-2xl flex items-center justify-center border border-white/30 shadow-inner">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                         d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />

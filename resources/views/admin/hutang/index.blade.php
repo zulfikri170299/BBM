@@ -298,7 +298,7 @@
                                             
                                             <template x-teleport="body">
                                                 <div x-show="showDetail" class="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center p-4" style="display: none;">
-                                                    <div x-show="showDetail" x-transition.opacity @click="showDetail = false" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm"></div>
+                                                    <div x-show="showDetail" x-transition.opacity @click="showDetail = false" class="fixed inset-0 bg-slate-950/80"></div>
                                                     <div x-show="showDetail" x-transition.translate.y @click.outside="showDetail = false" class="relative w-full max-w-sm bg-slate-900 border border-white/10 rounded-2xl shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
                                                         <div class="p-4 border-b border-white/10 flex justify-between items-center bg-slate-800/50">
                                                             <div class="text-left">
@@ -383,7 +383,7 @@
                 aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <div class="flex items-center justify-center min-h-screen p-4">
                 <div x-show="showModal" x-transition.opacity
-                    class="fixed inset-0 bg-slate-900/60 transition-opacity backdrop-blur-sm" aria-hidden="true"
+                    class="fixed inset-0 bg-slate-900/60 transition-opacity" aria-hidden="true"
                     @click="showModal = false"></div>
 
                 <div x-show="showModal" x-transition:enter="ease-out duration-300"
@@ -480,7 +480,7 @@
                 aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <div class="flex items-center justify-center min-h-screen p-4">
                 <div x-show="showEditModal" x-transition.opacity
-                    class="fixed inset-0 bg-slate-900/60 transition-opacity backdrop-blur-sm" aria-hidden="true"
+                    class="fixed inset-0 bg-slate-900/60 transition-opacity" aria-hidden="true"
                     @click="showEditModal = false"></div>
 
                 <div x-show="showEditModal" x-transition:enter="ease-out duration-300"
@@ -634,7 +634,7 @@
                 aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <div class="flex items-center justify-center min-h-screen p-4">
                 <div x-show="showCreateModal" x-transition.opacity
-                    class="fixed inset-0 bg-slate-900/60 transition-opacity backdrop-blur-sm" aria-hidden="true"
+                    class="fixed inset-0 bg-slate-900/60 transition-opacity" aria-hidden="true"
                     @click="showCreateModal = false"></div>
 
                 <div x-show="showCreateModal" x-transition:enter="ease-out duration-300"

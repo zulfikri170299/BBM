@@ -154,7 +154,7 @@
         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
 
         {{-- Backdrop --}}
-        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" @click="showResetModal = false"></div>
+        <div class="absolute inset-0 bg-slate-900/60" @click="showResetModal = false"></div>
 
         {{-- Modal Card --}}
         <div class="relative w-full max-w-sm bg-slate-900 border border-white/5 rounded-3xl shadow-2xl overflow-hidden" x-show="showResetModal"

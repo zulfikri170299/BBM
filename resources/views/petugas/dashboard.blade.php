@@ -61,7 +61,7 @@
                 <div class="absolute -top-4 -right-4 w-24 h-24 bg-slate-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500">
                 </div>
                 <div class="relative z-10">
-                    <div class="p-2 sm:p-3 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl backdrop-blur-sm w-fit mb-3 sm:mb-4">
+                    <div class="p-2 sm:p-3 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl w-fit mb-3 sm:mb-4">
                         <svg class="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4">
@@ -85,14 +85,14 @@
                         'Solar' => 'from-amber-600 to-amber-900 border border-amber-400 shadow-xl',
                         'Dexlite' => 'from-rose-600 to-rose-900 border border-rose-400 shadow-xl',
                     ];
-                    $colorClass = $colors[$jenis] ?? 'from-slate-800/40 to-slate-900/80 border border-slate-500/20 shadow-lg shadow-slate-500/5 group hover:shadow-slate-500/20 backdrop-blur-xl';
+                    $colorClass = $colors[$jenis] ?? 'from-slate-800/40 to-slate-900/80 border border-slate-500/20 shadow-lg shadow-slate-500/5 group hover:shadow-slate-500/20';
                 @endphp
                 <div
                     class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br {{ $colorClass }} p-4 sm:p-5 lg:p-6 text-white shadow-xl group transition-all duration-300 hover:-translate-y-1">
                     <div class="absolute -top-4 -right-4 w-24 h-24 bg-slate-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500">
                     </div>
                     <div class="relative z-10">
-                        <div class="p-2 sm:p-3 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl backdrop-blur-sm w-fit mb-3 sm:mb-4">
+                        <div class="p-2 sm:p-3 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl w-fit mb-3 sm:mb-4">
                             <svg class="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
@@ -110,7 +110,7 @@
                 <div
                     class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-slate-400 to-slate-500 p-4 sm:p-5 lg:p-6 text-white shadow-xl opacity-60">
                     <div class="relative z-10">
-                        <div class="p-2 sm:p-3 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl backdrop-blur-sm w-fit mb-3 sm:mb-4">
+                        <div class="p-2 sm:p-3 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl w-fit mb-3 sm:mb-4">
                             <svg class="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
@@ -134,9 +134,9 @@
             </h2>
             <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
                 @foreach($adminTransactions as $at)
-                    <div class="bg-gradient-to-br from-purple-900/40 to-slate-900/80 border border-purple-500/20 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-5 flex items-center gap-4 group hover:shadow-purple-500/40 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+                    <div class="bg-gradient-to-br from-purple-900/40 to-slate-900/80 border border-purple-500/20 rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-5 flex items-center gap-4 group hover:shadow-purple-500/40 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
                         <div class="absolute -top-4 -right-4 w-24 h-24 bg-slate-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
-                        <div class="w-12 h-12 rounded-xl bg-white/20 border border-white/30 backdrop-blur-sm text-white flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform relative z-10">
+                        <div class="w-12 h-12 rounded-xl bg-white/20 border border-white/30 text-white flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform relative z-10">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                             </svg>

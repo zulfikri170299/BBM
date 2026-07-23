@@ -57,8 +57,8 @@ class DashboardController extends Controller
         $totalTransfer = $queryTransfer->count();
         $totalLiterTransfer = (clone $queryTransfer)->sum('jumlah');
 
-        $recentTransfers = (clone $queryTransfer)
-            ->with(['kendaraan', 'personel'])
+        $recentTransactions = (clone $queryTransaksi)
+            ->with(['kendaraan'])
             ->latest()
             ->take(7)
             ->get();
@@ -66,12 +66,14 @@ class DashboardController extends Controller
         $chartData = [];
         for ($i = 6; $i >= 0; $i--) {
             $date = now()->subDays($i);
-            $qChart = \App\Models\RiwayatTransferSaldoPersonel::whereDate('created_at', $date);
+            $qChart = \App\Models\TransaksiBbm::whereDate('created_at', $date);
             if ($user->role !== 'super_admin') {
-                $qChart->where('satker_id', $satkerId);
+                $qChart->whereHas('kendaraan', function($q) use ($satkerId) {
+                    $q->where('satker_id', $satkerId);
+                });
             }
             $count = (clone $qChart)->count();
-            $liter = (clone $qChart)->sum('jumlah');
+            $liter = (clone $qChart)->sum('liter');
             $chartData[] = ['date' => $date->format('d M'), 'count' => $count, 'liter' => round($liter, 1)];
         }
 
@@ -115,7 +117,7 @@ class DashboardController extends Controller
             'totalKendaraan', 'totalPersonel', 'totalTransaksi',
             'totalSaldoKendaraan', 'totalSaldoPersonel',
             'totalTransfer', 'totalLiterTransfer',
-            'recentTransfers', 'chartData',
+            'recentTransactions', 'chartData',
             'saldoKendaraanPerBbm', 'saldoPersonelPerBbm', 'literTransferPerBbm',
             'totalHutang', 'hutangPerBbm',
             'rodaR2', 'rodaR4', 'rodaR6', 'rodaNon',

@@ -188,8 +188,7 @@
                 align-items: center;
                 gap: 12px;
                 border: 1px solid rgba(255, 255, 255, 0.2);
-                backdrop-filter: blur(8px);
-                box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+box-shadow: 0 8px 20px rgba(0,0,0,0.4);
             }
 
             .bbm-dot-status {

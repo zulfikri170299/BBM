@@ -9,7 +9,7 @@
         <!-- Step 1: Search -->
         <div x-show="step === 'search'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" class="space-y-2.5">
             <!-- Tabs -->
-            <div class="flex bg-slate-900/50 p-1 rounded-xl border border-white/5 backdrop-blur-sm">
+            <div class="flex bg-slate-900/50 p-1 rounded-xl border border-white/5">
                 <button @@click="tab = 'barcode'; stopScanner();" 
                     :class="tab === 'barcode' ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-400 hover:text-slate-300'"
                     class="flex-1 py-1.5 text-[9px] font-black uppercase rounded-lg transition-all">Barcode</button>
@@ -25,7 +25,7 @@
                     <div class="w-full max-w-[260px] aspect-square bg-slate-800/50 rounded-xl relative overflow-hidden border-2 border-white/5">
                         <div id="reader" class="w-full h-full"></div>
                         <div id="scanner-placeholder" x-show="!isScannerActive || isLoadingScanner" 
-                             class="absolute inset-0 flex flex-col items-center justify-center bg-slate-900 border border-white/5/90 backdrop-blur-sm">
+                             class="absolute inset-0 flex flex-col items-center justify-center bg-slate-900 border border-white/5/90">
                             <div x-show="isLoadingScanner" class="mb-2">
                                 <svg class="animate-spin h-7 w-7 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

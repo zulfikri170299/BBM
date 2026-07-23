@@ -1,4 +1,4 @@
-<header class="flex h-16 shrink-0 items-center justify-between gap-x-4 border-b border-white/5 bg-slate-900/40 backdrop-blur-xl px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8 sticky top-0 z-20">
+<header class="flex h-16 shrink-0 items-center justify-between gap-x-4 border-b border-white/5 bg-slate-900 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8 sticky top-0 z-20">
     <div class="flex items-center gap-3">
         {{-- Hamburger Button (Mobile) --}}
         <button type="button" class="-m-2.5 p-2.5 text-slate-400 hover:text-white transition-colors lg:hidden" @click="sidebarOpen = true">

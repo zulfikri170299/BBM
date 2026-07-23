@@ -400,7 +400,7 @@
                                         
                                         <template x-teleport="body">
                                             <div x-show="showDetail" class="fixed inset-0 z-[9000] flex items-end sm:items-center justify-center p-4" style="display: none;">
-                                                <div x-show="showDetail" x-transition.opacity @click="showDetail = false" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm"></div>
+                                                <div x-show="showDetail" x-transition.opacity @click="showDetail = false" class="fixed inset-0 bg-slate-950/80"></div>
                                                 <div x-show="showDetail" x-transition.translate.y @click.outside="showDetail = false" class="relative w-full max-w-sm bg-slate-900 border border-white/10 rounded-2xl shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
                                                     <div class="p-4 border-b border-white/10 flex justify-between items-center bg-slate-800/50">
                                                         <div class="text-left">
@@ -468,6 +468,9 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z">
                                                 </path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1">
+                                                </path>
                                             </svg>
                                         </div>
                                         <p class="text-slate-400 font-medium">Belum ada kendaraan terdaftar</p>
@@ -490,24 +493,25 @@
         </div>
 
         <!-- Transfer Modal -->
-        <div x-show="showTransferModal" x-cloak style="display: none;" class="fixed inset-0 z-[9999] overflow-y-auto"
-            aria-labelledby="modal-title" role="dialog" aria-modal="true">
-            <div class="flex items-center justify-center min-h-screen px-4 py-6">
-    <template x-teleport="body">
-                <!-- Backdrop -->
-                <div x-show="showTransferModal" x-transition:enter="ease-out duration-300"
-                    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                    x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0"
-                    class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
-                    @click="showTransferModal = false"></div>
+        <div>
+            <template x-teleport="body">
+                <div x-show="showTransferModal" style="display: none;">
+                    <!-- Backdrop -->
+                    <div x-transition:enter="ease-out duration-300"
+                        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                        x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
+                        x-transition:leave-end="opacity-0"
+                        class="fixed inset-0 bg-slate-900/60 z-[9998] transition-opacity"
+                        @click="showTransferModal = false"></div>
 
-                <!-- Modal Panel -->
-                <div x-show="showTransferModal" x-transition:enter="ease-out duration-300"
-                    x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                    x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
-                    x-transition:leave-end="opacity-0 scale-95"
-                    class="relative bg-slate-900 border border-white/5 rounded-2xl shadow-2xl w-full max-w-md mx-auto max-h-[90vh] flex flex-col overflow-hidden">
+                    <!-- Modal Wrapper -->
+                    <div class="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-0 pointer-events-none">
+                        <!-- Modal Panel -->
+                        <div x-transition:enter="ease-out duration-300"
+                            x-transition:enter-start="opacity-0 scale-95 translate-y-4" x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                            x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                            x-transition:leave-end="opacity-0 scale-95 translate-y-4"
+                            class="relative bg-slate-900 border border-white/5 rounded-2xl shadow-2xl w-full max-w-md mx-auto max-h-[90vh] flex flex-col overflow-hidden pointer-events-auto">
                     <form action="{{ route('satker.kendaraans.transfer') }}" method="POST" class="flex flex-col h-full min-h-0">
                         @csrf
                         @php
@@ -519,7 +523,7 @@
                             class="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 px-4 sm:px-6 py-4 sm:py-5 shrink-0">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-3">
-                                    <div class="p-2 bg-slate-900 border border-white/5/20 rounded-xl backdrop-blur-sm">
+                                    <div class="p-2 bg-slate-900 border border-white/5/20 rounded-xl">
                                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -726,6 +730,9 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z">
                                             </path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1">
+                                            </path>
                                         </svg>
                                     </span>
                                     Tujuan Kendaraan
@@ -857,34 +864,34 @@
                     </form>
                 </div>
     </template>
-            </div>
         </div>
         <!-- Monthly Report Modal -->
-        <div x-show="showMonthlyReportModal" x-cloak style="display: none;" class="fixed inset-0 z-[9999] overflow-y-auto"
-            aria-labelledby="modal-title" role="dialog" aria-modal="true">
-            <div class="flex items-center justify-center min-h-screen px-4 py-6">
-    <template x-teleport="body">
-                <!-- Backdrop -->
-                <div x-show="showMonthlyReportModal" x-transition:enter="ease-out duration-300"
-                    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                    x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0"
-                    class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
-                    @click="showMonthlyReportModal = false"></div>
+        <div>
+            <template x-teleport="body">
+                <div x-show="showMonthlyReportModal" style="display: none;">
+                    <!-- Backdrop -->
+                    <div x-transition:enter="ease-out duration-300"
+                        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                        x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
+                        x-transition:leave-end="opacity-0"
+                        class="fixed inset-0 bg-slate-900/60 z-[9998] transition-opacity"
+                        @click="showMonthlyReportModal = false"></div>
 
-                <!-- Modal Panel -->
-                <div x-show="showMonthlyReportModal" x-transition:enter="ease-out duration-300"
-                    x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                    x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
-                    x-transition:leave-end="opacity-0 scale-95"
-                    class="relative bg-slate-900 border border-white/5 rounded-2xl shadow-2xl w-full max-w-sm mx-auto max-h-[90vh] flex flex-col overflow-hidden">
+                    <!-- Modal Wrapper -->
+                    <div class="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-0 pointer-events-none">
+                        <!-- Modal Panel -->
+                        <div x-transition:enter="ease-out duration-300"
+                            x-transition:enter-start="opacity-0 scale-95 translate-y-4" x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                            x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                            x-transition:leave-end="opacity-0 scale-95 translate-y-4"
+                            class="relative bg-slate-900 border border-white/5 rounded-2xl shadow-2xl w-full max-w-sm mx-auto max-h-[90vh] flex flex-col overflow-hidden pointer-events-auto">
                     <form action="{{ route('satker.kendaraans.laporan-bulanan') }}" method="GET">
                         <!-- Header with Gradient -->
                         <div
                             class="bg-gradient-to-r from-rose-500 via-rose-600 to-rose-700 px-4 sm:px-6 py-4 sm:py-5 shrink-0">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-3">
-                                    <div class="p-2 bg-slate-900 border border-white/5/20 rounded-xl backdrop-blur-sm">
+                                    <div class="p-2 bg-slate-900 border border-white/5/20 rounded-xl">
                                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -947,7 +954,6 @@
                     </form>
                 </div>
     </template>
-            </div>
         </div>
 
         <!-- Import Kendaraan Modal (Multi-Step) -->
@@ -955,23 +961,25 @@
             <div x-cloak x-data="importKendaraanModal()" @open-import-kendaraan.window="openModal()"
                 @turbo:before-cache.window="showModal = false">
     <template x-teleport="body">
+        <div x-show="showModal" style="display: none;" class="relative z-[9999]">
                 <!-- Backdrop -->
-                <div x-show="showModal" style="display: none;" x-transition:enter="transition ease-out duration-200"
+                <div x-show="showModal" x-transition:enter="transition ease-out duration-200"
                     x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                     x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[9999]"
+                    x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900/80 transition-opacity"
                     @click="closeModal()"></div>
 
-                <!-- Modal -->
-                <div x-show="showModal" style="display: none;" x-transition:enter="transition ease-out duration-300"
-                    x-transition:enter-start="opacity-0 scale-95 translate-y-4"
-                    x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                    x-transition:leave="transition ease-in duration-200"
-                    x-transition:leave-start="opacity-100 scale-100 translate-y-0"
-                    x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-                    class="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4" @click.self="closeModal()">
-                    <div class="bg-slate-900 border border-white/5 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden"
-                        @click.stop>
+                <!-- Modal Wrapper -->
+                <div class="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4 pointer-events-none">
+                    <!-- Modal Panel -->
+                    <div x-show="showModal" x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+                        x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                        x-transition:leave="transition ease-in duration-200"
+                        x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                        x-transition:leave-end="opacity-0 scale-95 translate-y-4"
+                        class="bg-slate-900 border border-white/5 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden pointer-events-auto"
+                        @click.outside="closeModal()">
                         <!-- Modal Header -->
                         <div class="px-4 sm:px-6 py-4 sm:py-5 bg-gradient-to-r from-violet-500 to-indigo-600 shrink-0">
                             <div class="flex items-center justify-between">
@@ -1417,10 +1425,12 @@
                                 </button>
                             </div>
                         </div>
+                        </div>
                     </div>
                 </div>
-    </template>
             </div>
+        </template>
+    </div>
 
             <script>
                 window.importKendaraanModal = function() {

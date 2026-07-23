@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="flex flex-col h-[calc(100vh-64px)] bg-[#F8FAFC]">
         <!-- Header Chat -->
-        <div class="bg-slate-900 border border-white/5/80 backdrop-blur-md border-b border-white/5 px-6 py-4 flex items-center justify-between shrink-0 sticky top-0 z-50">
+        <div class="bg-slate-900 border border-white/5/80 border-b border-white/5 px-6 py-4 flex items-center justify-between shrink-0 sticky top-0 z-50">
             <div class="flex items-center">
                 <a href="{{ route('chat.index') }}" class="mr-4 text-slate-400 hover:text-indigo-600 transition-all p-2 hover:bg-indigo-50 rounded-full group">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -184,7 +184,7 @@
                 if (msgDate !== lastDate) {
                     html += `
                         <div class="flex justify-center my-8">
-                            <span class="px-4 py-1.5 bg-slate-200/60 backdrop-blur-sm rounded-full text-[11px] text-slate-400 font-semibold tracking-wide uppercase shadow-sm">${msgDate}</span>
+                            <span class="px-4 py-1.5 bg-slate-200/60 rounded-full text-[11px] text-slate-400 font-semibold tracking-wide uppercase shadow-sm">${msgDate}</span>
                         </div>
                     `;
                     lastDate = msgDate;

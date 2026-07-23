@@ -33,7 +33,7 @@
                     @error('jabatan') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-slate-300 mb-1">Jabatan 2 (Opsional)</label>
+                    <label class="block text-sm font-semibold text-slate-300 mb-1">Kesatuan</label>
                     <input type="text" name="jabatan2" value="{{ old('jabatan2') }}"
                         class="w-full px-4 py-2.5 bg-slate-800/50 border border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-300"
                         placeholder="Contoh: Polda NTB">
@@ -162,7 +162,7 @@
     {{-- Modal Edit --}}
     <div id="editModal" class="fixed inset-0 z-[9999] hidden overflow-y-auto">
         <div class="flex items-center justify-center min-h-screen p-4 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity bg-slate-900/40 backdrop-blur-sm" onclick="closeEditModal()"></div>
+            <div class="fixed inset-0 transition-opacity bg-slate-900/40" onclick="closeEditModal()"></div>
             
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
             
@@ -188,7 +188,7 @@
                                     class="w-full px-4 py-2.5 bg-slate-800/50 border border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-300">
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold text-slate-300 mb-1">Jabatan 2 (Opsional)</label>
+                                <label class="block text-sm font-semibold text-slate-300 mb-1">Kesatuan</label>
                                 <input type="text" name="jabatan2" id="edit_jabatan2"
                                     class="w-full px-4 py-2.5 bg-slate-800/50 border border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-300">
                             </div>

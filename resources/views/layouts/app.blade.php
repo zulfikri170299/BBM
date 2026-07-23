@@ -78,12 +78,14 @@
         .desktop-float {
             animation: desktopFloat 3s ease-in-out infinite;
         }
-        @keyframes contentFadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .content-ready {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
-        .content-animate {
-            animation: contentFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        .content-loading {
+            opacity: 0;
+            transform: translateY(8px);
         }
         
         body {
@@ -123,9 +125,7 @@
             border-radius: 1rem;
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-            background-color: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background-color: #0f172a;
             color: #f1f5f9;
             font-size: 0.75rem;
             overflow: hidden;
@@ -242,7 +242,7 @@
                 <div x-data="{ show: true }" x-show="show" x-cloak
                     class="fixed inset-0 z-[9999] flex flex-col items-center justify-center p-4 sm:p-0 gap-4 pointer-events-none">
                     <!-- Backdrop -->
-                    <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm transition-opacity pointer-events-auto" @click="show = false"
+                    <div class="fixed inset-0 bg-slate-950/80 transition-opacity pointer-events-auto" @click="show = false"
                         x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
                         x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
                         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"></div>
@@ -326,7 +326,7 @@
             @endif
 
             <!-- Main Content Area -->
-            <main class="flex-1 overflow-y-auto content-animate custom-scrollbar">
+            <main class="flex-1 overflow-y-auto custom-scrollbar" id="main-content">
                 {{ $slot }}
             </main>
         </div>
@@ -537,6 +537,17 @@
         if (!window.sidebarLogicBound) {
             window.sidebarLogicBound = true;
             document.addEventListener('turbo:load', function () {
+                // Animate main content in
+                const main = document.getElementById('main-content');
+                if (main) {
+                    main.classList.remove('content-ready');
+                    main.classList.add('content-loading');
+                    // Force reflow
+                    main.offsetHeight;
+                    main.classList.remove('content-loading');
+                    main.classList.add('content-ready');
+                }
+
                 if (window.innerWidth < 1024) window.dispatchEvent(new CustomEvent('sidebar-close'));
                 window.dispatchEvent(new CustomEvent('close-reports'));
 
@@ -573,16 +584,6 @@
                         activeSubmenuDropdown = bestMatchLink.closest('div[x-show]');
                     } else {
                         bestMatchLink.classList.remove(...mainInactive); bestMatchLink.classList.add(...mainActive);
-                    }
-                }
-                
-                if (activeSubmenuDropdown) {
-                    // Open the dropdown if Alpine hasn't already.
-                    // Instead of managing Alpine state externally, we usually bind it or click the button.
-                    const button = activeSubmenuDropdown.previousElementSibling;
-                    if (button && activeSubmenuDropdown.style.display === 'none') {
-                        // Alpine handles clicks, so we can dispatch click
-                        // button.click(); 
                     }
                 }
             });

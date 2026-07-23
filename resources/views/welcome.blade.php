@@ -78,7 +78,7 @@
                 <div class="space-y-4 sm:space-y-8">
                     <div class="space-y-4">
                         <div
-                            class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-900/50 text-red-200 text-sm font-semibold border border-red-800 backdrop-blur-sm">
+                            class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-900/50 text-red-200 text-sm font-semibold border border-red-800">
                             <span class="relative flex h-2 w-2">
                                 <span
                                     class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
@@ -135,7 +135,7 @@
                         class="absolute inset-0 bg-gradient-to-tr from-red-500 to-orange-500 rounded-2xl transform rotate-3 opacity-20 blur-lg">
                     </div>
                     <div
-                        class="relative bg-slate-900 border border-white/5/5 border border-white/10 rounded-2xl shadow-2xl overflow-hidden p-2 backdrop-blur-sm">
+                        class="relative bg-slate-900 border border-white/5/5 border border-white/10 rounded-2xl shadow-2xl overflow-hidden p-2">
                         <div
                             class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl overflow-hidden aspect-[4/3] flex items-center justify-center relative">
                             <!-- Mockup UI -->

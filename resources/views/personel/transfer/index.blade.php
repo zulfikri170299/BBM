@@ -29,7 +29,7 @@
                         </p>
                     </div>
                     <div
-                        class="p-2 sm:p-3 bg-slate-900 border border-white/5/10 rounded-full backdrop-blur-sm border border-white/20 hidden sm:block">
+                        class="p-2 sm:p-3 bg-slate-900 border border-white/5/10 rounded-full border border-white/20 hidden sm:block">
                         <svg class="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
