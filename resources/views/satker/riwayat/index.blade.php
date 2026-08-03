@@ -48,14 +48,14 @@
         <div class="bg-slate-900 rounded-2xl border border-white/10 shadow-sm p-5">
             <form method="GET" action="{{ route('satker.riwayat.index') }}" class="flex flex-wrap gap-4 items-end">
                 <div class="flex-1 min-w-[150px]">
-                    <label class="block text-xs font-semibold text-slate-400 mb-1.5">Dari Tanggal</label>
-                    <input type="date" name="dari" value="{{ request('dari') }}"
-                        class="flatpickr w-full border-2 border-white/10 rounded-xl text-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Dari Tanggal</label>
+                    <input type="text" placeholder="Pilih Tanggal" name="dari" value="{{ request('dari') }}"
+                        class="flatpickr w-full h-11 px-4 border border-white/10 bg-slate-800/50 text-slate-300 rounded-xl text-xs font-bold focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
                 </div>
                 <div class="flex-1 min-w-[150px]">
-                    <label class="block text-xs font-semibold text-slate-400 mb-1.5">Sampai Tanggal</label>
-                    <input type="date" name="sampai" value="{{ request('sampai') }}"
-                        class="flatpickr w-full border-2 border-white/10 rounded-xl text-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Sampai Tanggal</label>
+                    <input type="text" placeholder="Pilih Tanggal" name="sampai" value="{{ request('sampai') }}"
+                        class="flatpickr w-full h-11 px-4 border border-white/10 bg-slate-800/50 text-slate-300 rounded-xl text-xs font-bold focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
                 </div>
                 <div class="flex-1 min-w-[180px]">
                     <label class="block text-xs font-semibold text-slate-400 mb-1.5">Kendaraan</label>

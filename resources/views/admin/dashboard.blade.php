@@ -11,13 +11,13 @@
         </div>
 
         <!-- Main Stats Grid -->
-        <div class="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
+        <div class="grid grid-cols-2 xl:grid-cols-4 gap-2 sm:gap-4">
             <!-- Card: Total Satker -->
             <div
-                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-900 border border-indigo-400 shadow-xl p-4 sm:p-5 text-white shadow-lg shadow-indigo-500/5 group hover:shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-1">
+                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-900 border border-indigo-400 shadow-xl p-3 sm:p-5 text-white shadow-lg shadow-indigo-500/5 group hover:shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-1">
                 <div class="absolute -top-4 -right-4 w-24 h-24 bg-indigo-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500">
                 </div>
-                <div class="relative z-10">
+                <div class="relative z-10 h-full flex flex-col">
                     <div class="flex items-center justify-between mb-2 sm:mb-3">
                         <div class="p-2 sm:p-2.5 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl">
                             <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -29,18 +29,18 @@
                         <a href="{{ route('admin.satkers.index') }}"
                             class="text-[9px] sm:text-[10px] font-semibold bg-white/20 border border-white/30 hover:bg-slate-900 border border-white/5/30 px-2 py-1 rounded-lg transition uppercase tracking-wider text-white/90">Kelola</a>
                     </div>
-                    <div class="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-2 mt-1 sm:mt-0">
-                        <p class="text-xl sm:text-2xl font-black text-white">{{ number_format($stats['totalSatker'], 0, ',', '.') }}</p>
-                        <p class="text-[9px] sm:text-[11px] text-white/90 opacity-80 font-medium truncate">Total Satker</p>
+                    <div class="flex flex-col gap-0.5 sm:gap-1 mt-2 sm:mt-1">
+                        <p class="text-2xl sm:text-4xl font-black text-white leading-none">{{ number_format($stats['totalSatker'], 0, ',', '.') }}</p>
+                        <p class="text-[10px] sm:text-sm text-white/90 font-medium leading-tight">Total Satker</p>
                     </div>
-                    <div class="mt-2 sm:mt-3 flex gap-2">
-                        <div class="flex-1 bg-white/20 border border-white/30 shadow-sm rounded-lg px-2 py-1 text-center flex flex-col justify-center">
-                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90 uppercase">Terdaftar</p>
-                            <p class="text-xs sm:text-sm font-black text-white leading-tight mt-0.5">{{ number_format($stats['totalSatker'], 0, ',', '.') }}</p>
+                    <div class="mt-auto pt-3 sm:pt-5 grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
+                        <div class="bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm rounded-xl px-3 py-2 text-center flex flex-col justify-center transition-colors hover:bg-white/20">
+                            <p class="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">Terdaftar</p>
+                            <p class="text-sm sm:text-base font-black text-white leading-tight">{{ number_format($stats['totalSatker'], 0, ',', '.') }}</p>
                         </div>
-                        <div class="flex-1 bg-white/20 border border-white/30 shadow-sm rounded-lg px-2 py-1 flex flex-col items-center justify-center">
-                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90 uppercase">Status</p>
-                            <p class="text-[10px] sm:text-xs font-black text-emerald-300 flex items-center gap-1.5 mt-0.5">
+                        <div class="bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm rounded-xl px-3 py-2 flex flex-col items-center justify-center transition-colors hover:bg-white/20">
+                            <p class="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">Status</p>
+                            <p class="text-xs sm:text-sm font-black text-emerald-300 flex items-center gap-1.5">
                                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>
                                 AKTIF
                             </p>
@@ -51,10 +51,10 @@
 
             <!-- Card: Total Users -->
             <div
-                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-900 border border-emerald-400 shadow-xl p-4 sm:p-5 text-white shadow-lg shadow-emerald-500/5 group hover:shadow-emerald-500/20 transition-all duration-300 hover:-translate-y-1">
+                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-900 border border-emerald-400 shadow-xl p-3 sm:p-5 text-white shadow-lg shadow-emerald-500/5 group hover:shadow-emerald-500/20 transition-all duration-300 hover:-translate-y-1">
                 <div class="absolute -top-4 -right-4 w-24 h-24 bg-emerald-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500">
                 </div>
-                <div class="relative z-10">
+                <div class="relative z-10 h-full flex flex-col">
                     <div class="flex items-center justify-between mb-2 sm:mb-3">
                         <div class="p-2 sm:p-2.5 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl">
                             <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -66,18 +66,18 @@
                         <a href="{{ route('admin.users.index') }}"
                             class="text-[9px] sm:text-[10px] font-semibold bg-white/20 border border-white/30 hover:bg-slate-900 border border-white/5/30 px-2 py-1 rounded-lg transition uppercase tracking-wider text-white/90">Kelola</a>
                     </div>
-                    <div class="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-2 mt-1 sm:mt-0">
-                        <p class="text-xl sm:text-2xl font-black text-white">{{ number_format($stats['totalUsers'], 0, ',', '.') }}</p>
-                        <p class="text-[9px] sm:text-[11px] text-white/90 opacity-80 font-medium truncate">Total Users</p>
+                    <div class="flex flex-col gap-0.5 sm:gap-1 mt-2 sm:mt-1">
+                        <p class="text-2xl sm:text-4xl font-black text-white leading-none">{{ number_format($stats['totalUsers'], 0, ',', '.') }}</p>
+                        <p class="text-[10px] sm:text-sm text-white/90 font-medium leading-tight">Total Users</p>
                     </div>
-                    <div class="mt-2 sm:mt-3 flex gap-2">
-                        <div class="flex-1 bg-white/20 border border-white/30 shadow-sm rounded-lg px-2 py-1 text-center flex flex-col justify-center">
-                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90 uppercase">Hak Akses</p>
-                            <p class="text-[10px] sm:text-xs font-black text-white mt-0.5 truncate">Terverifikasi</p>
+                    <div class="mt-auto pt-3 sm:pt-5 grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
+                        <div class="bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm rounded-xl px-3 py-2 text-center flex flex-col justify-center transition-colors hover:bg-white/20">
+                            <p class="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">Hak Akses</p>
+                            <p class="text-xs sm:text-sm font-black text-white truncate">Terverifikasi</p>
                         </div>
-                        <div class="flex-1 bg-white/20 border border-white/30 shadow-sm rounded-lg px-2 py-1 text-center flex flex-col justify-center">
-                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90 uppercase">Sistem</p>
-                            <p class="text-[10px] sm:text-xs font-black text-white mt-0.5">Online</p>
+                        <div class="bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm rounded-xl px-3 py-2 text-center flex flex-col justify-center transition-colors hover:bg-white/20">
+                            <p class="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">Sistem</p>
+                            <p class="text-xs sm:text-sm font-black text-white">Online</p>
                         </div>
                     </div>
                 </div>
@@ -85,10 +85,10 @@
 
             <!-- Card: Total Kendaraan -->
             <div
-                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-amber-500 to-amber-800 border border-amber-400 shadow-xl p-4 sm:p-5 text-white shadow-lg shadow-amber-500/5 group hover:shadow-amber-500/20 transition-all duration-300 hover:-translate-y-1">
+                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-amber-500 to-amber-800 border border-amber-400 shadow-xl p-3 sm:p-5 text-white shadow-lg shadow-amber-500/5 group hover:shadow-amber-500/20 transition-all duration-300 hover:-translate-y-1">
                 <div class="absolute -top-4 -right-4 w-24 h-24 bg-amber-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500">
                 </div>
-                <div class="relative z-10">
+                <div class="relative z-10 h-full flex flex-col">
                     <div class="flex items-center justify-between mb-2 sm:mb-3">
                         <div class="p-2 sm:p-2.5 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl">
                             <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -102,27 +102,26 @@
                         <a href="{{ route('admin.kendaraans.index') }}"
                             class="text-[9px] sm:text-[10px] font-semibold bg-white/20 border border-white/30 hover:bg-slate-900 border border-white/5/30 px-2 py-1 rounded-lg transition uppercase tracking-wider text-white/90">Kelola</a>
                     </div>
-                    <div class="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-2 mt-1 sm:mt-0">
-                        <p class="text-xl sm:text-2xl font-black text-white">{{ number_format($stats['totalKendaraan'], 0, ',', '.') }}</p>
-                        <p class="text-[9px] sm:text-[11px] text-white/90 opacity-80 font-medium truncate">Total
-                            Kendaraan</p>
+                    <div class="flex flex-col gap-0.5 sm:gap-1 mt-2 sm:mt-1">
+                        <p class="text-2xl sm:text-4xl font-black text-white leading-none">{{ number_format($stats['totalKendaraan'], 0, ',', '.') }}</p>
+                        <p class="text-[10px] sm:text-sm text-white/90 font-medium leading-tight">Total Kendaraan</p>
                     </div>
-                    <div class="grid grid-cols-4 gap-1 mt-2 sm:mt-3">
-                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center">
-                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90">R2</p>
-                            <p class="text-xs sm:text-sm font-black text-white">{{ $stats['rodaR2'] }}</p>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 mt-auto pt-3 sm:pt-5">
+                        <div class="bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm rounded-xl px-2 py-2 text-center transition-colors hover:bg-white/20">
+                            <p class="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">R2</p>
+                            <p class="text-sm sm:text-base font-black text-white">{{ $stats['rodaR2'] }}</p>
                         </div>
-                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center">
-                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90">R4</p>
-                            <p class="text-xs sm:text-sm font-black text-white">{{ $stats['rodaR4'] }}</p>
+                        <div class="bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm rounded-xl px-2 py-2 text-center transition-colors hover:bg-white/20">
+                            <p class="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">R4</p>
+                            <p class="text-sm sm:text-base font-black text-white">{{ $stats['rodaR4'] }}</p>
                         </div>
-                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center">
-                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90">R6</p>
-                            <p class="text-xs sm:text-sm font-black text-white">{{ $stats['rodaR6'] }}</p>
+                        <div class="bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm rounded-xl px-2 py-2 text-center transition-colors hover:bg-white/20">
+                            <p class="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">R6</p>
+                            <p class="text-sm sm:text-base font-black text-white">{{ $stats['rodaR6'] }}</p>
                         </div>
-                        <div class="bg-white/20 border border-white/30 shadow-sm rounded-lg px-1.5 py-1 text-center">
-                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90 leading-tight">Non</p>
-                            <p class="text-xs sm:text-sm font-black text-white">{{ $stats['rodaNon'] }}</p>
+                        <div class="bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm rounded-xl px-2 py-2 text-center transition-colors hover:bg-white/20">
+                            <p class="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">Non</p>
+                            <p class="text-sm sm:text-base font-black text-white">{{ $stats['rodaNon'] }}</p>
                         </div>
                     </div>
                 </div>
@@ -130,10 +129,10 @@
 
             <!-- Card: Total Transaksi -->
             <div
-                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-rose-600 to-rose-900 border border-rose-400 shadow-xl p-4 sm:p-5 text-white shadow-lg shadow-rose-500/5 group hover:shadow-rose-500/20 transition-all duration-300 hover:-translate-y-1">
+                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-rose-600 to-rose-900 border border-rose-400 shadow-xl p-3 sm:p-5 text-white shadow-lg shadow-rose-500/5 group hover:shadow-rose-500/20 transition-all duration-300 hover:-translate-y-1">
                 <div class="absolute -top-4 -right-4 w-24 h-24 bg-rose-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500">
                 </div>
-                <div class="relative z-10">
+                <div class="relative z-10 h-full flex flex-col">
                     <div class="flex items-center justify-between mb-2 sm:mb-3">
                         <div class="p-2 sm:p-2.5 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl">
                             <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -144,18 +143,18 @@
                         <a href="{{ route('admin.riwayat.index') }}"
                             class="text-[9px] sm:text-[10px] font-semibold bg-white/20 border border-white/30 hover:bg-slate-900 border border-white/5/30 px-2 py-1 rounded-lg transition uppercase tracking-wider text-white/90">Riwayat</a>
                     </div>
-                    <div class="flex flex-col sm:flex-row sm:items-baseline gap-0 sm:gap-2 mt-1 sm:mt-0">
-                        <p class="text-xl sm:text-2xl font-black text-white">{{ number_format($stats['totalTransaksi'], 0, ',', '.') }}</p>
-                        <p class="text-[9px] sm:text-[11px] text-white/90 opacity-80 font-medium truncate">Total Transaksi</p>
+                    <div class="flex flex-col gap-0.5 sm:gap-1 mt-2 sm:mt-1">
+                        <p class="text-2xl sm:text-4xl font-black text-white leading-none">{{ number_format($stats['totalTransaksi'], 0, ',', '.') }}</p>
+                        <p class="text-[10px] sm:text-sm text-white/90 font-medium leading-tight">Total Transaksi</p>
                     </div>
-                    <div class="mt-2 sm:mt-3 flex gap-2">
-                        <div class="flex-1 bg-white/20 border border-white/30 shadow-sm rounded-lg px-2 py-1 text-center flex flex-col justify-center">
-                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90 uppercase truncate">Volume Disalurkan</p>
-                            <p class="text-xs sm:text-sm font-black text-white mt-0.5">{{ number_format($stats['totalLiter'] ?? 0, 0, ',', '.') }} <span class="text-[9px] font-bold opacity-80">L</span></p>
+                    <div class="mt-auto pt-3 sm:pt-5 grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
+                        <div class="bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm rounded-xl px-3 py-2 text-center flex flex-col justify-center transition-colors hover:bg-white/20">
+                            <p class="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">Volume Disalurkan</p>
+                            <p class="text-sm sm:text-base font-black text-white">{{ number_format($stats['totalLiter'] ?? 0, 0, ',', '.') }} <span class="text-[10px] font-bold opacity-80">L</span></p>
                         </div>
-                        <div class="flex-1 bg-white/20 border border-white/30 shadow-sm rounded-lg px-2 py-1 text-center flex flex-col justify-center">
-                            <p class="text-[8px] sm:text-[9px] font-bold opacity-80 text-white/90 uppercase truncate">Total Bon</p>
-                            <p class="text-xs sm:text-sm font-black text-white mt-0.5">{{ number_format(($stats['totalHutangPertamax'] ?? 0) + ($stats['totalHutangDex'] ?? 0), 0, ',', '.') }} <span class="text-[9px] font-bold opacity-80">L</span></p>
+                        <div class="bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm rounded-xl px-3 py-2 text-center flex flex-col justify-center transition-colors hover:bg-white/20">
+                            <p class="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">Total Bon</p>
+                            <p class="text-sm sm:text-base font-black text-white">{{ number_format(($stats['totalHutangPertamax'] ?? 0) + ($stats['totalHutangDex'] ?? 0), 0, ',', '.') }} <span class="text-[10px] font-bold opacity-80">L</span></p>
                         </div>
                     </div>
                 </div>
