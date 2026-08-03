@@ -186,7 +186,7 @@
                             <!-- Kendaraan Table -->
                             <div x-show="tab === 'kendaraan'">
                                 <table class="w-full text-left border-collapse">
-                                    <thead class="sticky top-0 bg-slate-800/50 border-b border-white/5 shadow-sm z-10 text-[9px] font-black text-slate-400 uppercase tracking-[0.1em]">
+                                    <thead class="sticky top-0 bg-slate-900 border-b border-white/5 shadow-sm z-10 text-[9px] font-black text-slate-400 uppercase tracking-[0.1em]">
                                         <tr>
                                             <th class="px-4 py-3 w-10 text-center">
                                                 <input type="checkbox" x-model="allSelectedKendaraan" @change="toggleAllKendaraan" class="rounded-sm border-white/20 text-indigo-600 focus:ring-indigo-500 scale-90">
@@ -233,7 +233,7 @@
                             <!-- Personel Table -->
                             <div x-show="tab === 'personel'">
                                 <table class="w-full text-left border-collapse">
-                                    <thead class="sticky top-0 bg-slate-800/50 border-b border-white/5 shadow-sm z-10 text-[9px] font-black text-slate-400 uppercase tracking-[0.1em]">
+                                    <thead class="sticky top-0 bg-slate-900 border-b border-white/5 shadow-sm z-10 text-[9px] font-black text-slate-400 uppercase tracking-[0.1em]">
                                         <tr>
                                             <th class="px-4 py-3 w-10 text-center">
                                                 <input type="checkbox" x-model="allSelectedPersonel" @change="toggleAllPersonel" class="rounded-sm border-white/20 text-indigo-600 focus:ring-indigo-500 scale-90">
