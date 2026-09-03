@@ -167,16 +167,16 @@
 
                     {{-- GRAND TOTAL --}}
                     <tr class="bg-gray-200 dark:bg-gray-600 font-bold text-gray-900 dark:text-white">
-                        <td colspan="4"></td>
-                        <td class="border border-gray-400 dark:border-gray-600 px-2 py-2 text-center text-lg">TOTAL</td>
-                        <td class="border border-gray-400 dark:border-gray-600 px-2 py-2 text-center text-lg text-blue-700 dark:text-blue-300">{{ number_format($grandTotalPertamax[0], 0, ',', '.') }}</td>
-                        <td class="border border-gray-400 dark:border-gray-600 px-2 py-2 text-center text-lg text-emerald-700 dark:text-emerald-300">{{ number_format($grandTotalDex[0], 0, ',', '.') }}</td>
-                        <td class="border border-gray-400 dark:border-gray-600 px-2 py-2 text-center text-lg"></td>
-                        <td class="border border-gray-400 dark:border-gray-600 px-2 py-2 text-center text-lg text-blue-700 dark:text-blue-300">{{ number_format($grandTotalPertamax[1], 0, ',', '.') }}</td>
-                        <td class="border border-gray-400 dark:border-gray-600 px-2 py-2 text-center text-lg text-emerald-700 dark:text-emerald-300">{{ number_format($grandTotalDex[1], 0, ',', '.') }}</td>
-                        <td class="border border-gray-400 dark:border-gray-600 px-2 py-2 text-center text-lg"></td>
-                        <td class="border border-gray-400 dark:border-gray-600 px-2 py-2 text-center text-lg text-blue-700 dark:text-blue-300">{{ number_format($grandTotalPertamax[2], 0, ',', '.') }}</td>
-                        <td class="border border-gray-400 dark:border-gray-600 px-2 py-2 text-center text-lg text-emerald-700 dark:text-emerald-300">{{ number_format($grandTotalDex[2], 0, ',', '.') }}</td>
+                        <td colspan="4" class="border border-gray-400 dark:border-gray-600 px-2 py-2"></td>
+                        <td class="border border-gray-400 dark:border-gray-600 px-2 py-2 text-center">TOTAL</td>
+                        <td class="border border-gray-400 dark:border-gray-600 px-2 py-2 text-center text-blue-700 dark:text-blue-300">{{ number_format($grandTotalPertamax[0], 0, ',', '.') }}</td>
+                        <td class="border border-gray-400 dark:border-gray-600 px-2 py-2 text-center text-emerald-700 dark:text-emerald-300">{{ number_format($grandTotalDex[0], 0, ',', '.') }}</td>
+                        <td class="border border-gray-400 dark:border-gray-600 px-2 py-2 text-center">TOTAL</td>
+                        <td class="border border-gray-400 dark:border-gray-600 px-2 py-2 text-center text-blue-700 dark:text-blue-300">{{ number_format($grandTotalPertamax[1], 0, ',', '.') }}</td>
+                        <td class="border border-gray-400 dark:border-gray-600 px-2 py-2 text-center text-emerald-700 dark:text-emerald-300">{{ number_format($grandTotalDex[1], 0, ',', '.') }}</td>
+                        <td class="border border-gray-400 dark:border-gray-600 px-2 py-2 text-center">TOTAL</td>
+                        <td class="border border-gray-400 dark:border-gray-600 px-2 py-2 text-center text-blue-700 dark:text-blue-300">{{ number_format($grandTotalPertamax[2], 0, ',', '.') }}</td>
+                        <td class="border border-gray-400 dark:border-gray-600 px-2 py-2 text-center text-emerald-700 dark:text-emerald-300">{{ number_format($grandTotalDex[2], 0, ',', '.') }}</td>
                     </tr>
                 </tbody>
             </table>

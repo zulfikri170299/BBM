@@ -42,9 +42,17 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
                             {{ $rendis->triwulan }} - {{ $rendis->tahun }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                            Ptx: {{ number_format($rendis->pembelian_pertamax, 0, ',', '.') }}<br>
-                            Dex: {{ number_format($rendis->pembelian_pertamina_dex, 0, ',', '.') }}
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex flex-col gap-1.5 w-48">
+                                <div class="flex items-center justify-between text-xs bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded border border-blue-100 dark:border-blue-800/50">
+                                    <span class="text-blue-600 dark:text-blue-400 font-medium">Pertamax</span>
+                                    <span class="font-bold text-blue-700 dark:text-blue-300">{{ number_format($rendis->pembelian_pertamax, 0, ',', '.') }}</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded border border-emerald-100 dark:border-emerald-800/50">
+                                    <span class="text-emerald-600 dark:text-emerald-400 font-medium">Pertamina Dex</span>
+                                    <span class="font-bold text-emerald-700 dark:text-emerald-300">{{ number_format($rendis->pembelian_pertamina_dex, 0, ',', '.') }}</span>
+                                </div>
+                            </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                             @if($rendis->is_topup_b1) <span class="px-2 py-1 text-[10px] bg-green-100 text-green-800 rounded">B1 ✓</span> @else <span class="px-2 py-1 text-[10px] bg-gray-100 text-gray-600 rounded">B1 -</span> @endif

@@ -7,8 +7,9 @@ use App\Models\Satker;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
-class RendisExport implements FromView, ShouldAutoSize
+class RendisExport implements FromView, ShouldAutoSize, WithColumnFormatting
 {
     protected $rendisBbm;
 
@@ -30,5 +31,22 @@ class RendisExport implements FromView, ShouldAutoSize
             'kendaraansBySatker' => $kendaraansBySatker,
             'satkers' => $satkers
         ]);
+    }
+
+    public function columnFormats(): array
+    {
+        return [
+            'C' => '#,##0',
+            'D' => '#,##0',
+            'E' => '#,##0',
+            'F' => '#,##0',
+            'G' => '#,##0',
+            'H' => '#,##0',
+            'I' => '#,##0',
+            'J' => '#,##0',
+            'K' => '#,##0',
+            'L' => '#,##0',
+            'M' => '#,##0',
+        ];
     }
 }

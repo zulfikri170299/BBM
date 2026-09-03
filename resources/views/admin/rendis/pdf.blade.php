@@ -169,10 +169,10 @@
                 <td class="text-center">TOTAL</td>
                 <td class="text-center" style="color: #1d4ed8;">{{ number_format($grandTotalPertamax[0], 0, ',', '.') }}</td>
                 <td class="text-center" style="color: #047857;">{{ number_format($grandTotalDex[0], 0, ',', '.') }}</td>
-                <td class="text-center"></td>
+                <td class="text-center">TOTAL</td>
                 <td class="text-center" style="color: #1d4ed8;">{{ number_format($grandTotalPertamax[1], 0, ',', '.') }}</td>
                 <td class="text-center" style="color: #047857;">{{ number_format($grandTotalDex[1], 0, ',', '.') }}</td>
-                <td class="text-center"></td>
+                <td class="text-center">TOTAL</td>
                 <td class="text-center" style="color: #1d4ed8;">{{ number_format($grandTotalPertamax[2], 0, ',', '.') }}</td>
                 <td class="text-center" style="color: #047857;">{{ number_format($grandTotalDex[2], 0, ',', '.') }}</td>
             </tr>
