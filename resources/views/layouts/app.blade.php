@@ -225,7 +225,7 @@
     @stack('styles')
 </head>
 
-<body class="h-full font-sans antialiased text-slate-200 overflow-hidden bg-slate-900 relative selection:bg-brand-primary/30 selection:text-white" x-data="{ sidebarOpen: false }" @sidebar-close.window="sidebarOpen = false" @sidebar-open.window="sidebarOpen = true">
+<body class="h-full font-sans antialiased text-slate-200 overflow-hidden bg-slate-900 relative selection:bg-brand-primary/30 selection:text-white" x-data="{ sidebarOpen: false, desktopSidebarOpen: $persist(true) }" @sidebar-close.window="sidebarOpen = false" @sidebar-open.window="sidebarOpen = true">
     <!-- Solid clean background instead of blur -->
     <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none bg-slate-900">
     </div>

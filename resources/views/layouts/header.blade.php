@@ -8,6 +8,14 @@
             </svg>
         </button>
 
+        {{-- Hamburger Button (Desktop) --}}
+        <button type="button" class="-m-2.5 p-2.5 text-slate-400 hover:text-white transition-colors hidden lg:block" @click="desktopSidebarOpen = !desktopSidebarOpen">
+            <span class="sr-only">Toggle sidebar</span>
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+
         {{-- Page Title (Mobile) --}}
         <div class="lg:hidden flex items-center">
             <h1 class="text-sm font-bold text-slate-200">

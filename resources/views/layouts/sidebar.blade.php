@@ -56,7 +56,14 @@
 </div>
 
 <!-- Desktop Sidebar -->
-<div class="hidden lg:flex lg:w-72 lg:flex-col bg-slate-900 border-r border-white/5 relative z-10 transition-all duration-300" id="sidebar-nav">
+<div x-show="desktopSidebarOpen"
+     x-transition:enter="transition ease-in-out duration-300"
+     x-transition:enter-start="-translate-x-full opacity-0 lg:-ml-72"
+     x-transition:enter-end="translate-x-0 opacity-100 lg:ml-0"
+     x-transition:leave="transition ease-in-out duration-300"
+     x-transition:leave-start="translate-x-0 opacity-100 lg:ml-0"
+     x-transition:leave-end="-translate-x-full opacity-0 lg:-ml-72"
+     class="hidden lg:flex lg:w-72 lg:flex-col bg-slate-900 border-r border-white/5 relative z-10" id="sidebar-nav">
     <div class="flex h-24 shrink-0 items-center px-8 border-b border-white/5">
         <div class="flex items-center gap-4">
             <div class="relative">

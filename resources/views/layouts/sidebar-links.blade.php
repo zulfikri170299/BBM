@@ -66,6 +66,11 @@
                             <div class="submenu-dot {{ request()->routeIs('pembelian-bbm.*') ? 'active-dot' : '' }}"></div>
                             Pembelian BBM
                         </a>
+                        <a href="{{ route('admin.rendis.index') }}"
+                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.rendis.*') ? 'text-white active-' : 'text-slate-400 hover:text-white text-slate-400 hover:text-white hover:bg-white/5/50' }}">
+                            <div class="submenu-dot {{ request()->routeIs('admin.rendis.*') ? 'active-dot' : '' }}"></div>
+                            Rendis BBM
+                        </a>
                         <a href="{{ route('admin.sounding.index') }}"
                             class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.sounding.*') ? 'text-white active-' : 'text-slate-400 hover:text-white text-slate-400 hover:text-white hover:bg-white/5/50' }}">
                             <div class="submenu-dot {{ request()->routeIs('admin.sounding.*') ? 'active-dot' : '' }}"></div>

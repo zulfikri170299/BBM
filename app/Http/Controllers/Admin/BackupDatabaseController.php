@@ -45,7 +45,7 @@ class BackupDatabaseController extends Controller
 
         if ($connection === 'sqlite') {
             $dbPath = config('database.connections.sqlite.database');
-            $fileName = 'backup_pospolmas_' . Carbon::now()->format('Y-m-d_H-i-s') . '.sqlite';
+            $fileName = 'backup_bbm_' . Carbon::now()->format('Y-m-d_H-i-s') . '.sqlite';
             $filePath = $storagePath . '/' . $fileName;
 
             try {

@@ -196,6 +196,13 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     Route::get('/backup', [\App\Http\Controllers\Admin\BackupDatabaseController::class, 'index'])->name('backup.index')->middleware('role:super_admin');
     Route::post('/backup/export', [\App\Http\Controllers\Admin\BackupDatabaseController::class, 'export'])->name('backup.export')->middleware('role:super_admin');
     Route::post('/backup/import', [\App\Http\Controllers\Admin\BackupDatabaseController::class, 'import'])->name('backup.import')->middleware('role:super_admin');
+    // Rendis BBM
+    Route::get('/rendis/print-pdf/{rendisBbm}', [\App\Http\Controllers\Admin\RendisController::class, 'printPdf'])->name('rendis.print-pdf');
+    Route::get('/rendis/print-excel/{rendisBbm}', [\App\Http\Controllers\Admin\RendisController::class, 'printExcel'])->name('rendis.print-excel');
+    Route::post('/rendis/execute-topup/{rendisBbm}', [\App\Http\Controllers\Admin\RendisController::class, 'executeTopup'])->name('rendis.execute-topup');
+    Route::post('/rendis/verify-edit/{rendisBbm}', [\App\Http\Controllers\Admin\RendisController::class, 'verifyEdit'])->name('rendis.verify-edit');
+    Route::resource('rendis', \App\Http\Controllers\Admin\RendisController::class);
+
     // Stok BBM
     Route::get('/stok/print', [\App\Http\Controllers\Admin\StokController::class, 'print'])->name('stok.print');
     Route::get('/stok', [\App\Http\Controllers\Admin\StokController::class, 'index'])->name('stok.index');
