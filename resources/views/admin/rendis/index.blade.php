@@ -38,6 +38,29 @@
                 </thead>
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                     @forelse($rendisList as $rendis)
+                    @php
+                        $currentYear = (int) date('Y');
+                        $currentMonth = (int) date('n');
+                        $rendisYear = (int) $rendis->tahun;
+                        
+                        $twMonths = [
+                            'TW I' => [1, 2, 3],
+                            'TW II' => [4, 5, 6],
+                            'TW III' => [7, 8, 9],
+                            'TW IV' => [10, 11, 12],
+                        ];
+                        $months = $twMonths[$rendis->triwulan] ?? [1, 2, 3];
+                        
+                        $isAllowed = function($m) use ($currentYear, $currentMonth, $rendisYear) {
+                            if ($currentYear > $rendisYear) return true;
+                            if ($currentYear < $rendisYear) return false;
+                            return $currentMonth >= $m;
+                        };
+                        
+                        $canTopupB1 = $isAllowed($months[0]);
+                        $canTopupB2 = $isAllowed($months[1]);
+                        $canTopupB3 = $isAllowed($months[2]);
+                    @endphp
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
                             {{ $rendis->triwulan }} - {{ $rendis->tahun }}
@@ -90,24 +113,30 @@
                                 {{-- Aksi Top Up --}}
                                 <div class="flex items-center gap-1 bg-gray-100 dark:bg-gray-700/50 rounded-lg p-1">
                                     {{-- Top Up B1 --}}
-                                    @if(!$rendis->is_topup_b1)
+                                    @if($rendis->is_topup_b1)
+                                        <button type="button" disabled class="px-2 py-1 text-xs font-semibold rounded bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed" title="B1 Sudah Di-Topup">B1 Selesai</button>
+                                    @elseif($canTopupB1)
                                         <button type="button" @click="topupAction = '{{ route('admin.rendis.execute-topup', $rendis->id) }}?bulan=1'; topupBulan = 'Bulan 1'; pinValue = ''; showPinModal = true" class="px-2 py-1 text-xs font-semibold rounded bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm transition-colors" title="Eksekusi Top Up B1">Top Up B1</button>
                                     @else
-                                        <button type="button" disabled class="px-2 py-1 text-xs font-semibold rounded bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed" title="B1 Sudah Di-Topup">B1 Selesai</button>
+                                        <button type="button" disabled class="px-2 py-1 text-xs font-semibold rounded bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed border border-gray-300 dark:border-gray-600" title="Belum Waktunya">Top Up B1</button>
                                     @endif
 
                                     {{-- Top Up B2 --}}
-                                    @if(!$rendis->is_topup_b2)
+                                    @if($rendis->is_topup_b2)
+                                        <button type="button" disabled class="px-2 py-1 text-xs font-semibold rounded bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed" title="B2 Sudah Di-Topup">B2 Selesai</button>
+                                    @elseif($canTopupB2)
                                         <button type="button" @click="topupAction = '{{ route('admin.rendis.execute-topup', $rendis->id) }}?bulan=2'; topupBulan = 'Bulan 2'; pinValue = ''; showPinModal = true" class="px-2 py-1 text-xs font-semibold rounded bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm transition-colors" title="Eksekusi Top Up B2">Top Up B2</button>
                                     @else
-                                        <button type="button" disabled class="px-2 py-1 text-xs font-semibold rounded bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed" title="B2 Sudah Di-Topup">B2 Selesai</button>
+                                        <button type="button" disabled class="px-2 py-1 text-xs font-semibold rounded bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed border border-gray-300 dark:border-gray-600" title="Belum Waktunya">Top Up B2</button>
                                     @endif
 
                                     {{-- Top Up B3 --}}
-                                    @if(!$rendis->is_topup_b3)
+                                    @if($rendis->is_topup_b3)
+                                        <button type="button" disabled class="px-2 py-1 text-xs font-semibold rounded bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed" title="B3 Sudah Di-Topup">B3 Selesai</button>
+                                    @elseif($canTopupB3)
                                         <button type="button" @click="topupAction = '{{ route('admin.rendis.execute-topup', $rendis->id) }}?bulan=3'; topupBulan = 'Bulan 3'; pinValue = ''; showPinModal = true" class="px-2 py-1 text-xs font-semibold rounded bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm transition-colors" title="Eksekusi Top Up B3">Top Up B3</button>
                                     @else
-                                        <button type="button" disabled class="px-2 py-1 text-xs font-semibold rounded bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed" title="B3 Sudah Di-Topup">B3 Selesai</button>
+                                        <button type="button" disabled class="px-2 py-1 text-xs font-semibold rounded bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed border border-gray-300 dark:border-gray-600" title="Belum Waktunya">Top Up B3</button>
                                     @endif
                                 </div>
                             </div>
