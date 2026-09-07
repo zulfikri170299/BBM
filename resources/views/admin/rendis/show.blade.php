@@ -97,9 +97,11 @@
                         $grandTotalDex = [0, 0, 0];
                     @endphp
 
-                    @foreach($kendaraansBySatker as $satkerId => $items)
+                    @foreach($satkers as $satker)
                         @php
-                            $satkerName = $satkers[$satkerId]->nama_satker ?? 'LAINNYA';
+                            $satkerId = $satker->id;
+                            $items = $kendaraansBySatker->has($satkerId) ? $kendaraansBySatker->get($satkerId) : collect();
+                            $satkerName = $satker->nama_satker ?? 'LAINNYA';
                             $satkerLabel = $romawi[$satkerIdx] ?? ($satkerIdx + 1);
                             $satkerIdx++;
                             $subPertamax = [0, 0, 0];
@@ -111,36 +113,42 @@
                             <td colspan="12" class="border border-gray-400 dark:border-gray-600 px-2 py-2 text-gray-900 dark:text-yellow-400 uppercase">{{ $satkerName }}</td>
                         </tr>
 
-                        @foreach($items as $idx => $rk)
-                            @php
-                                $k = $rk->kendaraan;
-                                $isPertamax = $rk->jenis_bbm === 'pertamax';
-                                if ($isPertamax) {
-                                    $subPertamax[0] += $rk->bulan1_total;
-                                    $subPertamax[1] += $rk->bulan2_total;
-                                    $subPertamax[2] += $rk->bulan3_total;
-                                } else {
-                                    $subDex[0] += $rk->bulan1_total;
-                                    $subDex[1] += $rk->bulan2_total;
-                                    $subDex[2] += $rk->bulan3_total;
-                                }
-                            @endphp
+                        @if($items->count() > 0)
+                            @foreach($items as $idx => $rk)
+                                @php
+                                    $k = $rk->kendaraan;
+                                    $isPertamax = $rk->jenis_bbm === 'pertamax';
+                                    if ($isPertamax) {
+                                        $subPertamax[0] += $rk->bulan1_total;
+                                        $subPertamax[1] += $rk->bulan2_total;
+                                        $subPertamax[2] += $rk->bulan3_total;
+                                    } else {
+                                        $subDex[0] += $rk->bulan1_total;
+                                        $subDex[1] += $rk->bulan2_total;
+                                        $subDex[2] += $rk->bulan3_total;
+                                    }
+                                @endphp
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                    <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center">{{ $idx + 1 }}</td>
+                                    <td class="border border-gray-400 dark:border-gray-600 px-2 py-1">{{ $rk->uraian ?? $k->kategori_kendaraan ?? 'Operasional' }}</td>
+                                    <td class="border border-gray-400 dark:border-gray-600 px-2 py-1">{{ $k->jenis_kendaraan ?? '-' }}</td>
+                                    <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center font-semibold">{{ $k->no_polisi ?? '-' }}</td>
+                                    <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center text-gray-500">{{ $rk->liter_per_hari }} x {{ $rk->bulan1_total > 0 ? round($rk->bulan1_total / max($rk->liter_per_hari, 1)) : 0 }}</td>
+                                    <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center font-semibold text-blue-600 dark:text-blue-400">{{ $isPertamax && $rk->bulan1_total > 0 ? number_format($rk->bulan1_total, 0, ',', '.') : '' }}</td>
+                                    <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center font-semibold text-emerald-600 dark:text-emerald-400">{{ !$isPertamax && $rk->bulan1_total > 0 ? number_format($rk->bulan1_total, 0, ',', '.') : '' }}</td>
+                                    <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center text-gray-500">{{ $rk->liter_per_hari_b2 }} x {{ $rk->bulan2_total > 0 ? round($rk->bulan2_total / max($rk->liter_per_hari_b2, 1)) : 0 }}</td>
+                                    <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center font-semibold text-blue-600 dark:text-blue-400">{{ $isPertamax && $rk->bulan2_total > 0 ? number_format($rk->bulan2_total, 0, ',', '.') : '' }}</td>
+                                    <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center font-semibold text-emerald-600 dark:text-emerald-400">{{ !$isPertamax && $rk->bulan2_total > 0 ? number_format($rk->bulan2_total, 0, ',', '.') : '' }}</td>
+                                    <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center text-gray-500">{{ $rk->liter_per_hari_b3 }} x {{ $rk->bulan3_total > 0 ? round($rk->bulan3_total / max($rk->liter_per_hari_b3, 1)) : 0 }}</td>
+                                    <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center font-semibold text-blue-600 dark:text-blue-400">{{ $isPertamax && $rk->bulan3_total > 0 ? number_format($rk->bulan3_total, 0, ',', '.') : '' }}</td>
+                                    <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center font-semibold text-emerald-600 dark:text-emerald-400">{{ !$isPertamax && $rk->bulan3_total > 0 ? number_format($rk->bulan3_total, 0, ',', '.') : '' }}</td>
+                                </tr>
+                            @endforeach
+                        @else
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                                <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center">{{ $idx + 1 }}</td>
-                                <td class="border border-gray-400 dark:border-gray-600 px-2 py-1">{{ $rk->uraian ?? $k->kategori_kendaraan ?? 'Operasional' }}</td>
-                                <td class="border border-gray-400 dark:border-gray-600 px-2 py-1">{{ $k->jenis_kendaraan ?? '-' }}</td>
-                                <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center font-semibold">{{ $k->no_polisi ?? '-' }}</td>
-                                <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center text-gray-500">{{ $rk->liter_per_hari }} x {{ $rk->bulan1_total > 0 ? round($rk->bulan1_total / max($rk->liter_per_hari, 1)) : 0 }}</td>
-                                <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center font-semibold text-blue-600 dark:text-blue-400">{{ $isPertamax && $rk->bulan1_total > 0 ? number_format($rk->bulan1_total, 0, ',', '.') : '' }}</td>
-                                <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center font-semibold text-emerald-600 dark:text-emerald-400">{{ !$isPertamax && $rk->bulan1_total > 0 ? number_format($rk->bulan1_total, 0, ',', '.') : '' }}</td>
-                                <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center text-gray-500">{{ $rk->liter_per_hari }} x {{ $rk->bulan2_total > 0 ? round($rk->bulan2_total / max($rk->liter_per_hari, 1)) : 0 }}</td>
-                                <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center font-semibold text-blue-600 dark:text-blue-400">{{ $isPertamax && $rk->bulan2_total > 0 ? number_format($rk->bulan2_total, 0, ',', '.') : '' }}</td>
-                                <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center font-semibold text-emerald-600 dark:text-emerald-400">{{ !$isPertamax && $rk->bulan2_total > 0 ? number_format($rk->bulan2_total, 0, ',', '.') : '' }}</td>
-                                <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center text-gray-500">{{ $rk->liter_per_hari }} x {{ $rk->bulan3_total > 0 ? round($rk->bulan3_total / max($rk->liter_per_hari, 1)) : 0 }}</td>
-                                <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center font-semibold text-blue-600 dark:text-blue-400">{{ $isPertamax && $rk->bulan3_total > 0 ? number_format($rk->bulan3_total, 0, ',', '.') : '' }}</td>
-                                <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center font-semibold text-emerald-600 dark:text-emerald-400">{{ !$isPertamax && $rk->bulan3_total > 0 ? number_format($rk->bulan3_total, 0, ',', '.') : '' }}</td>
+                                <td colspan="13" class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center text-gray-500">Tidak ada kendaraan</td>
                             </tr>
-                        @endforeach
+                        @endif
 
                         @php
                             $grandTotalPertamax[0] += $subPertamax[0];

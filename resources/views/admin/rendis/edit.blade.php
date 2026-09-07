@@ -17,7 +17,7 @@
         <a href="{{ route('admin.rendis.index') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">&larr; Kembali</a>
     </div>
 
-    <form action="{{ route('admin.rendis.update', $rendisBbm->id) }}" method="POST" class="space-y-6">
+    <form id="form-edit-rendis" action="{{ route('admin.rendis.update', $rendisBbm->id) }}" method="POST" class="space-y-6">
         @csrf
         @method('PUT')
 
@@ -39,11 +39,15 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Pembelian Pertamax</label>
-                    <input type="number" name="pembelian_pertamax" id="input-pembelian-ptx" value="{{ $rendisBbm->pembelian_pertamax }}" min="0" required class="w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary">
+                    <input type="hidden" name="pembelian_pertamax" id="hidden-pembelian-ptx" value="{{ $rendisBbm->pembelian_pertamax }}">
+                    <input type="text" id="input-pembelian-ptx" value="{{ $rendisBbm->pembelian_pertamax }}" min="0" required class="w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary">
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Netto (Set. Susut): <span id="netto-ptx" class="font-bold text-gray-900 dark:text-white">0</span> L</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Pembelian P. Dex</label>
-                    <input type="number" name="pembelian_pertamina_dex" id="input-pembelian-dex" value="{{ $rendisBbm->pembelian_pertamina_dex }}" min="0" required class="w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary">
+                    <input type="hidden" name="pembelian_pertamina_dex" id="hidden-pembelian-dex" value="{{ $rendisBbm->pembelian_pertamina_dex }}">
+                    <input type="text" id="input-pembelian-dex" value="{{ $rendisBbm->pembelian_pertamina_dex }}" min="0" required class="w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary">
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Netto (Set. Susut): <span id="netto-dex" class="font-bold text-gray-900 dark:text-white">0</span> L</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Susut (%)</label>
@@ -104,7 +108,7 @@
                 <h3 class="text-lg font-medium text-gray-900 dark:text-white">Daftar Kendaraan & Alokasi per Satker</h3>
             </div>
             <div class="overflow-x-auto">
-                <table id="tabel-kendaraan" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-xs">
+                <table id="tabel-kendaraan" class="min-w-full table-fixed divide-y divide-gray-200 dark:divide-gray-700 text-xs">
                     <thead class="bg-gray-100 dark:bg-gray-900/80">
                         <tr>
                             <th rowspan="3" class="px-3 py-2 text-center font-bold uppercase border border-gray-300 dark:border-gray-600 w-10">No</th>
@@ -160,16 +164,17 @@
                                     <input type="number" name="kendaraan[{{ $k->id }}][liter_per_hari]" value="{{ $rk->liter_per_hari ?? 0 }}" min="0" step="0.1" class="w-12 p-0.5 text-center text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm input-lph-1">
                                     <span class="text-gray-500 text-[10px]">Ltr</span>
                                     <span class="text-gray-400">x</span>
-                                    <input type="number" value="0" min="0" class="w-10 p-0.5 text-center text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 shadow-sm input-hari-1">
+                                    <span class="hari-display input-hari-1 w-10 p-0.5 text-center text-xs rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/30" data-val="0" title="Klik untuk edit">0</span>
+                                    <input type="hidden" class="input-hari-1-hidden" value="0">
                                     <span class="text-gray-500 text-[10px]">hr</span>
                                 </div>
                             </td>
                             <td class="px-2 py-1 text-center font-bold border border-gray-200 dark:border-gray-700 text-blue-600 dark:text-blue-400">
-                                <span class="span-b1-total" {!! strtolower(str_replace(' ', '_', $k->jenis_bbm ?? 'pertamax')) !== 'pertamax' ? 'style="display:none;"' : '' !!}>{{ $rk->bulan1_total ?? 0 }}</span>
+                                <span class="span-b1-total inline-block min-w-[3rem] text-right" {!! strtolower(str_replace(' ', '_', $k->jenis_bbm ?? 'pertamax')) !== 'pertamax' ? 'style="display:none;"' : '' !!}>{{ $rk->bulan1_total ?? 0 }}</span>
                                 <input type="hidden" name="kendaraan[{{ $k->id }}][bulan1_total]" value="{{ $rk->bulan1_total ?? 0 }}" class="input-b1-total">
                             </td>
                             <td class="px-2 py-1 text-center font-bold border border-gray-200 dark:border-gray-700 text-emerald-600 dark:text-emerald-400">
-                                <span class="span-b1-total-dex" {!! strtolower(str_replace(' ', '_', $k->jenis_bbm ?? 'pertamax')) !== 'pertamina_dex' ? 'style="display:none;"' : '' !!}>{{ $rk->bulan1_total ?? 0 }}</span>
+                                <span class="span-b1-total-dex inline-block min-w-[3rem] text-right" {!! strtolower(str_replace(' ', '_', $k->jenis_bbm ?? 'pertamax')) !== 'pertamina_dex' ? 'style="display:none;"' : '' !!}>{{ $rk->bulan1_total ?? 0 }}</span>
                             </td>
 
                             {{-- BULAN 2 --}}
@@ -178,16 +183,17 @@
                                     <input type="number" name="kendaraan[{{ $k->id }}][liter_per_hari_b2]" value="{{ $rk->liter_per_hari_b2 ?? ($rk->liter_per_hari ?? 0) }}" min="0" step="0.1" class="w-12 p-0.5 text-center text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm input-lph-2">
                                     <span class="text-gray-500 text-[10px]">Ltr</span>
                                     <span class="text-gray-400">x</span>
-                                    <input type="number" value="0" min="0" class="w-10 p-0.5 text-center text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 shadow-sm input-hari-2">
+                                    <span class="hari-display input-hari-2 w-10 p-0.5 text-center text-xs rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/30" data-val="{{ $rk->hari_b2 ?? 0 }}" title="Klik untuk edit">{{ $rk->hari_b2 ?? 0 }}</span>
+                                    <input type="hidden" name="kendaraan[{{ $k->id }}][hari_b2]" class="input-hari-2-hidden" value="{{ $rk->hari_b2 ?? 0 }}">
                                     <span class="text-gray-500 text-[10px]">hr</span>
                                 </div>
                             </td>
                             <td class="px-2 py-1 text-center font-bold border border-gray-200 dark:border-gray-700 text-blue-600 dark:text-blue-400">
-                                <span class="span-b2-total" {!! strtolower(str_replace(' ', '_', $k->jenis_bbm ?? 'pertamax')) !== 'pertamax' ? 'style="display:none;"' : '' !!}>{{ $rk->bulan2_total ?? 0 }}</span>
+                                <span class="span-b2-total inline-block min-w-[3rem] text-right" {!! strtolower(str_replace(' ', '_', $k->jenis_bbm ?? 'pertamax')) !== 'pertamax' ? 'style="display:none;"' : '' !!}>{{ $rk->bulan2_total ?? 0 }}</span>
                                 <input type="hidden" name="kendaraan[{{ $k->id }}][bulan2_total]" value="{{ $rk->bulan2_total ?? 0 }}" class="input-b2-total">
                             </td>
                             <td class="px-2 py-1 text-center font-bold border border-gray-200 dark:border-gray-700 text-emerald-600 dark:text-emerald-400">
-                                <span class="span-b2-total-dex" {!! strtolower(str_replace(' ', '_', $k->jenis_bbm ?? 'pertamax')) !== 'pertamina_dex' ? 'style="display:none;"' : '' !!}>{{ $rk->bulan2_total ?? 0 }}</span>
+                                <span class="span-b2-total-dex inline-block min-w-[3rem] text-right" {!! strtolower(str_replace(' ', '_', $k->jenis_bbm ?? 'pertamax')) !== 'pertamina_dex' ? 'style="display:none;"' : '' !!}>{{ $rk->bulan2_total ?? 0 }}</span>
                             </td>
 
                             {{-- BULAN 3 --}}
@@ -196,16 +202,17 @@
                                     <input type="number" name="kendaraan[{{ $k->id }}][liter_per_hari_b3]" value="{{ $rk->liter_per_hari_b3 ?? ($rk->liter_per_hari ?? 0) }}" min="0" step="0.1" class="w-12 p-0.5 text-center text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm input-lph-3">
                                     <span class="text-gray-500 text-[10px]">Ltr</span>
                                     <span class="text-gray-400">x</span>
-                                    <input type="number" value="0" min="0" class="w-10 p-0.5 text-center text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 shadow-sm input-hari-3">
+                                    <span class="hari-display input-hari-3 w-10 p-0.5 text-center text-xs rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/30" data-val="{{ $rk->hari_b3 ?? 0 }}" title="Klik untuk edit">{{ $rk->hari_b3 ?? 0 }}</span>
+                                    <input type="hidden" name="kendaraan[{{ $k->id }}][hari_b3]" class="input-hari-3-hidden" value="{{ $rk->hari_b3 ?? 0 }}">
                                     <span class="text-gray-500 text-[10px]">hr</span>
                                 </div>
                             </td>
                             <td class="px-2 py-1 text-center font-bold border border-gray-200 dark:border-gray-700 text-blue-600 dark:text-blue-400">
-                                <span class="span-b3-total" {!! strtolower(str_replace(' ', '_', $k->jenis_bbm ?? 'pertamax')) !== 'pertamax' ? 'style="display:none;"' : '' !!}>{{ $rk->bulan3_total ?? 0 }}</span>
+                                <span class="span-b3-total inline-block min-w-[3rem] text-right" {!! strtolower(str_replace(' ', '_', $k->jenis_bbm ?? 'pertamax')) !== 'pertamax' ? 'style="display:none;"' : '' !!}>{{ $rk->bulan3_total ?? 0 }}</span>
                                 <input type="hidden" name="kendaraan[{{ $k->id }}][bulan3_total]" value="{{ $rk->bulan3_total ?? 0 }}" class="input-b3-total">
                             </td>
                             <td class="px-2 py-1 text-center font-bold border border-gray-200 dark:border-gray-700 text-emerald-600 dark:text-emerald-400">
-                                <span class="span-b3-total-dex" {!! strtolower(str_replace(' ', '_', $k->jenis_bbm ?? 'pertamina_dex')) !== 'pertamina_dex' ? 'style="display:none;"' : '' !!}>{{ $rk->bulan3_total ?? 0 }}</span>
+                                <span class="span-b3-total-dex inline-block min-w-[3rem] text-right" {!! strtolower(str_replace(' ', '_', $k->jenis_bbm ?? 'pertamina_dex')) !== 'pertamina_dex' ? 'style="display:none;"' : '' !!}>{{ $rk->bulan3_total ?? 0 }}</span>
                             </td>
                         </tr>
                         @endforeach
@@ -309,6 +316,10 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    const satkerTotals = {};
+    const satkerRows = {};
+    const allCachedRows = [];
+
     // === HARI KERJA CONFIG ===
     function getHari(bulan, kategori) {
         const id = 'b' + bulan + '_' + (kategori === 'pimpinan' ? 'pi' : (kategori === 'staff' ? 'st' : 'op'));
@@ -316,142 +327,357 @@ document.addEventListener('DOMContentLoaded', function() {
         return el ? (parseInt(el.value) || 0) : 0;
     }
 
-    // === NUMBER FORMATTER ===
     function fmt(n){ return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
 
-    // === ROW CALCULATION ===
-    function updateRowTotals(tr) {
-        const kategori = tr.dataset.kategori;
-        const lph1 = parseFloat(tr.querySelector('.input-lph-1').value) || 0;
-        const lph2 = parseFloat(tr.querySelector('.input-lph-2').value) || 0;
-        const lph3 = parseFloat(tr.querySelector('.input-lph-3').value) || 0;
+    // Ambil nilai hari dari span (yang pakai data-val)
+    function getHariVal(spanEl, bulan, kat) {
+        if (!spanEl) return getHari(bulan, kat);
+        const v = parseInt(spanEl.dataset.val) || 0;
+        return v > 0 ? v : getHari(bulan, kat);
+    }
 
-        // Read hari from row input (manual), fallback to global hari kerja
-        const ih1 = tr.querySelector('.input-hari-1');
-        const ih2 = tr.querySelector('.input-hari-2');
-        const ih3 = tr.querySelector('.input-hari-3');
-        const hari1 = (ih1 && ih1.value !== '' && parseInt(ih1.value) > 0) ? parseInt(ih1.value) : getHari(1, kategori);
-        const hari2 = (ih2 && ih2.value !== '' && parseInt(ih2.value) > 0) ? parseInt(ih2.value) : getHari(2, kategori);
-        const hari3 = (ih3 && ih3.value !== '' && parseInt(ih3.value) > 0) ? parseInt(ih3.value) : getHari(3, kategori);
+    // === ROW CALCULATION menggunakan cache ===
+    function updateRowTotals(rc) {
+        const lph1 = parseFloat(rc.inLph1.value) || 0;
+        const lph2 = parseFloat(rc.inLph2.value) || 0;
+        const lph3 = parseFloat(rc.inLph3.value) || 0;
 
-        // Update hari input display
-        if(ih1) ih1.value = hari1;
-        if(ih2) ih2.value = hari2;
-        if(ih3) ih3.value = hari3;
+        const hari1 = getHariVal(rc.spHari1, 1, rc.kat);
+        const hari2 = getHariVal(rc.spHari2, 2, rc.kat);
+        const hari3 = getHariVal(rc.spHari3, 3, rc.kat);
+
+        // Update display span ONLY if changed (do NOT write to dataset.val here, as it locks in the default)
+        if(rc.spHari1 && rc.spHari1.innerText != hari1){ rc.spHari1.innerText = hari1; }
+        if(rc.spHari2 && rc.spHari2.innerText != hari2){ rc.spHari2.innerText = hari2; }
+        if(rc.spHari3 && rc.spHari3.innerText != hari3){ rc.spHari3.innerText = hari3; }
+        
+        // Update hidden ONLY if changed
+        if(rc.hidHari1 && rc.hidHari1.value != hari1) rc.hidHari1.value = hari1;
+        if(rc.hidHari2 && rc.hidHari2.value != hari2) rc.hidHari2.value = hari2;
+        if(rc.hidHari3 && rc.hidHari3.value != hari3) rc.hidHari3.value = hari3;
 
         const b1 = Math.round(lph1 * hari1), b2 = Math.round(lph2 * hari2), b3 = Math.round(lph3 * hari3);
-        tr.querySelector('.input-b1-total').value = b1;
-        tr.querySelector('.input-b2-total').value = b2;
-        tr.querySelector('.input-b3-total').value = b3;
-
-        const s = (cls, val) => { const e = tr.querySelector(cls); if(e) e.innerText = fmt(val); };
-        s('.span-b1-total', b1); s('.span-b2-total', b2); s('.span-b3-total', b3);
-        s('.span-b1-total-dex', b1); s('.span-b2-total-dex', b2); s('.span-b3-total-dex', b3);
+        
+        if(rc.inB1.value != b1) rc.inB1.value = b1;
+        if(rc.inB2.value != b2) rc.inB2.value = b2;
+        if(rc.inB3.value != b3) rc.inB3.value = b3;
+        
+        const fb1 = fmt(b1), fb2 = fmt(b2), fb3 = fmt(b3);
+        if(rc.spB1 && rc.spB1.innerText !== fb1) rc.spB1.innerText = fb1;
+        if(rc.spB2 && rc.spB2.innerText !== fb2) rc.spB2.innerText = fb2;
+        if(rc.spB3 && rc.spB3.innerText !== fb3) rc.spB3.innerText = fb3;
     }
 
-    // === SATKER SUBTOTAL ===
-    function recalculateSatker(satkerId) {
+    function rebuildSatkerTotal(satkerId) {
         let p1=0,d1=0,p2=0,d2=0,p3=0,d3=0;
-        document.querySelectorAll('tr.kendaraan-row[data-satker-id="'+satkerId+'"]').forEach(function(tr) {
-            const j = tr.dataset.jenis;
-            const b1 = parseInt(tr.querySelector('.input-b1-total').value)||0;
-            const b2 = parseInt(tr.querySelector('.input-b2-total').value)||0;
-            const b3 = parseInt(tr.querySelector('.input-b3-total').value)||0;
-            if(j==='pertamax'){p1+=b1;p2+=b2;p3+=b3;}else{d1+=b1;d2+=b2;d3+=b3;}
-        });
-        var st = document.querySelector('tr.satker-total[data-satker-id="'+satkerId+'"]');
-        if(st){st.querySelector('.st-p1').innerText=fmt(p1);st.querySelector('.st-d1').innerText=fmt(d1);st.querySelector('.st-p2').innerText=fmt(p2);st.querySelector('.st-d2').innerText=fmt(d2);st.querySelector('.st-p3').innerText=fmt(p3);st.querySelector('.st-d3').innerText=fmt(d3);}
+        var rows = satkerRows[satkerId] || [];
+        for(var i=0;i<rows.length;i++){
+            var rc=rows[i];
+            var b1=parseInt(rc.inB1.value)||0, b2=parseInt(rc.inB2.value)||0, b3=parseInt(rc.inB3.value)||0;
+            if(rc.j==='pertamax'){p1+=b1;p2+=b2;p3+=b3;}else{d1+=b1;d2+=b2;d3+=b3;}
+        }
+        satkerTotals[satkerId]={p1,d1,p2,d2,p3,d3};
+        var st=document.querySelector('tr.satker-total[data-satker-id="'+satkerId+'"]');
+        if(st){
+            var set = function(cls, val) {
+                var el = st.querySelector(cls);
+                var fv = fmt(val);
+                if(el && el.innerText !== fv) el.innerText = fv;
+            };
+            set('.st-p1', p1); set('.st-d1', d1); set('.st-p2', p2);
+            set('.st-d2', d2); set('.st-p3', p3); set('.st-d3', d3);
+        }
     }
 
-    // === GRAND TOTAL ===
-    function recalculateGrandTotal() {
+    function updateGrandTotalDOM() {
         let tp1=0,td1=0,tp2=0,td2=0,tp3=0,td3=0;
-        document.querySelectorAll('tr.kendaraan-row').forEach(function(tr) {
-            var j=tr.dataset.jenis,b1=parseInt(tr.querySelector('.input-b1-total').value)||0,b2=parseInt(tr.querySelector('.input-b2-total').value)||0,b3=parseInt(tr.querySelector('.input-b3-total').value)||0;
-            if(j==='pertamax'){tp1+=b1;tp2+=b2;tp3+=b3;}else{td1+=b1;td2+=b2;td3+=b3;}
-        });
-        var $ = function(id,v){ var e=document.getElementById(id); if(e) e.innerText=fmt(v); };
+        for(const id in satkerTotals){const s=satkerTotals[id];tp1+=s.p1;td1+=s.d1;tp2+=s.p2;td2+=s.d2;tp3+=s.p3;td3+=s.d3;}
+        var $=function(id,v){var e=document.getElementById(id);var fv=fmt(v);if(e && e.innerText!==fv)e.innerText=fv;};
         $('grand-total-b1-ptx',tp1);$('grand-total-b1-dex',td1);$('grand-total-b2-ptx',tp2);$('grand-total-b2-dex',td2);$('grand-total-b3-ptx',tp3);$('grand-total-b3-dex',td3);
-        var twPtx=tp1+tp2+tp3, twDex=td1+td2+td3;
+        var twPtx=tp1+tp2+tp3,twDex=td1+td2+td3;
         $('grand-total-triwulan-ptx',twPtx);$('grand-total-triwulan-dex',twDex);
-        var pPtx=parseFloat(document.getElementById('input-pembelian-ptx').value)||0;
-        var pDex=parseFloat(document.getElementById('input-pembelian-dex').value)||0;
+        var pPtx=parseFloat(document.getElementById('hidden-pembelian-ptx').value)||0;
+        var pDex=parseFloat(document.getElementById('hidden-pembelian-dex').value)||0;
         var susut=parseFloat(document.getElementById('input-susut').value)||0;
-        var limPtx=Math.floor(pPtx-(pPtx*(susut/100))), limDex=Math.floor(pDex-(pDex*(susut/100)));
+        var limPtx=Math.floor(pPtx-(pPtx*(susut/100))),limDex=Math.floor(pDex-(pDex*(susut/100)));
         $('maksimal-distribusi-ptx',limPtx);$('maksimal-distribusi-dex',limDex);
+        $('netto-ptx',limPtx);$('netto-dex',limDex);
         var sPtx=document.getElementById('status-ptx');
-        if(sPtx){sPtx.innerHTML=twPtx>limPtx?'<span class="text-rose-600 font-bold">Melebihi batas (+'+fmt(twPtx-limPtx)+' L)</span>':'<span class="text-emerald-600 font-bold">Aman (Sisa '+fmt(limPtx-twPtx)+' L)</span>';}
+        if(sPtx){
+            var hPtx=twPtx>limPtx?'<span class="text-rose-600 font-bold">Melebihi batas (+'+fmt(twPtx-limPtx)+' L)</span>':'<span class="text-emerald-600 font-bold">Aman (Sisa '+fmt(limPtx-twPtx)+' L)</span>';
+            if(sPtx.innerHTML!==hPtx) sPtx.innerHTML=hPtx;
+        }
         var sDex=document.getElementById('status-dex');
-        if(sDex){sDex.innerHTML=twDex>limDex?'<span class="text-rose-600 font-bold">Melebihi batas (+'+fmt(twDex-limDex)+' L)</span>':'<span class="text-emerald-600 font-bold">Aman (Sisa '+fmt(limDex-twDex)+' L)</span>';}
+        if(sDex){
+            var hDex=twDex>limDex?'<span class="text-rose-600 font-bold">Melebihi batas (+'+fmt(twDex-limDex)+' L)</span>':'<span class="text-emerald-600 font-bold">Aman (Sisa '+fmt(limDex-twDex)+' L)</span>';
+            if(sDex.innerHTML!==hDex) sDex.innerHTML=hDex;
+        }
     }
 
-    function recalculateAllSatkers() {
-        var ids = new Set();
-        document.querySelectorAll('tr.kendaraan-row').forEach(function(tr){ if(tr.dataset.satkerId) ids.add(tr.dataset.satkerId); });
-        ids.forEach(function(id){ recalculateSatker(id); });
-        recalculateGrandTotal();
+    function rebuildAllTotals() {
+        for(const id in satkerTotals) satkerTotals[id]={p1:0,d1:0,p2:0,d2:0,p3:0,d3:0};
+        for(var i=0;i<allCachedRows.length;i++){
+            var rc=allCachedRows[i],sId=rc.sId,j=rc.j;
+            var b1=parseInt(rc.inB1.value)||0,b2=parseInt(rc.inB2.value)||0,b3=parseInt(rc.inB3.value)||0;
+            if(!satkerTotals[sId])satkerTotals[sId]={p1:0,d1:0,p2:0,d2:0,p3:0,d3:0};
+            if(j==='pertamax'){satkerTotals[sId].p1+=b1;satkerTotals[sId].p2+=b2;satkerTotals[sId].p3+=b3;}
+            else{satkerTotals[sId].d1+=b1;satkerTotals[sId].d2+=b2;satkerTotals[sId].d3+=b3;}
+        }
+        for(const id in satkerTotals){
+            const s=satkerTotals[id];
+            var st=document.querySelector('tr.satker-total[data-satker-id="'+id+'"]');
+            if(st){st.querySelector('.st-p1').innerText=fmt(s.p1);st.querySelector('.st-d1').innerText=fmt(s.d1);st.querySelector('.st-p2').innerText=fmt(s.p2);st.querySelector('.st-d2').innerText=fmt(s.d2);st.querySelector('.st-p3').innerText=fmt(s.p3);st.querySelector('.st-d3').innerText=fmt(s.d3);}
+        }
+        updateGrandTotalDOM();
     }
 
     function recalculateAll() {
-        document.querySelectorAll('tr.kendaraan-row').forEach(function(tr){ updateRowTotals(tr); });
-        recalculateAllSatkers();
+        for(var i=0;i<allCachedRows.length;i++) updateRowTotals(allCachedRows[i]);
+        rebuildAllTotals();
     }
 
-    // === TABLE EVENT DELEGATION (single listener, very fast) ===
-    var tabel = document.getElementById('tabel-kendaraan');
-    if(tabel) {
-        tabel.addEventListener('input', function(e) {
-            var t=e.target, tr=t.closest('tr.kendaraan-row');
+    // === BUILD ROW CACHE ===
+    document.querySelectorAll('tr.satker-total').forEach(function(st){
+        satkerTotals[st.dataset.satkerId]={p1:0,d1:0,p2:0,d2:0,p3:0,d3:0};
+        satkerRows[st.dataset.satkerId]=[];
+    });
+
+    document.querySelectorAll('tr.kendaraan-row').forEach(function(tr){
+        var sId=tr.dataset.satkerId;
+        var rc={
+            tr:tr, sId:sId, j:tr.dataset.jenis, kat:tr.dataset.kategori,
+            inLph1:tr.querySelector('.input-lph-1'),
+            inLph2:tr.querySelector('.input-lph-2'),
+            inLph3:tr.querySelector('.input-lph-3'),
+            spHari1:tr.querySelector('.input-hari-1'),  // sekarang span
+            spHari2:tr.querySelector('.input-hari-2'),
+            spHari3:tr.querySelector('.input-hari-3'),
+            hidHari1:tr.querySelector('.input-hari-1-hidden'),
+            hidHari2:tr.querySelector('.input-hari-2-hidden'),
+            hidHari3:tr.querySelector('.input-hari-3-hidden'),
+            inB1:tr.querySelector('.input-b1-total'),
+            inB2:tr.querySelector('.input-b2-total'),
+            inB3:tr.querySelector('.input-b3-total'),
+            spB1:tr.querySelector('.span-b1-total')||tr.querySelector('.span-b1-total-dex'),
+            spB2:tr.querySelector('.span-b2-total')||tr.querySelector('.span-b2-total-dex'),
+            spB3:tr.querySelector('.span-b3-total')||tr.querySelector('.span-b3-total-dex')
+        };
+        tr._rc=rc;
+        allCachedRows.push(rc);
+        if(satkerRows[sId]) satkerRows[sId].push(rc);
+    });
+
+    // === CLICK-TO-EDIT HARI (satu overlay input shared, bukan 800 input) ===
+    var hariOverlay = document.createElement('input');
+    hariOverlay.type='number'; hariOverlay.min='0';
+    hariOverlay.style.cssText='position:absolute;z-index:9999;width:52px;text-align:center;font-size:12px;border:2px solid #3b82f6;border-radius:4px;padding:2px 4px;background:#fff;color:#111;box-shadow:0 2px 8px rgba(0,0,0,0.2);display:none;';
+    document.body.appendChild(hariOverlay);
+    var activeSpan=null, activeRc=null;
+
+    function commitHari(){
+        if(!activeSpan) return;
+        var v=parseInt(hariOverlay.value)||0;
+        activeSpan.dataset.val=v;
+        activeSpan.innerText=v;
+        // update hidden
+        var hid=activeSpan.classList.contains('input-hari-1')?(activeRc&&activeRc.hidHari1):
+                (activeSpan.classList.contains('input-hari-2')?(activeRc&&activeRc.hidHari2):(activeRc&&activeRc.hidHari3));
+        if(hid) hid.value=v;
+        hariOverlay.style.display='none';
+        if(activeRc){
+            updateRowTotals(activeRc);
+            rebuildSatkerTotal(activeRc.sId);
+            updateGrandTotalDOM();
+        }
+        activeSpan=null; activeRc=null;
+    }
+
+    hariOverlay.addEventListener('blur',function(){ setTimeout(commitHari,100); });
+    hariOverlay.addEventListener('keydown',function(e){
+        if(e.key==='Enter'){commitHari();}
+        if(e.key==='Escape'){hariOverlay.style.display='none';activeSpan=null;activeRc=null;}
+    });
+
+    document.addEventListener('click',function(e){
+        if(e.target.classList.contains('hari-display')){
+            activeSpan=e.target;
+            var tr=e.target.closest('tr.kendaraan-row');
+            activeRc=tr?tr._rc:null;
+            var rect=e.target.getBoundingClientRect();
+            hariOverlay.style.display='block';
+            hariOverlay.style.left=(rect.left+window.scrollX)+'px';
+            hariOverlay.style.top=(rect.top+window.scrollY-1)+'px';
+            hariOverlay.value=parseInt(e.target.dataset.val)||0;
+            hariOverlay.select();
+            hariOverlay.focus();
+        } else if(e.target!==hariOverlay && hariOverlay.style.display!=='none'){
+            commitHari();
+        }
+    });
+
+    // === TABLE EVENT DELEGATION (lph & uraian saja) ===
+    var tabel=document.getElementById('tabel-kendaraan');
+    if(tabel){
+        var calcTimeout;
+        tabel.addEventListener('input',function(e){
+            var t=e.target,tr=t.closest('tr.kendaraan-row');
             if(!tr) return;
-            if(t.classList.contains('input-uraian')){tr.dataset.kategori=t.value.toLowerCase();}
-            else if(t.classList.contains('input-lph-1')){tr.querySelector('.input-lph-2').value=t.value;tr.querySelector('.input-lph-3').value=t.value;}
-            // For hari inputs, don't reset to global value
-            if(t.classList.contains('input-hari-1')||t.classList.contains('input-hari-2')||t.classList.contains('input-hari-3')){
-                // Manual hari override - recalculate with custom value
-                var lph1=parseFloat(tr.querySelector('.input-lph-1').value)||0;
-                var lph2=parseFloat(tr.querySelector('.input-lph-2').value)||0;
-                var lph3=parseFloat(tr.querySelector('.input-lph-3').value)||0;
-                var h1=parseInt(tr.querySelector('.input-hari-1').value)||0;
-                var h2=parseInt(tr.querySelector('.input-hari-2').value)||0;
-                var h3=parseInt(tr.querySelector('.input-hari-3').value)||0;
-                var b1=Math.round(lph1*h1),b2=Math.round(lph2*h2),b3=Math.round(lph3*h3);
-                tr.querySelector('.input-b1-total').value=b1;tr.querySelector('.input-b2-total').value=b2;tr.querySelector('.input-b3-total').value=b3;
-                var s=function(cls,val){var e2=tr.querySelector(cls);if(e2)e2.innerText=fmt(val);};
-                s('.span-b1-total',b1);s('.span-b2-total',b2);s('.span-b3-total',b3);
-                s('.span-b1-total-dex',b1);s('.span-b2-total-dex',b2);s('.span-b3-total-dex',b3);
-                recalculateSatker(tr.dataset.satkerId); recalculateGrandTotal();
-                return;
+            var rc=tr._rc; if(!rc) return;
+            if(t.classList.contains('input-uraian')){ 
+                rc.kat=t.value.toLowerCase(); 
+                if(rc.spHari1) rc.spHari1.dataset.val = 0;
+                if(rc.spHari2) rc.spHari2.dataset.val = 0;
+                if(rc.spHari3) rc.spHari3.dataset.val = 0;
+                updateRowTotals(rc);
+                clearTimeout(calcTimeout);
+                calcTimeout=setTimeout(function(){ rebuildSatkerTotal(rc.sId); updateGrandTotalDOM(); },200);
+                return; 
             }
-            updateRowTotals(tr); recalculateSatker(tr.dataset.satkerId); recalculateGrandTotal();
+            if(t.classList.contains('input-lph-1')){ rc.inLph2.value=t.value; rc.inLph3.value=t.value; }
+            updateRowTotals(rc);
+            clearTimeout(calcTimeout);
+            calcTimeout=setTimeout(function(){ rebuildSatkerTotal(rc.sId); updateGrandTotalDOM(); },200);
         });
-        tabel.addEventListener('change', function(e) {
-            var t=e.target, tr=t.closest('tr.kendaraan-row');
+        tabel.addEventListener('change',function(e){
+            var t=e.target,tr=t.closest('tr.kendaraan-row');
             if(!tr) return;
-            if(t.classList.contains('input-uraian')){tr.dataset.kategori=t.value.toLowerCase();}
-            updateRowTotals(tr); recalculateSatker(tr.dataset.satkerId); recalculateGrandTotal();
+            var rc=tr._rc; if(!rc) return;
+            if(t.classList.contains('input-uraian')){ 
+                rc.kat=t.value.toLowerCase(); 
+                if(rc.spHari1) rc.spHari1.dataset.val = 0;
+                if(rc.spHari2) rc.spHari2.dataset.val = 0;
+                if(rc.spHari3) rc.spHari3.dataset.val = 0;
+            }
+            updateRowTotals(rc);
+            clearTimeout(calcTimeout);
+            calcTimeout=setTimeout(function(){ rebuildSatkerTotal(rc.sId); updateGrandTotalDOM(); },200);
         });
     }
 
     // === TERAPKAN HARI KERJA BUTTON ===
-    var btnTerapkan = document.getElementById('btn-terapkan');
-    if(btnTerapkan) { btnTerapkan.addEventListener('click', function(){ recalculateAll(); }); }
+    var btnTerapkan=document.getElementById('btn-terapkan');
+    if(btnTerapkan){ btnTerapkan.addEventListener('click',function(){ recalculateAll(); }); }
 
-    // === PEMBELIAN / SUSUT LIVE UPDATE ===
-    ['input-pembelian-ptx','input-pembelian-dex','input-susut'].forEach(function(id){
-        var el = document.getElementById(id);
-        if(el) el.addEventListener('input', function(){ recalculateGrandTotal(); });
+    // === PEMBELIAN / SUSUT LIVE UPDATE & FORMATTER ===
+    ['input-pembelian-ptx','input-pembelian-dex'].forEach(function(id){
+        var el=document.getElementById(id);
+        if(el){
+            el.addEventListener('input',function(e){
+                var val=e.target.value.replace(/\D/g,'');
+                var hiddenEl=document.getElementById('hidden'+id.substring(5));
+                if(hiddenEl) hiddenEl.value=val||0;
+                e.target.value=val?new Intl.NumberFormat('id-ID').format(parseInt(val)):'';
+                updateGrandTotalDOM();
+            });
+            var val=el.value.replace(/\D/g,'');
+            el.value=val?new Intl.NumberFormat('id-ID').format(parseInt(val)):'';
+        }
     });
+    var elSusut=document.getElementById('input-susut');
+    if(elSusut) elSusut.addEventListener('input',function(){ updateGrandTotalDOM(); });
 
-    // === INITIAL CALC (batched, non-blocking) ===
-    var rows = document.querySelectorAll('tr.kendaraan-row');
-    var i = 0, batch = 30;
-    function processBatch() {
-        var end = Math.min(i + batch, rows.length);
-        for(; i < end; i++) { updateRowTotals(rows[i]); }
-        if(i < rows.length) { requestAnimationFrame(processBatch); }
-        else { recalculateAllSatkers(); }
+    // === INITIAL CALC (batched non-blocking) ===
+    var i=0, batch=30;
+    function processBatch(){
+        var end=Math.min(i+batch,allCachedRows.length);
+        for(;i<end;i++) updateRowTotals(allCachedRows[i]);
+        if(i<allCachedRows.length){ requestAnimationFrame(processBatch); }
+        else { rebuildAllTotals(); }
     }
-    if(rows.length > 0) { requestAnimationFrame(processBatch); }
+    if(allCachedRows.length>0){ requestAnimationFrame(processBatch); }
+    else { rebuildAllTotals(); }
+
+    // === SUBMIT VIA AJAX TO BYPASS MAX_INPUT_VARS ===
+    var formEdit=document.getElementById('form-edit-rendis');
+    if(formEdit){
+        formEdit.addEventListener('submit',async function(e){
+            e.preventDefault();
+            // commit any open hari overlay dulu
+            if(activeSpan) commitHari();
+            var btn=formEdit.querySelector('button[type="submit"]');
+            var originalText=btn.innerText;
+            btn.disabled=true; btn.innerText='Menyimpan...';
+
+            var formData=new FormData(formEdit);
+            var data={
+                _token:formData.get('_token'),
+                _method:formData.get('_method')||'POST',
+                pembelian_pertamax:formData.get('pembelian_pertamax'),
+                pembelian_pertamina_dex:formData.get('pembelian_pertamina_dex'),
+                susut_persen:formData.get('susut_persen'),
+                triwulan:formData.get('triwulan'),
+                tahun:formData.get('tahun'),
+                bulan1_hari_operasional:formData.get('bulan1_hari_operasional'),
+                bulan1_hari_staff:formData.get('bulan1_hari_staff'),
+                bulan1_hari_pimpinan:formData.get('bulan1_hari_pimpinan'),
+                bulan2_hari_operasional:formData.get('bulan2_hari_operasional'),
+                bulan2_hari_staff:formData.get('bulan2_hari_staff'),
+                bulan2_hari_pimpinan:formData.get('bulan2_hari_pimpinan'),
+                bulan3_hari_operasional:formData.get('bulan3_hari_operasional'),
+                bulan3_hari_staff:formData.get('bulan3_hari_staff'),
+                bulan3_hari_pimpinan:formData.get('bulan3_hari_pimpinan'),
+                kendaraan:{}
+            };
+
+            // Ambil lph & total dari cached rows (lebih cepat dari iterasi FormData)
+            for(var ci=0;ci<allCachedRows.length;ci++){
+                var rc2=allCachedRows[ci];
+                var kId=rc2.inB1.name.match(/\[(\d+)\]/)?rc2.inB1.name.match(/\[(\d+)\]/)[1]:null;
+                // Fallback: ambil dari name attribute input-lph-1
+                if(!kId && rc2.inLph1 && rc2.inLph1.name){
+                    var m=rc2.inLph1.name.match(/kendaraan\[(\d+)\]/);
+                    if(m) kId=m[1];
+                }
+                if(!kId) continue;
+                var h1=parseInt(rc2.spHari1?rc2.spHari1.dataset.val:0)||0;
+                var h2=parseInt(rc2.spHari2?rc2.spHari2.dataset.val:0)||0;
+                var h3=parseInt(rc2.spHari3?rc2.spHari3.dataset.val:0)||0;
+                data.kendaraan[kId]={
+                    liter_per_hari:rc2.inLph1.value,
+                    liter_per_hari_b2:rc2.inLph2.value,
+                    liter_per_hari_b3:rc2.inLph3.value,
+                    bulan1_total:rc2.inB1.value,
+                    bulan2_total:rc2.inB2.value,
+                    bulan3_total:rc2.inB3.value,
+                    hari_b1:h1, hari_b2:h2, hari_b3:h3
+                };
+                // uraian: ambil dari select
+                var sel=rc2.tr.querySelector('.input-uraian');
+                if(sel) data.kendaraan[kId].uraian=sel.value;
+            }
+
+            try{
+                const response=await fetch(formEdit.action,{
+                    method:'POST',
+                    headers:{'Content-Type':'application/json','X-Requested-With':'XMLHttpRequest','X-CSRF-TOKEN':data._token},
+                    body:JSON.stringify(data)
+                });
+                
+                let result;
+                const contentType = response.headers.get('content-type');
+                if(contentType && contentType.includes('application/json')){
+                    result = await response.json();
+                } else {
+                    const text = await response.text();
+                    console.error('Server returned non-JSON:', text);
+                    alert('Error Server: ' + text.substring(0, 100));
+                    btn.disabled = false; btn.innerText = originalText;
+                    return;
+                }
+
+                if(response.ok && result.redirect){ window.location.href=result.redirect; }
+                else{ 
+                    alert('Gagal menyimpan: ' + (result.message||'Data tidak valid. Cek console.')); 
+                    if(result.errors) console.error('Validation errors:', result.errors);
+                    btn.disabled=false; btn.innerText=originalText; 
+                }
+            }catch(err){ 
+                alert('Terjadi kesalahan JavaScript: ' + err.message); 
+                console.error(err); 
+                btn.disabled=false; btn.innerText=originalText; 
+            }
+        });
+    }
 });
 </script>
 </x-app-layout>

@@ -201,6 +201,12 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     Route::get('/rendis/print-excel/{rendisBbm}', [\App\Http\Controllers\Admin\RendisController::class, 'printExcel'])->name('rendis.print-excel');
     Route::post('/rendis/execute-topup/{rendisBbm}', [\App\Http\Controllers\Admin\RendisController::class, 'executeTopup'])->name('rendis.execute-topup');
     Route::post('/rendis/verify-edit/{rendisBbm}', [\App\Http\Controllers\Admin\RendisController::class, 'verifyEdit'])->name('rendis.verify-edit');
+    
+    // Rendis BBM (Admin)
+    Route::get('/rendis/import', [\App\Http\Controllers\Admin\RendisImportController::class, 'showImportForm'])->name('rendis.import');
+    Route::get('/rendis/import/template', [\App\Http\Controllers\Admin\RendisImportController::class, 'downloadTemplate'])->name('rendis.import.template');
+    Route::post('/rendis/import', [\App\Http\Controllers\Admin\RendisImportController::class, 'processImport'])->name('rendis.import.process');
+    
     Route::resource('rendis', \App\Http\Controllers\Admin\RendisController::class);
 
     // Stok BBM

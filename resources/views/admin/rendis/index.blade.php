@@ -1,14 +1,24 @@
 <x-app-layout>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ showPinModal: false, pinValue: '', topupAction: '', topupBulan: '' }">
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+    <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
             <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Rencana Distribusi (Rendis) BBM</h2>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Kelola rencana distribusi BBM per Triwulan</p>
         </div>
-        <a href="{{ route('admin.rendis.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-brand-primary hover:bg-brand-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary transition-colors">
-            <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-            Buat Rendis Baru
-        </a>
+        <div class="flex gap-2">
+            <a href="{{ route('admin.rendis.import') }}" class="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors">
+                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                </svg>
+                Import Excel
+            </a>
+            <a href="{{ route('admin.rendis.create') }}" class="inline-flex items-center px-4 py-2 bg-brand-primary hover:bg-brand-primary/90 text-white text-sm font-medium rounded-lg shadow-sm transition-colors">
+                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Buat Rendis Baru
+            </a>
+        </div>
     </div>
 
     @if(session('success'))
@@ -101,7 +111,7 @@
                                         </button>
                                     @endif
                                     @if(!$rendis->is_topup_b1 && !$rendis->is_topup_b2 && !$rendis->is_topup_b3)
-                                        <form action="{{ route('admin.rendis.destroy', $rendis->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Hapus Rendis ini?');">
+                                        <form action="{{ route('admin.rendis.destroy', $rendis->id) }}" method="POST" class="inline-block" onsubmit="event.preventDefault(); Swal.fire({title: 'Hapus Rendis ini?', text: 'Seluruh data kendaraan terkait Rendis ini juga akan terhapus secara permanen.', icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444', cancelButtonColor: '#6b7280', confirmButtonText: 'Ya, Hapus!', cancelButtonText: 'Batal'}).then((result) => { if (result.isConfirmed) this.submit(); });">
                                             @csrf @method('DELETE')
                                             <button type="submit" class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 transition-colors" title="Hapus">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>

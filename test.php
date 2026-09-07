@@ -1,1 +1,7 @@
-<?php \ = Illuminate\Http\Request::create('/admin/meter-reading', 'POST', ['tanggal' => '2026-06-01', 'jenis_bbm' => 'PERTAMINA DEX', 'meter_awal' => 200, 'meter_akhir' => 220, 'keterangan' => 'tes bro']); echo \->input('jenis_bbm');
+<?php
+require 'vendor/autoload.php';
+$app = require_once 'bootstrap/app.php';
+$app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+
+$satkers = \App\Models\Satker::getOrderedForRendis()->pluck('nama_satker')->toArray();
+echo json_encode($satkers, JSON_PRETTY_PRINT);

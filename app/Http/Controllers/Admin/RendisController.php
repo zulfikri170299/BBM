@@ -20,9 +20,9 @@ class RendisController extends Controller
 
     public function create()
     {
-        $satkers = Satker::orderBy('nama_satker')->get();
-        $kendaraans = Kendaraan::with('satker')->orderBy('satker_id')->get();
-        $kendaraansBySatker = $kendaraans->groupBy('satker_id');
+        $satkers = Satker::getOrderedForRendis();
+        $kendaraans = Kendaraan::with('satker')->where('satker_id', '!=', Satker::where('nama_satker', 'SPN')->value('id'))->get();
+        $kendaraansBySatker = Satker::sortKendaraansBySatker($kendaraans->groupBy('satker_id'));
 
         return view('admin.rendis.create', compact('satkers', 'kendaraans', 'kendaraansBySatker'));
     }
@@ -66,18 +66,25 @@ class RendisController extends Controller
                 'bulan3_hari_pimpinan' => $request->bulan3_hari_pimpinan,
             ]);
 
+            // Bulk preload semua kendaraan sekaligus (1 query, bukan 266 query)
+            $kendaraanIds = array_keys($request->kendaraan);
+            $kendaraansMap = Kendaraan::whereIn('id', $kendaraanIds)->get()->keyBy('id');
+
+            $now = now();
+            $bulkData = [];
             foreach ($request->kendaraan as $kId => $data) {
-                $kendaraan = Kendaraan::find($kId);
+                $kendaraan = $kendaraansMap->get($kId);
+                if (!$kendaraan) continue;
+
                 $literPerHari = floatval($data['liter_per_hari'] ?? 0);
                 $literPerHariB2 = floatval($data['liter_per_hari_b2'] ?? $literPerHari);
                 $literPerHariB3 = floatval($data['liter_per_hari_b3'] ?? $literPerHari);
                 $bulan1Total = floatval($data['bulan1_total'] ?? 0);
                 $bulan2Total = floatval($data['bulan2_total'] ?? 0);
                 $bulan3Total = floatval($data['bulan3_total'] ?? 0);
-                // Jenis BBM otomatis dari master kendaraan
                 $jenisBbm = strtolower(str_replace(' ', '_', $kendaraan->jenis_bbm ?? 'pertamax'));
 
-                RendisKendaraan::create([
+                $bulkData[] = [
                     'rendis_bbm_id' => $rendis->id,
                     'kendaraan_id' => $kId,
                     'uraian' => $data['uraian'] ?? $kendaraan->kategori_kendaraan ?? 'Operasional',
@@ -89,10 +96,22 @@ class RendisController extends Controller
                     'bulan3_total' => $bulan3Total,
                     'total_liter' => $bulan1Total + $bulan2Total + $bulan3Total,
                     'jenis_bbm' => $jenisBbm,
-                ]);
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
             }
+
+            foreach (array_chunk($bulkData, 100) as $chunk) {
+                RendisKendaraan::insert($chunk);
+            }
+
             return $rendis;
         });
+
+        if ($request->wantsJson()) {
+            session()->flash('success', 'Rendis berhasil dibuat.');
+            return response()->json(['redirect' => route('admin.rendis.show', $rendis->id)]);
+        }
 
         return redirect()->route('admin.rendis.show', $rendis->id)->with('success', 'Rendis berhasil dibuat.');
     }
@@ -101,10 +120,10 @@ class RendisController extends Controller
     {
         $rendisBbm = $rendi;
         $rendisBbm->load('rendisKendaraans.kendaraan.satker');
-        $kendaraansBySatker = $rendisBbm->rendisKendaraans->groupBy(function ($rk) {
+        $kendaraansBySatker = Satker::sortKendaraansBySatker($rendisBbm->rendisKendaraans->groupBy(function ($rk) {
             return $rk->kendaraan->satker_id ?? 0;
-        });
-        $satkers = Satker::all()->keyBy('id');
+        }));
+        $satkers = Satker::getOrderedForRendis()->keyBy('id');
         return view('admin.rendis.show', compact('rendisBbm', 'kendaraansBySatker', 'satkers'));
     }
 
@@ -118,9 +137,9 @@ class RendisController extends Controller
 
         $rendisBbm->load('rendisKendaraans.kendaraan');
 
-        $satkers = Satker::orderBy('nama_satker')->get();
-        $kendaraans = Kendaraan::with('satker')->orderBy('satker_id')->get();
-        $kendaraansBySatker = $kendaraans->groupBy('satker_id');
+        $satkers = Satker::getOrderedForRendis();
+        $kendaraans = Kendaraan::with('satker')->where('satker_id', '!=', Satker::where('nama_satker', 'SPN')->value('id'))->get();
+        $kendaraansBySatker = Satker::sortKendaraansBySatker($kendaraans->groupBy('satker_id'));
 
         $existingRendisKendaraans = $rendisBbm->rendisKendaraans->keyBy('kendaraan_id');
 
@@ -162,8 +181,16 @@ class RendisController extends Controller
 
             $rendisBbm->rendisKendaraans()->delete();
 
+            // Bulk preload semua kendaraan sekaligus (1 query)
+            $kendaraanIds = array_keys($request->kendaraan);
+            $kendaraansMap = Kendaraan::whereIn('id', $kendaraanIds)->get()->keyBy('id');
+
+            $now = now();
+            $bulkData = [];
             foreach ($request->kendaraan as $kId => $data) {
-                $kendaraan = Kendaraan::find($kId);
+                $kendaraan = $kendaraansMap->get($kId);
+                if (!$kendaraan) continue;
+
                 $literPerHari = floatval($data['liter_per_hari'] ?? 0);
                 $literPerHariB2 = floatval($data['liter_per_hari_b2'] ?? $literPerHari);
                 $literPerHariB3 = floatval($data['liter_per_hari_b3'] ?? $literPerHari);
@@ -172,7 +199,7 @@ class RendisController extends Controller
                 $bulan3Total = floatval($data['bulan3_total'] ?? 0);
                 $jenisBbm = strtolower(str_replace(' ', '_', $kendaraan->jenis_bbm ?? 'pertamax'));
 
-                RendisKendaraan::create([
+                $bulkData[] = [
                     'rendis_bbm_id' => $rendisBbm->id,
                     'kendaraan_id' => $kId,
                     'uraian' => $data['uraian'] ?? $kendaraan->kategori_kendaraan ?? 'Operasional',
@@ -184,9 +211,21 @@ class RendisController extends Controller
                     'bulan3_total' => $bulan3Total,
                     'total_liter' => $bulan1Total + $bulan2Total + $bulan3Total,
                     'jenis_bbm' => $jenisBbm,
-                ]);
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            }
+
+            // Bulk insert dalam chunk (1-3 query)
+            foreach (array_chunk($bulkData, 100) as $chunk) {
+                RendisKendaraan::insert($chunk);
             }
         });
+
+        if ($request->wantsJson()) {
+            session()->flash('success', 'Rendis berhasil diperbarui.');
+            return response()->json(['redirect' => route('admin.rendis.show', $rendisBbm->id)]);
+        }
 
         return redirect()->route('admin.rendis.show', $rendisBbm->id)->with('success', 'Rendis berhasil diperbarui.');
     }
@@ -350,10 +389,10 @@ class RendisController extends Controller
     public function printPdf(RendisBbm $rendisBbm)
     {
         $rendisBbm->load('rendisKendaraans.kendaraan.satker');
-        $kendaraansBySatker = $rendisBbm->rendisKendaraans->groupBy(function ($rk) {
+        $kendaraansBySatker = Satker::sortKendaraansBySatker($rendisBbm->rendisKendaraans->groupBy(function ($rk) {
             return $rk->kendaraan->satker_id ?? 0;
-        });
-        $satkers = Satker::all()->keyBy('id');
+        }));
+        $satkers = Satker::getOrderedForRendis()->keyBy('id');
         $settings = \App\Models\Setting::pluck('value', 'key')->toArray();
         $pdf = \PDF::loadView('admin.rendis.pdf', compact('rendisBbm', 'kendaraansBySatker', 'satkers', 'settings'))
             ->setPaper('legal', 'landscape');

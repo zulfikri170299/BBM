@@ -21,10 +21,10 @@ class RendisExport implements FromView, ShouldAutoSize, WithColumnFormatting
     public function view(): View
     {
         $this->rendisBbm->load('rendisKendaraans.kendaraan.satker');
-        $kendaraansBySatker = $this->rendisBbm->rendisKendaraans->groupBy(function ($rk) {
+        $kendaraansBySatker = Satker::sortKendaraansBySatker($this->rendisBbm->rendisKendaraans->groupBy(function ($rk) {
             return $rk->kendaraan->satker_id ?? 0;
-        });
-        $satkers = Satker::all()->keyBy('id');
+        }));
+        $satkers = Satker::getOrderedForRendis()->keyBy('id');
 
         return view('admin.rendis.excel', [
             'rendisBbm' => $this->rendisBbm,

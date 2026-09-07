@@ -30,11 +30,15 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Pembelian Pertamax</label>
-                    <input type="number" name="pembelian_pertamax" @input="recalculateGrandTotal()" min="0" required class="w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary">
+                    <input type="hidden" name="pembelian_pertamax" id="hidden-pembelian-ptx" value="0">
+                    <input type="text" id="input-pembelian-ptx" placeholder="0" @input="formatInputPtx($event)" required class="w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary">
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Netto (Set. Susut): <span id="netto-ptx" class="font-bold text-gray-900 dark:text-white">0</span> L</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Pembelian P. Dex</label>
-                    <input type="number" name="pembelian_pertamina_dex" @input="recalculateGrandTotal()" min="0" required class="w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary">
+                    <input type="hidden" name="pembelian_pertamina_dex" id="hidden-pembelian-dex" value="0">
+                    <input type="text" id="input-pembelian-dex" placeholder="0" @input="formatInputDex($event)" required class="w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary">
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Netto (Set. Susut): <span id="netto-dex" class="font-bold text-gray-900 dark:text-white">0</span> L</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Susut (%)</label>
@@ -306,8 +310,16 @@ function rendisForm() {
         'TW III': ['Juli', 'Agustus', 'September'],
         'TW IV':  ['Oktober', 'November', 'Desember'],
     };
+
+    // Cache totals per satker di memory (tidak perlu scan DOM berulang)
+    const satkerTotals = {}; // { satkerId: { p1,d1,p2,d2,p3,d3 } }
+    let grandPtx = {b1:0,b2:0,b3:0};
+    let grandDex = {b1:0,b2:0,b3:0};
+
     return {
         triwulan: 'TW III',
+        satkerRows: {}, // Cache baris tr per satker untuk performa maksimal
+        calcTimeout: null,
         hari: {
             b1_op: 23, b1_st: 23, b1_pi: 31,
             b2_op: 19, b2_st: 19, b2_pi: 31,
@@ -328,23 +340,42 @@ function rendisForm() {
                 tabel.addEventListener('input', function(e) { self.handleTableInput(e); });
                 tabel.addEventListener('change', function(e) { self.handleTableInput(e); });
             }
-            requestAnimationFrame(() => {
-                const rows = document.querySelectorAll('tr.kendaraan-row');
-                let i = 0;
-                const batchSize = 20;
-                const processBatch = () => {
-                    const end = Math.min(i + batchSize, rows.length);
-                    for (; i < end; i++) {
-                        self.updateRowTotals(rows[i]);
-                    }
-                    if (i < rows.length) {
-                        requestAnimationFrame(processBatch);
-                    } else {
-                        self.recalculateAllSatkers();
-                    }
-                };
-                processBatch();
+
+            // Inisialisasi semua satker totals & baris
+            document.querySelectorAll('tr.satker-total').forEach(st => {
+                const sid = st.dataset.satkerId;
+                satkerTotals[sid] = {p1:0,d1:0,p2:0,d2:0,p3:0,d3:0};
+                this.satkerRows[sid] = [];
             });
+
+            const rows = document.querySelectorAll('tr.kendaraan-row');
+            rows.forEach(tr => {
+                const sid = tr.dataset.satkerId;
+                if(this.satkerRows[sid]) this.satkerRows[sid].push(tr);
+            });
+
+            // Format nilai awal input
+            document.querySelectorAll('#input-pembelian-ptx, #input-pembelian-dex').forEach(el => {
+                let val = el.value.replace(/\D/g, '');
+                el.value = val ? new Intl.NumberFormat('id-ID').format(parseInt(val)) : '';
+            });
+
+            // Batched processing untuk mencegah freeze saat pertama kali dibuka
+            let i = 0;
+            const batchSize = 20;
+            const processBatch = () => {
+                const end = Math.min(i + batchSize, rows.length);
+                for (; i < end; i++) {
+                    self.updateRowTotals(rows[i]);
+                }
+                if (i < rows.length) {
+                    requestAnimationFrame(processBatch);
+                } else {
+                    self.rebuildAllTotals();
+                }
+            };
+            if (rows.length > 0) requestAnimationFrame(processBatch);
+            else self.rebuildAllTotals();
         },
         handleTableInput(event) {
             const target = event.target;
@@ -353,21 +384,60 @@ function rendisForm() {
 
             if (target.classList.contains('input-uraian')) {
                 tr.dataset.kategori = target.value.toLowerCase();
-                this.updateRowTotals(tr);
-                this.recalculateSatker(tr.dataset.satkerId);
-                this.recalculateGrandTotal();
             } else if (target.classList.contains('input-lph-1')) {
                 const val = target.value;
                 tr.querySelector('.input-lph-2').value = val;
                 tr.querySelector('.input-lph-3').value = val;
-                this.updateRowTotals(tr);
-                this.recalculateSatker(tr.dataset.satkerId);
-                this.recalculateGrandTotal();
-            } else if (target.classList.contains('input-lph-2') || target.classList.contains('input-lph-3')) {
-                this.updateRowTotals(tr);
-                this.recalculateSatker(tr.dataset.satkerId);
-                this.recalculateGrandTotal();
             }
+
+            if (target.classList.contains('input-hari-1') || target.classList.contains('input-hari-2') || target.classList.contains('input-hari-3')) {
+                const lph1 = parseFloat(tr.querySelector('.input-lph-1').value) || 0;
+                const lph2 = parseFloat(tr.querySelector('.input-lph-2').value) || 0;
+                const lph3 = parseFloat(tr.querySelector('.input-lph-3').value) || 0;
+                const h1 = parseInt(tr.querySelector('.input-hari-1').value) || 0;
+                const h2 = parseInt(tr.querySelector('.input-hari-2').value) || 0;
+                const h3 = parseInt(tr.querySelector('.input-hari-3').value) || 0;
+                const b1Total = Math.round(lph1 * h1);
+                const b2Total = Math.round(lph2 * h2);
+                const b3Total = Math.round(lph3 * h3);
+                tr.querySelector('.input-b1-total').value = b1Total;
+                tr.querySelector('.input-b2-total').value = b2Total;
+                tr.querySelector('.input-b3-total').value = b3Total;
+                
+                const sb1 = tr.querySelector('.span-b1-total');
+                const sb2 = tr.querySelector('.span-b2-total');
+                const sb3 = tr.querySelector('.span-b3-total');
+                if (sb1) sb1.innerText = b1Total;
+                if (sb2) sb2.innerText = b2Total;
+                if (sb3) sb3.innerText = b3Total;
+                
+                const sd1 = tr.querySelector('.span-b1-total-dex');
+                const sd2 = tr.querySelector('.span-b2-total-dex');
+                const sd3 = tr.querySelector('.span-b3-total-dex');
+                if (sd1) sd1.innerText = b1Total;
+                if (sd2) sd2.innerText = b2Total;
+                if (sd3) sd3.innerText = b3Total;
+            } else {
+                this.updateRowTotals(tr);
+            }
+
+            clearTimeout(this.calcTimeout);
+            this.calcTimeout = setTimeout(() => {
+                this.rebuildSatkerTotal(tr.dataset.satkerId);
+                this.updateGrandTotalDOM();
+            }, 200);
+        },
+        formatInputPtx(e) {
+            let val = e.target.value.replace(/\D/g, '');
+            document.getElementById('hidden-pembelian-ptx').value = val || 0;
+            e.target.value = val ? new Intl.NumberFormat('id-ID').format(parseInt(val)) : '';
+            this.updateGrandTotalDOM();
+        },
+        formatInputDex(e) {
+            let val = e.target.value.replace(/\D/g, '');
+            document.getElementById('hidden-pembelian-dex').value = val || 0;
+            e.target.value = val ? new Intl.NumberFormat('id-ID').format(parseInt(val)) : '';
+            this.updateGrandTotalDOM();
         },
         updateRowTotals(tr) {
             const kategori = tr.dataset.kategori;
@@ -379,9 +449,12 @@ function rendisForm() {
             const hari2 = this.getHari(2, kategori);
             const hari3 = this.getHari(3, kategori);
 
-            if (tr.querySelector('.span-hari-1')) tr.querySelector('.span-hari-1').innerText = hari1;
-            if (tr.querySelector('.span-hari-2')) tr.querySelector('.span-hari-2').innerText = hari2;
-            if (tr.querySelector('.span-hari-3')) tr.querySelector('.span-hari-3').innerText = hari3;
+            const sh1 = tr.querySelector('.span-hari-1');
+            const sh2 = tr.querySelector('.span-hari-2');
+            const sh3 = tr.querySelector('.span-hari-3');
+            if (sh1 && sh1.innerText != hari1) sh1.innerText = hari1;
+            if (sh2 && sh2.innerText != hari2) sh2.innerText = hari2;
+            if (sh3 && sh3.innerText != hari3) sh3.innerText = hari3;
 
             const b1Total = Math.round(lph1 * hari1);
             const b2Total = Math.round(lph2 * hari2);
@@ -391,29 +464,35 @@ function rendisForm() {
             tr.querySelector('.input-b2-total').value = b2Total;
             tr.querySelector('.input-b3-total').value = b3Total;
             
-            if (tr.querySelector('.span-b1-total')) tr.querySelector('.span-b1-total').innerText = b1Total;
-            if (tr.querySelector('.span-b2-total')) tr.querySelector('.span-b2-total').innerText = b2Total;
-            if (tr.querySelector('.span-b3-total')) tr.querySelector('.span-b3-total').innerText = b3Total;
+            const sb1 = tr.querySelector('.span-b1-total');
+            const sb2 = tr.querySelector('.span-b2-total');
+            const sb3 = tr.querySelector('.span-b3-total');
+            if (sb1 && sb1.innerText != b1Total) sb1.innerText = b1Total;
+            if (sb2 && sb2.innerText != b2Total) sb2.innerText = b2Total;
+            if (sb3 && sb3.innerText != b3Total) sb3.innerText = b3Total;
             
-            if (tr.querySelector('.span-b1-total-dex')) tr.querySelector('.span-b1-total-dex').innerText = b1Total;
-            if (tr.querySelector('.span-b2-total-dex')) tr.querySelector('.span-b2-total-dex').innerText = b2Total;
-            if (tr.querySelector('.span-b3-total-dex')) tr.querySelector('.span-b3-total-dex').innerText = b3Total;
+            const sd1 = tr.querySelector('.span-b1-total-dex');
+            const sd2 = tr.querySelector('.span-b2-total-dex');
+            const sd3 = tr.querySelector('.span-b3-total-dex');
+            if (sd1 && sd1.innerText != b1Total) sd1.innerText = b1Total;
+            if (sd2 && sd2.innerText != b2Total) sd2.innerText = b2Total;
+            if (sd3 && sd3.innerText != b3Total) sd3.innerText = b3Total;
         },
-        recalculateSatker(satkerId) {
-            let p1=0, d1=0, p2=0, d2=0, p3=0, d3=0;
-            const rows = document.querySelectorAll(`tr.kendaraan-row[data-satker-id="${satkerId}"]`);
-            rows.forEach(tr => {
-                const jenis = tr.dataset.jenis;
+        // Rebuild satu satker dari DOM rows-nya (hanya 10-15 row per satker, sangat cepat dari cache)
+        rebuildSatkerTotal(satkerId) {
+            let p1 = 0, d1 = 0, p2 = 0, d2 = 0, p3 = 0, d3 = 0;
+            const rows = this.satkerRows[satkerId] || [];
+            
+            for(let i = 0; i < rows.length; i++) {
+                const tr = rows[i];
+                const j = tr.dataset.jenis;
                 const b1 = parseInt(tr.querySelector('.input-b1-total').value) || 0;
                 const b2 = parseInt(tr.querySelector('.input-b2-total').value) || 0;
                 const b3 = parseInt(tr.querySelector('.input-b3-total').value) || 0;
-                
-                if (jenis === 'pertamax') {
-                    p1 += b1; p2 += b2; p3 += b3;
-                } else {
-                    d1 += b1; d2 += b2; d3 += b3;
-                }
-            });
+                if (j === 'pertamax') { p1 += b1; p2 += b2; p3 += b3; }
+                else { d1 += b1; d2 += b2; d3 += b3; }
+            }
+            satkerTotals[satkerId] = {p1,d1,p2,d2,p3,d3};
             const satkerTr = document.querySelector(`tr.satker-total[data-satker-id="${satkerId}"]`);
             if (satkerTr) {
                 satkerTr.querySelector('.st-p1').innerText = p1;
@@ -423,85 +502,155 @@ function rendisForm() {
                 satkerTr.querySelector('.st-p3').innerText = p3;
                 satkerTr.querySelector('.st-d3').innerText = d3;
             }
+            // Recalc grand total dari cached satker totals (tidak perlu scan semua row)
+            this.recalcGrandFromCache();
         },
-        
-        recalculateGrandTotal() {
-            let totalB1Ptx = 0, totalB1Dex = 0;
-            let totalB2Ptx = 0, totalB2Dex = 0;
-            let totalB3Ptx = 0, totalB3Dex = 0;
+        // Hitung grand total dari cache (sangat cepat, hanya 24 satker)
+        recalcGrandFromCache() {
+            grandPtx = {b1:0,b2:0,b3:0};
+            grandDex = {b1:0,b2:0,b3:0};
+            for (const id in satkerTotals) {
+                const s = satkerTotals[id];
+                grandPtx.b1 += s.p1; grandPtx.b2 += s.p2; grandPtx.b3 += s.p3;
+                grandDex.b1 += s.d1; grandDex.b2 += s.d2; grandDex.b3 += s.d3;
+            }
+        },
+        // Update DOM grand total (murah, hanya 12 element)
+        updateGrandTotalDOM() {
+            const $ = (id, v) => { const e = document.getElementById(id); if(e) e.innerText = v; };
+            $('grand-total-b1-ptx', grandPtx.b1); $('grand-total-b1-dex', grandDex.b1);
+            $('grand-total-b2-ptx', grandPtx.b2); $('grand-total-b2-dex', grandDex.b2);
+            $('grand-total-b3-ptx', grandPtx.b3); $('grand-total-b3-dex', grandDex.b3);
 
+            const twPtx = grandPtx.b1 + grandPtx.b2 + grandPtx.b3;
+            const twDex = grandDex.b1 + grandDex.b2 + grandDex.b3;
+            $('grand-total-triwulan-ptx', twPtx); $('grand-total-triwulan-dex', twDex);
+
+            const pembelianPtx = parseFloat(document.getElementById('hidden-pembelian-ptx').value) || 0;
+            const pembelianDex = parseFloat(document.getElementById('hidden-pembelian-dex').value) || 0;
+            const susut = parseFloat(document.querySelector('input[name="susut_persen"]').value) || 0;
+            const limitPtx = Math.floor(pembelianPtx - (pembelianPtx * (susut / 100)));
+            const limitDex = Math.floor(pembelianDex - (pembelianDex * (susut / 100)));
+            $('maksimal-distribusi-ptx', limitPtx); $('maksimal-distribusi-dex', limitDex);
+            $('netto-ptx', limitPtx); $('netto-dex', limitDex);
+
+            const sPtx = document.getElementById('status-ptx');
+            if(sPtx) {
+                sPtx.innerHTML = twPtx > limitPtx
+                    ? `<span class="text-rose-600 font-bold">Melebihi batas (+${twPtx - limitPtx} L)</span>`
+                    : `<span class="text-emerald-600 font-bold">Aman (Sisa ${limitPtx - twPtx} L)</span>`;
+            }
+            const sDex = document.getElementById('status-dex');
+            if(sDex) {
+                sDex.innerHTML = twDex > limitDex
+                    ? `<span class="text-rose-600 font-bold">Melebihi batas (+${twDex - limitDex} L)</span>`
+                    : `<span class="text-emerald-600 font-bold">Aman (Sisa ${limitDex - twDex} L)</span>`;
+            }
+        },
+        // Rebuild semua totals dari awal (dipanggil sekali saat init & saat klik Terapkan)
+        rebuildAllTotals() {
+            for (const id in satkerTotals) {
+                satkerTotals[id] = {p1:0,d1:0,p2:0,d2:0,p3:0,d3:0};
+            }
             document.querySelectorAll('tr.kendaraan-row').forEach(tr => {
+                const sId = tr.dataset.satkerId;
                 const jenis = tr.dataset.jenis;
                 const b1 = parseInt(tr.querySelector('.input-b1-total').value) || 0;
                 const b2 = parseInt(tr.querySelector('.input-b2-total').value) || 0;
                 const b3 = parseInt(tr.querySelector('.input-b3-total').value) || 0;
-
+                if (!satkerTotals[sId]) satkerTotals[sId] = {p1:0,d1:0,p2:0,d2:0,p3:0,d3:0};
                 if (jenis === 'pertamax') {
-                    totalB1Ptx += b1;
-                    totalB2Ptx += b2;
-                    totalB3Ptx += b3;
+                    satkerTotals[sId].p1 += b1; satkerTotals[sId].p2 += b2; satkerTotals[sId].p3 += b3;
                 } else {
-                    totalB1Dex += b1;
-                    totalB2Dex += b2;
-                    totalB3Dex += b3;
+                    satkerTotals[sId].d1 += b1; satkerTotals[sId].d2 += b2; satkerTotals[sId].d3 += b3;
                 }
             });
-
-            if(document.getElementById('grand-total-b1-ptx')) document.getElementById('grand-total-b1-ptx').innerText = totalB1Ptx;
-            if(document.getElementById('grand-total-b1-dex')) document.getElementById('grand-total-b1-dex').innerText = totalB1Dex;
-            if(document.getElementById('grand-total-b2-ptx')) document.getElementById('grand-total-b2-ptx').innerText = totalB2Ptx;
-            if(document.getElementById('grand-total-b2-dex')) document.getElementById('grand-total-b2-dex').innerText = totalB2Dex;
-            if(document.getElementById('grand-total-b3-ptx')) document.getElementById('grand-total-b3-ptx').innerText = totalB3Ptx;
-            if(document.getElementById('grand-total-b3-dex')) document.getElementById('grand-total-b3-dex').innerText = totalB3Dex;
-
-            const totalTriwulanPtx = totalB1Ptx + totalB2Ptx + totalB3Ptx;
-            const totalTriwulanDex = totalB1Dex + totalB2Dex + totalB3Dex;
-            
-            if(document.getElementById('grand-total-triwulan-ptx')) document.getElementById('grand-total-triwulan-ptx').innerText = totalTriwulanPtx;
-            if(document.getElementById('grand-total-triwulan-dex')) document.getElementById('grand-total-triwulan-dex').innerText = totalTriwulanDex;
-
-            const pembelianPtx = parseFloat(document.querySelector('input[name="pembelian_pertamax"]').value) || 0;
-            const pembelianDex = parseFloat(document.querySelector('input[name="pembelian_pertamina_dex"]').value) || 0;
-            const susut = parseFloat(document.querySelector('input[name="susut_persen"]').value) || 0;
-
-            const limitPtx = Math.floor(pembelianPtx - (pembelianPtx * (susut / 100)));
-            const limitDex = Math.floor(pembelianDex - (pembelianDex * (susut / 100)));
-
-            if(document.getElementById('maksimal-distribusi-ptx')) document.getElementById('maksimal-distribusi-ptx').innerText = limitPtx;
-            if(document.getElementById('maksimal-distribusi-dex')) document.getElementById('maksimal-distribusi-dex').innerText = limitDex;
-
-            const statusPtx = document.getElementById('status-ptx');
-            if(statusPtx) {
-                if(totalTriwulanPtx > limitPtx) {
-                    statusPtx.innerHTML = `<span class="text-rose-600 font-bold">Melebihi batas (+${totalTriwulanPtx - limitPtx} L)</span>`;
-                } else {
-                    statusPtx.innerHTML = `<span class="text-emerald-600 font-bold">Aman (Sisa ${limitPtx - totalTriwulanPtx} L)</span>`;
+            // Update semua satker DOM
+            for (const id in satkerTotals) {
+                const s = satkerTotals[id];
+                const st = document.querySelector(`tr.satker-total[data-satker-id="${id}"]`);
+                if (st) {
+                    st.querySelector('.st-p1').innerText = s.p1;
+                    st.querySelector('.st-d1').innerText = s.d1;
+                    st.querySelector('.st-p2').innerText = s.p2;
+                    st.querySelector('.st-d2').innerText = s.d2;
+                    st.querySelector('.st-p3').innerText = s.p3;
+                    st.querySelector('.st-d3').innerText = s.d3;
                 }
             }
-
-            const statusDex = document.getElementById('status-dex');
-            if(statusDex) {
-                if(totalTriwulanDex > limitDex) {
-                    statusDex.innerHTML = `<span class="text-rose-600 font-bold">Melebihi batas (+${totalTriwulanDex - limitDex} L)</span>`;
-                } else {
-                    statusDex.innerHTML = `<span class="text-emerald-600 font-bold">Aman (Sisa ${limitDex - totalTriwulanDex} L)</span>`;
-                }
-            }
-        },
-        recalculateAllSatkers() {
-
-            const satkerIds = new Set();
-            document.querySelectorAll('tr.kendaraan-row').forEach(tr => {
-                if(tr.dataset.satkerId) satkerIds.add(tr.dataset.satkerId);
-            });
-            satkerIds.forEach(id => this.recalculateSatker(id));
-            this.recalculateGrandTotal();
+            this.recalcGrandFromCache();
+            this.updateGrandTotalDOM();
         },
         recalculateAll() {
             document.querySelectorAll('tr.kendaraan-row').forEach(tr => {
                 this.updateRowTotals(tr);
             });
-            this.recalculateAllSatkers();
+            this.rebuildAllTotals();
+        },
+        async submitForm(e) {
+            const form = e.target;
+            const action = form.getAttribute('action');
+            
+            const btn = form.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+            btn.disabled = true;
+            btn.innerText = 'Menyimpan...';
+
+            const formData = new FormData(form);
+            const data = {
+                _token: formData.get('_token'),
+                pembelian_pertamax: formData.get('pembelian_pertamax'),
+                pembelian_pertamina_dex: formData.get('pembelian_pertamina_dex'),
+                susut_persen: formData.get('susut_persen'),
+                triwulan: formData.get('triwulan'),
+                tahun: formData.get('tahun'),
+                bulan1_hari_operasional: formData.get('bulan1_hari_operasional'),
+                bulan1_hari_staff: formData.get('bulan1_hari_staff'),
+                bulan1_hari_pimpinan: formData.get('bulan1_hari_pimpinan'),
+                bulan2_hari_operasional: formData.get('bulan2_hari_operasional'),
+                bulan2_hari_staff: formData.get('bulan2_hari_staff'),
+                bulan2_hari_pimpinan: formData.get('bulan2_hari_pimpinan'),
+                bulan3_hari_operasional: formData.get('bulan3_hari_operasional'),
+                bulan3_hari_staff: formData.get('bulan3_hari_staff'),
+                bulan3_hari_pimpinan: formData.get('bulan3_hari_pimpinan'),
+                kendaraan: {}
+            };
+
+            for (let [key, value] of formData.entries()) {
+                const match = key.match(/^kendaraan\[(\d+)\]\[([^\]]+)\]$/);
+                if (match) {
+                    const kId = match[1];
+                    const field = match[2];
+                    if (!data.kendaraan[kId]) data.kendaraan[kId] = {};
+                    data.kendaraan[kId][field] = value;
+                }
+            }
+
+            try {
+                const response = await fetch(action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': data._token
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                if (response.ok && result.redirect) {
+                    window.location.href = result.redirect;
+                } else {
+                    alert('Gagal menyimpan data: ' + (result.message || 'Terjadi kesalahan'));
+                    btn.disabled = false;
+                    btn.innerText = originalText;
+                }
+            } catch (err) {
+                alert('Terjadi kesalahan koneksi.');
+                console.error(err);
+                btn.disabled = false;
+                btn.innerText = originalText;
+            }
         }
     }
 }
