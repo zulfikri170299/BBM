@@ -141,15 +141,21 @@
                             <td colspan="13" class="px-3 py-2 font-extrabold text-gray-800 dark:text-yellow-300 uppercase border border-gray-300 dark:border-gray-600">{{ $satker->nama_satker ?? 'TANPA SATKER' }}</td>
                         </tr>
                         @foreach($kendaraanList as $idx => $k)
-                        @php $rk = $existingRendisKendaraans->get($k->id); @endphp
-                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors kendaraan-row" data-satker-id="{{ $satkerId }}" data-kategori="{{ strtolower($k->kategori_kendaraan ?? 'operasional') }}" data-jenis="{{ strtolower(str_replace(' ', '_', $k->jenis_bbm ?? 'pertamax')) }}">
+                        @php 
+                            $rk = $existingRendisKendaraans->get($k->id); 
+                            $currentUraian = strtolower(trim($rk->uraian ?? $k->kategori_kendaraan ?? 'Operasional'));
+                            $katKey = $currentUraian == 'opsnal' ? 'operasional' : $currentUraian;
+                            $hk1 = $rendisBbm->{"bulan1_hari_{$katKey}"} ?? 22;
+                            $hk2 = $rendisBbm->{"bulan2_hari_{$katKey}"} ?? 22;
+                            $hk3 = $rendisBbm->{"bulan3_hari_{$katKey}"} ?? 22;
+                        @endphp
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors kendaraan-row" data-satker-id="{{ $satkerId }}" data-kategori="{{ $katKey }}" data-jenis="{{ strtolower(str_replace(' ', '_', $k->jenis_bbm ?? 'pertamax')) }}">
                             <td class="px-3 py-1 text-center border border-gray-200 dark:border-gray-700">{{ $idx + 1 }}</td>
                             <td class="px-1 py-1 border border-gray-200 dark:border-gray-700">
-                                @php $currentUraian = $rk->uraian ?? $k->kategori_kendaraan ?? 'Operasional'; @endphp
-                                <select name="kendaraan[{ $k->id }][uraian]" class="w-full text-xs p-1 rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white input-uraian">
-                                    <option value="Opsnal" {{ $currentUraian == 'Opsnal' || $currentUraian == 'Operasional' ? 'selected' : '' }}>Opsnal</option>
-                                    <option value="Staff" {{ $currentUraian == 'Staff' ? 'selected' : '' }}>Staff</option>
-                                    <option value="Pimpinan" {{ $currentUraian == 'Pimpinan' ? 'selected' : '' }}>Pimpinan</option>
+                                <select name="kendaraan[{{ $k->id }}][uraian]" class="w-full text-xs p-1 rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white input-uraian">
+                                    <option value="Opsnal" {{ $currentUraian == 'opsnal' || $currentUraian == 'operasional' ? 'selected' : '' }}>Opsnal</option>
+                                    <option value="Staff" {{ $currentUraian == 'staff' ? 'selected' : '' }}>Staff</option>
+                                    <option value="Pimpinan" {{ $currentUraian == 'pimpinan' ? 'selected' : '' }}>Pimpinan</option>
                                 </select>
                             </td>
                             <td class="px-3 py-1 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 whitespace-nowrap">{{ $k->jenis_kendaraan ?? '-' }}</td>
@@ -164,8 +170,8 @@
                                     <input type="number" name="kendaraan[{{ $k->id }}][liter_per_hari]" value="{{ $rk->liter_per_hari ?? 0 }}" min="0" step="0.1" class="w-12 p-0.5 text-center text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm input-lph-1">
                                     <span class="text-gray-500 text-[10px]">Ltr</span>
                                     <span class="text-gray-400">x</span>
-                                    <span class="hari-display input-hari-1 w-10 p-0.5 text-center text-xs rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/30" data-val="0" title="Klik untuk edit">0</span>
-                                    <input type="hidden" class="input-hari-1-hidden" value="0">
+                                    <span class="hari-display input-hari-1 w-10 p-0.5 text-center text-xs rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/30" data-val="{{ $hk1 }}" title="Klik untuk edit">{{ $hk1 }}</span>
+                                    <input type="hidden" name="kendaraan[{{ $k->id }}][jumlah_hari]" class="input-hari-1-hidden" value="{{ $hk1 }}">
                                     <span class="text-gray-500 text-[10px]">hr</span>
                                 </div>
                             </td>
@@ -183,8 +189,8 @@
                                     <input type="number" name="kendaraan[{{ $k->id }}][liter_per_hari_b2]" value="{{ $rk->liter_per_hari_b2 ?? ($rk->liter_per_hari ?? 0) }}" min="0" step="0.1" class="w-12 p-0.5 text-center text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm input-lph-2">
                                     <span class="text-gray-500 text-[10px]">Ltr</span>
                                     <span class="text-gray-400">x</span>
-                                    <span class="hari-display input-hari-2 w-10 p-0.5 text-center text-xs rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/30" data-val="{{ $rk->hari_b2 ?? 0 }}" title="Klik untuk edit">{{ $rk->hari_b2 ?? 0 }}</span>
-                                    <input type="hidden" name="kendaraan[{{ $k->id }}][hari_b2]" class="input-hari-2-hidden" value="{{ $rk->hari_b2 ?? 0 }}">
+                                    <span class="hari-display input-hari-2 w-10 p-0.5 text-center text-xs rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/30" data-val="{{ $hk2 }}" title="Klik untuk edit">{{ $hk2 }}</span>
+                                    <input type="hidden" name="kendaraan[{{ $k->id }}][hari_b2]" class="input-hari-2-hidden" value="{{ $hk2 }}">
                                     <span class="text-gray-500 text-[10px]">hr</span>
                                 </div>
                             </td>
@@ -202,8 +208,8 @@
                                     <input type="number" name="kendaraan[{{ $k->id }}][liter_per_hari_b3]" value="{{ $rk->liter_per_hari_b3 ?? ($rk->liter_per_hari ?? 0) }}" min="0" step="0.1" class="w-12 p-0.5 text-center text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm input-lph-3">
                                     <span class="text-gray-500 text-[10px]">Ltr</span>
                                     <span class="text-gray-400">x</span>
-                                    <span class="hari-display input-hari-3 w-10 p-0.5 text-center text-xs rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/30" data-val="{{ $rk->hari_b3 ?? 0 }}" title="Klik untuk edit">{{ $rk->hari_b3 ?? 0 }}</span>
-                                    <input type="hidden" name="kendaraan[{{ $k->id }}][hari_b3]" class="input-hari-3-hidden" value="{{ $rk->hari_b3 ?? 0 }}">
+                                    <span class="hari-display input-hari-3 w-10 p-0.5 text-center text-xs rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/30" data-val="{{ $hk3 }}" title="Klik untuk edit">{{ $hk3 }}</span>
+                                    <input type="hidden" name="kendaraan[{{ $k->id }}][hari_b3]" class="input-hari-3-hidden" value="{{ $hk3 }}">
                                     <span class="text-gray-500 text-[10px]">hr</span>
                                 </div>
                             </td>
