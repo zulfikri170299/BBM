@@ -88,9 +88,9 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
-                            @if($rendis->is_topup_b1) <span class="px-2 py-1 text-[10px] bg-green-100 text-green-800 rounded">B1 ✓</span> @else <span class="px-2 py-1 text-[10px] bg-gray-100 text-gray-600 rounded">B1 -</span> @endif
-                            @if($rendis->is_topup_b2) <span class="px-2 py-1 text-[10px] bg-green-100 text-green-800 rounded">B2 ✓</span> @else <span class="px-2 py-1 text-[10px] bg-gray-100 text-gray-600 rounded">B2 -</span> @endif
-                            @if($rendis->is_topup_b3) <span class="px-2 py-1 text-[10px] bg-green-100 text-green-800 rounded">B3 ✓</span> @else <span class="px-2 py-1 text-[10px] bg-gray-100 text-gray-600 rounded">B3 -</span> @endif
+                            @if($rendis->is_topup_b1) <span class="px-2 py-1 text-[10px] bg-green-100 text-green-800 rounded">B1 ✓</span> @else <span class="px-2 py-1 text-[10px] bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">B1 -</span> @endif
+                            @if($rendis->is_topup_b2) <span class="px-2 py-1 text-[10px] bg-green-100 text-green-800 rounded">B2 ✓</span> @else <span class="px-2 py-1 text-[10px] bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">B2 -</span> @endif
+                            @if($rendis->is_topup_b3) <span class="px-2 py-1 text-[10px] bg-green-100 text-green-800 rounded">B3 ✓</span> @else <span class="px-2 py-1 text-[10px] bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">B3 -</span> @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div class="flex items-center justify-end gap-2">
@@ -113,7 +113,7 @@
                                     @if(!$rendis->is_topup_b1 && !$rendis->is_topup_b2 && !$rendis->is_topup_b3)
                                         <form action="{{ route('admin.rendis.destroy', $rendis->id) }}" method="POST" class="inline-block" onsubmit="event.preventDefault(); Swal.fire({title: 'Hapus Rendis ini?', text: 'Seluruh data kendaraan terkait Rendis ini juga akan terhapus secara permanen.', icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444', cancelButtonColor: '#6b7280', confirmButtonText: 'Ya, Hapus!', cancelButtonText: 'Batal'}).then((result) => { if (result.isConfirmed) this.submit(); });">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 transition-colors" title="Hapus">
+                                            <button type="submit" class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 dark:text-red-400 dark:hover:bg-red-50 dark:bg-red-900/50 transition-colors" title="Hapus">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                             </button>
                                         </form>
@@ -121,32 +121,32 @@
                                 </div>
 
                                 {{-- Aksi Top Up --}}
-                                <div class="flex items-center gap-1 bg-gray-100 dark:bg-gray-700/50 rounded-lg p-1">
+                                <div class="flex items-center gap-1 bg-white text-slate-900 dark:bg-gray-700/50 rounded-lg p-1">
                                     {{-- Top Up B1 --}}
                                     @if($rendis->is_topup_b1)
-                                        <button type="button" disabled class="px-2 py-1 text-xs font-semibold rounded bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed" title="B1 Sudah Di-Topup">B1 Selesai</button>
+                                        <button type="button" disabled class="px-2 py-1 text-xs font-semibold rounded bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed" title="B1 Sudah Di-Topup">B1 Selesai</button>
                                     @elseif($canTopupB1)
                                         <button type="button" @click="topupAction = '{{ route('admin.rendis.execute-topup', $rendis->id) }}?bulan=1'; topupBulan = 'Bulan 1'; pinValue = ''; showPinModal = true" class="px-2 py-1 text-xs font-semibold rounded bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm transition-colors" title="Eksekusi Top Up B1">Top Up B1</button>
                                     @else
-                                        <button type="button" disabled class="px-2 py-1 text-xs font-semibold rounded bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed border border-gray-300 dark:border-gray-600" title="Belum Waktunya">Top Up B1</button>
+                                        <button type="button" disabled class="px-2 py-1 text-xs font-semibold rounded bg-gray-200 bg-white text-slate-900 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed border border-gray-300 dark:border-gray-600" title="Belum Waktunya">Top Up B1</button>
                                     @endif
 
                                     {{-- Top Up B2 --}}
                                     @if($rendis->is_topup_b2)
-                                        <button type="button" disabled class="px-2 py-1 text-xs font-semibold rounded bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed" title="B2 Sudah Di-Topup">B2 Selesai</button>
+                                        <button type="button" disabled class="px-2 py-1 text-xs font-semibold rounded bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed" title="B2 Sudah Di-Topup">B2 Selesai</button>
                                     @elseif($canTopupB2)
                                         <button type="button" @click="topupAction = '{{ route('admin.rendis.execute-topup', $rendis->id) }}?bulan=2'; topupBulan = 'Bulan 2'; pinValue = ''; showPinModal = true" class="px-2 py-1 text-xs font-semibold rounded bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm transition-colors" title="Eksekusi Top Up B2">Top Up B2</button>
                                     @else
-                                        <button type="button" disabled class="px-2 py-1 text-xs font-semibold rounded bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed border border-gray-300 dark:border-gray-600" title="Belum Waktunya">Top Up B2</button>
+                                        <button type="button" disabled class="px-2 py-1 text-xs font-semibold rounded bg-gray-200 bg-white text-slate-900 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed border border-gray-300 dark:border-gray-600" title="Belum Waktunya">Top Up B2</button>
                                     @endif
 
                                     {{-- Top Up B3 --}}
                                     @if($rendis->is_topup_b3)
-                                        <button type="button" disabled class="px-2 py-1 text-xs font-semibold rounded bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed" title="B3 Sudah Di-Topup">B3 Selesai</button>
+                                        <button type="button" disabled class="px-2 py-1 text-xs font-semibold rounded bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed" title="B3 Sudah Di-Topup">B3 Selesai</button>
                                     @elseif($canTopupB3)
                                         <button type="button" @click="topupAction = '{{ route('admin.rendis.execute-topup', $rendis->id) }}?bulan=3'; topupBulan = 'Bulan 3'; pinValue = ''; showPinModal = true" class="px-2 py-1 text-xs font-semibold rounded bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm transition-colors" title="Eksekusi Top Up B3">Top Up B3</button>
                                     @else
-                                        <button type="button" disabled class="px-2 py-1 text-xs font-semibold rounded bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed border border-gray-300 dark:border-gray-600" title="Belum Waktunya">Top Up B3</button>
+                                        <button type="button" disabled class="px-2 py-1 text-xs font-semibold rounded bg-gray-200 bg-white text-slate-900 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed border border-gray-300 dark:border-gray-600" title="Belum Waktunya">Top Up B3</button>
                                     @endif
                                 </div>
                             </div>
@@ -177,7 +177,7 @@
                 @csrf
                 <div class="mb-5">
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">PIN Top Up</label>
-                    <input type="password" name="topup_password" x-model="pinValue" required autofocus placeholder="Masukkan PIN..." class="w-full px-4 py-3 text-center text-lg tracking-widest rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-emerald-500 focus:ring-emerald-500 shadow-sm">
+                    <input type="password" name="topup_password" x-model="pinValue" required autofocus placeholder="Masukkan PIN..." class="w-full px-4 py-3 text-center text-lg tracking-widest rounded-xl border-gray-300 dark:border-gray-600 bg-white text-slate-900 dark:bg-gray-700 dark:text-white focus:border-emerald-500 focus:ring-emerald-500 shadow-sm">
                 </div>
                 <div class="flex gap-3">
                     <button type="button" @click="showPinModal = false" class="flex-1 px-4 py-2.5 text-sm font-medium rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Batal</button>

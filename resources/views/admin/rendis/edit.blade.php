@@ -14,7 +14,7 @@
             <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Edit Rendis BBM</h2>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Ubah data rencana pendistribusian BBM Triwulan</p>
         </div>
-        <a href="{{ route('admin.rendis.index') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">&larr; Kembali</a>
+        <a href="{{ route('admin.rendis.index') }}" class="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">&larr; Kembali</a>
     </div>
 
     <form id="form-edit-rendis" action="{{ route('admin.rendis.update', $rendisBbm->id) }}" method="POST" class="space-y-6">
@@ -27,31 +27,31 @@
             <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Triwulan</label>
-                    <select name="triwulan" id="select-triwulan" required class="w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary">
+                    <select name="triwulan" id="select-triwulan" required class="w-full px-3 py-2 rounded-lg border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary">
                         @foreach(['TW I','TW II','TW III','TW IV'] as $tw)
-                        <option value="{{ $tw }}" {{ $rendisBbm->triwulan === $tw ? 'selected' : '' }}>{{ $tw }}</option>
+                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $tw }}" {{ $rendisBbm->triwulan === $tw ? 'selected' : '' }}>{{ $tw }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tahun</label>
-                    <input type="number" name="tahun" value="{{ $rendisBbm->tahun }}" required class="w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary">
+                    <input type="number" name="tahun" value="{{ $rendisBbm->tahun }}" required class="w-full px-3 py-2 rounded-lg border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Pembelian Pertamax</label>
                     <input type="hidden" name="pembelian_pertamax" id="hidden-pembelian-ptx" value="{{ $rendisBbm->pembelian_pertamax }}">
-                    <input type="text" id="input-pembelian-ptx" value="{{ $rendisBbm->pembelian_pertamax }}" min="0" required class="w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary">
+                    <input type="text" id="input-pembelian-ptx" value="{{ $rendisBbm->pembelian_pertamax }}" min="0" required class="w-full px-3 py-2 rounded-lg border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary">
                     <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Netto (Set. Susut): <span id="netto-ptx" class="font-bold text-gray-900 dark:text-white">0</span> L</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Pembelian P. Dex</label>
                     <input type="hidden" name="pembelian_pertamina_dex" id="hidden-pembelian-dex" value="{{ $rendisBbm->pembelian_pertamina_dex }}">
-                    <input type="text" id="input-pembelian-dex" value="{{ $rendisBbm->pembelian_pertamina_dex }}" min="0" required class="w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary">
+                    <input type="text" id="input-pembelian-dex" value="{{ $rendisBbm->pembelian_pertamina_dex }}" min="0" required class="w-full px-3 py-2 rounded-lg border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary">
                     <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Netto (Set. Susut): <span id="netto-dex" class="font-bold text-gray-900 dark:text-white">0</span> L</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Susut (%)</label>
-                    <input type="number" name="susut_persen" id="input-susut" value="{{ $rendisBbm->susut_persen }}" min="0" step="0.1" class="w-full px-3 py-2 rounded-lg border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary">
+                    <input type="number" name="susut_persen" id="input-susut" value="{{ $rendisBbm->susut_persen }}" min="0" step="0.1" class="w-full px-3 py-2 rounded-lg border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary">
                 </div>
             </div>
         </div>
@@ -62,7 +62,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">
                     <thead>
-                        <tr class="bg-gray-100 dark:bg-gray-900/50">
+                        <tr class="bg-white text-slate-900 dark:bg-gray-900/50">
                             <th class="px-4 py-3 text-left font-bold text-gray-700 dark:text-gray-200 border-b-2 border-gray-200 dark:border-gray-700">Kategori</th>
                             <th class="px-4 py-3 text-center font-bold text-gray-700 dark:text-gray-200 border-b-2 border-gray-200 dark:border-gray-700">{{ $bulanNames[0] }}</th>
                             <th class="px-4 py-3 text-center font-bold text-gray-700 dark:text-gray-200 border-b-2 border-gray-200 dark:border-gray-700">{{ $bulanNames[1] }}</th>
@@ -72,21 +72,21 @@
                     <tbody>
                         <tr class="border-b border-gray-200 dark:border-gray-700">
                             <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">Operasional</td>
-                            <td class="px-4 py-2"><input type="number" name="bulan1_hari_operasional" id="b1_op" value="{{ $rendisBbm->bulan1_hari_operasional }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
-                            <td class="px-4 py-2"><input type="number" name="bulan2_hari_operasional" id="b2_op" value="{{ $rendisBbm->bulan2_hari_operasional }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
-                            <td class="px-4 py-2"><input type="number" name="bulan3_hari_operasional" id="b3_op" value="{{ $rendisBbm->bulan3_hari_operasional }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
+                            <td class="px-4 py-2"><input type="number" name="bulan1_hari_operasional" id="b1_op" value="{{ $rendisBbm->bulan1_hari_operasional }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
+                            <td class="px-4 py-2"><input type="number" name="bulan2_hari_operasional" id="b2_op" value="{{ $rendisBbm->bulan2_hari_operasional }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
+                            <td class="px-4 py-2"><input type="number" name="bulan3_hari_operasional" id="b3_op" value="{{ $rendisBbm->bulan3_hari_operasional }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
                         </tr>
                         <tr class="border-b border-gray-200 dark:border-gray-700">
                             <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">Staff</td>
-                            <td class="px-4 py-2"><input type="number" name="bulan1_hari_staff" id="b1_st" value="{{ $rendisBbm->bulan1_hari_staff }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
-                            <td class="px-4 py-2"><input type="number" name="bulan2_hari_staff" id="b2_st" value="{{ $rendisBbm->bulan2_hari_staff }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
-                            <td class="px-4 py-2"><input type="number" name="bulan3_hari_staff" id="b3_st" value="{{ $rendisBbm->bulan3_hari_staff }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
+                            <td class="px-4 py-2"><input type="number" name="bulan1_hari_staff" id="b1_st" value="{{ $rendisBbm->bulan1_hari_staff }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
+                            <td class="px-4 py-2"><input type="number" name="bulan2_hari_staff" id="b2_st" value="{{ $rendisBbm->bulan2_hari_staff }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
+                            <td class="px-4 py-2"><input type="number" name="bulan3_hari_staff" id="b3_st" value="{{ $rendisBbm->bulan3_hari_staff }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
                         </tr>
                         <tr>
                             <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">Pimpinan</td>
-                            <td class="px-4 py-2"><input type="number" name="bulan1_hari_pimpinan" id="b1_pi" value="{{ $rendisBbm->bulan1_hari_pimpinan }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
-                            <td class="px-4 py-2"><input type="number" name="bulan2_hari_pimpinan" id="b2_pi" value="{{ $rendisBbm->bulan2_hari_pimpinan }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
-                            <td class="px-4 py-2"><input type="number" name="bulan3_hari_pimpinan" id="b3_pi" value="{{ $rendisBbm->bulan3_hari_pimpinan }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
+                            <td class="px-4 py-2"><input type="number" name="bulan1_hari_pimpinan" id="b1_pi" value="{{ $rendisBbm->bulan1_hari_pimpinan }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
+                            <td class="px-4 py-2"><input type="number" name="bulan2_hari_pimpinan" id="b2_pi" value="{{ $rendisBbm->bulan2_hari_pimpinan }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
+                            <td class="px-4 py-2"><input type="number" name="bulan3_hari_pimpinan" id="b3_pi" value="{{ $rendisBbm->bulan3_hari_pimpinan }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
                         </tr>
                     
                       </tbody>
@@ -109,7 +109,7 @@
             </div>
             <div class="overflow-x-auto">
                 <table id="tabel-kendaraan" class="min-w-full table-fixed divide-y divide-gray-200 dark:divide-gray-700 text-xs">
-                    <thead class="bg-gray-100 dark:bg-gray-900/80">
+                    <thead class="bg-white text-slate-900 dark:bg-gray-900/80">
                         <tr>
                             <th rowspan="3" class="px-3 py-2 text-center font-bold uppercase border border-gray-300 dark:border-gray-600 w-10">No</th>
                             <th rowspan="3" class="px-3 py-2 text-left font-bold uppercase border border-gray-300 dark:border-gray-600">Uraian</th>
@@ -120,7 +120,7 @@
                             <th colspan="3" class="px-3 py-2 text-center font-bold uppercase border border-gray-300 dark:border-gray-600">{{ $bulanNames[1] }}</th>
                             <th colspan="3" class="px-3 py-2 text-center font-bold uppercase border border-gray-300 dark:border-gray-600">{{ $bulanNames[2] }}</th>
                         </tr>
-                        <tr class="bg-gray-100 dark:bg-gray-900/80">
+                        <tr class="bg-white text-slate-900 dark:bg-gray-900/80">
                             <th class="px-2 py-1 text-center font-semibold border border-gray-300 dark:border-gray-600">Indeks</th>
                             <th class="px-2 py-1 text-center font-semibold border border-gray-300 dark:border-gray-600">Pertamax</th>
                             <th class="px-2 py-1 text-center font-semibold border border-gray-300 dark:border-gray-600">P. Dex</th>
@@ -152,10 +152,10 @@
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors kendaraan-row" data-satker-id="{{ $satkerId }}" data-kategori="{{ $katKey }}" data-jenis="{{ strtolower(str_replace(' ', '_', $k->jenis_bbm ?? 'pertamax')) }}">
                             <td class="px-3 py-1 text-center border border-gray-200 dark:border-gray-700">{{ $idx + 1 }}</td>
                             <td class="px-1 py-1 border border-gray-200 dark:border-gray-700">
-                                <select name="kendaraan[{{ $k->id }}][uraian]" class="w-full text-xs p-1 rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white input-uraian">
-                                    <option value="Opsnal" {{ $currentUraian == 'opsnal' || $currentUraian == 'operasional' ? 'selected' : '' }}>Opsnal</option>
-                                    <option value="Staff" {{ $currentUraian == 'staff' ? 'selected' : '' }}>Staff</option>
-                                    <option value="Pimpinan" {{ $currentUraian == 'pimpinan' ? 'selected' : '' }}>Pimpinan</option>
+                                <select name="kendaraan[{{ $k->id }}][uraian]" class="w-full text-xs p-1 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white dark:border-gray-600 dark:bg-gray-700 dark:text-white input-uraian">
+                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Opsnal" {{ $currentUraian == 'opsnal' || $currentUraian == 'operasional' ? 'selected' : '' }}>Opsnal</option>
+                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Staff" {{ $currentUraian == 'staff' ? 'selected' : '' }}>Staff</option>
+                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Pimpinan" {{ $currentUraian == 'pimpinan' ? 'selected' : '' }}>Pimpinan</option>
                                 </select>
                             </td>
                             <td class="px-3 py-1 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 whitespace-nowrap">{{ $k->jenis_kendaraan ?? '-' }}</td>
@@ -167,12 +167,12 @@
                             {{-- BULAN 1 --}}
                             <td class="px-1 py-1 text-center border border-gray-200 dark:border-gray-700">
                                 <div class="flex items-center justify-center gap-0.5">
-                                    <input type="number" name="kendaraan[{{ $k->id }}][liter_per_hari]" value="{{ $rk->liter_per_hari ?? 0 }}" min="0" step="0.1" class="w-12 p-0.5 text-center text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm input-lph-1">
-                                    <span class="text-gray-500 text-[10px]">Ltr</span>
+                                    <input type="number" name="kendaraan[{{ $k->id }}][liter_per_hari]" value="{{ $rk->liter_per_hari ?? 0 }}" min="0" step="0.1" class="w-12 p-0.5 text-center text-xs rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm input-lph-1">
+                                    <span class="text-gray-500 dark:text-gray-400 text-[10px]">Ltr</span>
                                     <span class="text-gray-400">x</span>
-                                    <span class="hari-display input-hari-1 w-10 p-0.5 text-center text-xs rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/30" data-val="{{ $hk1 }}" title="Klik untuk edit">{{ $hk1 }}</span>
+                                    <span class="hari-display input-hari-1 w-10 p-0.5 text-center text-xs rounded border border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/30" data-val="{{ $hk1 }}" title="Klik untuk edit">{{ $hk1 }}</span>
                                     <input type="hidden" name="kendaraan[{{ $k->id }}][jumlah_hari]" class="input-hari-1-hidden" value="{{ $hk1 }}">
-                                    <span class="text-gray-500 text-[10px]">hr</span>
+                                    <span class="text-gray-500 dark:text-gray-400 text-[10px]">hr</span>
                                 </div>
                             </td>
                             <td class="px-2 py-1 text-center font-bold border border-gray-200 dark:border-gray-700 text-blue-600 dark:text-blue-400">
@@ -186,12 +186,12 @@
                             {{-- BULAN 2 --}}
                             <td class="px-1 py-1 text-center border border-gray-200 dark:border-gray-700">
                                 <div class="flex items-center justify-center gap-0.5">
-                                    <input type="number" name="kendaraan[{{ $k->id }}][liter_per_hari_b2]" value="{{ $rk->liter_per_hari_b2 ?? ($rk->liter_per_hari ?? 0) }}" min="0" step="0.1" class="w-12 p-0.5 text-center text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm input-lph-2">
-                                    <span class="text-gray-500 text-[10px]">Ltr</span>
+                                    <input type="number" name="kendaraan[{{ $k->id }}][liter_per_hari_b2]" value="{{ $rk->liter_per_hari_b2 ?? ($rk->liter_per_hari ?? 0) }}" min="0" step="0.1" class="w-12 p-0.5 text-center text-xs rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm input-lph-2">
+                                    <span class="text-gray-500 dark:text-gray-400 text-[10px]">Ltr</span>
                                     <span class="text-gray-400">x</span>
-                                    <span class="hari-display input-hari-2 w-10 p-0.5 text-center text-xs rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/30" data-val="{{ $hk2 }}" title="Klik untuk edit">{{ $hk2 }}</span>
+                                    <span class="hari-display input-hari-2 w-10 p-0.5 text-center text-xs rounded border border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/30" data-val="{{ $hk2 }}" title="Klik untuk edit">{{ $hk2 }}</span>
                                     <input type="hidden" name="kendaraan[{{ $k->id }}][hari_b2]" class="input-hari-2-hidden" value="{{ $hk2 }}">
-                                    <span class="text-gray-500 text-[10px]">hr</span>
+                                    <span class="text-gray-500 dark:text-gray-400 text-[10px]">hr</span>
                                 </div>
                             </td>
                             <td class="px-2 py-1 text-center font-bold border border-gray-200 dark:border-gray-700 text-blue-600 dark:text-blue-400">
@@ -205,12 +205,12 @@
                             {{-- BULAN 3 --}}
                             <td class="px-1 py-1 text-center border border-gray-200 dark:border-gray-700">
                                 <div class="flex items-center justify-center gap-0.5">
-                                    <input type="number" name="kendaraan[{{ $k->id }}][liter_per_hari_b3]" value="{{ $rk->liter_per_hari_b3 ?? ($rk->liter_per_hari ?? 0) }}" min="0" step="0.1" class="w-12 p-0.5 text-center text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm input-lph-3">
-                                    <span class="text-gray-500 text-[10px]">Ltr</span>
+                                    <input type="number" name="kendaraan[{{ $k->id }}][liter_per_hari_b3]" value="{{ $rk->liter_per_hari_b3 ?? ($rk->liter_per_hari ?? 0) }}" min="0" step="0.1" class="w-12 p-0.5 text-center text-xs rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm input-lph-3">
+                                    <span class="text-gray-500 dark:text-gray-400 text-[10px]">Ltr</span>
                                     <span class="text-gray-400">x</span>
-                                    <span class="hari-display input-hari-3 w-10 p-0.5 text-center text-xs rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/30" data-val="{{ $hk3 }}" title="Klik untuk edit">{{ $hk3 }}</span>
+                                    <span class="hari-display input-hari-3 w-10 p-0.5 text-center text-xs rounded border border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/30" data-val="{{ $hk3 }}" title="Klik untuk edit">{{ $hk3 }}</span>
                                     <input type="hidden" name="kendaraan[{{ $k->id }}][hari_b3]" class="input-hari-3-hidden" value="{{ $hk3 }}">
-                                    <span class="text-gray-500 text-[10px]">hr</span>
+                                    <span class="text-gray-500 dark:text-gray-400 text-[10px]">hr</span>
                                 </div>
                             </td>
                             <td class="px-2 py-1 text-center font-bold border border-gray-200 dark:border-gray-700 text-blue-600 dark:text-blue-400">
@@ -223,7 +223,7 @@
                         </tr>
                         @endforeach
                         {{-- SATKER JUMLAH --}}
-                        <tr class="bg-gray-100 dark:bg-gray-700/50 satker-total" data-satker-id="{{ $satkerId }}">
+                        <tr class="bg-white text-slate-900 dark:bg-gray-700/50 satker-total" data-satker-id="{{ $satkerId }}">
                             <td colspan="5" class="px-3 py-2 text-right font-bold text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600">JUMLAH</td>
                             <td class="border border-gray-300 dark:border-gray-600"></td>
                             <td class="px-2 py-2 text-center font-bold text-blue-600 dark:text-blue-400 border border-gray-300 dark:border-gray-600 st-p1">0</td>

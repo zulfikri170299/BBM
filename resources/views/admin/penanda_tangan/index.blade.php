@@ -2,8 +2,8 @@
     <div class="p-2 sm:p-6 lg:p-8 space-y-6">
         {{-- Page Header --}}
         <div>
-            <h1 class="text-2xl font-bold text-white">Penanda Tangan Laporan</h1>
-            <p class="mt-1 text-slate-400">Kelola data penanda tangan yang akan ditampilkan di semua laporan PDF.</p>
+            <h1 class="text-2xl font-bold text-slate-800 dark:text-white">Penanda Tangan Laporan</h1>
+            <p class="mt-1 text-slate-600 dark:text-slate-400">Kelola data penanda tangan yang akan ditampilkan di semua laporan PDF.</p>
         </div>
 
         {{-- Alert --}}
@@ -14,42 +14,42 @@
         @endif
 
         {{-- Form Tambah --}}
-        <div class="bg-slate-900 rounded-2xl border border-white/10 shadow-sm overflow-hidden p-6">
-            <h3 class="text-lg font-bold text-slate-200 mb-4">Tambah Penanda Tangan</h3>
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden p-6">
+            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200 mb-4">Tambah Penanda Tangan</h3>
             <form action="{{ route('admin.penanda-tangan.store') }}" method="POST" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 @csrf
                 <div>
-                    <label class="block text-sm font-semibold text-slate-300 mb-1">Nama <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama <span class="text-red-500">*</span></label>
                     <input type="text" name="nama" required value="{{ old('nama') }}"
-                        class="w-full px-4 py-2.5 bg-slate-800/50 border border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-300"
+                        class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-700 dark:text-slate-300"
                         placeholder="Nama lengkap">
                     @error('nama') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-slate-300 mb-1">Jabatan <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Jabatan <span class="text-red-500">*</span></label>
                     <input type="text" name="jabatan" required value="{{ old('jabatan') }}"
-                        class="w-full px-4 py-2.5 bg-slate-800/50 border border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-300"
+                        class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-700 dark:text-slate-300"
                         placeholder="Contoh: Kasubbagrenmin Biro Logistik">
                     @error('jabatan') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-slate-300 mb-1">Kesatuan</label>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Kesatuan</label>
                     <input type="text" name="jabatan2" value="{{ old('jabatan2') }}"
-                        class="w-full px-4 py-2.5 bg-slate-800/50 border border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-300"
+                        class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-700 dark:text-slate-300"
                         placeholder="Contoh: Polda NTB">
                     @error('jabatan2') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-slate-300 mb-1">Pangkat</label>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Pangkat</label>
                     <input type="text" name="pangkat" value="{{ old('pangkat') }}"
-                        class="w-full px-4 py-2.5 bg-slate-800/50 border border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-300"
+                        class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-700 dark:text-slate-300"
                         placeholder="Contoh: KOMISARIS POLISI">
                     @error('pangkat') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-slate-300 mb-1">NRP</label>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">NRP</label>
                     <input type="text" name="nrp" value="{{ old('nrp') }}"
-                        class="w-full px-4 py-2.5 bg-slate-800/50 border border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-300"
+                        class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-700 dark:text-slate-300"
                         placeholder="Contoh: 99101131">
                     @error('nrp') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
@@ -64,38 +64,38 @@
         </div>
 
         {{-- Tabel Data --}}
-        <div class="bg-slate-900 rounded-2xl border border-white/10 shadow-sm overflow-hidden">
-            <div class="p-6 border-b border-white/5">
-                <h3 class="text-lg font-bold text-slate-200">Daftar Penanda Tangan</h3>
-                <p class="text-xs text-slate-400">Data terakhir yang aktif akan digunakan di semua laporan PDF.</p>
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
+            <div class="bg-white dark:bg-slate-900 dark:text-white p-6 border-b border-slate-200 dark:border-white/5">
+                <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">Daftar Penanda Tangan</h3>
+                <p class="text-xs text-slate-600 dark:text-slate-400">Data terakhir yang aktif akan digunakan di semua laporan PDF.</p>
             </div>
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-white/10">
-                    <thead class="bg-slate-800/50">
+                <table class="min-w-full divide-y divide-slate-300 dark:divide-white/10">
+                    <thead class="bg-slate-50 dark:bg-slate-800/50">
                         <tr>
-                            <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase">No</th>
-                            <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase">Nama</th>
-                            <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase">Jabatan</th>
-                            <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase">Jabatan 2</th>
-                            <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase">Pangkat</th>
-                            <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase">NRP</th>
-                            <th class="px-4 py-3 text-center text-xs font-bold text-slate-400 uppercase">Aksi</th>
+                            <th class="px-4 py-3 text-left text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">No</th>
+                            <th class="px-4 py-3 text-left text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">Nama</th>
+                            <th class="px-4 py-3 text-left text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">Jabatan</th>
+                            <th class="px-4 py-3 text-left text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">Jabatan 2</th>
+                            <th class="px-4 py-3 text-left text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">Pangkat</th>
+                            <th class="px-4 py-3 text-left text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">NRP</th>
+                            <th class="px-4 py-3 text-center text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-slate-900 border border-white/5 divide-y divide-white/5">
+                    <tbody class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 divide-y divide-slate-200 dark:divide-white/5">
                         @forelse($penandaTangans as $index => $pt)
-                            <tr class="hover:bg-slate-800/50 transition {{ $index === 0 ? 'bg-emerald-50/50' : '' }}">
-                                <td class="px-4 py-3 text-xs text-slate-400">
+                            <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition {{ $index === 0 ? 'bg-emerald-50/50' : '' }}">
+                                <td class="px-4 py-3 text-xs text-slate-600 dark:text-slate-400">
                                     {{ $index + 1 }}
                                     @if($index === 0)
                                         <span class="ml-1 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">AKTIF</span>
                                     @endif
                                 </td>
-                                <td class="px-4 py-3 text-xs font-medium text-slate-200">{{ $pt->nama }}</td>
-                                <td class="px-4 py-3 text-xs text-slate-400">{{ $pt->jabatan }}</td>
-                                <td class="px-4 py-3 text-xs text-slate-400">{{ $pt->jabatan2 ?? '-' }}</td>
-                                <td class="px-4 py-3 text-xs text-slate-400">{{ $pt->pangkat ?? '-' }}</td>
-                                <td class="px-4 py-3 text-xs text-slate-400">{{ $pt->nrp ?? '-' }}</td>
+                                <td class="px-4 py-3 text-xs font-medium text-slate-800 dark:text-slate-200">{{ $pt->nama }}</td>
+                                <td class="px-4 py-3 text-xs text-slate-600 dark:text-slate-400">{{ $pt->jabatan }}</td>
+                                <td class="px-4 py-3 text-xs text-slate-600 dark:text-slate-400">{{ $pt->jabatan2 ?? '-' }}</td>
+                                <td class="px-4 py-3 text-xs text-slate-600 dark:text-slate-400">{{ $pt->pangkat ?? '-' }}</td>
+                                <td class="px-4 py-3 text-xs text-slate-600 dark:text-slate-400">{{ $pt->nrp ?? '-' }}</td>
                                 <td class="px-4 py-3 text-sm text-center">
                                     <div class="flex items-center justify-center gap-2">
                                         {{-- Edit Button --}}
@@ -117,8 +117,8 @@
                             </tr>
                         @empty
                             <tr>
-                                 <td colspan="7" class="px-6 py-12 text-center text-slate-400">
-                                    <svg class="w-12 h-12 mx-auto mb-3 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                 <td colspan="7" class="px-6 py-12 text-center text-slate-600 dark:text-slate-400">
+                                    <svg class="w-12 h-12 mx-auto mb-3 text-slate-700 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                     Belum ada data penanda tangan. Silakan tambahkan di form di atas.
                                 </td>
                             </tr>
@@ -131,25 +131,25 @@
         {{-- Preview --}}
         @if($penandaTangans->count() > 0)
             @php $active = $penandaTangans->first(); @endphp
-            <div class="bg-slate-900 rounded-2xl border border-white/10 shadow-sm overflow-hidden p-6">
-                <h3 class="text-lg font-bold text-slate-200 mb-4">Preview Tanda Tangan di PDF</h3>
-                <div class="border border-dashed border-white/20 rounded-2xl p-8 max-w-sm mx-auto text-center bg-slate-800/50/30">
-                    <p class="text-xs text-slate-300">Mataram, {{ \Carbon\Carbon::now()->setTimezone('Asia/Makassar')->translatedFormat('d F Y') }}</p>
-                    <p class="text-xs text-slate-200 mt-2 uppercase">{{ $active->jabatan }}</p>
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden p-6">
+                <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200 mb-4">Preview Tanda Tangan di PDF</h3>
+                <div class="border border-dashed border-slate-300 dark:border-white/20 rounded-2xl p-8 max-w-sm mx-auto text-center bg-slate-50 dark:bg-slate-800/30">
+                    <p class="text-xs text-slate-700 dark:text-slate-300">Mataram, {{ \Carbon\Carbon::now()->setTimezone('Asia/Makassar')->translatedFormat('d F Y') }}</p>
+                    <p class="text-xs text-slate-800 dark:text-slate-200 mt-2 uppercase">{{ $active->jabatan }}</p>
                     @if($active->jabatan2)
-                        <p class="text-xs text-slate-200 mt-0 uppercase">{{ $active->jabatan2 }}</p>
+                        <p class="text-xs text-slate-800 dark:text-slate-200 mt-0 uppercase">{{ $active->jabatan2 }}</p>
                     @endif
                     
                     <div class="mt-12 inline-block">
                         <table class="border-collapse mx-auto w-auto">
                             <tr>
                                 <td class="border-b border-slate-900 text-center px-4 pb-0">
-                                    <span class="text-sm text-white">{{ $active->nama }}</span>
+                                    <span class="text-sm text-slate-800 dark:text-white">{{ $active->nama }}</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="text-center pt-0 px-1">
-                                    <span class="text-xs text-slate-300 font-medium">{{ $active->pangkat }} NRP {{ $active->nrp }}</span>
+                                    <span class="text-xs text-slate-700 dark:text-slate-300 font-medium">{{ $active->pangkat }} NRP {{ $active->nrp }}</span>
                                 </td>
                             </tr>
                         </table>
@@ -162,15 +162,15 @@
     {{-- Modal Edit --}}
     <div id="editModal" class="fixed inset-0 z-[9999] hidden overflow-y-auto">
         <div class="flex items-center justify-center min-h-screen p-4 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity bg-slate-900/40" onclick="closeEditModal()"></div>
+            <div class="fixed inset-0 transition-opacity bg-white dark:bg-slate-900/40" onclick="closeEditModal()"></div>
             
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
             
-            <div class="inline-block align-bottom bg-slate-900 border border-white/5 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-white/10">
-                <div class="bg-slate-900 border border-white/5 px-6 py-6 pb-4">
+            <div class="inline-block align-bottom bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-slate-200 dark:border-white/10">
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 px-6 py-6 pb-4">
                     <div class="flex items-center justify-between mb-6">
-                        <h3 class="text-xl font-bold text-slate-200">Edit Penanda Tangan</h3>
-                        <button onclick="closeEditModal()" class="text-slate-400 hover:text-slate-400 transition">
+                        <h3 class="text-xl font-bold text-slate-800 dark:text-slate-200">Edit Penanda Tangan</h3>
+                        <button onclick="closeEditModal()" class="text-slate-500 dark:text-slate-400 hover:text-slate-600 dark:text-slate-400 transition">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                         </button>
                     </div>
@@ -178,36 +178,36 @@
                         @csrf @method('PUT')
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-sm font-semibold text-slate-300 mb-1">Nama</label>
+                                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama</label>
                                 <input type="text" name="nama" id="edit_nama" required
-                                    class="w-full px-4 py-2.5 bg-slate-800/50 border border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-300">
+                                    class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-700 dark:text-slate-300">
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold text-slate-300 mb-1">Jabatan</label>
+                                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Jabatan</label>
                                 <input type="text" name="jabatan" id="edit_jabatan" required
-                                    class="w-full px-4 py-2.5 bg-slate-800/50 border border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-300">
+                                    class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-700 dark:text-slate-300">
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold text-slate-300 mb-1">Kesatuan</label>
+                                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Kesatuan</label>
                                 <input type="text" name="jabatan2" id="edit_jabatan2"
-                                    class="w-full px-4 py-2.5 bg-slate-800/50 border border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-300">
+                                    class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-700 dark:text-slate-300">
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-semibold text-slate-300 mb-1">Pangkat</label>
+                                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Pangkat</label>
                                     <input type="text" name="pangkat" id="edit_pangkat"
-                                        class="w-full px-4 py-2.5 bg-slate-800/50 border border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-300">
+                                        class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-700 dark:text-slate-300">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-semibold text-slate-300 mb-1">NRP</label>
+                                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">NRP</label>
                                     <input type="text" name="nrp" id="edit_nrp"
-                                        class="w-full px-4 py-2.5 bg-slate-800/50 border border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-300">
+                                        class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-white/10 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium text-slate-700 dark:text-slate-300">
                                 </div>
                             </div>
                         </div>
                         <div class="mt-8 flex justify-end gap-3">
                             <button type="button" onclick="closeEditModal()" 
-                                class="px-6 py-2.5 bg-slate-800 text-slate-300 rounded-xl font-bold hover:bg-slate-200 transition-all">Batal</button>
+                                class="px-6 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl font-bold hover:bg-slate-200 transition-all">Batal</button>
                             <button type="submit" 
                                 class="px-6 py-2.5 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all">Update Data</button>
                         </div>

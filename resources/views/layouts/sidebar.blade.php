@@ -12,7 +12,7 @@
          x-transition:leave="transition-opacity ease-linear duration-300" 
          x-transition:leave-start="opacity-100" 
          x-transition:leave-end="opacity-0" 
-         class="fixed inset-0 bg-slate-950/80" @click="sidebarOpen = false"></div>
+         class="fixed inset-0 bg-slate-200/80 dark:bg-slate-950/80" @click="sidebarOpen = false"></div>
          
     <div x-show="sidebarOpen" 
          x-transition:enter="transition ease-in-out duration-300 transform" 
@@ -21,17 +21,17 @@
          x-transition:leave="transition ease-in-out duration-300 transform" 
          x-transition:leave-start="translate-x-0" 
          x-transition:leave-end="-translate-x-full" 
-         class="relative flex h-full w-full max-w-[240px] flex-1 flex-col bg-slate-900 pb-4 pt-5">
+         class="relative flex h-full w-full max-w-[240px] flex-1 flex-col bg-white dark:bg-slate-900 pb-4 pt-5 transition-colors duration-300">
          
         <div class="flex items-center justify-between px-4">
             <div class="flex items-center gap-3">
                 <img src="{{ asset('rolog.png') }}" class="h-8 w-auto desktop-float" alt="Logo">
                 <div class="flex flex-col">
                     <span class="text-lg font-black italic leading-none font-outfit uppercase tracking-[0.2em] desktop-shimmer">SPBP</span>
-                    <span class="text-[7px] font-black text-slate-400 uppercase tracking-[0.1em] mt-1">SIM BBM - Polda NTB</span>
+                    <span class="text-[7px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.1em] mt-1">SIM BBM - Polda NTB</span>
                 </div>
             </div>
-            <button type="button" class="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white/5 text-slate-400 hover:text-white" @click="sidebarOpen = false">
+            <button type="button" class="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white transition-colors" @click="sidebarOpen = false">
                 <span class="sr-only">Tutup sidebar</span>
                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
@@ -63,15 +63,15 @@
      x-transition:leave="transition ease-in-out duration-300"
      x-transition:leave-start="translate-x-0 opacity-100 lg:ml-0"
      x-transition:leave-end="-translate-x-full opacity-0 lg:-ml-72"
-     class="hidden lg:flex lg:w-72 lg:flex-col bg-slate-900 border-r border-white/5 relative z-10" id="sidebar-nav">
-    <div class="flex h-24 shrink-0 items-center px-8 border-b border-white/5">
+     class="hidden lg:flex lg:w-72 lg:flex-col bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-white/5 relative z-10 transition-colors duration-300" id="sidebar-nav">
+    <div class="bg-white dark:bg-slate-900 dark:text-white flex h-24 shrink-0 items-center px-8 border-b border-slate-200 dark:border-white/5 transition-colors">
         <div class="flex items-center gap-4">
             <div class="relative">
                 <img src="{{ asset('rolog.png') }}" class="h-10 w-auto desktop-float relative z-10" alt="Logo">
             </div>
             <div class="flex flex-col justify-center">
                 <span class="text-2xl font-black italic leading-none font-outfit uppercase tracking-[0.2em] desktop-shimmer">SPBP</span>
-                <span class="text-[8px] font-black text-slate-400 uppercase tracking-[0.1em] mt-1.5">SIM BBM - Polda NTB</span>
+                <span class="text-[8px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.1em] mt-1.5">SIM BBM - Polda NTB</span>
             </div>
         </div>
     </div>

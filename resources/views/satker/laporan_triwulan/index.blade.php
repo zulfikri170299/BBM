@@ -3,8 +3,8 @@
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h1 class="text-2xl font-bold text-white">Laporan Per 3 Bulan</h1>
-                <p class="mt-1 text-slate-400">Rekapitulasi total pendapatan, pemakaian, dan sisa BBM Satker {{ $satker->nama_satker }}.</p>
+                <h1 class="text-2xl font-bold text-slate-800 dark:text-white">Laporan Per 3 Bulan</h1>
+                <p class="mt-1 text-slate-600 dark:text-slate-400">Rekapitulasi total pendapatan, pemakaian, dan sisa BBM Satker {{ $satker->nama_satker }}.</p>
             </div>
             <!-- Print Button -->
             <div class="flex gap-2">
@@ -20,107 +20,107 @@
             </div>
         </div>
 
-        <div class="bg-slate-900 rounded-2xl border border-white/10 shadow-sm overflow-hidden p-6 mb-6">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden p-6 mb-6">
             <form action="{{ route('satker.laporan-triwulan.index') }}" method="GET"
                 class="flex flex-col sm:flex-row gap-4 items-end">
                 <div class="flex-1 w-full">
-                    <label class="block text-sm font-semibold text-slate-300 mb-2">Tahun</label>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Tahun</label>
                     <select name="tahun" id="filter_tahun" required onchange="this.form.submit()"
                         class="tom-select w-full">
                         @php
                             $currentYear = date('Y');
                         @endphp
                         @for($i = $currentYear - 2; $i <= $currentYear + 1; $i++)
-                            <option value="{{ $i }}" {{ request('tahun', date('Y')) == $i ? 'selected' : '' }}>{{ $i }}
+                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $i }}" {{ request('tahun', date('Y')) == $i ? 'selected' : '' }}>{{ $i }}
                             </option>
                         @endfor
                     </select>
                 </div>
 
                 <div class="flex-1 w-full">
-                    <label class="block text-sm font-semibold text-slate-300 mb-2">Triwulan</label>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Triwulan</label>
                     <select name="triwulan" id="filter_triwulan" required onchange="this.form.submit()"
                         class="tom-select w-full">
-                        <option value="1" {{ request('triwulan', 1) == 1 ? 'selected' : '' }}>Triwulan I (Jan-Mar)
+                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="1" {{ request('triwulan', 1) == 1 ? 'selected' : '' }}>Triwulan I (Jan-Mar)
                         </option>
-                        <option value="2" {{ request('triwulan') == 2 ? 'selected' : '' }}>Triwulan II (Apr-Jun)</option>
-                        <option value="3" {{ request('triwulan') == 3 ? 'selected' : '' }}>Triwulan III (Jul-Sep)</option>
-                        <option value="4" {{ request('triwulan') == 4 ? 'selected' : '' }}>Triwulan IV (Okt-Des)</option>
+                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="2" {{ request('triwulan') == 2 ? 'selected' : '' }}>Triwulan II (Apr-Jun)</option>
+                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="3" {{ request('triwulan') == 3 ? 'selected' : '' }}>Triwulan III (Jul-Sep)</option>
+                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="4" {{ request('triwulan') == 4 ? 'selected' : '' }}>Triwulan IV (Okt-Des)</option>
                     </select>
                 </div>
 
                 <div class="flex gap-2">
                     <a href="{{ route('satker.laporan-triwulan.index') }}"
-                        class="px-5 py-2.5 bg-slate-800 text-slate-400 rounded-xl font-bold text-xs hover:bg-slate-200 transition flex items-center justify-center">RESET</a>
+                        class="px-5 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-xl font-bold text-xs hover:bg-slate-200 transition flex items-center justify-center">RESET</a>
                 </div>
             </form>
         </div>
 
-        <div class="bg-slate-900 rounded-2xl border border-white/10 shadow-sm overflow-hidden">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
             <div
-                class="p-6 sm:p-8 border-b border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                class="bg-white dark:bg-slate-900 dark:text-white p-6 sm:p-8 border-b border-slate-200 dark:border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h3 class="text-lg font-bold text-slate-200">Rekapan Periode: {{ $periodeLabel }}</h3>
-                    <p class="text-xs text-slate-400">Berikut adalah data rekapan pemakaian BBM Satker Anda pada periode ini.</p>
+                    <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">Rekapan Periode: {{ $periodeLabel }}</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-400">Berikut adalah data rekapan pemakaian BBM Satker Anda pada periode ini.</p>
                 </div>
             </div>
 
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-white/10">
-                    <thead class="bg-slate-800">
+                <table class="min-w-full divide-y divide-slate-300 dark:divide-white/10">
+                    <thead class="bg-slate-50 dark:bg-slate-800">
                         <tr>
                             <th rowspan="2"
-                                class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-r border-white/10 align-middle">
+                                class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-left text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider border-b border-r border-slate-200 dark:border-white/10 align-middle">
                                 SATKER
                             </th>
                             <th colspan="{{ count($allBbmTypes) }}"
-                                class="px-4 py-3 text-center text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-r border-white/10">
+                                class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider border-b border-r border-slate-200 dark:border-white/10">
                                 JUMLAH PENDAPATAN
                             </th>
                             <th colspan="{{ count($allBbmTypes) }}"
-                                class="px-4 py-3 text-center text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-r border-white/10">
+                                class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider border-b border-r border-slate-200 dark:border-white/10">
                                 PEMAKAIAN
                             </th>
                             <th colspan="{{ count($allBbmTypes) }}"
-                                class="px-4 py-3 text-center text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-white/10">
+                                class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider border-b border-slate-200 dark:border-white/10">
                                 SISA BBM
                             </th>
                         </tr>
                         <tr>
                             @foreach($allBbmTypes as $jenis)
                                 <th
-                                    class="px-4 py-2 text-center text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-r border-white/10 bg-slate-800/50 whitespace-nowrap">
+                                    class="px-4 py-2 text-center text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider border-b border-r border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-800/50 whitespace-nowrap">
                                     {{ $jenis }}
                                 </th>
                             @endforeach
                             @foreach($allBbmTypes as $jenis)
                                 <th
-                                    class="px-4 py-2 text-center text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-r border-white/10 bg-slate-800/50 whitespace-nowrap">
+                                    class="px-4 py-2 text-center text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider border-b border-r border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-800/50 whitespace-nowrap">
                                     {{ $jenis }}
                                 </th>
                             @endforeach
                             @foreach($allBbmTypes as $jenis)
                                 <th
-                                    class="px-4 py-2 text-center text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-r border-white/10 bg-slate-800/50 whitespace-nowrap">
+                                    class="px-4 py-2 text-center text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider border-b border-r border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-800/50 whitespace-nowrap">
                                     {{ $jenis }}
                                 </th>
                             @endforeach
                         </tr>
                     </thead>
-                    <tbody class="bg-slate-900 border border-white/5 divide-y divide-white/5">
-                        <tr class="hover:bg-slate-800/50 transition">
-                            <td class="px-4 py-3 whitespace-nowrap text-sm font-bold text-slate-300 border-r border-white/5">
+                    <tbody class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 divide-y divide-slate-200 dark:divide-white/5">
+                        <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition">
+                            <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 whitespace-nowrap text-sm font-bold text-slate-700 dark:text-slate-300 border-r border-slate-200 dark:border-white/5">
                                 {{ strtoupper($satker->nama_satker) }}
                             </td>
 
                             @foreach($allBbmTypes as $jenis)
-                                <td class="px-4 py-3 whitespace-nowrap text-center text-xs text-slate-400 border-r border-white/5">
+                                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 whitespace-nowrap text-center text-xs text-slate-500 dark:text-slate-400 border-r border-slate-200 dark:border-white/5">
                                     {{ number_format($pendapatan[$jenis] ?? 0, 0, ',', '.') }}
                                 </td>
                             @endforeach
 
                             @foreach($allBbmTypes as $jenis)
-                                <td class="px-4 py-3 whitespace-nowrap text-center text-xs text-slate-400 border-r border-white/5">
+                                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 whitespace-nowrap text-center text-xs text-slate-500 dark:text-slate-400 border-r border-slate-200 dark:border-white/5">
                                     {{ number_format($pemakaian[$jenis] ?? 0, 0, ',', '.') }}
                                 </td>
                             @endforeach
@@ -129,7 +129,7 @@
                                 @php
                                     $sisa = $sisaBbm[$jenis] ?? 0;
                                 @endphp
-                                <td class="px-4 py-3 whitespace-nowrap text-center text-sm font-bold {{ $sisa < 0 ? 'text-red-600' : 'text-emerald-600' }} border-r border-white/5">
+                                <td class="px-4 py-3 whitespace-nowrap text-center text-sm font-bold {{ $sisa < 0 ? 'text-red-600' : 'text-emerald-600' }} border-r border-slate-200 dark:border-white/5">
                                     {{ rtrim(rtrim(number_format($sisa, 2, ',', '.'), '0'), ',') }}
                                 </td>
                             @endforeach

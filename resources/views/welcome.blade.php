@@ -35,7 +35,7 @@
     </style>
 </head>
 
-<body class="font-inter antialiased text-white bg-gradient-to-br from-red-900 via-red-950 to-slate-950 min-h-screen">
+<body class="font-inter antialiased text-slate-900 dark:text-white bg-gradient-to-br from-red-100 dark:from-red-900 via-red-950 to-slate-300 dark:to-slate-950 min-h-screen">
     <div class="relative min-h-screen flex flex-col overflow-hidden">
         <!-- Background Decoration -->
         <div class="absolute inset-0 z-0 bg-grid-pattern opacity-30 pointer-events-none"></div>
@@ -50,19 +50,19 @@
             <div class="flex items-center gap-3">
                 <img src="{{ asset('rolog.png') }}" alt="Logo Biro Logistik"
                     class="w-12 h-12 object-contain drop-shadow-md">
-                <span class="font-bold text-2xl tracking-tight text-white drop-shadow-sm">BIRO LOGISTIK</span>
+                <span class="font-bold text-2xl tracking-tight text-slate-900 dark:text-white drop-shadow-sm">BIRO LOGISTIK</span>
             </div>
             <div class="hidden md:flex gap-8">
                 @auth
-                    <a href="{{ url('/dashboard') }}" class="font-medium text-red-100 hover:text-white transition">Panel
+                    <a href="{{ url('/dashboard') }}" class="font-medium text-red-100 hover:text-slate-900 dark:text-white transition">Panel
                         Utama</a>
                 @else
-                    <a href="{{ route('login') }}" class="font-medium text-red-100 hover:text-white transition">Log in</a>
+                    <a href="{{ route('login') }}" class="font-medium text-red-100 hover:text-slate-900 dark:text-white transition">Log in</a>
                 @endauth
             </div>
             <!-- Mobile Menu Button (Placeholder) -->
             <div class="md:hidden">
-                <button class="text-red-100 hover:text-white">
+                <button class="text-red-100 hover:text-slate-900 dark:text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -78,7 +78,7 @@
                 <div class="space-y-4 sm:space-y-8">
                     <div class="space-y-4">
                         <div
-                            class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-900/50 text-red-200 text-sm font-semibold border border-red-800">
+                            class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-50 dark:bg-red-900/50 text-red-200 text-sm font-semibold border border-red-800">
                             <span class="relative flex h-2 w-2">
                                 <span
                                     class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
@@ -87,7 +87,7 @@
                             Sistem Manajemen Bahan Bakar Digital
                         </div>
                         <h1
-                            class="text-5xl md:text-6xl font-extrabold tracking-tight text-white leading-tight drop-shadow-lg">
+                            class="text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight drop-shadow-lg">
                             Kelola Logistik <br>
                             <span
                                 class="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">Lebih
@@ -102,28 +102,28 @@
                     <div class="flex flex-col sm:flex-row gap-4">
                         @auth
                             <a href="{{ url('/dashboard') }}"
-                                class="px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white font-bold rounded-xl shadow-lg shadow-red-900/40 hover:from-red-500 hover:to-red-600 hover:shadow-red-900/60 transition transform hover:-translate-y-1 text-center border border-red-500/30">
+                                class="px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 text-slate-900 dark:text-white font-bold rounded-xl shadow-lg shadow-red-900/40 hover:from-red-500 hover:to-red-600 hover:shadow-red-900/60 transition transform hover:-translate-y-1 text-center border border-red-500/30">
                                 Masuk ke Sistem
                             </a>
                         @else
                             <a href="{{ route('login') }}"
-                                class="px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white font-bold rounded-xl shadow-lg shadow-red-900/40 hover:from-red-500 hover:to-red-600 hover:shadow-red-900/60 transition transform hover:-translate-y-1 text-center border border-red-500/30">
+                                class="px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 text-slate-900 dark:text-white font-bold rounded-xl shadow-lg shadow-red-900/40 hover:from-red-500 hover:to-red-600 hover:shadow-red-900/60 transition transform hover:-translate-y-1 text-center border border-red-500/30">
                                 Login Sekarang
                             </a>
                         @endauth
                     </div>
 
-                    <div class="pt-8 grid grid-cols-3 gap-6 border-t border-white/10">
+                    <div class="bg-white dark:bg-slate-900 dark:text-white pt-8 grid grid-cols-3 gap-6 border-t border-slate-300 dark:border-white/10">
                         <div>
-                            <p class="text-3xl font-bold text-white">100%</p>
+                            <p class="text-3xl font-bold text-slate-900 dark:text-white">100%</p>
                             <p class="text-sm text-red-200 font-medium">Digital</p>
                         </div>
                         <div>
-                            <p class="text-3xl font-bold text-white">QR</p>
+                            <p class="text-3xl font-bold text-slate-900 dark:text-white">QR</p>
                             <p class="text-sm text-red-200 font-medium">Code System</p>
                         </div>
                         <div>
-                            <p class="text-3xl font-bold text-white">24/7</p>
+                            <p class="text-3xl font-bold text-slate-900 dark:text-white">24/7</p>
                             <p class="text-sm text-red-200 font-medium">Monitoring</p>
                         </div>
                     </div>
@@ -135,16 +135,16 @@
                         class="absolute inset-0 bg-gradient-to-tr from-red-500 to-orange-500 rounded-2xl transform rotate-3 opacity-20 blur-lg">
                     </div>
                     <div
-                        class="relative bg-slate-900 border border-white/5/5 border border-white/10 rounded-2xl shadow-2xl overflow-hidden p-2">
+                        class="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/5 border border-slate-300 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden p-2">
                         <div
-                            class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl overflow-hidden aspect-[4/3] flex items-center justify-center relative">
+                            class="bg-gradient-to-br from-slate-100 dark:from-slate-900 to-slate-800 rounded-xl overflow-hidden aspect-[4/3] flex items-center justify-center relative">
                             <!-- Mockup UI -->
                             <div class="absolute inset-0 bg-grid-pattern opacity-10"></div>
                             <div
-                                class="relative z-10 w-3/4 p-4 bg-slate-800 rounded-lg shadow-xl border border-slate-700 space-y-3">
+                                class="relative z-10 w-3/4 p-4 bg-slate-50 dark:bg-slate-800 rounded-lg shadow-xl border border-slate-700 space-y-3">
                                 <div class="flex items-center gap-3 mb-2">
                                     <div
-                                        class="w-8 h-8 bg-red-900/50 rounded-full flex items-center justify-center text-red-500 border border-red-500/20">
+                                        class="w-8 h-8 bg-red-50 dark:bg-red-900/50 rounded-full flex items-center justify-center text-red-500 border border-red-500/20">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -152,18 +152,18 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="h-2 w-20 bg-slate-700 rounded"></div>
-                                        <div class="h-1.5 w-12 bg-slate-700/50 rounded mt-1"></div>
+                                        <div class="h-2 w-20 bg-white dark:bg-slate-700 rounded"></div>
+                                        <div class="h-1.5 w-12 bg-white dark:bg-slate-700/50 rounded mt-1"></div>
                                     </div>
                                 </div>
                                 <div class="space-y-2">
-                                    <div class="h-2 w-full bg-slate-700 rounded"></div>
-                                    <div class="h-2 w-5/6 bg-slate-700 rounded"></div>
-                                    <div class="h-2 w-4/6 bg-slate-700 rounded"></div>
+                                    <div class="h-2 w-full bg-white dark:bg-slate-700 rounded"></div>
+                                    <div class="h-2 w-5/6 bg-white dark:bg-slate-700 rounded"></div>
+                                    <div class="h-2 w-4/6 bg-white dark:bg-slate-700 rounded"></div>
                                 </div>
                                 <div class="mt-4 flex justify-between items-center">
                                     <div class="h-8 w-24 bg-red-600 rounded"></div>
-                                    <div class="h-8 w-8 bg-slate-700 rounded-full"></div>
+                                    <div class="h-8 w-8 bg-white dark:bg-slate-700 rounded-full"></div>
                                 </div>
                             </div>
                         </div>

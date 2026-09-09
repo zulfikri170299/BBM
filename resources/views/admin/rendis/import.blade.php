@@ -5,7 +5,7 @@
                 <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Import Rendis BBM</h2>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Buat Rendis BBM massal menggunakan file Excel</p>
             </div>
-            <a href="{{ route('admin.rendis.index') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">&larr; Kembali ke Daftar</a>
+            <a href="{{ route('admin.rendis.index') }}" class="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">&larr; Kembali ke Daftar</a>
         </div>
 
         @if(session('error'))
@@ -65,7 +65,7 @@
                                 <div class="p-6">
                                     <div class="mb-5">
                                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">PIN Top Up</label>
-                                        <input type="password" name="pin" x-model="pinValue" placeholder="Masukkan PIN..." class="w-full px-4 py-3 text-center text-lg tracking-widest rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-emerald-500 focus:ring-emerald-500 shadow-sm">
+                                        <input type="password" name="pin" x-model="pinValue" placeholder="Masukkan PIN..." class="w-full px-4 py-3 text-center text-lg tracking-widest rounded-xl border-gray-300 dark:border-gray-600 bg-white text-slate-900 dark:bg-gray-700 dark:text-white focus:border-emerald-500 focus:ring-emerald-500 shadow-sm">
                                     </div>
                                     <div class="flex gap-3">
                                         <button type="button" @click="showPinModal = false" class="flex-1 px-4 py-2.5 text-sm font-medium rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Batal</button>

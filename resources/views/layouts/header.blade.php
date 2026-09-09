@@ -1,7 +1,7 @@
-<header class="flex h-16 shrink-0 items-center justify-between gap-x-4 border-b border-white/5 bg-slate-900 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8 sticky top-0 z-20">
+<header class="flex h-16 shrink-0 items-center justify-between gap-x-4 border-b border-slate-200 dark:border-white/5 bg-white dark:bg-slate-900 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8 sticky top-0 z-20 transition-colors duration-300">
     <div class="flex items-center gap-3">
         {{-- Hamburger Button (Mobile) --}}
-        <button type="button" class="-m-2.5 p-2.5 text-slate-400 hover:text-white transition-colors lg:hidden" @click="sidebarOpen = true">
+        <button type="button" class="-m-2.5 p-2.5 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white transition-colors lg:hidden" @click="sidebarOpen = true">
             <span class="sr-only">Buka sidebar</span>
             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -9,7 +9,7 @@
         </button>
 
         {{-- Hamburger Button (Desktop) --}}
-        <button type="button" class="-m-2.5 p-2.5 text-slate-400 hover:text-white transition-colors hidden lg:block" @click="desktopSidebarOpen = !desktopSidebarOpen">
+        <button type="button" class="-m-2.5 p-2.5 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white transition-colors hidden lg:block" @click="desktopSidebarOpen = !desktopSidebarOpen">
             <span class="sr-only">Toggle sidebar</span>
             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -18,13 +18,26 @@
 
         {{-- Page Title (Mobile) --}}
         <div class="lg:hidden flex items-center">
-            <h1 class="text-sm font-bold text-slate-200">
+            <h1 class="text-sm font-bold text-slate-800 dark:text-slate-200 transition-colors">
                 {{ auth()->user()->satker->nama_satker ?? 'BIRO LOGISTIK' }}
             </h1>
         </div>
     </div>
 
     <div class="flex items-center gap-x-4 lg:gap-x-6">
+        <!-- Theme Toggle -->
+        <button type="button" @click="isDarkMode = !isDarkMode" class="-m-2.5 p-2.5 text-slate-500 dark:text-slate-400 hover:text-slate-500 dark:hover:text-white dark:text-white transition-colors relative focus:outline-none flex items-center justify-center">
+            <span class="sr-only">Toggle Dark Mode</span>
+            <!-- Sun icon for light mode -->
+            <svg x-show="!isDarkMode" class="h-6 w-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+            </svg>
+            <!-- Moon icon for dark mode -->
+            <svg x-show="isDarkMode" x-cloak class="h-6 w-6 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+            </svg>
+        </button>
+
         <!-- Notifications -->
         <div x-data="{ 
             notificationsOpen: false, 
@@ -46,7 +59,7 @@
                 });
             }
         }" class="relative">
-            <button @click="notificationsOpen = !notificationsOpen" type="button" class="-m-2.5 p-2.5 text-slate-400 hover:text-white transition-colors relative focus:outline-none">
+            <button @click="notificationsOpen = !notificationsOpen" type="button" class="-m-2.5 p-2.5 text-slate-500 dark:text-slate-400 hover:text-slate-600 dark:hover:text-white dark:text-white transition-colors relative focus:outline-none">
                 <span class="sr-only">View notifications</span>
                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
@@ -60,11 +73,11 @@
             <div x-show="notificationsOpen" @click.away="notificationsOpen = false"
                 x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95"
                 x-transition:enter-end="opacity-100 scale-100"
-                class="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-slate-900 border border-white/10 rounded-2xl shadow-2xl z-[100] ring-1 ring-black ring-opacity-5 overflow-hidden"
+                class="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl z-[100] ring-1 ring-black ring-opacity-5 overflow-hidden transition-colors duration-300"
                 style="display: none;">
 
-                <div class="p-4 border-b border-white/5 flex justify-between items-center bg-slate-800/50">
-                    <h3 class="font-bold text-white">Notifikasi</h3>
+                <div class="p-4 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50 transition-colors">
+                    <h3 class="font-bold text-slate-800 dark:text-white">Notifikasi</h3>
                     <span class="px-2 py-0.5 bg-brand-primary/20 text-brand-primary border border-brand-primary/30 text-[10px] font-bold rounded-full"
                         x-text="unreadCount + ' Baru'"></span>
                 </div>
@@ -72,9 +85,9 @@
                 <div class="max-h-96 overflow-y-auto custom-scrollbar">
                     @forelse(auth()->user()->unreadNotifications as $notification)
                         <div id="notification-{{ $notification->id }}"
-                            class="p-4 border-b border-white/5 hover:bg-white/5 transition-colors group relative">
+                            class="p-4 border-b border-slate-100 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors group relative">
                             <div class="flex gap-3">
-                                <div class="shrink-0 w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center">
+                                <div class="shrink-0 w-10 h-10 rounded-xl bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30 flex items-center justify-center">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
@@ -82,10 +95,10 @@
                                     </svg>
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-bold text-slate-200 truncate">
+                                    <p class="text-sm font-bold text-slate-800 dark:text-slate-200 truncate">
                                         {{ $notification->data['title'] }}
                                     </p>
-                                    <p class="text-xs text-slate-400 mt-1 leading-relaxed line-clamp-2">
+                                    <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed line-clamp-2">
                                         {{ $notification->data['message'] }}
                                     </p>
                                     <div class="flex justify-between items-center mt-2">
@@ -100,14 +113,14 @@
                         </div>
                     @empty
                         <div class="p-8 text-center">
-                            <div class="w-16 h-16 bg-slate-800 border border-white/5 text-slate-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <div class="w-16 h-16 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 text-slate-500 rounded-full flex items-center justify-center mx-auto mb-3 transition-colors">
                                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
                                     </path>
                                 </svg>
                             </div>
-                            <p class="text-sm font-medium text-slate-400">Tidak ada notifikasi baru</p>
+                            <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Tidak ada notifikasi baru</p>
                         </div>
                     @endforelse
                 </div>
@@ -115,16 +128,16 @@
         </div>
 
         <!-- Separator -->
-        <div class="hidden lg:block lg:h-6 lg:w-px lg:bg-white/10" aria-hidden="true"></div>
+        <div class="hidden lg:block lg:h-6 lg:w-px lg:bg-slate-200 dark:lg:bg-white/10 transition-colors" aria-hidden="true"></div>
 
         <!-- Profile dropdown -->
         <div x-data="{ open: false }" class="relative">
             <button @click="open = !open" type="button" class="-m-1.5 flex items-center p-1.5 focus:outline-none" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                 <span class="sr-only">Buka user menu</span>
-                <img class="h-8 w-8 sm:h-9 sm:w-9 rounded-full bg-slate-800 ring-2 ring-brand-primary/50 object-cover shadow-[0_0_10px_rgba(0,98,255,0.3)]" src="{{ Auth::user()->profile_photo_url }}" alt="">
+                <img class="h-8 w-8 sm:h-9 sm:w-9 rounded-full bg-slate-50 dark:bg-slate-800 ring-2 ring-brand-primary/50 object-cover shadow-[0_0_10px_rgba(0,98,255,0.3)]" src="{{ Auth::user()->profile_photo_url }}" alt="">
                 <span class="hidden lg:flex lg:items-center">
-                    <span class="ml-4 text-sm font-semibold leading-6 text-slate-200" aria-hidden="true">{{ Auth::user()->name }}</span>
-                    <svg class="ml-2 h-5 w-5 text-slate-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <span class="ml-4 text-sm font-semibold leading-6 text-slate-800 dark:text-slate-200 transition-colors" aria-hidden="true">{{ Auth::user()->name }}</span>
+                    <svg class="ml-2 h-5 w-5 text-slate-600 dark:text-slate-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
                     </svg>
                 </span>
@@ -138,16 +151,16 @@
                 x-transition:leave="transition ease-in duration-75" 
                 x-transition:leave-start="transform opacity-100 scale-100" 
                 x-transition:leave-end="transform opacity-0 scale-95" 
-                class="absolute right-0 z-10 mt-2.5 w-48 origin-top-right rounded-xl bg-slate-900 border border-white/10 py-2 shadow-2xl ring-1 ring-white/5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1" style="display: none;">
+                class="absolute right-0 z-10 mt-2.5 w-48 origin-top-right rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 py-2 shadow-2xl ring-1 ring-black/5 dark:ring-white/5 focus:outline-none transition-colors duration-300" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1" style="display: none;">
                 
-                <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm leading-6 text-slate-300 hover:text-white hover:bg-white/5" role="menuitem" tabindex="-1">Profil Anda</a>
+                <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm leading-6 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-50 dark:hover:bg-white/5 transition-colors" role="menuitem" tabindex="-1">Profil Anda</a>
                 
                 @if(auth()->user()->is_developer)
-                    <div class="h-px bg-white/5 my-1"></div>
+                    <div class="h-px bg-slate-200 dark:bg-white/5 my-1 transition-colors"></div>
                     <form method="POST" action="{{ route('dev.lockdown.toggle') }}">
                         @csrf
                         <button type="submit"
-                            class="block w-full text-left px-4 py-2 text-sm leading-6 {{ \App\Models\Setting::isSystemLocked() ? 'text-emerald-400 hover:bg-emerald-400/10' : 'text-rose-400 hover:bg-rose-400/10' }}">
+                            class="block w-full text-left px-4 py-2 text-sm leading-6 {{ \App\Models\Setting::isSystemLocked() ? 'text-emerald-600 dark:text-emerald-400 hover:bg-emerald-400/10' : 'text-rose-600 dark:text-rose-400 hover:bg-rose-400/10' }}">
                             {{ \App\Models\Setting::isSystemLocked() ? __('Aktifkan Sistem') : __('Lockdown Sistem') }}
                         </button>
                     </form>
@@ -156,7 +169,7 @@
                 <div class="h-px bg-white/5 my-1"></div>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="w-full text-left block px-4 py-2 text-sm leading-6 text-red-400 hover:text-red-300 hover:bg-red-400/10" role="menuitem" tabindex="-1">Log out</button>
+                    <button type="submit" class="w-full text-left block px-4 py-2 text-sm leading-6 text-red-600 dark:text-red-400 hover:text-red-300 hover:bg-red-400/10" role="menuitem" tabindex="-1">Log out</button>
                 </form>
             </div>
         </div>

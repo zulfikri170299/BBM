@@ -3,8 +3,8 @@
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h1 class="text-xl font-bold text-white tracking-tight">Laporan Potong Saldo</h1>
-                <p class="mt-1 text-xs text-slate-400 text-slate-400">Riwayat pemotongan saldo kendaraan oleh Admin.</p>
+                <h1 class="text-xl font-bold text-slate-800 dark:text-white tracking-tight">Laporan Potong Saldo</h1>
+                <p class="mt-1 text-xs text-slate-600 dark:text-slate-400 text-slate-600 dark:text-slate-400">Riwayat pemotongan saldo kendaraan oleh Admin.</p>
             </div>
             <a href="{{ route('admin.laporan-potong.print', request()->query()) }}" target="_blank"
                 class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-rose-600 text-white rounded-xl font-semibold text-[11px] uppercase tracking-wider hover:bg-rose-700 shadow-lg shadow-rose-200 transition-all active:scale-95 gap-2">
@@ -18,26 +18,26 @@
         </div>
 
         <!-- Filter Card -->
-        <div class="bg-slate-900 border border-white/5 rounded-2xl border border-white/10 shadow-sm p-4">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-4">
             <form action="{{ route('admin.laporan-potong.index') }}" method="GET" class="space-y-4">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div>
-                        <label class="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1 ml-1">Mulai Tanggal</label>
+                        <label class="block text-[10px] font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1 ml-1">Mulai Tanggal</label>
                         <input type="date" name="start_date" value="{{ request('start_date') }}"
-                            class="w-full h-9 px-3 bg-slate-800/50 border-white/10 rounded-lg text-xs font-medium text-slate-300 focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all">
+                            class="w-full h-9 px-3 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-white/10 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1 ml-1">Sampai Tanggal</label>
+                        <label class="block text-[10px] font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1 ml-1">Sampai Tanggal</label>
                         <input type="date" name="end_date" value="{{ request('end_date') }}"
-                            class="w-full h-9 px-3 bg-slate-800/50 border-white/10 rounded-lg text-xs font-medium text-slate-300 focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all">
+                            class="w-full h-9 px-3 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-white/10 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all">
                     </div>
                     <div class="lg:col-span-1">
-                        <label class="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1 ml-1">Satker</label>
+                        <label class="block text-[10px] font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1 ml-1">Satker</label>
                         <select name="satker_id"
-                            class="w-full h-9 px-3 bg-slate-800/50 border-white/10 rounded-lg text-xs font-medium text-slate-300 focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all">
-                            <option value="">Semua Satker</option>
+                            class="w-full h-9 px-3 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-white/10 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all">
+                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua Satker</option>
                             @foreach($satkers as $satker)
-                                <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
+                                <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
                                     {{ $satker->nama_satker }}
                                 </option>
                             @endforeach
@@ -52,7 +52,7 @@
                             Filter
                         </button>
                         <a href="{{ route('admin.laporan-potong.index') }}"
-                            class="flex-1 h-9 bg-slate-800 text-slate-400 rounded-lg font-semibold text-[11px] uppercase tracking-wider hover:bg-slate-200 transition-all active:scale-95 flex items-center justify-center gap-2">
+                            class="flex-1 h-9 bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-lg font-semibold text-[11px] uppercase tracking-wider hover:bg-slate-200 transition-all active:scale-95 flex items-center justify-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
@@ -64,47 +64,47 @@
         </div>
 
         <!-- Table Card -->
-        <div class="bg-slate-900 rounded-2xl border border-white/10 shadow-sm overflow-hidden">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="min-w-full whitespace-nowrap">
                     <thead>
-                        <tr class="bg-slate-800/50/70">
-                            <th class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider w-12">No</th>
-                            <th class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">Tanggal</th>
-                            <th class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">Admin</th>
-                            <th class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">Satker</th>
-                            <th class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">Jenis Kendaraan</th>
-                            <th class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">Nopol</th>
-                            <th class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">BBM</th>
-                            <th class="px-4 py-3 text-right text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">Jumlah</th>
-                            <th class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">Keterangan</th>
+                        <tr class="bg-slate-50 dark:bg-slate-800/70">
+                            <th class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider w-12">No</th>
+                            <th class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">Tanggal</th>
+                            <th class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">Admin</th>
+                            <th class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">Satker</th>
+                            <th class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">Jenis Kendaraan</th>
+                            <th class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">Nopol</th>
+                            <th class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">BBM</th>
+                            <th class="px-4 py-3 text-right text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">Jumlah</th>
+                            <th class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">Keterangan</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-white/5">
+                    <tbody class="divide-y divide-slate-200 dark:divide-white/5">
                         @forelse($riwayat as $r)
-                            <tr class="hover:bg-slate-800/50 transition-colors">
+                            <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
                                 <td class="px-4 py-3 text-center">
-                                    <span class="text-xs font-medium text-slate-400">{{ $loop->iteration + ($riwayat->currentPage() - 1) * $riwayat->perPage() }}</span>
+                                    <span class="text-xs font-medium text-slate-600 dark:text-slate-400">{{ $loop->iteration + ($riwayat->currentPage() - 1) * $riwayat->perPage() }}</span>
                                 </td>
                                 <td class="px-4 py-3">
-                                    <span class="text-xs text-slate-200">{{ $r->created_at->setTimezone('Asia/Makassar')->format('d/m/Y H:i') }}</span>
+                                    <span class="text-xs text-slate-800 dark:text-slate-200">{{ $r->created_at->setTimezone('Asia/Makassar')->format('d/m/Y H:i') }}</span>
                                 </td>
                                 <td class="px-4 py-3">
-                                    <span class="text-xs text-slate-300">{{ $r->user->name ?? '-' }}</span>
+                                    <span class="text-xs text-slate-700 dark:text-slate-300">{{ $r->user->name ?? '-' }}</span>
                                 </td>
                                 <td class="px-4 py-3">
-                                    <span class="px-2 py-1 rounded-md bg-slate-800 text-xs font-semibold text-slate-400">
+                                    <span class="px-2 py-1 rounded-md bg-slate-50 dark:bg-slate-800 text-xs font-semibold text-slate-600 dark:text-slate-400">
                                         {{ $r->satker->nama_satker ?? '-' }}
                                     </span>
                                 </td>
                                 <td class="px-4 py-3">
-                                    <span class="text-xs text-slate-400">{{ $r->kendaraan->jenis_kendaraan ?? '-' }}</span>
+                                    <span class="text-xs text-slate-600 dark:text-slate-400">{{ $r->kendaraan->jenis_kendaraan ?? '-' }}</span>
                                 </td>
                                 <td class="px-4 py-3">
-                                    <span class="text-xs font-semibold text-slate-200">{{ $r->kendaraan->no_polisi ?? '-' }}</span>
+                                    <span class="text-xs font-semibold text-slate-800 dark:text-slate-200">{{ $r->kendaraan->no_polisi ?? '-' }}</span>
                                 </td>
                                 <td class="px-4 py-3 text-center">
-                                    <span class="px-2 py-1 rounded-md bg-rose-500/10 text-[11px] font-medium text-rose-400">
+                                    <span class="px-2 py-1 rounded-md bg-rose-500/10 text-[11px] font-medium text-rose-600 dark:text-rose-400">
                                         {{ $r->jenis_bbm }}
                                     </span>
                                 </td>
@@ -112,14 +112,14 @@
                                         {{ number_format($r->jumlah, 0, ',', '.') }} L
                                 </td>
                                 <td class="px-4 py-3">
-                                    <p class="text-xs text-slate-400 max-w-xs truncate" title="{{ $r->keterangan }}">
+                                    <p class="text-xs text-slate-600 dark:text-slate-400 max-w-xs truncate" title="{{ $r->keterangan }}">
                                         {{ $r->keterangan ?? '-' }}
                                     </p>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="px-6 py-12 text-center text-slate-400">Belum ada data pemotongan saldo.</td>
+                                <td colspan="8" class="px-6 py-12 text-center text-slate-600 dark:text-slate-400">Belum ada data pemotongan saldo.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -128,7 +128,7 @@
 
             <!-- Pagination -->
             @if($riwayat->hasPages())
-                <div class="px-3 sm:px-4 py-3 border-t border-white/5">
+                <div class="bg-white dark:bg-slate-900 dark:text-white px-3 sm:px-4 py-3 border-t border-slate-200 dark:border-white/5">
                     {{ $riwayat->links() }}
                 </div>
             @endif

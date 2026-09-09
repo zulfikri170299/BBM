@@ -1,18 +1,18 @@
 <x-app-layout>
     <div class="py-4 sm:py-12 px-2 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-slate-900 border border-white/5 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-white">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-slate-800 dark:text-white">
                     <div class="flex justify-between items-center mb-6">
                         <div>
                             <h2 class="text-2xl font-bold">Riwayat Berita Acara</h2>
-                            <p class="text-slate-400">Daftar dokumen yang dibuat otomatis setelah Import Saldo.</p>
+                            <p class="text-slate-600 dark:text-slate-400">Daftar dokumen yang dibuat otomatis setelah Import Saldo.</p>
                         </div>
                     </div>
 
                     <!-- Pihak Kesatu Configuration Form -->
-                    <div class="mb-8 p-6 bg-slate-800/50 rounded-2xl border border-white/10 shadow-sm">
-                        <h3 class="font-bold text-slate-200 flex items-center gap-2 mb-4">
+                    <div class="mb-8 p-6 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
+                        <h3 class="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2 mb-4">
                             <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
@@ -24,31 +24,31 @@
                             @csrf
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                                 <div class="space-y-1">
-                                    <label class="text-xs font-bold text-slate-400 uppercase">Nama</label>
+                                    <label class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">Nama</label>
                                     <input type="text" name="ba_pihak_1_nama"
                                         value="{{ $settings['ba_pihak_1_nama'] ?? '' }}"
-                                        class="w-full px-4 py-2 rounded-xl border-white/10 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                                        class="bg-white dark:bg-slate-900 dark:text-white w-full px-4 py-2 rounded-xl border-slate-200 dark:border-white/10 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
                                         placeholder="Nama Lengkap">
                                 </div>
                                 <div class="space-y-1">
-                                    <label class="text-xs font-bold text-slate-400 uppercase">Pangkat</label>
+                                    <label class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">Pangkat</label>
                                     <input type="text" name="ba_pihak_1_pangkat"
                                         value="{{ $settings['ba_pihak_1_pangkat'] ?? '' }}"
-                                        class="w-full px-4 py-2 rounded-xl border-white/10 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                                        class="bg-white dark:bg-slate-900 dark:text-white w-full px-4 py-2 rounded-xl border-slate-200 dark:border-white/10 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
                                         placeholder="Pangkat">
                                 </div>
                                 <div class="space-y-1">
-                                    <label class="text-xs font-bold text-slate-400 uppercase">NRP</label>
+                                    <label class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">NRP</label>
                                     <input type="text" name="ba_pihak_1_nrp"
                                         value="{{ $settings['ba_pihak_1_nrp'] ?? '' }}"
-                                        class="w-full px-4 py-2 rounded-xl border-white/10 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                                        class="bg-white dark:bg-slate-900 dark:text-white w-full px-4 py-2 rounded-xl border-slate-200 dark:border-white/10 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
                                         placeholder="NRP">
                                 </div>
                                 <div class="space-y-1">
-                                    <label class="text-xs font-bold text-slate-400 uppercase">Jabatan</label>
+                                    <label class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">Jabatan</label>
                                     <input type="text" name="ba_pihak_1_jabatan"
                                         value="{{ $settings['ba_pihak_1_jabatan'] ?? '' }}"
-                                        class="w-full px-4 py-2 rounded-xl border-white/10 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                                        class="bg-white dark:bg-slate-900 dark:text-white w-full px-4 py-2 rounded-xl border-slate-200 dark:border-white/10 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
                                         placeholder="Jabatan">
                                 </div>
                             </div>
@@ -73,23 +73,23 @@
                         </div>
                     @endif
 
-                    <div class="overflow-x-auto bg-slate-900 border border-white/5 rounded-xl shadow-sm border border-white/5">
-                        <table class="min-w-full divide-y divide-white/10">
-                            <thead class="bg-slate-800/50">
-                                <tr class="border-b border-white/5">
+                    <div class="overflow-x-auto bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-xl shadow-sm border border-slate-200 dark:border-white/5">
+                        <table class="min-w-full divide-y divide-slate-300 dark:divide-white/10">
+                            <thead class="bg-slate-50 dark:bg-slate-800/50">
+                                <tr class="bg-white dark:bg-slate-900 dark:text-white border-b border-slate-200 dark:border-white/5">
                                     <th colspan="7" class="px-4 py-3">
                                         <div class="flex items-center justify-between">
                                             <form action="{{ route('admin.ba.index') }}" method="GET"
                                                 class="flex items-center space-x-3">
                                                 <x-per-page :current="request('per_page', 15)" />
-                                                <select name="tahun" onchange="this.form.submit()" class="text-xs border-white/20 rounded-lg shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 py-1.5 pl-3 pr-8">
+                                                <select name="tahun" onchange="this.form.submit()" class="bg-white dark:bg-slate-900 dark:text-white text-xs border-slate-300 dark:border-white/20 rounded-lg shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 py-1.5 pl-3 pr-8">
                                                     @foreach($tahunList as $t)
-                                                        <option value="{{ $t }}" {{ $tahun == $t ? 'selected' : '' }}>Tahun {{ $t }}</option>
+                                                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $t }}" {{ $tahun == $t ? 'selected' : '' }}>Tahun {{ $t }}</option>
                                                     @endforeach
                                                 </select>
                                             </form>
                                             <div
-                                                class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
+                                                class="text-[10px] font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                                                 Menampilkan {{ $logs->firstItem() ?? 0 }}-{{ $logs->lastItem() ?? 0 }}
                                                 dari {{ $logs->total() }} data
                                             </div>
@@ -98,36 +98,36 @@
                                 </tr>
                                 <tr>
                                     <th
-                                        class="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                                        class="px-4 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                                         No</th>
                                     <th
-                                        class="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                                        class="px-4 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                                         Satker</th>
                                     <th
-                                        class="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                                        class="px-4 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                                         Periode</th>
                                     <th
-                                        class="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                                        class="px-4 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                                         Pertamax (L)</th>
                                     <th
-                                        class="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                                        class="px-4 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                                         Dex (L)</th>
                                     <th
-                                        class="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                                        class="px-4 py-3 text-left text-xs font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                                         Terakhir Diperbarui</th>
                                     <th
-                                        class="px-4 py-3 text-right text-xs font-medium text-slate-400 uppercase tracking-wider">
+                                        class="px-4 py-3 text-right text-xs font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                                         Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-slate-900 border border-white/5 divide-y divide-white/10">
+                            <tbody class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 divide-y divide-slate-300 dark:divide-white/10">
                                 @forelse($logs as $index => $log)
-                                    <tr class="hover:bg-slate-800/50 transition-colors">
-                                        <td class="px-4 py-3 whitespace-nowrap text-xs text-slate-400">
+                                    <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
+                                        <td class="px-4 py-3 whitespace-nowrap text-xs text-slate-600 dark:text-slate-400">
                                             {{ $logs->firstItem() + $index }}
                                         </td>
                                         <td class="px-4 py-3 whitespace-nowrap">
-                                            <div class="font-medium text-white">{{ $log->satker->nama_satker }}</div>
+                                            <div class="font-medium text-slate-800 dark:text-white">{{ $log->satker->nama_satker }}</div>
                                         </td>
                                         <td class="px-4 py-3 whitespace-nowrap">
                                             <span
@@ -136,13 +136,13 @@
                                                 {{ $log->tahun }}
                                             </span>
                                         </td>
-                                        <td class="px-4 py-3 whitespace-nowrap text-xs text-slate-400">
+                                        <td class="px-4 py-3 whitespace-nowrap text-xs text-slate-600 dark:text-slate-400">
                                             {{ number_format($log->total_pertamax, 0, ',', '.') }}
                                         </td>
-                                        <td class="px-4 py-3 whitespace-nowrap text-xs text-slate-400">
+                                        <td class="px-4 py-3 whitespace-nowrap text-xs text-slate-600 dark:text-slate-400">
                                             {{ number_format($log->total_dex, 0, ',', '.') }}
                                         </td>
-                                        <td class="px-4 py-3 whitespace-nowrap text-xs text-slate-400">
+                                        <td class="px-4 py-3 whitespace-nowrap text-xs text-slate-600 dark:text-slate-400">
                                             {{ $log->updated_at->format('d/m/Y H:i') }}
                                         </td>
                                         <td class="px-4 py-3 whitespace-nowrap text-right text-sm font-medium space-x-2">
@@ -176,7 +176,7 @@
                                                 <button type="submit"
                                                     data-confirm="Apakah Anda yakin ingin menghapus data Berita Acara ini?"
                                                     data-confirm-type="error"
-                                                    class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
+                                                    class="p-2 text-slate-700 dark:text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
                                                     title="Hapus Berita Acara">
                                                     <svg class="w-5 h-5" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
@@ -191,9 +191,9 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="px-6 py-10 text-center text-slate-400">
+                                        <td colspan="7" class="px-6 py-10 text-center text-slate-600 dark:text-slate-400">
                                             <div class="flex flex-col items-center">
-                                                <svg class="w-12 h-12 text-gray-300 mb-2" fill="none" stroke="currentColor"
+                                                <svg class="w-12 h-12 text-gray-600 dark:text-gray-300 mb-2" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                         d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">

@@ -1,20 +1,20 @@
 <x-app-layout>
-    <div class="min-h-screen bg-slate-800/50 py-8">
+    <div class="min-h-screen bg-slate-50 dark:bg-slate-800/50 py-8">
         <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
                 <div>
-                    <h1 class="text-2xl font-bold text-white tracking-tight">Laporan Tahunan</h1>
-                    <p class="text-slate-400 mt-1">Rekapitulasi BBM Tahunan</p>
+                    <h1 class="text-2xl font-bold text-slate-800 dark:text-white tracking-tight">Laporan Tahunan</h1>
+                    <p class="text-slate-600 dark:text-slate-400 mt-1">Rekapitulasi BBM Tahunan</p>
                 </div>
 
                 <div class="flex items-center gap-3">
                     <form action="{{ route('satker.laporan-tahunan.index') }}" method="GET" class="flex gap-2">
-                        <select name="year" class="rounded-xl border-white/10 focus:border-indigo-500 focus:ring-indigo-500 text-sm font-medium">
+                        <select name="year" class="bg-white dark:bg-slate-900 dark:text-white rounded-xl border-slate-200 dark:border-white/10 focus:border-indigo-500 focus:ring-indigo-500 text-sm font-medium">
                             @foreach($availableYears as $y)
-                                <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
+                                <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
                             @endforeach
                         </select>
-                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-slate-900 text-white text-sm font-semibold rounded-xl hover:bg-slate-800 transition-colors shadow-sm gap-2">
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-white text-slate-800 dark:text-white text-sm font-semibold rounded-xl hover:bg-slate-50 dark:bg-slate-800 transition-colors shadow-sm gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
                             </svg>
@@ -32,48 +32,48 @@
                 </div>
             </div>
 
-            <div class="bg-slate-900 border border-white/5 rounded-[2rem] shadow-sm border border-white/5 overflow-hidden">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-[2rem] shadow-sm border border-slate-200 dark:border-white/5 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm text-left">
-                        <thead class="bg-slate-800/50 text-slate-400 font-semibold border-b border-white/5">
+                        <thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-white/5">
                             <tr>
-                                <th rowspan="2" class="px-4 py-3 border-r border-white/5 text-center w-16">NO</th>
-                                <th rowspan="2" class="px-4 py-3 border-r border-white/5">SATKER</th>
-                                <th colspan="2" class="px-4 py-3 border-r border-white/5 text-center">PENDAPATAN</th>
-                                <th colspan="2" class="px-4 py-3 border-r border-white/5 text-center">PEMAKAIAN</th>
+                                <th rowspan="2" class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-r border-slate-200 dark:border-white/5 text-center w-16">NO</th>
+                                <th rowspan="2" class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-r border-slate-200 dark:border-white/5">SATKER</th>
+                                <th colspan="2" class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-r border-slate-200 dark:border-white/5 text-center">PENDAPATAN</th>
+                                <th colspan="2" class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-r border-slate-200 dark:border-white/5 text-center">PEMAKAIAN</th>
                                 <th colspan="2" class="px-4 py-3 text-center">SISA PEMAKAIAN</th>
                             </tr>
-                            <tr class="bg-slate-800/50 border-b border-white/5 text-xs tracking-wider">
-                                <th class="px-4 py-3 border-r border-white/5 text-center text-indigo-600">PERTAMAX</th>
-                                <th class="px-4 py-3 border-r border-white/5 text-center text-emerald-600">PERTAMINA DEX</th>
-                                <th class="px-4 py-3 border-r border-white/5 text-center text-indigo-600">PERTAMAX</th>
-                                <th class="px-4 py-3 border-r border-white/5 text-center text-emerald-600">PERTAMINA DEX</th>
-                                <th class="px-4 py-3 border-r border-white/5 text-center text-indigo-600">PERTAMAX</th>
+                            <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-white/5 text-xs tracking-wider">
+                                <th class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-r border-slate-200 dark:border-white/5 text-center text-indigo-600">PERTAMAX</th>
+                                <th class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-r border-slate-200 dark:border-white/5 text-center text-emerald-600">PERTAMINA DEX</th>
+                                <th class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-r border-slate-200 dark:border-white/5 text-center text-indigo-600">PERTAMAX</th>
+                                <th class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-r border-slate-200 dark:border-white/5 text-center text-emerald-600">PERTAMINA DEX</th>
+                                <th class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-r border-slate-200 dark:border-white/5 text-center text-indigo-600">PERTAMAX</th>
                                 <th class="px-4 py-3 text-center text-emerald-600">PERTAMINA DEX</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-white/5">
+                        <tbody class="divide-y divide-slate-200 dark:divide-white/5">
                             @forelse($reportData as $index => $data)
-                                <tr class="hover:bg-slate-800/50 transition-colors">
-                                    <td class="px-4 py-3 border-r border-white/5 text-center text-slate-400">{{ $index + 1 }}</td>
-                                    <td class="px-4 py-3 border-r border-white/5 font-medium text-slate-300">{{ $data['satker'] }}</td>
-                                    <td class="px-4 py-3 border-r border-white/5 text-center">{{ number_format($data['pendapatan_pertamax'], 0, ',', '.') }}</td>
-                                    <td class="px-4 py-3 border-r border-white/5 text-center">{{ number_format($data['pendapatan_dex'], 0, ',', '.') }}</td>
-                                    <td class="px-4 py-3 border-r border-white/5 text-center">{{ number_format($data['pemakaian_pertamax'], 0, ',', '.') }}</td>
-                                    <td class="px-4 py-3 border-r border-white/5 text-center">{{ number_format($data['pemakaian_dex'], 0, ',', '.') }}</td>
-                                    <td class="px-4 py-3 border-r border-white/5 text-center font-medium {{ $data['sisa_pertamax'] < 0 ? 'text-rose-600' : 'text-slate-300' }}">{{ number_format($data['sisa_pertamax'], 0, ',', '.') }}</td>
-                                    <td class="px-4 py-3 text-center font-medium {{ $data['sisa_dex'] < 0 ? 'text-rose-600' : 'text-slate-300' }}">{{ number_format($data['sisa_dex'], 0, ',', '.') }}</td>
+                                <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
+                                    <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-r border-slate-200 dark:border-white/5 text-center text-slate-600 dark:text-slate-400">{{ $index + 1 }}</td>
+                                    <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-r border-slate-200 dark:border-white/5 font-medium text-slate-700 dark:text-slate-300">{{ $data['satker'] }}</td>
+                                    <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-r border-slate-200 dark:border-white/5 text-center">{{ number_format($data['pendapatan_pertamax'], 0, ',', '.') }}</td>
+                                    <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-r border-slate-200 dark:border-white/5 text-center">{{ number_format($data['pendapatan_dex'], 0, ',', '.') }}</td>
+                                    <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-r border-slate-200 dark:border-white/5 text-center">{{ number_format($data['pemakaian_pertamax'], 0, ',', '.') }}</td>
+                                    <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-r border-slate-200 dark:border-white/5 text-center">{{ number_format($data['pemakaian_dex'], 0, ',', '.') }}</td>
+                                    <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-r border-slate-200 dark:border-white/5 text-center font-medium {{ $data["sisa_pertamax'] < 0 ? 'text-rose-600' : 'text-slate-700 dark:text-slate-300' }}">{{ number_format($data['sisa_pertamax'], 0, ',', '.') }}</td>
+                                    <td class="px-4 py-3 text-center font-medium {{ $data['sisa_dex'] < 0 ? 'text-rose-600' : 'text-slate-700 dark:text-slate-300' }}">{{ number_format($data['sisa_dex'], 0, ',', '.') }}</td>
                                 </tr>
                             @empty
                                 <tr>
                                     <td colspan="8" class="px-6 py-12 text-center">
                                         <div class="flex flex-col items-center justify-center">
-                                            <div class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mb-4">
-                                                <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <div class="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4">
+                                                <svg class="w-8 h-8 text-slate-600 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                                 </svg>
                                             </div>
-                                            <p class="text-slate-400 font-medium">Tidak ada data untuk tahun ini</p>
+                                            <p class="text-slate-600 dark:text-slate-400 font-medium">Tidak ada data untuk tahun ini</p>
                                         </div>
                                     </td>
                                 </tr>

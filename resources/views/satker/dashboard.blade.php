@@ -3,7 +3,7 @@
         <!-- Page Title -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4">
             <div>
-                <h1 class="text-xl sm:text-2xl font-bold text-white">Dashboard</h1>
+                <h1 class="text-xl sm:text-2xl font-bold text-slate-800 dark:text-white">Dashboard</h1>
 
             </div>
         </div>
@@ -12,12 +12,12 @@
         <div class="grid grid-cols-2 xl:grid-cols-4 gap-2 sm:gap-6">
             <!-- Card: Total Kendaraan -->
             <div
-                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-amber-500 to-amber-800 border border-amber-400 shadow-xl p-3 sm:p-6 text-white shadow-lg shadow-amber-500/5 group hover:shadow-amber-500/20 transition-all duration-300 hover:-translate-y-1">
+                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-amber-500 to-amber-800 border border-amber-400 shadow-xl p-3 sm:p-6 text-slate-800 dark:text-white shadow-lg shadow-amber-500/5 group hover:shadow-amber-500/20 transition-all duration-300 hover:-translate-y-1">
                 <div class="absolute -top-4 -right-4 w-24 h-24 bg-slate-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500">
                 </div>
                 <div class="relative z-10 h-full flex flex-col">
                     <div class="flex items-center justify-between mb-2 sm:mb-4">
-                        <div class="p-2 sm:p-3 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl">
+                        <div class="p-2 sm:p-3 bg-white/20 border border-slate-300 dark:border-white/30 rounded-lg sm:rounded-xl text-white">
                             <svg class="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -27,28 +27,28 @@
                             </svg>
                         </div>
                         <a href="{{ route('satker.kendaraans.index') }}"
-                            class="text-[9px] sm:text-[10px] font-semibold bg-white/20 hover:bg-white/30 border border-white/30 px-2 py-1 shadow-sm rounded-lg transition">Kelola
+                            class="text-[9px] sm:text-[10px] font-semibold bg-white/20 hover:bg-white/30 border border-slate-300 dark:border-white/30 px-2 py-1 shadow-sm rounded-lg transition">Kelola
                             →</a>
                     </div>
                     <div class="flex flex-col gap-0.5 sm:gap-1 mt-2 sm:mt-1">
-                        <p class="text-2xl sm:text-4xl font-black text-white leading-none">{{ $totalKendaraan }}</p>
-                        <p class="text-[10px] sm:text-sm text-white/90 font-medium leading-tight">Total Kendaraan</p>
+                        <p class="text-2xl sm:text-4xl font-black text-slate-800 dark:text-white leading-none">{{ $totalKendaraan }}</p>
+                        <p class="text-[10px] sm:text-sm text-slate-800 dark:text-white/90 font-medium leading-tight">Total Kendaraan</p>
                     </div>
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 mt-auto pt-3 sm:pt-5">
-                        <div class="bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm rounded-xl px-2 py-2 text-center transition-colors hover:bg-white/20">
-                            <p class="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">R2</p>
+                        <div class="bg-white/10 backdrop-blur-sm border border-slate-300 dark:border-white/20 shadow-sm rounded-xl px-2 py-2 text-center transition-colors hover:bg-white/20">
+                            <p class="text-[10px] sm:text-xs font-bold text-slate-800 dark:text-white/80 uppercase tracking-wider mb-1">R2</p>
                             <p class="text-sm sm:text-base font-black">{{ $rodaR2 }}</p>
                         </div>
-                        <div class="bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm rounded-xl px-2 py-2 text-center transition-colors hover:bg-white/20">
-                            <p class="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">R4</p>
+                        <div class="bg-white/10 backdrop-blur-sm border border-slate-300 dark:border-white/20 shadow-sm rounded-xl px-2 py-2 text-center transition-colors hover:bg-white/20">
+                            <p class="text-[10px] sm:text-xs font-bold text-slate-800 dark:text-white/80 uppercase tracking-wider mb-1">R4</p>
                             <p class="text-sm sm:text-base font-black">{{ $rodaR4 }}</p>
                         </div>
-                        <div class="bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm rounded-xl px-2 py-2 text-center transition-colors hover:bg-white/20">
-                            <p class="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">R6</p>
+                        <div class="bg-white/10 backdrop-blur-sm border border-slate-300 dark:border-white/20 shadow-sm rounded-xl px-2 py-2 text-center transition-colors hover:bg-white/20">
+                            <p class="text-[10px] sm:text-xs font-bold text-slate-800 dark:text-white/80 uppercase tracking-wider mb-1">R6</p>
                             <p class="text-sm sm:text-base font-black">{{ $rodaR6 }}</p>
                         </div>
-                        <div class="bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm rounded-xl px-2 py-2 text-center transition-colors hover:bg-white/20">
-                            <p class="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">Non</p>
+                        <div class="bg-white/10 backdrop-blur-sm border border-slate-300 dark:border-white/20 shadow-sm rounded-xl px-2 py-2 text-center transition-colors hover:bg-white/20">
+                            <p class="text-[10px] sm:text-xs font-bold text-slate-800 dark:text-white/80 uppercase tracking-wider mb-1">Non</p>
                             <p class="text-sm sm:text-base font-black">{{ $rodaNon }}</p>
                         </div>
                     </div>
@@ -57,12 +57,12 @@
 
             <!-- Card: Total Transaksi BBM -->
             <div
-                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-rose-600 to-rose-900 border border-rose-400 shadow-xl p-3 sm:p-6 text-white shadow-lg shadow-rose-500/5 group hover:shadow-rose-500/20 transition-all duration-300 hover:-translate-y-1">
+                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-rose-600 to-rose-900 border border-rose-400 shadow-xl p-3 sm:p-6 text-slate-800 dark:text-white shadow-lg shadow-rose-500/5 group hover:shadow-rose-500/20 transition-all duration-300 hover:-translate-y-1">
                 <div class="absolute -top-4 -right-4 w-24 h-24 bg-slate-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500">
                 </div>
                 <div class="relative z-10 h-full flex flex-col">
                     <div class="flex items-center justify-between mb-2 sm:mb-4">
-                        <div class="p-2 sm:p-3 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl">
+                        <div class="p-2 sm:p-3 bg-white/20 border border-slate-300 dark:border-white/30 rounded-lg sm:rounded-xl text-white">
                             <svg class="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
@@ -70,19 +70,19 @@
                         </div>
                     </div>
                     <div class="flex flex-col gap-0.5 sm:gap-1 mt-2 sm:mt-1">
-                        <p class="text-2xl sm:text-4xl font-black text-white leading-none">{{ $totalTransaksi }}</p>
-                        <p class="text-[10px] sm:text-sm text-white/90 font-medium leading-tight">Total Transaksi BBM</p>
+                        <p class="text-2xl sm:text-4xl font-black text-slate-800 dark:text-white leading-none">{{ $totalTransaksi }}</p>
+                        <p class="text-[10px] sm:text-sm text-slate-800 dark:text-white/90 font-medium leading-tight">Total Transaksi BBM</p>
                     </div>
                     <div class="mt-auto pt-3 sm:pt-5 grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
-                        <div class="bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm rounded-xl px-3 py-2 text-center flex flex-col justify-center transition-colors hover:bg-white/20">
-                            <p class="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">Sistem Pencatatan</p>
+                        <div class="bg-white/10 backdrop-blur-sm border border-slate-300 dark:border-white/20 shadow-sm rounded-xl px-3 py-2 text-center flex flex-col justify-center transition-colors hover:bg-white/20">
+                            <p class="text-[10px] sm:text-xs font-bold text-slate-800 dark:text-white/80 uppercase tracking-wider mb-1">Sistem Pencatatan</p>
                             <p class="text-xs sm:text-sm font-black text-emerald-300 flex items-center justify-center gap-1.5">
                                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span> Realtime
                             </p>
                         </div>
-                        <div class="bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm rounded-xl px-3 py-2 text-center flex flex-col justify-center transition-colors hover:bg-white/20">
-                            <p class="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">Validasi</p>
-                            <p class="text-xs sm:text-sm font-black text-white">Sistem</p>
+                        <div class="bg-white/10 backdrop-blur-sm border border-slate-300 dark:border-white/20 shadow-sm rounded-xl px-3 py-2 text-center flex flex-col justify-center transition-colors hover:bg-white/20">
+                            <p class="text-[10px] sm:text-xs font-bold text-slate-800 dark:text-white/80 uppercase tracking-wider mb-1">Validasi</p>
+                            <p class="text-xs sm:text-sm font-black text-slate-800 dark:text-white">Sistem</p>
                         </div>
                     </div>
                 </div>
@@ -91,12 +91,12 @@
 
             <!-- Card: Saldo Kendaraan -->
             <div
-                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-sky-500 to-sky-800 border border-sky-400 shadow-xl p-3 sm:p-6 text-white shadow-lg shadow-sky-500/5 group hover:shadow-sky-500/20 transition-all duration-300 hover:-translate-y-1">
+                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-sky-500 to-sky-800 border border-sky-400 shadow-xl p-3 sm:p-6 text-slate-800 dark:text-white shadow-lg shadow-sky-500/5 group hover:shadow-sky-500/20 transition-all duration-300 hover:-translate-y-1">
                 <div class="absolute -top-4 -right-4 w-24 h-24 bg-slate-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500">
                 </div>
                 <div class="relative z-10 h-full flex flex-col">
                     <div class="flex items-center justify-between mb-2 sm:mb-4">
-                        <div class="p-2 sm:p-3 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl">
+                        <div class="p-2 sm:p-3 bg-white/20 border border-slate-300 dark:border-white/30 rounded-lg sm:rounded-xl text-white">
                             <svg class="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
@@ -105,17 +105,17 @@
                         </div>
                     </div>
                     <div class="flex flex-col gap-0.5 sm:gap-1 mt-2 sm:mt-1">
-                        <p class="text-2xl sm:text-4xl font-black text-white leading-none">{{ rtrim(rtrim(number_format($totalSaldoKendaraan, 2, ',', '.'), '0'), ',') }} <span class="text-sm sm:text-lg font-medium opacity-80">L</span></p>
+                        <p class="text-2xl sm:text-4xl font-black text-white leading-none">{{ rtrim(rtrim(number_format($totalSaldoKendaraan, 2, ',', '.'), '0'), ',') }} <span class="text-sm sm:text-lg font-medium opacity-80 text-white">L</span></p>
                         <p class="text-[10px] sm:text-sm text-white/90 font-medium leading-tight">Saldo Kendaraan</p>
                     </div>
                     <div class="mt-auto pt-3 sm:pt-5 grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
                         @forelse($saldoKendaraanPerBbm as $bbm => $total)
-                            <div class="bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm rounded-xl px-2 py-2 text-center flex flex-col justify-center transition-colors hover:bg-white/20">
-                                <p class="text-[9px] sm:text-[10px] font-bold text-white/80 uppercase tracking-wider truncate mb-1" title="{{ $bbm }}">{{ $bbm }}</p>
-                                <p class="text-sm sm:text-base font-black text-white">{{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }} <span class="text-[10px] font-bold opacity-80">L</span></p>
+                            <div class="bg-white/10 backdrop-blur-sm border border-slate-400 dark:border-white/20 shadow-sm rounded-xl px-2 py-2 text-center flex flex-col justify-center transition-colors hover:bg-white/20">
+                                <p class="text-[9px] sm:text-[10px] font-bold text-white/90 uppercase tracking-wider truncate mb-1" title="{{ $bbm }}">{{ $bbm }}</p>
+                                <p class="text-sm sm:text-base font-black text-white">{{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }} <span class="text-[10px] font-bold opacity-80 text-white">L</span></p>
                             </div>
                         @empty
-                            <div class="col-span-1 sm:col-span-2 bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm rounded-xl px-2 py-2 text-center flex flex-col justify-center transition-colors hover:bg-white/20">
+                            <div class="col-span-1 sm:col-span-2 bg-white/10 backdrop-blur-sm border border-slate-400 dark:border-white/20 shadow-sm rounded-xl px-2 py-2 text-center flex flex-col justify-center transition-colors hover:bg-white/20">
                                 <p class="text-[9px] sm:text-[10px] font-bold text-white/80 uppercase tracking-wider mb-1">Status</p>
                                 <p class="text-xs sm:text-sm font-black text-white/90">Belum ada saldo</p>
                             </div>
@@ -126,12 +126,12 @@
 
             <!-- Card: Total Hutang (Bon) -->
             <div
-                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-800 border border-indigo-400 shadow-xl p-3 sm:p-6 text-white shadow-lg shadow-indigo-500/5 group hover:shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-1">
+                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-slate-600 to-slate-800 dark:from-slate-800 dark:to-slate-900 border border-slate-500/20 shadow-xl p-3 sm:p-6 text-white shadow-lg shadow-slate-500/5 group hover:shadow-slate-500/20 transition-all duration-300 hover:-translate-y-1">
                 <div class="absolute -top-4 -right-4 w-24 h-24 bg-slate-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500">
                 </div>
                 <div class="relative z-10 h-full flex flex-col">
                     <div class="flex items-center justify-between mb-2 sm:mb-4">
-                        <div class="p-2 sm:p-3 bg-white/20 border border-white/30 rounded-lg sm:rounded-xl">
+                        <div class="p-2 sm:p-3 bg-white/20 border border-slate-300 dark:border-white/30 rounded-lg sm:rounded-xl text-white">
                             <svg class="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
@@ -140,18 +140,27 @@
                         </div>
                     </div>
                     <div class="flex flex-col gap-0.5 sm:gap-1 mt-2 sm:mt-1">
-                        <p class="text-2xl sm:text-4xl font-black text-white leading-none">{{ rtrim(rtrim(number_format($totalHutang, 2, ',', '.'), '0'), ',') }} <span class="text-sm sm:text-lg font-medium opacity-80">L</span></p>
+                        <p class="text-2xl sm:text-4xl font-black text-white leading-none">{{ rtrim(rtrim(number_format($totalHutang, 2, ',', '.'), '0'), ',') }} <span class="text-sm sm:text-lg font-medium opacity-80 text-white">L</span></p>
                         <p class="text-[10px] sm:text-sm text-white/90 font-medium leading-tight">Total Hutang (Bon)</p>
                     </div>
                     <div class="mt-auto pt-3 sm:pt-5 grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
                         @forelse($hutangPerBbm as $bbm => $total)
-                            <div class="bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm rounded-xl px-2 py-2 text-center flex flex-col justify-center transition-colors hover:bg-white/20">
-                                <p class="text-[9px] sm:text-[10px] font-bold text-white/80 uppercase tracking-wider truncate mb-1" title="{{ $bbm }}">{{ $bbm }}</p>
-                                <p class="text-sm sm:text-base font-black text-white">{{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }} <span class="text-[10px] font-bold opacity-80">L</span></p>
+                            @php
+                                if (stripos($bbm, 'pertamax') !== false) {
+                                    $innerBg = 'bg-orange-500/80 hover:bg-orange-600/80 border-orange-400/50';
+                                } elseif (stripos($bbm, 'dex') !== false) {
+                                    $innerBg = 'bg-blue-500/80 hover:bg-blue-600/80 border-blue-400/50';
+                                } else {
+                                    $innerBg = 'bg-white/10 hover:bg-white/20 border-slate-400 dark:border-white/20';
+                                }
+                            @endphp
+                            <div class="{{ $innerBg }} backdrop-blur-sm border shadow-sm rounded-xl px-2 py-2 text-center flex flex-col justify-center transition-colors">
+                                <p class="text-[9px] sm:text-[10px] font-bold text-white/90 uppercase tracking-wider truncate mb-1" title="{{ $bbm }}">{{ $bbm }}</p>
+                                <p class="text-sm sm:text-base font-black text-white">{{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }} <span class="text-[10px] font-bold opacity-80 text-white">L</span></p>
                             </div>
                         @empty
-                            <div class="col-span-1 sm:col-span-2 bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm rounded-xl px-2 py-2 text-center flex flex-col justify-center transition-colors hover:bg-white/20">
-                                <p class="text-[9px] sm:text-[10px] font-bold text-white/80 uppercase tracking-wider mb-1">Status</p>
+                            <div class="col-span-1 sm:col-span-2 bg-white/10 backdrop-blur-sm border border-slate-300 dark:border-white/20 shadow-sm rounded-xl px-2 py-2 text-center flex flex-col justify-center transition-colors hover:bg-white/20">
+                                <p class="text-[9px] sm:text-[10px] font-bold text-slate-800 dark:text-white/80 uppercase tracking-wider mb-1">Status</p>
                                 <p class="text-xs sm:text-sm font-black text-emerald-300">Nihil (Tidak ada bon)</p>
                             </div>
                         @endforelse
@@ -164,41 +173,41 @@
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-3 sm:gap-6 mt-2 sm:mt-4">
             <!-- Chart Area -->
             <div
-                class="xl:col-span-2 bg-slate-900 border border-white/5 rounded-xl sm:rounded-2xl border border-white/10/70 shadow-sm p-4 sm:p-6">
-                <h3 class="text-base sm:text-lg font-bold text-slate-200 mb-2 sm:mb-4">Transaksi 7 Hari Terakhir
+                class="xl:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-xl sm:rounded-2xl border border-slate-200 dark:border-white/10/70 shadow-sm p-4 sm:p-6">
+                <h3 class="text-base sm:text-lg font-bold text-slate-800 dark:text-slate-200 mb-2 sm:mb-4">Transaksi 7 Hari Terakhir
                 </h3>
                 <div id="transactionChart"></div>
             </div>
 
             <!-- Recent Transactions -->
-            <div class="bg-slate-900 border border-white/5 rounded-xl sm:rounded-2xl border border-white/10/70 shadow-sm">
-                <div class="p-4 sm:p-6 border-b border-white/5">
-                    <h3 class="text-base sm:text-lg font-bold text-slate-200">Aktivitas Terbaru</h3>
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-xl sm:rounded-2xl border border-slate-200 dark:border-white/10/70 shadow-sm">
+                <div class="bg-white dark:bg-slate-900 dark:text-white p-4 sm:p-6 border-b border-slate-200 dark:border-white/5">
+                    <h3 class="text-base sm:text-lg font-bold text-slate-800 dark:text-slate-200">Aktivitas Terbaru</h3>
                 </div>
-                <div class="divide-y divide-white/5 max-h-[300px] sm:max-h-[400px] overflow-y-auto">
+                <div class="divide-y divide-slate-200 dark:divide-white/5 max-h-[300px] sm:max-h-[400px] overflow-y-auto">
                     @forelse($recentTransactions as $trx)
-                        <div class="px-4 py-3 sm:px-6 sm:py-4 hover:bg-slate-800/50 transition-colors">
+                        <div class="px-4 py-3 sm:px-6 sm:py-4 hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
                             <div class="flex items-center gap-2 sm:gap-3">
                                 <div
                                     class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold text-xs sm:text-sm">
                                     {{ substr($trx->kendaraan->no_polisi ?? '?', 0, 2) }}
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <p class="text-xs sm:text-xs font-medium text-slate-200 truncate">
+                                    <p class="text-xs sm:text-xs font-medium text-slate-800 dark:text-slate-200 truncate">
                                         {{ $trx->kendaraan->no_polisi ?? '-' }}
                                     </p>
-                                    <p class="text-[10px] sm:text-xs text-slate-400">
+                                    <p class="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400">
                                         {{ $trx->created_at->diffForHumans() }}</p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-xs sm:text-sm font-bold text-slate-300">
+                                    <p class="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300">
                                         {{ number_format($trx->liter, 0, ',', '.') }} L</p>
                                 </div>
                             </div>
                         </div>
                     @empty
                         <div class="px-6 py-12 text-center">
-                            <p class="text-xs text-slate-400">Belum ada aktivitas transaksi</p>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">Belum ada aktivitas transaksi</p>
                         </div>
                     @endforelse
                 </div>

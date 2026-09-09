@@ -2,7 +2,7 @@
     <div class="max-w-7xl mx-auto p-2 sm:p-6 lg:p-8 space-y-6 px-2 sm:px-6 lg:px-8">
         <!-- Page Title -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <h1 class="text-2xl sm:text-2xl font-bold text-white border-b-4 border-indigo-600 pb-2 inline-block">
+            <h1 class="text-2xl sm:text-2xl font-bold text-slate-800 dark:text-white border-b-4 border-indigo-600 pb-2 inline-block">
                 Rekapan Hutang BBM</h1>
         </div>
 
@@ -27,7 +27,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Form Input Baru -->
             <div
-                class="lg:col-span-1 bg-slate-900 border border-white/5 rounded-3xl border border-white/10 shadow-xl shadow-indigo-500/10 p-6 sm:p-8 relative overflow-hidden group">
+                class="lg:col-span-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-3xl border border-slate-200 dark:border-white/10 shadow-xl shadow-indigo-500/10 p-6 sm:p-8 relative overflow-hidden group">
                 <!-- Decorative background -->
                 <div
                     class="absolute -top-12 -right-12 w-32 h-32 bg-indigo-500/20 rounded-full blur-3xl group-hover:bg-indigo-500/40 transition-colors duration-500">
@@ -36,15 +36,15 @@
                 <div class="relative">
                     <div class="flex items-center gap-4 mb-8">
                         <div
-                            class="p-3 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-2xl text-white shadow-lg shadow-indigo-500/30">
+                            class="p-3 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-2xl text-slate-800 dark:text-white shadow-lg shadow-indigo-500/30">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                     d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                             </svg>
                         </div>
                         <div>
-                            <h2 class="text-xl font-extrabold text-slate-200 tracking-tight">Catat Hutang Baru</h2>
-                            <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Input Data Hutang
+                            <h2 class="text-xl font-extrabold text-slate-800 dark:text-slate-200 tracking-tight">Catat Hutang Baru</h2>
+                            <p class="text-xs font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider">Input Data Hutang
                                 Satker</p>
                         </div>
                     </div>
@@ -55,14 +55,14 @@
                         <!-- Satker Selection -->
                         <div class="space-y-2">
                             <x-input-label for="satker_id" value="Pilih Satker Unit"
-                                class="text-slate-300 font-bold ml-1" />
+                                class="text-slate-700 dark:text-slate-300 font-bold ml-1" />
                             <div class="relative">
                                 <select id="satker_id" name="satker_id"
                                     class="tom-select w-full duration-300"
                                     required>
-                                    <option value="">-- Pilih Satker --</option>
+                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">-- Pilih Satker --</option>
                                     @foreach($satkers as $sat)
-                                        <option value="{{ $sat->id }}">{{ $sat->nama_satker }}</option>
+                                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $sat->id }}">{{ $sat->nama_satker }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -71,12 +71,12 @@
                         <!-- Vehicle Selection -->
                         <div class="space-y-2">
                             <x-input-label for="kendaraan_select" value="Pilih Kendaraan"
-                                class="text-slate-300 font-bold ml-1" />
+                                class="text-slate-700 dark:text-slate-300 font-bold ml-1" />
                             <div class="relative">
                                 <select id="kendaraan_select"
-                                    class="tom-select w-full duration-300 disabled:bg-slate-800 disabled:cursor-not-allowed"
+                                    class="tom-select w-full duration-300 disabled:bg-slate-50 dark:bg-slate-800 disabled:cursor-not-allowed"
                                     required disabled>
-                                    <option value="">-- Pilih Satker Dahulu --</option>
+                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">-- Pilih Satker Dahulu --</option>
                                 </select>
                                 <div id="vehicle_loader"
                                     class="absolute inset-y-0 right-0 pr-10 flex items-center pointer-events-none hidden z-10">
@@ -94,12 +94,12 @@
 
                         {{-- Card Info Kendaraan --}}
                         <div id="vehicle_info_card"
-                            class="bg-gradient-to-br from-slate-900 to-indigo-900 rounded-2xl p-4 text-white shadow-lg space-y-3 hidden animate-in fade-in slide-in-from-top-4 duration-300">
+                            class="bg-gradient-to-br from-slate-100 dark:from-slate-900 to-indigo-900 rounded-2xl p-4 text-slate-800 dark:text-white shadow-lg space-y-3 hidden animate-in fade-in slide-in-from-top-4 duration-300">
                             <div class="flex justify-between items-start">
                                 <span
-                                    class="px-2 py-0.5 bg-slate-900 border border-white/5/20 rounded-md text-[10px] font-bold uppercase tracking-widest text-white/80">Info
+                                    class="px-2 py-0.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/20 rounded-md text-[10px] font-bold uppercase tracking-widest text-slate-800 dark:text-white/80">Info
                                     Kendaraan</span>
-                                <svg class="w-5 h-5 text-indigo-400" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400" fill="currentColor" viewBox="0 0 20 20">
                                     <path
                                         d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
                                     <path
@@ -108,11 +108,11 @@
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <p class="text-[10px] text-indigo-300 font-bold uppercase">No. Polisi</p>
+                                    <p class="text-[10px] text-indigo-600 dark:text-indigo-300 font-bold uppercase">No. Polisi</p>
                                     <p id="card_nopol" class="text-sm font-black tracking-tight">-</p>
                                 </div>
                                 <div>
-                                    <p class="text-[10px] text-indigo-300 font-bold uppercase">Jenis BBM</p>
+                                    <p class="text-[10px] text-indigo-600 dark:text-indigo-300 font-bold uppercase">Jenis BBM</p>
                                     <p id="card_bbm" class="text-sm font-bold">-</p>
                                 </div>
                             </div>
@@ -120,13 +120,13 @@
 
                         {{-- Panel Stok Tangki --}}
                         <div id="stok_tangki_card" class="hidden rounded-2xl border p-4 space-y-1 transition-all duration-300">
-                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Stok BBM di Tangki</p>
+                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-400">Stok BBM di Tangki</p>
                             <div class="flex items-end justify-between">
                                 <div>
-                                    <span id="stok_tangki_jenis" class="text-xs font-bold text-slate-400">-</span>
-                                    <p id="stok_tangki_nilai" class="text-2xl font-black text-slate-200">0 <span class="text-sm font-bold">L</span></p>
+                                    <span id="stok_tangki_jenis" class="text-xs font-bold text-slate-600 dark:text-slate-400">-</span>
+                                    <p id="stok_tangki_nilai" class="text-2xl font-black text-slate-800 dark:text-slate-200">0 <span class="text-sm font-bold">L</span></p>
                                 </div>
-                                <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-8 h-8 text-slate-700 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
                                 </svg>
                             </div>
@@ -140,10 +140,10 @@
                         <!-- Tanggal Bon Input -->
                         <div class="space-y-2">
                             <x-input-label for="tanggal_bon" value="Tanggal Bon"
-                                class="text-slate-300 font-bold ml-1" />
+                                class="text-slate-700 dark:text-slate-300 font-bold ml-1" />
                             <div class="relative group/input">
                                 <x-text-input id="tanggal_bon" name="tanggal_bon" type="date"
-                                    class="flatpickr block w-full bg-slate-800/50 border-white/10 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-2xl py-3.5 transition-all duration-300 font-bold text-slate-300"
+                                    class="flatpickr block w-full bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-white/10 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-2xl py-3.5 transition-all duration-300 font-bold text-slate-700 dark:text-slate-300"
                                     value="{{ date('Y-m-d') }}" required />
                             </div>
                         </div>
@@ -151,17 +151,17 @@
                         <!-- Nama Driver (Manual Input) -->
                         <div class="space-y-2">
                             <x-input-label for="nama_driver" value="Nama Driver (Manual)"
-                                class="text-slate-300 font-bold ml-1" />
+                                class="text-slate-700 dark:text-slate-300 font-bold ml-1" />
                             <div class="relative group/input">
                                 <div
-                                    class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within/input:text-indigo-500 transition-colors">
+                                    class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-600 dark:text-slate-400 group-focus-within/input:text-indigo-500 transition-colors">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                     </svg>
                                 </div>
                                 <x-text-input id="nama_driver" name="nama_driver" type="text"
-                                    class="block w-full pl-11 bg-slate-800/50 border-white/10 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-2xl py-3.5 transition-all duration-300 font-bold text-slate-300"
+                                    class="block w-full pl-11 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-white/10 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-2xl py-3.5 transition-all duration-300 font-bold text-slate-700 dark:text-slate-300"
                                     placeholder="Masukkan Nama Driver..." required />
                             </div>
                         </div>
@@ -169,20 +169,20 @@
                         <!-- Amount Input -->
                         <div class="space-y-2">
                             <x-input-label for="jumlah_bon" value="Jumlah Bon (Liter)"
-                                class="text-slate-300 font-bold ml-1" />
+                                class="text-slate-700 dark:text-slate-300 font-bold ml-1" />
                             <div class="relative group/input">
                                 <div
-                                    class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within/input:text-indigo-500 transition-colors">
+                                    class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-600 dark:text-slate-400 group-focus-within/input:text-indigo-500 transition-colors">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                                     </svg>
                                 </div>
                                 <x-text-input id="jumlah_bon" type="number" step="1" min="1" name="jumlah_bon"
-                                    class="block w-full pl-11 bg-slate-800/50 border-white/10 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-2xl py-3.5 transition-all duration-300 font-bold text-slate-300 text-lg"
+                                    class="block w-full pl-11 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-white/10 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-2xl py-3.5 transition-all duration-300 font-bold text-slate-700 dark:text-slate-300 text-lg"
                                     placeholder="0.0" required />
                                 <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                                    <span class="text-slate-400 font-bold text-sm">LTR</span>
+                                    <span class="text-slate-600 dark:text-slate-400 font-bold text-sm">LTR</span>
                                 </div>
                             </div>
                             {{-- Pesan error stok --}}
@@ -199,7 +199,7 @@
 
                         <div class="pt-2">
                             <button type="submit"
-                                class="w-full inline-flex justify-center items-center px-6 py-4 bg-gradient-to-r from-indigo-600 to-blue-600 border-none rounded-2xl font-black text-white uppercase tracking-widest hover:from-indigo-700 hover:to-blue-700 active:scale-[0.98] transition-all duration-200 shadow-xl shadow-indigo-500/30 group/btn">
+                                class="w-full inline-flex justify-center items-center px-6 py-4 bg-gradient-to-r from-indigo-600 to-blue-600 border-none rounded-2xl font-black text-slate-800 dark:text-white uppercase tracking-widest hover:from-indigo-700 hover:to-blue-700 active:scale-[0.98] transition-all duration-200 shadow-xl shadow-indigo-500/30 group/btn">
                                 <span>Simpan Data Hutang</span>
                                 <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
@@ -213,17 +213,17 @@
             </div>
 
             <!-- Tabel Riwayat -->
-            <div class="lg:col-span-2 bg-slate-900 border border-white/5 rounded-2xl border border-white/10 shadow-sm p-6 overflow-hidden">
+            <div class="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-6 overflow-hidden">
                 <div class="space-y-6 mb-6">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div class="flex items-center gap-3">
-                            <div class="p-2 bg-slate-800 rounded-lg text-slate-400">
+                            <div class="p-2 bg-slate-50 dark:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
-                            <h2 class="text-xl font-bold text-slate-200">Riwayat Hutang BBM</h2>
+                            <h2 class="text-xl font-bold text-slate-800 dark:text-slate-200">Riwayat Hutang BBM</h2>
                         </div>
 
                         <!-- Summary Outstanding per BBM -->
@@ -232,7 +232,7 @@
                                 <div
                                     class="px-3 py-1.5 bg-rose-50 border border-rose-100 rounded-xl flex items-center gap-2">
                                     <span
-                                        class="text-[10px] font-black text-rose-400 uppercase tracking-widest">{{ $bbm }}</span>
+                                        class="text-[10px] font-black text-rose-600 dark:text-rose-400 uppercase tracking-widest">{{ $bbm }}</span>
                                     <span class="text-xs font-bold text-rose-500">{{ $total }} L</span>
                                 </div>
                             @endforeach
@@ -246,17 +246,17 @@
                     </div>
 
                     <!-- Filter Form -->
-                    <div class="bg-slate-800/50 border border-white/10 rounded-2xl p-4">
+                    <div class="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-white/10 rounded-2xl p-4">
                         <form action="{{ route('petugas.hutang.index') }}" method="GET"
                             class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
                                 <x-input-label for="filter_satker" value="Filter Satker"
-                                    class="text-xs font-bold text-slate-400 mb-1" />
+                                    class="text-xs font-bold text-slate-600 dark:text-slate-400 mb-1" />
                                 <select name="satker_id" id="filter_satker"
                                     class="tom-select w-full">
-                                    <option value="">Semua Satker</option>
+                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua Satker</option>
                                     @foreach($satkers as $sat)
-                                        <option value="{{ $sat->id }}" {{ request('satker_id') == $sat->id ? 'selected' : '' }}>
+                                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $sat->id }}" {{ request('satker_id') == $sat->id ? 'selected' : '' }}>
                                             {{ $sat->nama_satker }}
                                         </option>
                                     @endforeach
@@ -264,13 +264,13 @@
                             </div>
                             <div>
                                 <x-input-label for="filter_status" value="Filter Status"
-                                    class="text-xs font-bold text-slate-400 mb-1" />
+                                    class="text-xs font-bold text-slate-600 dark:text-slate-400 mb-1" />
                                 <select name="status" id="filter_status"
                                     class="tom-select w-full">
-                                    <option value="">Semua Status</option>
-                                    <option value="belum_dibayar" {{ request('status') === 'belum_dibayar' ? 'selected' : '' }}>
+                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua Status</option>
+                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="belum_dibayar" {{ request('status') === 'belum_dibayar' ? 'selected' : '' }}>
                                         BELUM BAYAR</option>
-                                    <option value="sudah_dibayar" {{ request('status') === 'sudah_dibayar' ? 'selected' : '' }}>
+                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="sudah_dibayar" {{ request('status') === 'sudah_dibayar' ? 'selected' : '' }}>
                                         LUNAS</option>
                                 </select>
                             </div>
@@ -281,7 +281,7 @@
                                 </button>
                                 @if(request()->hasAny(['satker_id', 'status']))
                                     <a href="{{ route('petugas.hutang.index') }}"
-                                        class="px-4 py-2 bg-slate-200 text-slate-300 font-bold rounded-xl hover:bg-slate-300 transition active:scale-95">
+                                        class="px-4 py-2 bg-slate-200 text-slate-700 dark:text-slate-300 font-bold rounded-xl hover:bg-slate-300 transition active:scale-95">
                                         Reset
                                     </a>
                                 @endif
@@ -290,27 +290,27 @@
                     </div>
                 </div>
 
-                <div class="overflow-x-auto rounded-xl border border-white/10/60">
-                    <div class="px-4 py-3 border-b border-white/5 flex justify-between items-center bg-slate-800/50">
-                        <h3 class="text-sm font-bold text-slate-300 uppercase tracking-wider">Daftar Rekapan Hutang</h3>
+                <div class="bg-white dark:bg-slate-900 dark:text-white overflow-x-auto rounded-xl border border-slate-200 dark:border-white/10/60">
+                    <div class="px-4 py-3 border-b border-slate-200 dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
+                        <h3 class="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Daftar Rekapan Hutang</h3>
                         <div class="flex items-center gap-2">
-                            <span class="text-[10px] uppercase font-bold text-slate-400">Tampilkan</span>
+                            <span class="text-[10px] uppercase font-bold text-slate-600 dark:text-slate-400">Tampilkan</span>
                             <form action="{{ route('petugas.hutang.index') }}" method="GET" class="inline">
                                 @foreach(request()->except('per_page') as $key => $value)
                                     <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                                 @endforeach
                                 <select name="per_page" onchange="this.form.submit()"
-                                    class="block border-white/10 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm text-xs py-1.5 font-bold text-slate-300">
-                                    <option value="15" {{ request('per_page') == 15 || !request('per_page') ? 'selected' : '' }}>15</option>
-                                    <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
-                                    <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
-                                    <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
+                                    class="bg-white dark:bg-slate-900 dark:text-white block border-slate-200 dark:border-white/10 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm text-xs py-1.5 font-bold text-slate-700 dark:text-slate-300">
+                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="15" {{ request('per_page') == 15 || !request('per_page') ? 'selected' : '' }}>15</option>
+                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
                                 </select>
                             </form>
                         </div>
                     </div>
                     <table class="w-full text-sm text-left whitespace-nowrap">
-                        <thead class="text-xs text-slate-400 uppercase bg-slate-800/50/80 border-b border-white/10">
+                        <thead class="text-xs text-slate-600 dark:text-slate-400 uppercase bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-white/10">
                             <tr>
                                 <th class="px-4 py-4 font-bold tracking-wider">Tanggal</th>
                                 <th class="px-4 py-4 font-bold tracking-wider">Satker</th>
@@ -320,18 +320,18 @@
                                 <th class="px-4 py-4 font-bold tracking-wider">Status</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-white/5">
+                        <tbody class="divide-y divide-slate-200 dark:divide-white/5">
                             @forelse ($hutangs as $hutang)
-                                <tr class="hover:bg-slate-800/50 transition-colors">
+                                <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
                                     <td class="px-4 py-3">
-                                        <p class="font-medium text-white">
+                                        <p class="font-medium text-slate-800 dark:text-white">
                                             @if($hutang->tanggal_bon)
                                                 {{ \Carbon\Carbon::parse($hutang->tanggal_bon)->translatedFormat('d F Y') }}
                                             @else
                                                 {{ \Carbon\Carbon::parse($hutang->created_at)->timezone('Asia/Makassar')->translatedFormat('d F Y') }}
                                             @endif
                                         </p>
-                                        <p class="text-xs text-slate-400">
+                                        <p class="text-xs text-slate-600 dark:text-slate-400">
                                             @if($hutang->tanggal_bon)
                                                 {{-- For manual date, time might not be relevant or default to midnight --}}
                                                 Catatan Manual
@@ -341,14 +341,14 @@
                                             @endif
                                         </p>
                                     </td>
-                                    <td class="px-4 py-3 font-semibold text-slate-200">{{ $hutang->satker->nama_satker }}
+                                    <td class="px-4 py-3 font-semibold text-slate-800 dark:text-slate-200">{{ $hutang->satker->nama_satker }}
                                     </td>
                                     <td class="px-4 py-3">
-                                        <p class="font-bold text-white">{{ $hutang->nopol }}</p>
-                                        <p class="text-xs text-slate-400">{{ $hutang->jenis_kendaraan }}</p>
+                                        <p class="font-bold text-slate-800 dark:text-white">{{ $hutang->nopol }}</p>
+                                        <p class="text-xs text-slate-600 dark:text-slate-400">{{ $hutang->jenis_kendaraan }}</p>
                                     </td>
                                     <td class="px-4 py-3">
-                                        <div class="font-bold text-slate-200">{{ $hutang->nama_driver ?? '-' }}</div>
+                                        <div class="font-bold text-slate-800 dark:text-slate-200">{{ $hutang->nama_driver ?? '-' }}</div>
                                     </td>
                                     <td class="px-4 py-3">
                                         <span
@@ -365,10 +365,10 @@
                                             <span
                                                 class="px-2.5 py-1 bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg text-xs font-bold tracking-wide uppercase">LUNAS</span>
                                             <div class="mt-1 text-xs">
-                                                <span class="text-[10px] text-slate-400">Oleh:
+                                                <span class="text-[10px] text-slate-600 dark:text-slate-400">Oleh:
                                                     {{ $hutang->adminBayar->name ?? '-' }}</span>
                                                 <span
-                                                    class="text-[10px] text-slate-400">{{ \Carbon\Carbon::parse($hutang->tanggal_bayar)->timezone('Asia/Makassar')->translatedFormat('d M Y H:i') }}
+                                                    class="text-[10px] text-slate-600 dark:text-slate-400">{{ \Carbon\Carbon::parse($hutang->tanggal_bayar)->timezone('Asia/Makassar')->translatedFormat('d M Y H:i') }}
                                                     WITA</span>
                                             </div>
                                         @endif
@@ -376,7 +376,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="px-4 py-8 text-center text-slate-400 italic">Belum ada data
+                                    <td colspan="5" class="px-4 py-8 text-center text-slate-600 dark:text-slate-400 italic">Belum ada data
                                         hutang BBM.</td>
                                 </tr>
                             @endforelse
@@ -438,7 +438,7 @@
                     // Warna card berdasarkan stok
                     if (stokTangkiCard) {
                         stokTangkiCard.classList.remove('hidden', 'border-rose-200', 'bg-rose-50', 'border-amber-200', 'bg-amber-50', 'border-emerald-200', 'bg-emerald-50');
-                        if (stokTangkiNilai) stokTangkiNilai.classList.remove('text-rose-600', 'text-amber-600', 'text-emerald-600', 'text-slate-200');
+                        if (stokTangkiNilai) stokTangkiNilai.classList.remove('text-rose-600', 'text-amber-600', 'text-emerald-600', 'text-slate-800 dark:text-slate-200');
                         if (currentStok <= 0) {
                             stokTangkiCard.classList.add('border-rose-200', 'bg-rose-50');
                             if (stokTangkiNilai) stokTangkiNilai.classList.add('text-rose-600');

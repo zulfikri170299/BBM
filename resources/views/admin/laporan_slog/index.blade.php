@@ -1,11 +1,11 @@
 <x-app-layout>
-<div class="py-8 px-2 sm:px-6 lg:px-8 bg-slate-800/50/30 min-h-screen">
+<div class="py-8 px-2 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-800/30 min-h-screen">
   <!-- Clean & Professional Header -->
   <div class="max-w-7xl mx-auto mb-8 px-2 sm:px-6 lg:px-8">
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
       <div>
-        <h1 class="text-2xl font-bold text-white tracking-tight">Laporan Rutin</h1>
-        <p class="mt-1 text-xs text-slate-400 font-medium italic">Rekapitulasi persediaan, penerimaan, dan pengeluaran BBM {{ $jenisLaporan == 'harian' ? 'Per Hari (Harian)' : ($jenisLaporan == 'bulanan' ? 'Per Minggu (Bulanan)' : 'Per Bulan (Triwulan)') }}.</p>
+        <h1 class="text-2xl font-bold text-slate-800 dark:text-white tracking-tight">Laporan Rutin</h1>
+        <p class="mt-1 text-xs text-slate-600 dark:text-slate-400 font-medium italic">Rekapitulasi persediaan, penerimaan, dan pengeluaran BBM {{ $jenisLaporan == 'harian' ? 'Per Hari (Harian)' : ($jenisLaporan == 'bulanan' ? 'Per Minggu (Bulanan)' : 'Per Bulan (Triwulan)') }}.</p>
       </div>
       
       <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 w-full md:w-auto overflow-visible">
@@ -18,7 +18,7 @@
             jenisLabel: '{{ $jenisLaporan == 'harian' ? 'Harian' : ($jenisLaporan == 'bulanan' ? 'Bulanan' : 'Triwulan') }}',
             bulanLabel: '{{ Carbon\Carbon::create()->month((int)$bulan)->translatedFormat('F') }}'
           }" 
-          class="flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-start gap-2 bg-slate-900 border p-1 border-white/10 rounded-2xl shadow-sm ring-1 ring-black/5 w-full sm:w-auto">
+          class="flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-start gap-2 bg-white dark:bg-slate-900 border p-1 border-slate-200 dark:border-white/10 rounded-2xl shadow-sm ring-1 ring-black/5 w-full sm:w-auto">
           
           <input type="hidden" name="jenis_laporan" x-model="jenis">
           <input type="hidden" name="bulan" x-model="bulan">
@@ -26,34 +26,34 @@
           <input type="hidden" name="tahun" x-model="tahun">
 
           <!-- Jenis Laporan Dropdown -->
-          <div class="relative px-2 border-r border-white/5" x-data="{ open: false }">
+          <div class="bg-white dark:bg-slate-900 dark:text-white relative px-2 border-r border-slate-200 dark:border-white/5" x-data="{ open: false }">
             <button type="button" @click="open = !open" @click.away="open = false" 
-              class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-indigo-400 hover:bg-indigo-50 rounded-xl transition-all">
+              class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 rounded-xl transition-all">
               <span x-text="jenisLabel"></span>
               <svg class="w-3 h-3 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
             </button>
             <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-              class="absolute left-0 mt-2 w-32 bg-slate-900 border border-white/5 rounded-xl shadow-xl border border-white/5 z-50 overflow-hidden py-1">
-              <button type="button" @click="jenis = 'harian'; jenisLabel = 'Harian'; open = false" class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-slate-800/50 text-slate-300 transition-colors">Harian</button>
-              <button type="button" @click="jenis = 'bulanan'; jenisLabel = 'Bulanan'; open = false" class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-slate-800/50 text-slate-300 transition-colors">Bulanan</button>
-              <button type="button" @click="jenis = 'triwulan'; jenisLabel = 'Triwulan'; open = false" class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-slate-800/50 text-slate-300 transition-colors">Triwulan</button>
+              class="absolute left-0 mt-2 w-32 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-xl shadow-xl border border-slate-200 dark:border-white/5 z-50 overflow-hidden py-1">
+              <button type="button" @click="jenis = 'harian'; jenisLabel = 'Harian'; open = false" class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-slate-50 dark:bg-slate-800/50 text-slate-700 dark:text-slate-300 transition-colors">Harian</button>
+              <button type="button" @click="jenis = 'bulanan'; jenisLabel = 'Bulanan'; open = false" class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-slate-50 dark:bg-slate-800/50 text-slate-700 dark:text-slate-300 transition-colors">Bulanan</button>
+              <button type="button" @click="jenis = 'triwulan'; jenisLabel = 'Triwulan'; open = false" class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-slate-50 dark:bg-slate-800/50 text-slate-700 dark:text-slate-300 transition-colors">Triwulan</button>
             </div>
           </div>
 
           <!-- Bulan Dropdown -->
-          <div class="relative px-2 border-r border-white/5" x-show="jenis !== 'triwulan'" x-data="{ open: false }">
+          <div class="bg-white dark:bg-slate-900 dark:text-white relative px-2 border-r border-slate-200 dark:border-white/5" x-show="jenis !== 'triwulan'" x-data="{ open: false }">
             <button type="button" @click="open = !open" @click.away="open = false" 
-              class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-300 hover:bg-slate-800/50 rounded-xl transition-all">
+              class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:bg-slate-800/50 rounded-xl transition-all">
               <span x-text="bulanLabel"></span>
               <svg class="w-3 h-3 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
             </button>
             <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-              class="absolute right-0 mt-2 w-40 bg-slate-900 border border-white/5 rounded-xl shadow-xl border border-white/5 z-50 overflow-hidden max-h-60 overflow-y-auto py-1 custom-scrollbar">
+              class="absolute right-0 mt-2 w-40 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-xl shadow-xl border border-slate-200 dark:border-white/5 z-50 overflow-hidden max-h-60 overflow-y-auto py-1 custom-scrollbar">
               @foreach(range(1, 12) as $m)
                 @php $mStr = sprintf('%02d', $m); $mLabel = Carbon\Carbon::create()->month((int)$m)->translatedFormat('F'); @endphp
                 <button type="button" @click="bulan = '{{ $mStr }}'; bulanLabel = '{{ $mLabel }}'; open = false" 
-                  class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-slate-800/50 transition-colors"
-                  :class="bulan === '{{ $mStr }}' ? 'text-indigo-400 bg-indigo-500/20' : 'text-slate-300'">
+                  class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-slate-50 dark:bg-slate-800/50 transition-colors"
+                  :class="bulan === '{{ $mStr }}' ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-500/20' : 'text-slate-700 dark:text-slate-300'">
                   {{ $mLabel }}
                 </button>
               @endforeach
@@ -61,18 +61,18 @@
           </div>
 
           <!-- Triwulan Dropdown -->
-          <div class="relative px-2 border-r border-white/5" x-show="jenis === 'triwulan'" style="display: none;" x-data="{ open: false }">
+          <div class="bg-white dark:bg-slate-900 dark:text-white relative px-2 border-r border-slate-200 dark:border-white/5" x-show="jenis === 'triwulan'" style="display: none;" x-data="{ open: false }">
             <button type="button" @click="open = !open" @click.away="open = false" 
-              class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-300 hover:bg-slate-800/50 rounded-xl transition-all">
+              class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:bg-slate-800/50 rounded-xl transition-all">
               <span class="whitespace-nowrap" x-text="'TW ' + tw"></span>
               <svg class="w-3 h-3 transition-transform flex-shrink-0" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
             </button>
             <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-              class="absolute right-0 mt-2 w-32 bg-slate-900 border border-white/5 rounded-xl shadow-xl border border-white/5 z-50 overflow-hidden py-1">
+              class="absolute right-0 mt-2 w-32 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-xl shadow-xl border border-slate-200 dark:border-white/5 z-50 overflow-hidden py-1">
               @foreach(range(1, 4) as $t)
                 <button type="button" @click="tw = '{{ $t }}'; open = false" 
-                  class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-slate-800/50 transition-colors"
-                  :class="tw === '{{ $t }}' ? 'text-indigo-400 bg-indigo-500/20' : 'text-slate-300'">
+                  class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-slate-50 dark:bg-slate-800/50 transition-colors"
+                  :class="tw === '{{ $t }}' ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-500/20' : 'text-slate-700 dark:text-slate-300'">
                   TW {{ $t }}
                 </button>
               @endforeach
@@ -82,16 +82,16 @@
           <!-- Tahun Dropdown -->
           <div class="relative px-2" x-data="{ open: false }">
             <button type="button" @click="open = !open" @click.away="open = false" 
-              class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-300 hover:bg-slate-800/50 rounded-xl transition-all">
+              class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:bg-slate-800/50 rounded-xl transition-all">
               <span x-text="tahun"></span>
               <svg class="w-3 h-3 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
             </button>
             <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-              class="absolute right-0 mt-2 w-24 bg-slate-900 border border-white/5 rounded-xl shadow-xl border border-white/5 z-50 overflow-hidden py-1">
+              class="absolute right-0 mt-2 w-24 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-xl shadow-xl border border-slate-200 dark:border-white/5 z-50 overflow-hidden py-1">
               @foreach(range(date('Y')-2, date('Y')) as $y)
                 <button type="button" @click="tahun = '{{ $y }}'; open = false" 
-                  class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-slate-800/50 transition-colors"
-                  :class="tahun === '{{ $y }}' ? 'text-indigo-400 bg-indigo-500/20' : 'text-slate-300'">
+                  class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-slate-50 dark:bg-slate-800/50 transition-colors"
+                  :class="tahun === '{{ $y }}' ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-500/20' : 'text-slate-700 dark:text-slate-300'">
                   {{ $y }}
                 </button>
               @endforeach
@@ -117,192 +117,192 @@
   <!-- Modern Data Grid Table -->
   <div class="max-w-7xl mx-auto space-y-8 px-2 sm:px-6 lg:px-8">
     @if($jenisLaporan == 'bulanan')
-      <div class="bg-slate-900 border border-white/5 rounded-2xl shadow-sm border border-white/10 overflow-hidden ring-1 ring-white/10">
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl shadow-sm border border-slate-200 dark:border-white/10 overflow-hidden ring-1 ring-white/10">
         <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-white/5">
+          <table class="min-w-full divide-y divide-slate-200 dark:divide-white/5">
             <thead>
-              <tr class="bg-slate-800/50/80">
-                <th rowspan="2" class="px-4 py-4 text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest border-r border-white/5 w-12">No</th>
-                <th rowspan="2" class="px-4 py-3 text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest border-r border-white/5">Tanggal</th>
-                <th rowspan="2" class="px-4 py-3 text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest border-r border-white/5">Uraian</th>
-                <th colspan="2" class="px-4 py-4 text-center text-[10px] font-bold text-indigo-400 uppercase tracking-widest border-r border-white/5 ">Jenis dan Kuantum BMP</th>
-                <th rowspan="2" class="px-4 py-4 text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest border-r border-white/5">Satuan</th>
+              <tr class="bg-slate-50 dark:bg-slate-800/80">
+                <th rowspan="2" class="bg-white dark:bg-slate-900 dark:text-white px-4 py-4 text-center text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest border-r border-slate-200 dark:border-white/5 w-12">No</th>
+                <th rowspan="2" class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-left text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest border-r border-slate-200 dark:border-white/5">Tanggal</th>
+                <th rowspan="2" class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-left text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest border-r border-slate-200 dark:border-white/5">Uraian</th>
+                <th colspan="2" class="bg-white dark:bg-slate-900 dark:text-white px-4 py-4 text-center text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest border-r border-slate-200 dark:border-white/5 ">Jenis dan Kuantum BMP</th>
+                <th rowspan="2" class="bg-white dark:bg-slate-900 dark:text-white px-4 py-4 text-center text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest border-r border-slate-200 dark:border-white/5">Satuan</th>
               </tr>
-              <tr class="bg-slate-800/50/80">
-                <th class="px-4 py-2 text-center text-[10px] font-bold text-indigo-400 uppercase tracking-widest border-r border-white/5 ">Pertamax</th>
-                <th class="px-4 py-2 text-center text-[10px] font-bold text-indigo-400 uppercase tracking-widest border-r border-white/5 ">Pertamina Dex</th>
+              <tr class="bg-slate-50 dark:bg-slate-800/80">
+                <th class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-center text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest border-r border-slate-200 dark:border-white/5 ">Pertamax</th>
+                <th class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-center text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest border-r border-slate-200 dark:border-white/5 ">Pertamina Dex</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-white/5">
+            <tbody class="divide-y divide-slate-200 dark:divide-white/5">
               @php $i = 1; @endphp
               @foreach($data['weeks'] as $weekName => $weekData)
                 <!-- Persediaan Awal -->
-                <tr class="hover:bg-slate-800/50 transition-colors">
-                  <td rowspan="5" class="px-4 py-4 text-[11px] font-bold text-center text-slate-400 border-r border-white/5 align-top">{{ $i++ }}.</td>
-                  <td rowspan="5" class="px-4 py-3 text-sm font-bold text-white border-r border-white/5 align-top whitespace-nowrap">{{ $weekName }}</td>
-                  <td class="px-6 py-2 text-xs font-semibold text-slate-400 border-r border-white/5">Persediaan awal</td>
-                  <td class="px-4 py-2 text-xs text-center text-slate-300 border-r border-white/5">{{ number_format($weekData['awal_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-2 text-xs text-center text-slate-300 border-r border-white/5">{{ number_format($weekData['awal_dex'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-2 text-xs text-center text-slate-400">Liter</td>
+                <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
+                  <td rowspan="5" class="bg-white dark:bg-slate-900 dark:text-white px-4 py-4 text-[11px] font-bold text-center text-slate-500 dark:text-slate-400 border-r border-slate-200 dark:border-white/5 align-top">{{ $i++ }}.</td>
+                  <td rowspan="5" class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-sm font-bold text-slate-800 dark:text-white border-r border-slate-200 dark:border-white/5 align-top whitespace-nowrap">{{ $weekName }}</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-6 py-2 text-xs font-semibold text-slate-500 dark:text-slate-400 border-r border-slate-200 dark:border-white/5">Persediaan awal</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-xs text-center text-slate-700 dark:text-slate-300 border-r border-slate-200 dark:border-white/5">{{ number_format($weekData['awal_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-xs text-center text-slate-700 dark:text-slate-300 border-r border-slate-200 dark:border-white/5">{{ number_format($weekData['awal_dex'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="px-4 py-2 text-xs text-center text-slate-600 dark:text-slate-400">Liter</td>
                 </tr>
                 <!-- Penerimaan -->
-                <tr class="hover:bg-slate-800/50 transition-colors">
-                  <td class="px-6 py-2 text-xs font-semibold text-emerald-400 border-r border-white/5">Penerimaan</td>
-                  <td class="px-4 py-2 text-xs text-center text-emerald-400 font-bold border-r border-white/5">{{ number_format($weekData['terima_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-2 text-xs text-center text-emerald-400 font-bold border-r border-white/5">{{ number_format($weekData['terima_dex'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-2 text-xs text-center text-slate-400">Liter</td>
+                <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-6 py-2 text-xs font-semibold text-emerald-600 dark:text-emerald-400 border-r border-slate-200 dark:border-white/5">Penerimaan</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-xs text-center text-emerald-600 dark:text-emerald-400 font-bold border-r border-slate-200 dark:border-white/5">{{ number_format($weekData['terima_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-xs text-center text-emerald-600 dark:text-emerald-400 font-bold border-r border-slate-200 dark:border-white/5">{{ number_format($weekData['terima_dex'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="px-4 py-2 text-xs text-center text-slate-600 dark:text-slate-400">Liter</td>
                 </tr>
                 <!-- Jumlah -->
-                <tr class="hover:bg-slate-800/50 transition-colors ">
-                  <td class="px-6 py-2 text-xs font-bold text-indigo-400 border-r border-white/5">Jumlah</td>
-                  <td class="px-4 py-2 text-xs text-center text-indigo-400 font-bold border-r border-white/5">{{ number_format($weekData['jumlah_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-2 text-xs text-center text-indigo-400 font-bold border-r border-white/5">{{ number_format($weekData['jumlah_dex'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-2 text-xs text-center text-slate-400">Liter</td>
+                <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors ">
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-6 py-2 text-xs font-bold text-indigo-600 dark:text-indigo-400 border-r border-slate-200 dark:border-white/5">Jumlah</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-xs text-center text-indigo-600 dark:text-indigo-400 font-bold border-r border-slate-200 dark:border-white/5">{{ number_format($weekData['jumlah_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-xs text-center text-indigo-600 dark:text-indigo-400 font-bold border-r border-slate-200 dark:border-white/5">{{ number_format($weekData['jumlah_dex'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="px-4 py-2 text-xs text-center text-slate-600 dark:text-slate-400">Liter</td>
                 </tr>
                 <!-- Pengeluaran -->
-                <tr class="hover:bg-slate-800/50 transition-colors">
-                  <td class="px-6 py-2 text-xs font-semibold text-rose-400 border-r border-white/5">Pengeluaran</td>
-                  <td class="px-4 py-2 text-xs text-center text-rose-400 font-bold border-r border-white/5">{{ number_format($weekData['keluar_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-2 text-xs text-center text-rose-400 font-bold border-r border-white/5">{{ number_format($weekData['keluar_dex'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-2 text-xs text-center text-slate-400">Liter</td>
+                <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-6 py-2 text-xs font-semibold text-rose-600 dark:text-rose-400 border-r border-slate-200 dark:border-white/5">Pengeluaran</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-xs text-center text-rose-600 dark:text-rose-400 font-bold border-r border-slate-200 dark:border-white/5">{{ number_format($weekData['keluar_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-xs text-center text-rose-600 dark:text-rose-400 font-bold border-r border-slate-200 dark:border-white/5">{{ number_format($weekData['keluar_dex'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="px-4 py-2 text-xs text-center text-slate-600 dark:text-slate-400">Liter</td>
                 </tr>
                 <!-- Persediaan Akhir -->
-                <tr class="hover:bg-slate-800/50 transition-colors bg-slate-800/50">
-                  <td class="px-6 py-2 text-xs font-bold text-slate-200 border-r border-white/5">Persediaan akhir</td>
-                  <td class="px-4 py-2 text-xs text-center text-slate-200 font-black border-r border-white/5">{{ number_format($weekData['akhir_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-2 text-xs text-center text-slate-200 font-black border-r border-white/5">{{ number_format($weekData['akhir_dex'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-2 text-xs text-center text-slate-400">Liter</td>
+                <tr class="hover:bg-slate-50 transition-colors bg-slate-50 dark:bg-slate-800/50">
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-6 py-2 text-xs font-bold text-slate-800 dark:text-slate-200 border-r border-slate-200 dark:border-white/5">Persediaan akhir</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-xs text-center text-slate-800 dark:text-slate-200 font-black border-r border-slate-200 dark:border-white/5">{{ number_format($weekData['akhir_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-xs text-center text-slate-800 dark:text-slate-200 font-black border-r border-slate-200 dark:border-white/5">{{ number_format($weekData['akhir_dex'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="px-4 py-2 text-xs text-center text-slate-600 dark:text-slate-400">Liter</td>
                 </tr>
               @endforeach
             </tbody>
-            <tfoot class=" uppercase tracking-widest border-t-2 border-white/10">
+            <tfoot class="bg-white dark:bg-slate-900 dark:text-white  uppercase tracking-widest border-t-2 border-slate-200 dark:border-white/10">
               <!-- Rekapitulasi -->
               <tr class="font-bold">
-                <td rowspan="5" colspan="2" class="px-4 py-3 text-right text-[11px] text-indigo-400 border-r border-white/10 align-top">Rekapitulasi :</td>
-                <td class="px-4 py-3 text-xs text-slate-400 border-r border-white/10">Persediaan awal</td>
-                <td class="px-4 py-3 text-center text-xs text-slate-300 border-r border-white/10">{{ number_format($data['rekap']['awal_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                <td class="px-4 py-3 text-center text-xs text-slate-300 border-r border-white/10">{{ number_format($data['rekap']['awal_dex'], 0, ',', '.') ?: '-' }}</td>
-                <td class="px-4 py-3 text-center text-xs text-slate-400">Liter</td>
+                <td rowspan="5" colspan="2" class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-right text-[11px] text-indigo-600 dark:text-indigo-400 border-r border-slate-200 dark:border-white/10 align-top">Rekapitulasi :</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-xs text-slate-500 dark:text-slate-400 border-r border-slate-200 dark:border-white/10">Persediaan awal</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-slate-700 dark:text-slate-300 border-r border-slate-200 dark:border-white/10">{{ number_format($data['rekap']['awal_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-slate-700 dark:text-slate-300 border-r border-slate-200 dark:border-white/10">{{ number_format($data['rekap']['awal_dex'], 0, ',', '.') ?: '-' }}</td>
+                <td class="px-4 py-3 text-center text-xs text-slate-600 dark:text-slate-400">Liter</td>
               </tr>
               <tr class="font-bold">
-                <td class="px-4 py-3 text-xs text-emerald-400 border-r border-white/10">Penerimaan</td>
-                <td class="px-4 py-3 text-center text-xs text-emerald-400 border-r border-white/10">{{ number_format($data['rekap']['terima_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                <td class="px-4 py-3 text-center text-xs text-emerald-400 border-r border-white/10">{{ number_format($data['rekap']['terima_dex'], 0, ',', '.') ?: '-' }}</td>
-                <td class="px-4 py-3 text-center text-xs text-slate-400">Liter</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-xs text-emerald-600 dark:text-emerald-400 border-r border-slate-200 dark:border-white/10">Penerimaan</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-emerald-600 dark:text-emerald-400 border-r border-slate-200 dark:border-white/10">{{ number_format($data['rekap']['terima_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-emerald-600 dark:text-emerald-400 border-r border-slate-200 dark:border-white/10">{{ number_format($data['rekap']['terima_dex'], 0, ',', '.') ?: '-' }}</td>
+                <td class="px-4 py-3 text-center text-xs text-slate-600 dark:text-slate-400">Liter</td>
               </tr>
               <tr class="font-bold ">
-                <td class="px-4 py-3 text-xs text-indigo-400 border-r border-white/10">Jumlah</td>
-                <td class="px-4 py-3 text-center text-xs text-indigo-400 border-r border-white/10">{{ number_format($data['rekap']['jumlah_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                <td class="px-4 py-3 text-center text-xs text-indigo-400 border-r border-white/10">{{ number_format($data['rekap']['jumlah_dex'], 0, ',', '.') ?: '-' }}</td>
-                <td class="px-4 py-3 text-center text-xs text-slate-400">Liter</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-xs text-indigo-600 dark:text-indigo-400 border-r border-slate-200 dark:border-white/10">Jumlah</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-indigo-600 dark:text-indigo-400 border-r border-slate-200 dark:border-white/10">{{ number_format($data['rekap']['jumlah_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-indigo-600 dark:text-indigo-400 border-r border-slate-200 dark:border-white/10">{{ number_format($data['rekap']['jumlah_dex'], 0, ',', '.') ?: '-' }}</td>
+                <td class="px-4 py-3 text-center text-xs text-slate-600 dark:text-slate-400">Liter</td>
               </tr>
               <tr class="font-bold">
-                <td class="px-4 py-3 text-xs text-rose-400 border-r border-white/10">Pengeluaran</td>
-                <td class="px-4 py-3 text-center text-xs text-rose-400 border-r border-white/10">{{ number_format($data['rekap']['keluar_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                <td class="px-4 py-3 text-center text-xs text-rose-400 border-r border-white/10">{{ number_format($data['rekap']['keluar_dex'], 0, ',', '.') ?: '-' }}</td>
-                <td class="px-4 py-3 text-center text-xs text-slate-400">Liter</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-xs text-rose-600 dark:text-rose-400 border-r border-slate-200 dark:border-white/10">Pengeluaran</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-rose-600 dark:text-rose-400 border-r border-slate-200 dark:border-white/10">{{ number_format($data['rekap']['keluar_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-rose-600 dark:text-rose-400 border-r border-slate-200 dark:border-white/10">{{ number_format($data['rekap']['keluar_dex'], 0, ',', '.') ?: '-' }}</td>
+                <td class="px-4 py-3 text-center text-xs text-slate-600 dark:text-slate-400">Liter</td>
               </tr>
-              <tr class="font-black bg-slate-800">
-                <td class="px-4 py-3 text-xs text-white border-r border-white/10">Persediaan akhir</td>
-                <td class="px-4 py-3 text-center text-xs text-white border-r border-white/10">{{ number_format($data['rekap']['akhir_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                <td class="px-4 py-3 text-center text-xs text-white border-r border-white/10">{{ number_format($data['rekap']['akhir_dex'], 0, ',', '.') ?: '-' }}</td>
-                <td class="px-4 py-3 text-center text-xs text-slate-400">Liter</td>
+              <tr class="font-black bg-slate-50 dark:bg-slate-800">
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-xs text-slate-800 dark:text-white border-r border-slate-200 dark:border-white/10">Persediaan akhir</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-slate-800 dark:text-white border-r border-slate-200 dark:border-white/10">{{ number_format($data['rekap']['akhir_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-slate-800 dark:text-white border-r border-slate-200 dark:border-white/10">{{ number_format($data['rekap']['akhir_dex'], 0, ',', '.') ?: '-' }}</td>
+                <td class="px-4 py-3 text-center text-xs text-slate-600 dark:text-slate-400">Liter</td>
               </tr>
             </tfoot>
           </table>
         </div>
       </div>
     @elseif($jenisLaporan == 'triwulan')
-      <div class="bg-slate-900 border border-white/5 rounded-2xl shadow-sm border border-white/10 overflow-hidden ring-1 ring-white/10">
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl shadow-sm border border-slate-200 dark:border-white/10 overflow-hidden ring-1 ring-white/10">
         <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-white/5">
+          <table class="min-w-full divide-y divide-slate-200 dark:divide-white/5">
             <thead>
-              <tr class="bg-slate-800/50/80">
-                <th rowspan="2" class="px-4 py-4 text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest border-r border-white/5 w-12">No</th>
-                <th rowspan="2" class="px-4 py-3 text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest border-r border-white/5">Bulan</th>
-                <th rowspan="2" class="px-4 py-3 text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest border-r border-white/5">Uraian</th>
-                <th colspan="2" class="px-4 py-4 text-center text-[10px] font-bold text-indigo-400 uppercase tracking-widest border-r border-white/5 ">Jenis dan Kuantum BMP</th>
-                <th rowspan="2" class="px-4 py-4 text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest border-r border-white/5">Satuan</th>
+              <tr class="bg-slate-50 dark:bg-slate-800/80">
+                <th rowspan="2" class="bg-white dark:bg-slate-900 dark:text-white px-4 py-4 text-center text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest border-r border-slate-200 dark:border-white/5 w-12">No</th>
+                <th rowspan="2" class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-left text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest border-r border-slate-200 dark:border-white/5">Bulan</th>
+                <th rowspan="2" class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-left text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest border-r border-slate-200 dark:border-white/5">Uraian</th>
+                <th colspan="2" class="bg-white dark:bg-slate-900 dark:text-white px-4 py-4 text-center text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest border-r border-slate-200 dark:border-white/5 ">Jenis dan Kuantum BMP</th>
+                <th rowspan="2" class="bg-white dark:bg-slate-900 dark:text-white px-4 py-4 text-center text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest border-r border-slate-200 dark:border-white/5">Satuan</th>
               </tr>
-              <tr class="bg-slate-800/50/80">
-                <th class="px-4 py-2 text-center text-[10px] font-bold text-indigo-400 uppercase tracking-widest border-r border-white/5 ">Pertamax</th>
-                <th class="px-4 py-2 text-center text-[10px] font-bold text-indigo-400 uppercase tracking-widest border-r border-white/5 ">Pertamina Dex</th>
+              <tr class="bg-slate-50 dark:bg-slate-800/80">
+                <th class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-center text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest border-r border-slate-200 dark:border-white/5 ">Pertamax</th>
+                <th class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-center text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest border-r border-slate-200 dark:border-white/5 ">Pertamina Dex</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-white/5">
+            <tbody class="divide-y divide-slate-200 dark:divide-white/5">
               @php $i = 1; @endphp
               @foreach($data['months'] as $monthName => $monthData)
                 <!-- Persediaan Awal -->
-                <tr class="hover:bg-slate-800/50 transition-colors">
-                  <td rowspan="5" class="px-4 py-4 text-[11px] font-bold text-center text-slate-400 border-r border-white/5 align-top">{{ $i++ }}.</td>
-                  <td rowspan="5" class="px-4 py-3 text-sm font-bold text-white border-r border-white/5 align-top whitespace-nowrap">{{ $monthName }}</td>
-                  <td class="px-6 py-2 text-xs font-semibold text-slate-400 border-r border-white/5">Persediaan awal</td>
-                  <td class="px-4 py-2 text-xs text-center text-slate-300 border-r border-white/5">{{ number_format($monthData['awal_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-2 text-xs text-center text-slate-300 border-r border-white/5">{{ number_format($monthData['awal_dex'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-2 text-xs text-center text-slate-400">Liter</td>
+                <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
+                  <td rowspan="5" class="bg-white dark:bg-slate-900 dark:text-white px-4 py-4 text-[11px] font-bold text-center text-slate-500 dark:text-slate-400 border-r border-slate-200 dark:border-white/5 align-top">{{ $i++ }}.</td>
+                  <td rowspan="5" class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-sm font-bold text-slate-800 dark:text-white border-r border-slate-200 dark:border-white/5 align-top whitespace-nowrap">{{ $monthName }}</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-6 py-2 text-xs font-semibold text-slate-500 dark:text-slate-400 border-r border-slate-200 dark:border-white/5">Persediaan awal</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-xs text-center text-slate-700 dark:text-slate-300 border-r border-slate-200 dark:border-white/5">{{ number_format($monthData['awal_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-xs text-center text-slate-700 dark:text-slate-300 border-r border-slate-200 dark:border-white/5">{{ number_format($monthData['awal_dex'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="px-4 py-2 text-xs text-center text-slate-600 dark:text-slate-400">Liter</td>
                 </tr>
                 <!-- Penerimaan -->
-                <tr class="hover:bg-slate-800/50 transition-colors">
-                  <td class="px-6 py-2 text-xs font-semibold text-emerald-400 border-r border-white/5">Penerimaan</td>
-                  <td class="px-4 py-2 text-xs text-center text-emerald-400 font-bold border-r border-white/5">{{ number_format($monthData['terima_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-2 text-xs text-center text-emerald-400 font-bold border-r border-white/5">{{ number_format($monthData['terima_dex'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-2 text-xs text-center text-slate-400">Liter</td>
+                <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-6 py-2 text-xs font-semibold text-emerald-600 dark:text-emerald-400 border-r border-slate-200 dark:border-white/5">Penerimaan</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-xs text-center text-emerald-600 dark:text-emerald-400 font-bold border-r border-slate-200 dark:border-white/5">{{ number_format($monthData['terima_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-xs text-center text-emerald-600 dark:text-emerald-400 font-bold border-r border-slate-200 dark:border-white/5">{{ number_format($monthData['terima_dex'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="px-4 py-2 text-xs text-center text-slate-600 dark:text-slate-400">Liter</td>
                 </tr>
                 <!-- Jumlah -->
-                <tr class="hover:bg-slate-800/50 transition-colors ">
-                  <td class="px-6 py-2 text-xs font-bold text-indigo-400 border-r border-white/5">Jumlah</td>
-                  <td class="px-4 py-2 text-xs text-center text-indigo-400 font-bold border-r border-white/5">{{ number_format($monthData['jumlah_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-2 text-xs text-center text-indigo-400 font-bold border-r border-white/5">{{ number_format($monthData['jumlah_dex'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-2 text-xs text-center text-slate-400">Liter</td>
+                <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors ">
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-6 py-2 text-xs font-bold text-indigo-600 dark:text-indigo-400 border-r border-slate-200 dark:border-white/5">Jumlah</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-xs text-center text-indigo-600 dark:text-indigo-400 font-bold border-r border-slate-200 dark:border-white/5">{{ number_format($monthData['jumlah_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-xs text-center text-indigo-600 dark:text-indigo-400 font-bold border-r border-slate-200 dark:border-white/5">{{ number_format($monthData['jumlah_dex'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="px-4 py-2 text-xs text-center text-slate-600 dark:text-slate-400">Liter</td>
                 </tr>
                 <!-- Pengeluaran -->
-                <tr class="hover:bg-slate-800/50 transition-colors">
-                  <td class="px-6 py-2 text-xs font-semibold text-rose-400 border-r border-white/5">Pengeluaran</td>
-                  <td class="px-4 py-2 text-xs text-center text-rose-400 font-bold border-r border-white/5">{{ number_format($monthData['keluar_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-2 text-xs text-center text-rose-400 font-bold border-r border-white/5">{{ number_format($monthData['keluar_dex'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-2 text-xs text-center text-slate-400">Liter</td>
+                <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-6 py-2 text-xs font-semibold text-rose-600 dark:text-rose-400 border-r border-slate-200 dark:border-white/5">Pengeluaran</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-xs text-center text-rose-600 dark:text-rose-400 font-bold border-r border-slate-200 dark:border-white/5">{{ number_format($monthData['keluar_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-xs text-center text-rose-600 dark:text-rose-400 font-bold border-r border-slate-200 dark:border-white/5">{{ number_format($monthData['keluar_dex'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="px-4 py-2 text-xs text-center text-slate-600 dark:text-slate-400">Liter</td>
                 </tr>
                 <!-- Persediaan Akhir -->
-                <tr class="hover:bg-slate-800/50 transition-colors bg-slate-800/50">
-                  <td class="px-6 py-2 text-xs font-bold text-slate-200 border-r border-white/5">Persediaan akhir</td>
-                  <td class="px-4 py-2 text-xs text-center text-slate-200 font-black border-r border-white/5">{{ number_format($monthData['akhir_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-2 text-xs text-center text-slate-200 font-black border-r border-white/5">{{ number_format($monthData['akhir_dex'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-2 text-xs text-center text-slate-400">Liter</td>
+                <tr class="hover:bg-slate-50 transition-colors bg-slate-50 dark:bg-slate-800/50">
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-6 py-2 text-xs font-bold text-slate-800 dark:text-slate-200 border-r border-slate-200 dark:border-white/5">Persediaan akhir</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-xs text-center text-slate-800 dark:text-slate-200 font-black border-r border-slate-200 dark:border-white/5">{{ number_format($monthData['akhir_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 text-xs text-center text-slate-800 dark:text-slate-200 font-black border-r border-slate-200 dark:border-white/5">{{ number_format($monthData['akhir_dex'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="px-4 py-2 text-xs text-center text-slate-600 dark:text-slate-400">Liter</td>
                 </tr>
               @endforeach
             </tbody>
-            <tfoot class=" uppercase tracking-widest border-t-2 border-white/10">
+            <tfoot class="bg-white dark:bg-slate-900 dark:text-white  uppercase tracking-widest border-t-2 border-slate-200 dark:border-white/10">
               <!-- Rekapitulasi -->
               <tr class="font-bold">
-                <td rowspan="5" colspan="2" class="px-4 py-3 text-right text-[11px] text-indigo-400 border-r border-white/10 align-top">Rekapitulasi :</td>
-                <td class="px-4 py-3 text-xs text-slate-400 border-r border-white/10">Persediaan awal</td>
-                <td class="px-4 py-3 text-center text-xs text-slate-300 border-r border-white/10">{{ number_format($data['rekap']['awal_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                <td class="px-4 py-3 text-center text-xs text-slate-300 border-r border-white/10">{{ number_format($data['rekap']['awal_dex'], 0, ',', '.') ?: '-' }}</td>
-                <td class="px-4 py-3 text-center text-xs text-slate-400">Liter</td>
+                <td rowspan="5" colspan="2" class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-right text-[11px] text-indigo-600 dark:text-indigo-400 border-r border-slate-200 dark:border-white/10 align-top">Rekapitulasi :</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-xs text-slate-500 dark:text-slate-400 border-r border-slate-200 dark:border-white/10">Persediaan awal</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-slate-700 dark:text-slate-300 border-r border-slate-200 dark:border-white/10">{{ number_format($data['rekap']['awal_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-slate-700 dark:text-slate-300 border-r border-slate-200 dark:border-white/10">{{ number_format($data['rekap']['awal_dex'], 0, ',', '.') ?: '-' }}</td>
+                <td class="px-4 py-3 text-center text-xs text-slate-600 dark:text-slate-400">Liter</td>
               </tr>
               <tr class="font-bold">
-                <td class="px-4 py-3 text-xs text-emerald-400 border-r border-white/10">Penerimaan</td>
-                <td class="px-4 py-3 text-center text-xs text-emerald-400 border-r border-white/10">{{ number_format($data['rekap']['terima_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                <td class="px-4 py-3 text-center text-xs text-emerald-400 border-r border-white/10">{{ number_format($data['rekap']['terima_dex'], 0, ',', '.') ?: '-' }}</td>
-                <td class="px-4 py-3 text-center text-xs text-slate-400">Liter</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-xs text-emerald-600 dark:text-emerald-400 border-r border-slate-200 dark:border-white/10">Penerimaan</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-emerald-600 dark:text-emerald-400 border-r border-slate-200 dark:border-white/10">{{ number_format($data['rekap']['terima_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-emerald-600 dark:text-emerald-400 border-r border-slate-200 dark:border-white/10">{{ number_format($data['rekap']['terima_dex'], 0, ',', '.') ?: '-' }}</td>
+                <td class="px-4 py-3 text-center text-xs text-slate-600 dark:text-slate-400">Liter</td>
               </tr>
               <tr class="font-bold ">
-                <td class="px-4 py-3 text-xs text-indigo-400 border-r border-white/10">Jumlah</td>
-                <td class="px-4 py-3 text-center text-xs text-indigo-400 border-r border-white/10">{{ number_format($data['rekap']['jumlah_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                <td class="px-4 py-3 text-center text-xs text-indigo-400 border-r border-white/10">{{ number_format($data['rekap']['jumlah_dex'], 0, ',', '.') ?: '-' }}</td>
-                <td class="px-4 py-3 text-center text-xs text-slate-400">Liter</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-xs text-indigo-600 dark:text-indigo-400 border-r border-slate-200 dark:border-white/10">Jumlah</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-indigo-600 dark:text-indigo-400 border-r border-slate-200 dark:border-white/10">{{ number_format($data['rekap']['jumlah_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-indigo-600 dark:text-indigo-400 border-r border-slate-200 dark:border-white/10">{{ number_format($data['rekap']['jumlah_dex'], 0, ',', '.') ?: '-' }}</td>
+                <td class="px-4 py-3 text-center text-xs text-slate-600 dark:text-slate-400">Liter</td>
               </tr>
               <tr class="font-bold">
-                <td class="px-4 py-3 text-xs text-rose-400 border-r border-white/10">Pengeluaran</td>
-                <td class="px-4 py-3 text-center text-xs text-rose-400 border-r border-white/10">{{ number_format($data['rekap']['keluar_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                <td class="px-4 py-3 text-center text-xs text-rose-400 border-r border-white/10">{{ number_format($data['rekap']['keluar_dex'], 0, ',', '.') ?: '-' }}</td>
-                <td class="px-4 py-3 text-center text-xs text-slate-400">Liter</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-xs text-rose-600 dark:text-rose-400 border-r border-slate-200 dark:border-white/10">Pengeluaran</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-rose-600 dark:text-rose-400 border-r border-slate-200 dark:border-white/10">{{ number_format($data['rekap']['keluar_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-rose-600 dark:text-rose-400 border-r border-slate-200 dark:border-white/10">{{ number_format($data['rekap']['keluar_dex'], 0, ',', '.') ?: '-' }}</td>
+                <td class="px-4 py-3 text-center text-xs text-slate-600 dark:text-slate-400">Liter</td>
               </tr>
-              <tr class="font-black bg-slate-800">
-                <td class="px-4 py-3 text-xs text-white border-r border-white/10">Persediaan akhir</td>
-                <td class="px-4 py-3 text-center text-xs text-white border-r border-white/10">{{ number_format($data['rekap']['akhir_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                <td class="px-4 py-3 text-center text-xs text-white border-r border-white/10">{{ number_format($data['rekap']['akhir_dex'], 0, ',', '.') ?: '-' }}</td>
-                <td class="px-4 py-3 text-center text-xs text-slate-400">Liter</td>
+              <tr class="font-black bg-slate-50 dark:bg-slate-800">
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-xs text-slate-800 dark:text-white border-r border-slate-200 dark:border-white/10">Persediaan akhir</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-slate-800 dark:text-white border-r border-slate-200 dark:border-white/10">{{ number_format($data['rekap']['akhir_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-slate-800 dark:text-white border-r border-slate-200 dark:border-white/10">{{ number_format($data['rekap']['akhir_dex'], 0, ',', '.') ?: '-' }}</td>
+                <td class="px-4 py-3 text-center text-xs text-slate-600 dark:text-slate-400">Liter</td>
               </tr>
             </tfoot>
           </table>
@@ -310,32 +310,32 @@
       </div>
     @else
       @foreach($data as $weekName => $weekData)
-        <div class="bg-slate-900 border border-white/5 rounded-2xl shadow-sm border border-white/10 overflow-hidden ring-1 ring-white/10 mb-6">
-          <div class="bg-slate-800/50/80 px-6 py-3 border-b border-white/5">
-            <h2 class="text-xs font-semibold text-slate-200 uppercase tracking-widest">{{ $weekName }}</h2>
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl shadow-sm border border-slate-200 dark:border-white/10 overflow-hidden ring-1 ring-white/10 mb-6">
+          <div class="bg-slate-50 dark:bg-slate-800/80 px-6 py-3 border-b border-slate-200 dark:border-white/5">
+            <h2 class="text-xs font-semibold text-slate-800 dark:text-slate-200 uppercase tracking-widest">{{ $weekName }}</h2>
           </div>
           <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-white/5">
+            <table class="min-w-full divide-y divide-slate-200 dark:divide-white/5">
               <thead>
-                <tr class="bg-slate-800/50/80">
-                  <th rowspan="2" class="px-2 sm:px-4 py-3 sm:py-4 text-center text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest border-r border-white/5 w-8 sm:w-12">No</th>
-                  <th rowspan="2" class="px-2 sm:px-4 py-3 text-left text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest border-r border-white/5">Tanggal</th>
-                  <th rowspan="2" class="px-2 sm:px-4 py-3 text-left text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest border-r border-white/5">Uraian</th>
-                  <th colspan="2" class="px-2 sm:px-4 py-3 sm:py-4 text-center text-[9px] sm:text-[10px] font-bold text-indigo-400 uppercase tracking-widest border-r border-white/5 ">Jenis dan Kuantum BMP</th>
-                  <th rowspan="2" class="px-2 sm:px-4 py-4 text-center text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest border-r border-white/5">Satuan</th>
+                <tr class="bg-slate-50 dark:bg-slate-800/80">
+                  <th rowspan="2" class="bg-white dark:bg-slate-900 dark:text-white px-2 sm:px-4 py-3 sm:py-4 text-center text-[9px] sm:text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest border-r border-slate-200 dark:border-white/5 w-8 sm:w-12">No</th>
+                  <th rowspan="2" class="bg-white dark:bg-slate-900 dark:text-white px-2 sm:px-4 py-3 text-left text-[9px] sm:text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest border-r border-slate-200 dark:border-white/5">Tanggal</th>
+                  <th rowspan="2" class="bg-white dark:bg-slate-900 dark:text-white px-2 sm:px-4 py-3 text-left text-[9px] sm:text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest border-r border-slate-200 dark:border-white/5">Uraian</th>
+                  <th colspan="2" class="bg-white dark:bg-slate-900 dark:text-white px-2 sm:px-4 py-3 sm:py-4 text-center text-[9px] sm:text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest border-r border-slate-200 dark:border-white/5 ">Jenis dan Kuantum BMP</th>
+                  <th rowspan="2" class="bg-white dark:bg-slate-900 dark:text-white px-2 sm:px-4 py-4 text-center text-[9px] sm:text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest border-r border-slate-200 dark:border-white/5">Satuan</th>
                 </tr>
-                <tr class="bg-slate-800/50/80">
-                  <th class="px-2 sm:px-4 py-2 text-center text-[9px] sm:text-[10px] font-bold text-indigo-400 uppercase tracking-widest border-r border-white/5 ">Pertamax</th>
-                  <th class="px-2 sm:px-4 py-2 text-center text-[9px] sm:text-[10px] font-bold text-indigo-400 uppercase tracking-widest border-r border-white/5 ">P. Dex</th>
+                <tr class="bg-slate-50 dark:bg-slate-800/80">
+                  <th class="bg-white dark:bg-slate-900 dark:text-white px-2 sm:px-4 py-2 text-center text-[9px] sm:text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest border-r border-slate-200 dark:border-white/5 ">Pertamax</th>
+                  <th class="bg-white dark:bg-slate-900 dark:text-white px-2 sm:px-4 py-2 text-center text-[9px] sm:text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest border-r border-slate-200 dark:border-white/5 ">P. Dex</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-white/5">
+              <tbody class="divide-y divide-slate-200 dark:divide-white/5">
                 @php $i = 1; @endphp
                 @foreach($weekData['days'] as $day)
                   <!-- Persediaan Awal -->
-                  <tr class="hover:bg-slate-800/50 transition-colors">
-                    <td rowspan="5" class="px-2 sm:px-4 py-3 sm:py-4 text-[10px] sm:text-[11px] font-bold text-center text-slate-400 border-r border-white/5 align-top">{{ $i++ }}.</td>
-                    <td rowspan="5" class="px-2 sm:px-4 py-3 text-xs sm:text-sm font-bold text-white border-r border-white/5 align-top whitespace-nowrap">
+                  <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
+                    <td rowspan="5" class="bg-white dark:bg-slate-900 dark:text-white px-2 sm:px-4 py-3 sm:py-4 text-[10px] sm:text-[11px] font-bold text-center text-slate-500 dark:text-slate-400 border-r border-slate-200 dark:border-white/5 align-top">{{ $i++ }}.</td>
+                    <td rowspan="5" class="bg-white dark:bg-slate-900 dark:text-white px-2 sm:px-4 py-3 text-xs sm:text-sm font-bold text-slate-800 dark:text-white border-r border-slate-200 dark:border-white/5 align-top whitespace-nowrap">
                         @php
                             $parts = explode(' ', $day['nama_hari'], 2);
                         @endphp
@@ -346,73 +346,73 @@
                             @endif
                         </div>
                     </td>
-                    <td class="px-3 sm:px-6 py-2 text-[10px] sm:text-xs font-semibold text-slate-400 border-r border-white/5">Persediaan awal</td>
-                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-300 border-r border-white/5">{{ number_format($day['awal_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-300 border-r border-white/5">{{ number_format($day['awal_dex'], 0, ',', '.') ?: '-' }}</td>
-                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-400">Liter</td>
+                    <td class="bg-white dark:bg-slate-900 dark:text-white px-3 sm:px-6 py-2 text-[10px] sm:text-xs font-semibold text-slate-500 dark:text-slate-400 border-r border-slate-200 dark:border-white/5">Persediaan awal</td>
+                    <td class="bg-white dark:bg-slate-900 dark:text-white px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-700 dark:text-slate-300 border-r border-slate-200 dark:border-white/5">{{ number_format($day['awal_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                    <td class="bg-white dark:bg-slate-900 dark:text-white px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-700 dark:text-slate-300 border-r border-slate-200 dark:border-white/5">{{ number_format($day['awal_dex'], 0, ',', '.') ?: '-' }}</td>
+                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-600 dark:text-slate-400">Liter</td>
                   </tr>
                   <!-- Penerimaan -->
-                  <tr class="hover:bg-slate-800/50 transition-colors">
-                    <td class="px-3 sm:px-6 py-2 text-[10px] sm:text-xs font-semibold text-emerald-400 border-r border-white/5">Penerimaan</td>
-                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-emerald-400 font-bold border-r border-white/5">{{ number_format($day['terima_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-emerald-400 font-bold border-r border-white/5">{{ number_format($day['terima_dex'], 0, ',', '.') ?: '-' }}</td>
-                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-400">Liter</td>
+                  <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
+                    <td class="bg-white dark:bg-slate-900 dark:text-white px-3 sm:px-6 py-2 text-[10px] sm:text-xs font-semibold text-emerald-600 dark:text-emerald-400 border-r border-slate-200 dark:border-white/5">Penerimaan</td>
+                    <td class="bg-white dark:bg-slate-900 dark:text-white px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-emerald-600 dark:text-emerald-400 font-bold border-r border-slate-200 dark:border-white/5">{{ number_format($day['terima_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                    <td class="bg-white dark:bg-slate-900 dark:text-white px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-emerald-600 dark:text-emerald-400 font-bold border-r border-slate-200 dark:border-white/5">{{ number_format($day['terima_dex'], 0, ',', '.') ?: '-' }}</td>
+                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-600 dark:text-slate-400">Liter</td>
                   </tr>
                   <!-- Jumlah -->
-                  <tr class="hover:bg-slate-800/50 transition-colors ">
-                    <td class="px-3 sm:px-6 py-2 text-[10px] sm:text-xs font-bold text-indigo-400 border-r border-white/5">Jumlah</td>
-                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-indigo-400 font-bold border-r border-white/5">{{ number_format($day['jumlah_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-indigo-400 font-bold border-r border-white/5">{{ number_format($day['jumlah_dex'], 0, ',', '.') ?: '-' }}</td>
-                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-400">Liter</td>
+                  <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors ">
+                    <td class="bg-white dark:bg-slate-900 dark:text-white px-3 sm:px-6 py-2 text-[10px] sm:text-xs font-bold text-indigo-600 dark:text-indigo-400 border-r border-slate-200 dark:border-white/5">Jumlah</td>
+                    <td class="bg-white dark:bg-slate-900 dark:text-white px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-indigo-600 dark:text-indigo-400 font-bold border-r border-slate-200 dark:border-white/5">{{ number_format($day['jumlah_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                    <td class="bg-white dark:bg-slate-900 dark:text-white px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-indigo-600 dark:text-indigo-400 font-bold border-r border-slate-200 dark:border-white/5">{{ number_format($day['jumlah_dex'], 0, ',', '.') ?: '-' }}</td>
+                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-600 dark:text-slate-400">Liter</td>
                   </tr>
                   <!-- Pengeluaran -->
-                  <tr class="hover:bg-slate-800/50 transition-colors">
-                    <td class="px-3 sm:px-6 py-2 text-[10px] sm:text-xs font-semibold text-rose-400 border-r border-white/5">Pengeluaran</td>
-                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-rose-400 font-bold border-r border-white/5">{{ number_format($day['keluar_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-rose-400 font-bold border-r border-white/5">{{ number_format($day['keluar_dex'], 0, ',', '.') ?: '-' }}</td>
-                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-400">Liter</td>
+                  <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
+                    <td class="bg-white dark:bg-slate-900 dark:text-white px-3 sm:px-6 py-2 text-[10px] sm:text-xs font-semibold text-rose-600 dark:text-rose-400 border-r border-slate-200 dark:border-white/5">Pengeluaran</td>
+                    <td class="bg-white dark:bg-slate-900 dark:text-white px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-rose-600 dark:text-rose-400 font-bold border-r border-slate-200 dark:border-white/5">{{ number_format($day['keluar_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                    <td class="bg-white dark:bg-slate-900 dark:text-white px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-rose-600 dark:text-rose-400 font-bold border-r border-slate-200 dark:border-white/5">{{ number_format($day['keluar_dex'], 0, ',', '.') ?: '-' }}</td>
+                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-600 dark:text-slate-400">Liter</td>
                   </tr>
                   <!-- Persediaan Akhir -->
-                  <tr class="hover:bg-slate-800/50 transition-colors bg-slate-800/50">
-                    <td class="px-3 sm:px-6 py-2 text-[10px] sm:text-xs font-bold text-slate-200 border-r border-white/5">Persediaan akhir</td>
-                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-200 font-black border-r border-white/5">{{ number_format($day['akhir_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-200 font-black border-r border-white/5">{{ number_format($day['akhir_dex'], 0, ',', '.') ?: '-' }}</td>
-                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-400">Liter</td>
+                  <tr class="hover:bg-slate-50 transition-colors bg-slate-50 dark:bg-slate-800/50">
+                    <td class="bg-white dark:bg-slate-900 dark:text-white px-3 sm:px-6 py-2 text-[10px] sm:text-xs font-bold text-slate-800 dark:text-slate-200 border-r border-slate-200 dark:border-white/5">Persediaan akhir</td>
+                    <td class="bg-white dark:bg-slate-900 dark:text-white px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-800 dark:text-slate-200 font-black border-r border-slate-200 dark:border-white/5">{{ number_format($day['akhir_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                    <td class="bg-white dark:bg-slate-900 dark:text-white px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-800 dark:text-slate-200 font-black border-r border-slate-200 dark:border-white/5">{{ number_format($day['akhir_dex'], 0, ',', '.') ?: '-' }}</td>
+                    <td class="px-2 sm:px-4 py-2 text-[10px] sm:text-xs text-center text-slate-600 dark:text-slate-400">Liter</td>
                   </tr>
                 @endforeach
               </tbody>
-              <tfoot class=" uppercase tracking-widest border-t-2 border-white/10">
+              <tfoot class="bg-white dark:bg-slate-900 dark:text-white  uppercase tracking-widest border-t-2 border-slate-200 dark:border-white/10">
                 <!-- Rekapitulasi -->
                 <tr class="font-bold">
-                  <td rowspan="5" colspan="2" class="px-4 py-3 text-right text-[11px] text-indigo-400 border-r border-white/10 align-top">Rekapitulasi :</td>
-                  <td class="px-4 py-3 text-xs text-slate-400 border-r border-white/10">Persediaan awal</td>
-                  <td class="px-4 py-3 text-center text-xs text-slate-300 border-r border-white/10">{{ number_format($weekData['rekap']['awal_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-3 text-center text-xs text-slate-300 border-r border-white/10">{{ number_format($weekData['rekap']['awal_dex'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-3 text-center text-xs text-slate-400">Liter</td>
+                  <td rowspan="5" colspan="2" class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-right text-[11px] text-indigo-600 dark:text-indigo-400 border-r border-slate-200 dark:border-white/10 align-top">Rekapitulasi :</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-xs text-slate-500 dark:text-slate-400 border-r border-slate-200 dark:border-white/10">Persediaan awal</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-slate-700 dark:text-slate-300 border-r border-slate-200 dark:border-white/10">{{ number_format($weekData['rekap']['awal_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-slate-700 dark:text-slate-300 border-r border-slate-200 dark:border-white/10">{{ number_format($weekData['rekap']['awal_dex'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="px-4 py-3 text-center text-xs text-slate-600 dark:text-slate-400">Liter</td>
                 </tr>
                 <tr class="font-bold">
-                  <td class="px-4 py-3 text-xs text-emerald-400 border-r border-white/10">Penerimaan</td>
-                  <td class="px-4 py-3 text-center text-xs text-emerald-400 border-r border-white/10">{{ number_format($weekData['rekap']['terima_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-3 text-center text-xs text-emerald-400 border-r border-white/10">{{ number_format($weekData['rekap']['terima_dex'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-3 text-center text-xs text-slate-400">Liter</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-xs text-emerald-600 dark:text-emerald-400 border-r border-slate-200 dark:border-white/10">Penerimaan</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-emerald-600 dark:text-emerald-400 border-r border-slate-200 dark:border-white/10">{{ number_format($weekData['rekap']['terima_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-emerald-600 dark:text-emerald-400 border-r border-slate-200 dark:border-white/10">{{ number_format($weekData['rekap']['terima_dex'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="px-4 py-3 text-center text-xs text-slate-600 dark:text-slate-400">Liter</td>
                 </tr>
                 <tr class="font-bold ">
-                  <td class="px-4 py-3 text-xs text-indigo-400 border-r border-white/10">Jumlah</td>
-                  <td class="px-4 py-3 text-center text-xs text-indigo-400 border-r border-white/10">{{ number_format($weekData['rekap']['jumlah_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-3 text-center text-xs text-indigo-400 border-r border-white/10">{{ number_format($weekData['rekap']['jumlah_dex'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-3 text-center text-xs text-slate-400">Liter</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-xs text-indigo-600 dark:text-indigo-400 border-r border-slate-200 dark:border-white/10">Jumlah</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-indigo-600 dark:text-indigo-400 border-r border-slate-200 dark:border-white/10">{{ number_format($weekData['rekap']['jumlah_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-indigo-600 dark:text-indigo-400 border-r border-slate-200 dark:border-white/10">{{ number_format($weekData['rekap']['jumlah_dex'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="px-4 py-3 text-center text-xs text-slate-600 dark:text-slate-400">Liter</td>
                 </tr>
                 <tr class="font-bold">
-                  <td class="px-4 py-3 text-xs text-rose-400 border-r border-white/10">Pengeluaran</td>
-                  <td class="px-4 py-3 text-center text-xs text-rose-400 border-r border-white/10">{{ number_format($weekData['rekap']['keluar_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-3 text-center text-xs text-rose-400 border-r border-white/10">{{ number_format($weekData['rekap']['keluar_dex'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-3 text-center text-xs text-slate-400">Liter</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-xs text-rose-600 dark:text-rose-400 border-r border-slate-200 dark:border-white/10">Pengeluaran</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-rose-600 dark:text-rose-400 border-r border-slate-200 dark:border-white/10">{{ number_format($weekData['rekap']['keluar_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-rose-600 dark:text-rose-400 border-r border-slate-200 dark:border-white/10">{{ number_format($weekData['rekap']['keluar_dex'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="px-4 py-3 text-center text-xs text-slate-600 dark:text-slate-400">Liter</td>
                 </tr>
-                <tr class="font-black bg-slate-800">
-                  <td class="px-4 py-3 text-xs text-white border-r border-white/10">Persediaan akhir</td>
-                  <td class="px-4 py-3 text-center text-xs text-white border-r border-white/10">{{ number_format($weekData['rekap']['akhir_pertamax'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-3 text-center text-xs text-white border-r border-white/10">{{ number_format($weekData['rekap']['akhir_dex'], 0, ',', '.') ?: '-' }}</td>
-                  <td class="px-4 py-3 text-center text-xs text-slate-400">Liter</td>
+                <tr class="font-black bg-slate-50 dark:bg-slate-800">
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-xs text-slate-800 dark:text-white border-r border-slate-200 dark:border-white/10">Persediaan akhir</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-slate-800 dark:text-white border-r border-slate-200 dark:border-white/10">{{ number_format($weekData['rekap']['akhir_pertamax'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 text-center text-xs text-slate-800 dark:text-white border-r border-slate-200 dark:border-white/10">{{ number_format($weekData['rekap']['akhir_dex'], 0, ',', '.') ?: '-' }}</td>
+                  <td class="px-4 py-3 text-center text-xs text-slate-600 dark:text-slate-400">Liter</td>
                 </tr>
               </tfoot>
             </table>

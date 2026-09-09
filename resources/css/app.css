@@ -4,6 +4,10 @@
 
 @layer base {
     :root {
+        color-scheme: light;
+    }
+    
+    html.dark {
         color-scheme: dark;
     }
     
@@ -24,30 +28,30 @@
         box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.4);
     }
 
-        /* TomSelect Premium Styling */
+    /* TomSelect Premium Styling */
     .ts-wrapper .ts-control {
-        @apply border border-white/10 bg-slate-800/50 rounded-lg px-3 py-2 text-xs font-medium text-slate-300 shadow-none transition-all flex items-center;
+        @apply border border-slate-300 dark:border-white/10 bg-white dark:bg-slate-900 rounded-lg px-3 py-2 text-xs font-medium text-slate-800 dark:text-slate-200 shadow-none transition-all flex items-center;
         min-height: 36px;
     }
 
     .ts-wrapper.focus .ts-control {
-        @apply border-indigo-500 bg-slate-800 ring-4 ring-indigo-500/10;
+        @apply border-indigo-500 bg-white dark:bg-slate-900 ring-4 ring-indigo-500/10;
     }
 
     .ts-wrapper .ts-dropdown {
-        @apply rounded-xl border border-white/10 shadow-xl bg-slate-800 text-xs overflow-hidden p-2 z-[100];
+        @apply rounded-xl border border-slate-200 dark:border-white/10 shadow-xl bg-white dark:bg-slate-900 text-xs overflow-hidden p-2 z-[100];
     }
 
     .ts-wrapper .ts-dropdown .option {
-        @apply px-3 py-2.5 rounded-lg font-medium text-slate-300 hover:bg-slate-700 cursor-pointer;
+        @apply px-3 py-2.5 rounded-lg font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer;
     }
 
     .ts-wrapper .ts-dropdown .active {
-        @apply bg-indigo-500/20 text-indigo-400 font-bold;
+        @apply bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 font-bold;
     }
 
     .ts-wrapper .ts-control .item {
-        @apply font-medium text-slate-200 uppercase tracking-wider;
+        @apply font-medium text-slate-800 dark:text-slate-200 uppercase tracking-wider;
     }
 
     /* Flatpickr Premium Indigo Styling */

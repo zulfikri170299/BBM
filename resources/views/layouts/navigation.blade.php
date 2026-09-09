@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -78,7 +78,7 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button
-                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                             <div>{{ Auth::user()->name }}</div>
 
                             <div class="ms-1">
@@ -117,7 +117,7 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 
-                            <button type="submit" class="block w-full px-4 py-2 text-start text-sm leading-5 text-slate-300 hover:bg-slate-800 focus:outline-none focus:bg-slate-800 transition duration-150 ease-in-out">
+                            <button type="submit" class="block w-full px-4 py-2 text-start text-sm leading-5 text-slate-700 dark:text-slate-300 hover:bg-slate-50 focus:outline-none focus:bg-slate-50 dark:bg-slate-800 transition duration-150 ease-in-out">
                                 {{ __('Log Out') }}
                             </button>
                         </form>
@@ -165,7 +165,7 @@
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
 
-                    <button type="submit" class="block w-full ps-3 pe-4 py-2 border-l-4 border-transparent text-start text-base font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 hover:border-white/20 focus:outline-none focus:text-slate-200 focus:bg-slate-800/50 focus:border-white/20 transition duration-150 ease-in-out">
+                    <button type="submit" class="block w-full ps-3 pe-4 py-2 border-l-4 border-transparent text-start text-base font-medium text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:text-slate-200 hover:bg-slate-50 hover:border-slate-400 dark:border-white/20 focus:outline-none focus:text-slate-800 dark:text-slate-200 focus:bg-slate-50 dark:bg-slate-800/50 focus:border-slate-400 dark:border-white/20 transition duration-150 ease-in-out">
                         {{ __('Log Out') }}
                     </button>
                 </form>

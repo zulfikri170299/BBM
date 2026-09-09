@@ -1,14 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-slate-200 leading-tight">
+        <h2 class="font-semibold text-xl text-slate-800 dark:text-slate-200 leading-tight">
             {{ __('Create New User') }}
         </h2>
     </x-slot>
 
     <div class="py-4 sm:py-12 px-2 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-slate-900 border border-white/5 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-white">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-slate-800 dark:text-white">
                     @if ($errors->any())
                         <div class="mb-4">
                             <ul class="list-disc list-inside text-red-600">
@@ -22,55 +22,55 @@
                     <form action="{{ route('admin.users.store') }}" method="POST">
                         @csrf
                         <div class="mb-4">
-                            <label for="name" class="block text-slate-300 text-sm font-bold mb-2">Name:</label>
+                            <label for="name" class="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2">Name:</label>
                             <input type="text" name="name" id="name"
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-300 leading-tight focus:outline-none focus:shadow-outline"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-700 dark:text-slate-300 leading-tight focus:outline-none focus:shadow-outline"
                                 required>
                         </div>
                         <div class="mb-4">
-                            <label for="email" class="block text-slate-300 text-sm font-bold mb-2">Email:</label>
+                            <label for="email" class="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2">Email:</label>
                             <input type="email" name="email" id="email"
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-300 leading-tight focus:outline-none focus:shadow-outline"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-700 dark:text-slate-300 leading-tight focus:outline-none focus:shadow-outline"
                                 required>
                         </div>
                         <div class="mb-4">
-                            <label for="username" class="block text-slate-300 text-sm font-bold mb-2">Username:</label>
+                            <label for="username" class="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2">Username:</label>
                             <input type="text" name="username" id="username"
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-300 leading-tight focus:outline-none focus:shadow-outline">
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-700 dark:text-slate-300 leading-tight focus:outline-none focus:shadow-outline">
                         </div>
                         <div class="mb-4">
-                            <label for="role" class="block text-slate-300 text-sm font-bold mb-2">Role:</label>
+                            <label for="role" class="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2">Role:</label>
                             <select name="role" id="role"
                                 class="tom-select w-full leading-tight"
                                 required>
-                                <option value="super_admin">Super Admin</option>
-                                <option value="kasubbag">Kasubbag</option>
-                                <option value="admin_satker">Admin Satker</option>
-                                <option value="petugas_bbm">Petugas BBM</option>
-                                <option value="personel">Personel</option>
+                                <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="super_admin">Super Admin</option>
+                                <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="kasubbag">Kasubbag</option>
+                                <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="admin_satker">Admin Satker</option>
+                                <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="petugas_bbm">Petugas BBM</option>
+                                <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="personel">Personel</option>
                             </select>
                         </div>
                         <div class="mb-4">
-                            <label for="satker_id" class="block text-slate-300 text-sm font-bold mb-2">Satker:</label>
+                            <label for="satker_id" class="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2">Satker:</label>
                             <select name="satker_id" id="satker_id"
                                 class="tom-select w-full leading-tight">
-                                <option value="">None</option>
+                                <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">None</option>
                                 @foreach($satkers as $satker)
-                                    <option value="{{ $satker->id }}">{{ $satker->nama_satker }}</option>
+                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $satker->id }}">{{ $satker->nama_satker }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="mb-4">
-                            <label for="password" class="block text-slate-300 text-sm font-bold mb-2">Password:</label>
+                            <label for="password" class="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2">Password:</label>
                             <input type="password" name="password" id="password"
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-300 leading-tight focus:outline-none focus:shadow-outline"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-700 dark:text-slate-300 leading-tight focus:outline-none focus:shadow-outline"
                                 required>
                         </div>
                         <div class="mb-4">
                             <label for="password_confirmation"
-                                class="block text-slate-300 text-sm font-bold mb-2">Confirm Password:</label>
+                                class="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2">Confirm Password:</label>
                             <input type="password" name="password_confirmation" id="password_confirmation"
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-300 leading-tight focus:outline-none focus:shadow-outline"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-slate-700 dark:text-slate-300 leading-tight focus:outline-none focus:shadow-outline"
                                 required>
                         </div>
                         <div class="flex items-center justify-between">

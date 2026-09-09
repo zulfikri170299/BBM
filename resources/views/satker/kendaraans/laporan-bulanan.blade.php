@@ -8,8 +8,8 @@
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <div>
-                <h1 class="text-2xl font-bold text-white">Laporan Bulanan BBM</h1>
-                <p class="text-xs text-slate-400">Satker: <strong>{{ $satker->nama_satker ?? '-' }}</strong> | Periode:
+                <h1 class="text-2xl font-bold text-slate-800 dark:text-white">Laporan Bulanan BBM</h1>
+                <p class="text-xs text-slate-600 dark:text-slate-400">Satker: <strong>{{ $satker->nama_satker ?? '-' }}</strong> | Periode:
                     {{ $namaBulan }} {{ $tahun }}</p>
             </div>
             <div class="flex gap-2">
@@ -44,23 +44,23 @@
         </div>
 
         <!-- Filter -->
-        <div class="bg-slate-900 border border-white/5 rounded-lg border border-white/10 p-4">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-lg border border-slate-200 dark:border-white/10 p-4">
             <form action="{{ route('satker.kendaraans.laporan-bulanan') }}" method="GET"
                 class="flex flex-wrap gap-3 items-end">
                 <div>
-                    <label class="text-xs font-semibold text-slate-400 mb-1 block">Bulan</label>
-                    <select name="bulan" class="px-3 py-2 bg-slate-900 border border-white/5 border border-white/20 rounded-lg text-sm">
+                    <label class="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1 block">Bulan</label>
+                    <select name="bulan" class="px-3 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 border border-slate-300 dark:border-white/20 rounded-lg text-sm">
                         @for($m = 1; $m <= 12; $m++)
-                            <option value="{{ $m }}" {{ $bulan == $m ? 'selected' : '' }}>
+                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $m }}" {{ $bulan == $m ? 'selected' : '' }}>
                                 {{ \Carbon\Carbon::create(null, $m, 1)->translatedFormat('F') }}</option>
                         @endfor
                     </select>
                 </div>
                 <div>
-                    <label class="text-xs font-semibold text-slate-400 mb-1 block">Tahun</label>
-                    <select name="tahun" class="px-3 py-2 bg-slate-900 border border-white/5 border border-white/20 rounded-lg text-sm">
+                    <label class="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1 block">Tahun</label>
+                    <select name="tahun" class="px-3 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 border border-slate-300 dark:border-white/20 rounded-lg text-sm">
                         @for($y = now()->year; $y >= now()->year - 5; $y--)
-                            <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>{{ $y }}</option>
+                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>{{ $y }}</option>
                         @endfor
                     </select>
                 </div>
@@ -70,7 +70,7 @@
         </div>
 
         <!-- Table -->
-        <div class="bg-slate-900 border border-white/5 rounded-lg border border-white/10 overflow-hidden">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-lg border border-slate-200 dark:border-white/10 overflow-hidden">
             <div class="overflow-x-auto">
                 <style>
                     .laporan-tbl {

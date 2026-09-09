@@ -82,12 +82,12 @@
     </style>
 </head>
 
-<body class="font-sans antialiased text-slate-200 bg-slate-900">
+<body class="font-sans antialiased text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-900">
     <div class="min-h-screen flex flex-col items-center justify-center p-0 md:p-4 login-gradient">
         <div class="w-full {{ $maxWidth }} relative z-20 flex-1 flex flex-col justify-center">
             {{ $slot }}
 
-            <p class="text-center text-xs text-slate-400 mt-8 mb-8 md:mb-0 font-medium">
+            <p class="text-center text-xs text-slate-600 dark:text-slate-400 mt-8 mb-8 md:mb-0 font-medium">
                 &copy; {{ date('Y') }} BIRO LOGISTIK. Polda Nusa Tenggara Barat.
             </p>
         </div>

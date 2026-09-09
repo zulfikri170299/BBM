@@ -1,12 +1,12 @@
 <x-guest-layout maxWidth="max-w-5xl">
     <div
-        class="bg-slate-900 border-0 md:border md:border-white/10 rounded-none md:rounded-3xl shadow-none md:shadow-2xl overflow-hidden flex flex-col md:flex-row w-full flex-1 md:flex-auto">
+        class="bg-white dark:bg-slate-900 border-0 md:border md:border-slate-300 dark:border-white/10 rounded-none md:rounded-3xl shadow-none md:shadow-2xl overflow-hidden flex flex-col md:flex-row w-full flex-1 md:flex-auto">
 
         <!-- Left Side: Branding & Visuals -->
-        <div class="hidden md:flex md:w-1/2 bg-slate-800 relative items-center justify-center overflow-hidden">
+        <div class="hidden md:flex md:w-1/2 bg-slate-50 dark:bg-slate-800 relative items-center justify-center overflow-hidden">
             <!-- Background Image with Overlay -->
             <div class="absolute inset-0 bg-[url('/polda.jpg')] bg-cover bg-center opacity-70"></div>
-            <div class="absolute inset-0 bg-gradient-to-br from-red-900/60 to-slate-900/60 mix-blend-multiply"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-red-50 dark:from-red-900/60 to-slate-200/60 dark:to-slate-900/60 mix-blend-multiply"></div>
 
             <!-- Content -->
             <div class="relative z-10 p-12 flex flex-col items-center text-center">
@@ -18,12 +18,12 @@
                         class="w-32 h-32 object-contain relative drop-shadow-2xl transform group-hover:scale-105 transition-transform duration-500 animate-float">
                 </div>
 
-                <h2 class="text-3xl font-bold text-white mb-2 tracking-tight">SIM-BBM</h2>
+                <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-2 tracking-tight">SIM-BBM</h2>
                 <h3 class="text-sm font-semibold text-amber-500 mb-6 tracking-wider uppercase">(SISTEM INFORMASI MANAJEMEN BBM)</h3>
 
                 <div class="w-16 h-1 bg-gradient-to-r from-red-500 to-amber-500 rounded-full mb-8"></div>
 
-                <p class="text-slate-300 text-sm leading-relaxed max-w-xs font-light">
+                <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed max-w-xs font-light">
                     Platform digital terintegrasi untuk pengelolaan distribusi dan monitoring bahan bakar minyak kendaraan
                     dinas secara realtime dan transparan.
                 </p>
@@ -31,35 +31,35 @@
                 <div class="mt-12 flex gap-4">
                     <div class="flex flex-col items-center gap-1">
                         <div
-                            class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/10">
-                            <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-slate-300 dark:border-white/10">
+                            <svg class="w-5 h-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
-                        <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Efisien</span>
+                        <span class="text-[10px] text-slate-600 dark:text-slate-400 uppercase tracking-wider font-semibold">Efisien</span>
                     </div>
                     <div class="flex flex-col items-center gap-1">
                         <div
-                            class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/10">
-                            <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-slate-300 dark:border-white/10">
+                            <svg class="w-5 h-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
                                 </path>
                             </svg>
                         </div>
-                        <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Aman</span>
+                        <span class="text-[10px] text-slate-600 dark:text-slate-400 uppercase tracking-wider font-semibold">Aman</span>
                     </div>
                     <div class="flex flex-col items-center gap-1">
                         <div
-                            class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/10">
-                            <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-slate-300 dark:border-white/10">
+                            <svg class="w-5 h-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
                                 </path>
                             </svg>
                         </div>
-                        <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Terukur</span>
+                        <span class="text-[10px] text-slate-600 dark:text-slate-400 uppercase tracking-wider font-semibold">Terukur</span>
                     </div>
                 </div>
             </div>
@@ -79,12 +79,12 @@
                     <img src="{{ asset('rolog.png') }}" alt="Logo" class="w-16 h-16 object-contain drop-shadow-lg animate-float">
                 </div>
                 <div class="md:hidden">
-                    <h4 class="text-2xl font-bold text-white mb-1">SIM-BBM</h4>
+                    <h4 class="text-2xl font-bold text-slate-900 dark:text-white mb-1">SIM-BBM</h4>
                     <p class="text-amber-500 text-xs font-semibold tracking-wider uppercase mb-2">(SISTEM INFORMASI MANAJEMEN BBM)</p>
                 </div>
                 <div class="hidden md:block">
-                    <h4 class="text-2xl font-bold text-white mb-2">Selamat Datang</h4>
-                    <p class="text-slate-400 text-sm">Silakan masuk menggunakan akun kredensial Anda.</p>
+                    <h4 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Selamat Datang</h4>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm">Silakan masuk menggunakan akun kredensial Anda.</p>
                 </div>
             </div>
 
@@ -100,7 +100,7 @@
                         </path>
                     </svg>
                     <div>
-                        <p class="text-sm font-bold text-red-400">Akses Ditolak</p>
+                        <p class="text-sm font-bold text-red-600 dark:text-red-400">Akses Ditolak</p>
                         @if(session('error') !== 'Akses Ditolak')
                             <p class="text-xs font-medium text-red-200/80 leading-relaxed mt-1">{{ session('error') }}</p>
                         @endif
@@ -113,7 +113,7 @@
 
                 <!-- Email / NRP Address -->
                 <div class="space-y-2">
-                    <label for="email" class="text-xs font-semibold text-slate-300 uppercase tracking-wider">{{ isset($personelAccessControl) && $personelAccessControl == '1' ? 'Email / NRP' : 'Email' }}</label>
+                    <label for="email" class="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">{{ isset($personelAccessControl) && $personelAccessControl == '1' ? 'Email / NRP' : 'Email' }}</label>
                     <div class="relative group">
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-slate-500 group-focus-within:text-amber-500 transition-colors duration-300"
@@ -124,11 +124,11 @@
                         </div>
                         <input id="email" type="text" name="email" value="{{ old('email') }}" required autofocus
                             autocomplete="username"
-                            class="w-full pl-11 pr-4 py-3.5 bg-slate-950/30 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all duration-300 placeholder-slate-600 text-sm"
+                            class="w-full pl-11 pr-4 py-3.5 bg-slate-200/30 dark:bg-slate-950/30 border border-slate-700/50 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all duration-300 placeholder-slate-600 text-sm"
                             placeholder="Masukkan ID Pengguna">
                     </div>
                     @error('email')
-                        <p class="text-xs text-red-400 font-medium ml-1">{{ $message }}</p>
+                        <p class="text-xs text-red-600 dark:text-red-400 font-medium ml-1">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -136,9 +136,9 @@
                 <div class="space-y-2">
                     <div class="flex justify-between items-center">
                         <label for="password"
-                            class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Password</label>
+                            class="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Password</label>
                         @if (Route::has('password.request'))
-                            <a class="text-[10px] font-medium text-amber-500 hover:text-amber-400 transition-colors hover:underline decoration-amber-500/50 underline-offset-4"
+                            <a class="text-[10px] font-medium text-amber-500 hover:text-amber-600 dark:text-amber-400 transition-colors hover:underline decoration-amber-500/50 underline-offset-4"
                                 href="{{ route('password.request') }}">
                                 Lupa Password?
                             </a>
@@ -154,7 +154,7 @@
                         </div>
                         <input id="password" :type="show ? 'text' : 'password'" type="password" name="password" required
                             autocomplete="current-password"
-                            class="w-full pl-11 pr-12 py-3.5 bg-slate-950/30 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all duration-300 placeholder-slate-600 text-sm"
+                            class="w-full pl-11 pr-12 py-3.5 bg-slate-200/30 dark:bg-slate-950/30 border border-slate-700/50 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all duration-300 placeholder-slate-600 text-sm"
                             placeholder="••••••••">
                         <button type="button" @click="show = !show"
                             class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-500 hover:text-amber-500 transition-colors focus:outline-none">
@@ -170,7 +170,7 @@
                         </button>
                     </div>
                     @error('password')
-                        <p class="text-xs text-red-400 font-medium ml-1">{{ $message }}</p>
+                        <p class="text-xs text-red-600 dark:text-red-400 font-medium ml-1">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -178,10 +178,10 @@
                 <div class="flex items-center">
                     <label for="remember_me" class="inline-flex items-center cursor-pointer select-none group">
                         <input id="remember_me" type="checkbox"
-                            class="rounded border-slate-600 bg-slate-800 text-amber-500 focus:ring-amber-500/50 focus:ring-offset-0 focus:ring-offset-transparent shadow-sm transition-colors cursor-pointer w-4 h-4"
+                            class="rounded border-slate-600 bg-slate-50 text-amber-500 focus:ring-amber-500/50 focus:ring-offset-0 focus:ring-offset-transparent shadow-sm transition-colors cursor-pointer w-4 h-4 bg-white dark:bg-slate-900"
                             name="remember">
                         <span
-                            class="ml-2.5 text-xs text-slate-400 group-hover:text-amber-500 transition-colors font-medium">Ingat
+                            class="ml-2.5 text-xs text-slate-600 dark:text-slate-400 group-hover:text-amber-500 transition-colors font-medium">Ingat
                             saya di perangkat ini</span>
                     </label>
                 </div>
@@ -189,7 +189,7 @@
                 <!-- Submit Button -->
                 <div class="pt-2">
                     <button type="submit"
-                        class="w-full py-4 px-6 bg-gradient-to-r from-red-700 to-amber-700 hover:from-red-600 hover:to-amber-600 text-white font-bold rounded-xl shadow-lg shadow-red-900/30 transform hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 text-sm uppercase tracking-widest border-t border-white/10 relative overflow-hidden group">
+                        class="w-full py-4 px-6 bg-gradient-to-r from-red-700 to-amber-700 hover:from-red-600 hover:to-amber-600 text-slate-900 dark:text-white font-bold rounded-xl shadow-lg shadow-red-900/30 transform hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 text-sm uppercase tracking-widest border-t border-slate-300 dark:border-white/10 relative overflow-hidden group">
                         <span class="relative z-10 flex items-center justify-center gap-2">
                             LOGIN
                             <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none"
@@ -206,12 +206,12 @@
                                 <div class="w-full border-t border-slate-700/50"></div>
                             </div>
                             <div class="relative flex justify-center text-xs uppercase">
-                                <span class="bg-slate-900 border border-slate-700/50 px-3 py-1 rounded-full text-slate-500 font-bold tracking-widest">Atau</span>
+                                <span class="bg-white dark:bg-slate-900 border border-slate-700/50 px-3 py-1 rounded-full text-slate-500 font-bold tracking-widest">Atau</span>
                             </div>
                         </div>
                         
                         <a href="{{ route('cek-saldo.index') }}"
-                            class="w-full py-3 px-6 bg-slate-800/50 hover:bg-slate-700/50 text-amber-500 border border-amber-500/20 hover:border-amber-500/50 font-bold rounded-xl transition-all duration-200 text-xs uppercase tracking-widest flex items-center justify-center gap-2 group">
+                            class="w-full py-3 px-6 bg-slate-50 hover:bg-slate-100 dark:bg-slate-700/50 text-amber-500 border border-amber-500/20 hover:border-amber-500/50 font-bold rounded-xl transition-all duration-200 text-xs uppercase tracking-widest flex items-center justify-center gap-2 group">
                             <svg class="w-4 h-4 text-amber-500 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>

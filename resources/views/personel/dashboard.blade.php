@@ -238,12 +238,12 @@ box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-8 items-start">
             <!-- Personel Card Widget -->
             <div
-                class="bg-slate-900 border border-white/5 rounded-xl sm:rounded-2xl border border-white/10/70 shadow-sm overflow-hidden flex flex-col">
-                <div class="p-4 sm:p-6 border-b border-white/5">
-                    <h3 class="text-base sm:text-lg font-bold text-slate-200">Kartu Personel</h3>
+                class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-xl sm:rounded-2xl border border-slate-300 dark:border-white/10/70 shadow-sm overflow-hidden flex flex-col">
+                <div class="bg-white dark:bg-slate-900 dark:text-white p-4 sm:p-6 border-b border-slate-200 dark:border-white/5">
+                    <h3 class="text-base sm:text-lg font-bold text-slate-800 dark:text-slate-200">Kartu Personel</h3>
                 </div>
                 <!-- Removed overflow-x-auto as we aim to fit it naturally, but keeping flex-center is good -->
-                <div class="p-4 sm:p-6 flex flex-col items-center justify-center bg-slate-800/50">
+                <div class="p-4 sm:p-6 flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-800/50">
                     @php
                         $p = auth()->user()->personel;
                     @endphp
@@ -306,25 +306,25 @@ box-shadow: 0 8px 20px rgba(0,0,0,0.4);
                         <div class="grid grid-cols-2 gap-3 sm:gap-4 mt-2 sm:mt-6 max-w-[320px] w-full mx-auto">
                             <!-- External Balance Display -->
                             <div
-                                class="bg-slate-900 border border-white/5 border border-white/10 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-sm text-center">
+                                class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 border border-slate-300 dark:border-white/10 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-sm text-center">
                                 <div
-                                    class="text-[8px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5 sm:mb-1">
+                                    class="text-[8px] sm:text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-0.5 sm:mb-1">
                                     Sisa Kuota</div>
-                                <div class="text-lg sm:text-xl font-extrabold text-slate-200">
+                                <div class="text-lg sm:text-xl font-extrabold text-slate-800 dark:text-slate-200">
                                     {{ rtrim(rtrim(number_format($p->saldo, 2, ',', '.'), '0'), ',') }} L
                                 </div>
                             </div>
 
                             <!-- PIN Display -->
-                            <div class="bg-slate-900 border border-white/5 border border-white/10 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-sm text-center relative group cursor-pointer"
+                            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 border border-slate-300 dark:border-white/10 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-sm text-center relative group cursor-pointer"
                                 onclick="togglePin()">
                                 <div
-                                    class="text-[8px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5 sm:mb-1">
+                                    class="text-[8px] sm:text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-0.5 sm:mb-1">
                                     PIN Kartu</div>
                                 <div class="flex items-center justify-center gap-2">
                                     <span id="pin-display"
-                                        class="text-lg sm:text-xl font-extrabold text-slate-200 tracking-widest blur-sm select-none">******</span>
-                                    <svg id="pin-icon" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400" fill="none"
+                                        class="text-lg sm:text-xl font-extrabold text-slate-800 dark:text-slate-200 tracking-widest blur-sm select-none">******</span>
+                                    <svg id="pin-icon" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-600 dark:text-slate-400" fill="none"
                                         stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -369,54 +369,54 @@ box-shadow: 0 8px 20px rgba(0,0,0,0.4);
             </div>
 
             <!-- Transaction History Table -->
-            <div class="bg-slate-900 border border-white/5 rounded-xl sm:rounded-2xl border border-white/10/70 shadow-sm w-full">
-                <div class="p-4 sm:p-6 border-b border-white/5 flex justify-between items-center">
-                    <h3 class="text-base sm:text-lg font-bold text-slate-200">Riwayat Transaksi</h3>
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-xl sm:rounded-2xl border border-slate-300 dark:border-white/10/70 shadow-sm w-full">
+                <div class="bg-white dark:bg-slate-900 dark:text-white p-4 sm:p-6 border-b border-slate-200 dark:border-white/5 flex justify-between items-center">
+                    <h3 class="text-base sm:text-lg font-bold text-slate-800 dark:text-slate-200">Riwayat Transaksi</h3>
                 </div>
                 @if($transactions->isEmpty())
                     <div class="p-8 sm:p-12 text-center">
                         <div
-                            class="w-12 h-12 sm:w-16 sm:h-16 bg-slate-800 rounded-full mx-auto mb-3 sm:mb-4 flex items-center justify-center">
-                            <svg class="w-6 h-6 sm:w-8 sm:h-8 text-slate-400" fill="none" stroke="currentColor"
+                            class="w-12 h-12 sm:w-16 sm:h-16 bg-slate-50 dark:bg-slate-800 rounded-full mx-auto mb-3 sm:mb-4 flex items-center justify-center">
+                            <svg class="w-6 h-6 sm:w-8 sm:h-8 text-slate-600 dark:text-slate-400" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
                                 </path>
                             </svg>
                         </div>
-                        <p class="text-sm sm:text-base text-slate-400 font-medium">Belum ada transaksi</p>
+                        <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 font-medium">Belum ada transaksi</p>
                     </div>
                 @else
                     <div class="overflow-x-auto">
                         <table class="min-w-full whitespace-nowrap">
                             <thead>
-                                <tr class="bg-slate-800/50/70">
+                                <tr class="bg-slate-50 dark:bg-slate-800/70">
                                     <th
-                                        class="px-4 sm:px-6 py-3 sm:py-3.5 text-left text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                                        class="px-4 sm:px-6 py-3 sm:py-3.5 text-left text-[10px] sm:text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                                         Tanggal</th>
                                     <th
-                                        class="px-4 sm:px-6 py-3 sm:py-3.5 text-left text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                                        class="px-4 sm:px-6 py-3 sm:py-3.5 text-left text-[10px] sm:text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                                         Kendaraan</th>
                                     <th
-                                        class="px-4 sm:px-6 py-3 sm:py-3.5 text-right text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                                        class="px-4 sm:px-6 py-3 sm:py-3.5 text-right text-[10px] sm:text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                                         Liter</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-white/5">
+                            <tbody class="divide-y divide-slate-200 dark:divide-white/5">
                                 @foreach($transactions as $trx)
-                                    <tr class="hover:bg-slate-800/50 transition-colors">
+                                    <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
                                         <td
-                                            class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-xs text-slate-400">
+                                            class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-xs text-slate-600 dark:text-slate-400">
                                             {{ $trx->created_at->timezone('Asia/Makassar')->format('d/m/Y H:i') }}
                                         </td>
                                         <td class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                                             <span
-                                                class="text-xs sm:text-xs font-medium text-slate-200">{{ $trx->kendaraan->no_polisi ?? ($trx->personel->nrp ?? '-') }}</span>
+                                                class="text-xs sm:text-xs font-medium text-slate-800 dark:text-slate-200">{{ $trx->kendaraan->no_polisi ?? ($trx->personel->nrp ?? '-') }}</span>
                                             <span
-                                                class="text-[10px] sm:text-xs text-slate-400 ml-1">({{ $trx->kendaraan->jenis_bbm ?? ($trx->personel->jenis_bbm ?? '-') }})</span>
+                                                class="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400 ml-1">({{ $trx->kendaraan->jenis_bbm ?? ($trx->personel->jenis_bbm ?? '-') }})</span>
                                         </td>
                                         <td
-                                            class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-xs text-slate-400 text-right">
+                                            class="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-xs text-slate-600 dark:text-slate-400 text-right">
                                             {{ $trx->liter }} L
                                         </td>
                                     </tr>
@@ -424,7 +424,7 @@ box-shadow: 0 8px 20px rgba(0,0,0,0.4);
                             </tbody>
                         </table>
                     </div>
-                    <div class="p-3 sm:p-4 border-t border-white/5">
+                    <div class="bg-white dark:bg-slate-900 dark:text-white p-3 sm:p-4 border-t border-slate-200 dark:border-white/5">
                         {{ $transactions->links() }}
                     </div>
                 @endif

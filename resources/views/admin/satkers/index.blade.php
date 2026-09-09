@@ -3,8 +3,8 @@
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h1 class="text-2xl font-bold text-white">Satuan Kerja</h1>
-                <p class="mt-1 text-slate-400">Kelola semua unit Satuan Kerja yang terdaftar.</p>
+                <h1 class="text-2xl font-bold text-slate-800 dark:text-white">Satuan Kerja</h1>
+                <p class="mt-1 text-slate-600 dark:text-slate-400">Kelola semua unit Satuan Kerja yang terdaftar.</p>
             </div>
             <a href="{{ route('admin.satkers.create') }}"
                         class="flex-1 lg:flex-none inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-semibold text-sm hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all duration-200 hover:-translate-y-0.5">
@@ -27,7 +27,7 @@
                     </svg>
                 </div>
                 <p class="text-sm font-medium text-emerald-700 flex-1">{{ session('success') }}</p>
-                <button @click="show = false" class="text-emerald-400 hover:text-emerald-600 transition">
+                <button @click="show = false" class="text-emerald-600 dark:text-emerald-400 hover:text-emerald-600 transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
                         </path>
@@ -37,9 +37,9 @@
         @endif
 
         <!-- Table Card -->
-        <div class="bg-slate-900 rounded-2xl border border-white/10 shadow-sm overflow-hidden">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
             <!-- Table Header Info -->
-            <div class="px-4 py-3 border-b border-white/5 flex items-center justify-between">
+            <div class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-b border-slate-200 dark:border-white/5 flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="p-2 bg-indigo-100 text-indigo-600 rounded-lg">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -49,8 +49,8 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="font-semibold text-slate-200">Daftar Satker</h3>
-                        <p class="text-xs text-slate-400">{{ $satkers->total() }} satker terdaftar</p>
+                        <h3 class="font-semibold text-slate-800 dark:text-slate-200">Daftar Satker</h3>
+                        <p class="text-xs text-slate-600 dark:text-slate-400">{{ $satkers->total() }} satker terdaftar</p>
                     </div>
                 </div>
 
@@ -84,7 +84,7 @@
             <div class="overflow-x-auto">
                 <table class="min-w-full whitespace-nowrap">
                     <thead>
-                        <tr class="bg-slate-800/50 border-b border-white/5">
+                        <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-white/5">
                             <th colspan="4" class="px-4 py-3">
                                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                                     <div class="flex flex-wrap items-center gap-4">
@@ -104,7 +104,7 @@
                                             @endif
                                             <div class="relative w-full">
                                                 <span
-                                                    class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+                                                    class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-600 dark:text-slate-400">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -114,58 +114,58 @@
                                                 </span>
                                                 <input type="text" name="search" value="{{ request('search') }}"
                                                     placeholder="Cari satker..."
-                                                    class="block w-full pl-9 pr-3 py-1.5 border border-white/10 rounded-lg text-xs placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                                                    class="bg-white dark:bg-slate-900 dark:text-white block w-full pl-9 pr-3 py-1.5 border border-slate-200 dark:border-white/10 rounded-lg text-xs placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
                                             </div>
                                             @if(request('search'))
                                                 <a href="{{ route('admin.satkers.index', ['per_page' => request('per_page')]) }}"
-                                                    class="ml-2 text-xs text-slate-400 hover:text-slate-400 transition-colors">
+                                                    class="ml-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-600 dark:text-slate-400 transition-colors">
                                                     Reset
                                                 </a>
                                             @endif
                                         </form>
                                     </div>
-                                    <div class="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
+                                    <div class="text-[10px] font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                                         Menampilkan {{ $satkers->firstItem() ?? 0 }}-{{ $satkers->lastItem() ?? 0 }}
                                         dari {{ $satkers->total() }} data
                                     </div>
                                 </div>
                             </th>
                         </tr>
-                        <tr class="bg-slate-800/50/70">
+                        <tr class="bg-slate-50 dark:bg-slate-800/70">
                             <th class="w-10 px-6 py-3.5">
                                 <input type="checkbox" id="checkAll"
-                                    class="rounded border-white/20 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
+                                    class="rounded border-slate-300 dark:border-white/20 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer bg-white dark:bg-slate-900">
                             </th>
                             <th
-                                class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
+                                class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                                 Nama Satker</th>
                             <th
-                                class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
+                                class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                                 Alamat</th>
                             <th
-                                class="px-4 py-3 text-right text-[11px] font-medium tracking-wider text-slate-400 uppercase tracking-wider">
+                                class="px-4 py-3 text-right text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                                 Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-white/5">
+                    <tbody class="divide-y divide-slate-200 dark:divide-white/5">
                         @forelse($satkers as $index => $satker)
-                            <tr class="hover:bg-slate-800/50 transition-colors group">
+                            <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors group">
                                 <td class="px-4 py-3 whitespace-nowrap">
                                     <input type="checkbox" value="{{ $satker->id }}"
-                                        class="item-checkbox rounded border-white/20 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
+                                        class="bg-white dark:bg-slate-900 dark:text-white item-checkbox rounded border-slate-300 dark:border-white/20 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
                                 </td>
                                 <td class="px-4 py-3 whitespace-nowrap">
                                     <div class="flex items-center gap-3">
                                         <div
-                                            class="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-indigo-500/20">
+                                            class="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-slate-800 dark:text-white font-bold text-sm shadow-md shadow-indigo-500/20">
                                             {{ strtoupper(substr($satker->nama_satker, 0, 2)) }}
                                         </div>
-                                        <span class="text-xs font-medium text-slate-200">{{ $satker->nama_satker }}</span>
+                                        <span class="text-xs font-medium text-slate-800 dark:text-slate-200">{{ $satker->nama_satker }}</span>
                                     </div>
                                 </td>
                                 <td class="px-4 py-3">
-                                    <div class="flex items-center gap-2 text-xs text-slate-400 max-w-xs">
-                                        <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor"
+                                    <div class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400 max-w-xs">
+                                        <svg class="w-4 h-4 text-slate-600 dark:text-slate-400 flex-shrink-0" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
@@ -179,7 +179,7 @@
                                 <td class="px-4 py-3 whitespace-nowrap text-right">
                                     <div class="flex items-center justify-end gap-2">
                                         <a href="{{ route('admin.satkers.edit', $satker) }}"
-                                            class="inline-flex items-center px-3 py-1.5 bg-slate-800 hover:bg-indigo-100 text-slate-400 hover:text-indigo-700 rounded-lg text-xs font-semibold transition-colors">
+                                            class="inline-flex items-center px-3 py-1.5 bg-slate-50 dark:bg-slate-800 hover:bg-indigo-100 text-slate-500 dark:text-slate-400 hover:text-indigo-700 rounded-lg text-xs font-semibold transition-colors">
                                             <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -196,7 +196,7 @@
                                                 value="{{ request('satker_id') }}">
                                             <button type="submit" data-confirm="Yakin ingin menghapus satker ini?"
                                                 data-confirm-type="error"
-                                                class="inline-flex items-center px-3 py-1.5 bg-slate-800 hover:bg-red-100 text-slate-400 hover:text-red-700 rounded-lg text-xs font-semibold transition-colors">
+                                                class="inline-flex items-center px-3 py-1.5 bg-slate-50 dark:bg-slate-800 hover:bg-red-100 text-slate-500 dark:text-slate-400 hover:text-red-700 rounded-lg text-xs font-semibold transition-colors">
                                                 <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -214,16 +214,16 @@
                                 <td colspan="4" class="px-6 py-12 text-center">
                                     <div class="flex flex-col items-center">
                                         <div
-                                            class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mb-4">
-                                            <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor"
+                                            class="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4">
+                                            <svg class="w-8 h-8 text-slate-600 dark:text-slate-400" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
                                                 </path>
                                             </svg>
                                         </div>
-                                        <p class="text-slate-400 font-medium">Belum ada Satker terdaftar</p>
-                                        <p class="text-xs text-slate-400 mt-1">Klik tombol "Tambah Satker" untuk
+                                        <p class="text-slate-600 dark:text-slate-400 font-medium">Belum ada Satker terdaftar</p>
+                                        <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">Klik tombol "Tambah Satker" untuk
                                             menambah
                                             data.</p>
                                     </div>
@@ -236,7 +236,7 @@
 
             <!-- Pagination -->
             @if($satkers->hasPages())
-                <div class="px-4 py-3 border-t border-white/5">
+                <div class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-t border-slate-200 dark:border-white/5">
                     {{ $satkers->links() }}
                 </div>
             @endif

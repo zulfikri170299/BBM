@@ -14,7 +14,7 @@
     </style>
 </head>
 
-<body class="bg-[#0f172a] text-white flex items-center justify-center min-h-screen p-6">
+<body class="bg-[#0f172a] text-slate-900 dark:text-white flex items-center justify-center min-h-screen p-6">
     <div class="max-w-md w-full text-center space-y-8 animate-in fade-in zoom-in duration-700">
         <div class="relative">
             <div class="absolute inset-0 bg-indigo-500 blur-3xl opacity-20 -z-10"></div>
@@ -29,7 +29,7 @@
         </div>
 
         <h1 class="text-2xl font-bold tracking-tight">403 | Forbidden</h1>
-        <p class="text-slate-400 text-lg">
+        <p class="text-slate-600 dark:text-slate-400 text-lg">
             Maaf Anda Tidak Ada Akses Untuk Halaman Tersebut
         </p>
 

@@ -9,8 +9,8 @@
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-black text-white tracking-tight">Data Sounding BBM</h1>
-                    <p class="text-slate-400 text-sm font-medium mt-1 uppercase tracking-widest flex items-center gap-2">
+                    <h1 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Data Sounding BBM</h1>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm font-medium mt-1 uppercase tracking-widest flex items-center gap-2">
                         Monitoring Stok Fisik dan Pengeluaran
                     </p>
                 </div>
@@ -45,43 +45,43 @@
         @endif
 
         <!-- Filter Card -->
-        <div class="bg-slate-900 border border-white/5 rounded-3xl shadow-sm overflow-hidden mb-6">
-            <div class="p-5 border-b border-white/5 bg-slate-800/30">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-3xl shadow-sm overflow-hidden mb-6">
+            <div class="p-5 border-b border-slate-200 dark:border-white/5 bg-white dark:bg-slate-800/30">
                 <form action="{{ route($rolePrefix.'.sounding.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-5 items-end gap-3">
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5">Bulan</label>
+                        <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-1.5">Bulan</label>
                         <select name="bulan" class="tom-select w-full" data-placeholder="Pilih Bulan">
                             @foreach(range(1, 12) as $m)
-                                <option value="{{ str_pad($m, 2, '0', STR_PAD_LEFT) }}" {{ $bulan == str_pad($m, 2, '0', STR_PAD_LEFT) ? 'selected' : '' }}>
+                                <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ str_pad($m, 2, '0', STR_PAD_LEFT) }}" {{ $bulan == str_pad($m, 2, '0', STR_PAD_LEFT) ? 'selected' : '' }}>
                                     {{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}
                                 </option>
                             @endforeach
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5">Tahun</label>
+                        <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-1.5">Tahun</label>
                         <select name="tahun" class="tom-select w-full" data-placeholder="Pilih Tahun">
                             @foreach(range(date('Y') - 2, date('Y')) as $y)
-                                <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>{{ $y }}</option>
+                                <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>{{ $y }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5">Triwulan</label>
+                        <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-1.5">Triwulan</label>
                         <select name="tw" class="tom-select w-full" data-placeholder="Semua (Opsional)">
-                            <option value="">Semua (Opsional)</option>
-                            <option value="1" {{ $tw == '1' ? 'selected' : '' }}>Triwulan 1</option>
-                            <option value="2" {{ $tw == '2' ? 'selected' : '' }}>Triwulan 2</option>
-                            <option value="3" {{ $tw == '3' ? 'selected' : '' }}>Triwulan 3</option>
-                            <option value="4" {{ $tw == '4' ? 'selected' : '' }}>Triwulan 4</option>
+                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua (Opsional)</option>
+                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="1" {{ $tw == '1' ? 'selected' : '' }}>Triwulan 1</option>
+                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="2" {{ $tw == '2' ? 'selected' : '' }}>Triwulan 2</option>
+                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="3" {{ $tw == '3' ? 'selected' : '' }}>Triwulan 3</option>
+                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="4" {{ $tw == '4' ? 'selected' : '' }}>Triwulan 4</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5">Jenis BBM</label>
+                        <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-1.5">Jenis BBM</label>
                         <select name="jenis_bbm" class="tom-select w-full" data-placeholder="Semua BBM">
-                            <option value="">Semua BBM</option>
-                            <option value="PERTAMAX" {{ $jenis_bbm == 'PERTAMAX' ? 'selected' : '' }}>PERTAMAX</option>
-                            <option value="PERTAMINA DEX" {{ $jenis_bbm == 'PERTAMINA DEX' ? 'selected' : '' }}>PERTAMINA DEX</option>
+                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua BBM</option>
+                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="PERTAMAX" {{ $jenis_bbm == 'PERTAMAX' ? 'selected' : '' }}>PERTAMAX</option>
+                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="PERTAMINA DEX" {{ $jenis_bbm == 'PERTAMINA DEX' ? 'selected' : '' }}>PERTAMINA DEX</option>
                         </select>
                     </div>
                     <div>
@@ -94,22 +94,22 @@
                     </div>
                 </form>
             </div>
-        <div class="bg-slate-900 border border-white/5 rounded-3xl shadow-sm overflow-hidden">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-3xl shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="border-b border-white/5">
-                            <th class="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Tanggal</th>
-                            <th class="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Jenis BBM</th>
-                            <th class="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider text-right">Stok Awal</th>
-                            <th class="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider text-right">Stok Akhir</th>
-                            <th class="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider text-right">Pemakaian</th>
-                            <th class="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider text-right">Susut</th>
-                            <th class="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider text-center">Dokumentasi</th>
-                            <th class="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider text-center">Aksi</th>
+                        <tr class="bg-white dark:bg-slate-900 dark:text-white border-b border-slate-200 dark:border-white/5">
+                            <th class="px-6 py-4 text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Tanggal</th>
+                            <th class="px-6 py-4 text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Jenis BBM</th>
+                            <th class="px-6 py-4 text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider text-right">Stok Awal</th>
+                            <th class="px-6 py-4 text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider text-right">Stok Akhir</th>
+                            <th class="px-6 py-4 text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider text-right">Pemakaian</th>
+                            <th class="px-6 py-4 text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider text-right">Susut</th>
+                            <th class="px-6 py-4 text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider text-center">Dokumentasi</th>
+                            <th class="px-6 py-4 text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider text-center">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-white/5 text-white">
+                    <tbody class="divide-y divide-slate-200 dark:divide-white/5 text-slate-900 dark:text-white">
                         @php
                             $totals = [];
                         @endphp
@@ -124,23 +124,23 @@
                                 $totals[$jenis]['pemakaian'] += $item->pengeluaran_aplikasi;
                                 $totals[$jenis]['susut'] += $item->susut;
                             @endphp
-                            <tr class="hover:bg-white/5 border-b border-white/5 last:border-0 text-sm text-slate-300">
+                            <tr class="hover:bg-slate-200 dark:hover:bg-white/5 border-b border-slate-200 dark:border-white/5 last:border-0 text-sm text-slate-700 dark:text-slate-300">
                                 <td class="px-6 py-3 whitespace-nowrap">{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d/m/Y') }}</td>
                                 <td class="px-6 py-3 whitespace-nowrap">
-                                    <span class="px-3 py-1 rounded-full text-xs font-medium {{ $item->jenis_bbm == 'PERTAMAX' ? 'bg-indigo-500/10 text-indigo-400' : 'bg-rose-500/10 text-rose-400' }}">
+                                    <span class="px-3 py-1 rounded-full text-xs font-medium {{ $item->jenis_bbm == 'PERTAMAX' ? 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400' : 'bg-rose-500/10 text-rose-600 dark:text-rose-400' }}">
                                         {{ ucwords(strtolower($item->jenis_bbm)) }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-3 text-right whitespace-nowrap">{{ number_format($item->stok_awal, 0, ',', '.') }} L</td>
                                 <td class="px-6 py-3 text-right whitespace-nowrap">{{ number_format($item->stok_akhir, 0, ',', '.') }} L</td>
                                 <td class="px-6 py-3 text-right whitespace-nowrap">{{ number_format($item->pengeluaran_aplikasi, 0, ',', '.') }} L</td>
-                                <td class="px-6 py-3 text-right whitespace-nowrap font-medium {{ $item->susut > 0 ? 'text-emerald-400' : ($item->susut < 0 ? 'text-rose-400' : 'text-slate-400') }}">
+                                <td class="px-6 py-3 text-right whitespace-nowrap font-medium {{ $item->susut > 0 ? 'text-emerald-600 dark:text-emerald-400' : ($item->susut < 0 ? 'text-rose-600 dark:text-rose-400' : 'text-slate-600 dark:text-slate-400') }}">
                                     {{ number_format($item->susut, 0, ',', '.') }} L
                                 </td>
                                 <td class="px-6 py-3 text-center whitespace-nowrap">
                                     <div class="flex justify-center">
                                         @if($item->dokumentasi)
-                                            <a href="{{ Storage::url($item->dokumentasi) }}" target="_blank" class="p-1.5 bg-slate-800 text-indigo-400 hover:bg-indigo-500 hover:text-white rounded-lg transition-colors" title="Lihat Dokumentasi">
+                                            <a href="{{ Storage::url($item->dokumentasi) }}" target="_blank" class="p-1.5 bg-slate-50 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500 hover:text-white rounded-lg transition-colors" title="Lihat Dokumentasi">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -153,13 +153,13 @@
                                 </td>
                                 <td class="px-6 py-3 text-center whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-2">
-                                        <a href="{{ route($rolePrefix.'.sounding.edit', $item->id) }}" class="p-1.5 bg-slate-800 text-amber-400 hover:bg-amber-500 hover:text-white rounded-lg transition-colors" title="Edit">
+                                        <a href="{{ route($rolePrefix.'.sounding.edit', $item->id) }}" class="p-1.5 bg-slate-50 dark:bg-slate-800 text-amber-600 dark:text-amber-400 hover:bg-amber-500 hover:text-slate-900 dark:text-white rounded-lg transition-colors" title="Edit">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                         </a>
                                         <form action="{{ route($rolePrefix.'.sounding.destroy', $item->id) }}" method="POST" class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="p-1.5 bg-slate-800 text-rose-400 hover:bg-rose-500 hover:text-white rounded-lg transition-colors" 
+                                            <button type="submit" class="p-1.5 bg-slate-50 dark:bg-slate-800 text-rose-600 dark:text-rose-400 hover:bg-rose-500 hover:text-white rounded-lg transition-colors" 
                                                     title="Hapus" 
                                                     data-confirm="Apakah Anda yakin ingin menghapus data sounding ini? Data yang dihapus tidak dapat dikembalikan." 
                                                     data-confirm-type="error" 
@@ -175,12 +175,12 @@
                             <tr>
                                 <td colspan="8" class="px-6 py-12 text-center">
                                 <div class="flex flex-col items-center justify-center">
-                                    <div class="w-16 h-16 bg-slate-800/50 rounded-full flex items-center justify-center mb-4 text-slate-500">
+                                    <div class="w-16 h-16 bg-slate-50 dark:bg-slate-800/50 rounded-full flex items-center justify-center mb-4 text-slate-500">
                                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                                         </svg>
                                     </div>
-                                    <p class="text-slate-400 font-bold">Belum ada data sounding.</p>
+                                    <p class="text-slate-600 dark:text-slate-400 font-bold">Belum ada data sounding.</p>
                                     <p class="text-slate-500 text-xs mt-1">Ganti filter atau tambahkan data baru.</p>
                                 </div>
                             </td>
@@ -188,14 +188,14 @@
                         @endforelse
                     </tbody>
                     @if(count($soundings) > 0)
-                    <tfoot class="bg-white/5 border-t border-white/10 text-white">
+                    <tfoot class="bg-white/5 border-t border-slate-300 dark:border-white/10 text-slate-900 dark:text-white">
                         @foreach($totals as $jenis => $total)
-                        <tr class="border-b border-white/5 last:border-0 text-sm text-slate-300">
-                            <td colspan="2" class="px-6 py-4 text-right font-medium text-slate-400 uppercase">Total {{ ucwords(strtolower($jenis)) }}</td>
+                        <tr class="bg-white dark:bg-slate-900 dark:text-white border-b border-slate-200 dark:border-white/5 last:border-0 text-sm text-slate-700 dark:text-slate-300">
+                            <td colspan="2" class="px-6 py-4 text-right font-medium text-slate-600 dark:text-slate-400 uppercase">Total {{ ucwords(strtolower($jenis)) }}</td>
                             <td class="px-6 py-4 text-right whitespace-nowrap">{{ number_format($total['awal'], 0, ',', '.') }} L</td>
                             <td class="px-6 py-4 text-right whitespace-nowrap">{{ number_format($total['akhir'], 0, ',', '.') }} L</td>
                             <td class="px-6 py-4 text-right whitespace-nowrap">{{ number_format($total['pemakaian'], 0, ',', '.') }} L</td>
-                            <td class="px-6 py-4 text-right whitespace-nowrap font-medium {{ $total['susut'] > 0 ? 'text-emerald-400' : ($total['susut'] < 0 ? 'text-rose-400' : 'text-slate-400') }}">
+                            <td class="px-6 py-4 text-right whitespace-nowrap font-medium {{ $total['susut'] > 0 ? 'text-emerald-600 dark:text-emerald-400' : ($total['susut'] < 0 ? 'text-rose-600 dark:text-rose-400' : 'text-slate-600 dark:text-slate-400') }}">
                                 {{ number_format($total['susut'], 0, ',', '.') }} L
                             </td>
                             <td colspan="2"></td>

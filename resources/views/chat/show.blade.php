@@ -1,16 +1,16 @@
 <x-app-layout>
     <div class="flex flex-col h-[calc(100vh-64px)] bg-[#F8FAFC]">
         <!-- Header Chat -->
-        <div class="bg-slate-900 border border-white/5/80 border-b border-white/5 px-6 py-4 flex items-center justify-between shrink-0 sticky top-0 z-50">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/80 border-b border-slate-200 dark:border-white/5 px-6 py-4 flex items-center justify-between shrink-0 sticky top-0 z-50">
             <div class="flex items-center">
-                <a href="{{ route('chat.index') }}" class="mr-4 text-slate-400 hover:text-indigo-600 transition-all p-2 hover:bg-indigo-50 rounded-full group">
+                <a href="{{ route('chat.index') }}" class="mr-4 text-slate-700 dark:text-slate-400 hover:text-indigo-600 transition-all p-2 hover:bg-indigo-50 rounded-full group">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
                 </a>
                 <div class="flex items-center">
                     <div class="relative">
-                        <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-indigo-500/30">
+                        <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-slate-900 dark:text-white font-bold text-lg shadow-lg shadow-indigo-500/30">
                             {{ substr($receiver->name, 0, 1) }}
                         </div>
                         @if($receiver->isOnline())
@@ -20,13 +20,13 @@
                         @endif
                     </div>
                     <div class="ml-3">
-                        <h1 class="text-base font-bold text-slate-200 leading-tight">
+                        <h1 class="text-base font-bold text-slate-800 dark:text-slate-200 leading-tight">
                             {{ $receiver->name }}
                         </h1>
                         <p class="text-[11px] text-indigo-500 font-semibold tracking-wide uppercase mt-0.5">
                             {{ $receiver->role_label }}
                             @if($receiver->satker)
-                                <span class="text-slate-400 mx-1">•</span> {{ $receiver->satker->nama_satker }}
+                                <span class="text-slate-600 dark:text-slate-400 mx-1">•</span> {{ $receiver->satker->nama_satker }}
                             @endif
                         </p>
                     </div>
@@ -34,7 +34,7 @@
             </div>
             
             <div class="flex items-center space-x-1">
-                <button title="Info" class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-slate-800/50 rounded-full transition-colors">
+                <button title="Info" class="p-2 text-slate-700 dark:text-slate-400 hover:text-indigo-600 hover:bg-slate-50 dark:bg-slate-800/50 rounded-full transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -60,14 +60,14 @@
         </div>
 
         <!-- Input Area -->
-        <div class="bg-slate-900 border border-white/5 p-4 shrink-0 z-20">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 p-4 shrink-0 z-20">
             <div class="max-w-4xl mx-auto">
-                <form id="chat-form" class="relative flex items-end gap-3 bg-slate-800/50 p-2 rounded-3xl border border-white/10 shadow-sm focus-within:ring-2 focus-within:ring-indigo-100 focus-within:border-indigo-300 transition-all duration-300">
+                <form id="chat-form" class="relative flex items-end gap-3 bg-slate-50 dark:bg-slate-800/50 p-2 rounded-3xl border border-slate-300 dark:border-white/10 shadow-sm focus-within:ring-2 focus-within:ring-indigo-100 focus-within:border-indigo-300 transition-all duration-300">
                     <div class="flex-1">
                         <textarea 
                             id="message-input" 
                             name="message" 
-                            class="w-full pl-4 pr-4 py-3 bg-transparent border-0 focus:ring-0 focus:outline-none text-slate-300 placeholder:text-slate-400 resize-none max-h-32 text-[15px] leading-relaxed" 
+                            class="w-full pl-4 pr-4 py-3 bg-transparent border-0 focus:ring-0 focus:outline-none text-slate-700 dark:text-slate-300 placeholder:text-slate-600 dark:text-slate-400 resize-none max-h-32 text-[15px] leading-relaxed" 
                             rows="1"
                             placeholder="Ketik pesan Anda..." 
                             required
@@ -85,7 +85,7 @@
                     </button>
                 </form>
                 <div class="mt-2 text-center">
-                    <p class="text-[10px] text-slate-400 tracking-wide font-medium">Enter untuk kirim • Shift + Enter baris baru</p>
+                    <p class="text-[10px] text-slate-600 dark:text-slate-400 tracking-wide font-medium">Enter untuk kirim • Shift + Enter baris baru</p>
                 </div>
             </div>
         </div>
@@ -157,15 +157,15 @@
         function renderMessages(messages) {
             if (messages.length === 0) {
                 chatContainer.innerHTML = `
-                    <div class="flex flex-col items-center justify-center h-full text-slate-400">
-                        <div class="w-20 h-20 bg-slate-900 border border-white/5 rounded-3xl flex items-center justify-center shadow-sm mb-6 relative overflow-hidden group">
+                    <div class="flex flex-col items-center justify-center h-full text-slate-600 dark:text-slate-400">
+                        <div class="w-20 h-20 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-3xl flex items-center justify-center shadow-sm mb-6 relative overflow-hidden group">
                            <div class="absolute inset-0 bg-indigo-50 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-indigo-200 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                             </svg>
                         </div>
-                        <p class="font-semibold text-slate-400 mb-1">Mulai obrolan baru</p>
-                        <p class="text-xs text-slate-400 max-w-xs text-center">Kirim pesan pertama Anda kepada {{ $receiver->name }} sekarang.</p>
+                        <p class="font-semibold text-slate-600 dark:text-slate-400 mb-1">Mulai obrolan baru</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 max-w-xs text-center">Kirim pesan pertama Anda kepada {{ $receiver->name }} sekarang.</p>
                     </div>
                 `;
                 return;
@@ -184,7 +184,7 @@
                 if (msgDate !== lastDate) {
                     html += `
                         <div class="flex justify-center my-8">
-                            <span class="px-4 py-1.5 bg-slate-200/60 rounded-full text-[11px] text-slate-400 font-semibold tracking-wide uppercase shadow-sm">${msgDate}</span>
+                            <span class="px-4 py-1.5 bg-slate-200/60 rounded-full text-[11px] text-slate-600 dark:text-slate-400 font-semibold tracking-wide uppercase shadow-sm">${msgDate}</span>
                         </div>
                     `;
                     lastDate = msgDate;
@@ -195,8 +195,8 @@
                 // Teman (Kiri): Warna Putih, border halus, border radius khusus
                 
                 const bubbleClass = isMe 
-                    ? 'bg-gradient-to-br from-indigo-500 to-indigo-600 text-white rounded-[20px] rounded-br-[4px] shadow-sm shadow-indigo-500/10' 
-                    : 'bg-slate-900 border border-white/5 text-slate-300 border border-white/5 rounded-[20px] rounded-bl-[4px] shadow-sm';
+                    ? 'bg-gradient-to-br from-indigo-500 to-indigo-600 text-slate-900 dark:text-white rounded-[20px] rounded-br-[4px] shadow-sm shadow-indigo-500/10' 
+                    : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/5 rounded-[20px] rounded-bl-[4px] shadow-sm';
                 
                 const alignClass = isMe ? 'justify-end' : 'justify-start';
                 const containerClass = isMe ? 'items-end' : 'items-start';
@@ -207,7 +207,7 @@
                         <div class="flex flex-col ${containerClass} max-w-[85%] md:max-w-[70%] lg:max-w-[60%]">
                             <div class="flex items-center gap-2 w-full ${isMe ? 'flex-row' : 'flex-row-reverse'}">
                                 ${isMe ? `
-                                    <button onclick="deleteMessage(${msg.id})" class="opacity-0 group-hover:opacity-100 p-1.5 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-full transition-all focus:outline-none flex-shrink-0" title="Hapus pesan (karena salah ketik)">
+                                    <button onclick="deleteMessage(${msg.id})" class="opacity-0 group-hover:opacity-100 p-1.5 text-slate-700 dark:text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-full transition-all focus:outline-none flex-shrink-0" title="Hapus pesan (karena salah ketik)">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                         </svg>
@@ -218,12 +218,12 @@
                                 </div>
                             </div>
                             <div class="flex items-center mt-1 space-x-1.5 px-1 select-none">
-                                <span class="text-[10px] text-slate-400 font-medium tracking-wide">
+                                <span class="text-[10px] text-slate-600 dark:text-slate-400 font-medium tracking-wide">
                                     ${formatTime(msg.created_at)}
                                 </span>
                                 ${isMe ? (msg.is_read 
                                     ? '<svg class="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 6L7 17l-5-5m20-2l-7.5 7.5L13 16" /></svg>' 
-                                    : '<svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>') : ''}
+                                    : '<svg class="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>') : ''}
                             </div>
                         </div>
                     </div>

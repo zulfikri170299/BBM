@@ -1,9 +1,16 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-slate-900">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full" x-data="{ isDarkMode: $persist(true) }" :class="{ 'dark': isDarkMode }">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="color-scheme" content="dark">
+    <meta name="color-scheme" content="light dark">
+    <script>
+        if (localStorage.getItem('_x_isDarkMode') === 'true' || !('_x_isDarkMode' in localStorage)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'SPBP Rolog Polda NTB') }}</title>
@@ -24,6 +31,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -95,11 +103,40 @@
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+        ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        .dark ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.3); }
+        .dark ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+
+        /* Submenu styling */
+        .submenu-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 9999px;
+            margin-right: 0.75rem;
+            transition: all 0.3s ease;
+            background-color: #94a3b8; /* slate-400 */
+        }
+        .dark .submenu-dot {
+            background-color: #475569; /* slate-600 */
+        }
+        .active-dot {
+            background-color: #0062ff !important;
+            box-shadow: 0 0 8px rgba(0, 98, 255, 0.4);
+        }
+        .dark .active-dot {
+            background-color: #38bdf8 !important;
+            box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+        }
+        .submenu-line {
+            border-left: 1px solid #e2e8f0; /* slate-200 */
+        }
+        .dark .submenu-line {
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
         /* Dark Theme overrides for TomSelect */
-        .ts-wrapper .ts-control {
+        .dark .ts-wrapper .ts-control {
             border: 1px solid rgba(255, 255, 255, 0.1) !important;
             background-color: rgba(15, 23, 42, 0.6) !important;
             border-radius: 0.75rem !important;
@@ -114,13 +151,13 @@
             align-items: center;
         }
 
-        .ts-wrapper.focus .ts-control {
+        .dark .ts-wrapper.focus .ts-control {
             border-color: #0062ff !important;
             background-color: rgba(15, 23, 42, 0.9) !important;
             box-shadow: 0 0 0 2px rgba(0, 98, 255, 0.2) !important;
         }
 
-        .ts-dropdown, .ts-wrapper .ts-dropdown {
+        .dark .ts-dropdown, .dark .ts-wrapper .ts-dropdown {
             position: absolute;
             border-radius: 1rem;
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -140,28 +177,69 @@
             to { opacity: 1; transform: scaleY(1) translateY(0); }
         }
 
-        .ts-dropdown .option, .ts-wrapper .ts-dropdown .option {
+        .dark .ts-dropdown .option, .dark .ts-wrapper .ts-dropdown .option {
             padding: 0.625rem 0.75rem;
             border-radius: 0.5rem;
             font-weight: 500;
         }
 
-        .ts-dropdown .active, .ts-wrapper .ts-dropdown .active {
+        .dark .ts-dropdown .active, .dark .ts-wrapper .ts-dropdown .active {
             background-color: rgba(255, 255, 255, 0.05);
             color: #38bdf8;
         }
         
-        .ts-wrapper .ts-control .item {
+        .dark .ts-wrapper .ts-control .item {
             font-weight: 600;
             color: #f8fafc;
         }
 
-        .ts-wrapper .ts-control input {
+        .dark .ts-wrapper .ts-control input {
             color: #f8fafc !important;
         }
 
+        /* Light Theme overrides for TomSelect */
+        .ts-wrapper .ts-control {
+            border: 1px solid #e2e8f0;
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #1e293b;
+            transition: all 0.2s;
+            min-height: 38px;
+            display: flex;
+            align-items: center;
+        }
+
+        .ts-wrapper.focus .ts-control {
+            border-color: #0062ff !important;
+            box-shadow: 0 0 0 2px rgba(0, 98, 255, 0.2) !important;
+        }
+
+        .ts-dropdown, .ts-wrapper .ts-dropdown {
+            border-radius: 1rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            font-size: 0.75rem;
+            padding: 0.5rem;
+            z-index: 99999;
+            animation: dropdownFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .ts-dropdown .option, .ts-wrapper .ts-dropdown .option {
+            padding: 0.625rem 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .ts-dropdown .active, .ts-wrapper .ts-dropdown .active {
+            background-color: #f1f5f9;
+            color: #0f172a;
+        }
+
         /* Dark Theme overrides for Flatpickr */
-        .flatpickr-calendar {
+        .dark .flatpickr-calendar {
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
             border-radius: 1.5rem !important;
             border: 1px solid rgba(255, 255, 255, 0.1) !important;
@@ -171,47 +249,47 @@
             color: #f8fafc !important;
             z-index: 99999 !important;
         }
-        .flatpickr-day {
+        .dark .flatpickr-day {
             border-radius: 0.5rem !important;
             color: #cbd5e1 !important;
         }
-        .flatpickr-day:hover, .flatpickr-day.prevMonthDay:hover, .flatpickr-day.nextMonthDay:hover, .flatpickr-day:focus, .flatpickr-day.prevMonthDay:focus, .flatpickr-day.nextMonthDay:focus {
+        .dark .flatpickr-day:hover, .dark .flatpickr-day.prevMonthDay:hover, .dark .flatpickr-day.nextMonthDay:hover, .dark .flatpickr-day:focus, .dark .flatpickr-day.prevMonthDay:focus, .dark .flatpickr-day.nextMonthDay:focus {
             background: rgba(255,255,255,0.1) !important;
             border-color: transparent !important;
             color: #fff !important;
         }
-        .flatpickr-day.today {
+        .dark .flatpickr-day.today {
             border-color: rgba(255,255,255,0.2) !important;
             color: #38bdf8 !important;
         }
-        .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange {
+        .dark .flatpickr-day.selected, .dark .flatpickr-day.startRange, .dark .flatpickr-day.endRange {
             background: #0062ff !important;
             border-color: #0062ff !important;
             color: #fff !important;
         }
-        .flatpickr-months .flatpickr-month {
+        .dark .flatpickr-months .flatpickr-month {
             color: #f8fafc !important;
             fill: #f8fafc !important;
         }
-        .flatpickr-current-month .flatpickr-monthDropdown-months {
+        .dark .flatpickr-current-month .flatpickr-monthDropdown-months {
             background: #0f172a !important;
             color: #f8fafc !important;
         }
-        .flatpickr-current-month .flatpickr-monthDropdown-months .flatpickr-monthDropdown-month {
+        .dark .flatpickr-current-month .flatpickr-monthDropdown-months .flatpickr-monthDropdown-month {
             background-color: #0f172a !important;
         }
-        .flatpickr-months .flatpickr-prev-month,
-        .flatpickr-months .flatpickr-next-month {
+        .dark .flatpickr-months .flatpickr-prev-month,
+        .dark .flatpickr-months .flatpickr-next-month {
             color: #94a3b8 !important;
             fill: #94a3b8 !important;
             transition: all 0.2s ease;
         }
-        .flatpickr-months .flatpickr-prev-month:hover,
-        .flatpickr-months .flatpickr-next-month:hover {
+        .dark .flatpickr-months .flatpickr-prev-month:hover,
+        .dark .flatpickr-months .flatpickr-next-month:hover {
             color: #fff !important;
             fill: #fff !important;
         }
-        span.flatpickr-weekday {
+        .dark span.flatpickr-weekday {
             color: #94a3b8 !important;
         }
         
@@ -225,9 +303,9 @@
     @stack('styles')
 </head>
 
-<body class="h-full font-sans antialiased text-slate-200 overflow-hidden bg-slate-900 relative selection:bg-brand-primary/30 selection:text-white" x-data="{ sidebarOpen: false, desktopSidebarOpen: $persist(true) }" @sidebar-close.window="sidebarOpen = false" @sidebar-open.window="sidebarOpen = true">
+<body class="h-full font-sans antialiased text-slate-800 dark:text-slate-200 overflow-hidden bg-white dark:bg-slate-900 relative selection:bg-brand-primary/30 selection:text-slate-900 dark:text-white transition-colors duration-300" x-data="{ sidebarOpen: false, desktopSidebarOpen: $persist(true) }" @sidebar-close.window="sidebarOpen = false" @sidebar-open.window="sidebarOpen = true">
     <!-- Solid clean background instead of blur -->
-    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none bg-slate-900">
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none bg-white dark:bg-slate-900 transition-colors duration-300">
     </div>
 
     <div class="flex h-full min-h-full">
@@ -242,13 +320,13 @@
                 <div x-data="{ show: true }" x-show="show" x-cloak
                     class="fixed inset-0 z-[9999] flex flex-col items-center justify-center p-4 sm:p-0 gap-4 pointer-events-none">
                     <!-- Backdrop -->
-                    <div class="fixed inset-0 bg-slate-950/80 transition-opacity pointer-events-auto" @click="show = false"
+                    <div class="fixed inset-0 bg-slate-200/80 dark:bg-slate-950/80 transition-opacity pointer-events-auto" @click="show = false"
                         x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
                         x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
                         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"></div>
 
                     @if(session('success'))
-                        <div class="relative w-full max-w-sm bg-slate-900 border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center p-8 text-center pointer-events-auto"
+                        <div class="relative w-full max-w-sm bg-white dark:bg-slate-900 border border-slate-300 dark:border-white/10 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center p-8 text-center pointer-events-auto"
                             @click.stop x-transition:enter="transition ease-out duration-300 transform"
                             x-transition:enter-start="opacity-0 translate-y-8 scale-95"
                             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
@@ -257,13 +335,13 @@
                             x-transition:leave-end="opacity-0 translate-y-4 scale-95">
 
                             <div class="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mb-6 border border-emerald-500/30">
-                                <svg class="w-10 h-10 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-10 h-10 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                 </svg>
                             </div>
 
-                            <h3 class="text-[22px] font-bold text-white mb-2">Berhasil!</h3>
-                            <div class="text-[15px] font-medium text-slate-400 mb-8">{!! session('success') !!}</div>
+                            <h3 class="text-[22px] font-bold text-slate-900 dark:text-white mb-2">Berhasil!</h3>
+                            <div class="text-[15px] font-medium text-slate-600 dark:text-slate-400 mb-8">{!! session('success') !!}</div>
 
                             <button @click="show = false"
                                 class="w-full py-3.5 bg-brand-primary hover:bg-blue-600 text-white rounded-[1rem] font-bold transition-colors shadow-[0_0_15px_rgba(0,98,255,0.4)]">OK, Mengerti</button>
@@ -271,7 +349,7 @@
                     @endif
 
                     @if(session('error'))
-                        <div class="relative w-full max-w-sm bg-slate-900 border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center p-8 text-center pointer-events-auto"
+                        <div class="relative w-full max-w-sm bg-white dark:bg-slate-900 border border-slate-300 dark:border-white/10 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center p-8 text-center pointer-events-auto"
                             @click.stop x-transition:enter="transition ease-out duration-300 transform"
                             x-transition:enter-start="opacity-0 translate-y-8 scale-95"
                             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
@@ -280,22 +358,22 @@
                             x-transition:leave-end="opacity-0 translate-y-4 scale-95">
 
                             <div class="w-20 h-20 bg-rose-500/20 rounded-full flex items-center justify-center mb-6 border border-rose-500/30">
-                                <svg class="w-10 h-10 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-10 h-10 text-rose-600 dark:text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                                 </svg>
                             </div>
 
-                            <h3 class="text-[22px] font-bold text-white mb-2">Oops, Terjadi Kesalahan!</h3>
-                            <div class="text-[15px] font-medium text-slate-400 mb-8">{!! session('error') !!}</div>
+                            <h3 class="text-[22px] font-bold text-slate-900 dark:text-white mb-2">Oops, Terjadi Kesalahan!</h3>
+                            <div class="text-[15px] font-medium text-slate-600 dark:text-slate-400 mb-8">{!! session('error') !!}</div>
 
                             <button @click="show = false"
-                                class="w-full py-3.5 bg-slate-800 hover:bg-slate-700 border border-white/5 text-white rounded-[1rem] font-bold transition-colors">OK, Mengerti</button>
+                                class="w-full py-3.5 bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-white/5 text-slate-900 dark:text-white rounded-[1rem] font-bold transition-colors">OK, Mengerti</button>
                         </div>
                     @endif
 
                     @if ($errors->any())
-                        <div class="relative w-full max-w-sm bg-slate-900 border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center p-8 text-center pointer-events-auto"
+                        <div class="relative w-full max-w-sm bg-white dark:bg-slate-900 border border-slate-300 dark:border-white/10 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center p-8 text-center pointer-events-auto"
                             @click.stop x-transition:enter="transition ease-out duration-300 transform"
                             x-transition:enter-start="opacity-0 translate-y-8 scale-95"
                             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
@@ -304,13 +382,13 @@
                             x-transition:leave-end="opacity-0 translate-y-4 scale-95">
 
                             <div class="w-20 h-20 bg-amber-500/20 rounded-full flex items-center justify-center mb-6 border border-amber-500/30">
-                                <svg class="w-10 h-10 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-10 h-10 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
 
-                            <h3 class="text-[22px] font-bold text-white mb-3">Periksa Inputan Anda</h3>
-                            <div class="text-[14px] font-medium text-slate-400 w-full mb-8">
+                            <h3 class="text-[22px] font-bold text-slate-900 dark:text-white mb-3">Periksa Inputan Anda</h3>
+                            <div class="text-[14px] font-medium text-slate-600 dark:text-slate-400 w-full mb-8">
                                 <ul class="space-y-1">
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
@@ -319,7 +397,7 @@
                             </div>
 
                             <button @click="show = false"
-                                class="w-full py-3.5 bg-slate-800 hover:bg-slate-700 border border-white/5 text-white rounded-[1rem] font-bold transition-colors">Tutup & Perbaiki</button>
+                                class="w-full py-3.5 bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-white/5 text-slate-900 dark:text-white rounded-[1rem] font-bold transition-colors">Tutup & Perbaiki</button>
                         </div>
                     @endif
                 </div>
@@ -440,15 +518,16 @@
             if (icon === 'success') iconColor = '#10b981';
             if (icon === 'warning') iconColor = '#f59e0b';
 
+            const isDark = document.documentElement.classList.contains('dark');
             Swal.fire({
                 title, text, icon,
-                background: '#0f172a',
-                color: '#f8fafc',
+                background: isDark ? '#0f172a' : '#ffffff',
+                color: isDark ? '#f8fafc' : '#1e293b',
                 confirmButtonColor: '#0062ff',
                 confirmButtonText: 'Tutup',
                 customClass: {
-                    popup: 'border border-white/10 rounded-[2rem] shadow-2xl',
-                    title: 'text-2xl font-bold text-white',
+                    popup: 'border border-slate-300 dark:border-white/10 rounded-[2rem] shadow-2xl',
+                    title: 'text-2xl font-bold text-slate-900 dark:text-white',
                     confirmButton: 'rounded-xl px-10 py-3 font-bold uppercase tracking-wider text-sm shadow-[0_0_15px_rgba(0,98,255,0.4)]'
                 }
             });
@@ -460,12 +539,13 @@
             if (type === 'error' || type === 'danger') confirmColor = '#e11d48';
             if (type === 'warning') confirmColor = '#f59e0b';
 
+            const isDark = document.documentElement.classList.contains('dark');
             Swal.fire({
                 title: options.title || 'Konfirmasi',
                 text: options.message,
                 icon: type,
-                background: '#0f172a',
-                color: '#cbd5e1',
+                background: isDark ? '#0f172a' : '#ffffff',
+                color: isDark ? '#cbd5e1' : '#334155',
                 showCancelButton: true,
                 confirmButtonColor: confirmColor,
                 cancelButtonColor: '#1e293b',
@@ -473,11 +553,11 @@
                 cancelButtonText: options.cancelText || 'Batal',
                 reverseButtons: true,
                 customClass: {
-                    popup: 'border border-white/10 rounded-[2rem] shadow-2xl p-8',
-                    title: 'text-2xl font-black text-white mb-2',
-                    htmlContainer: 'text-slate-400 font-medium mb-6',
+                    popup: 'border border-slate-300 dark:border-white/10 rounded-[2rem] shadow-2xl p-8',
+                    title: 'text-2xl font-black text-slate-900 dark:text-white mb-2',
+                    htmlContainer: 'text-slate-600 dark:text-slate-400 font-medium mb-6',
                     confirmButton: 'rounded-2xl px-8 py-3.5 font-black uppercase tracking-widest text-xs shadow-lg ml-3',
-                    cancelButton: 'rounded-2xl px-8 py-3.5 font-bold uppercase tracking-widest text-xs text-slate-300 border border-white/10 hover:bg-white/5'
+                    cancelButton: 'rounded-2xl px-8 py-3.5 font-bold uppercase tracking-widest text-xs text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-white/10 hover:bg-slate-200 dark:hover:bg-white/5'
                 },
                 buttonsStyling: true
             }).then((result) => {
@@ -555,15 +635,15 @@
                 const sidebar = document.getElementById('sidebar-nav') || document;
                 const allLinks = sidebar.querySelectorAll('nav a[href]');
                 
-                const mainActive = ['bg-brand-primary', 'text-white', 'shadow-lg', 'shadow-brand-primary/20'];
-                const mainInactive = ['text-slate-400', 'hover:text-white', 'hover:bg-white/5'];
-                const subActive = ['text-white', 'bg-white/10'];
-                const subInactive = ['text-slate-400', 'hover:text-white', 'hover:bg-white/5'];
+                const mainActive = ['bg-brand-primary', 'text-slate-900 dark:text-white', 'shadow-lg', 'shadow-brand-primary/20'];
+                const mainInactive = ['text-slate-700', 'dark:text-slate-400', 'hover:text-slate-900', 'dark:hover:text-white dark:text-white', 'hover:bg-slate-200/50', 'dark:hover:bg-white/5', 'transition-colors'];
+                const subActive = ['text-brand-primary', 'dark:text-white', 'bg-brand-primary/10', 'dark:bg-white/10', 'font-semibold'];
+                const subInactive = ['text-slate-600', 'dark:text-slate-400', 'hover:text-slate-900', 'dark:hover:text-white dark:text-white', 'hover:bg-slate-100', 'dark:hover:bg-white/5', 'transition-colors'];
 
                 let activeSubmenuDropdown = null, bestMatchLink = null, bestMatchLength = 0;
 
                 allLinks.forEach(link => {
-                    const isInsideSubmenu = !!link.closest('div[x-show]');
+                    const isInsideSubmenu = !!link.closest('.submenu-line');
                     if (isInsideSubmenu) { link.classList.remove(...subActive); link.classList.add(...subInactive); }
                     else { link.classList.remove(...mainActive); link.classList.add(...mainInactive); }
 

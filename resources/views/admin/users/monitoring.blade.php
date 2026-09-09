@@ -2,25 +2,25 @@
     <div class="p-2 sm:p-6 lg:p-8 space-y-8">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h1 class="text-2xl font-bold text-white">Monitoring Aktivitas User</h1>
-                <p class="mt-1 text-slate-400">Pantau status aktif, lokasi terakhir, dan riwayat perubahan akun
+                <h1 class="text-2xl font-bold text-slate-800 dark:text-white">Monitoring Aktivitas User</h1>
+                <p class="mt-1 text-slate-600 dark:text-slate-400">Pantau status aktif, lokasi terakhir, dan riwayat perubahan akun
                     pengguna.</p>
             </div>
         </div>
 
-        <div class="bg-slate-900 border border-white/5 p-3 sm:p-4 rounded-2xl border border-white/10 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 p-3 sm:p-4 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
             <form action="{{ route('admin.users.monitoring') }}" method="GET"
                 class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <!-- Search -->
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Cari
+                    <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-1">Cari
                         User</label>
                     <div class="relative">
                         <input type="text" name="search" value="{{ request('search') }}"
                             placeholder="Nama atau email..."
-                            class="w-full pl-9 pr-4 py-2 bg-slate-800/50 border-white/10 rounded-xl text-sm focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                            class="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-white/10 rounded-xl text-sm focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="h-4 w-4 text-slate-600 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
@@ -30,13 +30,13 @@
 
                 <!-- Satker -->
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Filter
+                    <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-1">Filter
                         Satker</label>
                     <select name="satker_id" id="filter_satker_id"
                         class="tom-select w-full">
-                        <option value="">Semua Satker</option>
+                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua Satker</option>
                         @foreach($satkers as $satker)
-                            <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
+                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
                                 {{ $satker->nama_satker }}
                             </option>
                         @endforeach
@@ -45,10 +45,10 @@
 
                 <!-- Tanggal -->
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Filter
+                    <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-1">Filter
                         Tanggal Aktif</label>
                     <input type="date" name="tanggal" value="{{ request('tanggal') }}"
-                        class="flatpickr w-full py-2 bg-slate-800/50 border-white/10 rounded-xl text-sm focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                        class="flatpickr w-full py-2 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-white/10 rounded-xl text-sm focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                 </div>
 
                 <!-- Actions -->
@@ -59,7 +59,7 @@
                     </button>
                     @if(request()->anyFilled(['search', 'satker_id', 'tanggal']))
                         <a href="{{ route('admin.users.monitoring') }}"
-                            class="px-4 py-2 bg-slate-800 text-slate-400 rounded-xl text-sm font-bold hover:bg-slate-200 transition-all text-center">
+                            class="px-4 py-2 bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-xl text-sm font-bold hover:bg-slate-200 transition-all text-center">
                             Reset
                         </a>
                     @endif
@@ -67,10 +67,10 @@
             </form>
         </div>
 
-        <div class="bg-slate-900 border border-white/5 rounded-2xl border border-white/10 shadow-sm overflow-hidden">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
             <!-- Bulk Actions -->
             <div id="bulkActions"
-                class="hidden px-6 py-3 border-b border-white/5 flex items-center justify-between bg-indigo-50/50 animate-in fade-in duration-300">
+                class="hidden px-6 py-3 border-b border-slate-200 dark:border-white/5 flex items-center justify-between bg-indigo-50/50 animate-in fade-in duration-300">
                 <div class="flex items-center gap-3">
                     <span class="text-xs font-bold text-indigo-600"><span id="selectedCount">0</span> DIPILIH</span>
                     <div class="h-4 w-px bg-indigo-200"></div>
@@ -94,51 +94,51 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-800/50 border-b border-white/5">
+                        <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-white/5">
                             <th class="w-10 px-6 py-4">
                                 <input type="checkbox" id="checkAll"
-                                    class="rounded border-white/20 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
+                                    class="rounded border-slate-300 dark:border-white/20 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer bg-white dark:bg-slate-900">
                             </th>
-                            <th class="px-4 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">User
+                            <th class="px-4 py-3 text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">User
                             </th>
-                            <th class="px-4 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Satker
+                            <th class="px-4 py-3 text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">Satker
                                 & Role</th>
-                            <th class="px-4 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Status
+                            <th class="px-4 py-3 text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">Status
                                 Terakhir</th>
-                            <th class="px-4 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Lokasi
+                            <th class="px-4 py-3 text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">Lokasi
                                 Terakhir</th>
                             <th
-                                class="px-4 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">
+                                class="px-4 py-3 text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest text-center">
                                 Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-white/5">
+                    <tbody class="divide-y divide-slate-200 dark:divide-white/5">
                         @forelse($users as $user)
-                            <tr class="hover:bg-slate-800/50 transition-colors">
+                            <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
                                 <td class="px-4 py-3">
                                     @if(auth()->id() !== $user->id)
                                         <input type="checkbox" name="user_ids[]" value="{{ $user->id }}"
-                                            class="user-checkbox rounded border-white/20 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
+                                            class="bg-white dark:bg-slate-900 dark:text-white user-checkbox rounded border-slate-300 dark:border-white/20 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
                                     @endif
                                 </td>
                                 <td class="px-4 py-3">
                                     <div class="flex items-center gap-3">
                                         <div
-                                            class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-bold text-slate-400">
+                                            class="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center font-bold text-slate-600 dark:text-slate-400">
                                             {{ substr($user->name, 0, 1) }}
                                         </div>
                                         <div>
-                                            <p class="text-xs font-semibold text-slate-200">{{ $user->name }}</p>
-                                            <p class="text-xs text-slate-400">{{ $user->email }}</p>
+                                            <p class="text-xs font-semibold text-slate-800 dark:text-slate-200">{{ $user->name }}</p>
+                                            <p class="text-xs text-slate-600 dark:text-slate-400">{{ $user->email }}</p>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="px-4 py-3">
-                                    <p class="text-xs font-semibold text-slate-300">
+                                    <p class="text-xs font-semibold text-slate-700 dark:text-slate-300">
                                         {{ $user->satker->nama_satker ?? 'Pusat' }}</p>
                                     <div class="flex items-center gap-2 mt-1">
                                         <span
-                                            class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-800 text-slate-400">
+                                            class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
                                             {{ str_replace('_', ' ', $user->role) }}
                                         </span>
                                         @if($user->is_active)
@@ -156,11 +156,11 @@
                                         </div>
                                     @endif
                                     @if($user->last_activity_at)
-                                        <p class="text-xs font-medium text-slate-300">
+                                        <p class="text-xs font-medium text-slate-700 dark:text-slate-300">
                                             {{ $user->last_activity_at->diffForHumans() }}</p>
-                                        <p class="text-[10px] text-slate-400">{{ $user->last_activity_at->format('d/m H:i T') }}</p>
+                                        <p class="text-[10px] text-slate-600 dark:text-slate-400">{{ $user->last_activity_at->format('d/m H:i T') }}</p>
                                     @else
-                                        <span class="text-xs italic text-slate-400">Belum pernah aktif</span>
+                                        <span class="text-xs italic text-slate-600 dark:text-slate-400">Belum pernah aktif</span>
                                     @endif
                                 </td>
                                 <td class="px-4 py-3">
@@ -178,7 +178,7 @@
                                             Buka Maps
                                         </a>
                                     @else
-                                        <span class="text-xs text-slate-400">-</span>
+                                        <span class="text-xs text-slate-600 dark:text-slate-400">-</span>
                                     @endif
                                 </td>
                                 <td class="px-4 py-3 text-center">
@@ -188,7 +188,7 @@
                                                 class="inline">
                                                 @csrf
                                                 <button type="submit"
-                                                    class="p-1.5 {{ $user->is_active ? 'text-rose-400 hover:text-rose-600' : 'text-emerald-400 hover:text-emerald-600' }} transition-colors"
+                                                    class="p-1.5 {{ $user->is_active ? 'text-rose-600 dark:text-rose-400 hover:text-rose-600' : 'text-emerald-600 dark:text-emerald-400 hover:text-emerald-600' }} transition-colors"
                                                     title="{{ $user->is_active ? 'Nonaktifkan Akun' : 'Aktifkan Akun' }}">
                                                     @if($user->is_active)
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -210,7 +210,7 @@
                                                 @method('DELETE')
                                                 <button type="submit" data-confirm="Hapus log user ini?"
                                                     data-confirm-type="error"
-                                                    class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
+                                                    class="p-2 text-slate-700 dark:text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
                                                     title="Hapus">
                                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -221,7 +221,7 @@
                                             </form>
                                         @endif
                                         <button onclick="showLogs({{ $user->id }}, '{{ $user->name }}')"
-                                            class="p-1.5 text-slate-400 hover:text-indigo-600 transition-colors"
+                                            class="p-1.5 text-slate-700 dark:text-slate-400 hover:text-indigo-600 transition-colors"
                                             title="Lihat Detail Aktivitas">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -234,7 +234,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-6 py-12 text-center text-slate-400 italic">Tidak ada data user.
+                                <td colspan="5" class="px-6 py-12 text-center text-slate-600 dark:text-slate-400 italic">Tidak ada data user.
                                 </td>
                             </tr>
                         @endforelse
@@ -242,7 +242,7 @@
                 </table>
             </div>
             @if($users->hasPages())
-                <div class="px-3 sm:px-6 py-3 sm:py-4 bg-slate-800/50 border-t border-white/5">
+                <div class="px-3 sm:px-6 py-3 sm:py-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-200 dark:border-white/5">
                     {{ $users->links() }}
                 </div>
             @endif
@@ -253,14 +253,14 @@
     <div id="logModal" class="fixed inset-0 z-[9999] hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog"
         aria-modal="true">
         <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity bg-slate-900/50" aria-hidden="true"
+            <div class="fixed inset-0 transition-opacity bg-white dark:bg-slate-900/50" aria-hidden="true"
                 onclick="closeModal()"></div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
             <div
-                class="inline-block overflow-hidden text-left align-bottom transition-all transform bg-slate-900 border border-white/5 rounded-2xl shadow-xl sm:my-8 sm:align-middle sm:max-w-xl sm:w-full">
-                <div class="px-4 py-3 border-b border-white/5 flex justify-between items-center">
-                    <h3 class="text-lg font-bold text-slate-200" id="modalTitle">Riwayat Aktivitas</h3>
-                    <button onclick="closeModal()" class="text-slate-400 hover:text-slate-400">
+                class="inline-block overflow-hidden text-left align-bottom transition-all transform bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl shadow-xl sm:my-8 sm:align-middle sm:max-w-xl sm:w-full">
+                <div class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-b border-slate-200 dark:border-white/5 flex justify-between items-center">
+                    <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200" id="modalTitle">Riwayat Aktivitas</h3>
+                    <button onclick="closeModal()" class="text-slate-500 dark:text-slate-400 hover:text-slate-600 dark:text-slate-400">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M6 18L18 6M6 6l18 18"></path>
@@ -287,7 +287,7 @@
                     .then(response => response.json())
                     .then(logs => {
                         if (logs.length === 0) {
-                            content.innerHTML = '<p class="text-center text-slate-400 italic py-4">Belum ada riwayat aktivitas tercatat.</p>';
+                            content.innerHTML = '<p class="text-center text-slate-600 dark:text-slate-400 italic py-4">Belum ada riwayat aktivitas tercatat.</p>';
                             return;
                         }
 
@@ -297,11 +297,11 @@
                                 day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
                             });
                             html += `
-                                <div class="flex gap-4 p-3 rounded-xl bg-slate-800/50 border border-white/5">
+                                <div class="flex gap-4 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-white/5">
                                     <div class="flex-shrink-0 w-2 h-2 mt-1.5 rounded-full bg-indigo-500"></div>
                                     <div>
-                                        <p class="text-xs text-slate-200 font-medium">${log.aktivitas}</p>
-                                        <p class="text-[10px] text-slate-400 mt-1">${date} WIB</p>
+                                        <p class="text-xs text-slate-800 dark:text-slate-200 font-medium">${log.aktivitas}</p>
+                                        <p class="text-[10px] text-slate-600 dark:text-slate-400 mt-1">${date} WIB</p>
                                     </div>
                                 </div>
                             `;
@@ -369,10 +369,10 @@
                     background: '#ffffff',
                     customClass: {
                         popup: 'rounded-[2rem] border-none shadow-2xl p-8',
-                        title: 'text-2xl font-black text-slate-200 mb-2',
-                        htmlContainer: 'text-slate-400 font-medium mb-6',
+                        title: 'text-2xl font-black text-slate-800 dark:text-slate-200 mb-2',
+                        htmlContainer: 'text-slate-600 dark:text-slate-400 font-medium mb-6',
                         confirmButton: 'rounded-2xl px-8 py-3.5 font-black uppercase tracking-widest text-xs shadow-lg shadow-indigo-500/30 ml-3',
-                        cancelButton: 'rounded-2xl px-8 py-3.5 font-bold uppercase tracking-widest text-xs text-slate-400 hover:bg-slate-800'
+                        cancelButton: 'rounded-2xl px-8 py-3.5 font-bold uppercase tracking-widest text-xs text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:bg-slate-800'
                     }
                 }).then((result) => {
                     if (result.isConfirmed) {
