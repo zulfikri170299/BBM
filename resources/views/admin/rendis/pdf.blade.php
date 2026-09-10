@@ -134,10 +134,10 @@
                             <td class="text-center" style="color: #000000;">{{ $rk->liter_per_hari }} x {{ $rk->bulan1_total > 0 ? round($rk->bulan1_total / max($rk->liter_per_hari, 1)) : 0 }}</td>
                             <td class="text-center font-bold" style="color: #2563eb;">{{ $isPertamax && $rk->bulan1_total > 0 ? number_format($rk->bulan1_total, 0, ',', '.') : '' }}</td>
                             <td class="text-center font-bold" style="color: #059669;">{{ !$isPertamax && $rk->bulan1_total > 0 ? number_format($rk->bulan1_total, 0, ',', '.') : '' }}</td>
-                            <td class="text-center" style="color: #000000;">{{ $rk->liter_per_hari }} x {{ $rk->bulan2_total > 0 ? round($rk->bulan2_total / max($rk->liter_per_hari, 1)) : 0 }}</td>
+                            <td class="text-center" style="color: #000000;">{{ $rk->liter_per_hari_b2 }} x {{ $rk->bulan2_total > 0 ? round($rk->bulan2_total / max($rk->liter_per_hari_b2, 1)) : 0 }}</td>
                             <td class="text-center font-bold" style="color: #2563eb;">{{ $isPertamax && $rk->bulan2_total > 0 ? number_format($rk->bulan2_total, 0, ',', '.') : '' }}</td>
                             <td class="text-center font-bold" style="color: #059669;">{{ !$isPertamax && $rk->bulan2_total > 0 ? number_format($rk->bulan2_total, 0, ',', '.') : '' }}</td>
-                            <td class="text-center" style="color: #000000;">{{ $rk->liter_per_hari }} x {{ $rk->bulan3_total > 0 ? round($rk->bulan3_total / max($rk->liter_per_hari, 1)) : 0 }}</td>
+                            <td class="text-center" style="color: #000000;">{{ $rk->liter_per_hari_b3 }} x {{ $rk->bulan3_total > 0 ? round($rk->bulan3_total / max($rk->liter_per_hari_b3, 1)) : 0 }}</td>
                             <td class="text-center font-bold" style="color: #2563eb;">{{ $isPertamax && $rk->bulan3_total > 0 ? number_format($rk->bulan3_total, 0, ',', '.') : '' }}</td>
                             <td class="text-center font-bold" style="color: #059669;">{{ !$isPertamax && $rk->bulan3_total > 0 ? number_format($rk->bulan3_total, 0, ',', '.') : '' }}</td>
                         </tr>

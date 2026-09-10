@@ -124,10 +124,10 @@
                         <td style="border: 1px solid #000; text-align: center;">{{ $rk->liter_per_hari }} x {{ $rk->bulan1_total > 0 ? round($rk->bulan1_total / max($rk->liter_per_hari, 1)) : 0 }}</td>
                         <td style="border: 1px solid #000; text-align: right;">{{ $isPertamax && $rk->bulan1_total > 0 ? round($rk->bulan1_total) : '' }}</td>
                         <td style="border: 1px solid #000; text-align: right;">{{ !$isPertamax && $rk->bulan1_total > 0 ? round($rk->bulan1_total) : '' }}</td>
-                        <td style="border: 1px solid #000; text-align: center;">{{ $rk->liter_per_hari }} x {{ $rk->bulan2_total > 0 ? round($rk->bulan2_total / max($rk->liter_per_hari, 1)) : 0 }}</td>
+                        <td style="border: 1px solid #000; text-align: center;">{{ $rk->liter_per_hari_b2 }} x {{ $rk->bulan2_total > 0 ? round($rk->bulan2_total / max($rk->liter_per_hari_b2, 1)) : 0 }}</td>
                         <td style="border: 1px solid #000; text-align: right;">{{ $isPertamax && $rk->bulan2_total > 0 ? round($rk->bulan2_total) : '' }}</td>
                         <td style="border: 1px solid #000; text-align: right;">{{ !$isPertamax && $rk->bulan2_total > 0 ? round($rk->bulan2_total) : '' }}</td>
-                        <td style="border: 1px solid #000; text-align: center;">{{ $rk->liter_per_hari }} x {{ $rk->bulan3_total > 0 ? round($rk->bulan3_total / max($rk->liter_per_hari, 1)) : 0 }}</td>
+                        <td style="border: 1px solid #000; text-align: center;">{{ $rk->liter_per_hari_b3 }} x {{ $rk->bulan3_total > 0 ? round($rk->bulan3_total / max($rk->liter_per_hari_b3, 1)) : 0 }}</td>
                         <td style="border: 1px solid #000; text-align: right;">{{ $isPertamax && $rk->bulan3_total > 0 ? round($rk->bulan3_total) : '' }}</td>
                         <td style="border: 1px solid #000; text-align: right;">{{ !$isPertamax && $rk->bulan3_total > 0 ? round($rk->bulan3_total) : '' }}</td>
                     </tr>

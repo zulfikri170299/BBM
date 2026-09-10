@@ -39,7 +39,7 @@
             {{-- TABEL PEMBELIAN --}}
             <table class="w-1/2 mb-8 border-collapse border border-gray-400 dark:border-gray-600 text-sm">
                 <thead>
-                    <tr class="bg-white text-slate-900 dark:bg-gray-700">
+                    <tr class="bg-white text-slate-900 dark:text-gray-200 dark:bg-gray-700">
                         <th class="border border-gray-400 dark:border-gray-600 px-3 py-2">NO</th>
                         <th class="border border-gray-400 dark:border-gray-600 px-3 py-2">JENIS BBM</th>
                         <th class="border border-gray-400 dark:border-gray-600 px-3 py-2 text-right">PEMBELIAN</th>
@@ -68,7 +68,7 @@
             {{-- TABEL KENDARAAN --}}
             <table class="w-full border-collapse border border-gray-400 dark:border-gray-600 text-xs">
                 <thead>
-                    <tr class="bg-white text-slate-900 dark:bg-gray-700">
+                    <tr class="bg-white text-slate-900 dark:text-gray-200 dark:bg-gray-700">
                         <th rowspan="2" class="border border-gray-400 dark:border-gray-600 px-2 py-1 w-10">NO</th>
                         <th rowspan="2" class="border border-gray-400 dark:border-gray-600 px-2 py-1">URAIAN</th>
                         <th rowspan="2" class="border border-gray-400 dark:border-gray-600 px-2 py-1">JENIS RANDIS</th>
@@ -77,7 +77,7 @@
                         <th colspan="3" class="border border-gray-400 dark:border-gray-600 px-2 py-1">{{ strtoupper($namaBulan[1]) }}</th>
                         <th colspan="3" class="border border-gray-400 dark:border-gray-600 px-2 py-1">{{ strtoupper($namaBulan[2]) }}</th>
                     </tr>
-                    <tr class="bg-white text-slate-900 dark:bg-gray-700">
+                    <tr class="bg-white text-slate-900 dark:text-gray-200 dark:bg-gray-700">
                         <th class="border border-gray-400 dark:border-gray-600 px-2 py-1 whitespace-nowrap">Indeks<br><span class="text-[9px] font-normal text-gray-700 dark:text-gray-300">(Liter x Hari)</span></th>
                         <th class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-blue-600 dark:text-blue-400">Pertamax</th>
                         <th class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-emerald-600 dark:text-emerald-400">Pertamina Dex</th>

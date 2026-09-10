@@ -109,7 +109,7 @@
             </div>
             <div class="overflow-x-auto">
                 <table id="tabel-kendaraan" class="min-w-full table-fixed divide-y divide-gray-200 dark:divide-gray-700 text-xs">
-                    <thead class="bg-white text-slate-900 dark:bg-gray-900/80">
+                    <thead class="bg-white text-slate-900 dark:text-gray-200 dark:bg-gray-900/80">
                         <tr>
                             <th rowspan="3" class="px-3 py-2 text-center font-bold uppercase border border-gray-300 dark:border-gray-600 w-10">No</th>
                             <th rowspan="3" class="px-3 py-2 text-left font-bold uppercase border border-gray-300 dark:border-gray-600">Uraian</th>
@@ -120,7 +120,7 @@
                             <th colspan="3" class="px-3 py-2 text-center font-bold uppercase border border-gray-300 dark:border-gray-600">{{ $bulanNames[1] }}</th>
                             <th colspan="3" class="px-3 py-2 text-center font-bold uppercase border border-gray-300 dark:border-gray-600">{{ $bulanNames[2] }}</th>
                         </tr>
-                        <tr class="bg-white text-slate-900 dark:bg-gray-900/80">
+                        <tr class="bg-white text-slate-900 dark:text-gray-200 dark:bg-gray-900/80">
                             <th class="px-2 py-1 text-center font-semibold border border-gray-300 dark:border-gray-600">Indeks</th>
                             <th class="px-2 py-1 text-center font-semibold border border-gray-300 dark:border-gray-600">Pertamax</th>
                             <th class="px-2 py-1 text-center font-semibold border border-gray-300 dark:border-gray-600">P. Dex</th>
@@ -654,8 +654,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             try{
                 const response=await fetch(formEdit.action,{
-                    method:'POST',
-                    headers:{'Content-Type':'application/json','X-Requested-With':'XMLHttpRequest','X-CSRF-TOKEN':data._token},
+                    method:'PUT',
+                    headers:{'Content-Type':'application/json','Accept':'application/json','X-Requested-With':'XMLHttpRequest','X-CSRF-TOKEN':data._token},
                     body:JSON.stringify(data)
                 });
                 

@@ -100,7 +100,7 @@
             </div>
             <div class="overflow-x-auto">
                 <table id="tabel-kendaraan" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-xs">
-                    <thead class="bg-white text-slate-900 dark:bg-gray-900/80">
+                    <thead class="bg-white text-slate-900 dark:text-gray-200 dark:bg-gray-900/80">
                         <tr>
                             <th rowspan="3" class="px-3 py-2 text-center font-bold text-gray-600 dark:text-gray-300 uppercase border border-gray-300 dark:border-gray-600 w-10">No</th>
                             <th rowspan="3" class="px-3 py-2 text-left font-bold text-gray-600 dark:text-gray-300 uppercase border border-gray-300 dark:border-gray-600">Uraian</th>
@@ -111,7 +111,7 @@
                             <th colspan="3" class="px-3 py-2 text-center font-bold text-gray-600 dark:text-gray-300 uppercase border border-gray-300 dark:border-gray-600" x-text="namaBulan[1]">Bulan 2</th>
                             <th colspan="3" class="px-3 py-2 text-center font-bold text-gray-600 dark:text-gray-300 uppercase border border-gray-300 dark:border-gray-600" x-text="namaBulan[2]">Bulan 3</th>
                         </tr>
-                        <tr class="bg-white text-slate-900 dark:bg-gray-900/80">
+                        <tr class="bg-white text-slate-900 dark:text-gray-200 dark:bg-gray-900/80">
                             <th class="px-2 py-1 text-center font-semibold text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-600">Indeks</th>
                             <th class="px-2 py-1 text-center font-semibold text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-600">Pertamax</th>
                             <th class="px-2 py-1 text-center font-semibold text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-600">P. Dex</th>
@@ -631,6 +631,7 @@ function rendisForm() {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Accept': 'application/json',
                         'X-Requested-With': 'XMLHttpRequest',
                         'X-CSRF-TOKEN': data._token
                     },
