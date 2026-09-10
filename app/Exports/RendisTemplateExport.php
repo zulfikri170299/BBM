@@ -52,14 +52,14 @@ class RendisTemplateExport implements FromView, WithColumnWidths, WithStyles, Wi
             'H' => 10, // Hari B1 / formula
             'I' => 10, // Pertamax B1 / Netto Dex
             'J' => 10, // Dex B1 / formula
-            'K' => 8,  // Indeks B2
-            'L' => 8,  // Hari B2
-            'M' => 10, // Pertamax B2
-            'N' => 10, // Dex B2
-            'O' => 8,  // Indeks B3
-            'P' => 8,  // Hari B3
-            'Q' => 10, // Pertamax B3
-            'R' => 10, // Dex B3
+            'K' => 10,  // Indeks B2
+            'L' => 11,  // Hari B2
+            'M' => 11, // Pertamax B2
+            'N' => 11, // Dex B2
+            'O' => 10,  // Indeks B3
+            'P' => 11,  // Hari B3
+            'Q' => 11, // Pertamax B3
+            'R' => 11, // Dex B3
         ];
     }
 
@@ -94,6 +94,18 @@ class RendisTemplateExport implements FromView, WithColumnWidths, WithStyles, Wi
                 // Apply the validation to a range
                 $sheet->setDataValidation('C11:C500', $validation);
 
+                // Add dropdown for Triwulan (Col B, Row 3)
+                $validationTw = $sheet->getCell('B3')->getDataValidation();
+                $validationTw->setType(DataValidation::TYPE_LIST);
+                $validationTw->setErrorStyle(DataValidation::STYLE_INFORMATION);
+                $validationTw->setAllowBlank(false);
+                $validationTw->setShowDropDown(true);
+                $validationTw->setShowInputMessage(true);
+                $validationTw->setShowErrorMessage(true);
+                $validationTw->setErrorTitle('Input Error');
+                $validationTw->setError('Pilih Triwulan dari daftar yang tersedia.');
+                $validationTw->setFormula1('"TW I,TW II,TW III,TW IV"');
+
                 $highestRow = $sheet->getHighestRow();
 
                 // Group rows 1 to 7 so they can be collapsed to save space
@@ -108,8 +120,8 @@ class RendisTemplateExport implements FromView, WithColumnWidths, WithStyles, Wi
                 $sheet->freezePane('A11');
 
                 // Set Number Format
-                $sheet->getStyle('B4')->getNumberFormat()->setFormatCode('#,##0');
-                $sheet->getStyle('D4')->getNumberFormat()->setFormatCode('#,##0');
+                $sheet->getStyle('B4:D4')->getNumberFormat()->setFormatCode('#,##0');
+                $sheet->getStyle('J5:L7')->getNumberFormat()->setFormatCode('#,##0');
                 $sheet->getStyle('G11:R' . $highestRow)->getNumberFormat()->setFormatCode('#,##0');
             },
         ];

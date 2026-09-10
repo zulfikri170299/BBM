@@ -1,15 +1,15 @@
 <table>
     <thead>
         <tr>
-            <th colspan="16" style="font-weight: bold; text-align: center; font-size: 14px;">TEMPLATE IMPORT RENDIS BBM</th>
+            <th colspan="18" style="font-weight: bold; text-align: center; font-size: 14px;">TEMPLATE IMPORT RENDIS BBM</th>
         </tr>
-        <tr><th colspan="16"></th></tr>
+        <tr><th colspan="18"></th></tr>
         <tr>
             <th style="font-weight: bold;">Triwulan</th>
             <th>TW I</th>
             <th style="font-weight: bold;">Tahun</th>
             <th>{{ date('Y') }}</th>
-            <th colspan="12">*(Isi TW I / TW II / TW III / TW IV)</th>
+            <th colspan="14">*(Isi TW I / TW II / TW III / TW IV)</th>
         </tr>
         <tr>
             <th style="font-weight: bold;">Pembelian Pertamax</th>
@@ -18,34 +18,46 @@
             <th>0</th>
             <th style="font-weight: bold;">Susut (%)</th>
             <th>1.5</th>
-            <th style="font-weight: bold; color: #10b981;">Netto Ptx:</th>
+            <th colspan="2"></th>
+            <th style="font-weight: bold; text-align: center;">Uraian</th>
+            <th style="font-weight: bold; text-align: center;">Pertamax</th>
+            <th style="font-weight: bold; text-align: center;">Pertamina Dex</th>
+            <th colspan="7"></th>
+        </tr>
+        <tr>
+            <th style="font-weight: bold;">="Hari Operasional (" &amp; IF($B$3="TW I","Januari",IF($B$3="TW II","April",IF($B$3="TW III","Juli",IF($B$3="TW IV","Oktober","Bulan 1")))) &amp; ")"</th>
+            <th>Ops:</th><th>22</th>
+            <th>Staff:</th><th>22</th>
+            <th>Pimpinan:</th><th>30</th>
+            <th></th>
+            <th style="font-weight: bold; color: #10b981; text-align: center;">Netto</th>
             <th style="font-weight: bold; color: #10b981;">=B4-(B4*(F4/100))</th>
-            <th style="font-weight: bold; color: #10b981;">Netto Dex:</th>
             <th style="font-weight: bold; color: #10b981;">=D4-(D4*(F4/100))</th>
-            <th colspan="6"></th>
+            <th colspan="7"></th>
         </tr>
         <tr>
-            <th style="font-weight: bold;">Hari Operasional (Bulan 1)</th>
+            <th style="font-weight: bold;">="Hari Operasional (" &amp; IF($B$3="TW I","Februari",IF($B$3="TW II","Mei",IF($B$3="TW III","Agustus",IF($B$3="TW IV","November","Bulan 2")))) &amp; ")"</th>
             <th>Ops:</th><th>22</th>
             <th>Staff:</th><th>22</th>
             <th>Pimpinan:</th><th>30</th>
-            <th colspan="9"></th>
+            <th></th>
+            <th style="font-weight: bold; color: #f59e0b; text-align: center;">Total</th>
+            <th style="font-weight: bold; color: #f59e0b;">=SUBTOTAL(9, I11:I2000)+SUBTOTAL(9, M11:M2000)+SUBTOTAL(9, Q11:Q2000)</th>
+            <th style="font-weight: bold; color: #f59e0b;">=SUBTOTAL(9, J11:J2000)+SUBTOTAL(9, N11:N2000)+SUBTOTAL(9, R11:R2000)</th>
+            <th colspan="7"></th>
         </tr>
         <tr>
-            <th style="font-weight: bold;">Hari Operasional (Bulan 2)</th>
+            <th style="font-weight: bold;">="Hari Operasional (" &amp; IF($B$3="TW I","Maret",IF($B$3="TW II","Juni",IF($B$3="TW III","September",IF($B$3="TW IV","Desember","Bulan 3")))) &amp; ")"</th>
             <th>Ops:</th><th>22</th>
             <th>Staff:</th><th>22</th>
             <th>Pimpinan:</th><th>30</th>
-            <th colspan="9"></th>
+            <th></th>
+            <th style="font-weight: bold; color: #ef4444; text-align: center;">Sisa</th>
+            <th style="font-weight: bold; color: #ef4444;">=J5-J6</th>
+            <th style="font-weight: bold; color: #ef4444;">=K5-K6</th>
+            <th colspan="7"></th>
         </tr>
-        <tr>
-            <th style="font-weight: bold;">Hari Operasional (Bulan 3)</th>
-            <th>Ops:</th><th>22</th>
-            <th>Staff:</th><th>22</th>
-            <th>Pimpinan:</th><th>30</th>
-            <th colspan="9"></th>
-        </tr>
-        <tr><th colspan="16"></th></tr>
+        <tr><th colspan="18"></th></tr>
         <tr>
             <th rowspan="2" style="font-weight: bold; background-color: #1e3a8a; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #0f172a;">ID KENDARAAN</th>
             <th rowspan="2" style="font-weight: bold; background-color: #1e3a8a; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #0f172a;">NO</th>
@@ -54,9 +66,9 @@
             <th rowspan="2" style="font-weight: bold; background-color: #1e3a8a; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #0f172a;">NOPOL</th>
             <th rowspan="2" style="font-weight: bold; background-color: #1e3a8a; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #0f172a;">JENIS BBM</th>
             
-            <th colspan="4" style="font-weight: bold; background-color: #1e3a8a; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #0f172a;">BULAN 1</th>
-            <th colspan="4" style="font-weight: bold; background-color: #1e3a8a; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #0f172a;">BULAN 2</th>
-            <th colspan="4" style="font-weight: bold; background-color: #1e3a8a; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #0f172a;">BULAN 3</th>
+            <th colspan="4" style="font-weight: bold; background-color: #1e3a8a; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #0f172a;">=UPPER(IF($B$3="TW I","Januari",IF($B$3="TW II","April",IF($B$3="TW III","Juli",IF($B$3="TW IV","Oktober","BULAN 1")))))</th>
+            <th colspan="4" style="font-weight: bold; background-color: #1e3a8a; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #0f172a;">=UPPER(IF($B$3="TW I","Februari",IF($B$3="TW II","Mei",IF($B$3="TW III","Agustus",IF($B$3="TW IV","November","BULAN 2")))))</th>
+            <th colspan="4" style="font-weight: bold; background-color: #1e3a8a; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #0f172a;">=UPPER(IF($B$3="TW I","Maret",IF($B$3="TW II","Juni",IF($B$3="TW III","September",IF($B$3="TW IV","Desember","BULAN 3")))))</th>
         </tr>
         <tr>
             <th style="font-weight: bold; background-color: #2563eb; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #1e3a8a;">Indeks</th>
@@ -146,16 +158,16 @@
                     <td colspan="6" style="font-weight: bold; text-align: right; color: #ffffff; background-color: #4b5563;">JUMLAH</td>
                     <td style="background-color: #4b5563;"></td>
                     <td style="background-color: #4b5563;"></td>
-                    <td style="font-weight: bold; color: #60a5fa; background-color: #4b5563;">=SUM(I{{ $startSatkerRow }}:I{{ $rowIdx-1 }})</td>
-                    <td style="font-weight: bold; color: #34d399; background-color: #4b5563;">=SUM(J{{ $startSatkerRow }}:J{{ $rowIdx-1 }})</td>
+                    <td style="font-weight: bold; color: #60a5fa; background-color: #4b5563;">=SUBTOTAL(9, I{{ $startSatkerRow }}:I{{ $rowIdx-1 }})</td>
+                    <td style="font-weight: bold; color: #34d399; background-color: #4b5563;">=SUBTOTAL(9, J{{ $startSatkerRow }}:J{{ $rowIdx-1 }})</td>
                     <td style="background-color: #4b5563;"></td>
                     <td style="background-color: #4b5563;"></td>
-                    <td style="font-weight: bold; color: #60a5fa; background-color: #4b5563;">=SUM(M{{ $startSatkerRow }}:M{{ $rowIdx-1 }})</td>
-                    <td style="font-weight: bold; color: #34d399; background-color: #4b5563;">=SUM(N{{ $startSatkerRow }}:N{{ $rowIdx-1 }})</td>
+                    <td style="font-weight: bold; color: #60a5fa; background-color: #4b5563;">=SUBTOTAL(9, M{{ $startSatkerRow }}:M{{ $rowIdx-1 }})</td>
+                    <td style="font-weight: bold; color: #34d399; background-color: #4b5563;">=SUBTOTAL(9, N{{ $startSatkerRow }}:N{{ $rowIdx-1 }})</td>
                     <td style="background-color: #4b5563;"></td>
                     <td style="background-color: #4b5563;"></td>
-                    <td style="font-weight: bold; color: #60a5fa; background-color: #4b5563;">=SUM(Q{{ $startSatkerRow }}:Q{{ $rowIdx-1 }})</td>
-                    <td style="font-weight: bold; color: #34d399; background-color: #4b5563;">=SUM(R{{ $startSatkerRow }}:R{{ $rowIdx-1 }})</td>
+                    <td style="font-weight: bold; color: #60a5fa; background-color: #4b5563;">=SUBTOTAL(9, Q{{ $startSatkerRow }}:Q{{ $rowIdx-1 }})</td>
+                    <td style="font-weight: bold; color: #34d399; background-color: #4b5563;">=SUBTOTAL(9, R{{ $startSatkerRow }}:R{{ $rowIdx-1 }})</td>
                 </tr>
                 
                 @php $noSatker++; @endphp
@@ -171,12 +183,12 @@
                 $subtotalsM[] = 'M'.$r; $subtotalsN[] = 'N'.$r;
                 $subtotalsQ[] = 'Q'.$r; $subtotalsR[] = 'R'.$r;
             }
-            $sumI = !empty($subtotalsI) ? '='.implode('+', $subtotalsI) : '0';
-            $sumJ = !empty($subtotalsJ) ? '='.implode('+', $subtotalsJ) : '0';
-            $sumM = !empty($subtotalsM) ? '='.implode('+', $subtotalsM) : '0';
-            $sumN = !empty($subtotalsN) ? '='.implode('+', $subtotalsN) : '0';
-            $sumQ = !empty($subtotalsQ) ? '='.implode('+', $subtotalsQ) : '0';
-            $sumR = !empty($subtotalsR) ? '='.implode('+', $subtotalsR) : '0';
+            $sumI = '=SUBTOTAL(9, I11:I'.($rowIdx-1).')';
+            $sumJ = '=SUBTOTAL(9, J11:J'.($rowIdx-1).')';
+            $sumM = '=SUBTOTAL(9, M11:M'.($rowIdx-1).')';
+            $sumN = '=SUBTOTAL(9, N11:N'.($rowIdx-1).')';
+            $sumQ = '=SUBTOTAL(9, Q11:Q'.($rowIdx-1).')';
+            $sumR = '=SUBTOTAL(9, R11:R'.($rowIdx-1).')';
         @endphp
         <tr>
             <td colspan="6" style="font-weight: bold; text-align: right; color: #ffffff; background-color: #111827;">GRAND TOTAL</td>
