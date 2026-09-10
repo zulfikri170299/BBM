@@ -141,7 +141,7 @@
                             <td class="px-3 py-1 text-center text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700">{{ $idx + 1 }}</td>
                             <td class="px-1 py-1 border border-gray-200 dark:border-gray-700">
                                 @php $currentUraian = $k->kategori_kendaraan ?? 'Operasional'; @endphp
-                                <select name="kendaraan[{ $k->id }][uraian]" class="w-full text-xs p-1 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white dark:border-gray-600 dark:bg-gray-700 dark:text-white input-uraian">
+                                <select name="kendaraan[{{ $k->id }}][uraian]" class="w-full text-xs p-1 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white dark:border-gray-600 dark:bg-gray-700 dark:text-white input-uraian">
                                     <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Opsnal" {{ $currentUraian == 'Opsnal' || $currentUraian == 'Operasional' ? 'selected' : '' }}>Opsnal</option>
                                     <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Staff" {{ $currentUraian == 'Staff' ? 'selected' : '' }}>Staff</option>
                                     <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Pimpinan" {{ $currentUraian == 'Pimpinan' ? 'selected' : '' }}>Pimpinan</option>

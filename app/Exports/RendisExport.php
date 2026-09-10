@@ -6,10 +6,10 @@ use App\Models\RendisBbm;
 use App\Models\Satker;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
 
-class RendisExport implements FromView, ShouldAutoSize, WithColumnFormatting
+class RendisExport implements FromView, WithColumnFormatting, WithColumnWidths
 {
     protected $rendisBbm;
 
@@ -47,6 +47,25 @@ class RendisExport implements FromView, ShouldAutoSize, WithColumnFormatting
             'K' => '#,##0',
             'L' => '#,##0',
             'M' => '#,##0',
+        ];
+    }
+
+    public function columnWidths(): array
+    {
+        return [
+            'A' => 5,
+            'B' => 30,
+            'C' => 15,
+            'D' => 12,
+            'E' => 15,
+            'F' => 12,
+            'G' => 12,
+            'H' => 15,
+            'I' => 12,
+            'J' => 12,
+            'K' => 15,
+            'L' => 12,
+            'M' => 12,
         ];
     }
 }
