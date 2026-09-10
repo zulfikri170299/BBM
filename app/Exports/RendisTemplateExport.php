@@ -95,17 +95,6 @@ class RendisTemplateExport implements FromView, WithColumnWidths, WithStyles, Wi
                 $sheet->setDataValidation('C11:C500', $validation);
 
                 $highestRow = $sheet->getHighestRow();
-                
-                // Set background color for Indeks columns (G, K, O) - previously #e0f2fe
-                $sheet->getStyle('G11:G' . $highestRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE0F2FE');
-                $sheet->getStyle('K11:K' . $highestRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE0F2FE');
-                $sheet->getStyle('O11:O' . $highestRow)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE0F2FE');
-
-                // Set font color for Hari columns (H, L, P) - previously #6b7280
-                $sheet->getStyle('H11:H' . $highestRow)->getFont()->getColor()->setARGB('FF6B7280');
-                $sheet->getStyle('L11:L' . $highestRow)->getFont()->getColor()->setARGB('FF6B7280');
-                $sheet->getStyle('P11:P' . $highestRow)->getFont()->getColor()->setARGB('FF6B7280');
-
                 // Set Number Format
                 $sheet->getStyle('B4')->getNumberFormat()->setFormatCode('#,##0');
                 $sheet->getStyle('D4')->getNumberFormat()->setFormatCode('#,##0');

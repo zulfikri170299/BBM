@@ -118,20 +118,20 @@
                         <td>{{ $k->jenis_bbm }}</td>
                         
                         {{-- B1 --}}
-                        <td>0</td>
-                        <td>="x " &amp; {{ $ifH1 }}</td>
+                        <td style="background-color: #e0f2fe;">0</td>
+                        <td style="color: #6b7280;">="x " &amp; {{ $ifH1 }}</td>
                         <td>{{ $isPertamax ? '=G' . $rowIdx . '*' . $ifH1 : '0' }}</td>
                         <td>{{ $isDex ? '=G' . $rowIdx . '*' . $ifH1 : '0' }}</td>
 
                         {{-- B2 --}}
-                        <td>0</td>
-                        <td>="x " &amp; {{ $ifH2 }}</td>
+                        <td style="background-color: #e0f2fe;">0</td>
+                        <td style="color: #6b7280;">="x " &amp; {{ $ifH2 }}</td>
                         <td>{{ $isPertamax ? '=K' . $rowIdx . '*' . $ifH2 : '0' }}</td>
                         <td>{{ $isDex ? '=K' . $rowIdx . '*' . $ifH2 : '0' }}</td>
 
                         {{-- B3 --}}
-                        <td>0</td>
-                        <td>="x " &amp; {{ $ifH3 }}</td>
+                        <td style="background-color: #e0f2fe;">0</td>
+                        <td style="color: #6b7280;">="x " &amp; {{ $ifH3 }}</td>
                         <td>{{ $isPertamax ? '=O' . $rowIdx . '*' . $ifH3 : '0' }}</td>
                         <td>{{ $isDex ? '=O' . $rowIdx . '*' . $ifH3 : '0' }}</td>
                     </tr>
