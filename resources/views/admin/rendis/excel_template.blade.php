@@ -47,30 +47,30 @@
         </tr>
         <tr><th colspan="16"></th></tr>
         <tr>
-            <th rowspan="2" style="font-weight: bold; background-color: #f3f4f6; text-align: center;">ID KENDARAAN (JANGAN DIUBAH)</th>
-            <th rowspan="2" style="font-weight: bold; background-color: #f3f4f6; text-align: center;">NO</th>
-            <th rowspan="2" style="font-weight: bold; background-color: #f3f4f6; text-align: center;">URAIAN</th>
-            <th rowspan="2" style="font-weight: bold; background-color: #f3f4f6; text-align: center;">JENIS RANDIS</th>
-            <th rowspan="2" style="font-weight: bold; background-color: #f3f4f6; text-align: center;">NOPOL</th>
-            <th rowspan="2" style="font-weight: bold; background-color: #f3f4f6; text-align: center;">JENIS BBM</th>
+            <th rowspan="2" style="font-weight: bold; background-color: #1e3a8a; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #0f172a;">ID KENDARAAN</th>
+            <th rowspan="2" style="font-weight: bold; background-color: #1e3a8a; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #0f172a;">NO</th>
+            <th rowspan="2" style="font-weight: bold; background-color: #1e3a8a; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #0f172a;">URAIAN</th>
+            <th rowspan="2" style="font-weight: bold; background-color: #1e3a8a; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #0f172a;">JENIS RANDIS</th>
+            <th rowspan="2" style="font-weight: bold; background-color: #1e3a8a; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #0f172a;">NOPOL</th>
+            <th rowspan="2" style="font-weight: bold; background-color: #1e3a8a; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #0f172a;">JENIS BBM</th>
             
-            <th colspan="4" style="font-weight: bold; background-color: #f3f4f6; text-align: center;">BULAN 1</th>
-            <th colspan="4" style="font-weight: bold; background-color: #f3f4f6; text-align: center;">BULAN 2</th>
-            <th colspan="4" style="font-weight: bold; background-color: #f3f4f6; text-align: center;">BULAN 3</th>
+            <th colspan="4" style="font-weight: bold; background-color: #1e3a8a; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #0f172a;">BULAN 1</th>
+            <th colspan="4" style="font-weight: bold; background-color: #1e3a8a; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #0f172a;">BULAN 2</th>
+            <th colspan="4" style="font-weight: bold; background-color: #1e3a8a; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #0f172a;">BULAN 3</th>
         </tr>
         <tr>
-            <th style="font-weight: bold; background-color: #f3f4f6; text-align: center;">Indeks</th>
-            <th style="font-weight: bold; background-color: #f3f4f6; text-align: center;">Hari</th>
-            <th style="font-weight: bold; background-color: #f3f4f6; text-align: center;">Pertamax</th>
-            <th style="font-weight: bold; background-color: #f3f4f6; text-align: center;">P. Dex</th>
-            <th style="font-weight: bold; background-color: #f3f4f6; text-align: center;">Indeks</th>
-            <th style="font-weight: bold; background-color: #f3f4f6; text-align: center;">Hari</th>
-            <th style="font-weight: bold; background-color: #f3f4f6; text-align: center;">Pertamax</th>
-            <th style="font-weight: bold; background-color: #f3f4f6; text-align: center;">P. Dex</th>
-            <th style="font-weight: bold; background-color: #f3f4f6; text-align: center;">Indeks</th>
-            <th style="font-weight: bold; background-color: #f3f4f6; text-align: center;">Hari</th>
-            <th style="font-weight: bold; background-color: #f3f4f6; text-align: center;">Pertamax</th>
-            <th style="font-weight: bold; background-color: #f3f4f6; text-align: center;">P. Dex</th>
+            <th style="font-weight: bold; background-color: #2563eb; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #1e3a8a;">Indeks</th>
+            <th style="font-weight: bold; background-color: #2563eb; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #1e3a8a;">Hari</th>
+            <th style="font-weight: bold; background-color: #2563eb; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #1e3a8a;">Pertamax</th>
+            <th style="font-weight: bold; background-color: #2563eb; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #1e3a8a;">P. Dex</th>
+            <th style="font-weight: bold; background-color: #2563eb; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #1e3a8a;">Indeks</th>
+            <th style="font-weight: bold; background-color: #2563eb; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #1e3a8a;">Hari</th>
+            <th style="font-weight: bold; background-color: #2563eb; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #1e3a8a;">Pertamax</th>
+            <th style="font-weight: bold; background-color: #2563eb; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #1e3a8a;">P. Dex</th>
+            <th style="font-weight: bold; background-color: #2563eb; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #1e3a8a;">Indeks</th>
+            <th style="font-weight: bold; background-color: #2563eb; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #1e3a8a;">Hari</th>
+            <th style="font-weight: bold; background-color: #2563eb; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #1e3a8a;">Pertamax</th>
+            <th style="font-weight: bold; background-color: #2563eb; color: #ffffff; text-align: center; vertical-align: middle; border: 1px solid #1e3a8a;">P. Dex</th>
         </tr>
     </thead>
     <tbody>
