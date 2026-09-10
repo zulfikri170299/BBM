@@ -95,6 +95,18 @@ class RendisTemplateExport implements FromView, WithColumnWidths, WithStyles, Wi
                 $sheet->setDataValidation('C11:C500', $validation);
 
                 $highestRow = $sheet->getHighestRow();
+
+                // Group rows 1 to 7 so they can be collapsed to save space
+                for ($r = 1; $r <= 7; $r++) {
+                    $sheet->getRowDimension($r)->setOutlineLevel(1);
+                    $sheet->getRowDimension($r)->setVisible(false);
+                    $sheet->getRowDimension($r)->setCollapsed(true);
+                }
+                $sheet->setShowSummaryBelow(false);
+
+                // Freeze Panes (Header row 1-10)
+                $sheet->freezePane('A11');
+
                 // Set Number Format
                 $sheet->getStyle('B4')->getNumberFormat()->setFormatCode('#,##0');
                 $sheet->getStyle('D4')->getNumberFormat()->setFormatCode('#,##0');
