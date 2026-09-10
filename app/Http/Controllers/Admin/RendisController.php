@@ -291,82 +291,76 @@ class RendisController extends Controller
             return back()->with('error', 'Top Up untuk bulan ini sudah dieksekusi sebelumnya.');
         }
 
-        $errors = [];
-        $satkerSummary = [];
+        try {
+            DB::transaction(function () use ($rendisBbm, $bulan, $colName, &$satkerSummary) {
+                $kendaraans = $rendisBbm->rendisKendaraans()->with('kendaraan')->get();
 
-        DB::transaction(function () use ($rendisBbm, $bulan, $colName, &$errors, &$satkerSummary) {
-            $kendaraans = $rendisBbm->rendisKendaraans()->with('kendaraan')->get();
+                foreach ($kendaraans as $rk) {
+                    $kendaraan = $rk->kendaraan;
+                    $jumlahTopup = 0;
+                    
+                    if ($bulan === '1') $jumlahTopup = $rk->bulan1_total;
+                    elseif ($bulan === '2') $jumlahTopup = $rk->bulan2_total;
+                    elseif ($bulan === '3') $jumlahTopup = $rk->bulan3_total;
 
-            foreach ($kendaraans as $rk) {
-                $kendaraan = $rk->kendaraan;
-                $jumlahTopup = 0;
-                
-                if ($bulan === '1') $jumlahTopup = $rk->bulan1_total;
-                elseif ($bulan === '2') $jumlahTopup = $rk->bulan2_total;
-                elseif ($bulan === '3') $jumlahTopup = $rk->bulan3_total;
+                    if ($jumlahTopup > 0) {
+                        $jenisBbm = $kendaraan->jenis_bbm ?? 'Pertamax';
 
-                if ($jumlahTopup > 0) {
-                    $jenisBbm = $kendaraan->jenis_bbm ?? 'Pertamax';
+                        // --- CHECK & DEDUCT ADMIN STOCK ---
+                        $adminStock = \App\Models\AdminBbmStock::where('jenis_bbm', $jenisBbm)->first();
+                        if (!$adminStock || $adminStock->saldo < $jumlahTopup) {
+                            throw new \Exception('Gagal memperoses karena Stok BBM Anda Kurang');
+                        }
 
-                    // --- CHECK & DEDUCT ADMIN STOCK ---
-                    $adminStock = \App\Models\AdminBbmStock::where('jenis_bbm', $jenisBbm)->first();
-                    if (!$adminStock || $adminStock->saldo < $jumlahTopup) {
-                        $errors[] = "Stok Pusat untuk {$jenisBbm} tidak cukup. Tersedia: " . ($adminStock ? $adminStock->saldo : 0) . " L untuk kendaraan {$kendaraan->no_polisi}.";
-                        continue;
-                    }
+                        // Potong Stok Admin
+                        $adminStock->decrement('saldo', $jumlahTopup);
 
-                    // Potong Stok Admin
-                    $adminStock->decrement('saldo', $jumlahTopup);
+                        // Riwayat Stok Admin
+                        \App\Models\RiwayatStokAdmin::create([
+                            'user_id' => auth()->id(),
+                            'jenis_bbm' => $jenisBbm,
+                            'jumlah' => $jumlahTopup,
+                            'tipe' => 'keluar',
+                            'keterangan' => "Top-up via Rendis {$rendisBbm->triwulan} {$rendisBbm->tahun} Bulan {$bulan} untuk kendaraan {$kendaraan->no_polisi}",
+                        ]);
+                        // ----------------------------------
 
-                    // Riwayat Stok Admin
-                    \App\Models\RiwayatStokAdmin::create([
-                        'user_id' => auth()->id(),
-                        'jenis_bbm' => $jenisBbm,
-                        'jumlah' => $jumlahTopup,
-                        'tipe' => 'keluar',
-                        'keterangan' => "Top-up via Rendis {$rendisBbm->triwulan} {$rendisBbm->tahun} Bulan {$bulan} untuk kendaraan {$kendaraan->no_polisi}",
-                    ]);
-                    // ----------------------------------
+                        $kendaraan->saldo += $jumlahTopup;
+                        $kendaraan->save();
 
-                    $kendaraan->saldo += $jumlahTopup;
-                    $kendaraan->save();
+                        \App\Models\RiwayatTopup::create([
+                            'kendaraan_id' => $kendaraan->id,
+                            'jumlah' => $jumlahTopup,
+                            'satker_id' => $kendaraan->satker_id,
+                            'tipe' => 'masuk',
+                            'metode' => 'RENDIS',
+                            'jenis_bbm' => $jenisBbm,
+                            'keterangan' => 'Top Up Rendis ' . $rendisBbm->triwulan . ' ' . $rendisBbm->tahun . ' Bulan ' . $bulan,
+                            'status' => 'success',
+                            'user_id' => auth()->id(),
+                        ]);
 
-                    \App\Models\RiwayatTopup::create([
-                        'kendaraan_id' => $kendaraan->id,
-                        'jumlah' => $jumlahTopup,
-                        'satker_id' => $kendaraan->satker_id,
-                        'tipe' => 'masuk',
-                        'metode' => 'RENDIS',
-                        'jenis_bbm' => $jenisBbm,
-                        'keterangan' => 'Top Up Rendis ' . $rendisBbm->triwulan . ' ' . $rendisBbm->tahun . ' Bulan ' . $bulan,
-                        'status' => 'success',
-                        'user_id' => auth()->id(),
-                    ]);
+                        // Track for BA
+                        $satkerId = $kendaraan->satker_id;
+                        if (!isset($satkerSummary[$satkerId])) {
+                            $satkerSummary[$satkerId] = [
+                                'Pertamax' => 0,
+                                'Pertamina Dex' => 0,
+                            ];
+                        }
 
-                    // Track for BA
-                    $satkerId = $kendaraan->satker_id;
-                    if (!isset($satkerSummary[$satkerId])) {
-                        $satkerSummary[$satkerId] = [
-                            'Pertamax' => 0,
-                            'Pertamina Dex' => 0,
-                        ];
-                    }
-
-                    if (stripos($jenisBbm, 'Pertamax') !== false) {
-                        $satkerSummary[$satkerId]['Pertamax'] += $jumlahTopup;
-                    } elseif (stripos($jenisBbm, 'Dex') !== false) {
-                        $satkerSummary[$satkerId]['Pertamina Dex'] += $jumlahTopup;
+                        if (stripos($jenisBbm, 'Pertamax') !== false) {
+                            $satkerSummary[$satkerId]['Pertamax'] += $jumlahTopup;
+                        } elseif (stripos($jenisBbm, 'Dex') !== false) {
+                            $satkerSummary[$satkerId]['Pertamina Dex'] += $jumlahTopup;
+                        }
                     }
                 }
-            }
 
-            if (count($errors) === 0) {
                 $rendisBbm->update([$colName => true]);
-            }
-        });
-
-        if (count($errors) > 0) {
-            return back()->with('error', 'Gagal memproses Top Up: ' . implode('<br>', array_unique($errors)));
+            });
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
         }
 
         // Trigger BA Otomatis per Satker

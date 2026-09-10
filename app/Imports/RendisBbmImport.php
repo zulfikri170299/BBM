@@ -9,9 +9,17 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Exception;
+use App\Exceptions\ImportConflictException;
 
 class RendisBbmImport implements ToCollection
 {
+    protected $actionType;
+
+    public function __construct($actionType = null)
+    {
+        $this->actionType = $actionType;
+    }
+
     public function collection(Collection $rows)
     {
         // Pengecekan dasar struktur file
@@ -55,29 +63,54 @@ class RendisBbmImport implements ToCollection
             // Cek jika rendis sudah ada, bisa dilewati atau dilempar error (karena harus unique per TW + Tahun)
             $existing = RendisBbm::where('triwulan', $triwulan)->where('tahun', $tahun)->first();
             if ($existing) {
-                throw new Exception("Data Rendis BBM untuk {$triwulan} {$tahun} sudah ada. Silakan gunakan fitur Edit atau Hapus data yang sudah ada terlebih dahulu.");
+                if ($this->actionType === 'replace') {
+                    // Hapus data lama beserta kendaraannya
+                    $existing->delete();
+                    $rendisBbm = null; // Akan dibuat baru di bawah
+                } elseif ($this->actionType === 'update') {
+                    // Update data induk
+                    $existing->update([
+                        'pembelian_pertamax' => $pembelianPertamax,
+                        'pembelian_pertamina_dex' => $pembelianDex,
+                        'susut_persen' => $susut,
+                        'bulan1_hari_operasional' => $b1Ops,
+                        'bulan1_hari_staff' => $b1Staff,
+                        'bulan1_hari_pimpinan' => $b1Pim,
+                        'bulan2_hari_operasional' => $b2Ops,
+                        'bulan2_hari_staff' => $b2Staff,
+                        'bulan2_hari_pimpinan' => $b2Pim,
+                        'bulan3_hari_operasional' => $b3Ops,
+                        'bulan3_hari_staff' => $b3Staff,
+                        'bulan3_hari_pimpinan' => $b3Pim,
+                    ]);
+                    $rendisBbm = $existing;
+                } else {
+                    throw new ImportConflictException("Data Rendis BBM untuk {$triwulan} {$tahun} sudah ada.");
+                }
             }
 
-            // Buat Rendis Induk
-            $rendisBbm = RendisBbm::create([
-                'triwulan' => $triwulan,
-                'tahun' => $tahun,
-                'pembelian_pertamax' => $pembelianPertamax,
-                'pembelian_pertamina_dex' => $pembelianDex,
-                'susut_persen' => $susut,
-                'bulan1_hari_operasional' => $b1Ops,
-                'bulan1_hari_staff' => $b1Staff,
-                'bulan1_hari_pimpinan' => $b1Pim,
-                'bulan2_hari_operasional' => $b2Ops,
-                'bulan2_hari_staff' => $b2Staff,
-                'bulan2_hari_pimpinan' => $b2Pim,
-                'bulan3_hari_operasional' => $b3Ops,
-                'bulan3_hari_staff' => $b3Staff,
-                'bulan3_hari_pimpinan' => $b3Pim,
-                'is_topup_b1' => false,
-                'is_topup_b2' => false,
-                'is_topup_b3' => false,
-            ]);
+            if (!isset($rendisBbm)) {
+                // Buat Rendis Induk Baru
+                $rendisBbm = RendisBbm::create([
+                    'triwulan' => $triwulan,
+                    'tahun' => $tahun,
+                    'pembelian_pertamax' => $pembelianPertamax,
+                    'pembelian_pertamina_dex' => $pembelianDex,
+                    'susut_persen' => $susut,
+                    'bulan1_hari_operasional' => $b1Ops,
+                    'bulan1_hari_staff' => $b1Staff,
+                    'bulan1_hari_pimpinan' => $b1Pim,
+                    'bulan2_hari_operasional' => $b2Ops,
+                    'bulan2_hari_staff' => $b2Staff,
+                    'bulan2_hari_pimpinan' => $b2Pim,
+                    'bulan3_hari_operasional' => $b3Ops,
+                    'bulan3_hari_staff' => $b3Staff,
+                    'bulan3_hari_pimpinan' => $b3Pim,
+                    'is_topup_b1' => false,
+                    'is_topup_b2' => false,
+                    'is_topup_b3' => false,
+                ]);
+            }
 
             $now = now();
             $bulkData = [];
@@ -141,8 +174,20 @@ class RendisBbmImport implements ToCollection
                 ];
             }
 
-            foreach (array_chunk($bulkData, 100) as $chunk) {
-                RendisKendaraan::insert($chunk);
+            if ($this->actionType === 'update') {
+                foreach ($bulkData as $data) {
+                    RendisKendaraan::updateOrCreate(
+                        [
+                            'rendis_bbm_id' => $rendisBbm->id,
+                            'kendaraan_id' => $data['kendaraan_id']
+                        ],
+                        $data
+                    );
+                }
+            } else {
+                foreach (array_chunk($bulkData, 100) as $chunk) {
+                    RendisKendaraan::insert($chunk);
+                }
             }
         });
     }

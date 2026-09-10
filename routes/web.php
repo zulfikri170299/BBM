@@ -206,6 +206,7 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     Route::get('/rendis/import', [\App\Http\Controllers\Admin\RendisImportController::class, 'showImportForm'])->name('rendis.import');
     Route::get('/rendis/import/template', [\App\Http\Controllers\Admin\RendisImportController::class, 'downloadTemplate'])->name('rendis.import.template');
     Route::post('/rendis/import', [\App\Http\Controllers\Admin\RendisImportController::class, 'processImport'])->name('rendis.import.process');
+    Route::post('/rendis/import/resolve', [\App\Http\Controllers\Admin\RendisImportController::class, 'resolveImportConflict'])->name('rendis.import.resolve');
     
     Route::resource('rendis', \App\Http\Controllers\Admin\RendisController::class);
 

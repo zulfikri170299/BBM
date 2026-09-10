@@ -80,4 +80,34 @@
 
         </div>
     </div>
+
+    @if(session('import_conflict'))
+        <form id="conflictForm" action="{{ route('admin.rendis.import.resolve') }}" method="POST" class="hidden" style="display: none;">
+            @csrf
+            <input type="hidden" name="file_path" value="{{ session('import_conflict')['file_path'] }}">
+            <input type="hidden" name="action_type" id="action_type_input" value="">
+        </form>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        title: 'Data Sudah Ada!',
+                        text: '{{ session("import_conflict")["message"] }}',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Update Data Saja',
+                        cancelButtonText: 'Batal',
+                        confirmButtonColor: '#3b82f6',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById('action_type_input').value = 'update';
+                            document.getElementById('conflictForm').submit();
+                        }
+                    });
+                } else {
+                    alert('Data Sudah Ada! Pilihan fitur timpa/update membutuhkan SweetAlert.');
+                }
+            });
+        </script>
+    @endif
 </x-app-layout>
