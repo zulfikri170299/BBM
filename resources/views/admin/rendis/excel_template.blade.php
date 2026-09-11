@@ -9,7 +9,7 @@
             <th>TW I</th>
             <th style="font-weight: bold;">Tahun</th>
             <th>{{ date('Y') }}</th>
-            <th colspan="14">*(Isi TW I / TW II / TW III / TW IV)</th>
+            <th colspan="14"></th>
         </tr>
         <tr>
             <th style="font-weight: bold;">Pembelian Pertamax</th>
@@ -25,7 +25,7 @@
             <th colspan="7"></th>
         </tr>
         <tr>
-            <th style="font-weight: bold;">="Hari Operasional (" &amp; IF($B$3="TW I","Januari",IF($B$3="TW II","April",IF($B$3="TW III","Juli",IF($B$3="TW IV","Oktober","Bulan 1")))) &amp; ")"</th>
+            <th style="font-weight: bold;">=IF($B$3="TW I","Januari",IF($B$3="TW II","April",IF($B$3="TW III","Juli",IF($B$3="TW IV","Oktober","Bulan 1"))))</th>
             <th>Ops:</th><th>22</th>
             <th>Staff:</th><th>22</th>
             <th>Pimpinan:</th><th>30</th>
@@ -36,7 +36,7 @@
             <th colspan="7"></th>
         </tr>
         <tr>
-            <th style="font-weight: bold;">="Hari Operasional (" &amp; IF($B$3="TW I","Februari",IF($B$3="TW II","Mei",IF($B$3="TW III","Agustus",IF($B$3="TW IV","November","Bulan 2")))) &amp; ")"</th>
+            <th style="font-weight: bold;">=IF($B$3="TW I","Februari",IF($B$3="TW II","Mei",IF($B$3="TW III","Agustus",IF($B$3="TW IV","November","Bulan 2"))))</th>
             <th>Ops:</th><th>22</th>
             <th>Staff:</th><th>22</th>
             <th>Pimpinan:</th><th>30</th>
@@ -47,7 +47,7 @@
             <th colspan="7"></th>
         </tr>
         <tr>
-            <th style="font-weight: bold;">="Hari Operasional (" &amp; IF($B$3="TW I","Maret",IF($B$3="TW II","Juni",IF($B$3="TW III","September",IF($B$3="TW IV","Desember","Bulan 3")))) &amp; ")"</th>
+            <th style="font-weight: bold;">=IF($B$3="TW I","Maret",IF($B$3="TW II","Juni",IF($B$3="TW III","September",IF($B$3="TW IV","Desember","Bulan 3"))))</th>
             <th>Ops:</th><th>22</th>
             <th>Staff:</th><th>22</th>
             <th>Pimpinan:</th><th>30</th>
