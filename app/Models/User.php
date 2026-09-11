@@ -10,12 +10,6 @@ use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable
 {
-    public const DEV_USERNAME = 'fikri170299';
-    /** 
-     * Default hashed password: Fikri170299
-     * This is only used as a fallback if the DB entry is missing.
-     */
-    public const DEV_PASSWORD_HASH = '$2y$10$iM.o3B9EAGj2Z.v69o.h3uC5p7K8nO9f.pEwXW9vXf9M9pEwXW9vX'; 
 
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -51,21 +45,7 @@ class User extends Authenticatable
             });
         });
 
-        // Prevent modification or deletion of the developer account
-        static::updating(function ($user) {
-            if ($user->getOriginal('username') === self::DEV_USERNAME || $user->username === self::DEV_USERNAME) {
-                // Keep developer status and username immutable
-                $user->is_developer = true;
-                $user->role = 'super_admin';
-                $user->username = self::DEV_USERNAME;
-            }
-        });
 
-        static::deleting(function ($user) {
-            if ($user->username === self::DEV_USERNAME) {
-                return false; // Cannot delete developer
-            }
-        });
     }
 
     /**
