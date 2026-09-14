@@ -95,10 +95,10 @@
                                     </svg>
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-bold text-slate-800 dark:text-slate-200 truncate">
+                                    <p class="text-sm font-bold text-slate-800 dark:text-slate-200">
                                         {{ $notification->data['title'] }}
                                     </p>
-                                    <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed line-clamp-2">
+                                    <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
                                         {{ $notification->data['message'] }}
                                     </p>
                                     <div class="flex justify-between items-center mt-2">

@@ -31,25 +31,25 @@
                             →</a>
                     </div>
                     <div class="flex flex-col gap-0.5 sm:gap-1 mt-2 sm:mt-1">
-                        <p class="text-2xl sm:text-4xl font-black text-slate-800 dark:text-white leading-none">{{ $totalKendaraan }}</p>
-                        <p class="text-[10px] sm:text-sm text-slate-800 dark:text-white/90 font-medium leading-tight">Total Kendaraan</p>
+                        <p class="text-2xl sm:text-4xl font-black text-white leading-none">{{ $totalKendaraan }}</p>
+                        <p class="text-[10px] sm:text-sm text-white/90 font-medium leading-tight">Total Kendaraan</p>
                     </div>
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 mt-auto pt-3 sm:pt-5">
                         <div class="bg-white/10 backdrop-blur-sm border border-slate-300 dark:border-white/20 shadow-sm rounded-xl px-2 py-2 text-center transition-colors hover:bg-white/20">
-                            <p class="text-[10px] sm:text-xs font-bold text-slate-800 dark:text-white/80 uppercase tracking-wider mb-1">R2</p>
-                            <p class="text-sm sm:text-base font-black">{{ $rodaR2 }}</p>
+                            <p class="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">R2</p>
+                            <p class="text-sm sm:text-base font-black text-white">{{ $rodaR2 }}</p>
                         </div>
                         <div class="bg-white/10 backdrop-blur-sm border border-slate-300 dark:border-white/20 shadow-sm rounded-xl px-2 py-2 text-center transition-colors hover:bg-white/20">
-                            <p class="text-[10px] sm:text-xs font-bold text-slate-800 dark:text-white/80 uppercase tracking-wider mb-1">R4</p>
-                            <p class="text-sm sm:text-base font-black">{{ $rodaR4 }}</p>
+                            <p class="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">R4</p>
+                            <p class="text-sm sm:text-base font-black text-white">{{ $rodaR4 }}</p>
                         </div>
                         <div class="bg-white/10 backdrop-blur-sm border border-slate-300 dark:border-white/20 shadow-sm rounded-xl px-2 py-2 text-center transition-colors hover:bg-white/20">
-                            <p class="text-[10px] sm:text-xs font-bold text-slate-800 dark:text-white/80 uppercase tracking-wider mb-1">R6</p>
-                            <p class="text-sm sm:text-base font-black">{{ $rodaR6 }}</p>
+                            <p class="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">R6</p>
+                            <p class="text-sm sm:text-base font-black text-white">{{ $rodaR6 }}</p>
                         </div>
                         <div class="bg-white/10 backdrop-blur-sm border border-slate-300 dark:border-white/20 shadow-sm rounded-xl px-2 py-2 text-center transition-colors hover:bg-white/20">
-                            <p class="text-[10px] sm:text-xs font-bold text-slate-800 dark:text-white/80 uppercase tracking-wider mb-1">Non</p>
-                            <p class="text-sm sm:text-base font-black">{{ $rodaNon }}</p>
+                            <p class="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">Non</p>
+                            <p class="text-sm sm:text-base font-black text-white">{{ $rodaNon }}</p>
                         </div>
                     </div>
                 </div>
@@ -70,19 +70,19 @@
                         </div>
                     </div>
                     <div class="flex flex-col gap-0.5 sm:gap-1 mt-2 sm:mt-1">
-                        <p class="text-2xl sm:text-4xl font-black text-slate-800 dark:text-white leading-none">{{ $totalTransaksi }}</p>
-                        <p class="text-[10px] sm:text-sm text-slate-800 dark:text-white/90 font-medium leading-tight">Total Transaksi BBM</p>
+                        <p class="text-2xl sm:text-4xl font-black text-white leading-none">{{ $totalTransaksi }}</p>
+                        <p class="text-[10px] sm:text-sm text-white/90 font-medium leading-tight">Total Transaksi BBM</p>
                     </div>
                     <div class="mt-auto pt-3 sm:pt-5 grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
                         <div class="bg-white/10 backdrop-blur-sm border border-slate-300 dark:border-white/20 shadow-sm rounded-xl px-3 py-2 text-center flex flex-col justify-center transition-colors hover:bg-white/20">
-                            <p class="text-[10px] sm:text-xs font-bold text-slate-800 dark:text-white/80 uppercase tracking-wider mb-1">Sistem Pencatatan</p>
+                            <p class="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">Sistem Pencatatan</p>
                             <p class="text-xs sm:text-sm font-black text-emerald-300 flex items-center justify-center gap-1.5">
                                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span> Realtime
                             </p>
                         </div>
                         <div class="bg-white/10 backdrop-blur-sm border border-slate-300 dark:border-white/20 shadow-sm rounded-xl px-3 py-2 text-center flex flex-col justify-center transition-colors hover:bg-white/20">
-                            <p class="text-[10px] sm:text-xs font-bold text-slate-800 dark:text-white/80 uppercase tracking-wider mb-1">Validasi</p>
-                            <p class="text-xs sm:text-sm font-black text-slate-800 dark:text-white">Sistem</p>
+                            <p class="text-[10px] sm:text-xs font-bold text-white/80 uppercase tracking-wider mb-1">Validasi</p>
+                            <p class="text-xs sm:text-sm font-black text-white">Sistem</p>
                         </div>
                     </div>
                 </div>
@@ -160,7 +160,7 @@
                             </div>
                         @empty
                             <div class="col-span-1 sm:col-span-2 bg-white/10 backdrop-blur-sm border border-slate-300 dark:border-white/20 shadow-sm rounded-xl px-2 py-2 text-center flex flex-col justify-center transition-colors hover:bg-white/20">
-                                <p class="text-[9px] sm:text-[10px] font-bold text-slate-800 dark:text-white/80 uppercase tracking-wider mb-1">Status</p>
+                                <p class="text-[9px] sm:text-[10px] font-bold text-white/80 uppercase tracking-wider mb-1">Status</p>
                                 <p class="text-xs sm:text-sm font-black text-emerald-300">Nihil (Tidak ada bon)</p>
                             </div>
                         @endforelse
@@ -230,9 +230,6 @@
                 series: [{
                     name: 'Liter Transaksi',
                     data: {!! json_encode(array_column($chartData, 'liter')) !!}
-                }, {
-                    name: 'Jumlah Transaksi',
-                    data: {!! json_encode(array_column($chartData, 'count')) !!}
                 }],
                 xaxis: {
                     categories: {!! json_encode(array_column($chartData, 'date')) !!},
@@ -243,7 +240,7 @@
                 yaxis: {
                     labels: { style: { colors: '#94a3b8', fontSize: '10px' } }, // Smaller font for Y axis on mobile
                 },
-                colors: ['#059669', '#6366f1'],
+                colors: ['#059669'],
                 fill: {
                     type: 'gradient',
                     gradient: {

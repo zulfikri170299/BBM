@@ -61,7 +61,7 @@
                                     <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-r border-slate-200 dark:border-white/5 text-center">{{ number_format($data['pendapatan_dex'], 0, ',', '.') }}</td>
                                     <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-r border-slate-200 dark:border-white/5 text-center">{{ number_format($data['pemakaian_pertamax'], 0, ',', '.') }}</td>
                                     <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-r border-slate-200 dark:border-white/5 text-center">{{ number_format($data['pemakaian_dex'], 0, ',', '.') }}</td>
-                                    <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-r border-slate-200 dark:border-white/5 text-center font-medium {{ $data["sisa_pertamax'] < 0 ? 'text-rose-600' : 'text-slate-700 dark:text-slate-300' }}">{{ number_format($data['sisa_pertamax'], 0, ',', '.') }}</td>
+                                    <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 border-r border-slate-200 dark:border-white/5 text-center font-medium {{ $data['sisa_pertamax'] < 0 ? 'text-rose-600' : 'text-slate-700 dark:text-slate-300' }}">{{ number_format($data['sisa_pertamax'], 0, ',', '.') }}</td>
                                     <td class="px-4 py-3 text-center font-medium {{ $data['sisa_dex'] < 0 ? 'text-rose-600' : 'text-slate-700 dark:text-slate-300' }}">{{ number_format($data['sisa_dex'], 0, ',', '.') }}</td>
                                 </tr>
                             @empty
