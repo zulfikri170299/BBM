@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\FilterableByYear;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class RiwayatTransferSaldoPersonel extends Model
 {
-    use HasFactory;
+    use HasFactory, FilterableByYear;
 
     protected $table = 'riwayat_transfer_saldo_personels';
 

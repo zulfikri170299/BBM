@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\FilterableByYear;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 class RiwayatTopup extends Model
 {
+    use FilterableByYear;
+
     protected static function boot()
     {
         parent::boot();

@@ -302,6 +302,16 @@ class RendisController extends Controller
             DB::transaction(function () use ($rendisBbm, $bulan, $colName, &$satkerSummary) {
                 $kendaraans = $rendisBbm->rendisKendaraans()->with('kendaraan')->get();
 
+                // Hitung logical month untuk memanipulasi created_at agar terbaca di Laporan Bulanan
+                $twOffset = 0;
+                if ($rendisBbm->triwulan === 'TW II') $twOffset = 3;
+                elseif ($rendisBbm->triwulan === 'TW III') $twOffset = 6;
+                elseif ($rendisBbm->triwulan === 'TW IV') $twOffset = 9;
+                
+                $logicalMonth = $twOffset + (int)$bulan;
+                // Tetapkan tanggal ke pertengahan bulan tersebut (UTC) agar aman dari batas query zona waktu
+                $topupDate = \Carbon\Carbon::create($rendisBbm->tahun, $logicalMonth, 15, 12, 0, 0, 'UTC')->format('Y-m-d H:i:s');
+
                 foreach ($kendaraans as $rk) {
                     $kendaraan = $rk->kendaraan;
                     $jumlahTopup = 0;
@@ -329,6 +339,8 @@ class RendisController extends Controller
                             'jumlah' => $jumlahTopup,
                             'tipe' => 'keluar',
                             'keterangan' => "Top-up via Rendis {$rendisBbm->triwulan} {$rendisBbm->tahun} Bulan {$bulan} untuk kendaraan {$kendaraan->no_polisi}",
+                            'created_at' => $topupDate,
+                            'updated_at' => $topupDate,
                         ]);
                         // ----------------------------------
 
@@ -345,6 +357,8 @@ class RendisController extends Controller
                             'keterangan' => 'Top Up Rendis ' . $rendisBbm->triwulan . ' ' . $rendisBbm->tahun . ' Bulan ' . $bulan,
                             'status' => 'success',
                             'user_id' => auth()->id(),
+                            'created_at' => $topupDate,
+                            'updated_at' => $topupDate,
                         ]);
 
                         // Track for BA

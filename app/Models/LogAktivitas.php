@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\FilterableByYear;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 class LogAktivitas extends Model
 {
-    use HasFactory;
+    use HasFactory, FilterableByYear;
 
     protected $table = 'log_aktivitas';
     protected $guarded = ['id'];

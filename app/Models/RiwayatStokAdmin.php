@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\FilterableByYear;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 class RiwayatStokAdmin extends Model
 {
-    use HasFactory;
+    use HasFactory, FilterableByYear;
 
     protected static function boot()
     {

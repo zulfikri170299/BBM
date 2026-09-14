@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\FilterableByYear;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class TransaksiBbm extends Model
 {
-    use HasFactory;
+    use HasFactory, FilterableByYear;
 
     protected $fillable = [
         'satker_id',

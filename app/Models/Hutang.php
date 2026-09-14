@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\FilterableByYear;
+
 use Illuminate\Database\Eloquent\Model;
 
 class Hutang extends Model
 {
+    use FilterableByYear;
+
     protected $guarded = ['id'];
 
     public function satker()

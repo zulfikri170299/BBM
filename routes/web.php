@@ -35,6 +35,21 @@ Route::middleware('auth')->group(function () {
         return response()->json(['success' => true]);
     })->name('notifications.read');
 
+    // Filter Tahun Route
+    Route::post('/set-filter-tahun', function (\Illuminate\Http\Request $request) {
+        $request->validate(['tahun' => 'required|integer|min:2020|max:' . date('Y')]);
+        session(['filter_tahun' => $request->tahun]);
+        return back();
+    })->name('set-filter-tahun');
+
+    Route::get('/test-filter', function() {
+        session(['filter_tahun' => 2023]);
+        return [
+            'transaksi_count' => \App\Models\TransaksiBbm::count(),
+            'riwayat_count' => \App\Models\RiwayatTopup::count(),
+        ];
+    });
+
     // Chat Routes
     Route::get('/chat/unread/count', [\App\Http\Controllers\ChatController::class, 'unreadCount'])->name('chat.unread.count');
     Route::get('/chat', [\App\Http\Controllers\ChatController::class, 'index'])->name('chat.index');
@@ -196,6 +211,11 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     Route::get('/backup', [\App\Http\Controllers\Admin\BackupDatabaseController::class, 'index'])->name('backup.index')->middleware('role:super_admin');
     Route::post('/backup/export', [\App\Http\Controllers\Admin\BackupDatabaseController::class, 'export'])->name('backup.export')->middleware('role:super_admin');
     Route::post('/backup/import', [\App\Http\Controllers\Admin\BackupDatabaseController::class, 'import'])->name('backup.import')->middleware('role:super_admin');
+
+    // Hapus Data Tahunan
+    Route::get('/hapus-data-tahunan', [\App\Http\Controllers\Admin\HapusDataTahunanController::class, 'index'])->name('hapus-data-tahunan.index')->middleware('role:super_admin');
+    Route::delete('/hapus-data-tahunan', [\App\Http\Controllers\Admin\HapusDataTahunanController::class, 'destroy'])->name('hapus-data-tahunan.destroy')->middleware('role:super_admin');
+
     // Rendis BBM
     Route::get('/rendis/print-pdf/{rendisBbm}', [\App\Http\Controllers\Admin\RendisController::class, 'printPdf'])->name('rendis.print-pdf');
     Route::get('/rendis/print-excel/{rendisBbm}', [\App\Http\Controllers\Admin\RendisController::class, 'printExcel'])->name('rendis.print-excel');

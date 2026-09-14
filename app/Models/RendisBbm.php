@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use App\Traits\FilterableByYear;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class RendisBbm extends Model
 {
-    use HasFactory;
+    use HasFactory, FilterableByYear;
+
+    public $yearFilterField = 'tahun';
 
     protected $guarded = ['id'];
 

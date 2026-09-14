@@ -127,6 +127,50 @@
             </div>
         </div>
 
+        <!-- Year Filter -->
+        <div x-data="{ yearOpen: false }" class="relative">
+            <button @click="yearOpen = !yearOpen" type="button" class="-m-2.5 p-2.5 mx-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors relative flex items-center gap-1 focus:outline-none rounded-xl" title="Filter Data Berdasarkan Tahun">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" />
+                </svg>
+                <span class="text-sm font-bold">{{ session('filter_tahun', date('Y')) }}</span>
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+
+            <!-- Year Dropdown -->
+            <div x-show="yearOpen" @click.away="yearOpen = false"
+                x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95"
+                x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75"
+                x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95"
+                class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 py-2 shadow-2xl ring-1 ring-black/5 focus:outline-none overflow-hidden max-h-60 overflow-y-auto custom-scrollbar" style="display: none;">
+                
+                <div class="px-4 py-2 border-b border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-slate-800/50">
+                    <span class="text-xs font-bold text-slate-500 dark:text-slate-400">Pilih Tahun</span>
+                </div>
+
+                @php
+                    $currentYear = date('Y');
+                    $startYear = 2020;
+                @endphp
+                @for($y = $currentYear; $y >= $startYear; $y--)
+                    <form method="POST" action="{{ route('set-filter-tahun') }}">
+                        @csrf
+                        <input type="hidden" name="tahun" value="{{ $y }}">
+                        <button type="submit" class="block w-full text-left px-4 py-2 text-sm leading-6 {{ session('filter_tahun', $currentYear) == $y ? 'text-brand-primary font-bold bg-brand-primary/10' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5' }} transition-colors">
+                            {{ $y }}
+                            @if(session('filter_tahun', $currentYear) == $y)
+                                <svg class="inline-block float-right h-4 w-4 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            @endif
+                        </button>
+                    </form>
+                @endfor
+            </div>
+        </div>
+
         <!-- Separator -->
         <div class="hidden lg:block lg:h-6 lg:w-px lg:bg-slate-200 dark:lg:bg-white/10 transition-colors" aria-hidden="true"></div>
 

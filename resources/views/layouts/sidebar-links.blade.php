@@ -316,6 +316,11 @@
                             <div class="submenu-dot {{ request()->routeIs('admin.backup.*') ? 'active-dot' : '' }}"></div>
                             Backup Database
                         </a>
+                        <a href="{{ route('admin.hapus-data-tahunan.index') }}"
+                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.hapus-data-tahunan.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                            <div class="submenu-dot {{ request()->routeIs('admin.hapus-data-tahunan.*') ? 'active-dot' : '' }}"></div>
+                            Hapus Data Tahunan
+                        </a>
                     </div>
                 </div>
             @endif

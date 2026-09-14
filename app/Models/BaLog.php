@@ -2,10 +2,16 @@
 
 namespace App\Models;
 
+use App\Traits\FilterableByYear;
+
 use Illuminate\Database\Eloquent\Model;
 
 class BaLog extends Model
 {
+    use FilterableByYear;
+
+    public $yearFilterField = 'tahun';
+
     protected $fillable = [
         'satker_id',
         'bulan',
