@@ -14,6 +14,7 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use PhpOffice\PhpSpreadsheet\Style\Protection;
 
 class RendisTemplateExport implements FromView, WithColumnWidths, WithStyles, WithEvents
 {
@@ -123,6 +124,24 @@ class RendisTemplateExport implements FromView, WithColumnWidths, WithStyles, Wi
                 $sheet->getStyle('B4:D4')->getNumberFormat()->setFormatCode('#,##0');
                 $sheet->getStyle('J5:L7')->getNumberFormat()->setFormatCode('#,##0');
                 $sheet->getStyle('G11:R' . $highestRow)->getNumberFormat()->setFormatCode('#,##0');
+
+                // Instead of Worksheet Protection (which blocks row deletion),
+                // we use Data Validation to prevent typing in master data columns.
+                $readOnlyValidation = new DataValidation();
+                $readOnlyValidation->setType(DataValidation::TYPE_CUSTOM);
+                $readOnlyValidation->setErrorStyle(DataValidation::STYLE_STOP);
+                $readOnlyValidation->setAllowBlank(true);
+                $readOnlyValidation->setShowErrorMessage(true);
+                $readOnlyValidation->setErrorTitle('Kolom Terkunci');
+                $readOnlyValidation->setError('Data master ini tidak boleh diubah. Jika kendaraan ini tidak diperlukan, Anda dapat menghapus seluruh baris.');
+                $readOnlyValidation->setFormula1('FALSE'); // Nothing is valid to type
+
+                // Apply to ID, NO, JENIS RANDIS, NOPOL, JENIS BBM individually to ensure it applies to all columns
+                $sheet->setDataValidation("A11:A{$highestRow}", clone $readOnlyValidation);
+                $sheet->setDataValidation("B11:B{$highestRow}", clone $readOnlyValidation);
+                $sheet->setDataValidation("D11:D{$highestRow}", clone $readOnlyValidation);
+                $sheet->setDataValidation("E11:E{$highestRow}", clone $readOnlyValidation);
+                $sheet->setDataValidation("F11:F{$highestRow}", clone $readOnlyValidation);
             },
         ];
     }
