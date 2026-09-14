@@ -90,23 +90,37 @@
                         font-size: 10px;
                         font-family: 'Outfit', sans-serif;
                         background: transparent;
+                        color: #334155;
+                    }
+                    .dark .laporan-tbl {
                         color: #cbd5e1;
                     }
                     .laporan-tbl th,
                     .laporan-tbl td {
-                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        border: 1px solid rgba(0, 0, 0, 0.1);
                         padding: 6px 4px;
                         text-align: center;
                         vertical-align: middle;
                     }
+                    .dark .laporan-tbl th,
+                    .dark .laporan-tbl td {
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                    }
                     .laporan-tbl th {
-                        background: rgba(30, 41, 59, 0.8);
+                        background: rgba(241, 245, 249, 0.8);
                         font-weight: 700;
-                        color: #94a3b8;
+                        color: #475569;
                         text-transform: uppercase;
                         letter-spacing: 0.05em;
                     }
+                    .dark .laporan-tbl th {
+                        background: rgba(30, 41, 59, 0.8);
+                        color: #94a3b8;
+                    }
                     .laporan-tbl tbody tr:hover td {
+                        background: rgba(0, 0, 0, 0.02);
+                    }
+                    .dark .laporan-tbl tbody tr:hover td {
                         background: rgba(255, 255, 255, 0.05);
                     }
                     .laporan-tbl .text-left {
@@ -115,12 +129,21 @@
                     }
                     .laporan-tbl .bold {
                         font-weight: bold;
+                        color: #0f172a;
+                        background: rgba(226, 232, 240, 0.4);
+                    }
+                    .dark .laporan-tbl .bold {
                         color: #f8fafc;
                         background: rgba(30, 41, 59, 0.4);
                     }
                     .laporan-title {
                         text-align: center;
                         padding: 24px 0;
+                        color: #0f172a;
+                        background: rgba(241, 245, 249, 0.4);
+                        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                    }
+                    .dark .laporan-title {
                         color: #f8fafc;
                         background: rgba(15, 23, 42, 0.4);
                         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -131,6 +154,9 @@
                         text-transform: uppercase;
                         letter-spacing: 0.1em;
                         margin: 0;
+                        color: #0284c7;
+                    }
+                    .dark .laporan-title h2 {
                         color: #38bdf8;
                     }
                     .laporan-title h3 {
@@ -138,6 +164,9 @@
                         font-weight: 700;
                         text-transform: uppercase;
                         margin: 6px 0 0 0;
+                        color: #475569;
+                    }
+                    .dark .laporan-title h3 {
                         color: #94a3b8;
                     }
                     .rotate-date {
@@ -145,6 +174,9 @@
                         font-weight: 800;
                         display: block;
                         margin: 0 auto;
+                        color: #334155;
+                    }
+                    .dark .rotate-date {
                         color: #e2e8f0;
                     }
                 </style>
