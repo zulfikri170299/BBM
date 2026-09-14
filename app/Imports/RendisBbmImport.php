@@ -175,6 +175,11 @@ class RendisBbmImport implements ToCollection
             }
 
             if ($this->actionType === 'update') {
+                $importedKendaraanIds = array_column($bulkData, 'kendaraan_id');
+                RendisKendaraan::where('rendis_bbm_id', $rendisBbm->id)
+                    ->whereNotIn('kendaraan_id', $importedKendaraanIds)
+                    ->delete();
+
                 foreach ($bulkData as $data) {
                     RendisKendaraan::updateOrCreate(
                         [

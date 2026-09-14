@@ -73,6 +73,8 @@ class RendisController extends Controller
             $now = now();
             $bulkData = [];
             foreach ($request->kendaraan as $kId => $data) {
+                if (isset($data['delete']) && $data['delete'] == 1) continue;
+
                 $kendaraan = $kendaraansMap->get($kId);
                 if (!$kendaraan) continue;
 
@@ -137,11 +139,14 @@ class RendisController extends Controller
 
         $rendisBbm->load('rendisKendaraans.kendaraan');
 
-        $satkers = Satker::getOrderedForRendis();
-        $kendaraans = Kendaraan::with('satker')->where('satker_id', '!=', Satker::where('nama_satker', 'SPN')->value('id'))->get();
-        $kendaraansBySatker = Satker::sortKendaraansBySatker($kendaraans->groupBy('satker_id'));
-
         $existingRendisKendaraans = $rendisBbm->rendisKendaraans->keyBy('kendaraan_id');
+        
+        $satkers = Satker::getOrderedForRendis();
+        $kendaraans = Kendaraan::with('satker')
+            ->whereIn('id', $existingRendisKendaraans->keys())
+            ->where('satker_id', '!=', Satker::where('nama_satker', 'SPN')->value('id'))
+            ->get();
+        $kendaraansBySatker = Satker::sortKendaraansBySatker($kendaraans->groupBy('satker_id'));
 
         return view('admin.rendis.edit', compact('rendisBbm', 'satkers', 'kendaraans', 'kendaraansBySatker', 'existingRendisKendaraans'));
     }
@@ -188,6 +193,8 @@ class RendisController extends Controller
             $now = now();
             $bulkData = [];
             foreach ($request->kendaraan as $kId => $data) {
+                if (isset($data['delete']) && $data['delete'] == 1) continue;
+
                 $kendaraan = $kendaraansMap->get($kId);
                 if (!$kendaraan) continue;
 

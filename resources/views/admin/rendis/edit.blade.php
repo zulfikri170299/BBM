@@ -104,13 +104,19 @@
 
         {{-- TABEL KENDARAAN PER SATKER --}}
         <div class="bg-white dark:bg-gray-800 shadow-sm rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 flex justify-between items-center">
                 <h3 class="text-lg font-medium text-gray-900 dark:text-white">Daftar Kendaraan & Alokasi per Satker</h3>
+                <button type="button" id="btn-hapus-terpilih" class="px-3 py-1.5 text-sm bg-red-100 text-red-600 hover:bg-red-200 hover:text-red-700 font-semibold rounded-lg hidden transition-colors">
+                    Hapus Terpilih
+                </button>
             </div>
             <div class="overflow-x-auto">
                 <table id="tabel-kendaraan" class="min-w-full table-fixed divide-y divide-gray-200 dark:divide-gray-700 text-xs">
                     <thead class="bg-white text-slate-900 dark:text-gray-200 dark:bg-gray-900/80">
                         <tr>
+                            <th rowspan="3" class="px-3 py-2 text-center font-bold uppercase border border-gray-300 dark:border-gray-600 w-10">
+                                <input type="checkbox" id="check-all-delete" onchange="document.querySelectorAll('.delete-checkbox').forEach(cb => cb.checked = this.checked)" title="Centang semua untuk dihapus" class="rounded border-gray-300 dark:border-gray-600 text-red-600 focus:ring-red-500 cursor-pointer">
+                            </th>
                             <th rowspan="3" class="px-3 py-2 text-center font-bold uppercase border border-gray-300 dark:border-gray-600 w-10">No</th>
                             <th rowspan="3" class="px-3 py-2 text-left font-bold uppercase border border-gray-300 dark:border-gray-600">Uraian</th>
                             <th rowspan="3" class="px-3 py-2 text-left font-bold uppercase border border-gray-300 dark:border-gray-600">Jenis Randis</th>
@@ -138,7 +144,7 @@
                         @php $satker = $kendaraanList->first()->satker; $satkerLabel = $romawi[$satkerIdx] ?? ($satkerIdx+1); $satkerIdx++; @endphp
                         <tr class="bg-yellow-50 dark:bg-yellow-900/20 border-t-2 border-yellow-400 dark:border-yellow-600">
                             <td class="px-3 py-2 text-center font-extrabold text-gray-800 dark:text-yellow-300 border border-gray-300 dark:border-gray-600">{{ $satkerLabel }}</td>
-                            <td colspan="13" class="px-3 py-2 font-extrabold text-gray-800 dark:text-yellow-300 uppercase border border-gray-300 dark:border-gray-600">{{ $satker->nama_satker ?? 'TANPA SATKER' }}</td>
+                            <td colspan="14" class="px-3 py-2 font-extrabold text-gray-800 dark:text-yellow-300 uppercase border border-gray-300 dark:border-gray-600">{{ $satker->nama_satker ?? 'TANPA SATKER' }}</td>
                         </tr>
                         @foreach($kendaraanList as $idx => $k)
                         @php 
@@ -150,6 +156,9 @@
                             $hk3 = $rendisBbm->{"bulan3_hari_{$katKey}"} ?? 22;
                         @endphp
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors kendaraan-row" data-satker-id="{{ $satkerId }}" data-kategori="{{ $katKey }}" data-jenis="{{ strtolower(str_replace(' ', '_', $k->jenis_bbm ?? 'pertamax')) }}">
+                            <td class="px-3 py-1 text-center border border-gray-200 dark:border-gray-700">
+                                <input type="checkbox" name="kendaraan[{{ $k->id }}][delete]" value="1" class="delete-checkbox rounded border-gray-300 dark:border-gray-600 text-red-600 focus:ring-red-500 cursor-pointer">
+                            </td>
                             <td class="px-3 py-1 text-center border border-gray-200 dark:border-gray-700">{{ $idx + 1 }}</td>
                             <td class="px-1 py-1 border border-gray-200 dark:border-gray-700">
                                 <select name="kendaraan[{{ $k->id }}][uraian]" class="w-full text-xs p-1 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white dark:border-gray-600 dark:bg-gray-700 dark:text-white input-uraian">
@@ -224,7 +233,7 @@
                         @endforeach
                         {{-- SATKER JUMLAH --}}
                         <tr class="bg-white text-slate-900 dark:bg-gray-700/50 satker-total" data-satker-id="{{ $satkerId }}">
-                            <td colspan="5" class="px-3 py-2 text-right font-bold text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600">JUMLAH</td>
+                            <td colspan="6" class="px-3 py-2 text-right font-bold text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600">JUMLAH</td>
                             <td class="border border-gray-300 dark:border-gray-600"></td>
                             <td class="px-2 py-2 text-center font-bold text-blue-600 dark:text-blue-400 border border-gray-300 dark:border-gray-600 st-p1">0</td>
                             <td class="px-2 py-2 text-center font-bold text-emerald-600 dark:text-emerald-400 border border-gray-300 dark:border-gray-600 st-d1">0</td>
@@ -557,6 +566,88 @@ document.addEventListener('DOMContentLoaded', function() {
             updateRowTotals(rc);
             clearTimeout(calcTimeout);
             calcTimeout=setTimeout(function(){ rebuildSatkerTotal(rc.sId); updateGrandTotalDOM(); },200);
+        });
+    }
+
+    // === HAPUS TERPILIH ===
+    var btnHapus = document.getElementById('btn-hapus-terpilih');
+    var checkAll = document.getElementById('check-all-delete');
+    
+    function toggleBtnHapus() {
+        if(!btnHapus) return;
+        var anyChecked = document.querySelectorAll('.delete-checkbox:checked').length > 0;
+        if(anyChecked) {
+            btnHapus.classList.remove('hidden');
+        } else {
+            btnHapus.classList.add('hidden');
+        }
+    }
+
+    if(checkAll) {
+        // inline onchange from create was removed, doing it via event listener instead:
+        checkAll.addEventListener('change', function() {
+            var isChecked = this.checked;
+            document.querySelectorAll('.delete-checkbox').forEach(function(cb) {
+                cb.checked = isChecked;
+            });
+            toggleBtnHapus();
+        });
+    }
+
+    if(tabel) {
+        tabel.addEventListener('change', function(e) {
+            if(e.target.classList.contains('delete-checkbox')) {
+                toggleBtnHapus();
+                if(!e.target.checked && checkAll) checkAll.checked = false;
+            }
+        });
+    }
+
+    if(btnHapus) {
+        btnHapus.addEventListener('click', function() {
+            var checked = document.querySelectorAll('.delete-checkbox:checked');
+            if (checked.length === 0) return;
+            
+            Swal.fire({
+                title: 'Apakah Anda Yakin?',
+                text: 'Yakin ingin menghapus ' + checked.length + ' kendaraan yang dipilih dari tabel ini?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#3b82f6',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var affectedSatkers = new Set();
+                    checked.forEach(function(cb) {
+                        var tr = cb.closest('tr');
+                        if(!tr) return;
+                        var rc = tr._rc;
+                        if(rc) {
+                            affectedSatkers.add(rc.sId);
+                            
+                            var idx = allCachedRows.indexOf(rc);
+                            if(idx > -1) allCachedRows.splice(idx, 1);
+                            
+                            var satkerArr = satkerRows[rc.sId];
+                            if(satkerArr) {
+                                var satkerIdx = satkerArr.indexOf(rc);
+                                if(satkerIdx > -1) satkerArr.splice(satkerIdx, 1);
+                            }
+                        }
+                        tr.remove();
+                    });
+                    
+                    if(checkAll) checkAll.checked = false;
+                    toggleBtnHapus();
+                    
+                    affectedSatkers.forEach(function(sId) {
+                        rebuildSatkerTotal(sId);
+                    });
+                    updateGrandTotalDOM();
+                }
+            });
         });
     }
 
