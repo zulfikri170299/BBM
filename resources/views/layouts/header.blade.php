@@ -73,7 +73,7 @@
             <div x-show="notificationsOpen" @click.away="notificationsOpen = false"
                 x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95"
                 x-transition:enter-end="opacity-100 scale-100"
-                class="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl z-[100] ring-1 ring-black ring-opacity-5 overflow-hidden transition-colors duration-300"
+                class="fixed left-4 right-4 top-16 sm:absolute sm:top-auto sm:left-auto sm:right-0 sm:mt-2 sm:w-80 max-w-sm mx-auto sm:mx-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl z-[100] ring-1 ring-black ring-opacity-5 overflow-hidden transition-colors duration-300"
                 style="display: none;">
 
                 <div class="p-4 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50 transition-colors">
