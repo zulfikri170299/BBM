@@ -269,7 +269,7 @@
                             </th>
                         </tr>
                         <tr class="bg-slate-50 dark:bg-slate-800/70">
-                            <th class="px-4 py-3.5 text-center w-10">
+                            <th class="px-4 py-3.5 text-center w-10 hidden sm:table-cell">
                                 <input type="checkbox" id="checkAll"
                                     class="w-4 h-4 text-indigo-600 border-slate-300 dark:border-white/20 rounded focus:ring-indigo-500 cursor-pointer bg-white dark:bg-slate-900">
                             </th>
@@ -277,7 +277,7 @@
                                 class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider w-12">
                                 No</th>
                             <th
-                                class="px-2 sm:px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">
+                                class="px-2 sm:px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider hidden lg:table-cell">
                                 Kendaraan</th>
                             <th
                                 class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">
@@ -302,7 +302,7 @@
                     <tbody class="divide-y divide-slate-200 dark:divide-white/5">
                         @forelse($kendaraans as $kendaraan)
                             <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
-                                <td class="px-4 py-4 text-center">
+                                <td class="px-4 py-4 text-center hidden sm:table-cell">
                                     <input type="checkbox" name="item_ids[]" value="{{ $kendaraan->id }}"
                                         class="bg-white dark:bg-slate-900 dark:text-white item-checkbox w-4 h-4 text-indigo-600 border-slate-300 dark:border-white/20 rounded focus:ring-indigo-500 cursor-pointer">
                                 </td>
@@ -310,12 +310,15 @@
                                     <span
                                         class="text-xs font-semibold text-slate-600 dark:text-slate-400">{{ $loop->iteration + ($kendaraans->currentPage() - 1) * $kendaraans->perPage() }}</span>
                                 </td>
-                                <td class="px-2 sm:px-4 py-3 max-w-[55px] sm:max-w-none whitespace-normal break-words">
+                                <td class="px-2 sm:px-4 py-3 max-w-[55px] sm:max-w-none whitespace-normal break-words hidden lg:table-cell">
                                     <span
                                         class="text-[11px] sm:text-xs font-semibold text-slate-800 dark:text-slate-200 leading-tight">{{ $kendaraan->jenis_kendaraan }}</span>
                                 </td>
-                                <td class="px-4 py-3">
-                                    <span class="text-xs font-bold text-slate-800 dark:text-slate-200">{{ $kendaraan->no_polisi }}</span>
+                                <td class="px-4 py-3 max-w-[120px] sm:max-w-[200px] lg:max-w-none">
+                                    <div class="flex flex-col min-w-0">
+                                        <span class="text-[10px] sm:text-xs font-semibold text-slate-500 dark:text-slate-400 mb-0.5 lg:hidden truncate" title="{{ $kendaraan->jenis_kendaraan }}">{{ $kendaraan->jenis_kendaraan }}</span>
+                                        <span class="text-xs font-bold text-slate-800 dark:text-slate-200">{{ $kendaraan->no_polisi }}</span>
+                                    </div>
                                 </td>
                                 <td class="px-4 py-3 text-center hidden lg:table-cell">
                                     <span class="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-lg text-[10px] font-bold bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300">

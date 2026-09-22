@@ -17,14 +17,14 @@
         </button>
 
         {{-- Page Title (Mobile) --}}
-        <div class="lg:hidden flex items-center">
-            <h1 class="text-sm font-bold text-slate-800 dark:text-slate-200 transition-colors">
+        <div class="lg:hidden flex items-center min-w-0">
+            <h1 class="text-sm font-bold text-slate-800 dark:text-slate-200 transition-colors truncate">
                 {{ auth()->user()->satker->nama_satker ?? 'BIRO LOGISTIK' }}
             </h1>
         </div>
     </div>
 
-    <div class="flex items-center gap-x-4 lg:gap-x-6">
+    <div class="flex items-center gap-x-2 sm:gap-x-4 lg:gap-x-6 shrink-0">
         <!-- Theme Toggle -->
         <button type="button" @click="isDarkMode = !isDarkMode" class="-m-2.5 p-2.5 text-slate-500 dark:text-slate-400 hover:text-slate-500 dark:hover:text-white dark:text-white transition-colors relative focus:outline-none flex items-center justify-center">
             <span class="sr-only">Toggle Dark Mode</span>
@@ -176,9 +176,9 @@
 
         <!-- Profile dropdown -->
         <div x-data="{ open: false }" class="relative">
-            <button @click="open = !open" type="button" class="-m-1.5 flex items-center p-1.5 focus:outline-none" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+            <button @click="open = !open" type="button" class="-m-1.5 flex items-center p-1.5 focus:outline-none shrink-0" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                 <span class="sr-only">Buka user menu</span>
-                <img class="h-8 w-8 sm:h-9 sm:w-9 rounded-full bg-slate-50 dark:bg-slate-800 ring-2 ring-brand-primary/50 object-cover shadow-[0_0_10px_rgba(0,98,255,0.3)]" src="{{ Auth::user()->profile_photo_url }}" alt="">
+                <img class="h-8 w-8 sm:h-9 sm:w-9 shrink-0 rounded-full bg-slate-50 dark:bg-slate-800 ring-2 ring-brand-primary/50 object-cover shadow-[0_0_10px_rgba(0,98,255,0.3)]" src="{{ Auth::user()->profile_photo_url }}" alt="">
                 <span class="hidden lg:flex lg:items-center">
                     <span class="ml-4 text-sm font-semibold leading-6 text-slate-800 dark:text-slate-200 transition-colors" aria-hidden="true">{{ Auth::user()->name }}</span>
                     <svg class="ml-2 h-5 w-5 text-slate-600 dark:text-slate-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
