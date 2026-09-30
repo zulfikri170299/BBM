@@ -72,7 +72,7 @@
         </div>
 
         <!-- Filters -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 p-4 lg:p-6 rounded-[2rem] lg:rounded-[2.5rem] border border-slate-200 dark:border-white/5 shadow-xl shadow-slate-200/50">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-4 lg:p-6">
             <form action="{{ route('satker.hutang.index') }}" method="GET"
                 class="flex flex-col lg:flex-row lg:items-end gap-5 lg:gap-3">
                 <div class="grid grid-cols-2 gap-3 lg:flex lg:flex-nowrap lg:gap-3 flex-1">
@@ -145,7 +145,7 @@
         @endif
 
         <!-- Table Data -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-[2.5rem] border border-slate-200 dark:border-white/5 shadow-xl shadow-slate-200/50 overflow-hidden">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
             <div class="px-8 py-5 border-b border-slate-50 flex justify-between items-center bg-slate-50 dark:bg-slate-800/30">
                 <div class="flex items-center gap-4">
                     <form action="{{ route('satker.hutang.index') }}" method="GET" class="flex items-center gap-3">
@@ -168,22 +168,22 @@
                 </div>
             </div>
             <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left border-collapse">
+                <table class="min-w-full whitespace-nowrap">
                     <thead>
-                        <tr class="text-[11px] text-slate-600 dark:text-slate-400 uppercase tracking-[0.15em] bg-slate-50 dark:bg-slate-800/50">
-                            <th class="px-8 py-4 font-black">Tanggal Bon</th>
-                            <th class="px-8 py-4 font-black">Kendaraan</th>
-                            <th class="px-8 py-4 font-black text-center">Driver</th>
-                            <th class="px-8 py-4 font-black text-center">Jumlah Bon</th>
-                            <th class="px-8 py-4 font-black">Status</th>
-                            <th class="px-8 py-4 font-black text-right">Aksi</th>
+                        <tr class="bg-white dark:bg-slate-800/80 border-b border-slate-200 dark:border-white/5">
+                            <th class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">Tanggal Bon</th>
+                            <th class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">Kendaraan</th>
+                            <th class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">Driver</th>
+                            <th class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">Jumlah Bon</th>
+                            <th class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">Status</th>
+                            <th class="px-4 py-3 text-right text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-50">
+                    <tbody class="divide-y divide-slate-200 dark:divide-white/5">
                         @forelse($hutangs as $hutang)
-                            <tr class="hover:bg-indigo-50/30 transition-colors group">
-                                <td class="px-8 py-2 whitespace-nowrap">
-                                    <div class="font-bold text-slate-800 dark:text-slate-200">
+                            <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
+                                <td class="px-4 py-3">
+                                    <div class="text-xs font-medium text-slate-800 dark:text-slate-200">
                                         @if($hutang->tanggal_bon)
                                             {{ \Carbon\Carbon::parse($hutang->tanggal_bon)->format('d M Y') }}
                                         @else
@@ -199,21 +199,21 @@
                                         @endif
                                     </div>
                                 </td>
-                                <td class="px-8 py-2">
-                                    <div>
-                                        <div class="font-black text-slate-800 dark:text-white tracking-tight">{{ $hutang->nopol }}</div>
+                                <td class="px-4 py-3">
+                                    <div class="flex flex-col">
+                                        <span class="text-xs text-slate-700 dark:text-slate-300 font-medium">{{ $hutang->nopol }}</span>
                                         <div class="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">
                                             {{ $hutang->jenis_kendaraan }}
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-8 py-2 text-center">
-                                    <div class="font-bold text-slate-700 dark:text-slate-300">{{ $hutang->nama_driver ?? '-' }}</div>
+                                <td class="px-4 py-3 text-center">
+                                    <span class="text-xs font-medium text-slate-700 dark:text-slate-300">{{ $hutang->nama_driver ?? '-' }}</span>
                                 </td>
-                                <td class="px-8 py-2 text-center">
-                                    <div class="inline-flex flex-col items-center">
+                                <td class="px-4 py-3 text-center">
+                                    <div class="flex flex-col items-center">
                                         <span
-                                            class="text-sm font-black text-slate-800 dark:text-white">{{ number_format($hutang->jumlah_bon, 0, ',', '.') }}
+                                            class="text-sm font-bold text-rose-600">{{ number_format($hutang->jumlah_bon, 0, ',', '.') }}
                                             L</span>
                                         <span
                                             class="text-[9px] font-black text-indigo-500 uppercase tracking-widest bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-100/50 mt-1">
@@ -221,7 +221,7 @@
                                         </span>
                                     </div>
                                 </td>
-                                <td class="px-8 py-2">
+                                <td class="px-4 py-3 text-center">
                                     @if($hutang->status === 'belum_dibayar')
                                         <span
                                             class="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-50 text-rose-600 border border-rose-100/50 rounded-full text-[10px] font-black uppercase tracking-widest">
@@ -245,7 +245,7 @@
                                         </div>
                                     @endif
                                 </td>
-                                <td class="px-8 py-2 text-right">
+                                <td class="px-4 py-3 text-right">
                                     @if($hutang->status === 'belum_dibayar')
                                         <button
                                             @click="openModal({{ $hutang->id }}, '{{ $hutang->nopol }}', '{{ $hutang->jenis_bbm }}', {{ $hutang->jumlah_bon }})"
