@@ -130,7 +130,7 @@
                                 @endphp
                                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                                     <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center">{{ $idx + 1 }}</td>
-                                    <td class="border border-gray-400 dark:border-gray-600 px-2 py-1">{{ $rk->uraian ?? $k->kategori_kendaraan ?? 'Operasional' }}</td>
+                                    <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 whitespace-nowrap">{{ $rk->uraian ?? $k->kategori_kendaraan ?? 'Operasional' }}</td>
                                     <td class="border border-gray-400 dark:border-gray-600 px-2 py-1">{{ $k->jenis_kendaraan ?? '-' }}</td>
                                     <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center font-semibold">{{ $k->no_polisi ?? '-' }}</td>
                                     <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center text-gray-500">{{ $rk->liter_per_hari }} x {{ $rk->bulan1_total > 0 ? round($rk->bulan1_total / max($rk->liter_per_hari, 1)) : 0 }}</td>

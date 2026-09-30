@@ -147,9 +147,19 @@ class RendisBbmImport implements ToCollection
                 $uraianFinal = $uraianExcel ?: ($kendaraan->kategori_kendaraan ?? 'Ran Ops');
                 $kat = strtolower($uraianFinal);
                 
-                $h1 = ($kat == 'ran staff' || $kat == 'staff') ? $b1Staff : $b1Ops;
-                $h2 = ($kat == 'ran staff' || $kat == 'staff') ? $b2Staff : $b2Ops;
-                $h3 = ($kat == 'ran staff' || $kat == 'staff') ? $b3Staff : $b3Ops;
+                // Fallback global
+                $globalH1 = ($kat == 'ran staff' || $kat == 'staff') ? $b1Staff : $b1Ops;
+                $globalH2 = ($kat == 'ran staff' || $kat == 'staff') ? $b2Staff : $b2Ops;
+                $globalH3 = ($kat == 'ran staff' || $kat == 'staff') ? $b3Staff : $b3Ops;
+
+                // Cek override per kendaraan (H=7, L=11, P=15)
+                $h1Raw = str_replace(['x', ' ', '='], '', $row[7] ?? '');
+                $h2Raw = str_replace(['x', ' ', '='], '', $row[11] ?? '');
+                $h3Raw = str_replace(['x', ' ', '='], '', $row[15] ?? '');
+
+                $h1 = (is_numeric($h1Raw) && $h1Raw !== '') ? intval($h1Raw) : $globalH1;
+                $h2 = (is_numeric($h2Raw) && $h2Raw !== '') ? intval($h2Raw) : $globalH2;
+                $h3 = (is_numeric($h3Raw) && $h3Raw !== '') ? intval($h3Raw) : $globalH3;
 
                 $b1Total = round($lph1 * $h1);
                 $b2Total = round($lph2 * $h2);

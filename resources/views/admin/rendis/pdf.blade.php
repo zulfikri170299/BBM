@@ -76,13 +76,13 @@
                 <th colspan="3">{{ strtoupper($namaBulan[2]) }}</th>
             </tr>
             <tr>
-                <th>Indeks<br><span style="font-size:7px; font-weight:normal">(Liter x Hari)</span></th>
+                <th>Indeks<br><span style="font-size:8px; font-weight:normal">(Liter x Hari)</span></th>
                 <th style="color: #2563eb">Pertamax</th>
                 <th style="color: #059669">Pertamina Dex</th>
-                <th>Indeks<br><span style="font-size:7px; font-weight:normal">(Liter x Hari)</span></th>
+                <th>Indeks<br><span style="font-size:8px; font-weight:normal">(Liter x Hari)</span></th>
                 <th style="color: #2563eb">Pertamax</th>
                 <th style="color: #059669">Pertamina Dex</th>
-                <th>Indeks<br><span style="font-size:7px; font-weight:normal">(Liter x Hari)</span></th>
+                <th>Indeks<br><span style="font-size:8px; font-weight:normal">(Liter x Hari)</span></th>
                 <th style="color: #2563eb">Pertamax</th>
                 <th style="color: #059669">Pertamina Dex</th>
             </tr>

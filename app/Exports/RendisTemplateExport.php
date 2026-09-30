@@ -49,16 +49,16 @@ class RendisTemplateExport implements FromView, WithColumnWidths, WithStyles, Wi
             'D' => 28, // JENIS RANDIS
             'E' => 12, // NOPOL
             'F' => 15, // JENIS BBM
-            'G' => 9,  // Indeks B1 / Netto Ptx
-            'H' => 10, // Hari B1 / formula
-            'I' => 10, // Pertamax B1 / Netto Dex
-            'J' => 10, // Dex B1 / formula
-            'K' => 10,  // Indeks B2
-            'L' => 11,  // Hari B2
+            'G' => 6,  // Indeks B1
+            'H' => 7, // Hari B1
+            'I' => 10, // Pertamax B1
+            'J' => 10, // Dex B1
+            'K' => 6,  // Indeks B2
+            'L' => 7,  // Hari B2
             'M' => 11, // Pertamax B2
             'N' => 11, // Dex B2
-            'O' => 10,  // Indeks B3
-            'P' => 11,  // Hari B3
+            'O' => 6,  // Indeks B3
+            'P' => 7,  // Hari B3
             'Q' => 11, // Pertamax B3
             'R' => 11, // Dex B3
         ];
@@ -125,6 +125,11 @@ class RendisTemplateExport implements FromView, WithColumnWidths, WithStyles, Wi
                 $sheet->getStyle('B8')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_GENERAL);
                 $sheet->getStyle('E6:F8')->getNumberFormat()->setFormatCode('#,##0');
                 $sheet->getStyle('G12:R' . $highestRow)->getNumberFormat()->setFormatCode('#,##0');
+                
+                // Format kolom Hari agar menampilkan "x " di depan angka
+                $sheet->getStyle('H12:H' . $highestRow)->getNumberFormat()->setFormatCode('"x "#,##0');
+                $sheet->getStyle('L12:L' . $highestRow)->getNumberFormat()->setFormatCode('"x "#,##0');
+                $sheet->getStyle('P12:P' . $highestRow)->getNumberFormat()->setFormatCode('"x "#,##0');
 
                 // Instead of Worksheet Protection (which blocks row deletion),
                 // we use Data Validation to prevent typing in master data columns.
@@ -142,6 +147,23 @@ class RendisTemplateExport implements FromView, WithColumnWidths, WithStyles, Wi
                 $sheet->setDataValidation("D12:D{$highestRow}", clone $readOnlyValidation);
                 $sheet->setDataValidation("E12:E{$highestRow}", clone $readOnlyValidation);
                 $sheet->setDataValidation("F12:F{$highestRow}", clone $readOnlyValidation);
+
+                // Add Confirmation Warning for 'Hari' columns (H, L, P)
+                $hariValidation = new DataValidation();
+                $hariValidation->setType(DataValidation::TYPE_CUSTOM);
+                $hariValidation->setErrorStyle(DataValidation::STYLE_WARNING); // Warning allows user to proceed by clicking Yes
+                $hariValidation->setAllowBlank(true);
+                $hariValidation->setShowInputMessage(true);
+                $hariValidation->setShowErrorMessage(true);
+                $hariValidation->setPromptTitle('Edit Hari');
+                $hariValidation->setPrompt('Ketik angka baru untuk mengubah jumlah hari.\n(Untuk mengembalikan rumus otomatis, cukup Copy dari sel di atas/bawahnya)');
+                $hariValidation->setErrorTitle('Konfirmasi Perubahan');
+                $hariValidation->setError('Apakah Anda yakin ingin merubah jumlah hari untuk kendaraan ini?');
+                $hariValidation->setFormula1('FALSE'); // Always trigger the warning on edit
+
+                $sheet->setDataValidation("H12:H{$highestRow}", clone $hariValidation);
+                $sheet->setDataValidation("L12:L{$highestRow}", clone $hariValidation);
+                $sheet->setDataValidation("P12:P{$highestRow}", clone $hariValidation);
             },
         ];
     }
