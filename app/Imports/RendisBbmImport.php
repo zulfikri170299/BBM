@@ -28,29 +28,28 @@ class RendisBbmImport implements ToCollection
         }
 
         // Ambil data Umum dari baris yang ditentukan (indeks mulai 0)
-        // Row 3 (Index 2): Triwulan di B (1), Tahun di D (3)
+        // Row 3 (Index 2): Triwulan di B (1), Tahun di C (2)
+        // Row 3 (Index 2): Triwulan di B (1)
         $triwulan = trim($rows[2][1] ?? '');
-        $tahun = trim($rows[2][3] ?? '');
+        $tahun = date('Y');
 
-        // Row 4 (Index 3): Beli Ptx B (1), Beli Dex D (3), Susut F (5)
-        $pembelianPertamax = floatval($rows[3][1] ?? 0);
-        $pembelianDex = floatval($rows[3][3] ?? 0);
-        $susut = floatval($rows[3][5] ?? 1.5);
+        // Row 6 (Index 5): Beli Ptx B (1), Hari B1 Staff I (8), Ops J (9)
+        $pembelianPertamax = floatval($rows[5][1] ?? 0);
+        $b1Staff = intval($rows[5][8] ?? 0);
+        $b1Ops = intval($rows[5][9] ?? 0);
+        $b1Pim = 0; // Legacy
 
-        // Row 5 (Index 4): Hari B1 Ops C (2), Staff E (4), Pimpinan G (6)
-        $b1Ops = intval($rows[4][2] ?? 0);
-        $b1Staff = intval($rows[4][4] ?? 0);
-        $b1Pim = intval($rows[4][6] ?? 0);
+        // Row 7 (Index 6): Beli Dex B (1), Hari B2 Staff I (8), Ops J (9)
+        $pembelianDex = floatval($rows[6][1] ?? 0);
+        $b2Staff = intval($rows[6][8] ?? 0);
+        $b2Ops = intval($rows[6][9] ?? 0);
+        $b2Pim = 0;
 
-        // Row 6 (Index 5): Hari B2 Ops C (2), Staff E (4), Pimpinan G (6)
-        $b2Ops = intval($rows[5][2] ?? 0);
-        $b2Staff = intval($rows[5][4] ?? 0);
-        $b2Pim = intval($rows[5][6] ?? 0);
-
-        // Row 7 (Index 6): Hari B3 Ops C (2), Staff E (4), Pimpinan G (6)
-        $b3Ops = intval($rows[6][2] ?? 0);
-        $b3Staff = intval($rows[6][4] ?? 0);
-        $b3Pim = intval($rows[6][6] ?? 0);
+        // Row 8 (Index 7): Susut B (1), Hari B3 Staff I (8), Ops J (9)
+        $susut = floatval($rows[7][1] ?? 1.5);
+        $b3Staff = intval($rows[7][8] ?? 0);
+        $b3Ops = intval($rows[7][9] ?? 0);
+        $b3Pim = 0;
 
         if (!in_array($triwulan, ['TW I', 'TW II', 'TW III', 'TW IV'])) {
             throw new Exception("Triwulan tidak valid. Harus TW I / TW II / TW III / TW IV");
@@ -115,14 +114,14 @@ class RendisBbmImport implements ToCollection
             $now = now();
             $bulkData = [];
 
-            // Proses Kendaraan mulai dari Row 10 (Index 9)
+            // Proses Kendaraan mulai dari Row 12 (Index 11)
             // A=0: ID Kendaraan
             // G=6: LPH B1
-            // J=9: LPH B2
-            // M=12: LPH B3
+            // K=10: LPH B2
+            // O=14: LPH B3
             
             $kendaraanIds = [];
-            for ($i = 9; $i < count($rows); $i++) {
+            for ($i = 11; $i < count($rows); $i++) {
                 $row = $rows[$i];
                 $id = trim($row[0] ?? '');
                 if ($id && is_numeric($id)) {
@@ -131,7 +130,7 @@ class RendisBbmImport implements ToCollection
             }
             $kendaraansMap = Kendaraan::whereIn('id', $kendaraanIds)->get()->keyBy('id');
 
-            for ($i = 9; $i < count($rows); $i++) {
+            for ($i = 11; $i < count($rows); $i++) {
                 $row = $rows[$i];
                 $id = trim($row[0] ?? '');
                 if (!$id || !is_numeric($id)) continue;
@@ -145,12 +144,12 @@ class RendisBbmImport implements ToCollection
 
                 // Hitung total berdasar hari
                 $uraianExcel = trim($row[2] ?? '');
-                $uraianFinal = $uraianExcel ?: ($kendaraan->kategori_kendaraan ?? 'Operasional');
+                $uraianFinal = $uraianExcel ?: ($kendaraan->kategori_kendaraan ?? 'Ran Ops');
                 $kat = strtolower($uraianFinal);
                 
-                $h1 = $kat == 'pimpinan' ? $b1Pim : ($kat == 'staff' ? $b1Staff : $b1Ops);
-                $h2 = $kat == 'pimpinan' ? $b2Pim : ($kat == 'staff' ? $b2Staff : $b2Ops);
-                $h3 = $kat == 'pimpinan' ? $b3Pim : ($kat == 'staff' ? $b3Staff : $b3Ops);
+                $h1 = ($kat == 'ran staff' || $kat == 'staff') ? $b1Staff : $b1Ops;
+                $h2 = ($kat == 'ran staff' || $kat == 'staff') ? $b2Staff : $b2Ops;
+                $h3 = ($kat == 'ran staff' || $kat == 'staff') ? $b3Staff : $b3Ops;
 
                 $b1Total = round($lph1 * $h1);
                 $b2Total = round($lph2 * $h2);

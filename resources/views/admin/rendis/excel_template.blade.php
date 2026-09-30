@@ -1,61 +1,66 @@
 <table>
     <thead>
         <tr>
-            <th colspan="18" style="font-weight: bold; text-align: center; font-size: 14px;">TEMPLATE IMPORT RENDIS BBM</th>
+            <th colspan="18" style="font-weight: bold; text-align: center; font-size: 14px;">=CONCATENATE("RENDIS BBM ", B3, " TAHUN {{ date('Y') }}")</th>
         </tr>
         <tr><th colspan="18"></th></tr>
         <tr>
-            <th style="font-weight: bold;">Triwulan</th>
-            <th>TW I</th>
-            <th style="font-weight: bold;">Tahun</th>
-            <th>{{ date('Y') }}</th>
-            <th colspan="14"></th>
+            <th style="font-weight: bold; background-color: #ff0000;">Triwulan</th>
+            <th style="font-weight: bold; background-color: #ff0000;">TW I</th>
+            <th colspan="16"></th>
+        </tr>
+        <tr><th colspan="18"></th></tr>
+        <tr>
+            <th style="font-weight: bold; background-color: #d9d9d9;">Uraian</th>
+            <th style="font-weight: bold; background-color: #d9d9d9;">Jumlah</th>
+            <th></th>
+            <th style="font-weight: bold; background-color: #d9d9d9;">Uraian</th>
+            <th style="font-weight: bold; background-color: #d9d9d9;">Pertamax</th>
+            <th style="font-weight: bold; background-color: #d9d9d9;">P. Dex</th>
+            <th></th>
+            <th style="font-weight: bold; background-color: #d9d9d9;">Bulan</th>
+            <th style="font-weight: bold; background-color: #d9d9d9;">Ran Staff</th>
+            <th style="font-weight: bold; background-color: #d9d9d9;">Ran Ops</th>
+            <th colspan="8"></th>
         </tr>
         <tr>
-            <th style="font-weight: bold;">Pembelian Pertamax</th>
+            <th>Pembelian Pertamax</th>
             <th>0</th>
-            <th style="font-weight: bold;">Pembelian P. Dex</th>
+            <th></th>
+            <th style="color: #10b981;">Netto</th>
+            <th style="color: #10b981;">=B6-(B6*(B8/100))</th>
+            <th style="color: #10b981;">=B7-(B7*(B8/100))</th>
+            <th></th>
+            <th>=IF($B$3="TW I","Januari",IF($B$3="TW II","April",IF($B$3="TW III","Juli",IF($B$3="TW IV","Oktober","Bulan 1"))))</th>
+            <th>22</th>
+            <th>22</th>
+            <th colspan="8"></th>
+        </tr>
+        <tr>
+            <th>Pembelian P. Dex</th>
             <th>0</th>
-            <th style="font-weight: bold;">Susut (%)</th>
+            <th></th>
+            <th style="color: #f59e0b;">Total</th>
+            <th style="color: #f59e0b;">=SUBTOTAL(9, I12:I2000)+SUBTOTAL(9, M12:M2000)+SUBTOTAL(9, Q12:Q2000)</th>
+            <th style="color: #f59e0b;">=SUBTOTAL(9, J12:J2000)+SUBTOTAL(9, N12:N2000)+SUBTOTAL(9, R12:R2000)</th>
+            <th></th>
+            <th>=IF($B$3="TW I","Februari",IF($B$3="TW II","Mei",IF($B$3="TW III","Agustus",IF($B$3="TW IV","November","Bulan 2"))))</th>
+            <th>22</th>
+            <th>22</th>
+            <th colspan="8"></th>
+        </tr>
+        <tr>
+            <th>Susut (%)</th>
             <th>1.5</th>
-            <th colspan="2"></th>
-            <th style="font-weight: bold; text-align: center;">Uraian</th>
-            <th style="font-weight: bold; text-align: center;">Pertamax</th>
-            <th style="font-weight: bold; text-align: center;">Pertamina Dex</th>
-            <th colspan="7"></th>
-        </tr>
-        <tr>
-            <th style="font-weight: bold;">=IF($B$3="TW I","Januari",IF($B$3="TW II","April",IF($B$3="TW III","Juli",IF($B$3="TW IV","Oktober","Bulan 1"))))</th>
-            <th>Ops:</th><th>22</th>
-            <th>Staff:</th><th>22</th>
-            <th>Pimpinan:</th><th>30</th>
             <th></th>
-            <th style="font-weight: bold; color: #10b981; text-align: center;">Netto</th>
-            <th style="font-weight: bold; color: #10b981;">=B4-(B4*(F4/100))</th>
-            <th style="font-weight: bold; color: #10b981;">=D4-(D4*(F4/100))</th>
-            <th colspan="7"></th>
-        </tr>
-        <tr>
-            <th style="font-weight: bold;">=IF($B$3="TW I","Februari",IF($B$3="TW II","Mei",IF($B$3="TW III","Agustus",IF($B$3="TW IV","November","Bulan 2"))))</th>
-            <th>Ops:</th><th>22</th>
-            <th>Staff:</th><th>22</th>
-            <th>Pimpinan:</th><th>30</th>
+            <th style="color: #ef4444;">Sisa</th>
+            <th style="color: #ef4444;">=E6-E7</th>
+            <th style="color: #ef4444;">=F6-F7</th>
             <th></th>
-            <th style="font-weight: bold; color: #f59e0b; text-align: center;">Total</th>
-            <th style="font-weight: bold; color: #f59e0b;">=SUBTOTAL(9, I11:I2000)+SUBTOTAL(9, M11:M2000)+SUBTOTAL(9, Q11:Q2000)</th>
-            <th style="font-weight: bold; color: #f59e0b;">=SUBTOTAL(9, J11:J2000)+SUBTOTAL(9, N11:N2000)+SUBTOTAL(9, R11:R2000)</th>
-            <th colspan="7"></th>
-        </tr>
-        <tr>
-            <th style="font-weight: bold;">=IF($B$3="TW I","Maret",IF($B$3="TW II","Juni",IF($B$3="TW III","September",IF($B$3="TW IV","Desember","Bulan 3"))))</th>
-            <th>Ops:</th><th>22</th>
-            <th>Staff:</th><th>22</th>
-            <th>Pimpinan:</th><th>30</th>
-            <th></th>
-            <th style="font-weight: bold; color: #ef4444; text-align: center;">Sisa</th>
-            <th style="font-weight: bold; color: #ef4444;">=J5-J6</th>
-            <th style="font-weight: bold; color: #ef4444;">=K5-K6</th>
-            <th colspan="7"></th>
+            <th>=IF($B$3="TW I","Maret",IF($B$3="TW II","Juni",IF($B$3="TW III","September",IF($B$3="TW IV","Desember","Bulan 3"))))</th>
+            <th>22</th>
+            <th>22</th>
+            <th colspan="8"></th>
         </tr>
         <tr><th colspan="18"></th></tr>
         <tr>
@@ -90,7 +95,7 @@
             $currentSatker = null;
             $noSatker = 1;
             $roman = ['','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI','XVII','XVIII','XIX','XX','XXI','XXII','XXIII','XXIV','XXV'];
-            $rowIdx = 10; // First data row starts at 11
+            $rowIdx = 11; // First data row starts at 12
             $satkerSubtotalRows = []; // To store row indices of subtotals for grand total
         @endphp
         
@@ -114,36 +119,36 @@
                         $isDex = $jenisBbm === 'pertamina_dex';
                         
                         // Dynamic Hari cell formulas based on Uraian (Column C)
-                        $ifH1 = 'IF(C' . $rowIdx . '="Pimpinan", $G$5, IF(C' . $rowIdx . '="Staff", $E$5, $C$5))';
-                        $ifH2 = 'IF(C' . $rowIdx . '="Pimpinan", $G$6, IF(C' . $rowIdx . '="Staff", $E$6, $C$6))';
-                        $ifH3 = 'IF(C' . $rowIdx . '="Pimpinan", $G$7, IF(C' . $rowIdx . '="Staff", $E$7, $C$7))';
+                        $ifH1 = 'IF(C' . $rowIdx . '="Ran Staff", $I$6, $J$6)';
+                        $ifH2 = 'IF(C' . $rowIdx . '="Ran Staff", $I$7, $J$7)';
+                        $ifH3 = 'IF(C' . $rowIdx . '="Ran Staff", $I$8, $J$8)';
                         
                         $uraian = trim($k->kategori_kendaraan ?? '');
-                        if(empty($uraian)) $uraian = 'Operasional';
+                        if(empty($uraian)) $uraian = 'Ran Ops';
                     @endphp
                     <tr>
                         <td>{{ $k->id }}</td>
                         <td style="text-align: center;">{{ $noK++ }}</td>
-                        <td>{{ ucfirst(strtolower($uraian)) }}</td>
+                        <td>{{ ucwords(strtolower($uraian)) }}</td>
                         <td>{{ $k->jenis_kendaraan ?? '-' }}</td>
                         <td>{{ $k->no_polisi }}</td>
                         <td>{{ $k->jenis_bbm }}</td>
                         
                         {{-- B1 --}}
                         <td style="background-color: #e0f2fe;">0</td>
-                        <td style="color: #6b7280;">="x " &amp; {{ $ifH1 }}</td>
+                        <td style="color: #6b7280;">=CONCATENATE("x ", {{ $ifH1 }})</td>
                         <td>{{ $isPertamax ? '=G' . $rowIdx . '*' . $ifH1 : '0' }}</td>
                         <td>{{ $isDex ? '=G' . $rowIdx . '*' . $ifH1 : '0' }}</td>
 
                         {{-- B2 --}}
                         <td style="background-color: #e0f2fe;">0</td>
-                        <td style="color: #6b7280;">="x " &amp; {{ $ifH2 }}</td>
+                        <td style="color: #6b7280;">=CONCATENATE("x ", {{ $ifH2 }})</td>
                         <td>{{ $isPertamax ? '=K' . $rowIdx . '*' . $ifH2 : '0' }}</td>
                         <td>{{ $isDex ? '=K' . $rowIdx . '*' . $ifH2 : '0' }}</td>
 
                         {{-- B3 --}}
                         <td style="background-color: #e0f2fe;">0</td>
-                        <td style="color: #6b7280;">="x " &amp; {{ $ifH3 }}</td>
+                        <td style="color: #6b7280;">=CONCATENATE("x ", {{ $ifH3 }})</td>
                         <td>{{ $isPertamax ? '=O' . $rowIdx . '*' . $ifH3 : '0' }}</td>
                         <td>{{ $isDex ? '=O' . $rowIdx . '*' . $ifH3 : '0' }}</td>
                     </tr>
@@ -183,12 +188,12 @@
                 $subtotalsM[] = 'M'.$r; $subtotalsN[] = 'N'.$r;
                 $subtotalsQ[] = 'Q'.$r; $subtotalsR[] = 'R'.$r;
             }
-            $sumI = '=SUBTOTAL(9, I11:I'.($rowIdx-1).')';
-            $sumJ = '=SUBTOTAL(9, J11:J'.($rowIdx-1).')';
-            $sumM = '=SUBTOTAL(9, M11:M'.($rowIdx-1).')';
-            $sumN = '=SUBTOTAL(9, N11:N'.($rowIdx-1).')';
-            $sumQ = '=SUBTOTAL(9, Q11:Q'.($rowIdx-1).')';
-            $sumR = '=SUBTOTAL(9, R11:R'.($rowIdx-1).')';
+            $sumI = '=SUBTOTAL(9, I12:I'.($rowIdx-1).')';
+            $sumJ = '=SUBTOTAL(9, J12:J'.($rowIdx-1).')';
+            $sumM = '=SUBTOTAL(9, M12:M'.($rowIdx-1).')';
+            $sumN = '=SUBTOTAL(9, N12:N'.($rowIdx-1).')';
+            $sumQ = '=SUBTOTAL(9, Q12:Q'.($rowIdx-1).')';
+            $sumR = '=SUBTOTAL(9, R12:R'.($rowIdx-1).')';
         @endphp
         <tr>
             <td colspan="6" style="font-weight: bold; text-align: right; color: #ffffff; background-color: #111827;">GRAND TOTAL</td>

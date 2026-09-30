@@ -77,8 +77,8 @@ class RendisTemplateExport implements FromView, WithColumnWidths, WithStyles, Wi
             AfterSheet::class => function (AfterSheet $event) {
                 $sheet = $event->sheet->getDelegate();
                 
-                // Add dropdown for Uraian (Col C) from row 11 down to 500
-                $validation = $sheet->getCell('C11')->getDataValidation();
+                // Add dropdown for Uraian (Col C) from row 12 down to 500
+                $validation = $sheet->getCell('C12')->getDataValidation();
                 $validation->setType(DataValidation::TYPE_LIST);
                 $validation->setErrorStyle(DataValidation::STYLE_INFORMATION);
                 $validation->setAllowBlank(false);
@@ -88,12 +88,12 @@ class RendisTemplateExport implements FromView, WithColumnWidths, WithStyles, Wi
                 $validation->setErrorTitle('Input Error');
                 $validation->setError('Pilih kategori dari daftar yang tersedia.');
                 $validation->setPromptTitle('Pilih Kategori');
-                $validation->setPrompt('Silakan pilih Opsna, Pimpinan, atau Staff.');
+                $validation->setPrompt('Silakan pilih Ran Staff atau Ran Ops.');
                 // Define dropdown options
-                $validation->setFormula1('"Operasional,Pimpinan,Staff"');
+                $validation->setFormula1('"Ran Staff,Ran Ops"');
                 
                 // Apply the validation to a range
-                $sheet->setDataValidation('C11:C500', $validation);
+                $sheet->setDataValidation('C12:C500', $validation);
 
                 // Add dropdown for Triwulan (Col B, Row 3)
                 $validationTw = $sheet->getCell('B3')->getDataValidation();
@@ -109,21 +109,22 @@ class RendisTemplateExport implements FromView, WithColumnWidths, WithStyles, Wi
 
                 $highestRow = $sheet->getHighestRow();
 
-                // Group rows 1 to 7 so they can be collapsed to save space
-                for ($r = 1; $r <= 7; $r++) {
+                // Group rows 1 to 8 so they can be collapsed to save space
+                for ($r = 1; $r <= 8; $r++) {
                     $sheet->getRowDimension($r)->setOutlineLevel(1);
                     $sheet->getRowDimension($r)->setVisible(false);
                     $sheet->getRowDimension($r)->setCollapsed(true);
                 }
                 $sheet->setShowSummaryBelow(false);
 
-                // Freeze Panes (Header row 1-10)
-                $sheet->freezePane('A11');
+                // Freeze Panes (Header row 1-11)
+                $sheet->freezePane('A12');
 
                 // Set Number Format
-                $sheet->getStyle('B4:D4')->getNumberFormat()->setFormatCode('#,##0');
-                $sheet->getStyle('J5:L7')->getNumberFormat()->setFormatCode('#,##0');
-                $sheet->getStyle('G11:R' . $highestRow)->getNumberFormat()->setFormatCode('#,##0');
+                $sheet->getStyle('B6:B7')->getNumberFormat()->setFormatCode('#,##0');
+                $sheet->getStyle('B8')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_GENERAL);
+                $sheet->getStyle('E6:F8')->getNumberFormat()->setFormatCode('#,##0');
+                $sheet->getStyle('G12:R' . $highestRow)->getNumberFormat()->setFormatCode('#,##0');
 
                 // Instead of Worksheet Protection (which blocks row deletion),
                 // we use Data Validation to prevent typing in master data columns.
@@ -137,11 +138,10 @@ class RendisTemplateExport implements FromView, WithColumnWidths, WithStyles, Wi
                 $readOnlyValidation->setFormula1('FALSE'); // Nothing is valid to type
 
                 // Apply to ID, NO, JENIS RANDIS, NOPOL, JENIS BBM individually to ensure it applies to all columns
-                $sheet->setDataValidation("A11:A{$highestRow}", clone $readOnlyValidation);
-                $sheet->setDataValidation("B11:B{$highestRow}", clone $readOnlyValidation);
-                $sheet->setDataValidation("D11:D{$highestRow}", clone $readOnlyValidation);
-                $sheet->setDataValidation("E11:E{$highestRow}", clone $readOnlyValidation);
-                $sheet->setDataValidation("F11:F{$highestRow}", clone $readOnlyValidation);
+                $sheet->setDataValidation("A12:A{$highestRow}", clone $readOnlyValidation);
+                $sheet->setDataValidation("D12:D{$highestRow}", clone $readOnlyValidation);
+                $sheet->setDataValidation("E12:E{$highestRow}", clone $readOnlyValidation);
+                $sheet->setDataValidation("F12:F{$highestRow}", clone $readOnlyValidation);
             },
         ];
     }

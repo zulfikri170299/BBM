@@ -71,22 +71,16 @@
                     </thead>
                     <tbody>
                         <tr class="border-b border-gray-200 dark:border-gray-700">
-                            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">Operasional</td>
-                            <td class="px-4 py-2"><input type="number" name="bulan1_hari_operasional" id="b1_op" value="{{ $rendisBbm->bulan1_hari_operasional }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
-                            <td class="px-4 py-2"><input type="number" name="bulan2_hari_operasional" id="b2_op" value="{{ $rendisBbm->bulan2_hari_operasional }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
-                            <td class="px-4 py-2"><input type="number" name="bulan3_hari_operasional" id="b3_op" value="{{ $rendisBbm->bulan3_hari_operasional }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
-                        </tr>
-                        <tr class="border-b border-gray-200 dark:border-gray-700">
-                            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">Staff</td>
+                            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">Ran Staff</td>
                             <td class="px-4 py-2"><input type="number" name="bulan1_hari_staff" id="b1_st" value="{{ $rendisBbm->bulan1_hari_staff }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
                             <td class="px-4 py-2"><input type="number" name="bulan2_hari_staff" id="b2_st" value="{{ $rendisBbm->bulan2_hari_staff }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
                             <td class="px-4 py-2"><input type="number" name="bulan3_hari_staff" id="b3_st" value="{{ $rendisBbm->bulan3_hari_staff }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
                         </tr>
-                        <tr>
-                            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">Pimpinan</td>
-                            <td class="px-4 py-2"><input type="number" name="bulan1_hari_pimpinan" id="b1_pi" value="{{ $rendisBbm->bulan1_hari_pimpinan }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
-                            <td class="px-4 py-2"><input type="number" name="bulan2_hari_pimpinan" id="b2_pi" value="{{ $rendisBbm->bulan2_hari_pimpinan }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
-                            <td class="px-4 py-2"><input type="number" name="bulan3_hari_pimpinan" id="b3_pi" value="{{ $rendisBbm->bulan3_hari_pimpinan }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
+                        <tr class="border-b border-gray-200 dark:border-gray-700">
+                            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">Ran Ops</td>
+                            <td class="px-4 py-2"><input type="number" name="bulan1_hari_operasional" id="b1_op" value="{{ $rendisBbm->bulan1_hari_operasional }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
+                            <td class="px-4 py-2"><input type="number" name="bulan2_hari_operasional" id="b2_op" value="{{ $rendisBbm->bulan2_hari_operasional }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
+                            <td class="px-4 py-2"><input type="number" name="bulan3_hari_operasional" id="b3_op" value="{{ $rendisBbm->bulan3_hari_operasional }}" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white hari-input"></td>
                         </tr>
                     
                       </tbody>
@@ -162,9 +156,8 @@
                             <td class="px-3 py-1 text-center border border-gray-200 dark:border-gray-700">{{ $idx + 1 }}</td>
                             <td class="px-1 py-1 border border-gray-200 dark:border-gray-700">
                                 <select name="kendaraan[{{ $k->id }}][uraian]" class="w-full text-xs p-1 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white dark:border-gray-600 dark:bg-gray-700 dark:text-white input-uraian">
-                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Opsnal" {{ $currentUraian == 'opsnal' || $currentUraian == 'operasional' ? 'selected' : '' }}>Opsnal</option>
-                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Staff" {{ $currentUraian == 'staff' ? 'selected' : '' }}>Staff</option>
-                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Pimpinan" {{ $currentUraian == 'pimpinan' ? 'selected' : '' }}>Pimpinan</option>
+                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Ran Staff" {{ $currentUraian == 'ran staff' || $currentUraian == 'staff' ? 'selected' : '' }}>Ran Staff</option>
+                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Ran Ops" {{ $currentUraian == 'ran ops' || $currentUraian == 'opsnal' || $currentUraian == 'operasional' ? 'selected' : '' }}>Ran Ops</option>
                                 </select>
                             </td>
                             <td class="px-3 py-1 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 whitespace-nowrap">{{ $k->jenis_kendaraan ?? '-' }}</td>
@@ -337,7 +330,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // === HARI KERJA CONFIG ===
     function getHari(bulan, kategori) {
-        const id = 'b' + bulan + '_' + (kategori === 'pimpinan' ? 'pi' : (kategori === 'staff' ? 'st' : 'op'));
+        const k = kategori.toLowerCase();
+        const id = 'b' + bulan + '_' + ((k === 'ran staff' || k === 'staff') ? 'st' : 'op');
         const el = document.getElementById(id);
         return el ? (parseInt(el.value) || 0) : 0;
     }

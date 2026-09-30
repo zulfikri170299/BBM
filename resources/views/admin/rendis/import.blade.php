@@ -39,8 +39,8 @@
                             file:mr-4 file:py-2 file:px-4
                             file:rounded-lg file:border-0
                             file:text-sm file:font-semibold
-                            file:bg-brand-primary file:text-white
-                            hover:file:bg-brand-secondary
+                            file:bg-red-600 file:text-white
+                            hover:file:bg-red-700
                             border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700">
                         @error('file_excel')
                             <p class="mt-1 text-sm text-rose-500">{{ $message }}</p>

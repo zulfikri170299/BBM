@@ -62,22 +62,16 @@
                     </thead>
                     <tbody>
                         <tr class="border-b border-gray-200 dark:border-gray-700">
-                            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">Operasional</td>
-                            <td class="px-4 py-2"><input type="number" name="bulan1_hari_operasional" x-model.number="hari.b1_op" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary"></td>
-                            <td class="px-4 py-2"><input type="number" name="bulan2_hari_operasional" x-model.number="hari.b2_op" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary"></td>
-                            <td class="px-4 py-2"><input type="number" name="bulan3_hari_operasional" x-model.number="hari.b3_op" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary"></td>
-                        </tr>
-                        <tr class="border-b border-gray-200 dark:border-gray-700">
-                            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">Staff</td>
+                            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">Ran Staff</td>
                             <td class="px-4 py-2"><input type="number" name="bulan1_hari_staff" x-model.number="hari.b1_st" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary"></td>
                             <td class="px-4 py-2"><input type="number" name="bulan2_hari_staff" x-model.number="hari.b2_st" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary"></td>
                             <td class="px-4 py-2"><input type="number" name="bulan3_hari_staff" x-model.number="hari.b3_st" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary"></td>
                         </tr>
-                        <tr>
-                            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">Pimpinan</td>
-                            <td class="px-4 py-2"><input type="number" name="bulan1_hari_pimpinan" x-model.number="hari.b1_pi" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary"></td>
-                            <td class="px-4 py-2"><input type="number" name="bulan2_hari_pimpinan" x-model.number="hari.b2_pi" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary"></td>
-                            <td class="px-4 py-2"><input type="number" name="bulan3_hari_pimpinan" x-model.number="hari.b3_pi" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary"></td>
+                        <tr class="border-b border-gray-200 dark:border-gray-700">
+                            <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">Ran Ops</td>
+                            <td class="px-4 py-2"><input type="number" name="bulan1_hari_operasional" x-model.number="hari.b1_op" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary"></td>
+                            <td class="px-4 py-2"><input type="number" name="bulan2_hari_operasional" x-model.number="hari.b2_op" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary"></td>
+                            <td class="px-4 py-2"><input type="number" name="bulan3_hari_operasional" x-model.number="hari.b3_op" min="0" class="w-full text-center px-3 py-2 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-brand-primary focus:ring-brand-primary"></td>
                         </tr>
                     
                       </tbody>
@@ -149,11 +143,10 @@
                             </td>
                             <td class="px-3 py-1 text-center text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700">{{ $idx + 1 }}</td>
                             <td class="px-1 py-1 border border-gray-200 dark:border-gray-700">
-                                @php $currentUraian = $k->kategori_kendaraan ?? 'Operasional'; @endphp
+                                @php $currentUraian = $k->kategori_kendaraan ?? 'Ran Ops'; @endphp
                                 <select name="kendaraan[{{ $k->id }}][uraian]" class="w-full text-xs p-1 rounded border-gray-300 dark:border-gray-600 bg-white text-gray-900 dark:text-white dark:border-gray-600 dark:bg-gray-700 dark:text-white input-uraian">
-                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Opsnal" {{ $currentUraian == 'Opsnal' || $currentUraian == 'Operasional' ? 'selected' : '' }}>Opsnal</option>
-                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Staff" {{ $currentUraian == 'Staff' ? 'selected' : '' }}>Staff</option>
-                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Pimpinan" {{ $currentUraian == 'Pimpinan' ? 'selected' : '' }}>Pimpinan</option>
+                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Ran Staff" {{ $currentUraian == 'Ran Staff' || $currentUraian == 'Staff' ? 'selected' : '' }}>Ran Staff</option>
+                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Ran Ops" {{ $currentUraian == 'Ran Ops' || $currentUraian == 'Opsnal' || $currentUraian == 'Operasional' ? 'selected' : '' }}>Ran Ops</option>
                                 </select>
                             </td>
                             <td class="px-3 py-1 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 whitespace-nowrap">{{ $k->jenis_kendaraan ?? '-' }}</td>
@@ -330,17 +323,17 @@ function rendisForm() {
         satkerRows: {}, // Cache baris tr per satker untuk performa maksimal
         calcTimeout: null,
         hari: {
-            b1_op: 23, b1_st: 23, b1_pi: 31,
-            b2_op: 19, b2_st: 19, b2_pi: 31,
-            b3_op: 22, b3_st: 22, b3_pi: 30,
+            b1_st: 23, b1_op: 23,
+            b2_st: 19, b2_op: 19,
+            b3_st: 22, b3_op: 22,
         },
         get namaBulan() { return twMap[this.triwulan] || ['Bulan 1', 'Bulan 2', 'Bulan 3']; },
         getHari(bulan, kategori) {
             const h = this.hari;
-            const k = kategori;
-            if (bulan === 1) return k === 'pimpinan' ? h.b1_pi : (k === 'staff' ? h.b1_st : h.b1_op);
-            if (bulan === 2) return k === 'pimpinan' ? h.b2_pi : (k === 'staff' ? h.b2_st : h.b2_op);
-            return k === 'pimpinan' ? h.b3_pi : (k === 'staff' ? h.b3_st : h.b3_op);
+            const k = kategori.toLowerCase();
+            if (bulan === 1) return (k === 'ran staff' || k === 'staff') ? h.b1_st : h.b1_op;
+            if (bulan === 2) return (k === 'ran staff' || k === 'staff') ? h.b2_st : h.b2_op;
+            return (k === 'ran staff' || k === 'staff') ? h.b3_st : h.b3_op;
         },
         init() {
             const self = this;

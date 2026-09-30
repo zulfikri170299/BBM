@@ -37,13 +37,10 @@ class RendisController extends Controller
             'susut_persen' => 'nullable|numeric|min:0|max:100',
             'bulan1_hari_operasional' => 'required|integer|min:0',
             'bulan1_hari_staff' => 'required|integer|min:0',
-            'bulan1_hari_pimpinan' => 'required|integer|min:0',
             'bulan2_hari_operasional' => 'required|integer|min:0',
             'bulan2_hari_staff' => 'required|integer|min:0',
-            'bulan2_hari_pimpinan' => 'required|integer|min:0',
             'bulan3_hari_operasional' => 'required|integer|min:0',
             'bulan3_hari_staff' => 'required|integer|min:0',
-            'bulan3_hari_pimpinan' => 'required|integer|min:0',
             'kendaraan' => 'required|array',
         ]);
 
@@ -57,13 +54,13 @@ class RendisController extends Controller
                 'susut_persen' => $request->susut_persen ?? 1.5,
                 'bulan1_hari_operasional' => $request->bulan1_hari_operasional,
                 'bulan1_hari_staff' => $request->bulan1_hari_staff,
-                'bulan1_hari_pimpinan' => $request->bulan1_hari_pimpinan,
+                'bulan1_hari_pimpinan' => 0,
                 'bulan2_hari_operasional' => $request->bulan2_hari_operasional,
                 'bulan2_hari_staff' => $request->bulan2_hari_staff,
-                'bulan2_hari_pimpinan' => $request->bulan2_hari_pimpinan,
+                'bulan2_hari_pimpinan' => 0,
                 'bulan3_hari_operasional' => $request->bulan3_hari_operasional,
                 'bulan3_hari_staff' => $request->bulan3_hari_staff,
-                'bulan3_hari_pimpinan' => $request->bulan3_hari_pimpinan,
+                'bulan3_hari_pimpinan' => 0,
             ]);
 
             // Bulk preload semua kendaraan sekaligus (1 query, bukan 266 query)
@@ -89,7 +86,7 @@ class RendisController extends Controller
                 $bulkData[] = [
                     'rendis_bbm_id' => $rendis->id,
                     'kendaraan_id' => $kId,
-                    'uraian' => $data['uraian'] ?? $kendaraan->kategori_kendaraan ?? 'Operasional',
+                    'uraian' => $data['uraian'] ?? $kendaraan->kategori_kendaraan ?? 'Ran Ops',
                     'liter_per_hari' => $literPerHari,
                     'liter_per_hari_b2' => $literPerHariB2,
                     'liter_per_hari_b3' => $literPerHariB3,
@@ -175,13 +172,13 @@ class RendisController extends Controller
                 'susut_persen' => $request->susut_persen ?? 1.5,
                 'bulan1_hari_operasional' => $request->bulan1_hari_operasional,
                 'bulan1_hari_staff' => $request->bulan1_hari_staff,
-                'bulan1_hari_pimpinan' => $request->bulan1_hari_pimpinan,
+                'bulan1_hari_pimpinan' => 0,
                 'bulan2_hari_operasional' => $request->bulan2_hari_operasional,
                 'bulan2_hari_staff' => $request->bulan2_hari_staff,
-                'bulan2_hari_pimpinan' => $request->bulan2_hari_pimpinan,
+                'bulan2_hari_pimpinan' => 0,
                 'bulan3_hari_operasional' => $request->bulan3_hari_operasional,
                 'bulan3_hari_staff' => $request->bulan3_hari_staff,
-                'bulan3_hari_pimpinan' => $request->bulan3_hari_pimpinan,
+                'bulan3_hari_pimpinan' => 0,
             ]);
 
             $rendisBbm->rendisKendaraans()->delete();
@@ -209,7 +206,7 @@ class RendisController extends Controller
                 $bulkData[] = [
                     'rendis_bbm_id' => $rendisBbm->id,
                     'kendaraan_id' => $kId,
-                    'uraian' => $data['uraian'] ?? $kendaraan->kategori_kendaraan ?? 'Operasional',
+                    'uraian' => $data['uraian'] ?? $kendaraan->kategori_kendaraan ?? 'Ran Ops',
                     'liter_per_hari' => $literPerHari,
                     'liter_per_hari_b2' => $literPerHariB2,
                     'liter_per_hari_b3' => $literPerHariB3,
