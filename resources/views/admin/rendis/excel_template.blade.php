@@ -140,13 +140,13 @@
                         <td>{{ $isDex ? '=G' . $rowIdx . '*H' . $rowIdx : '0' }}</td>
 
                         {{-- B2 --}}
-                        <td style="background-color: #e0f2fe;">0</td>
+                        <td style="background-color: #e0f2fe;">=G{{ $rowIdx }}</td>
                         <td style="color: #6b7280; text-align: left;">={{ $ifH2 }}</td>
                         <td>{{ $isPertamax ? '=K' . $rowIdx . '*L' . $rowIdx : '0' }}</td>
                         <td>{{ $isDex ? '=K' . $rowIdx . '*L' . $rowIdx : '0' }}</td>
 
                         {{-- B3 --}}
-                        <td style="background-color: #e0f2fe;">0</td>
+                        <td style="background-color: #e0f2fe;">=G{{ $rowIdx }}</td>
                         <td style="color: #6b7280; text-align: left;">={{ $ifH3 }}</td>
                         <td>{{ $isPertamax ? '=O' . $rowIdx . '*P' . $rowIdx : '0' }}</td>
                         <td>{{ $isDex ? '=O' . $rowIdx . '*P' . $rowIdx : '0' }}</td>
