@@ -123,8 +123,7 @@
                         $ifH2 = 'IF(C' . $rowIdx . '="Ran Staff", $I$7, $J$7)';
                         $ifH3 = 'IF(C' . $rowIdx . '="Ran Staff", $I$8, $J$8)';
                         
-                        $uraian = trim($k->kategori_kendaraan ?? '');
-                        if(empty($uraian)) $uraian = 'Ran Ops';
+                        $uraian = 'Ran Staff';
                     @endphp
                     <tr>
                         <td>{{ $k->id }}</td>
