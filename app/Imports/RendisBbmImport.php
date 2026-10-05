@@ -8,10 +8,11 @@ use App\Models\RendisKendaraan;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 use Exception;
 use App\Exceptions\ImportConflictException;
 
-class RendisBbmImport implements ToCollection
+class RendisBbmImport implements ToCollection, WithCalculatedFormulas
 {
     protected $actionType;
 
