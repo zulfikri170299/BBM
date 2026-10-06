@@ -739,7 +739,10 @@ class KendaraanController extends Controller
                 ->where('tipe', 'keluar')
                 ->whereBetween('created_at', [$startUtc, $endUtc])
                 ->get();
-            $topupKeluar = $topupKeluarAll->whereNotIn('metode', ['potong_saldo_hangus', 'POTONG_SALDO_MASAL_HANGUS'])->sum('jumlah');
+            $topupKeluar = $topupKeluarAll->whereNotIn('metode', ['potong_saldo_hangus', 'POTONG_SALDO_MASAL_HANGUS'])
+                ->filter(function($item) {
+                    return strpos($item->keterangan, 'Pelunasan bon hutang') === false;
+                })->sum('jumlah');
             $hangusKeluar = $topupKeluarAll->whereIn('metode', ['potong_saldo_hangus', 'POTONG_SALDO_MASAL_HANGUS'])->sum('jumlah');
 
             $topupBulanIni = $topupMasuk; // Hanya saldo MASUK yang dihitung sebagai Top Up di laporan
@@ -755,6 +758,9 @@ class KendaraanController extends Controller
                 ->where('kendaraan_id', $kendaraan->id)
                 ->where('tipe', 'keluar')
                 ->where('created_at', '<=', $prevMonthEndUtc)
+                ->where(function($q) {
+                    $q->whereNull('keterangan')->orWhere('keterangan', 'not like', 'Pelunasan bon hutang%');
+                })
                 ->sum('jumlah');
             
             $totalTopupSampaiSebelumnya = $totalTopupSampaiSebelumnyaMasuk - $totalTopupSampaiSebelumnyaKeluar;
@@ -793,20 +799,6 @@ class KendaraanController extends Controller
 
             // Sisa BBM bulan lalu = (total top up masuk + total TM) - (total top up keluar + total pemakaian + total hutang + total transfer keluar)
             $sisaBulanLalu = ($totalTopupSampaiSebelumnyaMasuk + $totalTmSampaiSebelumnya) - ($totalTopupSampaiSebelumnyaKeluar + $totalPemakaianSampaiSebelumnya + $totalHutangSampaiSebelumnya + $totalTransferKeluarSebelumnya);
-
-            // Jika sisa bulan lalu minus (karena hutang), cek apakah hutang bulan lalu sudah dibayar di bulan ini
-            // Jika sudah dibayar, kurangi nilai minus tersebut sesuai jumlah yang dibayar
-            if ($sisaBulanLalu < 0) {
-                $hutangDibayarBulanIni = \App\Models\Hutang::where('satker_id', $satkerId)
-                    ->where('nopol', $kendaraan->no_polisi)
-                    ->where('jenis_bbm', $kendaraan->jenis_bbm)
-                    ->where('tanggal_bon', '<', $startDateWita->format('Y-m-d'))
-                    ->where('status', 'sudah_dibayar')
-                    ->whereBetween('tanggal_bayar', [$startUtc, $endUtc])
-                    ->sum('jumlah_bon');
-                
-                $sisaBulanLalu += $hutangDibayarBulanIni;
-            }
 
             // Transfer Masuk (TM) bulan ini
             $tmBulanIni1 = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)

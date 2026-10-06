@@ -23,7 +23,7 @@
             this.kendaraanSearch = '';
         },
         // Target Type
-        tipeTujuan: 'personel',
+        tipeTujuan: '{{ (\App\Models\Setting::where("key", "personel_access_control")->value("value") ?? "1") == "1" ? "personel" : "kendaraan" }}',
         // Searchable Personel
         personelSearch: '',
         personelOpen: false,
@@ -638,20 +638,20 @@
                             </div>
 
                             <!-- Tipe Tujuan Selector -->
+                            @if($personelAccessControl == '1')
                             <div class="p-1 bg-slate-50 dark:bg-slate-800 rounded-xl flex">
-                                @if($personelAccessControl == '1')
                                 <button type="button" @click="tipeTujuan = 'personel'"
                                     class="flex-1 px-4 py-2 text-xs font-bold rounded-lg transition-all"
                                     :class="tipeTujuan === 'personel' ? 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 text-emerald-600 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:text-slate-300'">
                                     Ke Personel
                                 </button>
-                                @endif
                                 <button type="button" @click="tipeTujuan = 'kendaraan'"
                                     class="flex-1 px-4 py-2 text-xs font-bold rounded-lg transition-all"
                                     :class="tipeTujuan === 'kendaraan' ? 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 text-emerald-600 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:text-slate-300'">
                                     Antar Kendaraan
                                 </button>
                             </div>
+                            @endif
 
                             <input type="hidden" name="tipe_tujuan" :value="tipeTujuan">
 
