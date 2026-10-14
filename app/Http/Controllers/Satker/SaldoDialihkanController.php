@@ -23,13 +23,27 @@ class SaldoDialihkanController extends Controller
                 $request->start_date . ' 00:00:00',
                 $request->end_date . ' 23:59:59'
             ]);
+        } elseif ($request->filled('start_date')) {
+            $query->where('created_at', '>=', $request->start_date . ' 00:00:00');
+        } elseif ($request->filled('end_date')) {
+            $query->where('created_at', '<=', $request->end_date . ' 23:59:59');
         }
+
+        $summary = (clone $query)->reorder()
+            ->selectRaw('jenis_bbm, SUM(jumlah) as total')
+            ->groupBy('jenis_bbm')
+            ->pluck('total', 'jenis_bbm');
         
         $query->latest();
 
-        $riwayat = $query->paginate(20)->withQueryString();
+        $perPage = (int) $request->input('per_page', 15);
+        if (!in_array($perPage, [10, 15, 25, 50, 100])) {
+            $perPage = 15;
+        }
 
-        return view('satker.saldo_dialihkan.index', compact('riwayat'));
+        $riwayat = $query->paginate($perPage)->withQueryString();
+
+        return view('satker.saldo_dialihkan.index', compact('riwayat', 'summary'));
     }
 
     public function print(Request $request)

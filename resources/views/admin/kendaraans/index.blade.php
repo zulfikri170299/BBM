@@ -13,7 +13,7 @@
             <div class="flex flex-wrap items-center gap-2 sm:gap-3">
                 @if(auth()->user()->role === 'super_admin')
                     <button @click="$dispatch('open-import-kendaraan')"
-                        class="inline-flex items-center justify-center w-10 h-10 bg-white border border-slate-200 dark:border-white/10 text-violet-600 dark:text-violet-400 rounded-xl hover:bg-white dark:bg-slate-700 hover:text-violet-300 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
+                        class="inline-flex items-center justify-center w-10 h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-violet-600 dark:text-violet-400 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
                         title="Import Data Kendaraan">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -21,11 +21,11 @@
                             </path>
                         </svg>
                         <span
-                            class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-white dark:bg-slate-800 text-slate-800 dark:text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Import
+                            class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-[11px] font-semibold rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-20">Import
                             Data Kendaraan</span>
                     </button>
                     <button @click="$dispatch('open-import')"
-                        class="inline-flex items-center justify-center w-10 h-10 bg-white border border-slate-200 dark:border-white/10 text-blue-600 dark:text-blue-400 rounded-xl hover:bg-white dark:bg-slate-700 hover:text-blue-300 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
+                        class="inline-flex items-center justify-center w-10 h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-blue-600 dark:text-blue-400 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
                         title="Import Top Up">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -33,59 +33,55 @@
                             </path>
                         </svg>
                         <span
-                            class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-white dark:bg-slate-800 text-slate-800 dark:text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Import
+                            class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-[11px] font-semibold rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-20">Import
                             Top Up</span>
                     </button>
                     <button @click="$dispatch('open-topup-select')"
-                        class="inline-flex items-center justify-center w-10 h-10 bg-white border border-slate-200 dark:border-white/10 text-emerald-600 dark:text-emerald-400 rounded-xl hover:bg-white dark:bg-slate-700 hover:text-emerald-300 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
+                        class="inline-flex items-center justify-center w-10 h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-emerald-600 dark:text-emerald-400 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
                         title="Top Up Saldo">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a1 1 0 11-2 0 1 1 0 012 0z">
                             </path>
                         </svg>
-                        <!-- Tooltip -->
                         <span
-                            class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-white dark:bg-slate-800 text-slate-800 dark:text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Top
+                            class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-[11px] font-semibold rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-20">Top
                             Up Saldo</span>
                     </button>
                 @endif
                 <a href="{{ route('admin.kendaraans.export', ['satker_id' => request('satker_id')]) }}" target="_blank"
                     rel="nofollow"
-                    class="inline-flex items-center justify-center w-10 h-10 bg-white border border-slate-200 dark:border-white/10 text-amber-600 dark:text-amber-400 rounded-xl hover:bg-white dark:bg-slate-700 hover:text-amber-300 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
+                    class="inline-flex items-center justify-center w-10 h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-amber-600 dark:text-amber-400 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
                     title="Export Excel">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                     </svg>
-                    <!-- Tooltip -->
                     <span
-                        class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-white dark:bg-slate-800 text-slate-800 dark:text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Export
+                        class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-[11px] font-semibold rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-20">Export
                         Excel</span>
                 </a>
                 <button @click="$dispatch('open-monthly-report')"
-                    class="inline-flex items-center justify-center w-10 h-10 bg-white border border-slate-200 dark:border-white/10 text-rose-600 dark:text-rose-400 rounded-xl hover:bg-white dark:bg-slate-700 hover:text-rose-300 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
+                    class="inline-flex items-center justify-center w-10 h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-rose-600 dark:text-rose-400 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
                     title="Laporan Bulanan">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                         </path>
                     </svg>
-                    <!-- Tooltip -->
                     <span
-                        class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-white dark:bg-slate-800 text-slate-800 dark:text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Laporan
+                        class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-[11px] font-semibold rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-20">Laporan
                         Bulanan Satker</span>
                 </button>
                 @if(auth()->user()->role !== 'kasubbag')
                     <a href="{{ route('admin.kendaraans.create') }}"
-                        class="flex-1 lg:flex-none inline-flex items-center justify-center w-10 h-10 bg-indigo-500/20 border border-indigo-500/30 text-indigo-600 dark:text-indigo-300 rounded-xl hover:bg-indigo-500/30 hover:text-indigo-200 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
+                        class="inline-flex items-center justify-center w-10 h-10 bg-brand-primary hover:bg-brand-primary/90 text-white rounded-xl shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
                         title="Tambah Kendaraan">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                         </svg>
-                        <!-- Tooltip -->
                         <span
-                            class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-white dark:bg-slate-800 text-slate-800 dark:text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">Tambah
+                            class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-[11px] font-semibold rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-20">Tambah
                             Kendaraan</span>
                     </a>
                 @endif
@@ -93,8 +89,8 @@
                 <!-- Filter Satker (Icon-only) -->
                 <div x-data="{ open: false }" class="relative">
                     <button @click="open = !open"
-                        class="inline-flex items-center justify-center w-10 h-10 bg-white border-2 border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 rounded-xl hover:bg-slate-50 dark:bg-slate-800/50 hover:border-indigo-500 hover:text-indigo-600 shadow-sm transition-all duration-200 group relative"
-                        :class="{ 'border-indigo-500 text-indigo-600 ring-4 ring-indigo-500/10': open || '{{ request('satker_id') }}' != '' }"
+                        class="inline-flex items-center justify-center w-10 h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 shadow-sm transition-all duration-200 group relative"
+                        :class="{ 'border-brand-primary text-brand-primary ring-2 ring-brand-primary/20': open || '{{ request('satker_id') }}' != '' }"
                         title="Filter Satker">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -103,12 +99,11 @@
                         </svg>
 
                         @if(request('satker_id'))
-                            <span class="absolute top-2 right-2 w-2 h-2 bg-indigo-600 rounded-full border-2 border-white"></span>
+                            <span class="absolute top-2 right-2 w-2 h-2 bg-brand-primary rounded-full ring-2 ring-white dark:ring-slate-900"></span>
                         @endif
 
-                        <!-- Tooltip -->
                         <span
-                            class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-white dark:bg-slate-800 text-slate-800 dark:text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
+                            class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-[11px] font-semibold rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-20">
                             Filter Satker {{ request('satker_id') ? '(Aktif)' : '' }}
                         </span>
                     </button>
@@ -142,11 +137,11 @@
 
         <!-- Table Card -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
-            <!-- Table Header Info -->
-            <div class="bg-white dark:bg-slate-900 dark:text-white hidden sm:flex px-4 sm:px-6 py-4 border-b border-slate-200 dark:border-white/5 items-center justify-between">
+            <!-- Table Header Info & Bulk Actions -->
+            <div class="px-4 sm:px-6 py-4 border-b border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div class="flex items-center gap-3">
-                    <div class="p-2 bg-blue-100 text-blue-600 rounded-lg">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="p-2.5 bg-brand-primary/10 text-brand-primary dark:bg-white/10 dark:text-white rounded-xl">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -155,21 +150,20 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="font-semibold text-slate-800 dark:text-slate-200">Daftar Kendaraan</h3>
-                        <p class="text-xs text-slate-600 dark:text-slate-400">{{ $kendaraans->total() }} kendaraan dari seluruh satker</p>
+                        <h2 class="text-base sm:text-lg font-black text-slate-800 dark:text-white">Daftar Kendaraan</h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ number_format($kendaraans->total()) }} kendaraan dari seluruh satker</p>
                     </div>
                 </div>
 
                 <!-- Bulk Actions -->
                 @if(auth()->user()->role !== 'kasubbag')
-                    <div id="bulkActions" class="hidden flex items-center gap-3">
-                        <span
-                            class="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100">
-                            <span id="selectedCount">0</span> DIPILIH
+                    <div id="bulkActions" class="hidden items-center gap-2.5 animate-fade-in">
+                        <span class="text-xs font-bold text-slate-600 dark:text-slate-400">
+                            <span id="selectedCount" class="text-brand-primary font-black">0</span> dipilih:
                         </span>
                         <button type="button" id="bulkDeleteBtn"
-                            class="px-3 py-1.5 bg-rose-600 text-white rounded-lg text-xs font-bold hover:bg-rose-700 transition shadow-sm">
-                            <svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            class="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl shadow-sm flex items-center gap-1.5 transition">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
                                 </path>
@@ -187,182 +181,171 @@
                 </form>
             @endif
 
+            <!-- Filter & Controls Toolbar -->
+            <div class="p-3.5 sm:p-4 bg-slate-50/50 dark:bg-slate-800/30 border-b border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                <form action="{{ route('admin.kendaraans.index') }}" method="GET" class="flex flex-wrap items-center gap-2.5 flex-1">
+                    @if(request('satker_id'))
+                        <input type="hidden" name="satker_id" value="{{ request('satker_id') }}">
+                    @endif
+
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Tampilkan:</span>
+                        <x-per-page :current="request('per_page', 15)" />
+                    </div>
+
+                    <div class="relative flex-1 min-w-[200px] max-w-sm">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </span>
+                        <input type="text" name="search" value="{{ request('search') }}"
+                            placeholder="Cari nopol, jenis kendaraan..."
+                            class="w-full pl-9 pr-9 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl text-xs font-medium text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all">
+                        @if(request('search'))
+                            <a href="{{ route('admin.kendaraans.index', array_merge(request()->except('search', 'page'))) }}"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-rose-500 transition-colors" title="Hapus pencarian">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                            </a>
+                        @endif
+                    </div>
+
+                    @if(request('search') || request('satker_id'))
+                        <a href="{{ route('admin.kendaraans.index') }}"
+                            class="py-2 px-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-semibold rounded-xl transition flex items-center gap-1.5 shrink-0"
+                            title="Reset Semua Filter">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                            <span>Reset</span>
+                        </a>
+                    @endif
+                </form>
+
+                <div class="text-[11px] font-bold text-slate-500 dark:text-slate-400 self-end sm:self-auto shrink-0">
+                    Menampilkan <span class="text-slate-800 dark:text-white font-extrabold">{{ $kendaraans->firstItem() ?? 0 }}-{{ $kendaraans->lastItem() ?? 0 }}</span> dari <span class="text-slate-800 dark:text-white font-extrabold">{{ number_format($kendaraans->total()) }}</span> data
+                </div>
+            </div>
+
             <!-- Table -->
             <div class="overflow-x-auto">
-                <table class="min-w-full whitespace-nowrap">
+                <table class="w-full text-left text-xs border-collapse">
                     <thead>
-                        <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-white/5">
-                            <th colspan="9" class="px-4 py-3">
-                                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                                    <form action="{{ route('admin.kendaraans.index') }}" method="GET"
-                                        class="flex flex-row items-center gap-3 w-full sm:w-auto">
-                                        @if(request('satker_id'))
-                                            <input type="hidden" name="satker_id" value="{{ request('satker_id') }}">
-                                        @endif
-                                        <x-per-page :current="request('per_page', 15)" />
-
-                                        <div class="relative flex-1 w-full sm:w-auto">
-                                            <span
-                                                class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-slate-600 dark:text-slate-400">
-                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z">
-                                                    </path>
-                                                </svg>
-                                            </span>
-                                            <input type="text" name="search" value="{{ request('search') }}"
-                                                placeholder="Cari nopol, jenis kendaraan..."
-                                                class="block w-full sm:w-48 pl-8 pr-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-lg text-xs text-slate-800 dark:text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all shadow-inner">
-                                        </div>
-
-                                        @if(request('search'))
-                                            <a href="{{ route('admin.kendaraans.index', ['satker_id' => request('satker_id')]) }}"
-                                                class="text-xs font-medium text-slate-700 dark:text-slate-400 hover:text-indigo-600 transition-colors">
-                                                Reset
-                                            </a>
-                                        @endif
-                                    </form>
-                                    <div class="text-[10px] font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider">
-                                        Menampilkan
-                                        {{ $kendaraans->firstItem() ?? 0 }}-{{ $kendaraans->lastItem() ?? 0 }} dari
-                                        {{ $kendaraans->total() }} data
-                                    </div>
-                                </div>
-                            </th>
-                        </tr>
-                        <tr class="bg-slate-50 dark:bg-slate-800/70">
+                        <tr class="bg-slate-50/80 dark:bg-slate-800/50 border-b border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[10px] font-black">
                             @if(auth()->user()->role !== 'kasubbag')
-                                <th class="w-10 px-4 sm:px-6 py-3.5 hidden sm:table-cell">
+                                <th class="py-3.5 px-4 w-10 text-center">
                                     <input type="checkbox" id="checkAll"
-                                        class="rounded border-slate-300 dark:border-white/20 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer bg-white dark:bg-slate-900">
+                                        class="rounded border-slate-300 dark:border-white/20 text-brand-primary focus:ring-brand-primary scale-95 cursor-pointer bg-white dark:bg-slate-900">
                                 </th>
                             @endif
-                            <th
-                                class="px-4 sm:px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">
-                                Satker</th>
-                            <th
-                                class="px-4 sm:px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider hidden lg:table-cell">
-                                Jenis Kendaraan</th>
-                            <th
-                                class="px-4 sm:px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">
-                                Nopol</th>
-                            <th
-                                class="px-4 sm:px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider hidden lg:table-cell">
-                                Roda</th>
-                            <th
-                                class="px-4 sm:px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider hidden lg:table-cell">
-                                Jenis BBM</th>
-                            <th
-                                class="px-4 sm:px-4 py-3 text-right text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider hidden lg:table-cell">
-                                Saldo</th>
-                            <th
-                                class="px-4 sm:px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider hidden lg:table-cell">
-                                PIN</th>
-                            <th
-                                class="px-4 sm:px-4 py-3 text-right text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">
-                                DETAIL</th>
+                            <th class="py-3.5 px-4">Satker</th>
+                            <th class="py-3.5 px-4">Jenis Kendaraan</th>
+                            <th class="py-3.5 px-4">Nopol</th>
+                            <th class="py-3.5 px-4 text-center">Roda</th>
+                            <th class="py-3.5 px-4 text-center">Jenis BBM</th>
+                            <th class="py-3.5 px-4 text-right">Saldo</th>
+                            <th class="py-3.5 px-4 text-center">PIN</th>
+                            <th class="py-3.5 px-4 text-center">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-200 dark:divide-white/5">
+                    <tbody class="divide-y divide-slate-100 dark:divide-white/5">
                         @forelse($kendaraans as $kendaraan)
-                            <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-white/[0.02] transition-colors {{ $kendaraan->status_approval === 'pending' ? 'bg-amber-500/[0.02]' : '' }}">
                                 @if(auth()->user()->role !== 'kasubbag')
-                                    <td class="px-4 sm:px-6 py-4 hidden sm:table-cell">
+                                    <td class="py-3.5 px-4 text-center">
                                         <input type="checkbox" value="{{ $kendaraan->id }}"
-                                            class="bg-white dark:bg-slate-900 dark:text-white item-checkbox rounded border-slate-300 dark:border-white/20 text-indigo-600 focus:ring-indigo-500 shadow-sm cursor-pointer">
+                                            class="item-checkbox rounded border-slate-300 dark:border-white/20 text-brand-primary focus:ring-brand-primary scale-95 cursor-pointer bg-white dark:bg-slate-900">
                                     </td>
                                 @endif
-                                <td class="px-4 sm:px-6 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div
-                                            class="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-slate-800 dark:text-white font-bold text-xs shadow-sm">
+                                <td class="py-3.5 px-4">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="flex-shrink-0 w-8 h-8 rounded-xl bg-brand-primary/10 text-brand-primary dark:bg-white/10 dark:text-white font-black text-xs flex items-center justify-center border border-brand-primary/20 dark:border-white/10">
                                             {{ strtoupper(substr($kendaraan->satker->nama_satker ?? '-', 0, 2)) }}
                                         </div>
-                                        <span
-                                            class="text-xs font-medium text-slate-700 dark:text-slate-300">{{ $kendaraan->satker->nama_satker ?? '-' }}</span>
-                                    </div>
-                                </td>
-                                <td class="px-4 sm:px-6 py-4 hidden lg:table-cell">
-                                    <span
-                                        class="text-xs font-semibold text-slate-800 dark:text-slate-200">{{ $kendaraan->jenis_kendaraan }}</span>
-                                </td>
-                                <td class="px-4 sm:px-6 py-4 max-w-[120px] sm:max-w-[200px] lg:max-w-none">
-                                    <div class="flex flex-col min-w-0">
-                                        <span class="text-[10px] sm:text-xs font-semibold text-slate-500 dark:text-slate-400 mb-0.5 lg:hidden truncate" title="{{ $kendaraan->jenis_kendaraan }}">{{ $kendaraan->jenis_kendaraan }}</span>
-                                        <div class="flex flex-wrap items-center gap-1.5">
-                                            <span class="text-xs font-bold text-slate-800 dark:text-slate-200">{{ $kendaraan->no_polisi }}</span>
-                                            @if($kendaraan->status_approval === 'pending')
-                                                <a href="{{ route('admin.persetujuan-kendaraan.index', ['status' => 'pending']) }}" class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 hover:bg-amber-200 transition" title="Menunggu persetujuan Super Admin (Klik untuk tinjau)">
-                                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>
-                                                    Butuh Persetujuan ({{ ucfirst($kendaraan->aksi_approval ?? 'Pengajuan') }})
-                                                </a>
-                                            @elseif($kendaraan->status_approval === 'ditolak')
-                                                <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300" title="{{ $kendaraan->alasan_penolakan ? 'Alasan: '.$kendaraan->alasan_penolakan : 'Ditolak' }}">
-                                                    Ditolak
-                                                </span>
-                                            @endif
+                                        <div class="min-w-0">
+                                            <div class="font-bold text-slate-800 dark:text-white leading-tight truncate max-w-[200px] sm:max-w-none" title="{{ $kendaraan->satker->nama_satker ?? '-' }}">
+                                                {{ $kendaraan->satker->nama_satker ?? '-' }}
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-4 sm:px-6 py-4 text-center hidden lg:table-cell">
-                                    <span class="inline-flex items-center justify-center min-w-[2rem] px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300">
-                                        {{ $kendaraan->roda ?? '-' }}
+                                <td class="py-3.5 px-4">
+                                    <span class="font-bold text-slate-800 dark:text-white">{{ $kendaraan->jenis_kendaraan }}</span>
+                                </td>
+                                <td class="py-3.5 px-4 whitespace-nowrap">
+                                    <div class="flex flex-wrap items-center gap-1.5">
+                                        <span class="font-black text-slate-900 dark:text-white tracking-wide font-mono text-xs">{{ $kendaraan->no_polisi }}</span>
+                                        @if($kendaraan->status_approval === 'pending')
+                                            <a href="{{ route('admin.persetujuan-kendaraan.index', ['status' => 'pending']) }}" class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 transition" title="Menunggu persetujuan Super Admin (Klik untuk tinjau)">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                                                Persetujuan
+                                            </a>
+                                        @elseif($kendaraan->status_approval === 'ditolak')
+                                            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-wider bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20" title="{{ $kendaraan->alasan_penolakan ? 'Alasan: '.$kendaraan->alasan_penolakan : 'Ditolak' }}">
+                                                Ditolak
+                                            </span>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td class="py-3.5 px-4 text-center">
+                                    <span class="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-white/10">
+                                        {{ $kendaraan->roda ?: '-' }}
                                     </span>
                                 </td>
-                                <td class="px-4 sm:px-6 py-4 hidden lg:table-cell">
-                                    @php
-                                        $bbmColors = [
-                                            'Pertamax' => 'bg-blue-100 text-blue-700',
-                                            'Pertamina Dex' => 'bg-yellow-200 text-yellow-700',
-                                        ];
-                                        $color = $bbmColors[$kendaraan->jenis_bbm] ?? 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300';
-                                    @endphp
-                                    <span
-                                        class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold whitespace-nowrap {{ $color }}">
-                                        {{ $kendaraan->jenis_bbm }}
-                                    </span>
-                                </td>
-                                <td class="px-4 sm:px-6 py-4 text-right hidden lg:table-cell">
-                                    @if($kendaraan->hasUnpaidBon())
-                                        <div class="inline-flex items-center justify-end gap-1.5 text-rose-600 dark:text-rose-400">
-                                            <span class="text-xs font-bold whitespace-nowrap text-rose-600 dark:text-rose-400">
-                                                {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
-                                            </span>
-                                            <span class="relative group/lock inline-flex items-center cursor-pointer">
-                                                <svg class="w-4 h-4 text-rose-600 dark:text-rose-400" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
-                                                </svg>
-                                                <span class="pointer-events-none absolute bottom-full right-0 mb-1.5 hidden group-hover/lock:block z-50 whitespace-nowrap rounded-lg bg-red-600 text-white text-[11px] font-bold py-1 px-2.5 shadow-xl border border-red-500">
-                                                    Kendaraan Masih Mempunyai Hutang {{ rtrim(rtrim(number_format($kendaraan->totalUnpaidBon(), 2, ',', '.'), '0'), ',') }} Ltr
-                                                </span>
-                                            </span>
-                                        </div>
-                                    @elseif($kendaraan->saldo > 10)
-                                        <span class="text-xs font-bold whitespace-nowrap text-slate-800 dark:text-white">
-                                            {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
+                                <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                                    @if(stripos($kendaraan->jenis_bbm, 'dex') !== false)
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                                            {{ $kendaraan->jenis_bbm }}
                                         </span>
-                                    @elseif($kendaraan->saldo >= 1)
-                                        <span class="text-xs font-bold whitespace-nowrap text-amber-500 dark:text-amber-400">
-                                            {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
-                                        </span>
-                                        <span class="block text-[11px] text-amber-500 dark:text-amber-400 font-semibold mt-0.5">Saldo rendah</span>
                                     @else
-                                        <span class="text-xs font-bold whitespace-nowrap text-rose-600 dark:text-rose-400">
-                                            {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                                            {{ $kendaraan->jenis_bbm }}
                                         </span>
-                                        <span class="block text-[11px] text-rose-600 dark:text-rose-400 font-bold mt-0.5">Saldo habis</span>
                                     @endif
                                 </td>
-                                <td class="px-4 sm:px-6 py-4 text-center hidden lg:table-cell">
-                                    <code
-                                        class="px-2.5 py-1 bg-amber-50 text-amber-700 rounded-lg text-xs font-mono font-bold tracking-widest">{{ $kendaraan->pin }}</code>
+                                <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                                    @if($kendaraan->hasUnpaidBon())
+                                        <div class="inline-flex flex-col items-end">
+                                            <div class="inline-flex items-center gap-1.5 text-rose-600 dark:text-rose-400 font-black">
+                                                <span>{{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter</span>
+                                                <span class="relative group/lock inline-flex items-center cursor-pointer">
+                                                    <svg class="w-4 h-4 text-rose-600 dark:text-rose-400" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                    <span class="pointer-events-none absolute bottom-full right-0 mb-1.5 hidden group-hover/lock:block z-50 whitespace-nowrap rounded-lg bg-red-600 text-white text-[11px] font-bold py-1 px-2.5 shadow-xl border border-red-500">
+                                                        Kendaraan Masih Mempunyai Hutang {{ rtrim(rtrim(number_format($kendaraan->totalUnpaidBon(), 2, ',', '.'), '0'), ',') }} Ltr
+                                                    </span>
+                                                </span>
+                                            </div>
+                                            <span class="text-[10px] font-bold text-rose-500">Ada Hutang</span>
+                                        </div>
+                                    @elseif($kendaraan->saldo > 10)
+                                        <div class="font-black text-slate-800 dark:text-white">
+                                            {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
+                                        </div>
+                                    @elseif($kendaraan->saldo >= 1)
+                                        <div class="inline-flex flex-col items-end">
+                                            <span class="font-black text-amber-600 dark:text-amber-400">
+                                                {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
+                                            </span>
+                                            <span class="text-[10px] font-bold text-amber-500">Saldo rendah</span>
+                                        </div>
+                                    @else
+                                        <div class="inline-flex flex-col items-end">
+                                            <span class="font-black text-rose-600 dark:text-rose-400">
+                                                {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
+                                            </span>
+                                            <span class="text-[10px] font-bold text-rose-500">Saldo habis</span>
+                                        </div>
+                                    @endif
                                 </td>
-                                <td class="px-4 sm:px-6 py-4 text-right">
-                                    <div class="hidden lg:flex items-center justify-end gap-1.5">
+                                <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-mono font-bold tracking-widest bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                                        {{ $kendaraan->pin }}
+                                    </span>
+                                </td>
+                                <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                                    <div class="inline-flex items-center justify-center gap-1">
                                         <a href="{{ route('admin.kendaraans.print', $kendaraan) }}"
-                        class="flex-1 lg:flex-none inline-flex items-center p-2 bg-white dark:bg-slate-800 hover:bg-indigo-100 text-slate-700 dark:text-slate-400 hover:text-indigo-600 rounded-lg transition-colors"
+                                            class="p-2 text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-500/10 rounded-xl transition-all"
                                             title="Print Kartu Kendaraan">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -370,25 +353,26 @@
                                                 </path>
                                             </svg>
                                         </a>
+
                                         @if(auth()->user()->role !== 'kasubbag')
                                             <button type="button"
                                                 @click="$dispatch('open-transfer', {id: {{ $kendaraan->id }}, nopol: '{{ $kendaraan->no_polisi }}', current_satker: '{{ $kendaraan->satker->nama_satker ?? '-' }}'})"
-                                                class="inline-flex items-center p-2 bg-white dark:bg-slate-800 hover:bg-violet-100 text-slate-700 dark:text-slate-400 hover:text-violet-600 rounded-lg transition-colors"
+                                                class="p-2 text-slate-500 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-500/10 rounded-xl transition-all"
                                                 title="Pindah Satker">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                         d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
                                                 </svg>
                                             </button>
-                                            <form action="{{ route('admin.kendaraans.reset-pin', $kendaraan) }}" method="POST"
-                                                class="inline">
+
+                                            <form action="{{ route('admin.kendaraans.reset-pin', $kendaraan) }}" method="POST" class="inline">
                                                 @csrf
                                                 <button type="submit"
                                                     data-confirm="Reset PIN kendaraan {{ $kendaraan->no_polisi }}? PIN baru akan di-generate secara acak."
                                                     data-confirm-title="Reset PIN"
                                                     data-confirm-text="Ya, Reset PIN"
                                                     data-confirm-type="warning"
-                                                    class="inline-flex items-center p-2 bg-white dark:bg-slate-800 hover:bg-amber-100 text-slate-700 dark:text-slate-400 hover:text-amber-600 rounded-lg transition-colors"
+                                                    class="p-2 text-slate-500 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-500/10 rounded-xl transition-all"
                                                     title="Reset PIN">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -397,32 +381,34 @@
                                                     </svg>
                                                 </button>
                                             </form>
+
                                             <button type="button"
                                                 @click="$dispatch('open-potong-saldo', {id: {{ $kendaraan->id }}, nopol: '{{ $kendaraan->no_polisi }}', saldo: {{ $kendaraan->saldo }}, jenis_bbm: '{{ $kendaraan->jenis_bbm }}'})"
-                                                class="inline-flex items-center p-2 bg-white dark:bg-slate-800 hover:bg-rose-100 text-slate-700 dark:text-slate-400 hover:text-rose-600 rounded-lg transition-colors"
+                                                class="p-2 text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-xl transition-all"
                                                 title="Potong Saldo">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
                                                 </svg>
                                             </button>
+
                                             <a href="{{ route('admin.kendaraans.edit', $kendaraan) }}"
-                                                class="inline-flex items-center p-2 bg-white dark:bg-slate-800 hover:bg-indigo-100 text-slate-700 dark:text-slate-400 hover:text-indigo-600 rounded-lg transition-colors"
-                                                title="Edit">
+                                                class="p-2 text-slate-500 dark:text-slate-400 hover:text-brand-primary dark:hover:text-white hover:bg-brand-primary/10 dark:hover:bg-white/10 rounded-xl transition-all"
+                                                title="Edit Kendaraan">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                         d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
                                                     </path>
                                                 </svg>
                                             </a>
-                                            <form action="{{ route('admin.kendaraans.destroy', $kendaraan) }}" method="POST"
-                                                class="inline">
+
+                                            <form action="{{ route('admin.kendaraans.destroy', $kendaraan) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" data-confirm="Yakin ingin menghapus kendaraan ini?"
                                                     data-confirm-type="error"
-                                                    class="p-2 text-slate-700 dark:text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
+                                                    class="p-2 text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-xl transition-all"
                                                     title="Hapus Kendaraan">
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                             d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
                                                         </path>
@@ -431,129 +417,22 @@
                                             </form>
                                         @endif
                                     </div>
-                                    <!-- Mobile detail button/modal start -->
-                                    <div x-data="{ showDetail: false }" class="lg:hidden flex justify-end">
-                                        <button type="button" @click="showDetail = true" class="inline-flex items-center p-2 bg-indigo-600/10 text-indigo-600 dark:text-indigo-400 rounded-lg border border-indigo-600/20 shadow-sm" title="Lihat Detail">
-                                            <svg class="w-5 h-5 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                            </svg>
-                                        </button>
-                                        
-                                        <template x-teleport="body">
-                                            <div x-show="showDetail" class="fixed inset-0 z-[9000] flex items-end sm:items-center justify-center p-4" style="display: none;">
-                                                <div x-show="showDetail" x-transition.opacity @click="showDetail = false" class="fixed inset-0 bg-white dark:bg-slate-950/80"></div>
-                                                <div x-show="showDetail" x-transition.translate.y @click.outside="showDetail = false" class="relative w-full max-w-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
-                                                    <div class="p-4 border-b border-slate-200 dark:border-white/10 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
-                                                        <div class="text-left">
-                                                            <h3 class="text-slate-800 dark:text-white font-bold text-lg leading-tight">{{ $kendaraan->no_polisi }}</h3>
-                                                            <p class="text-slate-600 dark:text-slate-400 text-xs">{{ $kendaraan->jenis_kendaraan }}</p>
-                                                        </div>
-                                                        <button type="button" @click="showDetail = false" class="p-2 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:text-white rounded-xl border border-slate-200 dark:border-white/5 shadow-sm">
-                                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                                        </button>
-                                                    </div>
-                                                    <div class="p-4 overflow-y-auto w-full custom-scrollbar text-left text-sm space-y-4">
-                                                        <div class="grid grid-cols-2 gap-4">
-                                                            <div>
-                                                                <span class="text-[10px] text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1">Roda</span>
-                                                                <span class="font-bold text-slate-800 dark:text-white">{{ $kendaraan->roda ?? '-' }}</span>
-                                                            </div>
-                                                            <div>
-                                                                <span class="text-[10px] text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1">Jenis BBM</span>
-                                                                <span class="font-bold text-slate-800 dark:text-white">{{ $kendaraan->jenis_bbm }}</span>
-                                                            </div>
-                                                            <div>
-                                                                <span class="text-[10px] text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1">Saldo</span>
-                                                                @if($kendaraan->hasUnpaidBon())
-                                                                    <div class="flex items-center gap-1.5 text-rose-600 dark:text-rose-400">
-                                                                        <span class="font-bold text-rose-600 dark:text-rose-400">{{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} L</span>
-                                                                        <span class="inline-flex items-center">
-                                                                            <svg class="w-4 h-4 text-rose-600 dark:text-rose-400" fill="currentColor" viewBox="0 0 20 20">
-                                                                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
-                                                                            </svg>
-                                                                        </span>
-                                                                    </div>
-                                                                    <span class="inline-block bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded mt-0.5">
-                                                                        Kendaraan Masih Mempunyai Hutang {{ rtrim(rtrim(number_format($kendaraan->totalUnpaidBon(), 2, ',', '.'), '0'), ',') }} Ltr
-                                                                    </span>
-                                                                @elseif($kendaraan->saldo > 10)
-                                                                    <span class="font-bold text-slate-800 dark:text-white">{{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} L</span>
-                                                                @elseif($kendaraan->saldo >= 1)
-                                                                    <span class="font-bold text-amber-500 dark:text-amber-400">{{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} L</span>
-                                                                    <span class="block text-[10px] text-amber-500 font-bold">Saldo rendah</span>
-                                                                @else
-                                                                    <span class="font-bold text-rose-600 dark:text-rose-400">{{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} L</span>
-                                                                    <span class="block text-[10px] text-rose-600 font-bold">Saldo habis</span>
-                                                                @endif
-                                                            </div>
-                                                            <div>
-                                                                <span class="text-[10px] text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1">PIN</span>
-                                                                <code class="bg-amber-400/20 text-amber-500 px-2 py-0.5 rounded font-bold">{{ $kendaraan->pin }}</code>
-                                                            </div>
-                                                        </div>
-                                                        
-                                                        <div class="bg-white dark:bg-slate-900 dark:text-white pt-4 border-t border-slate-200 dark:border-white/10 flex flex-col gap-2">
-                                                            <a href="{{ route('admin.kendaraans.print', $kendaraan) }}" class="flex items-center gap-3 w-full p-3 bg-white rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-800 dark:text-white hover:bg-white dark:bg-slate-700 transition">
-                                                                <div class="p-1.5 bg-blue-500/20 text-blue-600 dark:text-blue-400 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg></div>
-                                                                <span class="font-semibold text-xs">Print Kartu</span>
-                                                            </a>
-                                                            @if(auth()->user()->role !== 'kasubbag')
-                                                                <button type="button" @click="showDetail = false; $dispatch('open-transfer', {id: {{ $kendaraan->id }}, nopol: '{{ $kendaraan->no_polisi }}', current_satker: '{{ $kendaraan->satker->nama_satker ?? '-' }}'})" class="flex items-center gap-3 w-full p-3 bg-white rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-800 dark:text-white hover:bg-white dark:bg-slate-700 transition">
-                                                                    <div class="p-1.5 bg-violet-500/20 text-violet-600 dark:text-violet-400 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg></div>
-                                                                    <span class="font-semibold text-xs">Pindah Satker</span>
-                                                                </button>
-                                                                <form action="{{ route('admin.kendaraans.reset-pin', $kendaraan) }}" method="POST" class="w-full">
-                                                                    @csrf
-                                                                    <button type="submit" data-confirm="Reset PIN kendaraan {{ $kendaraan->no_polisi }}?" data-confirm-type="warning" class="flex items-center w-full gap-3 p-3 bg-white rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-800 dark:text-white hover:bg-white dark:bg-slate-700 transition text-left">
-                                                                        <div class="p-1.5 bg-amber-500/20 text-amber-600 dark:text-amber-400 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg></div>
-                                                                        <span class="font-semibold text-xs">Reset PIN</span>
-                                                                    </button>
-                                                                </form>
-                                                                <button type="button" @click="showDetail = false; $dispatch('open-potong-saldo', {id: {{ $kendaraan->id }}, nopol: '{{ $kendaraan->no_polisi }}', saldo: {{ $kendaraan->saldo }}, jenis_bbm: '{{ $kendaraan->jenis_bbm }}'})" class="flex items-center gap-3 w-full p-3 bg-white rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-800 dark:text-white hover:bg-white dark:bg-slate-700 transition">
-                                                                    <div class="p-1.5 bg-rose-500/20 text-rose-600 dark:text-rose-400 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg></div>
-                                                                    <span class="font-semibold text-xs">Potong Saldo</span>
-                                                                </button>
-                                                                <a href="{{ route('admin.kendaraans.edit', $kendaraan) }}" class="flex items-center gap-3 w-full p-3 bg-white rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-800 dark:text-white hover:bg-white dark:bg-slate-700 transition">
-                                                                    <div class="p-1.5 bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></div>
-                                                                    <span class="font-semibold text-xs">Edit</span>
-                                                                </a>
-                                                                <form action="{{ route('admin.kendaraans.destroy', $kendaraan) }}" method="POST" class="w-full">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <button type="submit" data-confirm="Yakin ingin menghapus kendaraan ini?" data-confirm-type="error" class="flex items-center gap-3 w-full p-3 bg-rose-50/50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 border border-rose-900/50 rounded-xl hover:text-white hover:bg-rose-600 transition text-left">
-                                                                        <div class="p-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></div>
-                                                                        <span class="font-bold text-xs">Hapus Kendaraan</span>
-                                                                    </button>
-                                                                </form>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </template>
-                                    </div>
-                                    <!-- Mobile detail button/modal end -->
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="10" class="px-6 py-12 text-center">
-                                    <div class="flex flex-col items-center">
-                                        <div
-                                            class="w-16 h-16 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center mb-4">
-                                            <svg class="w-8 h-8 text-slate-600 dark:text-slate-400" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z">
-                                                </path>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1">
-                                                </path>
-                                            </svg>
-                                        </div>
-                                        <p class="text-slate-600 dark:text-slate-400 font-medium">Belum ada kendaraan terdaftar</p>
+                                <td colspan="9" class="py-12 text-center">
+                                    <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 mx-auto flex items-center justify-center mb-3">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1">
+                                            </path>
+                                        </svg>
                                     </div>
+                                    <p class="text-sm font-bold text-slate-600 dark:text-slate-400">Belum ada kendaraan terdaftar</p>
+                                    <p class="text-xs text-slate-400 mt-1">Belum ada data yang cocok dengan kriteria filter saat ini.</p>
                                 </td>
                             </tr>
                         @endforelse
@@ -563,7 +442,7 @@
 
             <!-- Pagination -->
             @if($kendaraans->hasPages())
-                <div class="bg-white dark:bg-slate-900 dark:text-white px-4 sm:px-6 py-4 border-t border-slate-200 dark:border-white/5">
+                <div class="p-4 border-t border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-900/50">
                     {{ $kendaraans->links() }}
                 </div>
             @endif
