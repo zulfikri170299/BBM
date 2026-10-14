@@ -2,8 +2,10 @@
     <div class="p-2 sm:p-6 lg:p-8 space-y-4 sm:space-y-6" x-data="{ 
         showTransferModal: false, 
         showMonthlyReportModal: false,
+        showAlasan: false,
+        alasanModal: '',
+        nopolModal: '',
         selectedBbm: '',
-        personels: {{ json_encode($personels) }},
         // Searchable Kendaraan
         kendaraanSearch: '',
         kendaraanOpen: false,
@@ -21,25 +23,6 @@
             this.selectedBbm = k.jenis_bbm;
             this.kendaraanOpen = false;
             this.kendaraanSearch = '';
-        },
-        // Target Type
-        tipeTujuan: '{{ (\App\Models\Setting::where("key", "personel_access_control")->value("value") ?? "1") == "1" ? "personel" : "kendaraan" }}',
-        // Searchable Personel
-        personelSearch: '',
-        personelOpen: false,
-        personelSelected: null,
-        personelLabel: '',
-        get filteredPersonels() {
-            let list = this.personels.filter(p => !this.selectedBbm || !p.jenis_bbm || p.jenis_bbm === this.selectedBbm);
-            if (!this.personelSearch) return list;
-            const q = this.personelSearch.toLowerCase();
-            return list.filter(p => p.nama.toLowerCase().includes(q) || (p.jenis_bbm && p.jenis_bbm.toLowerCase().includes(q)));
-        },
-        selectPersonel(p) {
-            this.personelSelected = p.id;
-            this.personelLabel = p.nama + ' • ' + (p.jenis_bbm ? p.jenis_bbm : 'Belum set BBM');
-            this.personelOpen = false;
-            this.personelSearch = '';
         },
         // Searchable Tujuan Kendaraan
         tujuanKendaraanSearch: '',
@@ -190,14 +173,38 @@
             </div>
         @endif
 
+        <!-- Info Pengajuan Kendaraan -->
+        @if((isset($rejectedKendaraans) && $rejectedKendaraans->isNotEmpty()) || (isset($pendingKendaraans) && $pendingKendaraans->isNotEmpty()))
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-3.5 bg-indigo-50/70 dark:bg-slate-800/80 border border-indigo-100 dark:border-white/10 rounded-2xl shadow-sm text-xs">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400"></span>
+                    <span class="text-slate-700 dark:text-slate-300">
+                        Anda memiliki 
+                        @if(isset($pendingKendaraans) && $pendingKendaraans->isNotEmpty())
+                            <strong class="text-amber-600 dark:text-amber-400">{{ $pendingKendaraans->count() }} pengajuan pending</strong>
+                        @endif
+                        @if((isset($pendingKendaraans) && $pendingKendaraans->isNotEmpty()) && (isset($rejectedKendaraans) && $rejectedKendaraans->isNotEmpty()))
+                            dan
+                        @endif
+                        @if(isset($rejectedKendaraans) && $rejectedKendaraans->isNotEmpty())
+                            <strong class="text-rose-600 dark:text-rose-400">{{ $rejectedKendaraans->count() }} pengajuan ditolak</strong>
+                        @endif
+                        yang dapat dimonitor.
+                    </span>
+                </div>
+                <a href="{{ route('satker.persetujuan-kendaraan.index') }}" class="font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 flex-shrink-0">
+                    Buka Persetujuan Kendaraan &rarr;
+                </a>
+            </div>
+        @endif
+
         <!-- Table Card -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
-            <div class="bg-white dark:bg-slate-900 dark:text-white hidden sm:flex px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-200 dark:border-white/5 items-center justify-between">
+            <div class="bg-white dark:bg-slate-900 dark:text-white px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-200 dark:border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-3">
                 <div class="flex items-center gap-2 sm:gap-3">
                     <div>
-                        <h3 class="text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-200">Daftar Kendaraan</h3>
-                        <p class="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400">{{ $kendaraans->total() }} kendaraan terdaftar
-                        </p>
+                        <h3 class="text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-200">Daftar Kendaraan Aktif</h3>
+                        <p class="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400">{{ $kendaraans->total() }} kendaraan disetujui</p>
                     </div>
                 </div>
             </div>
@@ -317,7 +324,14 @@
                                 <td class="px-4 py-3 max-w-[120px] sm:max-w-[200px] lg:max-w-none">
                                     <div class="flex flex-col min-w-0">
                                         <span class="text-[10px] sm:text-xs font-semibold text-slate-500 dark:text-slate-400 mb-0.5 lg:hidden truncate" title="{{ $kendaraan->jenis_kendaraan }}">{{ $kendaraan->jenis_kendaraan }}</span>
-                                        <span class="text-xs font-bold text-slate-800 dark:text-slate-200">{{ $kendaraan->no_polisi }}</span>
+                                        <div class="flex items-center gap-1.5 flex-wrap">
+                                            <span class="text-xs font-bold text-slate-800 dark:text-slate-200">{{ $kendaraan->no_polisi }}</span>
+                                            @if($kendaraan->status_approval === 'ditolak' && $kendaraan->aksi_approval === 'edit')
+                                                <a href="{{ route('satker.persetujuan-kendaraan.index', ['status' => 'ditolak', 'search' => $kendaraan->no_polisi]) }}" class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300 hover:bg-rose-200 transition" title="Pengajuan edit ditolak: {{ $kendaraan->alasan_penolakan }} (Klik untuk lihat catatan)">
+                                                    Edit Ditolak
+                                                </a>
+                                            @endif
+                                        </div>
                                     </div>
                                 </td>
                                 <td class="px-4 py-3 text-center hidden lg:table-cell">
@@ -328,8 +342,8 @@
                                 <td class="px-4 py-3 hidden lg:table-cell">
                                     @php
                                         $bbmColors = [
-                                            'Pertamax' => 'bg-blue-100 text-blue-700',
-                                            'Pertamina Dex' => 'bg-yellow-200 text-yellow-700',
+                                             'Pertamax' => 'bg-blue-100 text-blue-700',
+                                             'Pertamina Dex' => 'bg-yellow-200 text-yellow-700',
                                         ];
                                         $color = $bbmColors[$kendaraan->jenis_bbm] ?? 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300';
                                     @endphp
@@ -339,12 +353,34 @@
                                     </span>
                                 </td>
                                 <td class="px-4 py-3 text-right hidden lg:table-cell">
-                                    <span
-                                        class="text-xs font-bold whitespace-nowrap {{ $kendaraan->saldo < 10 ? 'text-red-600' : 'text-slate-800 dark:text-slate-200' }}">
-                                        {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
-                                    </span>
-                                    @if($kendaraan->saldo < 10)
-                                        <span class="block text-xs text-red-500 font-medium mt-0.5">Saldo rendah</span>
+                                    @if($kendaraan->hasUnpaidBon())
+                                        <div class="inline-flex items-center justify-end gap-1.5 text-rose-600 dark:text-rose-400">
+                                            <span class="text-xs font-bold whitespace-nowrap text-rose-600 dark:text-rose-400">
+                                                {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
+                                            </span>
+                                            <span class="relative group/lock inline-flex items-center cursor-pointer">
+                                                <svg class="w-4 h-4 text-rose-600 dark:text-rose-400" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                                                </svg>
+                                                <span class="pointer-events-none absolute bottom-full right-0 mb-1.5 hidden group-hover/lock:block z-50 whitespace-nowrap rounded-lg bg-red-600 text-white text-[11px] font-bold py-1 px-2.5 shadow-xl border border-red-500">
+                                                    Kendaraan Masih Mempunyai Hutang {{ rtrim(rtrim(number_format($kendaraan->totalUnpaidBon(), 2, ',', '.'), '0'), ',') }} Ltr
+                                                </span>
+                                            </span>
+                                        </div>
+                                    @elseif($kendaraan->saldo > 10)
+                                        <span class="text-xs font-bold whitespace-nowrap text-slate-800 dark:text-white">
+                                            {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
+                                        </span>
+                                    @elseif($kendaraan->saldo >= 1)
+                                        <span class="text-xs font-bold whitespace-nowrap text-amber-500 dark:text-amber-400">
+                                            {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
+                                        </span>
+                                        <span class="block text-[11px] text-amber-500 dark:text-amber-400 font-semibold mt-0.5">Saldo rendah</span>
+                                    @else
+                                        <span class="text-xs font-bold whitespace-nowrap text-rose-600 dark:text-rose-400">
+                                            {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
+                                        </span>
+                                        <span class="block text-[11px] text-rose-600 dark:text-rose-400 font-bold mt-0.5">Saldo habis</span>
                                     @endif
                                 </td>
                                 <td class="px-4 py-3 text-center hidden lg:table-cell">
@@ -354,7 +390,6 @@
                                 <td class="px-4 py-3 text-center">
                                     <div class="hidden lg:flex items-center justify-center gap-2">
                                         <a href="{{ route('satker.kendaraans.print', $kendaraan) }}"
-
                                             class="p-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-600 hover:text-indigo-700 rounded-lg transition-colors group"
                                             title="Print Barcode">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -363,6 +398,7 @@
                                                 </path>
                                             </svg>
                                         </a>
+
                                         @if(\App\Models\Setting::where('key', 'satker_can_edit_kendaraan')->value('value') ?? 1)
                                             <a href="{{ route('satker.kendaraans.edit', $kendaraan) }}"
                                                 class="p-2 bg-amber-100 hover:bg-amber-200 text-amber-600 hover:text-amber-700 rounded-lg transition-colors group"
@@ -374,23 +410,24 @@
                                                 </svg>
                                             </a>
                                         @endif
-                                            <form action="{{ route('satker.kendaraans.reset-pin', $kendaraan) }}"
-                                                method="POST">
-                                                @csrf
-                                                <button type="submit"
-                                                    data-confirm="Apakah Anda yakin ingin mereset PIN kendaraan ini? PIN baru akan di-generate secara acak."
-                                                    data-confirm-title="Reset PIN"
-                                                    data-confirm-text="Ya, Reset PIN"
-                                                    data-confirm-type="warning"
-                                                    class="p-2 bg-red-100 hover:bg-red-200 text-red-600 hover:text-red-700 rounded-lg transition-colors group"
-                                                    title="Reset PIN">
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                            d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z">
-                                                        </path>
-                                                    </svg>
-                                                </button>
-                                            </form>
+
+                                        <form action="{{ route('satker.kendaraans.reset-pin', $kendaraan) }}"
+                                            method="POST">
+                                            @csrf
+                                            <button type="submit"
+                                                data-confirm="Apakah Anda yakin ingin mereset PIN kendaraan ini? PIN baru akan di-generate secara acak."
+                                                data-confirm-title="Reset PIN"
+                                                data-confirm-text="Ya, Reset PIN"
+                                                data-confirm-type="warning"
+                                                class="p-2 bg-red-100 hover:bg-red-200 text-red-600 hover:text-red-700 rounded-lg transition-colors group"
+                                                title="Reset PIN">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z">
+                                                    </path>
+                                                </svg>
+                                            </button>
+                                        </form>
                                     </div>
                                     <!-- Mobile detail button/modal start -->
                                     <div x-data="{ showDetail: false }" class="lg:hidden flex justify-end">
@@ -416,6 +453,13 @@
                                                     </div>
                                                     <div class="p-4 overflow-y-auto w-full custom-scrollbar text-left text-sm space-y-4">
                                                         <div class="grid grid-cols-2 gap-4">
+                                                            <div class="col-span-2 p-2.5 rounded-xl border bg-emerald-50 border-emerald-200 dark:bg-emerald-950/20 dark:border-emerald-800">
+                                                                <span class="text-[10px] text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wider block mb-0.5">Status Kendaraan</span>
+                                                                <span class="font-bold text-xs text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5">
+                                                                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                                                    Aktif & Disetujui
+                                                                </span>
+                                                            </div>
                                                             <div>
                                                                 <span class="text-[10px] text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1">Roda</span>
                                                                 <span class="font-bold text-slate-800 dark:text-white">{{ $kendaraan->roda ?? '-' }}</span>
@@ -426,7 +470,27 @@
                                                             </div>
                                                             <div>
                                                                 <span class="text-[10px] text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1">Saldo</span>
-                                                                <span class="font-bold text-emerald-600 dark:text-emerald-400">{{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} L</span>
+                                                                @if($kendaraan->hasUnpaidBon())
+                                                                    <div class="flex items-center gap-1.5 text-rose-600 dark:text-rose-400">
+                                                                        <span class="font-bold text-rose-600 dark:text-rose-400">{{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} L</span>
+                                                                        <span class="inline-flex items-center">
+                                                                            <svg class="w-4 h-4 text-rose-600 dark:text-rose-400" fill="currentColor" viewBox="0 0 20 20">
+                                                                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                                                                            </svg>
+                                                                        </span>
+                                                                    </div>
+                                                                    <span class="inline-block bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded mt-0.5">
+                                                                        Kendaraan Masih Mempunyai Hutang {{ rtrim(rtrim(number_format($kendaraan->totalUnpaidBon(), 2, ',', '.'), '0'), ',') }} Ltr
+                                                                    </span>
+                                                                @elseif($kendaraan->saldo > 10)
+                                                                    <span class="font-bold text-slate-800 dark:text-white">{{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} L</span>
+                                                                @elseif($kendaraan->saldo >= 1)
+                                                                    <span class="font-bold text-amber-500 dark:text-amber-400">{{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} L</span>
+                                                                    <span class="block text-[10px] text-amber-500 font-bold">Saldo rendah</span>
+                                                                @else
+                                                                    <span class="font-bold text-rose-600 dark:text-rose-400">{{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} L</span>
+                                                                    <span class="block text-[10px] text-rose-600 font-bold">Saldo habis</span>
+                                                                @endif
                                                             </div>
                                                             <div>
                                                                 <span class="text-[10px] text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1">PIN</span>
@@ -462,7 +526,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="px-6 py-12 text-center">
+                                <td colspan="9" class="px-6 py-12 text-center">
                                     <div class="flex flex-col items-center">
                                         <div
                                             class="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4">
@@ -494,6 +558,59 @@
                 </div>
             @endif
         </div>
+
+        <!-- Modal Alasan Penolakan Super Admin -->
+        <template x-teleport="body">
+            <div x-show="showAlasan" style="display: none;" class="relative z-[9999]" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                <div x-show="showAlasan" x-transition.opacity class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" @click="showAlasan = false"></div>
+                <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+                    <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                        <div x-show="showAlasan" x-transition:enter="ease-out duration-300"
+                            x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                            x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                            x-transition:leave="ease-in duration-200"
+                            x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                            x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                            @click.outside="showAlasan = false"
+                            class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-slate-900 text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-slate-200 dark:border-white/10">
+                            
+                            <div class="bg-gradient-to-r from-rose-500 to-red-600 px-6 py-4 text-white flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-2 bg-white/20 rounded-xl">
+                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-base font-bold text-white">Catatan Penolakan Super Admin</h3>
+                                        <p class="text-xs text-rose-100" x-text="'Kendaraan: ' + nopolModal"></p>
+                                    </div>
+                                </div>
+                                <button type="button" @click="showAlasan = false" class="text-white/80 hover:text-white transition">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                </button>
+                            </div>
+
+                            <div class="p-6 space-y-4">
+                                <div class="p-4 bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50 rounded-xl">
+                                    <label class="block text-xs font-bold text-rose-800 dark:text-rose-300 uppercase tracking-wider mb-1.5">Alasan Penolakan:</label>
+                                    <p class="text-sm text-slate-800 dark:text-slate-200 whitespace-pre-wrap leading-relaxed font-medium" x-text="alasanModal"></p>
+                                </div>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">
+                                    Silakan perbaiki data kendaraan dengan menekan tombol <strong>Edit Kendaraan</strong> sesuai arahan/alasan di atas, lalu simpan kembali untuk mengajukan ulang persetujuan ke Super Admin.
+                                </p>
+                            </div>
+
+                            <div class="bg-slate-50 dark:bg-slate-800/50 px-6 py-3.5 flex justify-end">
+                                <button type="button" @click="showAlasan = false" class="px-4 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 text-sm font-semibold rounded-xl transition">
+                                    Tutup
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
 
         <!-- Transfer Modal -->
         <div>
@@ -637,95 +754,8 @@
                                 </div>
                             </div>
 
-                            <!-- Tipe Tujuan Selector -->
-                            @if($personelAccessControl == '1')
-                            <div class="p-1 bg-slate-50 dark:bg-slate-800 rounded-xl flex">
-                                <button type="button" @click="tipeTujuan = 'personel'"
-                                    class="flex-1 px-4 py-2 text-xs font-bold rounded-lg transition-all"
-                                    :class="tipeTujuan === 'personel' ? 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 text-emerald-600 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:text-slate-300'">
-                                    Ke Personel
-                                </button>
-                                <button type="button" @click="tipeTujuan = 'kendaraan'"
-                                    class="flex-1 px-4 py-2 text-xs font-bold rounded-lg transition-all"
-                                    :class="tipeTujuan === 'kendaraan' ? 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 text-emerald-600 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:text-slate-300'">
-                                    Antar Kendaraan
-                                </button>
-                            </div>
-                            @endif
-
-                            <input type="hidden" name="tipe_tujuan" :value="tipeTujuan">
-
-                            <!-- Tujuan Personel (Searchable) -->
-                            @if($personelAccessControl == '1')
-                            <div x-show="tipeTujuan === 'personel'">
-                                <label class="flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                                    <span
-                                        class="flex items-center justify-center w-6 h-6 rounded-lg bg-purple-100 text-purple-600">
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
-                                            </path>
-                                        </svg>
-                                    </span>
-                                    Tujuan Personel
-                                </label>
-                                <input type="hidden" name="personel_id" :value="personelSelected" :required="tipeTujuan === 'personel'">
-                                <div class="relative" @click.outside="personelOpen = false">
-                                    <div @click="personelOpen = !personelOpen; $nextTick(() => { if(personelOpen) $refs.personelInput.focus() })"
-                                        class="block w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-white/10 rounded-xl text-sm cursor-pointer flex items-center justify-between transition-all"
-                                        :class="personelOpen ? 'ring-2 ring-emerald-500 border-emerald-500' : ''">
-                                        <span x-text="personelLabel || '— Pilih Personel —'"
-                                            :class="personelLabel ? 'text-slate-800 dark:text-slate-200' : 'text-slate-600 dark:text-slate-400'"></span>
-                                        <svg class="w-4 h-4 text-slate-600 dark:text-slate-400 transition-transform"
-                                            :class="personelOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M19 9l-7 7-7-7"></path>
-                                        </svg>
-                                    </div>
-                                    <div x-show="personelOpen" x-transition.opacity.duration.150ms
-                                        class="absolute z-50 mt-1 w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 border border-slate-200 dark:border-white/10 rounded-xl shadow-lg overflow-hidden"
-                                        style="display:none;">
-                                        <div class="bg-white dark:bg-slate-900 dark:text-white p-2 border-b border-slate-200 dark:border-white/5">
-                                            <div class="relative">
-                                                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600 dark:text-slate-400"
-                                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                                </svg>
-                                                <input x-ref="personelInput" x-model="personelSearch" type="text"
-                                                    placeholder="Cari personel..."
-                                                    class="bg-white dark:bg-slate-900 dark:text-white w-full pl-9 pr-3 py-2 text-sm border border-slate-200 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
-                                            </div>
-                                        </div>
-                                        <div class="max-h-48 overflow-y-auto">
-                                            <template x-for="p in filteredPersonels" :key="p.id">
-                                                <div @click="selectPersonel(p)"
-                                                    class="px-4 py-2.5 text-xs text-slate-700 dark:text-slate-300 hover:bg-emerald-50 cursor-pointer flex items-center justify-between transition-colors"
-                                                    :class="personelSelected === p.id ? 'bg-emerald-50 text-emerald-700 font-semibold' : ''">
-                                                    <span
-                                                        x-text="p.nama + ' • ' + (p.jenis_bbm ? p.jenis_bbm : 'Belum set BBM')"></span>
-                                                    <svg x-show="personelSelected === p.id"
-                                                        class="w-4 h-4 text-emerald-500" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd"
-                                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                            clip-rule="evenodd"></path>
-                                                    </svg>
-                                                </div>
-                                            </template>
-                                            <div x-show="filteredPersonels.length === 0"
-                                                class="px-4 py-3 text-xs text-slate-600 dark:text-slate-400 text-center">Tidak ditemukan
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @endif
-
                             <!-- Tujuan Kendaraan (Searchable) -->
-                            <div x-show="tipeTujuan === 'kendaraan'">
+                            <div>
                                 <label class="flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                                     <span
                                         class="flex items-center justify-center w-6 h-6 rounded-lg bg-emerald-100 text-emerald-600">
@@ -740,7 +770,7 @@
                                     </span>
                                     Tujuan Kendaraan
                                 </label>
-                                <input type="hidden" name="tujuan_kendaraan_id" :value="tujuanKendaraanSelected" :required="tipeTujuan === 'kendaraan'">
+                                <input type="hidden" name="tujuan_kendaraan_id" :value="tujuanKendaraanSelected" required>
                                 <div class="relative" @click.outside="tujuanKendaraanOpen = false">
                                     <div @click="tujuanKendaraanOpen = !tujuanKendaraanOpen; $nextTick(() => { if(tujuanKendaraanOpen) $refs.tujuanKendaraanInput.focus() })"
                                         class="block w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-white/10 rounded-xl text-sm cursor-pointer flex items-center justify-between transition-all"

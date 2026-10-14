@@ -17,7 +17,6 @@ class AdminController extends Controller
             'totalUsers' => \App\Models\User::where('role', '!=', 'personel')->count(),
             'totalKendaraan' => \App\Models\Kendaraan::count(),
             'totalTransaksi' => \App\Models\TransaksiBbm::count(),
-            'totalPersonel' => \App\Models\Personel::count(),
             'totalLiter' => \App\Models\TransaksiBbm::sum('liter'),
             'totalHutangPertamax' => \App\Models\Hutang::where('status', 'belum_dibayar')->where('jenis_bbm', 'Pertamax')->sum('jumlah_bon'),
             'totalHutangDex' => \App\Models\Hutang::where('status', 'belum_dibayar')->where('jenis_bbm', 'Pertamina Dex')->sum('jumlah_bon'),
@@ -37,16 +36,8 @@ class AdminController extends Controller
             ->groupBy('jenis_bbm')
             ->get();
 
-        // Saldo Personel per Jenis BBM
-        $personelFuel = \App\Models\Personel::select('jenis_bbm', \Illuminate\Support\Facades\DB::raw('SUM(saldo) as total'))
-            ->groupBy('jenis_bbm')
-            ->get();
-
-        $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
-        if ($personelAccessControl == '0') {
-            $stats['totalPersonel'] = 0;
-            $personelFuel = collect();
-        }
+        $personelFuel = collect();
+        $personelAccessControl = '0';
 
         // Get Users with Location
         $usersWithLocation = \App\Models\User::select('id', 'name', 'role', 'last_latitude', 'last_longitude', 'last_activity_at')
@@ -186,6 +177,9 @@ class AdminController extends Controller
                         'jenis_bbm' => $jenisBbm ?: 'TANPA JENIS',
                         'keterangan' => 'Top-up massal dari Super Admin',
                     ]);
+
+                    // Otomatis lunasi BON jika saldo mencukupi
+                    $kendaraan->autoSettleBon(auth()->id());
                 }
             }
 

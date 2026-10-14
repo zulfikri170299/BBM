@@ -33,10 +33,11 @@ class SettingController extends Controller
             'satker_can_create_kendaraan', 
             'satker_can_edit_kendaraan',
             'satker_can_import_kendaraan',
-            'is_satker_enabled',
-            'is_personel_enabled',
-            'personel_access_control'
+            'is_satker_enabled'
         ];
+        // Pastikan modul personel selalu nonaktif
+        Setting::updateOrCreate(['key' => 'personel_access_control'], ['value' => '0']);
+        Setting::updateOrCreate(['key' => 'is_personel_enabled'], ['value' => '0']);
         foreach ($checkboxes as $key) {
             if (!$request->has($key)) {
                 Setting::updateOrCreate(

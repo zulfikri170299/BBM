@@ -29,7 +29,13 @@ class KendaraanController extends Controller
 
     public function index(Request $request)
     {
-        $query = Kendaraan::with('satker')->latest();
+        $query = Kendaraan::with('satker')->where(function ($q) {
+            $q->where('status_approval', 'disetujui')
+              ->orWhere(function ($sub) {
+                  $sub->where('status_approval', 'ditolak')
+                      ->where('aksi_approval', 'edit');
+              });
+        })->latest();
 
         if ($request->filled('satker_id')) {
             $query->where('satker_id', $request->satker_id);
@@ -47,7 +53,13 @@ class KendaraanController extends Controller
         $perPage = $this->getPerPage($request);
         $kendaraans = $query->paginate($perPage)->withQueryString();
         $satkers = Satker::orderBy('nama_satker')->get();
-        $allKendaraans = Kendaraan::select('id', 'satker_id', 'no_polisi', 'jenis_kendaraan', 'jenis_bbm', 'saldo')->get();
+        $allKendaraans = Kendaraan::where(function ($q) {
+            $q->where('status_approval', 'disetujui')
+              ->orWhere(function ($sub) {
+                  $sub->where('status_approval', 'ditolak')
+                      ->where('aksi_approval', 'edit');
+              });
+        })->select('id', 'satker_id', 'no_polisi', 'jenis_kendaraan', 'jenis_bbm', 'saldo')->get();
         $adminStocks = \App\Models\AdminBbmStock::all();
 
         return view('admin.kendaraans.index', compact('kendaraans', 'satkers', 'allKendaraans', 'adminStocks'));
@@ -92,6 +104,10 @@ class KendaraanController extends Controller
             'saldo' => 0,
             'roda' => $request->roda,
             'cc' => $request->cc,
+            'status_approval' => 'disetujui',
+            'aksi_approval' => 'tambah',
+            'disetujui_oleh' => auth()->id(),
+            'disetujui_pada' => now(),
         ]);
 
         LogAktivitas::create([
@@ -211,6 +227,9 @@ class KendaraanController extends Controller
 
             DB::commit();
 
+            // Otomatis lunasi BON jika saldo mencukupi
+            $settledBons = $kendaraan->autoSettleBon($user->id);
+
             // 6. Kirim Notifikasi ke Admin Satker terkait
             $adminSatkers = User::where('satker_id', $kendaraan->satker_id)
                 ->where('role', 'admin_satker')
@@ -233,7 +252,13 @@ class KendaraanController extends Controller
             return back()->with('error', 'Terjadi kesalahan saat top up: ' . $e->getMessage());
         }
 
-        return redirect()->route('admin.kendaraans.index')->with('success', 'Top Up berhasil!');
+        $successMsg = 'Top Up berhasil!';
+        if (!empty($settledBons)) {
+            $totalSettledLiters = array_sum(array_column($settledBons, 'jumlah_bon'));
+            $successMsg .= " Saldo sebesar {$totalSettledLiters} L langsung dipotong otomatis untuk melunasi " . count($settledBons) . " BON hutang.";
+        }
+
+        return redirect()->route('admin.kendaraans.index')->with('success', $successMsg);
     }
 
 
@@ -457,8 +482,12 @@ class KendaraanController extends Controller
             'ids.*' => 'exists:kendaraans,id',
         ]);
 
-        $count = Kendaraan::whereIn('id', $request->ids)->count();
-        Kendaraan::whereIn('id', $request->ids)->delete();
+        $kendaraans = Kendaraan::whereIn('id', $request->ids)->get();
+        $count = $kendaraans->count();
+
+        foreach ($kendaraans as $kendaraan) {
+            $kendaraan->delete();
+        }
 
         LogAktivitas::create([
             'user_id' => auth()->id(),
@@ -1155,6 +1184,10 @@ class KendaraanController extends Controller
                     'barcode' => $barcode,
                     'pin' => $pin,
                     'saldo' => 0,
+                    'status_approval' => 'disetujui',
+                    'aksi_approval' => 'import',
+                    'disetujui_oleh' => auth()->id(),
+                    'disetujui_pada' => now(),
                 ]);
                 $successCount++;
             }

@@ -43,9 +43,9 @@
                             :active="request()->routeIs('satker.kendaraans.*')">
                             {{ __('Kendaraan') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('satker.personels.index')"
-                            :active="request()->routeIs('satker.personels.*')">
-                            {{ __('Personel') }}
+                        <x-nav-link :href="route('satker.persetujuan-kendaraan.index')"
+                            :active="request()->routeIs('satker.persetujuan-kendaraan.*')">
+                            {{ __('Persetujuan Kendaraan') }}
                         </x-nav-link>
                         <x-nav-link :href="route('satker.hutang.index')" :active="request()->routeIs('satker.hutang.*')">
                             {{ __('Hutang BBM') }}
@@ -62,12 +62,6 @@
                         </x-nav-link>
                         <x-nav-link :href="route('petugas.hutang.index')" :active="request()->routeIs('petugas.hutang.*')">
                             {{ __('Hutang BBM') }}
-                        </x-nav-link>
-                    @endif
-
-                    @if(auth()->user()->role === 'personel')
-                        <x-nav-link :href="route('personel.dashboard')" :active="request()->routeIs('personel.dashboard')">
-                            {{ __('Dashboard') }}
                         </x-nav-link>
                     @endif
                 </div>

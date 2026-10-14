@@ -58,13 +58,12 @@
                         </label>
                     </div>
 
-                    <div class="bg-white dark:bg-slate-900 dark:text-white pt-4 border-t border-slate-200 dark:border-white/5">
-                        <h4 class="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-4">Aktivasi Global
-                            Akun</h4>
+                                        <div class="bg-white dark:bg-slate-900 dark:text-white pt-4 border-t border-slate-200 dark:border-white/5">
+                        <h4 class="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-4">Aktivasi Global Akun</h4>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" x-data="{ showPersonelAccess: {{ ($settings['personel_access_control'] ?? '1') == '1' ? 'true' : 'false' }} }">
+                        <div class="max-w-xl">
                             <div
-                                class="flex items-center justify-between p-4 border border-slate-200 dark:border-white/10 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 shadow-sm">
+                                class="flex items-center justify-between p-4 border border-slate-200 dark:border-white/10 rounded-xl bg-white dark:bg-slate-900 shadow-sm">
                                 <div>
                                     <h3 class="font-semibold text-slate-800 dark:text-slate-200">Akses Akun Satker</h3>
                                     <p class="text-xs text-slate-600 dark:text-slate-400">Kontrol login seluruh Admin Satker.</p>
@@ -75,38 +74,6 @@
                                 </div>
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" name="is_satker_enabled" value="1" class="sr-only peer bg-white dark:bg-slate-900" {{ ($settings['is_satker_enabled'] ?? '1') == '1' ? 'checked' : '' }}>
-                                    <div
-                                        class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 after:border-slate-300 dark:border-white/20 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-600">
-                                    </div>
-                                </label>
-                            </div>
-
-                            <div x-show="showPersonelAccess" x-transition
-                                class="flex items-center justify-between p-4 border border-slate-200 dark:border-white/10 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 shadow-sm">
-                                <div>
-                                    <h3 class="font-semibold text-slate-800 dark:text-slate-200">Akses User</h3>
-                                    <p class="text-xs text-slate-600 dark:text-slate-400">Kontrol login per individu.</p>
-                                    <a href="{{ route('admin.users.index', ['role' => 'personel']) }}"
-                                        class="text-[10px] font-bold text-indigo-600 hover:text-indigo-800 mt-2 inline-block uppercase tracking-wider">
-                                        &rarr; Pilih Akun per Individu
-                                    </a>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" name="is_personel_enabled" value="1" class="sr-only peer bg-white dark:bg-slate-900" {{ ($settings['is_personel_enabled'] ?? '1') == '1' ? 'checked' : '' }}>
-                                    <div
-                                        class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 after:border-slate-300 dark:border-white/20 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-600">
-                                    </div>
-                                </label>
-                            </div>
-
-                            <div
-                                class="flex items-center justify-between p-3 border border-slate-200 dark:border-white/5 rounded-lg bg-slate-50 dark:bg-slate-800/50">
-                                <div>
-                                    <h3 class="text-sm font-medium text-slate-600 dark:text-slate-400">Kontrol User</h3>
-                                    <p class="text-[10px] text-slate-600 dark:text-slate-400 mt-0.5">Matikan semua menu dan data user.</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer scale-90 origin-right">
-                                    <input type="checkbox" name="personel_access_control" value="1" class="sr-only peer bg-white dark:bg-slate-900" @change="showPersonelAccess = $event.target.checked" {{ ($settings['personel_access_control'] ?? '1') == '1' ? 'checked' : '' }}>
                                     <div
                                         class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 after:border-slate-300 dark:border-white/20 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-600">
                                     </div>

@@ -291,7 +291,19 @@
                                 <td class="px-4 sm:px-6 py-4 max-w-[120px] sm:max-w-[200px] lg:max-w-none">
                                     <div class="flex flex-col min-w-0">
                                         <span class="text-[10px] sm:text-xs font-semibold text-slate-500 dark:text-slate-400 mb-0.5 lg:hidden truncate" title="{{ $kendaraan->jenis_kendaraan }}">{{ $kendaraan->jenis_kendaraan }}</span>
-                                        <span class="text-xs font-bold text-slate-800 dark:text-slate-200">{{ $kendaraan->no_polisi }}</span>
+                                        <div class="flex flex-wrap items-center gap-1.5">
+                                            <span class="text-xs font-bold text-slate-800 dark:text-slate-200">{{ $kendaraan->no_polisi }}</span>
+                                            @if($kendaraan->status_approval === 'pending')
+                                                <a href="{{ route('admin.persetujuan-kendaraan.index', ['status' => 'pending']) }}" class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 hover:bg-amber-200 transition" title="Menunggu persetujuan Super Admin (Klik untuk tinjau)">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>
+                                                    Butuh Persetujuan ({{ ucfirst($kendaraan->aksi_approval ?? 'Pengajuan') }})
+                                                </a>
+                                            @elseif($kendaraan->status_approval === 'ditolak')
+                                                <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300" title="{{ $kendaraan->alasan_penolakan ? 'Alasan: '.$kendaraan->alasan_penolakan : 'Ditolak' }}">
+                                                    Ditolak
+                                                </span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </td>
                                 <td class="px-4 sm:px-6 py-4 text-center hidden lg:table-cell">
@@ -313,12 +325,34 @@
                                     </span>
                                 </td>
                                 <td class="px-4 sm:px-6 py-4 text-right hidden lg:table-cell">
-                                    <span
-                                        class="text-xs font-bold whitespace-nowrap {{ $kendaraan->saldo < 10 ? 'text-red-600' : 'text-slate-800 dark:text-slate-200' }}">
-                                        {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
-                                    </span>
-                                    @if($kendaraan->saldo < 10)
-                                        <span class="block text-xs text-red-500 font-medium mt-0.5">Saldo rendah</span>
+                                    @if($kendaraan->hasUnpaidBon())
+                                        <div class="inline-flex items-center justify-end gap-1.5 text-rose-600 dark:text-rose-400">
+                                            <span class="text-xs font-bold whitespace-nowrap text-rose-600 dark:text-rose-400">
+                                                {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
+                                            </span>
+                                            <span class="relative group/lock inline-flex items-center cursor-pointer">
+                                                <svg class="w-4 h-4 text-rose-600 dark:text-rose-400" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                                                </svg>
+                                                <span class="pointer-events-none absolute bottom-full right-0 mb-1.5 hidden group-hover/lock:block z-50 whitespace-nowrap rounded-lg bg-red-600 text-white text-[11px] font-bold py-1 px-2.5 shadow-xl border border-red-500">
+                                                    Kendaraan Masih Mempunyai Hutang {{ rtrim(rtrim(number_format($kendaraan->totalUnpaidBon(), 2, ',', '.'), '0'), ',') }} Ltr
+                                                </span>
+                                            </span>
+                                        </div>
+                                    @elseif($kendaraan->saldo > 10)
+                                        <span class="text-xs font-bold whitespace-nowrap text-slate-800 dark:text-white">
+                                            {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
+                                        </span>
+                                    @elseif($kendaraan->saldo >= 1)
+                                        <span class="text-xs font-bold whitespace-nowrap text-amber-500 dark:text-amber-400">
+                                            {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
+                                        </span>
+                                        <span class="block text-[11px] text-amber-500 dark:text-amber-400 font-semibold mt-0.5">Saldo rendah</span>
+                                    @else
+                                        <span class="text-xs font-bold whitespace-nowrap text-rose-600 dark:text-rose-400">
+                                            {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
+                                        </span>
+                                        <span class="block text-[11px] text-rose-600 dark:text-rose-400 font-bold mt-0.5">Saldo habis</span>
                                     @endif
                                 </td>
                                 <td class="px-4 sm:px-6 py-4 text-center hidden lg:table-cell">
@@ -431,7 +465,27 @@
                                                             </div>
                                                             <div>
                                                                 <span class="text-[10px] text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1">Saldo</span>
-                                                                <span class="font-bold text-emerald-600 dark:text-emerald-400">{{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} L</span>
+                                                                @if($kendaraan->hasUnpaidBon())
+                                                                    <div class="flex items-center gap-1.5 text-rose-600 dark:text-rose-400">
+                                                                        <span class="font-bold text-rose-600 dark:text-rose-400">{{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} L</span>
+                                                                        <span class="inline-flex items-center">
+                                                                            <svg class="w-4 h-4 text-rose-600 dark:text-rose-400" fill="currentColor" viewBox="0 0 20 20">
+                                                                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                                                                            </svg>
+                                                                        </span>
+                                                                    </div>
+                                                                    <span class="inline-block bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded mt-0.5">
+                                                                        Kendaraan Masih Mempunyai Hutang {{ rtrim(rtrim(number_format($kendaraan->totalUnpaidBon(), 2, ',', '.'), '0'), ',') }} Ltr
+                                                                    </span>
+                                                                @elseif($kendaraan->saldo > 10)
+                                                                    <span class="font-bold text-slate-800 dark:text-white">{{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} L</span>
+                                                                @elseif($kendaraan->saldo >= 1)
+                                                                    <span class="font-bold text-amber-500 dark:text-amber-400">{{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} L</span>
+                                                                    <span class="block text-[10px] text-amber-500 font-bold">Saldo rendah</span>
+                                                                @else
+                                                                    <span class="font-bold text-rose-600 dark:text-rose-400">{{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} L</span>
+                                                                    <span class="block text-[10px] text-rose-600 font-bold">Saldo habis</span>
+                                                                @endif
                                                             </div>
                                                             <div>
                                                                 <span class="text-[10px] text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1">PIN</span>

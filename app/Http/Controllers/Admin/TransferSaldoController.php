@@ -93,6 +93,11 @@ class TransferSaldoController extends Controller
                 $kendaraan = Kendaraan::findOrFail($request->kendaraan_id);
                 $personel = Personel::findOrFail($request->personel_id);
 
+                if ($kendaraan->hasUnpaidBon()) {
+                    $totalBon = $kendaraan->totalUnpaidBon();
+                    return back()->with('error', "Transfer ditolak! Saldo kendaraan {$kendaraan->no_polisi} sedang dikunci karena memiliki BON belum dibayar sebesar {$totalBon} Liter. Harap lunasi BON terlebih dahulu.");
+                }
+
                 if ($kendaraan->saldo < $request->jumlah) {
                     return back()->with('error', "Saldo kendaraan {$kendaraan->no_polisi} tidak mencukupi. Tersedia: {$kendaraan->saldo} L.");
                 }
@@ -143,6 +148,7 @@ class TransferSaldoController extends Controller
                 ]);
 
                 $tujuan->increment('saldo', $request->jumlah);
+                $tujuan->autoSettleBon($user->id);
 
                 RiwayatTransferSaldoPersonel::create([
                     'satker_id' => $tujuan->satker_id,

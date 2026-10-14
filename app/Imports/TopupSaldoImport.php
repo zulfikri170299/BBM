@@ -115,6 +115,9 @@ class TopupSaldoImport implements ToCollection, WithHeadingRow, WithStartRow
                 'metode' => 'IMPORT',
             ]);
 
+            // Otomatis lunasi BON jika saldo mencukupi
+            $kendaraan->autoSettleBon(auth()->id());
+
             // Kirim Notifikasi ke Admin Satker terkait
             $adminSatkers = User::where('satker_id', $kendaraan->satker_id)
                 ->where('role', 'admin_satker')

@@ -18,6 +18,22 @@
                     class="flex-1 py-1.5 text-[9px] font-black uppercase rounded-lg transition-all">{{ $personelAccessControl == '1' ? 'NOPOL / NRP' : 'NOPOL' }}</button>
             </div>
 
+            <!-- Error Alert Global (Muncul untuk Barcode Scan maupun Manual Input) -->
+            <div x-show="error" x-transition class="p-3 bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 rounded-xl flex items-start gap-2.5 shadow-sm" x-cloak>
+                <div class="p-1 bg-rose-100 dark:bg-rose-900/60 text-rose-600 dark:text-rose-400 rounded-lg shrink-0 mt-0.5">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <p class="text-[9px] font-black uppercase tracking-wider text-rose-700 dark:text-rose-300">Pemberitahuan</p>
+                    <p class="text-xs font-bold text-rose-800 dark:text-rose-200 mt-0.5 leading-snug" x-text="error"></p>
+                </div>
+                <button type="button" @@click="error = null" class="text-rose-400 hover:text-rose-600 dark:hover:text-rose-200">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
             <!-- Card Container -->
             <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl p-4 shadow-xl shadow-indigo-500/10 relative">
                 <!-- Barcode -->
@@ -71,7 +87,7 @@
 
                 <!-- Manual -->
                 <div x-show="tab !== 'barcode'" class="space-y-3 py-1" x-cloak>
-                    <div x-show="error" class="p-2 bg-red-50 border border-red-200 rounded-lg text-red-600 text-[10px] font-black uppercase text-center" x-text="error"></div>
+                    
                     
                     <input type="text" x-model="manualValue" @@keyup.enter="checkData(tab, manualValue)"
                         class="w-full px-4 py-4 bg-slate-50 dark:bg-slate-800/50 border-2 border-slate-200 dark:border-white/5 rounded-xl text-2xl text-center font-black text-slate-800 dark:text-white uppercase tracking-widest outline-none"
@@ -198,6 +214,9 @@
                             this.stopScanner();
                         } else { 
                             this.error = res.message; 
+                            if (mode === 'barcode') {
+                                this.stopScanner();
+                            }
                         }
                     } catch (e) { 
                         console.error('Error:', e);

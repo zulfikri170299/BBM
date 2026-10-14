@@ -20,60 +20,26 @@ class PinManagementController extends Controller
             abort(403);
         }
 
-        $tab = $request->get('tab', 'personel');
+        $tab = 'kendaraan';
         $search = $request->get('search');
         $satkerId = $request->get('satker_id');
         $perPage = $this->getPerPage($request);
 
         $satkers = Satker::orderBy('nama_satker')->get();
 
-        if ($tab === 'personel') {
-            $query = Personel::with('satker')->latest();
-            if ($search) {
-                $query->where(function($q) use ($search) {
-                    $q->where('nama', 'like', "%{$search}%")
-                      ->orWhere('nrp', 'like', "%{$search}%");
-                });
-            }
-            if ($satkerId) {
-                $query->where('satker_id', $satkerId);
-            }
-            $data = $query->paginate($perPage, ['*'], 'personel_page')->withQueryString();
-        } else {
-            $query = Kendaraan::with('satker')->latest();
-            if ($search) {
-                $query->where(function($q) use ($search) {
-                    $q->where('no_polisi', 'like', "%{$search}%")
-                      ->orWhere('kode_kendaraan', 'like', "%{$search}%");
-                });
-            }
-            if ($satkerId) {
-                $query->where('satker_id', $satkerId);
-            }
-            $data = $query->paginate($perPage, ['*'], 'kendaraan_page')->withQueryString();
+        $query = Kendaraan::with('satker')->latest();
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('no_polisi', 'like', "%{$search}%")
+                  ->orWhere('kode_kendaraan', 'like', "%{$search}%");
+            });
         }
+        if ($satkerId) {
+            $query->where('satker_id', $satkerId);
+        }
+        $data = $query->paginate($perPage, ['*'], 'kendaraan_page')->withQueryString();
 
         return view('admin.pin-management.index', compact('data', 'satkers', 'tab'));
-    }
-
-    public function updatePersonelPin(Request $request, Personel $personel)
-    {
-        if (auth()->user()->role !== 'super_admin') {
-            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
-        }
-
-        $request->validate([
-            'pin' => 'required|integer|digits:6',
-        ]);
-
-        $personel->update(['pin' => $request->pin]);
-
-        LogAktivitas::create([
-            'user_id' => auth()->id(),
-            'aktivitas' => "Update PIN Personel (Manual): {$personel->nama} (NRP: {$personel->nrp})"
-        ]);
-
-        return response()->json(['success' => true, 'message' => 'PIN Personel berhasil diperbarui.']);
     }
 
     public function updateKendaraanPin(Request $request, Kendaraan $kendaraan)

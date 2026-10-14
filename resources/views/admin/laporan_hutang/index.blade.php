@@ -158,7 +158,7 @@
                                             <span class="inline-flex items-center px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-[10px] font-black uppercase tracking-wider">
                                                 Lunas
                                             </span>
-                                            <span class="text-[9px] font-medium text-slate-600 dark:text-slate-400 mt-1">Oleh: {{ $hutang->adminBayar->name ?? '-' }}</span>
+                                            <span class="text-[9px] font-medium text-slate-600 dark:text-slate-400 mt-1">Oleh: {{ $hutang->adminBayar ? $hutang->adminBayar->name : 'Otomatis Sistem' }}</span>
                                         </div>
                                     @else
                                         <span class="inline-flex items-center px-2.5 py-1 bg-rose-50 text-rose-700 border border-rose-200 rounded-lg text-[10px] font-black uppercase tracking-wider">

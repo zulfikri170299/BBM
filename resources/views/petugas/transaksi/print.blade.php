@@ -49,32 +49,31 @@
 
                     <div class="bg-white dark:bg-slate-900 dark:text-white border-t border-dashed border-slate-200 dark:border-white/10"></div>
 
-                    <!-- Info Unit (Kendaraan/Personel) -->
+                    <!-- Info Kendaraan -->
                     @php
-                        $target = $transaksi->kendaraan ?? $transaksi->personel;
-                        $isKendaraan = isset($transaksi->kendaraan);
+                        $target = $transaksi->kendaraan;
+                        $nopol = $target?->no_polisi ?? $transaksi->nopol ?? '-';
+                        $satkerName = $target?->satker?->nama_satker ?? $transaksi->satker?->nama_satker ?? '-';
+                        $jenisKendaraan = $target?->jenis_kendaraan ?? '-';
+                        $jenisBbm = $transaksi->jenis_bbm ?? $target?->jenis_bbm ?? '-';
+                        $sisaSaldo = $target?->saldo ?? 0;
                     @endphp
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <p class="text-[10px] text-slate-600 dark:text-slate-400 font-medium uppercase tracking-wider">
-                                {{ $isKendaraan ? 'No Polisi' : 'NRP' }}</p>
-                            <p class="text-sm font-bold text-slate-800 dark:text-slate-200">
-                                {{ $isKendaraan ? $target->no_polisi : $target->nrp }}</p>
+                            <p class="text-[10px] text-slate-600 dark:text-slate-400 font-medium uppercase tracking-wider">No Polisi</p>
+                            <p class="text-sm font-bold text-slate-800 dark:text-slate-200">{{ $nopol }}</p>
                         </div>
                         <div class="text-right">
                             <p class="text-[10px] text-slate-600 dark:text-slate-400 font-medium uppercase tracking-wider">Satker</p>
-                            <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">{{ $target->satker->nama_satker ?? '-' }}
-                            </p>
+                            <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">{{ $satkerName }}</p>
                         </div>
                         <div>
-                            <p class="text-[10px] text-slate-600 dark:text-slate-400 font-medium uppercase tracking-wider">
-                                {{ $isKendaraan ? 'Jenis Kendaraan' : 'Nama' }}</p>
-                            <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">
-                                {{ $isKendaraan ? $target->jenis_kendaraan : $target->nama }}</p>
+                            <p class="text-[10px] text-slate-600 dark:text-slate-400 font-medium uppercase tracking-wider">Jenis Kendaraan</p>
+                            <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">{{ $jenisKendaraan }}</p>
                         </div>
                         <div class="text-right">
                             <p class="text-[10px] text-slate-600 dark:text-slate-400 font-medium uppercase tracking-wider">Jenis BBM</p>
-                            <p class="text-sm font-bold text-slate-800 dark:text-slate-200">{{ $target->jenis_bbm }}</p>
+                            <p class="text-sm font-bold text-slate-800 dark:text-slate-200">{{ $jenisBbm }}</p>
                         </div>
                     </div>
 
@@ -94,10 +93,9 @@
 
                     <!-- Sisa Saldo -->
                     <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-center">
-                        <p class="text-xs text-emerald-600 font-medium">Sisa Saldo
-                            {{ $isKendaraan ? 'Kendaraan' : 'Personel' }}</p>
+                        <p class="text-xs text-emerald-600 font-medium">Sisa Saldo Kendaraan</p>
                         <p class="text-xl font-bold text-emerald-700 mt-0.5">
-                            {{ rtrim(rtrim(number_format($target->saldo, 2, ',', '.'), '0'), ',') }} Liter</p>
+                            {{ rtrim(rtrim(number_format($sisaSaldo, 2, ',', '.'), '0'), ',') }} Liter</p>
                     </div>
                 </div>
 

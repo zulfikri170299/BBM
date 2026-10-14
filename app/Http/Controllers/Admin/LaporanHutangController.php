@@ -16,6 +16,9 @@ class LaporanHutangController extends Controller
 
     public function index(Request $request)
     {
+        // Jalankan pelunasan otomatis untuk semua BON yang saldonya mencukupi
+        \App\Models\Kendaraan::autoSettleAllEligible();
+
         $query = Hutang::with(['satker', 'petugas', 'adminBayar']);
 
         // Filter Tanggal
@@ -55,6 +58,9 @@ class LaporanHutangController extends Controller
 
     public function print(Request $request)
     {
+        // Jalankan pelunasan otomatis untuk semua BON yang saldonya mencukupi
+        \App\Models\Kendaraan::autoSettleAllEligible();
+
         $query = Hutang::with(['satker', 'petugas', 'adminBayar']);
 
         // Filter Tanggal

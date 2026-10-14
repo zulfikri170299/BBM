@@ -17,6 +17,10 @@ class LaporanHutangController extends Controller
     {
         $user = auth()->user();
         $satker = $user->satker;
+
+        // Jalankan pelunasan otomatis untuk BON satker yang saldonya mencukupi
+        \App\Models\Kendaraan::autoSettleAllEligible($user->role !== 'super_admin' ? $satker->id : null);
+
         $query = Hutang::with(['petugas', 'adminBayar']);
         
         if ($user->role !== 'super_admin') {
@@ -57,6 +61,10 @@ class LaporanHutangController extends Controller
     {
         $user = auth()->user();
         $satker = $user->satker;
+
+        // Jalankan pelunasan otomatis untuk BON satker yang saldonya mencukupi
+        \App\Models\Kendaraan::autoSettleAllEligible($user->role !== 'super_admin' ? $satker->id : null);
+
         $query = Hutang::with(['petugas', 'adminBayar']);
         
         if ($user->role !== 'super_admin') {

@@ -14,6 +14,7 @@ class TransaksiBbm extends Model
     protected $fillable = [
         'satker_id',
         'kendaraan_id',
+        'nopol',
         'personel_id',
         'petugas_id',
         'nama_driver',
@@ -23,6 +24,11 @@ class TransaksiBbm extends Model
         'total',
         'jenis_bbm',
     ];
+
+    public function getNoPolisiAttribute()
+    {
+        return $this->kendaraan?->no_polisi ?? $this->attributes['nopol'] ?? '-';
+    }
 
     public function kendaraan()
     {

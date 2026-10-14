@@ -9,6 +9,9 @@ class HutangController extends Controller
 {
     public function index(Request $request)
     {
+        // Jalankan pelunasan otomatis untuk semua BON yang saldonya mencukupi
+        \App\Models\Kendaraan::autoSettleAllEligible();
+
         $query = \App\Models\Hutang::with(['satker', 'petugas', 'adminBayar'])->orderBy('created_at', 'desc');
 
         if ($request->filled('satker_id')) {
@@ -141,6 +144,9 @@ class HutangController extends Controller
 
     public function downloadPDF(Request $request)
     {
+        // Jalankan pelunasan otomatis untuk semua BON yang saldonya mencukupi
+        \App\Models\Kendaraan::autoSettleAllEligible();
+
         $query = \App\Models\Hutang::with(['satker', 'petugas', 'adminBayar'])->orderBy('created_at', 'desc');
 
         if ($request->filled('satker_id')) {
@@ -250,10 +256,14 @@ class HutangController extends Controller
     {
         $request->validate(['satker_id' => 'required|exists:satkers,id']);
 
-        $kendaraans = \App\Models\Kendaraan::where('satker_id', $request->satker_id)
-            ->where('saldo', '<=', 0)
-            ->select('id', 'no_polisi', 'jenis_kendaraan', 'jenis_bbm', 'saldo')
-            ->get();
+        $query = \App\Models\Kendaraan::where('satker_id', $request->satker_id)
+            ->select('id', 'no_polisi', 'jenis_kendaraan', 'jenis_bbm', 'saldo');
+
+        if ($request->boolean('hanya_saldo_habis')) {
+            $query->where('saldo', '<=', 0);
+        }
+
+        $kendaraans = $query->get();
 
         return response()->json($kendaraans);
     }
@@ -266,12 +276,22 @@ class HutangController extends Controller
             return back()->with('error', 'Hutang ini sudah dibayar sebelumnya.');
         }
 
-        $kendaraan = \App\Models\Kendaraan::where('no_polisi', $hutang->nopol)
-            ->where('satker_id', $hutang->satker_id)
-            ->firstOrFail();
+        $kendaraan = \App\Models\Kendaraan::where('satker_id', $hutang->satker_id)
+            ->where(function($q) use ($hutang) {
+                $q->where('no_polisi', $hutang->nopol)
+                  ->orWhereRaw("TRIM(UPPER(no_polisi)) = ?", [trim(strtoupper($hutang->nopol))]);
+            })
+            ->first();
+
+        if (!$kendaraan) {
+            $cleanNopol = preg_replace('/[^A-Za-z0-9]/', '', strtoupper($hutang->nopol));
+            $kendaraan = \App\Models\Kendaraan::where('satker_id', $hutang->satker_id)
+                ->whereRaw("REPLACE(REPLACE(REPLACE(UPPER(no_polisi), ' ', ''), '-', ''), '.', '') = ?", [$cleanNopol])
+                ->firstOrFail();
+        }
 
         if ($kendaraan->saldo < $hutang->jumlah_bon) {
-            return back()->with('error', 'Saldo kendaraan tidak mencukupi. Saldo: ' . $kendaraan->saldo . ' L');
+            return back()->with('error', 'Saldo kendaraan tidak mencukupi untuk melunasi BON ini. Saldo: ' . $kendaraan->saldo . ' L, Jumlah BON: ' . $hutang->jumlah_bon . ' L');
         }
 
         \Illuminate\Support\Facades\DB::transaction(function () use ($hutang, $kendaraan, $user) {
@@ -302,6 +322,11 @@ class HutangController extends Controller
             ]);
         });
 
-        return back()->with('success', 'Hutang berhasil dibayar oleh Super Admin.');
+        $isFullyPaid = !$kendaraan->fresh()->hasUnpaidBon();
+        $msg = $isFullyPaid 
+            ? "Hutang berhasil dibayar. Semua BON kendaraan {$kendaraan->no_polisi} telah lunas dan saldo kini dapat digunakan kembali."
+            : "Hutang berhasil dibayar. Kendaraan {$kendaraan->no_polisi} masih memiliki sisa BON lain sebesar {$kendaraan->totalUnpaidBon()} L (saldo tetap dikunci hingga lunas).";
+
+        return back()->with('success', $msg);
     }
 }

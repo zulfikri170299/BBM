@@ -146,7 +146,7 @@
                     <td class="text-center">
                         @if($hutang->status === 'sudah_dibayar')
                             <span class="font-bold" style="color: #059669;">LUNAS</span><br>
-                            <span style="font-size: 7.5pt; color: #64748b;">Oleh: {{ $hutang->adminBayar->name ?? '-' }}</span>
+                            <span style="font-size: 7.5pt; color: #64748b;">Oleh: {{ $hutang->adminBayar ? $hutang->adminBayar->name : 'Otomatis Sistem' }}</span>
                         @else
                             <span class="font-bold" style="color: #e11d48;">BELUM LUNAS</span>
                         @endif

@@ -21,16 +21,14 @@ class BulkPotongSaldoController extends Controller
     public function index()
     {
         $kendaraans = Kendaraan::with('satker')->orderBy('no_polisi')->get();
-        $personels = Personel::with('satker')->orderBy('nama')->get();
         $satkers = Satker::orderBy('nama_satker')->get();
         
-        return view('admin.potong-saldo.index', compact('kendaraans', 'personels', 'satkers'));
+        return view('admin.potong-saldo.index', compact('kendaraans', 'satkers'));
     }
 
     public function process(Request $request)
     {
         $request->validate([
-            'type' => 'required|in:kendaraan,personel',
             'ids' => 'required|array',
             'ids.*' => 'integer',
             'is_kosongkan' => 'required|in:1',
@@ -50,10 +48,9 @@ class BulkPotongSaldoController extends Controller
             return back()->with('error', 'Password Top Up salah!');
         }
 
-        $type = $request->type;
         $ids = $request->ids;
         $isKosongkan = $request->is_kosongkan === '1';
-        $jumlah = $isKosongkan ? 9999999 : $request->jumlah; // Jika kosongkan, set nilai sangat besar agar min(jumlah, saldo) selalu saldo
+        $jumlah = $isKosongkan ? 9999999 : $request->jumlah;
         $kembalikanKeStok = $request->kembalikan_ke_stok === 'ya';
         $keterangan = $request->keterangan;
 
@@ -63,11 +60,7 @@ class BulkPotongSaldoController extends Controller
             $successCount = 0;
             $failCount = 0;
 
-            if ($type === 'kendaraan') {
-                $entities = Kendaraan::whereIn('id', $ids)->get();
-            } else {
-                $entities = Personel::whereIn('id', $ids)->get();
-            }
+            $entities = Kendaraan::whereIn('id', $ids)->get();
 
             foreach ($entities as $entity) {
                 $potong = min($jumlah, $entity->saldo);
@@ -83,8 +76,8 @@ class BulkPotongSaldoController extends Controller
                 // 2. Catat Riwayat
                 RiwayatTopup::create([
                     'satker_id' => $entity->satker_id,
-                    'kendaraan_id' => $type === 'kendaraan' ? $entity->id : null,
-                    'personel_id' => $type === 'personel' ? $entity->id : null,
+                    'kendaraan_id' => $entity->id,
+                    'personel_id' => null,
                     'user_id' => $user->id,
                     'jumlah' => $potong,
                     'tipe' => 'keluar',
@@ -107,7 +100,7 @@ class BulkPotongSaldoController extends Controller
                         'jenis_bbm' => $entity->jenis_bbm,
                         'jumlah' => $potong,
                         'tipe' => 'masuk',
-                        'keterangan' => "Pengembalian saldo (Masal) dari " . ($type === 'kendaraan' ? "kendaraan {$entity->no_polisi}" : "personel {$entity->nama}") . ". Ket: {$keterangan}",
+                        'keterangan' => "Pengembalian saldo (Masal) dari kendaraan {$entity->no_polisi}. Ket: {$keterangan}",
                     ]);
                 }
 
@@ -116,12 +109,12 @@ class BulkPotongSaldoController extends Controller
 
             LogAktivitas::create([
                 'user_id' => $user->id,
-                'aktivitas' => "Potong saldo masal {$type} sebanyak {$successCount} data. Ket: {$keterangan}"
+                'aktivitas' => "Potong saldo masal kendaraan sebanyak {$successCount} data. Ket: {$keterangan}"
             ]);
 
             DB::commit();
 
-            return back()->with('success', "Berhasil memotong saldo {$successCount} {$type}. " . ($failCount > 0 ? "Gagal: {$failCount} (Saldo 0)." : ""));
+            return back()->with('success', "Berhasil memotong saldo {$successCount} kendaraan. " . ($failCount > 0 ? "Gagal: {$failCount} (Saldo 0)." : ""));
 
         } catch (\Exception $e) {
             DB::rollBack();

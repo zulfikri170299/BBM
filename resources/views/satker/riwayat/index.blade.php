@@ -172,7 +172,7 @@
                                 </td>
                                 <td class="px-4 py-3">
                                     <div class="flex flex-col">
-                                        <span class="text-xs text-slate-700 dark:text-slate-300 font-medium">{{ $trx->kendaraan->jenis_kendaraan ?? ($trx->personel->nama ?? '-') }}</span>
+                                        <span class="text-xs text-slate-700 dark:text-slate-300 font-medium">{{ $trx->kendaraan?->jenis_kendaraan ?? '-' }}</span>
                                         @if($isPotong)
                                             <span class="text-[10px] font-bold text-amber-600 uppercase tracking-tighter">Potong Saldo</span>
                                         @endif
@@ -180,11 +180,11 @@
                                 </td>
                                 <td class="px-4 py-3">
                                     <span
-                                        class="text-xs font-semibold text-slate-800 dark:text-slate-200">{{ $trx->kendaraan->no_polisi ?? ($trx->personel->nrp ?? '-') }}</span>
+                                        class="text-xs font-semibold text-slate-800 dark:text-slate-200">{{ $trx->kendaraan?->no_polisi ?? $trx->nopol ?? '-' }}</span>
                                 </td>
                                 <td class="px-4 py-3">
                                     @php
-                                        $jenisBbm = $trx->kendaraan->jenis_bbm ?? ($trx->personel->jenis_bbm ?? null);
+                                        $jenisBbm = $trx->jenis_bbm ?? $trx->kendaraan?->jenis_bbm;
                                         $bbmColors = [
                                             'Pertalite' => 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20',
                                             'Pertamax' => 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20',

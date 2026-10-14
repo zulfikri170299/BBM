@@ -69,8 +69,8 @@
                         @endif
                     </td>
                 @endif
-                <td>{{ $trx->kendaraan->jenis_kendaraan ?? ($trx->personel->nama ?? '-') }}</td>
-                <td class="text-center"><b>{{ $trx->kendaraan->no_polisi ?? ($trx->personel->nrp ?? '-') }}</b></td>
+                <td>{{ $trx->kendaraan?->jenis_kendaraan ?? '-' }}</td>
+                <td class="text-center"><b>{{ $trx->kendaraan?->no_polisi ?? $trx->nopol ?? '-' }}</b></td>
                 <td class="text-center">{{ $trx->jenis_bbm ?? '-' }}</td>
                 <td>
                     @if($isPotong)

@@ -27,9 +27,14 @@ class KendaraanController extends Controller
         $satkerId = $user->satker_id;
         $search = $request->input('search');
 
-        // Jika Super Admin, tampilkan semua kendaraan jika tidak ada filter satker
-        // atau gunakan satker_id dari user jika ada.
-        $query = Kendaraan::query();
+        // Tabel utama kendaraan HANYA menampilkan kendaraan yang SUDAH DISETUJUI
+        $query = Kendaraan::query()->where(function ($q) {
+            $q->where('status_approval', 'disetujui')
+              ->orWhere(function ($sub) {
+                  $sub->where('status_approval', 'ditolak')
+                      ->where('aksi_approval', 'edit');
+              });
+        });
         if ($user->role !== 'super_admin') {
             $query->where('satker_id', $satkerId);
         }
@@ -44,25 +49,33 @@ class KendaraanController extends Controller
 
         $kendaraans = $query->latest()->paginate($this->getPerPage($request))->withQueryString();
         
-        // Untuk dropdown filter atau data lainnya di view
-        if ($user->role === 'super_admin') {
-            $personels = \App\Models\Personel::all();
-            $availableKendaraans = Kendaraan::all();
-        } else {
-            $personels = \App\Models\Personel::where('satker_id', $satkerId)->get();
-            $availableKendaraans = Kendaraan::where('satker_id', $satkerId)->get();
+        // Data pengajuan yang belum disetujui (dipisahkan agar tidak mencemari tabel kendaraan aktif)
+        $submissionQuery = Kendaraan::query();
+        if ($user->role !== 'super_admin') {
+            $submissionQuery->where('satker_id', $satkerId);
         }
 
-        return view('satker.kendaraans.index', compact('kendaraans', 'personels', 'availableKendaraans'));
+        $pendingKendaraans = (clone $submissionQuery)->where('status_approval', 'pending')->latest()->get();
+        $rejectedKendaraans = (clone $submissionQuery)->where('status_approval', 'ditolak')->latest()->get();
+
+        $availableKendaraans = ($user->role === 'super_admin' ? Kendaraan::query() : Kendaraan::where('satker_id', $satkerId))
+            ->where(function ($q) {
+                $q->where('status_approval', 'disetujui')
+                  ->orWhere(function ($sub) {
+                      $sub->where('status_approval', 'ditolak')
+                          ->where('aksi_approval', 'edit');
+                  });
+            })
+            ->get();
+
+        return view('satker.kendaraans.index', compact('kendaraans', 'availableKendaraans', 'pendingKendaraans', 'rejectedKendaraans'));
     }
 
     public function storeTransfer(Request $request)
     {
         $request->validate([
             'kendaraan_id' => 'required|exists:kendaraans,id',
-            'tipe_tujuan' => 'required|in:personel,kendaraan',
-            'personel_id' => 'required_if:tipe_tujuan,personel|nullable|exists:personels,id',
-            'tujuan_kendaraan_id' => 'required_if:tipe_tujuan,kendaraan|nullable|exists:kendaraans,id',
+            'tujuan_kendaraan_id' => 'required|exists:kendaraans,id',
             'jumlah' => 'required|integer|min:1',
             'keterangan' => 'nullable|string|max:255',
         ]);
@@ -70,55 +83,33 @@ class KendaraanController extends Controller
         $satkerId = auth()->user()->satker_id;
         $kendaraan = Kendaraan::where('id', $request->kendaraan_id)->where('satker_id', $satkerId)->firstOrFail();
         
+        if ($kendaraan->hasUnpaidBon()) {
+            $totalBon = $kendaraan->totalUnpaidBon();
+            return back()->with('error', "Transfer saldo ditolak! Saldo kendaraan {$kendaraan->no_polisi} sedang dikunci karena masih memiliki BON/Hutang belum dibayar sebesar {$totalBon} Liter. Harap lunasi BON terlebih dahulu.");
+        }
+
         if ($kendaraan->saldo < $request->jumlah) {
             return back()->with('error', 'Saldo kendaraan tidak mencukupi.');
         }
 
-        $targetName = '';
-        $personelId = null;
-        $tujuanKendaraanId = null;
-
-        if ($request->tipe_tujuan === 'personel') {
-            $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
-            if ($personelAccessControl == '0') {
-                return back()->with('error', 'Fitur transfer ke personel sedang dinonaktifkan.');
-            }
-
-            $personel = \App\Models\Personel::where('id', $request->personel_id)->where('satker_id', $satkerId)->firstOrFail();
-            
-            if ($personel->jenis_bbm && $personel->jenis_bbm !== $kendaraan->jenis_bbm) {
-                return back()->with('error', 'Transfer ditolak! Personel memiliki jenis BBM berbeda.');
-            }
-            
-            $personelId = $personel->id;
-            $targetName = "Personel (" . $personel->nama . ")";
-            
-            \Illuminate\Support\Facades\DB::transaction(function () use ($kendaraan, $personel, $request, $satkerId) {
-                $kendaraan->decrement('saldo', $request->jumlah);
-                $personel->increment('saldo', $request->jumlah);
-                $personel->update(['jenis_bbm' => $kendaraan->jenis_bbm]);
-                $this->createTransferHistory($satkerId, $kendaraan->id, $personel->id, null, $request->jumlah, $kendaraan->jenis_bbm, $request->keterangan);
-            });
-        } else {
-            if ($request->tujuan_kendaraan_id == $kendaraan->id) {
-                return back()->with('error', 'Kendaraan tujuan tidak boleh sama dengan sumber.');
-            }
-            
-            $tujuan = Kendaraan::where('id', $request->tujuan_kendaraan_id)->where('satker_id', $satkerId)->firstOrFail();
-            
-            if ($tujuan->jenis_bbm !== $kendaraan->jenis_bbm) {
-                return back()->with('error', 'Transfer ditolak! Jenis BBM tidak cocok.');
-            }
-
-            $tujuanKendaraanId = $tujuan->id;
-            $targetName = "Kendaraan (" . $tujuan->no_polisi . ")";
-
-            \Illuminate\Support\Facades\DB::transaction(function () use ($kendaraan, $tujuan, $request, $satkerId) {
-                $kendaraan->decrement('saldo', $request->jumlah);
-                $tujuan->increment('saldo', $request->jumlah);
-                $this->createTransferHistory($satkerId, $kendaraan->id, null, $tujuan->id, $request->jumlah, $kendaraan->jenis_bbm, $request->keterangan);
-            });
+        if ($request->tujuan_kendaraan_id == $kendaraan->id) {
+            return back()->with('error', 'Kendaraan tujuan tidak boleh sama dengan sumber.');
         }
+        
+        $tujuan = Kendaraan::where('id', $request->tujuan_kendaraan_id)->where('satker_id', $satkerId)->firstOrFail();
+        
+        if ($tujuan->jenis_bbm !== $kendaraan->jenis_bbm) {
+            return back()->with('error', 'Transfer ditolak! Jenis BBM tidak cocok.');
+        }
+
+        $targetName = "Kendaraan (" . $tujuan->no_polisi . ")";
+
+        \Illuminate\Support\Facades\DB::transaction(function () use ($kendaraan, $tujuan, $request, $satkerId) {
+            $kendaraan->decrement('saldo', $request->jumlah);
+            $tujuan->increment('saldo', $request->jumlah);
+            $tujuan->autoSettleBon(auth()->id());
+            $this->createTransferHistory($satkerId, $kendaraan->id, null, $tujuan->id, $request->jumlah, $kendaraan->jenis_bbm, $request->keterangan);
+        });
 
         LogAktivitas::create([
             'user_id' => auth()->id(),
@@ -638,6 +629,9 @@ class KendaraanController extends Controller
         $lastId = Kendaraan::max('id') ?? 0;
         $kodeKendaraan = 'KND-' . str_pad($lastId + 1, 5, '0', STR_PAD_LEFT);
 
+        $isSuperAdmin = auth()->user()->role === 'super_admin';
+        $statusApproval = $isSuperAdmin ? 'disetujui' : 'pending';
+
         Kendaraan::create([
             'satker_id' => auth()->user()->satker_id,
             'kode_kendaraan' => $kodeKendaraan,
@@ -649,14 +643,25 @@ class KendaraanController extends Controller
             'saldo' => 0,
             'roda' => $request->roda,
             'cc' => $request->cc,
+            'status_approval' => $statusApproval,
+            'aksi_approval' => 'tambah',
+            'diajukan_oleh' => auth()->id(),
+            'disetujui_oleh' => $isSuperAdmin ? auth()->id() : null,
+            'disetujui_pada' => $isSuperAdmin ? now() : null,
         ]);
 
         LogAktivitas::create([
             'user_id' => auth()->id(),
-            'aktivitas' => "Menambahkan Kendaraan Baru: {$request->no_polisi} ({$request->jenis_kendaraan})"
+            'aktivitas' => ($isSuperAdmin ? "Menambahkan Kendaraan Baru: " : "Mengajukan Kendaraan Baru: ") . "{$request->no_polisi} ({$request->jenis_kendaraan})"
         ]);
 
-        return redirect()->route('satker.kendaraans.index')->with('success', 'Kendaraan berhasil ditambahkan! Kode: ' . $kodeKendaraan . ' | Barcode: ' . $barcode . ' | PIN: ' . $pin . ' (Simpan PIN ini, tidak bisa dilihat lagi!)');
+        if ($isSuperAdmin) {
+            $msg = 'Kendaraan berhasil ditambahkan! Kode: ' . $kodeKendaraan . ' | Barcode: ' . $barcode . ' | PIN: ' . $pin . ' (Simpan PIN ini, tidak bisa dilihat lagi!)';
+        } else {
+            $msg = 'Data kendaraan berhasil diajukan dan menunggu persetujuan Superadmin! Kode: ' . $kodeKendaraan . ' | Barcode: ' . $barcode . ' | PIN: ' . $pin . ' (Simpan PIN ini, tidak bisa dilihat lagi!)';
+        }
+
+        return redirect()->route('satker.kendaraans.index')->with('success', $msg);
     }
     public function edit(Kendaraan $kendaraan)
     {
@@ -691,20 +696,49 @@ class KendaraanController extends Controller
             'cc' => 'nullable|string',
         ]);
 
-        $kendaraan->update([
-            'no_polisi' => $request->no_polisi,
-            'jenis_kendaraan' => $request->jenis_kendaraan,
-            'jenis_bbm' => $request->jenis_bbm,
-            'roda' => $request->roda,
-            'cc' => $request->cc,
-        ]);
+        $isSuperAdmin = auth()->user()->role === 'super_admin';
 
-        LogAktivitas::create([
-            'user_id' => auth()->id(),
-            'aktivitas' => "Memperbarui data Kendaraan: {$kendaraan->no_polisi}"
-        ]);
+        if ($isSuperAdmin) {
+            $kendaraan->update([
+                'no_polisi' => $request->no_polisi,
+                'jenis_kendaraan' => $request->jenis_kendaraan,
+                'jenis_bbm' => $request->jenis_bbm,
+                'roda' => $request->roda,
+                'cc' => $request->cc,
+                'status_approval' => 'disetujui',
+                'disetujui_oleh' => auth()->id(),
+                'disetujui_pada' => now(),
+                'alasan_penolakan' => null,
+            ]);
 
-        return redirect()->route('satker.kendaraans.index')->with('success', 'Data kendaraan berhasil diperbarui.');
+            LogAktivitas::create([
+                'user_id' => auth()->id(),
+                'aktivitas' => "Memperbarui data Kendaraan (Super Admin): {$kendaraan->no_polisi}"
+            ]);
+
+            return redirect()->route('satker.kendaraans.index')->with('success', 'Data kendaraan berhasil diperbarui.');
+        } else {
+            $kendaraan->update([
+                'status_approval' => 'pending',
+                'aksi_approval' => 'edit',
+                'alasan_penolakan' => null,
+                'diajukan_oleh' => auth()->id(),
+                'pending_changes' => [
+                    'no_polisi' => $request->no_polisi,
+                    'jenis_kendaraan' => $request->jenis_kendaraan,
+                    'jenis_bbm' => $request->jenis_bbm,
+                    'roda' => $request->roda,
+                    'cc' => $request->cc,
+                ],
+            ]);
+
+            LogAktivitas::create([
+                'user_id' => auth()->id(),
+                'aktivitas' => "Mengajukan perubahan data Kendaraan: {$kendaraan->no_polisi}"
+            ]);
+
+            return redirect()->route('satker.kendaraans.index')->with('success', 'Perubahan data kendaraan berhasil diajukan dan menunggu persetujuan Superadmin.');
+        }
     }
 
     public function previewImport(Request $request)
@@ -931,16 +965,36 @@ class KendaraanController extends Controller
                 else { $errors[] = "Baris {$r}: Jenis BBM '{$jenisBbm}' tidak valid."; continue; }
 
                 // Check duplicate
+                $isSuperAdmin = auth()->user()->role === 'super_admin';
                 $existing = Kendaraan::where('no_polisi', $nopol)->first();
                 if ($existing) {
                     if ($duplicateAction === 'update') {
-                        $existing->update([
-                            'jenis_kendaraan' => $jenisKendaraan,
-                            'jenis_bbm' => $jenisBbm,
-                            'roda' => $roda,
-                            'cc' => $cc,
-                            'satker_id' => $satkerId,
-                        ]);
+                        if ($isSuperAdmin) {
+                            $existing->update([
+                                'jenis_kendaraan' => $jenisKendaraan,
+                                'jenis_bbm' => $jenisBbm,
+                                'roda' => $roda,
+                                'cc' => $cc,
+                                'satker_id' => $satkerId,
+                                'status_approval' => 'disetujui',
+                                'disetujui_oleh' => auth()->id(),
+                                'disetujui_pada' => now(),
+                            ]);
+                        } else {
+                            $existing->update([
+                                'status_approval' => 'pending',
+                                'aksi_approval' => 'edit',
+                                'alasan_penolakan' => null,
+                                'diajukan_oleh' => auth()->id(),
+                                'pending_changes' => [
+                                    'jenis_kendaraan' => $jenisKendaraan,
+                                    'jenis_bbm' => $jenisBbm,
+                                    'roda' => $roda,
+                                    'cc' => $cc,
+                                    'satker_id' => $satkerId,
+                                ],
+                            ]);
+                        }
                         $updatedCount++;
                     } else {
                         $skippedCount++;
@@ -966,6 +1020,11 @@ class KendaraanController extends Controller
                         'barcode' => $barcode,
                         'pin' => $pin,
                         'saldo' => 0,
+                        'status_approval' => $isSuperAdmin ? 'disetujui' : 'pending',
+                        'aksi_approval' => 'import',
+                        'diajukan_oleh' => auth()->id(),
+                        'disetujui_oleh' => $isSuperAdmin ? auth()->id() : null,
+                        'disetujui_pada' => $isSuperAdmin ? now() : null,
                     ]);
                     $successCount++;
                 }
@@ -977,8 +1036,13 @@ class KendaraanController extends Controller
             ]);
 
             $messages = [];
-            if ($successCount > 0) $messages[] = "{$successCount} kendaraan baru ditambahkan";
-            if ($updatedCount > 0) $messages[] = "{$updatedCount} data diperbarui";
+            if ($isSuperAdmin) {
+                if ($successCount > 0) $messages[] = "{$successCount} kendaraan baru ditambahkan";
+                if ($updatedCount > 0) $messages[] = "{$updatedCount} data diperbarui";
+            } else {
+                if ($successCount > 0) $messages[] = "{$successCount} kendaraan baru diajukan (menunggu persetujuan Superadmin)";
+                if ($updatedCount > 0) $messages[] = "{$updatedCount} data perubahan diajukan (menunggu persetujuan Superadmin)";
+            }
             if ($skippedCount > 0) $messages[] = "{$skippedCount} data duplikat dilewati";
 
             if (count($errors) > 0) {
@@ -1026,9 +1090,14 @@ class KendaraanController extends Controller
         ]);
 
         $satkerId = auth()->user()->satker_id;
-        $deleted = Kendaraan::where('satker_id', $satkerId)
+        $kendaraans = Kendaraan::where('satker_id', $satkerId)
             ->whereIn('id', $request->ids)
-            ->delete();
+            ->get();
+        $deleted = $kendaraans->count();
+
+        foreach ($kendaraans as $kendaraan) {
+            $kendaraan->delete();
+        }
 
         LogAktivitas::create([
             'user_id' => auth()->id(),

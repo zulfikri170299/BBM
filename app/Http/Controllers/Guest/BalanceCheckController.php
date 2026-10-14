@@ -49,41 +49,6 @@ class BalanceCheckController extends Controller
             ]);
         }
 
-        $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
-
-        if ($personelAccessControl == '1') {
-            // Cari di Personel (NRP atau Barcode)
-            // Coba cari yang persis dulu
-            $personel = Personel::where('nrp', '=', $identifier, 'and')
-                ->orWhere('barcode', '=', $identifier)
-                ->first();
-
-            // Jika tidak ketemu, coba cari tanpa spasi
-            if (!$personel) {
-                $personel = Personel::whereRaw("REPLACE(nrp, ' ', '') = ?", [$identifierNoSpace], 'and')
-                    ->first();
-            }
-        } else {
-            $personel = null;
-        }
-
-        if ($personel) {
-            return view('public.balance-result', [
-                'type' => 'personel',
-                'data' => $personel,
-                'title' => 'Data Personel',
-                'name' => $personel->nama,
-                'id_label' => 'NRP',
-                'id_value' => $personel->nrp,
-                'jenis_bbm' => $personel->jenis_bbm,
-                'saldo' => $personel->saldo,
-            ]);
-        }
-
-        if ($personelAccessControl == '1') {
-            return back()->with('error', 'Data tidak ditemukan. Pastikan Nopol atau NRP yang Anda masukkan benar.');
-        } else {
-            return back()->with('error', 'Data tidak ditemukan. Pastikan Nopol yang Anda masukkan benar.');
-        }
+        return back()->with('error', 'Data tidak ditemukan. Pastikan Nopol yang Anda masukkan benar.');
     }
 }

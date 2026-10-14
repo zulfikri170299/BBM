@@ -533,35 +533,46 @@
             });
         });
 
-        window.confirmDialog = window.confirmDialog || ((options, callback) => {
+        window.confirmDialog = ((options, callback) => {
             const type = options.type || 'question';
             let confirmColor = '#0062ff';
-            if (type === 'error' || type === 'danger') confirmColor = '#e11d48';
-            if (type === 'warning') confirmColor = '#f59e0b';
+            let swalIcon = type;
+            if (type === 'danger' || type === 'error') {
+                confirmColor = '#e11d48';
+                swalIcon = (type === 'danger') ? 'warning' : 'error';
+            } else if (type === 'warning') {
+                confirmColor = '#f59e0b';
+                swalIcon = 'warning';
+            } else if (type === 'success') {
+                confirmColor = '#10b981';
+                swalIcon = 'success';
+            }
 
             const isDark = document.documentElement.classList.contains('dark');
-            Swal.fire({
+            return Swal.fire({
                 title: options.title || 'Konfirmasi',
                 text: options.message,
-                icon: type,
+                icon: swalIcon,
                 background: isDark ? '#0f172a' : '#ffffff',
-                color: isDark ? '#cbd5e1' : '#334155',
+                color: isDark ? '#f8fafc' : '#1e293b',
                 showCancelButton: true,
                 confirmButtonColor: confirmColor,
-                cancelButtonColor: '#1e293b',
+                cancelButtonColor: isDark ? '#334155' : '#94a3b8',
                 confirmButtonText: options.confirmText || 'Ya, Lanjutkan!',
                 cancelButtonText: options.cancelText || 'Batal',
                 reverseButtons: true,
                 customClass: {
-                    popup: 'border border-slate-300 dark:border-white/10 rounded-[2rem] shadow-2xl p-8',
-                    title: 'text-2xl font-black text-slate-900 dark:text-white mb-2',
-                    htmlContainer: 'text-slate-600 dark:text-slate-400 font-medium mb-6',
-                    confirmButton: 'rounded-2xl px-8 py-3.5 font-black uppercase tracking-widest text-xs shadow-lg ml-3',
-                    cancelButton: 'rounded-2xl px-8 py-3.5 font-bold uppercase tracking-widest text-xs text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-white/10 hover:bg-slate-200 dark:hover:bg-white/5'
+                    popup: 'border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl p-6 sm:p-8',
+                    title: 'text-xl sm:text-2xl font-black text-slate-900 dark:text-white mb-2',
+                    htmlContainer: 'text-slate-600 dark:text-slate-300 font-medium mb-6 text-sm',
+                    confirmButton: 'rounded-xl px-6 py-2.5 font-black uppercase tracking-wider text-xs shadow-lg ml-2',
+                    cancelButton: 'rounded-xl px-6 py-2.5 font-bold uppercase tracking-wider text-xs text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/5'
                 },
                 buttonsStyling: true
             }).then((result) => {
-                if (result.isConfirmed && callback) callback();
+                if (result.isConfirmed && typeof callback === 'function') {
+                    callback();
+                }
             });
         });
 

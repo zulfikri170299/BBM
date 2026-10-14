@@ -252,11 +252,11 @@
                                 </td>
                                 <td class="px-4 py-3">
                                     <span
-                                        class="text-xs text-slate-700 dark:text-slate-300">{{ $trx->kendaraan->jenis_kendaraan ?? ($trx->personel->nama ?? '-') }}</span>
+                                        class="text-xs text-slate-700 dark:text-slate-300">{{ $trx->kendaraan?->jenis_kendaraan ?? '-' }}</span>
                                 </td>
                                 <td class="px-4 py-3">
                                     <span
-                                        class="text-xs font-semibold text-slate-800 dark:text-slate-200">{{ $trx->kendaraan->no_polisi ?? ($trx->personel->nrp ?? '-') }}</span>
+                                        class="text-xs font-semibold text-slate-800 dark:text-slate-200">{{ $trx->kendaraan?->no_polisi ?? $trx->nopol ?? '-' }}</span>
                                 </td>
                                 <td class="px-4 py-3">
                                     @php

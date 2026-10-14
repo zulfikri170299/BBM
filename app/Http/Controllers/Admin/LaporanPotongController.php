@@ -13,7 +13,7 @@ class LaporanPotongController extends Controller
     public function index(Request $request)
     {
         $query = RiwayatTopup::with(['satker', 'kendaraan', 'user'])
-            ->where('metode', 'potong_saldo')
+            ->whereIn('metode', ['potong_saldo', 'Potong Saldo'])
             ->latest();
 
         // Filter Satker
@@ -42,7 +42,7 @@ class LaporanPotongController extends Controller
     public function print(Request $request)
     {
         $query = RiwayatTopup::with(['satker', 'kendaraan', 'user'])
-            ->where('metode', 'potong_saldo')
+            ->whereIn('metode', ['potong_saldo', 'Potong Saldo'])
             ->latest();
 
         // Filter Satker

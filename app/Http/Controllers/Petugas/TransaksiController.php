@@ -33,39 +33,54 @@ class TransaksiController extends Controller
                     ->whereRaw("REPLACE(REPLACE(REPLACE(no_polisi, ' ', ''), '-', ''), '.', '') LIKE ?", ["%$val%"])
                     ->first();
 
-                // Jika tidak ditemukan di kendaraan, cari di personel
-                if (!$target) {
-                    $target = Personel::with(['satker', 'user'])
-                        ->where('nrp', 'like', "%$val%")
-                        ->first();
-                }
-
             } elseif ($mode === 'nopol') {
                 $request->validate(['nopol' => 'required|string']);
                 $target = Kendaraan::with('satker')
                     ->where('no_polisi', 'like', '%' . trim($request->nopol) . '%')
                     ->first();
-            } elseif ($mode === 'nrp') {
-                $request->validate(['nrp' => 'required|string']);
-                $target = Personel::with(['satker', 'user'])
-                    ->where('nrp', 'like', '%' . trim($request->nrp) . '%')
-                    ->first();
             } else {
                 $request->validate(['barcode' => 'required|string']);
                 $target = Kendaraan::with('satker')->where('barcode', $request->barcode)->first();
-                if (!$target) {
-                    $target = Personel::with(['satker', 'user'])->where('barcode', $request->barcode)->first();
-                }
             }
 
             if (!$target) {
-                $message = $mode === 'barcode' ? 'Barcode tidak ditemukan.' : 'Data tidak ditemukan.';
+                $message = $mode === 'barcode' ? 'Barcode kendaraan tidak ditemukan.' : 'Data kendaraan tidak ditemukan.';
                 if ($request->wantsJson()) return response()->json(['success' => false, 'message' => $message], 404);
                 return back()->withErrors(['error' => $message]);
             }
 
             // Validasi akun aktif untuk Kendaraan (via Admin Satker)
             if ($target instanceof Kendaraan) {
+                if ($target->status_approval === 'pending') {
+                    $message = "Kendaraan {$target->no_polisi} belum dapat bertransaksi karena masih MENUNGGU PERSETUJUAN Superadmin.";
+                    if ($request->wantsJson()) return response()->json(['success' => false, 'message' => $message], 422);
+                    return back()->withErrors(['error' => $message]);
+                }
+                if ($target->status_approval === 'ditolak' && $target->aksi_approval !== 'edit') {
+                    $alasan = $target->alasan_penolakan ? " (Alasan: {$target->alasan_penolakan})" : "";
+                    $message = "Kendaraan {$target->no_polisi} tidak dapat bertransaksi karena pengajuan DITOLAK Superadmin.{$alasan}";
+                    if ($request->wantsJson()) return response()->json(['success' => false, 'message' => $message], 422);
+                    return back()->withErrors(['error' => $message]);
+                }
+
+                // Coba lunasi otomatis jika saldo saat ini sudah mencukupi
+                $target->autoSettleBon();
+
+                // Validasi Saldo Dikunci jika Kendaraan memiliki BON yang belum dibayar
+                if ($target->hasUnpaidBon()) {
+                    $totalBon = $target->totalUnpaidBon();
+                    $message = "Saldo kendaraan {$target->no_polisi} sedang DIKUNCI karena memiliki BON/Hutang BBM yang belum dibayar sebesar {$totalBon} Liter. Harap lunasi BON terlebih dahulu sebelum menggunakan saldo.";
+                    if ($request->wantsJson()) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => $message,
+                            'is_bon_locked' => true,
+                            'bon_total' => $totalBon,
+                        ], 422);
+                    }
+                    return back()->withErrors(['error' => $message]);
+                }
+
                 $hasAdminSatker = \App\Models\User::where('satker_id', $target->satker_id)
                     ->where('role', 'admin_satker')
                     ->exists();
@@ -84,22 +99,6 @@ class TransaksiController extends Controller
                 }
             }
 
-            // Validasi akun aktif untuk Personel
-            if ($target instanceof Personel) {
-                $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
-                if ($personelAccessControl == '0') {
-                    $message = 'Kartu Anda Sedang di Nonaktifkan';
-                    if ($request->wantsJson()) return response()->json(['success' => false, 'message' => $message], 403);
-                    return back()->withErrors(['error' => $message]);
-                }
-
-                if ($target->user_id && (!$target->user || !($target->user->is_active ?? false))) {
-                    $message = 'Akun Anda sedang dinonaktifkan. Silakan hubungi Super Admin.';
-                    if ($request->wantsJson()) return response()->json(['success' => false, 'message' => $message], 403);
-                    return back()->withErrors(['error' => $message]);
-                }
-            }
-
             // Data Satker corrupt check
             if (!$target->satker) {
                 $message = 'Data Satker tidak ditemukan/corrupt. Silakan hubungi Super Admin.';
@@ -112,12 +111,12 @@ class TransaksiController extends Controller
                 return response()->json([
                     'success' => true,
                     'data' => $target,
-                    'type' => ($target instanceof Kendaraan) ? 'kendaraan' : 'personel',
+                    'type' => 'kendaraan',
                     'satker' => $target->satker->nama_satker
                 ]);
             }
 
-            // Fallback (selalu respon error jika non-AJAX karena template diwajibkan SPA)
+            // Fallback
             return back()->withErrors(['error' => 'Harus melalui AJAX']);
 
         } catch (\Throwable $e) {
@@ -134,25 +133,24 @@ class TransaksiController extends Controller
     public function process(Request $request)
     {
         $request->validate([
-            'kendaraan_id' => 'nullable|exists:kendaraans,id',
-            'personel_id' => 'nullable|exists:personels,id',
+            'kendaraan_id' => 'required|exists:kendaraans,id',
             'liter' => 'required|integer|min:1',
             'nama_driver' => 'required|string|max:255',
             'pin' => 'required|integer',
         ]);
 
-        if (!$request->kendaraan_id && !$request->personel_id) {
-            return redirect()->route('petugas.transaksi.index')->withErrors(['error' => 'Data tidak valid.']);
+        $target = Kendaraan::findOrFail($request->kendaraan_id);
+        if ($target->status_approval === 'pending') {
+            return redirect()->route('petugas.transaksi.index')->with('error', "Transaksi ditolak! Kendaraan {$target->no_polisi} masih menunggu persetujuan Superadmin.");
+        }
+        if ($target->status_approval === 'ditolak' && $target->aksi_approval !== 'edit') {
+            return redirect()->route('petugas.transaksi.index')->with('error', "Transaksi ditolak! Pengajuan kendaraan {$target->no_polisi} ditolak oleh Superadmin.");
         }
 
-        if ($request->kendaraan_id) {
-            $target = Kendaraan::findOrFail($request->kendaraan_id);
-        } else {
-            $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
-            if ($personelAccessControl == '0') {
-                return redirect()->route('petugas.transaksi.index')->withErrors(['error' => 'Kartu Anda Sedang di Nonaktifkan']);
-            }
-            $target = Personel::findOrFail($request->personel_id);
+        $target->autoSettleBon();
+        if ($target->hasUnpaidBon()) {
+            $totalBon = $target->totalUnpaidBon();
+            return redirect()->route('petugas.transaksi.index')->with('error', "Transaksi ditolak! Saldo kendaraan {$target->no_polisi} sedang dikunci karena masih memiliki BON belum dibayar sebesar {$totalBon} Liter. Harap lunasi BON terlebih dahulu.");
         }
 
         // Verifikasi PIN
@@ -160,7 +158,7 @@ class TransaksiController extends Controller
             return redirect()->route('petugas.transaksi.index')->withErrors(['pin' => 'PIN Salah!']);
         }
 
-        // Cek saldo liter (sudah dibulatkan di tampilan, pesan harus bulat)
+        // Cek saldo liter
         if ($target->saldo < $request->liter) {
             return redirect()->route('petugas.transaksi.index')->with('error', 'Saldo tidak mencukupi! Saldo tersisa: ' . number_format($target->saldo, 0, ',', '.') . ' Liter');
         }
@@ -175,18 +173,13 @@ class TransaksiController extends Controller
         $totalHarga = $hargaPerLiter * $request->liter;
 
         // Potong saldo
-        if ($target instanceof \App\Models\Personel) {
-            $target->saldo -= $request->liter;
-            $target->save(); // Trigger eloquent 'saving' event
-        } else {
-            $target->decrement('saldo', $request->liter);
-        }
+        $target->decrement('saldo', $request->liter);
 
         // Catat transaksi
         $transaksi = TransaksiBbm::create([
             'satker_id' => $target->satker_id,
-            'kendaraan_id' => $request->kendaraan_id,
-            'personel_id' => $request->personel_id,
+            'kendaraan_id' => $target->id,
+            'nopol' => $target->no_polisi,
             'petugas_id' => auth()->id(),
             'nama_driver' => $request->nama_driver,
             'tanggal' => \Carbon\Carbon::now('Asia/Makassar'),
@@ -198,7 +191,7 @@ class TransaksiController extends Controller
 
         LogAktivitas::create([
             'user_id' => auth()->id(),
-            'aktivitas' => "Memproses pengisian BBM: {$request->liter} L untuk " . ($request->kendaraan_id ? "Kendaraan ({$target->no_polisi})" : "Personel ({$target->nama})")
+            'aktivitas' => "Memproses pengisian BBM: {$request->liter} L untuk Kendaraan ({$target->no_polisi})"
         ]);
 
         return redirect()->route('petugas.transaksi.print', $transaksi);
@@ -206,7 +199,7 @@ class TransaksiController extends Controller
 
     public function print(TransaksiBbm $transaksi)
     {
-        $transaksi->load('kendaraan.satker', 'personel.satker', 'petugas');
+        $transaksi->load('kendaraan.satker', 'satker', 'petugas');
 
         return view('petugas.transaksi.print', compact('transaksi'));
     }

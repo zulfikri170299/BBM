@@ -1,57 +1,33 @@
 <x-app-layout>
-    <div class="py-6 px-2 sm:px-6 lg:px-8  min-h-screen" x-data="{ 
-        tab: 'kendaraan',
+    <div class="py-6 px-2 sm:px-6 lg:px-8 min-h-screen" x-data="{ 
         selectedKendaraan: [],
-        selectedPersonel: [],
         searchKendaraan: '',
-        searchPersonel: '',
         filterSatker: '',
         filterBbm: '',
         allSelectedKendaraan: false,
-        allSelectedPersonel: false,
         
         kendaraanList: @js($kendaraans->map(fn($k) => ['id' => $k->id, 'bbm' => $k->jenis_bbm, 'saldo' => $k->saldo])),
-        personelList: @js($personels->map(fn($p) => ['id' => $p->id, 'bbm' => $p->jenis_bbm, 'saldo' => $p->saldo])),
         
         get countPertamax() {
-            let data = this.tab === 'kendaraan' ? this.kendaraanList : this.personelList;
-            let selected = this.tab === 'kendaraan' ? this.selectedKendaraan : this.selectedPersonel;
-            return data.filter(item => selected.includes(item.id.toString()) && item.bbm === 'Pertamax').length;
+            return this.kendaraanList.filter(item => this.selectedKendaraan.includes(item.id.toString()) && item.bbm === 'Pertamax').length;
         },
         get countDex() {
-            let data = this.tab === 'kendaraan' ? this.kendaraanList : this.personelList;
-            let selected = this.tab === 'kendaraan' ? this.selectedKendaraan : this.selectedPersonel;
-            return data.filter(item => selected.includes(item.id.toString()) && item.bbm === 'Pertamina Dex').length;
+            return this.kendaraanList.filter(item => this.selectedKendaraan.includes(item.id.toString()) && item.bbm === 'Pertamina Dex').length;
         },
         get literPertamax() {
-            let data = this.tab === 'kendaraan' ? this.kendaraanList : this.personelList;
-            let selected = this.tab === 'kendaraan' ? this.selectedKendaraan : this.selectedPersonel;
-            return data.filter(item => selected.includes(item.id.toString()) && item.bbm === 'Pertamax').reduce((a, b) => a + parseFloat(b.saldo), 0);
+            return this.kendaraanList.filter(item => this.selectedKendaraan.includes(item.id.toString()) && item.bbm === 'Pertamax').reduce((a, b) => a + parseFloat(b.saldo), 0);
         },
         get literDex() {
-            let data = this.tab === 'kendaraan' ? this.kendaraanList : this.personelList;
-            let selected = this.tab === 'kendaraan' ? this.selectedKendaraan : this.selectedPersonel;
-            return data.filter(item => selected.includes(item.id.toString()) && item.bbm === 'Pertamina Dex').reduce((a, b) => a + parseFloat(b.saldo), 0);
+            return this.kendaraanList.filter(item => this.selectedKendaraan.includes(item.id.toString()) && item.bbm === 'Pertamina Dex').reduce((a, b) => a + parseFloat(b.saldo), 0);
         },
         
         toggleAllKendaraan() {
             if (this.allSelectedKendaraan) {
-                // Hanya pilih yang terlihat (tidak kena filter)
                 this.selectedKendaraan = Array.from(document.querySelectorAll('.kendaraan-checkbox'))
                     .filter(el => el.closest('tr').style.display !== 'none')
                     .map(el => el.value);
             } else {
                 this.selectedKendaraan = [];
-            }
-        },
-        toggleAllPersonel() {
-            if (this.allSelectedPersonel) {
-                // Hanya pilih yang terlihat (tidak kena filter)
-                this.selectedPersonel = Array.from(document.querySelectorAll('.personel-checkbox'))
-                    .filter(el => el.closest('tr').style.display !== 'none')
-                    .map(el => el.value);
-            } else {
-                this.selectedPersonel = [];
             }
         }
     }">
@@ -60,15 +36,7 @@
             <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h1 class="text-2xl sm:text-2xl font-bold text-slate-800 dark:text-white tracking-wide border-b-2 border-indigo-500/50 pb-2 inline-block">Potong Saldo Masal</h1>
-                    <p class="text-xs sm:text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest mt-1">Pengosongan Saldo Serentak</p>
-                </div>
-                <div class="flex items-center gap-1 p-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-xl shadow-lg">
-                    <button @click="tab = 'kendaraan'" :class="tab === 'kendaraan' ? 'bg-indigo-600 shadow-sm text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/5'" class="px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2">
-                        <i class="fas fa-car"></i> Kendaraan
-                    </button>
-                    <button @click="tab = 'personel'" :class="tab === 'personel' ? 'bg-amber-500 shadow-sm text-slate-800 dark:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/5'" class="px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2">
-                        <i class="fas fa-user-tag"></i> Personel
-                    </button>
+                    <p class="text-xs sm:text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest mt-1">Pengosongan Saldo Kendaraan Serentak</p>
                 </div>
             </div>
 
@@ -80,8 +48,8 @@
                         <div class="bg-white dark:bg-slate-900 dark:text-white p-3 border-b border-slate-200 dark:border-white/5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 ">
                             <div class="relative w-full sm:max-w-xs sm:flex-1">
                                 <input type="text" 
-                                    x-model="tab === 'kendaraan' ? searchKendaraan : searchPersonel"
-                                    :placeholder="tab === 'kendaraan' ? 'Cari nopol...' : 'Cari nama/nrp...'" 
+                                    x-model="searchKendaraan"
+                                    placeholder="Cari nopol..." 
                                     class="w-full pl-8 pr-4 py-1.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-white/5 rounded-lg focus:ring-2 focus:ring-indigo-500 text-xs font-medium">
                                 <div class="absolute left-2.5 top-2 text-slate-600 dark:text-slate-400">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -230,52 +198,6 @@
                                 </table>
                             </div>
 
-                            <!-- Personel Table -->
-                            <div x-show="tab === 'personel'">
-                                <table class="w-full text-left border-collapse">
-                                    <thead class="sticky top-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-white/5 shadow-sm z-10 text-[9px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.1em]">
-                                        <tr>
-                                            <th class="px-4 py-3 w-10 text-center">
-                                                <input type="checkbox" x-model="allSelectedPersonel" @change="toggleAllPersonel" class="rounded-sm border-slate-300 dark:border-white/20 text-indigo-600 focus:ring-indigo-500 scale-90 bg-white dark:bg-slate-900">
-                                            </th>
-                                            <th class="px-2 py-3">Satker</th>
-                                            <th class="px-2 py-3">Personel</th>
-                                            <th class="px-4 py-3 text-right">Saldo</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="divide-y divide-slate-200 dark:divide-white/5">
-                                        @foreach($personels as $p)
-                                            <tr x-show="(searchPersonel === '' || '{{ $p->nama }} {{ $p->nrp }}'.toLowerCase().includes(searchPersonel.toLowerCase())) &&
-                                                        (filterSatker === '' || '{{ $p->satker_id }}' === filterSatker) &&
-                                                        (filterBbm === '' || '{{ $p->jenis_bbm }}' === filterBbm)" 
-                                                class="hover:bg-indigo-50/20 transition-colors">
-                                                <td class="px-4 py-2.5 text-center">
-                                                    <input type="checkbox" value="{{ $p->id }}" x-model="selectedPersonel" class="bg-white dark:bg-slate-900 dark:text-white personel-checkbox rounded-sm border-slate-300 dark:border-white/20 text-indigo-600 focus:ring-indigo-500 scale-90">
-                                                </td>
-                                                <td class="px-2 py-2.5">
-                                                    <div class="text-[10px] font-bold text-slate-600 dark:text-slate-400 truncate max-w-[150px]">{{ $p->satker->nama_satker }}</div>
-                                                </td>
-                                                <td class="px-2 py-2.5">
-                                                    <div class="flex items-center justify-between gap-4">
-                                                        <div class="flex flex-col">
-                                                            <span class="text-xs font-black text-slate-800 dark:text-white leading-tight">{{ $p->nama }}</span>
-                                                            <span class="text-[8px] font-bold text-slate-600 dark:text-slate-400">NRP: {{ $p->nrp }}</span>
-                                                        </div>
-                                                        @if($p->jenis_bbm === 'Pertamax')
-                                                            <span class="text-[7px] font-black text-indigo-600 px-1.5 py-0.5 bg-indigo-50 rounded uppercase border border-indigo-100">Pertamax</span>
-                                                        @else
-                                                            <span class="text-[7px] font-black text-amber-600 px-1.5 py-0.5 bg-amber-50 rounded uppercase border border-amber-100">P. Dex</span>
-                                                        @endif
-                                                    </div>
-                                                </td>
-                                                <td class="px-4 py-2.5 text-right">
-                                                    <span class="text-xs font-black {{ $p->saldo > 0 ? 'text-indigo-600' : 'text-slate-700 dark:text-slate-300' }}">{{ rtrim(rtrim(number_format($p->saldo, 2, ',', '.'), '0'), ',') }} L</span>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -324,9 +246,9 @@
                         <div class="p-4">
                             <form action="{{ route('admin.bulk-potong.process') }}" method="POST" class="space-y-4">
                                 @csrf
-                                <input type="hidden" name="type" :value="tab">
+                                <input type="hidden" name="type" value="kendaraan">
                                 <input type="hidden" name="is_kosongkan" value="1">
-                                <template x-for="id in (tab === 'kendaraan' ? selectedKendaraan : selectedPersonel)" :key="id">
+                                <template x-for="id in selectedKendaraan" :key="id">
                                     <input type="hidden" name="ids[]" :value="id">
                                 </template>
 

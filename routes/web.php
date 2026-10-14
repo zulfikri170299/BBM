@@ -15,8 +15,7 @@ Route::get('/dashboard', function () {
         return redirect()->route('satker.dashboard');
     } elseif ($user->role === 'petugas_bbm') {
         return redirect()->route('petugas.dashboard');
-    } elseif ($user->role === 'personel') {
-        return redirect()->route('personel.dashboard');
+
     }
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -88,19 +87,11 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     // PIN Management (Super Admin Only)
     Route::middleware('role:super_admin')->group(function () {
         Route::get('/pin-management', [\App\Http\Controllers\Admin\PinManagementController::class, 'index'])->name('pin-management.index');
-        Route::post('/pin-management/personel/{personel}', [\App\Http\Controllers\Admin\PinManagementController::class, 'updatePersonelPin'])->name('pin-management.personel.update');
+
         Route::post('/pin-management/kendaraan/{kendaraan}', [\App\Http\Controllers\Admin\PinManagementController::class, 'updateKendaraanPin'])->name('pin-management.kendaraan.update');
     });
 
-    Route::get('/personels/export', [\App\Http\Controllers\Admin\PersonelController::class, 'export'])->name('personels.export');
-    Route::post('/personels/preview-import', [\App\Http\Controllers\Admin\PersonelController::class, 'previewImport'])->name('personels.preview-import');
-    Route::post('/personels/import', [\App\Http\Controllers\Admin\PersonelController::class, 'import'])->name('personels.import');
-    Route::get('/personels/download-template', [\App\Http\Controllers\Admin\PersonelController::class, 'downloadTemplate'])->name('personels.download-template');
-    Route::post('/personels/bulk-delete', [\App\Http\Controllers\Admin\PersonelController::class, 'bulkDelete'])->name('personels.bulk-delete');
-    Route::resource('personels', \App\Http\Controllers\Admin\PersonelController::class);
-    Route::post('/personels/{personel}/reset-pin', [\App\Http\Controllers\Admin\PersonelController::class, 'resetPin'])->name('personels.reset-pin');
-    Route::post('/personels/{personel}/reset-password', [\App\Http\Controllers\Admin\PersonelController::class, 'resetPassword'])->name('personels.reset-password');
-    Route::get('/personels/{personel}/print', [\App\Http\Controllers\Admin\PersonelController::class, 'print'])->name('personels.print');
+
     Route::get('/kendaraans/export', [\App\Http\Controllers\Admin\KendaraanController::class, 'export'])->name('kendaraans.export');
     Route::get('/kendaraans/download-template', [\App\Http\Controllers\Admin\KendaraanController::class, 'downloadTemplate'])->name('kendaraans.download-template');
     Route::get('/kendaraans/download-format', [\App\Http\Controllers\Admin\KendaraanController::class, 'downloadFormat'])->name('kendaraans.download-format');
@@ -117,6 +108,15 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     Route::get('/kendaraans', [\App\Http\Controllers\Admin\KendaraanController::class, 'index'])->name('kendaraans.index');
     Route::get('/kendaraans/create', [\App\Http\Controllers\Admin\KendaraanController::class, 'create'])->name('kendaraans.create');
     Route::post('/kendaraans', [\App\Http\Controllers\Admin\KendaraanController::class, 'store'])->name('kendaraans.store');
+    
+    // Persetujuan Kendaraan (Approval Workflow)
+    Route::prefix('persetujuan-kendaraan')->name('persetujuan-kendaraan.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\KendaraanApprovalController::class, 'index'])->name('index');
+        Route::post('/{kendaraan}/setujui', [\App\Http\Controllers\Admin\KendaraanApprovalController::class, 'approve'])->name('approve');
+        Route::post('/{kendaraan}/tolak', [\App\Http\Controllers\Admin\KendaraanApprovalController::class, 'reject'])->name('reject');
+        Route::post('/bulk-setujui', [\App\Http\Controllers\Admin\KendaraanApprovalController::class, 'bulkApprove'])->name('bulk-approve');
+        Route::post('/bulk-tolak', [\App\Http\Controllers\Admin\KendaraanApprovalController::class, 'bulkReject'])->name('bulk-reject');
+    });
     
     // Parameterized routes (must be below static routes)
     Route::get('/kendaraans/{kendaraan}/print', [\App\Http\Controllers\Admin\KendaraanController::class, 'print'])->name('kendaraans.print');
@@ -150,8 +150,7 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     // Laporan Sisa BBM (Kendaraan & Personel)
     Route::get('/laporan-sisa/kendaraan', [\App\Http\Controllers\Admin\LaporanSisaController::class, 'kendaraan'])->name('laporan-sisa.kendaraan');
     Route::get('/laporan-sisa/kendaraan/print', [\App\Http\Controllers\Admin\LaporanSisaController::class, 'printKendaraan'])->name('laporan-sisa.kendaraan.print');
-    Route::get('/laporan-sisa/personel', [\App\Http\Controllers\Admin\LaporanSisaController::class, 'personel'])->name('laporan-sisa.personel');
-    Route::get('/laporan-sisa/personel/print', [\App\Http\Controllers\Admin\LaporanSisaController::class, 'printPersonel'])->name('laporan-sisa.personel.print');
+
     
     // Satisfaction Index
     Route::get('/satisfaction-index', [\App\Http\Controllers\Admin\SatisfactionController::class, 'index'])->name('satisfaction.index');
@@ -291,14 +290,12 @@ Route::middleware(['auth', 'role:admin_satker'])->prefix('satker')->name('satker
     Route::post('/kendaraans/{kendaraan}/reset-pin', [\App\Http\Controllers\Satker\KendaraanController::class, 'resetPin'])->name('kendaraans.reset-pin');
     Route::resource('kendaraans', \App\Http\Controllers\Satker\KendaraanController::class)->except(['edit', 'update']);
     
-    // Personel Routes
-    Route::get('/personels/export', [\App\Http\Controllers\Satker\PersonelController::class, 'export'])->name('personels.export');
-    Route::post('/personels/bulk-delete', [\App\Http\Controllers\Satker\PersonelController::class, 'bulkDelete'])->name('personels.bulk-delete');
-    Route::post('/personels/preview-import', [\App\Http\Controllers\Satker\PersonelController::class, 'previewImport'])->name('personels.preview-import');
-    Route::post('/personels/import', [\App\Http\Controllers\Satker\PersonelController::class, 'import'])->name('personels.import');
-    Route::get('/personels/download-template', [\App\Http\Controllers\Satker\PersonelController::class, 'downloadTemplate'])->name('personels.download-template');
-    Route::get('/personels/{personel}/print', [\App\Http\Controllers\Satker\PersonelController::class, 'print'])->name('personels.print');
-    Route::resource('personels', \App\Http\Controllers\Satker\PersonelController::class);
+    // Persetujuan / Monitoring Pengajuan Kendaraan
+    Route::prefix('persetujuan-kendaraan')->name('persetujuan-kendaraan.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Satker\KendaraanApprovalController::class, 'index'])->name('index');
+        Route::delete('/{kendaraan}', [\App\Http\Controllers\Satker\KendaraanApprovalController::class, 'destroy'])->name('destroy');
+    });
+
     Route::get('/riwayat/print', [\App\Http\Controllers\Satker\RiwayatController::class, 'print'])->name('riwayat.print');
     Route::get('/riwayat', [\App\Http\Controllers\Satker\RiwayatController::class, 'index'])->name('riwayat.index');
     Route::get('/laporan-hutang/print', [\App\Http\Controllers\Satker\LaporanHutangController::class, 'print'])->name('laporan-hutang.print');
@@ -374,12 +371,7 @@ Route::middleware(['auth', 'role:super_admin,petugas_bbm'])->prefix('pembelian-b
     Route::delete('/{pembelianBbm}', [\App\Http\Controllers\PembelianBbmController::class, 'destroy'])->name('destroy');
 });
 
-Route::middleware(['auth', 'role:personel'])->prefix('personel')->name('personel.')->group(function () {
-    Route::get('/dashboard', [\App\Http\Controllers\Personel\DashboardController::class, 'index'])->name('dashboard');
-    Route::post('/reset-pin', [\App\Http\Controllers\Personel\DashboardController::class, 'resetPin'])->name('reset-pin');
-    Route::get('/transfer', [\App\Http\Controllers\Personel\TransferController::class, 'index'])->name('transfer.index');
-    Route::post('/transfer', [\App\Http\Controllers\Personel\TransferController::class, 'store'])->name('transfer.store');
-});
+
 
 // Secret Developer Utilities
 Route::middleware(['auth'])->group(function () {

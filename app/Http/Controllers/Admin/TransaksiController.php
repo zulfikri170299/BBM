@@ -63,6 +63,26 @@ class TransaksiController extends Controller
                 return back()->withErrors(['error' => $message]);
             }
 
+            if ($target instanceof Kendaraan) {
+                // Coba lunasi otomatis jika saldo saat ini sudah mencukupi
+                $target->autoSettleBon();
+
+                // Validasi Saldo Dikunci jika Kendaraan memiliki BON yang belum dibayar
+                if ($target->hasUnpaidBon()) {
+                    $totalBon = $target->totalUnpaidBon();
+                    $message = "Saldo kendaraan {$target->no_polisi} sedang DIKUNCI karena memiliki BON/Hutang BBM yang belum dibayar sebesar {$totalBon} Liter. Harap lunasi BON terlebih dahulu sebelum menggunakan saldo.";
+                    if ($request->wantsJson()) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => $message,
+                            'is_bon_locked' => true,
+                            'bon_total' => $totalBon,
+                        ], 422);
+                    }
+                    return back()->withErrors(['error' => $message]);
+                }
+            }
+
             if ($target instanceof Personel) {
                 $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
                 if ($personelAccessControl == '0') {
@@ -118,6 +138,11 @@ class TransaksiController extends Controller
 
         if ($request->kendaraan_id) {
             $target = Kendaraan::findOrFail($request->kendaraan_id);
+            $target->autoSettleBon();
+            if ($target->hasUnpaidBon()) {
+                $totalBon = $target->totalUnpaidBon();
+                return redirect()->route('admin.transaksi.index')->with('error', "Transaksi ditolak! Saldo kendaraan {$target->no_polisi} sedang dikunci karena masih memiliki BON belum dibayar sebesar {$totalBon} Liter. Harap lunasi BON terlebih dahulu.");
+            }
         } else {
             $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
             if ($personelAccessControl == '0') {

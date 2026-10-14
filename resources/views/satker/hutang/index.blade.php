@@ -2,16 +2,18 @@
     <div class="max-w-7xl mx-auto p-2 sm:p-6 lg:p-8 space-y-6 px-2 sm:px-6 lg:px-8" x-data="{ 
             showModal: false, 
             selectedHutang: null,
-            hutangData: { nopol: '', bbm: '', jumlah: 0 },
+            hutangData: { nopol: '', bbm: '', jumlah: 0, saldo: 0 },
             selectedKendaraan: '', 
             selectedBbm: '',
             kendaraans: {{ $kendaraans->toJson() }},
             get filteredKendaraans() {
                 return this.kendaraans.filter(k => k.jenis_bbm === this.selectedBbm);
             },
-            openModal(id, nopol, bbm, jumlah) {
+            openModal(id, nopol, bbm, jumlah, saldo = null) {
                 this.selectedHutang = id;
-                this.hutangData = { nopol, bbm, jumlah };
+                let k = this.kendaraans.find(item => item.no_polisi === nopol);
+                let s = saldo !== null ? saldo : (k ? k.saldo : 0);
+                this.hutangData = { nopol, bbm, jumlah, saldo: s };
                 this.showModal = true;
             }
         }">
@@ -176,7 +178,7 @@
                             <th class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">Driver</th>
                             <th class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">Jumlah Bon</th>
                             <th class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">Status</th>
-                            <th class="px-4 py-3 text-right text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">Aksi</th>
+                            
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-200 dark:divide-white/5">
@@ -245,22 +247,11 @@
                                         </div>
                                     @endif
                                 </td>
-                                <td class="px-4 py-3 text-right">
-                                    @if($hutang->status === 'belum_dibayar')
-                                        <button
-                                            @click="openModal({{ $hutang->id }}, '{{ $hutang->nopol }}', '{{ $hutang->jenis_bbm }}', {{ $hutang->jumlah_bon }})"
-                                            class="inline-flex h-9 items-center justify-center px-5 bg-indigo-600 text-white font-black text-[11px] uppercase tracking-widest rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/20 active:scale-95 mb-0.5">
-                                            Bayar Hutang
-                                        </button>
-                                    @else
-                                        <span
-                                            class="text-[10px] font-black text-slate-700 dark:text-slate-300 uppercase tracking-widest italic">Success</span>
-                                    @endif
-                                </td>
+                                
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-8 py-20 text-center">
+                                <td colspan="5" class="px-8 py-20 text-center">
                                     <div class="flex flex-col items-center">
                                         <div
                                             class="w-16 h-16 bg-slate-50 dark:bg-slate-800/50 rounded-[2rem] flex items-center justify-center text-slate-800 dark:text-slate-200 mb-4">
@@ -365,6 +356,10 @@
                                     Bon</label>
                                 <p class="text-2xl font-black text-rose-600 leading-tight tracking-tight"
                                     x-text="`${hutangData.jumlah} L`"></p>
+                            </div>
+                            <div class="col-span-2 pt-3 mt-1 border-t border-slate-200 dark:border-white/10 border-dashed flex justify-between items-center">
+                                <span class="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">Sisa Saldo Kendaraan</span>
+                                <span class="text-lg font-black text-emerald-600 dark:text-emerald-400" x-text="`${hutangData.saldo} L`"></span>
                             </div>
                         </div>
                     </div>

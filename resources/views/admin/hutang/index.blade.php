@@ -167,8 +167,6 @@
                             <th class="px-4 py-3 font-bold hidden lg:table-cell">Petugas Pencatat</th>
                             <th class="px-4 py-3 font-bold">Status</th>
                             @if(auth()->user()->role !== 'kasubbag')
-                                <th class="px-4 py-3 font-bold text-center border-l border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800/30 hidden lg:table-cell">
-                                    Pembayaran</th>
                                 <th class="bg-white dark:bg-slate-900 dark:text-white px-4 py-3 font-bold text-center border-l border-slate-200 dark:border-white/10">DETAIL</th>
                             @endif
                         </tr>
@@ -224,7 +222,7 @@
                                             <span
                                                 class="px-2 py-0.5 bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg text-[10px] font-bold uppercase w-fit">LUNAS</span>
                                             <span class="text-[9px] text-slate-600 dark:text-slate-400">Oleh:
-                                                {{ $hutang->adminBayar->name ?? '-' }}</span>
+                                                {{ $hutang->adminBayar ? $hutang->adminBayar->name : 'Otomatis Sistem' }}</span>
                                             <span
                                                 class="text-[9px] text-slate-600 dark:text-slate-400">{{ \Carbon\Carbon::parse($hutang->tanggal_bayar)->timezone('Asia/Makassar')->format('d-m-Y') }}
                                             </span>
@@ -232,19 +230,6 @@
                                     @endif
                                 </td>
                                 @if(auth()->user()->role !== 'kasubbag')
-                                    <td class="px-4 py-2 border-l border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-slate-800/20 hidden lg:table-cell">
-                                        <div class="flex items-center justify-center">
-                                            @if($hutang->status === 'belum_dibayar')
-                                                <button
-                                                    @click="openModal({{ $hutang->id }}, {{ $hutang->satker_id }}, '{{ $hutang->jenis_bbm }}', '{{ $hutang->nopol }}', {{ $hutang->jumlah_bon }})"
-                                                    class="px-3 py-1.5 bg-indigo-600 font-bold text-white rounded-lg hover:bg-indigo-700 transition shadow-sm text-[10px] uppercase tracking-wider">
-                                                    Bayar
-                                                </button>
-                                            @else
-                                                <span class="text-[10px] font-bold text-slate-600 dark:text-slate-400 italic">Selesai</span>
-                                            @endif
-                                        </div>
-                                    </td>
                                     <td class="bg-white dark:bg-slate-900 dark:text-white px-4 py-2 border-l border-slate-200 dark:border-white/5">
                                         <!-- Desktop actions -->
                                         <div class="hidden lg:flex items-center justify-center gap-2">
@@ -331,10 +316,7 @@
                                                             
                                                             <div class="bg-white dark:bg-slate-900 dark:text-white pt-4 border-t border-slate-200 dark:border-white/10 flex flex-col gap-2">
                                                                 @if($hutang->status === 'belum_dibayar')
-                                                                    <button type="button" @click="showDetail = false; openModal({{ $hutang->id }}, {{ $hutang->satker_id }}, '{{ $hutang->jenis_bbm }}', '{{ $hutang->nopol }}', {{ $hutang->jumlah_bon }})" class="flex items-center gap-3 w-full p-3 bg-indigo-600 rounded-xl text-white hover:bg-indigo-700 transition">
-                                                                        <div class="p-1.5 bg-indigo-500/20 text-indigo-100 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 9v-1m0 1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
-                                                                        <span class="font-black text-xs uppercase tracking-wider">Bayar Hutang</span>
-                                                                    </button>
+                                                                    
 
                                                                     <button type="button" @click="showDetail = false; openEditModal(@js($editData))" class="flex items-center gap-3 w-full p-3 bg-slate-50 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-800 dark:text-white hover:bg-slate-100 dark:bg-slate-700 transition">
                                                                         <div class="p-1.5 bg-blue-500/20 text-blue-600 dark:text-blue-400 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></div>
@@ -362,7 +344,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="{{ auth()->user()->role === 'kasubbag' ? 7 : 9 }}"
+                                <td colspan="{{ auth()->user()->role === 'kasubbag' ? 7 : 8 }}"
                                     class="px-6 py-8 text-center text-slate-600 dark:text-slate-400 italic">Tidak ada data hutang
                                     ditemukan.</td>
                             </tr>
@@ -905,19 +887,28 @@
                         this.loadingFormKendaraan = false;
                     }
                 },
-                async openModal(id, satkerId, bbm, nopol, jumlah) {
+                async openModal(id, satkerId, bbm, nopol, jumlah, currentSaldo = null) {
                     this.selectedHutang = id;
                     this.selectedSatker = satkerId;
                     this.selectedBbm = bbm;
-                    this.hutangData = { nopol, bbm, jumlah, saldo: 'Tidak ada' };
+                    this.hutangData = { 
+                        nopol, 
+                        bbm, 
+                        jumlah, 
+                        saldo: (currentSaldo !== null && currentSaldo !== undefined) ? currentSaldo : 'Tidak ada' 
+                    };
                     this.showModal = true;
                     
-                    if (!this.formKendaraans.some(k => k.no_polisi === nopol)) {
-                        await this.fetchFormKendaraans(satkerId);
-                    }
-                    const foundKend = this.formKendaraans.find(k => k.no_polisi === nopol);
-                    if (foundKend) {
-                        this.hutangData.saldo = foundKend.saldo;
+                    try {
+                        if (!this.formKendaraans.some(k => k.no_polisi === nopol)) {
+                            await this.fetchFormKendaraans(satkerId);
+                        }
+                        const foundKend = this.formKendaraans.find(k => k.no_polisi === nopol);
+                        if (foundKend) {
+                            this.hutangData.saldo = foundKend.saldo;
+                        }
+                    } catch (e) {
+                        console.error('Error fetching kendaraan saldo:', e);
                     }
                 },
                 async openEditModal(hutang) {

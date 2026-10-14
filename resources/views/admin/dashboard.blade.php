@@ -401,11 +401,11 @@
                             <div class="px-4 py-3 sm:px-6 sm:py-4 hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
                                 <div class="flex items-center gap-2 sm:gap-3">
                                     <div class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-xs sm:text-sm">
-                                        {{ substr($trx->kendaraan->no_polisi ?? ($trx->personel->nrp ?? '?'), 0, 2) }}
+                                        {{ substr($trx->kendaraan?->no_polisi ?? $trx->nopol ?? '?', 0, 2) }}
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-xs sm:text-xs font-medium text-slate-800 dark:text-slate-200 truncate">
-                                            {{ $trx->kendaraan->no_polisi ?? ($trx->personel->nama ?? 'Personel') }}</p>
+                                            {{ $trx->kendaraan?->no_polisi ?? $trx->nopol ?? '-' }}</p>
                                         <p class="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400">
                                             {{ $trx->created_at->diffForHumans() }}</p>
                                     </div>

@@ -25,17 +25,23 @@
                 Kendaraan
             </a>
 
-            @if($personelAccessControl == '1')
-            <a href="{{ route('admin.personels.index') }}"
-                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('admin.personels.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
-                <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
-                    </path>
-                </svg>
-                Personel
+            @php $pendingCountNav = \App\Models\Kendaraan::where('status_approval', 'pending')->count(); @endphp
+            <a href="{{ route('admin.persetujuan-kendaraan.index') }}"
+                class="group flex items-center justify-between rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('admin.persetujuan-kendaraan.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
+                <div class="flex items-center gap-x-2.5">
+                    <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Persetujuan Kendaraan
+                </div>
+                @if($pendingCountNav > 0)
+                    <span class="inline-flex items-center justify-center px-2 py-0.5 text-[10px] font-black leading-none text-white bg-amber-500 rounded-full shadow-sm animate-pulse">
+                        {{ $pendingCountNav }}
+                    </span>
+                @endif
             </a>
-            @endif
+
+
 
             <div class="space-y-1">
                 <button @click="masterBbmOpen = !masterBbmOpen"
@@ -109,13 +115,7 @@
                             <div class="submenu-dot {{ request()->routeIs('admin.hutang.*') ? 'active-dot' : '' }}"></div>
                             Hutang BBM
                         </a>
-                        @if($personelAccessControl == '1')
-                        <a href="{{ route('admin.transfer-saldo.index') }}"
-                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.transfer-saldo.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
-                            <div class="submenu-dot {{ request()->routeIs('admin.transfer-saldo.*') ? 'active-dot' : '' }}"></div>
-                            Transfer Saldo
-                        </a>
-                        @endif
+
                         <a href="{{ route('admin.bulk-potong.index') }}"
                             class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.bulk-potong.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                             <div class="submenu-dot {{ request()->routeIs('admin.bulk-potong.*') ? 'active-dot' : '' }}"></div>
@@ -222,13 +222,7 @@
                         <div class="submenu-dot {{ request()->routeIs('admin.laporan-sisa.kendaraan') ? 'active-dot' : '' }}"></div>
                         Sisa BBM Kendaraan
                     </a>
-                    @if($personelAccessControl == '1')
-                    <a href="{{ route('admin.laporan-sisa.personel') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-sisa.personel') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
-                        <div class="submenu-dot {{ request()->routeIs('admin.laporan-sisa.personel') ? 'active-dot' : '' }}"></div>
-                        Sisa BBM Personel
-                    </a>
-                    @endif
+
                 </div>
             </div>
 
@@ -357,17 +351,33 @@
                 Kendaraan
             </a>
 
-            @if($personelAccessControl == '1')
-            <a href="{{ route('satker.personels.index') }}"
-                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('satker.personels.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
-                <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
-                    </path>
-                </svg>
-                Personel
+            @php 
+                $satkerPendingNav = \App\Models\Kendaraan::where('satker_id', auth()->user()->satker_id)->where('status_approval', 'pending')->count();
+                $satkerRejectedNav = \App\Models\Kendaraan::where('satker_id', auth()->user()->satker_id)->where('status_approval', 'ditolak')->count();
+            @endphp
+            <a href="{{ route('satker.persetujuan-kendaraan.index') }}"
+                class="group flex items-center justify-between rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('satker.persetujuan-kendaraan.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
+                <div class="flex items-center gap-x-2.5">
+                    <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Persetujuan Kendaraan
+                </div>
+                <div class="flex items-center gap-1">
+                    @if($satkerPendingNav > 0)
+                        <span class="inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-black leading-none text-white bg-amber-500 rounded-full shadow-sm animate-pulse" title="{{ $satkerPendingNav }} menunggu persetujuan">
+                            {{ $satkerPendingNav }}
+                        </span>
+                    @endif
+                    @if($satkerRejectedNav > 0)
+                        <span class="inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-black leading-none text-white bg-rose-500 rounded-full shadow-sm" title="{{ $satkerRejectedNav }} ditolak">
+                            {{ $satkerRejectedNav }}
+                        </span>
+                    @endif
+                </div>
             </a>
-            @endif
+
+
 
             <a href="{{ route('satker.hutang.index') }}"
                 class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('satker.hutang.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
@@ -432,13 +442,11 @@
                         <div class="submenu-dot {{ request()->routeIs('satker.kendaraans.laporan-bulanan.*') ? 'active-dot' : '' }}"></div>
                         Laporan Bulanan
                     </a>
-                    @if($personelAccessControl == '1')
                     <a href="{{ route('satker.kendaraans.laporan-transfer') }}"
                         class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.kendaraans.laporan-transfer.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('satker.kendaraans.laporan-transfer.*') ? 'active-dot' : '' }}"></div>
                         Laporan Transfer
                     </a>
-                    @endif
                     <a href="{{ route('satker.saldo-dialihkan.index') }}"
                         class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.saldo-dialihkan.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('satker.saldo-dialihkan.*') ? 'active-dot' : '' }}"></div>
@@ -550,28 +558,7 @@
             </a>
         @endif
 
-        @if(auth()->user()->role === 'personel')
-            <a href="{{ route('personel.dashboard') }}"
-                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('personel.dashboard') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
-                <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
-                    </path>
-                </svg>
-                Dashboard
-            </a>
 
-            <a href="{{ route('personel.transfer.index') }}"
-                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('personel.transfer.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
-                <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
-                </svg>
-                Transfer Saldo
-            </a>
-
-
-        @endif
 
         <p class="px-4 py-1 mt-2 text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">Komunikasi</p>
         @if(in_array(auth()->user()->role, ['super_admin', 'kasubbag']))

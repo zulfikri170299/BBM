@@ -1,7 +1,4 @@
 {{-- sidebar.blade.php --}}
-@php
-    $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
-@endphp
 
 <!-- Mobile Sidebar Overlay -->
 <div x-show="sidebarOpen" x-cloak class="fixed inset-0 z-40 lg:hidden" role="dialog" aria-modal="true">
