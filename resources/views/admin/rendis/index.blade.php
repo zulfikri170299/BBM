@@ -1,5 +1,5 @@
 <x-app-layout>
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ showPinModal: false, pinValue: '', topupAction: '', topupBulan: '' }">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ showPinModal: false, pinValue: '', topupAction: '', topupBulan: '', showPrintModal: false, printBaseUrl: '', printRendisTitle: '' }">
     <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
             <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Rencana Distribusi (Rendis) BBM</h2>
@@ -105,9 +105,9 @@
                                     <a href="{{ route('admin.rendis.show', $rendis->id) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 transition-colors" title="Detail">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                     </a>
-                                    <a href="{{ route('admin.rendis.print-pdf', $rendis->id) }}" target="_blank" class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-900/30 dark:text-rose-400 dark:hover:bg-rose-900/50 transition-colors" title="Cetak PDF">
+                                    <button type="button" @click="printBaseUrl = '{{ route('admin.rendis.print-pdf', $rendis->id) }}'; printRendisTitle = '{{ $rendis->triwulan }} {{ $rendis->tahun }}'; showPrintModal = true" class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-900/30 dark:text-rose-400 dark:hover:bg-rose-900/50 transition-colors" title="Cetak PDF">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                                    </a>
+                                    </button>
                                     <a href="{{ route('admin.rendis.print-excel', $rendis->id) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-green-50 text-green-600 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-900/50 transition-colors" title="Export Excel">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                     </a>
@@ -208,10 +208,10 @@
                                                     <div class="p-1.5 bg-blue-500/20 text-blue-600 dark:text-blue-400 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></div>
                                                     <span class="font-semibold text-xs">Detail Kendaraan</span>
                                                 </a>
-                                                <a href="{{ route('admin.rendis.print-pdf', $rendis->id) }}" target="_blank" class="flex items-center gap-3 w-full p-3 bg-white rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-800 dark:text-white hover:bg-slate-50 dark:bg-slate-800 transition">
+                                                <button type="button" @click="showDetail = false; printBaseUrl = '{{ route('admin.rendis.print-pdf', $rendis->id) }}'; printRendisTitle = '{{ $rendis->triwulan }} {{ $rendis->tahun }}'; showPrintModal = true" class="flex items-center gap-3 w-full p-3 bg-white rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-800 dark:text-white hover:bg-slate-50 dark:bg-slate-800 transition text-left">
                                                     <div class="p-1.5 bg-rose-500/20 text-rose-600 dark:text-rose-400 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg></div>
                                                     <span class="font-semibold text-xs">Cetak PDF</span>
-                                                </a>
+                                                </button>
                                                 <a href="{{ route('admin.rendis.print-excel', $rendis->id) }}" class="flex items-center gap-3 w-full p-3 bg-white rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-800 dark:text-white hover:bg-slate-50 dark:bg-slate-800 transition">
                                                     <div class="p-1.5 bg-green-500/20 text-green-600 dark:text-green-400 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div>
                                                     <span class="font-semibold text-xs">Export Excel</span>
@@ -326,6 +326,58 @@
                     <button type="submit" class="flex-1 px-4 py-2.5 text-sm font-bold rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm transition-colors">Konfirmasi</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    {{-- MODAL PILIH UKURAN KERTAS CETAK PDF --}}
+    <div x-show="showPrintModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" @click="showPrintModal = false"></div>
+        <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-gray-700 p-6 w-full max-w-md z-10" @click.stop>
+            <div class="text-center mb-6">
+                <div class="mx-auto w-14 h-14 flex items-center justify-center rounded-2xl bg-rose-50 dark:bg-rose-900/30 border border-rose-100 dark:border-rose-800/40 text-rose-600 dark:text-rose-400 mb-3 shadow-inner">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-black text-slate-800 dark:text-white tracking-tight">Pilih Ukuran Kertas PDF</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                    Cetak dokumen Rendis BBM <span class="font-bold text-rose-600 dark:text-rose-400" x-text="printRendisTitle"></span>
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                {{-- Opsi A4 --}}
+                <a :href="printBaseUrl + '?paper=a4'" target="_blank" @click="showPrintModal = false" class="group relative flex flex-col p-4 rounded-xl border-2 border-slate-200 dark:border-gray-700 hover:border-indigo-500 dark:hover:border-indigo-400 bg-slate-50/50 dark:bg-gray-700/30 hover:bg-indigo-50/40 dark:hover:bg-indigo-950/30 transition-all duration-200 text-left cursor-pointer">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="inline-flex items-center justify-center px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-slate-200 dark:bg-gray-600 text-slate-700 dark:text-slate-200 group-hover:bg-indigo-500 group-hover:text-white transition-colors">
+                            A4
+                        </span>
+                        <svg class="w-4 h-4 text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </div>
+                    <div class="font-black text-slate-800 dark:text-white text-base group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Kertas A4</div>
+                    <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 font-medium">210 x 297 mm</div>
+                    <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-2">Standar ISO Internasional</div>
+                </a>
+
+                {{-- Opsi F4 --}}
+                <a :href="printBaseUrl + '?paper=f4'" target="_blank" @click="showPrintModal = false" class="group relative flex flex-col p-4 rounded-xl border-2 border-rose-300 dark:border-rose-900/60 hover:border-rose-500 dark:hover:border-rose-400 bg-rose-50/30 dark:bg-rose-950/20 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-all duration-200 text-left cursor-pointer shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="inline-flex items-center justify-center px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-rose-500 text-white">
+                            F4 (Folio)
+                        </span>
+                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
+                            Disarankan
+                        </span>
+                    </div>
+                    <div class="font-black text-slate-800 dark:text-white text-base group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">Kertas F4</div>
+                    <div class="text-[11px] text-rose-600 dark:text-rose-400 mt-1 font-bold">215 x 345 mm</div>
+                    <div class="text-[10px] text-slate-500 dark:text-slate-400 mt-2">Tinggi 345mm & Lebar 215mm</div>
+                </a>
+            </div>
+
+            <button type="button" @click="showPrintModal = false" class="w-full px-4 py-2.5 text-sm font-semibold rounded-xl border border-slate-300 dark:border-gray-600 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-gray-700 transition-colors">
+                Batal
+            </button>
         </div>
     </div>
 </div>

@@ -398,7 +398,7 @@ class RendisController extends Controller
         return back()->with('success', 'Top Up Massal Bulan ' . $bulan . ' berhasil dieksekusi. Berita Acara dan Daftar Nominatif telah dibuat.');
     }
 
-    public function printPdf(RendisBbm $rendisBbm)
+    public function printPdf(Request $request, RendisBbm $rendisBbm)
     {
         $rendisBbm->load('rendisKendaraans.kendaraan.satker');
         $kendaraansBySatker = Satker::sortKendaraansBySatker($rendisBbm->rendisKendaraans->groupBy(function ($rk) {
@@ -406,9 +406,20 @@ class RendisController extends Controller
         }));
         $satkers = Satker::getOrderedForRendis()->keyBy('id');
         $settings = \App\Models\Setting::pluck('value', 'key')->toArray();
-        $pdf = \PDF::loadView('admin.rendis.pdf', compact('rendisBbm', 'kendaraansBySatker', 'satkers', 'settings'))
-            ->setPaper('legal', 'landscape');
-        return $pdf->stream('Rendis_BBM_' . $rendisBbm->triwulan . '_' . $rendisBbm->tahun . '.pdf');
+
+        $paper = strtolower($request->query('paper', 'f4'));
+        if ($paper === 'a4') {
+            $paperSize = 'a4';
+        } else {
+            // Ukuran F4: tinggi 345 mm dan lebar 215 mm
+            // Konversi ke point (pt): 1 mm = 72 / 25.4 pt
+            $paperSize = [0, 0, 215 * 72 / 25.4, 345 * 72 / 25.4];
+            $paper = 'f4';
+        }
+
+        $pdf = \PDF::loadView('admin.rendis.pdf', compact('rendisBbm', 'kendaraansBySatker', 'satkers', 'settings', 'paper'))
+            ->setPaper($paperSize, 'landscape');
+        return $pdf->stream('Rendis_BBM_' . $rendisBbm->triwulan . '_' . $rendisBbm->tahun . '_' . strtoupper($paper) . '.pdf');
     }
 
     public function printExcel(RendisBbm $rendisBbm)

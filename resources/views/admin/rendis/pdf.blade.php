@@ -4,12 +4,36 @@
     <meta charset="UTF-8">
     <title>Rendis BBM {{ $rendisBbm->triwulan }} {{ $rendisBbm->tahun }}</title>
     <style>
-        @page { margin-top: 15px; }
-        body { font-family: sans-serif; font-size: 10px; margin: 10px; }
-        .title { font-size: 16px; font-weight: bold; text-align: center; text-transform: uppercase; margin-top: 30px; margin-bottom: 30px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #000; padding: 4px 5px; }
-        th { background-color: #f0f0f0; font-size: 9px; }
+        @page {
+            size: {{ ($paper ?? 'f4') === 'a4' ? '297mm 210mm landscape' : '345mm 215mm landscape' }};
+            margin-top: 10mm;
+            margin-bottom: 10mm;
+            margin-left: {{ ($paper ?? 'f4') === 'a4' ? '6mm' : '8mm' }};
+            margin-right: {{ ($paper ?? 'f4') === 'a4' ? '6mm' : '8mm' }};
+        }
+        body {
+            font-family: sans-serif;
+            font-size: {{ ($paper ?? 'f4') === 'a4' ? '8.5px' : '9.5px' }};
+            margin: 0;
+            padding: 0;
+        }
+        .title {
+            font-size: {{ ($paper ?? 'f4') === 'a4' ? '14px' : '15px' }};
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+            margin-top: {{ ($paper ?? 'f4') === 'a4' ? '14px' : '16px' }};
+            margin-bottom: {{ ($paper ?? 'f4') === 'a4' ? '14px' : '16px' }};
+        }
+        table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+        th, td {
+            border: 1px solid #000;
+            padding: {{ ($paper ?? 'f4') === 'a4' ? '3px 3px' : '4px 5px' }};
+        }
+        th {
+            background-color: #f0f0f0;
+            font-size: {{ ($paper ?? 'f4') === 'a4' ? '8px' : '9px' }};
+        }
         .text-center { text-align: center; }
         .text-right { text-align: right; }
         .font-bold { font-weight: bold; }
@@ -35,7 +59,7 @@
     @endphp
 
     {{-- TABEL PEMBELIAN --}}
-    <table style="width: 45%; margin-bottom: 15px;">
+    <table style="width: {{ ($paper ?? 'f4') === 'a4' ? '50%' : '65%' }}; margin-bottom: 12px;">
         <thead>
             <tr>
                 <th>NO</th>
@@ -67,24 +91,24 @@
     <table>
         <thead>
             <tr>
-                <th rowspan="2" style="width:3%">NO</th>
-                <th rowspan="2" style="width:8%">URAIAN</th>
-                <th rowspan="2" style="width:14%">JENIS RANDIS</th>
-                <th rowspan="2" style="width:9%">NOPOL</th>
+                <th rowspan="2" style="width: {{ ($paper ?? 'f4') === 'a4' ? '3%' : '3%' }}">NO</th>
+                <th rowspan="2" style="width: {{ ($paper ?? 'f4') === 'a4' ? '8%' : '9%' }}">URAIAN</th>
+                <th rowspan="2" style="width: {{ ($paper ?? 'f4') === 'a4' ? '15%' : '19%' }}">JENIS RANDIS</th>
+                <th rowspan="2" style="width: {{ ($paper ?? 'f4') === 'a4' ? '9%' : '10%' }}">NOPOL</th>
                 <th colspan="3">{{ strtoupper($namaBulan[0]) }}</th>
                 <th colspan="3">{{ strtoupper($namaBulan[1]) }}</th>
                 <th colspan="3">{{ strtoupper($namaBulan[2]) }}</th>
             </tr>
             <tr>
-                <th>Indeks<br><span style="font-size:8px; font-weight:normal">(Liter x Hari)</span></th>
-                <th style="color: #2563eb">Pertamax</th>
-                <th style="color: #059669">Pertamina Dex</th>
-                <th>Indeks<br><span style="font-size:8px; font-weight:normal">(Liter x Hari)</span></th>
-                <th style="color: #2563eb">Pertamax</th>
-                <th style="color: #059669">Pertamina Dex</th>
-                <th>Indeks<br><span style="font-size:8px; font-weight:normal">(Liter x Hari)</span></th>
-                <th style="color: #2563eb">Pertamax</th>
-                <th style="color: #059669">Pertamina Dex</th>
+                <th style="width: {{ ($paper ?? 'f4') === 'a4' ? '7.5%' : '7%' }}">Indeks<br><span style="font-size:8px; font-weight:normal">(Liter x Hari)</span></th>
+                <th style="width: {{ ($paper ?? 'f4') === 'a4' ? '7%' : '6.3%' }}; color: #2563eb">Pertamax</th>
+                <th style="width: {{ ($paper ?? 'f4') === 'a4' ? '7%' : '6.3%' }}; color: #059669">Pertamina Dex</th>
+                <th style="width: {{ ($paper ?? 'f4') === 'a4' ? '7.5%' : '7%' }}">Indeks<br><span style="font-size:8px; font-weight:normal">(Liter x Hari)</span></th>
+                <th style="width: {{ ($paper ?? 'f4') === 'a4' ? '7%' : '6.3%' }}; color: #2563eb">Pertamax</th>
+                <th style="width: {{ ($paper ?? 'f4') === 'a4' ? '7%' : '6.3%' }}; color: #059669">Pertamina Dex</th>
+                <th style="width: {{ ($paper ?? 'f4') === 'a4' ? '7.5%' : '7%' }}">Indeks<br><span style="font-size:8px; font-weight:normal">(Liter x Hari)</span></th>
+                <th style="width: {{ ($paper ?? 'f4') === 'a4' ? '7%' : '6.3%' }}; color: #2563eb">Pertamax</th>
+                <th style="width: {{ ($paper ?? 'f4') === 'a4' ? '7%' : '6.3%' }}; color: #059669">Pertamina Dex</th>
             </tr>
         </thead>
         <tbody>
