@@ -1,267 +1,231 @@
 <x-app-layout>
-    <div class="max-w-7xl mx-auto p-2 sm:p-6 lg:p-8 space-y-6 px-2 sm:px-6 lg:px-8" x-data="{ 
-            showModal: false, 
-            selectedHutang: null,
-            hutangData: { nopol: '', bbm: '', jumlah: 0, saldo: 0 },
-            selectedKendaraan: '', 
-            selectedBbm: '',
-            kendaraans: {{ $kendaraans->toJson() }},
-            get filteredKendaraans() {
-                return this.kendaraans.filter(k => k.jenis_bbm === this.selectedBbm);
-            },
-            openModal(id, nopol, bbm, jumlah, saldo = null) {
-                this.selectedHutang = id;
-                let k = this.kendaraans.find(item => item.no_polisi === nopol);
-                let s = saldo !== null ? saldo : (k ? k.saldo : 0);
-                this.hutangData = { nopol, bbm, jumlah, saldo: s };
-                this.showModal = true;
-            }
-        }">
-        <!-- Page Title & Summary Cards -->
-        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
-            <div class="space-y-1">
+    <div class="max-w-7xl mx-auto p-3 sm:p-6 lg:p-8 space-y-6">
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
                 <h1 class="text-2xl font-black text-slate-800 dark:text-white tracking-tight">Daftar Hutang BBM Satker</h1>
-                <div class="h-1.5 w-20 bg-indigo-600 rounded-full"></div>
-            </div>
-
-            <div class="flex flex-wrap items-center gap-3">
-                <!-- Hutang Stats Pill Style -->
-                @php $hasData = false; @endphp
-                @foreach(['Pertamax', 'Pertamina Dex'] as $jenis)
-                    @php
-                        $totalBelum = $belumDibayar[$jenis] ?? 0;
-                        $totalSudah = $sudahDibayar[$jenis] ?? 0;
-                    @endphp
-                    @if($totalBelum > 0 || $totalSudah > 0)
-                        @php $hasData = true; @endphp
-                        <div class="flex gap-2">
-                            <!-- Belum Dibayar -->
-                            <div
-                                class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 px-4 py-3 rounded-[1.5rem] border border-slate-50 flex items-center gap-3 shadow-sm hover:shadow-md transition-shadow">
-                                <div class="w-1.5 h-10 bg-rose-500 rounded-full shadow-sm shadow-rose-200"></div>
-                                <div>
-                                    <p class="text-[9px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.1em] mb-1">
-                                        BELUM DIBAYAR ({{ $jenis }})
-                                    </p>
-                                    <p class="text-xl font-black text-rose-600 leading-none tracking-tight">
-                                        {{ rtrim(rtrim(number_format($totalBelum, 2, ',', '.'), '0'), ',') ?: '0' }}
-                                        <span class="text-xs font-bold text-slate-700 dark:text-slate-300 ml-0.5">L</span>
-                                    </p>
-                                </div>
-                            </div>
-
-                            <!-- Sudah Dibayar -->
-                            <div
-                                class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 px-4 py-3 rounded-[1.5rem] border border-slate-50 flex items-center gap-3 shadow-sm hover:shadow-md transition-shadow">
-                                <div class="w-1.5 h-10 bg-emerald-500 rounded-full shadow-sm shadow-emerald-200"></div>
-                                <div>
-                                    <p class="text-[9px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.1em] mb-1">
-                                        SUDAH DIBAYAR ({{ $jenis }})
-                                    </p>
-                                    <p class="text-xl font-black text-emerald-600 leading-none tracking-tight">
-                                        {{ rtrim(rtrim(number_format($totalSudah, 2, ',', '.'), '0'), ',') ?: '0' }}
-                                        <span class="text-xs font-bold text-slate-700 dark:text-slate-300 ml-0.5">L</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-                @endforeach
-                @if(!$hasData)
-                    <div class="text-slate-600 dark:text-slate-400 text-xs italic font-bold">Belum ada catatan hutang.</div>
-                @endif
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Pantau riwayat hutang / BON BBM armada kendaraan yang belum lunas dan yang telah terpotong otomatis.</p>
             </div>
         </div>
 
-        <!-- Filters -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-4 lg:p-6">
-            <form action="{{ route('satker.hutang.index') }}" method="GET"
-                class="flex flex-col lg:flex-row lg:items-end gap-5 lg:gap-3">
-                <div class="grid grid-cols-2 gap-3 lg:flex lg:flex-nowrap lg:gap-3 flex-1">
-                    <div class="space-y-1.5 lg:flex-1">
-                        <label
-                            class="flex items-center gap-2 text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest pl-1">
-                            BBM
-                        </label>
-                        <select name="jenis_bbm"
-                            class="tom-select w-full">
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua BBM</option>
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Pertamax" {{ request('jenis_bbm') == 'Pertamax' ? 'selected' : '' }}>Pertamax
-                            </option>
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Pertamina Dex" {{ request('jenis_bbm') == 'Pertamina Dex' ? 'selected' : '' }}>
-                                Pertamina Dex</option>
-                        </select>
-                    </div>
-                    <div class="space-y-1.5 lg:flex-1">
-                        <label
-                            class="flex items-center gap-2 text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest pl-1">
-                            Status
-                        </label>
-                        <select name="status"
-                            class="tom-select w-full">
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua Status</option>
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="belum_dibayar" {{ request('status') == 'belum_dibayar' ? 'selected' : '' }}>BELUM
-                            </option>
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="sudah_dibayar" {{ request('status') == 'sudah_dibayar' ? 'selected' : '' }}>LUNAS
-                            </option>
-                        </select>
+        <!-- Summary Statistics Cards -->
+        @php
+            $pertamaxBelum = $belumDibayar['Pertamax'] ?? 0;
+            $pertamaxSudah = $sudahDibayar['Pertamax'] ?? 0;
+            $dexBelum = $belumDibayar['Pertamina Dex'] ?? 0;
+            $dexSudah = $sudahDibayar['Pertamina Dex'] ?? 0;
+        @endphp
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+            <!-- Belum Dibayar Pertamax -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl p-4 shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-[9px] font-black uppercase tracking-wider text-slate-400">Belum Bayar (Pertamax)</span>
+                    <div class="text-2xl font-black text-rose-600 dark:text-rose-400 mt-1">
+                        {{ rtrim(rtrim(number_format($pertamaxBelum, 2, ',', '.'), '0'), ',') ?: '0' }} <span class="text-xs font-bold text-slate-400">L</span>
                     </div>
                 </div>
-                <div class="flex items-center justify-between lg:justify-start gap-2 lg:mb-0.5 pt-1 lg:pt-0">
-                    <button type="submit"
-                        class="flex-1 lg:flex-none px-4 py-3.5 lg:px-5 lg:py-3.5 bg-indigo-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/20 active:scale-95 text-center">
-                        Terapkan
-                    </button>
-                    <a href="{{ route('satker.hutang.index') }}"
-                        class="px-4 py-3 text-slate-500 dark:text-slate-400 hover:text-slate-600 dark:text-slate-400 font-black text-[10px] uppercase tracking-widest transition-colors">
-                        Reset
-                    </a>
+                <div class="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center border border-rose-100 dark:border-rose-900/50">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+            </div>
 
+            <!-- Sudah Dibayar Pertamax -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl p-4 shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-[9px] font-black uppercase tracking-wider text-slate-400">Lunas (Pertamax)</span>
+                    <div class="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1">
+                        {{ rtrim(rtrim(number_format($pertamaxSudah, 2, ',', '.'), '0'), ',') ?: '0' }} <span class="text-xs font-bold text-slate-400">L</span>
+                    </div>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center border border-emerald-100 dark:border-emerald-900/50">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+            </div>
+
+            <!-- Belum Dibayar Pertamina Dex -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl p-4 shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-[9px] font-black uppercase tracking-wider text-slate-400">Belum Bayar (Dex)</span>
+                    <div class="text-2xl font-black text-rose-600 dark:text-rose-400 mt-1">
+                        {{ rtrim(rtrim(number_format($dexBelum, 2, ',', '.'), '0'), ',') ?: '0' }} <span class="text-xs font-bold text-slate-400">L</span>
+                    </div>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center border border-rose-100 dark:border-rose-900/50">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+            </div>
+
+            <!-- Sudah Dibayar Pertamina Dex -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl p-4 shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-[9px] font-black uppercase tracking-wider text-slate-400">Lunas (Dex)</span>
+                    <div class="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1">
+                        {{ rtrim(rtrim(number_format($dexSudah, 2, ',', '.'), '0'), ',') ?: '0' }} <span class="text-xs font-bold text-slate-400">L</span>
+                    </div>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center border border-emerald-100 dark:border-emerald-900/50">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Card -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-4">
+            <form action="{{ route('satker.hutang.index') }}" method="GET" class="flex flex-col md:flex-row items-stretch md:items-end gap-3">
+                <div class="flex-1 space-y-1">
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider pl-0.5">BBM</label>
+                    <select name="jenis_bbm" class="tom-select w-full">
+                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua BBM</option>
+                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Pertamax" {{ request('jenis_bbm') == 'Pertamax' ? 'selected' : '' }}>Pertamax</option>
+                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Pertamina Dex" {{ request('jenis_bbm') == 'Pertamina Dex' ? 'selected' : '' }}>Pertamina Dex</option>
+                    </select>
+                </div>
+
+                <div class="flex-1 space-y-1">
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider pl-0.5">Status</label>
+                    <select name="status" class="tom-select w-full">
+                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua Status</option>
+                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="belum_dibayar" {{ request('status') == 'belum_dibayar' ? 'selected' : '' }}>Belum Bayar</option>
+                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="sudah_dibayar" {{ request('status') == 'sudah_dibayar' ? 'selected' : '' }}>Lunas</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center gap-2 pt-1 md:pt-0">
+                    <button type="submit" class="h-10 px-5 bg-brand-primary text-white rounded-xl text-xs font-bold hover:bg-brand-primary/90 transition shadow-sm flex items-center justify-center gap-1.5 flex-1 md:flex-none">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+                        <span>Filter</span>
+                    </button>
+                    @if(request('jenis_bbm') || request('status'))
+                        <a href="{{ route('satker.hutang.index') }}" class="h-10 px-3.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold transition flex items-center justify-center">
+                            Reset
+                        </a>
+                    @endif
                 </div>
             </form>
         </div>
 
         @if(session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-                <strong class="font-bold">Berhasil!</strong>
-                <span class="block sm:inline">{{ session('success') }}</span>
+            <div class="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-xl text-xs font-bold text-emerald-800 dark:text-emerald-200">
+                {{ session('success') }}
             </div>
         @endif
 
         @if(session('error'))
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                <strong class="font-bold">Error!</strong>
-                <span class="block sm:inline">{{ session('error') }}</span>
+            <div class="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-xl text-xs font-bold text-rose-800 dark:text-rose-200">
+                {{ session('error') }}
             </div>
         @endif
 
-        @if($errors->any())
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                <strong class="font-bold">Error Form!</strong>
-                <ul>
-                    @foreach($errors->all() as $error)
-                        <li>- {{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <!-- Table Data -->
+        <!-- Table Card -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
-            <div class="px-8 py-5 border-b border-slate-50 flex justify-between items-center bg-slate-50 dark:bg-slate-800/30">
-                <div class="flex items-center gap-4">
-                    <form action="{{ route('satker.hutang.index') }}" method="GET" class="flex items-center gap-3">
+            <!-- Table Sub-header (Limit & Count) -->
+            <div class="px-5 py-3.5 border-b border-slate-200 dark:border-white/10 flex flex-wrap justify-between items-center gap-3 bg-slate-50 dark:bg-slate-800/40">
+                <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Tampilkan</span>
+                    <form action="{{ route('satker.hutang.index') }}" method="GET" class="inline">
                         @foreach(request()->except('per_page') as $key => $value)
                             <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                         @endforeach
-                        <label
-                            class="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest leading-none">Limit:</label>
-                        <select name="per_page" onchange="this.form.submit()"
-                            class="text-xs font-bold border-slate-200 dark:border-white/5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 py-1.5 pl-3 pr-8 transition-all">
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="15" {{ request('per_page') == 15 ? 'selected' : '' }}>15</option>
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
+                        <select name="per_page" onchange="this.form.submit()" class="h-8 px-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-lg text-xs font-bold text-slate-700 dark:text-slate-200 focus:ring-1 focus:ring-indigo-500">
+                            <option value="15" {{ request('per_page', 15) == 15 ? 'selected' : '' }}>15</option>
+                            <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+                            <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+                            <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
                         </select>
                     </form>
                 </div>
-                <div class="text-[10px] text-slate-600 dark:text-slate-400 font-black uppercase tracking-widest">
-                    {{ $hutangs->firstItem() ?? 0 }}-{{ $hutangs->lastItem() ?? 0 }} / {{ $hutangs->total() }} Data
+                <div class="text-[11px] font-bold text-slate-500 dark:text-slate-400">
+                    Menampilkan <span class="text-slate-800 dark:text-white">{{ $hutangs->firstItem() ?? 0 }}-{{ $hutangs->lastItem() ?? 0 }}</span> dari <span class="text-slate-800 dark:text-white">{{ $hutangs->total() }}</span> Data
                 </div>
             </div>
+
+            <!-- Table -->
             <div class="overflow-x-auto">
-                <table class="min-w-full whitespace-nowrap">
-                    <thead>
-                        <tr class="bg-white dark:bg-slate-800/80 border-b border-slate-200 dark:border-white/5">
-                            <th class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">Tanggal Bon</th>
-                            <th class="px-4 py-3 text-left text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">Kendaraan</th>
-                            <th class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">Driver</th>
-                            <th class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">Jumlah Bon</th>
-                            <th class="px-4 py-3 text-center text-[11px] font-medium tracking-wider text-slate-600 dark:text-slate-400 uppercase tracking-wider">Status</th>
-                            
+                <table class="min-w-full text-left text-xs whitespace-nowrap">
+                    <thead class="bg-slate-50 dark:bg-slate-800/70 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[11px] border-b border-slate-200 dark:border-white/10">
+                        <tr>
+                            <th class="px-5 py-3.5 text-center w-12">No</th>
+                            <th class="px-5 py-3.5">Tanggal Bon</th>
+                            <th class="px-5 py-3.5">Kendaraan</th>
+                            <th class="px-5 py-3.5">Driver</th>
+                            <th class="px-5 py-3.5 text-center">Jumlah Bon</th>
+                            <th class="px-5 py-3.5 text-center">Status</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-200 dark:divide-white/5">
+                    <tbody class="divide-y divide-slate-200 dark:divide-white/5 text-slate-700 dark:text-slate-300">
                         @forelse($hutangs as $hutang)
-                            <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
-                                <td class="px-4 py-3">
-                                    <div class="text-xs font-medium text-slate-800 dark:text-slate-200">
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+                                <td class="px-5 py-3.5 text-center font-bold text-slate-400">
+                                    {{ $loop->iteration + ($hutangs->currentPage() - 1) * $hutangs->perPage() }}
+                                </td>
+                                <td class="px-5 py-3.5">
+                                    <div class="font-bold text-slate-900 dark:text-white">
                                         @if($hutang->tanggal_bon)
                                             {{ \Carbon\Carbon::parse($hutang->tanggal_bon)->format('d M Y') }}
                                         @else
                                             {{ \Carbon\Carbon::parse($hutang->created_at)->timezone('Asia/Makassar')->format('d M Y') }}
                                         @endif
                                     </div>
-                                    <div class="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-wider mt-0.5">
+                                    <div class="text-[10px] text-slate-400 uppercase mt-0.5">
                                         @if($hutang->tanggal_bon)
-                                            CATATAN MANUAL
+                                            Catatan Manual
                                         @else
-                                            {{ \Carbon\Carbon::parse($hutang->created_at)->timezone('Asia/Makassar')->format('H:i') }}
-                                            WITA
+                                            {{ \Carbon\Carbon::parse($hutang->created_at)->timezone('Asia/Makassar')->format('H:i') }} WITA
                                         @endif
                                     </div>
                                 </td>
-                                <td class="px-4 py-3">
-                                    <div class="flex flex-col">
-                                        <span class="text-xs text-slate-700 dark:text-slate-300 font-medium">{{ $hutang->nopol }}</span>
-                                        <div class="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">
-                                            {{ $hutang->jenis_kendaraan }}
-                                        </div>
+                                <td class="px-5 py-3.5">
+                                    <div class="font-mono font-bold text-slate-900 dark:text-white text-xs">
+                                        {{ $hutang->nopol }}
+                                    </div>
+                                    <div class="text-[10px] text-slate-400 mt-0.5">
+                                        {{ $hutang->jenis_kendaraan }}
                                     </div>
                                 </td>
-                                <td class="px-4 py-3 text-center">
-                                    <span class="text-xs font-medium text-slate-700 dark:text-slate-300">{{ $hutang->nama_driver ?? '-' }}</span>
+                                <td class="px-5 py-3.5 font-medium text-slate-800 dark:text-slate-200">
+                                    {{ $hutang->nama_driver ?? '-' }}
                                 </td>
-                                <td class="px-4 py-3 text-center">
+                                <td class="px-5 py-3.5 text-center">
                                     <div class="flex flex-col items-center">
-                                        <span
-                                            class="text-sm font-bold text-rose-600">{{ number_format($hutang->jumlah_bon, 0, ',', '.') }}
-                                            L</span>
-                                        <span
-                                            class="text-[9px] font-black text-indigo-500 uppercase tracking-widest bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-100/50 mt-1">
+                                        <span class="font-black text-rose-600 dark:text-rose-400 text-sm">
+                                            {{ number_format($hutang->jumlah_bon, 0, ',', '.') }} L
+                                        </span>
+                                        <span class="inline-block mt-0.5 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider {{ str_contains(strtolower($hutang->jenis_bbm), 'dex') ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300' : 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300' }}">
                                             {{ $hutang->jenis_bbm }}
                                         </span>
                                     </div>
                                 </td>
-                                <td class="px-4 py-3 text-center">
+                                <td class="px-5 py-3.5 text-center">
                                     @if($hutang->status === 'belum_dibayar')
-                                        <span
-                                            class="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-50 text-rose-600 border border-rose-100/50 rounded-full text-[10px] font-black uppercase tracking-widest">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-300 border border-rose-200 dark:border-rose-800/50">
                                             <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
-                                            BELUM BAYAR
+                                            Belum Bayar
                                         </span>
                                     @else
-                                        <div class="flex flex-col">
-                                            <span
-                                                class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-600 border border-emerald-100/50 rounded-full text-[10px] font-black uppercase tracking-widest w-fit">
-                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                                        d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                LUNAS
+                                        <div class="flex flex-col items-center">
+                                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/50">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                                Lunas
                                             </span>
-                                            <span class="text-[9px] font-bold text-slate-600 dark:text-slate-400 mt-1 pl-1">
-                                                Paid:
-                                                {{ \Carbon\Carbon::parse($hutang->tanggal_bayar)->timezone('Asia/Makassar')->format('d/m/Y') }}
-                                            </span>
+                                            @if($hutang->tanggal_bayar)
+                                                <span class="text-[9px] text-slate-400 mt-0.5">
+                                                    {{ \Carbon\Carbon::parse($hutang->tanggal_bayar)->timezone('Asia/Makassar')->format('d/m/Y') }}
+                                                </span>
+                                            @endif
                                         </div>
                                     @endif
                                 </td>
-                                
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-8 py-20 text-center">
-                                    <div class="flex flex-col items-center">
-                                        <div
-                                            class="w-16 h-16 bg-slate-50 dark:bg-slate-800/50 rounded-[2rem] flex items-center justify-center text-slate-800 dark:text-slate-200 mb-4">
-                                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                                <td colspan="6" class="px-6 py-12 text-center">
+                                    <div class="flex flex-col items-center justify-center">
+                                        <div class="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 mb-3">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                             </svg>
                                         </div>
-                                        <p class="text-sm font-bold text-slate-600 dark:text-slate-400 italic">Tidak ada data hutang ditemukan.
-                                        </p>
+                                        <p class="text-sm font-bold text-slate-600 dark:text-slate-400">Tidak ada data catatan hutang</p>
                                     </div>
                                 </td>
                             </tr>
@@ -269,130 +233,13 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- Pagination -->
             @if($hutangs->hasPages())
-                <div class="px-8 py-6 border-t border-slate-50 bg-slate-50 dark:bg-slate-800/20">
+                <div class="px-5 py-4 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-800/40">
                     {{ $hutangs->links() }}
                 </div>
             @endif
-        </div>
-
-        <!-- Payment Modal -->
-        <div x-show="showModal" class="fixed inset-0 z-[9999] flex items-center justify-center p-4" x-cloak>
-    <template x-teleport="body">
-            <!-- Backdrop -->
-            <div x-show="showModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
-                x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
-                x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                class="fixed inset-0 bg-white dark:bg-slate-900/60" aria-hidden="true" @click="showModal = false">
-            </div>
-
-            <!-- Modal Panel -->
-            <div x-show="showModal" x-transition:enter="ease-out duration-300"
-                x-transition:enter-start="opacity-0 scale-95 translate-y-4"
-                x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="ease-in duration-200"
-                x-transition:leave-start="opacity-100 scale-100 translate-y-0"
-                x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-                class="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-[3rem] shadow-2xl overflow-hidden max-w-xl w-full border border-slate-300 dark:border-white/20">
-
-                <!-- Header -->
-                <div
-                    class="bg-gradient-to-br from-indigo-600 to-indigo-800 px-10 py-8 text-slate-800 dark:text-white relative overflow-hidden">
-                    <div class="absolute top-0 right-0 -mt-8 -mr-8 w-32 h-32 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/10 rounded-full blur-2xl"></div>
-                    <div
-                        class="absolute bottom-0 left-0 -mb-12 -ml-12 w-48 h-48 bg-indigo-500/20 rounded-full blur-3xl">
-                    </div>
-
-                    <div class="relative flex justify-between items-center">
-                        <div class="flex items-center gap-4">
-                            <div
-                                class="w-12 h-12 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/20 rounded-2xl flex items-center justify-center border border-slate-300 dark:border-white/30 shadow-inner">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                        d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="text-2xl font-black tracking-tight leading-none">Pembayaran</h3>
-                                <p
-                                    class="text-indigo-100 text-[10px] font-black uppercase tracking-[0.2em] mt-1.5 opacity-80">
-                                    Konfirmasi Transaksi</p>
-                            </div>
-                        </div>
-                        <button @click="showModal = false" class="p-2 hover:bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/10 rounded-xl transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                    d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="p-10 space-y-8">
-                    <!-- Summary Card -->
-                    <div
-                        class="bg-slate-50 dark:bg-slate-800/50 rounded-[2rem] p-8 border border-slate-200 dark:border-white/5 relative group overflow-hidden">
-                        <div
-                            class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-indigo-200 to-transparent opacity-30 group-hover:opacity-100 transition-opacity">
-                        </div>
-
-                        <div class="flex items-center justify-between mb-6">
-                            <span
-                                class="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest leading-none">Detail
-                                Tagihan</span>
-                            <span
-                                class="px-3 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 text-indigo-600 font-black text-[10px] rounded-full border border-indigo-50 shadow-sm"
-                                x-text="hutangData.bbm"></span>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-8">
-                            <div class="space-y-1">
-                                <label class="text-[9px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">No.
-                                    Polisi</label>
-                                <p class="text-2xl font-black text-slate-800 dark:text-white leading-tight tracking-tight"
-                                    x-text="hutangData.nopol"></p>
-                            </div>
-                            <div class="space-y-1 text-right">
-                                <label class="text-[9px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">Jumlah
-                                    Bon</label>
-                                <p class="text-2xl font-black text-rose-600 leading-tight tracking-tight"
-                                    x-text="`${hutangData.jumlah} L`"></p>
-                            </div>
-                            <div class="col-span-2 pt-3 mt-1 border-t border-slate-200 dark:border-white/10 border-dashed flex justify-between items-center">
-                                <span class="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">Sisa Saldo Kendaraan</span>
-                                <span class="text-lg font-black text-emerald-600 dark:text-emerald-400" x-text="`${hutangData.saldo} L`"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <form :action="`/satker/hutang/${selectedHutang}/bayar`" method="POST" id="paymentForm"
-                        class="space-y-6">
-                        @csrf
-                        <div class="space-y-3">
-                            <input type="hidden" name="nopol" :value="hutangData.nopol">
-                            <p class="text-sm font-bold text-slate-600 dark:text-slate-400 mb-4 bg-indigo-50 p-4 rounded-2xl border border-indigo-100/50 flex gap-3">
-                                <svg class="h-6 w-6 text-indigo-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
-                                </svg>
-                                <span>
-                                    Pembayaran ini akan memotong saldo kendaraan <span class="font-black text-indigo-700" x-text="hutangData.nopol"></span>.
-                                </span>
-                            </p>
-                        </div>
-                    </form>
-
-                    <div class="flex flex-col gap-3">
-                        <button type="submit" form="paymentForm"
-                            class="w-full py-5 bg-indigo-600 text-white font-black rounded-2xl shadow-xl shadow-indigo-500/20 hover:bg-indigo-700 hover:shadow-indigo-500/30 focus:outline-none focus:ring-4 focus:ring-indigo-500/20 active:scale-[0.98] transition-all text-xs uppercase tracking-[0.2em] disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none">
-                            Konfirmasi Pembayaran
-                        </button>
-                        <button type="button" @click="showModal = false"
-                            class="w-full py-4 text-slate-500 dark:text-slate-400 hover:text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:bg-slate-800/50 font-black rounded-2xl transition-all text-[10px] uppercase tracking-[0.2em]">
-                            Batalkan
-                        </button>
-                    </div>
-                </div>
-            </div>
-    </template>
         </div>
     </div>
 </x-app-layout>

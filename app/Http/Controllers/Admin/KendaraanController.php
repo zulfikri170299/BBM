@@ -768,10 +768,7 @@ class KendaraanController extends Controller
                 ->where('tipe', 'keluar')
                 ->whereBetween('created_at', [$startUtc, $endUtc])
                 ->get();
-            $topupKeluar = $topupKeluarAll->whereNotIn('metode', ['potong_saldo_hangus', 'POTONG_SALDO_MASAL_HANGUS'])
-                ->filter(function($item) {
-                    return strpos($item->keterangan, 'Pelunasan bon hutang') === false;
-                })->sum('jumlah');
+            $topupKeluar = $topupKeluarAll->whereNotIn('metode', ['potong_saldo_hangus', 'POTONG_SALDO_MASAL_HANGUS'])->sum('jumlah');
             $hangusKeluar = $topupKeluarAll->whereIn('metode', ['potong_saldo_hangus', 'POTONG_SALDO_MASAL_HANGUS'])->sum('jumlah');
 
             $topupBulanIni = $topupMasuk; // Hanya saldo MASUK yang dihitung sebagai Top Up di laporan
@@ -786,10 +783,8 @@ class KendaraanController extends Controller
             $totalTopupSampaiSebelumnyaKeluar = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
                 ->where('tipe', 'keluar')
+                ->whereNotIn('metode', ['potong_saldo_hangus', 'POTONG_SALDO_MASAL_HANGUS'])
                 ->where('created_at', '<=', $prevMonthEndUtc)
-                ->where(function($q) {
-                    $q->whereNull('keterangan')->orWhere('keterangan', 'not like', 'Pelunasan bon hutang%');
-                })
                 ->sum('jumlah');
             
             $totalTopupSampaiSebelumnya = $totalTopupSampaiSebelumnyaMasuk - $totalTopupSampaiSebelumnyaKeluar;
@@ -800,11 +795,13 @@ class KendaraanController extends Controller
                 ->where('tanggal', '<=', $prevMonthEndUtc)
                 ->sum('liter');
 
-            // Total hutang (bon) sampai akhir bulan lalu untuk kendaraan ini
+            // Total hutang (bon) sampai akhir bulan lalu yang MASIH BELUM dibayar
+            // (Hutang yang dibayar di bulan ini akan dicatat keluar di kolom TK bulan ini)
             $totalHutangSampaiSebelumnya = \App\Models\Hutang::where('satker_id', $satkerId)
                 ->where('nopol', $kendaraan->no_polisi)
                 ->where('jenis_bbm', $kendaraan->jenis_bbm)
                 ->where('tanggal_bon', '<', $startDateWita->format('Y-m-d'))
+                ->where('status', 'belum_dibayar')
                 ->sum('jumlah_bon');
 
             // Total transfer keluar (saldo personil) sampai akhir bulan lalu di Satker ini
