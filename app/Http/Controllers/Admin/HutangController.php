@@ -259,7 +259,7 @@ class HutangController extends Controller
         $query = \App\Models\Kendaraan::where('satker_id', $request->satker_id)
             ->select('id', 'no_polisi', 'jenis_kendaraan', 'jenis_bbm', 'saldo');
 
-        if ($request->boolean('hanya_saldo_habis')) {
+        if (!$request->boolean('include_all')) {
             $query->where('saldo', '<=', 0);
         }
 

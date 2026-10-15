@@ -51,6 +51,7 @@ Route::middleware('auth')->group(function () {
 
     // Chat Routes
     Route::get('/chat/unread/count', [\App\Http\Controllers\ChatController::class, 'unreadCount'])->name('chat.unread.count');
+    Route::get('/chat/latest-unread', [\App\Http\Controllers\ChatController::class, 'getLatestUnread'])->name('chat.latest-unread');
     Route::get('/chat', [\App\Http\Controllers\ChatController::class, 'index'])->name('chat.index');
     Route::get('/chat/{receiver}', [\App\Http\Controllers\ChatController::class, 'show'])->name('chat.show');
     Route::get('/chat/{receiver}/messages', [\App\Http\Controllers\ChatController::class, 'getMessages'])->name('chat.messages');
@@ -153,6 +154,7 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
 
     
     // Satisfaction Index
+    Route::get('/satisfaction-index/print', [\App\Http\Controllers\Admin\SatisfactionController::class, 'print'])->name('satisfaction.print');
     Route::get('/satisfaction-index', [\App\Http\Controllers\Admin\SatisfactionController::class, 'index'])->name('satisfaction.index');
     
     // Berita Acara

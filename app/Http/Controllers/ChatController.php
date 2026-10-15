@@ -90,6 +90,47 @@ class ChatController extends Controller
         return response()->json(['count' => $count]);
     }
 
+    public function getLatestUnread(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['has_unread' => false]);
+        }
+
+        $latestChat = Chat::with(['sender.satker'])
+            ->where('receiver_id', $user->id)
+            ->where('is_read', false)
+            ->latest()
+            ->first();
+
+        if (!$latestChat || !$latestChat->sender) {
+            return response()->json(['has_unread' => false]);
+        }
+
+        $sender = $latestChat->sender;
+        $messageRaw = strip_tags($latestChat->message);
+        $messageSnippet = \Illuminate\Support\Str::limit($messageRaw, 90, '...');
+
+        return response()->json([
+            'has_unread' => true,
+            'message' => [
+                'id' => $latestChat->id,
+                'sender_id' => $sender->id,
+                'sender_name' => $sender->name,
+                'sender_role' => $sender->role_label,
+                'sender_satker' => $sender->satker ? $sender->satker->nama_satker : null,
+                'sender_initial' => strtoupper(substr($sender->name, 0, 1)),
+                'has_photo' => $sender->has_profile_photo,
+                'avatar_url' => $sender->has_profile_photo ? asset('storage/' . $sender->profile_photo_path) : null,
+                'text_full' => $messageRaw,
+                'text_snippet' => $messageSnippet,
+                'chat_url' => route('chat.show', $sender->id),
+                'created_at_human' => $latestChat->created_at ? $latestChat->created_at->diffForHumans() : 'Baru saja',
+                'created_at_time' => $latestChat->created_at ? $latestChat->created_at->format('H:i') : '',
+            ]
+        ]);
+    }
+
     public function destroy(Chat $chat)
     {
         if ($chat->sender_id !== Auth::id()) {

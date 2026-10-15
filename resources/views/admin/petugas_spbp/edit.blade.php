@@ -1,113 +1,107 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex items-center space-x-4">
-            <a href="{{ route('admin.petugas-spbp.index') }}" class="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:text-slate-300">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="p-2 sm:p-6 lg:p-8 space-y-6">
+        <!-- Page Header -->
+        <div class="flex items-center gap-3.5">
+            <a href="{{ route('admin.petugas-spbp.index') }}" 
+                class="w-10 h-10 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 shadow-sm transition-all hover:scale-105">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
             </a>
-            <h2 class="font-semibold text-xl text-slate-800 dark:text-slate-200 leading-tight">
-                {{ __('Edit Petugas SPBP') }}
-            </h2>
-        </div>
-    </x-slot>
-
-    <div class="py-12 bg-slate-50 dark:bg-slate-800/50 min-h-screen px-2 sm:px-6 lg:px-8">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 overflow-hidden shadow-sm sm:rounded-2xl border border-slate-200 dark:border-white/10">
-                <div class="p-8">
-                    <div class="mb-8">
-                        <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">Edit Data Petugas</h3>
-                        <p class="text-xs text-slate-600 dark:text-slate-400">Perbarui informasi petugas SPBP untuk keperluan laporan PDF.</p>
-                    </div>
-
-                    <form action="{{ route('admin.petugas-spbp.update', $petugas_spbp) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-
-                        <div class="space-y-6">
-                            <!-- Nama -->
-                            <div class="space-y-1.5">
-                                <label for="nama" class="block text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Nama Lengkap</label>
-                                <div class="relative group">
-                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-600 dark:text-slate-400 group-focus-within:text-indigo-500 transition-colors">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                        </svg>
-                                    </div>
-                                    <input type="text" name="nama" id="nama" value="{{ old('nama', $petugas_spbp->nama) }}" required
-                                        class="pl-11 block w-full rounded-xl border-slate-200 dark:border-white/10 bg-slate-50 focus:bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all duration-200 sm:text-sm py-2.5"
-                                        placeholder="ZULFIKRI, S.Kom.">
-                                </div>
-                                @error('nama')
-                                    <p class="mt-1 text-sm text-red-600 flex items-center gap-1 ml-1">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-                                        {{ $message }}
-                                    </p>
-                                @enderror
-                            </div>
-
-                            <!-- Pangkat/NRP -->
-                            <div class="space-y-1.5">
-                                <label for="pangkat_nrp" class="block text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Pangkat / NRP / NIP</label>
-                                <div class="relative group">
-                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-600 dark:text-slate-400 group-focus-within:text-indigo-500 transition-colors">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-                                        </svg>
-                                    </div>
-                                    <input type="text" name="pangkat_nrp" id="pangkat_nrp" value="{{ old('pangkat_nrp', $petugas_spbp->pangkat_nrp) }}" required
-                                        class="pl-11 block w-full rounded-xl border-slate-200 dark:border-white/10 bg-slate-50 focus:bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all duration-200 sm:text-sm py-2.5"
-                                        placeholder="BRIPTU NRP 99101131">
-                                </div>
-                                @error('pangkat_nrp')
-                                    <p class="mt-1 text-sm text-red-600 flex items-center gap-1 ml-1">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-                                        {{ $message }}
-                                    </p>
-                                @enderror
-                            </div>
-
-                            <!-- Urutan -->
-                            <div class="space-y-1.5">
-                                <label for="urutan" class="block text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Urutan Tampilan</label>
-                                <div class="relative group">
-                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-600 dark:text-slate-400 group-focus-within:text-indigo-500 transition-colors">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 013 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11"></path>
-                                        </svg>
-                                    </div>
-                                    <input type="number" name="urutan" id="urutan" value="{{ old('urutan', $petugas_spbp->urutan) }}" required min="1"
-                                        class="pl-11 block w-full rounded-xl border-slate-200 dark:border-white/10 bg-slate-50 focus:bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all duration-200 sm:text-sm py-2.5">
-                                </div>
-                                <p class="text-[11px] text-slate-600 dark:text-slate-400 ml-1 flex items-center gap-1">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    Menentukan posisi petugas di tanda tangan laporan PDF.
-                                </p>
-                                @error('urutan')
-                                    <p class="mt-1 text-sm text-red-600 flex items-center gap-1 ml-1">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-                                        {{ $message }}
-                                    </p>
-                                @enderror
-                            </div>
-
-                            <div class="bg-white dark:bg-slate-900 dark:text-white flex items-center justify-end gap-3 pt-6 border-t border-slate-200 dark:border-white/5">
-                                <a href="{{ route('admin.petugas-spbp.index') }}" 
-                                    class="px-6 py-2.5 text-sm font-bold text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:text-slate-200 transition-colors">
-                                    Batal
-                                </a>
-                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-indigo-500/30 transition-all active:scale-95 flex items-center gap-2">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                                    </svg>
-                                    Simpan Perubahan
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+            <div>
+                <h1 class="text-2xl font-bold text-slate-800 dark:text-white tracking-tight">Edit Petugas SPBP</h1>
+                <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-0.5">Perbarui data petugas penanda tangan untuk laporan dokumen PDF.</p>
             </div>
+        </div>
+
+        <!-- Form Card -->
+        <div class="max-w-2xl bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 bg-slate-50/70 dark:bg-slate-800/40 border-b border-slate-200 dark:border-white/10">
+                <h3 class="text-sm font-bold text-slate-800 dark:text-white">Edit Data Petugas</h3>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Perbarui informasi nama lengkap, pangkat/NRP, atau urutan tanda tangan</p>
+            </div>
+
+            <form action="{{ route('admin.petugas-spbp.update', $petugas_spbp) }}" method="POST" class="p-6 space-y-5">
+                @csrf
+                @method('PUT')
+
+                <!-- Nama -->
+                <div>
+                    <label for="nama" class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">
+                        Nama Lengkap <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                        </div>
+                        <input type="text" name="nama" id="nama" value="{{ old('nama', $petugas_spbp->nama) }}" required
+                            class="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800/60 border {{ $errors->has('nama') ? 'border-red-500' : 'border-slate-200 dark:border-white/10' }} rounded-xl text-sm font-semibold text-slate-800 dark:text-white placeholder:text-slate-400 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition"
+                            placeholder="Contoh: I KOMANG DARMAJA, S.Sos.">
+                    </div>
+                    @error('nama')
+                        <p class="mt-1 text-xs text-rose-500 font-medium">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Pangkat/NRP -->
+                <div>
+                    <label for="pangkat_nrp" class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">
+                        Pangkat / NRP / NIP <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                        </div>
+                        <input type="text" name="pangkat_nrp" id="pangkat_nrp" value="{{ old('pangkat_nrp', $petugas_spbp->pangkat_nrp) }}" required
+                            class="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800/60 border {{ $errors->has('pangkat_nrp') ? 'border-red-500' : 'border-slate-200 dark:border-white/10' }} rounded-xl text-sm font-semibold text-slate-800 dark:text-white placeholder:text-slate-400 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition"
+                            placeholder="Contoh: AKP NRP 79070976">
+                    </div>
+                    @error('pangkat_nrp')
+                        <p class="mt-1 text-xs text-rose-500 font-medium">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Urutan -->
+                <div>
+                    <label for="urutan" class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">
+                        Urutan Tampilan <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                            </svg>
+                        </div>
+                        <input type="number" name="urutan" id="urutan" value="{{ old('urutan', $petugas_spbp->urutan) }}" required min="1"
+                            class="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800/60 border {{ $errors->has('urutan') ? 'border-red-500' : 'border-slate-200 dark:border-white/10' }} rounded-xl text-sm font-semibold text-slate-800 dark:text-white placeholder:text-slate-400 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition">
+                    </div>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+                        Menentukan nomor urut kolom penanda tangan dari kiri ke kanan pada cetak laporan PDF.
+                    </p>
+                    @error('urutan')
+                        <p class="mt-1 text-xs text-rose-500 font-medium">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-200 dark:border-white/10">
+                    <a href="{{ route('admin.petugas-spbp.index') }}" 
+                        class="px-4 py-2.5 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition">
+                        Batal
+                    </a>
+                    <button type="submit" 
+                        class="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white rounded-xl text-xs font-bold shadow-sm shadow-indigo-600/20 transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                        <span>Simpan Perubahan</span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </x-app-layout>

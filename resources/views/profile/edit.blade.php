@@ -15,9 +15,19 @@
                 <div
                     class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-300 dark:border-white/10 shadow-sm overflow-hidden p-4 sm:p-6 text-center">
                     <div
-                        class="w-20 h-20 sm:w-24 sm:h-24 mx-auto rounded-2xl overflow-hidden flex items-center justify-center shadow-lg ring-4 ring-slate-50 mb-3 sm:mb-4">
-                        <img src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}"
-                            class="w-full h-full object-cover">
+                        class="w-20 h-20 sm:w-24 sm:h-24 mx-auto rounded-2xl overflow-hidden flex items-center justify-center shadow-lg ring-4 ring-slate-50 dark:ring-white/10 mb-3 sm:mb-4">
+                        @if(Auth::user()->has_profile_photo)
+                            <img src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}"
+                                class="w-full h-full object-cover"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div style="display: none;" class="w-full h-full bg-gradient-to-br from-indigo-600 to-blue-600 text-white font-black text-xl flex items-center justify-center tracking-wider">
+                                {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                            </div>
+                        @else
+                            <div class="w-full h-full bg-gradient-to-br from-indigo-600 to-blue-600 text-white font-black text-xl flex items-center justify-center tracking-wider">
+                                {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                            </div>
+                        @endif
                     </div>
                     <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">{{ Auth::user()->name }}</h3>
                     <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-medium break-all">{{ Auth::user()->email }}</p>
@@ -105,8 +115,18 @@
                             @csrf
 
                             <div class="flex items-center gap-4">
-                                <img src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}"
-                                    class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover shadow-sm">
+                                @if(Auth::user()->has_profile_photo)
+                                    <img src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}"
+                                        class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover shadow-sm shrink-0"
+                                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div style="display: none;" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-indigo-600 to-blue-600 text-white font-black text-lg flex items-center justify-center shadow-sm shrink-0 tracking-wider">
+                                        {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                                    </div>
+                                @else
+                                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-indigo-600 to-blue-600 text-white font-black text-lg flex items-center justify-center shadow-sm shrink-0 tracking-wider">
+                                        {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                                    </div>
+                                @endif
                                 <div class="w-full">
                                     <input id="photo" name="photo" type="file" class="block w-full text-xs sm:text-sm text-slate-600 dark:text-slate-400
                                         file:mr-2 sm:file:mr-4 file:py-2 file:px-4

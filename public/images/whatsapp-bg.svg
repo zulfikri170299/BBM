@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="412" height="412" viewBox="0 0 412 412" fill="none">
+  <g fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.06">
+    <!-- Chat bubble 1 -->
+    <path d="M45 40h40a10 10 0 0 1 10 10v20a10 10 0 0 1-10 10H60l-15 12V80a10 10 0 0 1-10-10V50a10 10 0 0 1 10-10z"/>
+    <!-- Phone -->
+    <rect x="180" y="35" width="22" height="38" rx="4"/>
+    <circle cx="191" cy="65" r="2" fill="#ffffff"/>
+    <line x1="187" y1="41" x2="195" y2="41"/>
+    <!-- Coffee cup -->
+    <path d="M290 45h30v22a10 10 0 0 1-10 10h-10a10 10 0 0 1-10-10V45z"/>
+    <path d="M320 50h8a5 5 0 0 1 5 5v2a5 5 0 0 1-5 5h-8"/>
+    <line x1="285" y1="82" x2="325" y2="82"/>
+    <!-- Camera -->
+    <rect x="50" y="150" width="36" height="26" rx="4"/>
+    <circle cx="68" cy="163" r="7"/>
+    <path d="M60 150l3-6h10l3 6"/>
+    <!-- Heart -->
+    <path d="M190 150c-6-6-16-6-20 2-4-8-14-8-20-2-7 7 0 17 20 28 20-11 27-21 20-28z"/>
+    <!-- Music note -->
+    <path d="M295 140v26a6 6 0 1 1-5-6h5V145l20-5v21a6 6 0 1 1-5-6h5v-25l-20 5z"/>
+    <!-- Smiley -->
+    <circle cx="68" cy="265" r="18"/>
+    <circle cx="62" cy="260" r="2" fill="#ffffff"/>
+    <circle cx="74" cy="260" r="2" fill="#ffffff"/>
+    <path d="M62 272c3 4 9 4 12 0"/>
+    <!-- Star -->
+    <polygon points="185,245 188,255 198,255 190,261 193,271 185,265 177,271 180,261 172,255 182,255"/>
+    <!-- Location Pin -->
+    <path d="M305 245a12 12 0 0 0-12 12c0 9 12 22 12 22s12-13 12-22a12 12 0 0 0-12-12z"/>
+    <circle cx="305" cy="257" r="4"/>
+    <!-- Clock -->
+    <circle cx="68" cy="360" r="15"/>
+    <polyline points="68,350 68,360 74,364"/>
+    <!-- Paperplane -->
+    <polygon points="175,345 205,357 185,363 182,375 175,345"/>
+    <polyline points="205,357 182,363"/>
+    <!-- Thumbs up -->
+    <path d="M295 365v-12a5 5 0 0 1 5-5l5-12a4 4 0 0 1 4 4v10h12a4 4 0 0 1 4 4l-4 15h-26z"/>
+    <!-- Headphone -->
+    <path d="M120 90a20 20 0 0 1 40 0v18h-8v-12h8"/>
+    <rect x="114" y="96" width="6" height="14" rx="2"/>
+    <rect x="160" y="96" width="6" height="14" rx="2"/>
+    <!-- Small dots and crosses -->
+    <circle cx="130" cy="160" r="2" fill="#ffffff"/>
+    <circle cx="250" cy="110" r="2" fill="#ffffff"/>
+    <circle cx="250" cy="220" r="2" fill="#ffffff"/>
+    <circle cx="120" cy="300" r="2" fill="#ffffff"/>
+    <circle cx="360" cy="180" r="2" fill="#ffffff"/>
+    <line x1="140" y1="40" x2="148" y2="48"/>
+    <line x1="148" y1="40" x2="140" y2="48"/>
+    <line x1="360" y1="80" x2="368" y2="88"/>
+    <line x1="368" y1="80" x2="360" y2="88"/>
+    <line x1="240" y1="330" x2="248" y2="338"/>
+    <line x1="248" y1="330" x2="240" y2="338"/>
+  </g>
+</svg>

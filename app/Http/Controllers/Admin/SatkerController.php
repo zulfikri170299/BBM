@@ -16,7 +16,7 @@ class SatkerController extends Controller
     public function index(Request $request)
     {
         $perPage = $this->getPerPage($request);
-        $query = Satker::latest();
+        $query = Satker::withCount(['kendaraans', 'users'])->latest();
 
         if ($request->filled('search')) {
             $search = $request->search;

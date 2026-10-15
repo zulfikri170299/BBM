@@ -178,7 +178,18 @@
         <div x-data="{ open: false }" class="relative">
             <button @click="open = !open" type="button" class="-m-1.5 flex items-center p-1.5 focus:outline-none shrink-0" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                 <span class="sr-only">Buka user menu</span>
-                <img class="h-8 w-8 sm:h-9 sm:w-9 shrink-0 rounded-full bg-slate-50 dark:bg-slate-800 ring-2 ring-brand-primary/50 object-cover shadow-[0_0_10px_rgba(0,98,255,0.3)]" src="{{ Auth::user()->profile_photo_url }}" alt="">
+                @if(Auth::user()->has_profile_photo)
+                    <img class="h-8 w-8 sm:h-9 sm:w-9 shrink-0 rounded-full bg-slate-50 dark:bg-slate-800 ring-2 ring-brand-primary/50 object-cover shadow-[0_0_10px_rgba(0,98,255,0.3)]"
+                        src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div style="display: none;" class="h-8 w-8 sm:h-9 sm:w-9 shrink-0 rounded-full bg-gradient-to-br from-indigo-600 to-blue-600 text-white font-black text-xs flex items-center justify-center ring-2 ring-brand-primary/50 shadow-[0_0_10px_rgba(0,98,255,0.3)] tracking-wider">
+                        {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                    </div>
+                @else
+                    <div class="h-8 w-8 sm:h-9 sm:w-9 shrink-0 rounded-full bg-gradient-to-br from-indigo-600 to-blue-600 text-white font-black text-xs flex items-center justify-center ring-2 ring-brand-primary/50 shadow-[0_0_10px_rgba(0,98,255,0.3)] tracking-wider">
+                        {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                    </div>
+                @endif
                 <span class="hidden lg:flex lg:items-center">
                     <span class="ml-4 text-sm font-semibold leading-6 text-slate-800 dark:text-slate-200 transition-colors" aria-hidden="true">{{ Auth::user()->name }}</span>
                     <svg class="ml-2 h-5 w-5 text-slate-600 dark:text-slate-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">

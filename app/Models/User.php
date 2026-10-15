@@ -131,10 +131,17 @@ class User extends Authenticatable
         return $this->hasMany(Chat::class, 'receiver_id');
     }
 
+    public function getHasProfilePhotoAttribute(): bool
+    {
+        return !empty($this->profile_photo_path) && file_exists(public_path('storage/' . $this->profile_photo_path));
+    }
+
     public function getProfilePhotoUrlAttribute()
     {
-        return $this->profile_photo_path
-            ? asset('storage/' . $this->profile_photo_path)
-            : 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF';
+        if ($this->has_profile_photo) {
+            return asset('storage/' . $this->profile_photo_path);
+        }
+
+        return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF';
     }
 }
