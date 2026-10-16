@@ -32,7 +32,7 @@
             <!-- Backup / Export Section -->
             <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl shadow-2xl overflow-hidden flex flex-col">
                 <div class="px-4 sm:px-5 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 shrink-0">
-                    <h3 class="text-base font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                    <h3 class="text-base font-bold text-white flex items-center gap-2">
                         <div class="p-1.5 bg-white dark:bg-slate-900/20 rounded-lg">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                         </div>
@@ -71,7 +71,7 @@
                                 </p>
                             @endif
                         </div>
-                        <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-slate-800 dark:text-white rounded-xl font-bold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 transition-all hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 text-sm uppercase tracking-wider mt-2">
+                        <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-xl font-bold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 transition-all hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 text-sm uppercase tracking-wider mt-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                             Export Sekarang
                         </button>
@@ -82,7 +82,7 @@
             <!-- Import / Restore Section -->
             <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl shadow-2xl overflow-hidden flex flex-col">
                 <div class="px-4 sm:px-5 py-4 bg-gradient-to-r from-rose-500 to-red-600 shrink-0">
-                    <h3 class="text-base font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                    <h3 class="text-base font-bold text-white flex items-center gap-2">
                         <div class="p-1.5 bg-white dark:bg-slate-900/20 rounded-lg">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                         </div>
@@ -130,7 +130,7 @@
                             data-confirm-type="danger"
                             data-confirm-title="Peringatan Restore Data!"
                             data-confirm-text="Ya, Restore Sekarang!"
-                            class="w-full py-2.5 mt-2 bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-slate-800 dark:text-white rounded-xl font-bold shadow-lg shadow-red-500/30 hover:shadow-red-500/40 transition-all hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 text-sm uppercase tracking-wider">
+                            class="w-full py-2.5 mt-2 bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white rounded-xl font-bold shadow-lg shadow-red-500/30 hover:shadow-red-500/40 transition-all hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 text-sm uppercase tracking-wider">
                             <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                             Restore Data
                         </button>

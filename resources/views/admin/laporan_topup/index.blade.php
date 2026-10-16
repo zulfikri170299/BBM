@@ -9,7 +9,7 @@
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-bold text-slate-800 dark:text-white tracking-tight">Laporan Top Up</h1>
+                    <h1 class="text-2xl font-bold text-white tracking-tight">Laporan Top Up</h1>
                     <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-0.5">Riwayat dan rekapitulasi pengisian saldo BBM kendaraan dinas.</p>
                 </div>
             </div>
@@ -32,7 +32,7 @@
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 p-4 shadow-sm flex items-center justify-between">
                 <div>
                     <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Transaksi</p>
-                    <h3 class="text-xl font-black text-slate-800 dark:text-white mt-1">{{ number_format($riwayats->total(), 0, ',', '.') }}</h3>
+                    <h3 class="text-xl font-black text-white mt-1">{{ number_format($riwayats->total(), 0, ',', '.') }}</h3>
                     <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 font-medium">Catatan pengisian saldo</p>
                 </div>
                 <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-100 dark:border-indigo-500/20 shrink-0">
@@ -161,7 +161,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-sm font-bold text-slate-800 dark:text-white">Riwayat Transaksi Top Up</h3>
+                        <h3 class="text-sm font-bold text-white">Riwayat Transaksi Top Up</h3>
                         <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Menampilkan {{ $riwayats->firstItem() ?? 0 }}-{{ $riwayats->lastItem() ?? 0 }} dari total {{ $riwayats->total() }} catatan</p>
                     </div>
                 </div>
@@ -257,7 +257,7 @@
                                         $mtdClass = match($mtd) {
                                             'RENDIS' => 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20',
                                             'IMPORT' => 'bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400 border-indigo-200 dark:border-indigo-500/20',
-                                            default => 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border-slate-200 dark:border-white/10'
+                                            default => 'bg-slate-100 text-white dark:bg-slate-800 dark:text-slate-300 border-slate-200 dark:border-white/10'
                                         };
                                     @endphp
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-lg text-[10px] font-bold border {{ $mtdClass }}">

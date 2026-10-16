@@ -88,12 +88,12 @@
         }
         .content-ready {
             opacity: 1;
-            transform: translateY(0);
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform: none !important;
+            transition: opacity 0.25s ease;
         }
         .content-loading {
             opacity: 0;
-            transform: translateY(8px);
+            transform: none !important;
         }
         
         body {
@@ -340,7 +340,7 @@
                                 </svg>
                             </div>
 
-                            <h3 class="text-[22px] font-bold text-slate-900 dark:text-white mb-2">Berhasil!</h3>
+                            <h3 class="text-[22px] font-bold text-white mb-2">Berhasil!</h3>
                             <div class="text-[15px] font-medium text-slate-600 dark:text-slate-400 mb-8">{!! session('success') !!}</div>
 
                             <button @click="show = false"
@@ -368,7 +368,7 @@
                             <div class="text-[15px] font-medium text-slate-600 dark:text-slate-400 mb-8">{!! session('error') !!}</div>
 
                             <button @click="show = false"
-                                class="w-full py-3.5 bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-white/5 text-slate-900 dark:text-white rounded-[1rem] font-bold transition-colors">OK, Mengerti</button>
+                                class="w-full py-3.5 bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-white/5 text-slate-800 dark:text-white rounded-[1rem] font-bold transition-colors">OK, Mengerti</button>
                         </div>
                     @endif
 
@@ -397,7 +397,7 @@
                             </div>
 
                             <button @click="show = false"
-                                class="w-full py-3.5 bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-white/5 text-slate-900 dark:text-white rounded-[1rem] font-bold transition-colors">Tutup & Perbaiki</button>
+                                class="w-full py-3.5 bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-white/5 text-slate-800 dark:text-white rounded-[1rem] font-bold transition-colors">Tutup & Perbaiki</button>
                         </div>
                     @endif
                 </div>
@@ -527,7 +527,7 @@
                 confirmButtonText: 'Tutup',
                 customClass: {
                     popup: 'border border-slate-300 dark:border-white/10 rounded-[2rem] shadow-2xl',
-                    title: 'text-2xl font-bold text-slate-900 dark:text-white',
+                    title: 'text-2xl font-bold text-white',
                     confirmButton: 'rounded-xl px-10 py-3 font-bold uppercase tracking-wider text-sm shadow-[0_0_15px_rgba(0,98,255,0.4)]'
                 }
             });
@@ -563,7 +563,7 @@
                 reverseButtons: true,
                 customClass: {
                     popup: 'border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl p-6 sm:p-8',
-                    title: 'text-xl sm:text-2xl font-black text-slate-900 dark:text-white mb-2',
+                    title: 'text-xl sm:text-2xl font-black text-white mb-2',
                     htmlContainer: 'text-slate-600 dark:text-slate-300 font-medium mb-6 text-sm',
                     confirmButton: 'rounded-xl px-6 py-2.5 font-black uppercase tracking-wider text-xs shadow-lg ml-2',
                     cancelButton: 'rounded-xl px-6 py-2.5 font-bold uppercase tracking-wider text-xs text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/5'
@@ -767,10 +767,10 @@
                 const sidebar = document.getElementById('sidebar-nav') || document;
                 const allLinks = sidebar.querySelectorAll('nav a[href]');
                 
-                const mainActive = ['bg-brand-primary', 'text-slate-900 dark:text-white', 'shadow-lg', 'shadow-brand-primary/20'];
-                const mainInactive = ['text-slate-700', 'dark:text-slate-400', 'hover:text-slate-900', 'dark:hover:text-white dark:text-white', 'hover:bg-slate-200/50', 'dark:hover:bg-white/5', 'transition-colors'];
+                const mainActive = ['bg-brand-primary', 'text-white', 'shadow-lg', 'shadow-brand-primary/20'];
+                const mainInactive = ['text-white', 'dark:text-slate-400', 'hover:text-white', 'dark:hover:text-white dark:text-white', 'hover:bg-slate-200/50', 'dark:hover:bg-white/5', 'transition-colors'];
                 const subActive = ['text-brand-primary', 'dark:text-white', 'bg-brand-primary/10', 'dark:bg-white/10', 'font-semibold'];
-                const subInactive = ['text-slate-600', 'dark:text-slate-400', 'hover:text-slate-900', 'dark:hover:text-white dark:text-white', 'hover:bg-slate-100', 'dark:hover:bg-white/5', 'transition-colors'];
+                const subInactive = ['text-slate-600', 'dark:text-slate-400', 'hover:text-white', 'dark:hover:text-white dark:text-white', 'hover:bg-slate-100', 'dark:hover:bg-white/5', 'transition-colors'];
 
                 let activeSubmenuDropdown = null, bestMatchLink = null, bestMatchLength = 0;
 
@@ -841,7 +841,7 @@
                 </div>
                 <div class="flex items-center gap-2">
                     <span id="toast-chat-time" class="text-[11px] font-medium text-slate-600 dark:text-slate-400">Baru saja</span>
-                    <button type="button" onclick="window.skipIncomingChat()" class="text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 p-1 rounded-lg transition-colors" title="Lewati / Tutup">
+                    <button type="button" onclick="window.skipIncomingChat()" class="text-slate-600 dark:text-slate-400 hover:text-white dark:hover:text-slate-200 p-1 rounded-lg transition-colors" title="Lewati / Tutup">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
@@ -856,7 +856,7 @@
                 </div>
                 <div class="flex-1 min-w-0">
                     <div class="flex items-center gap-1.5 flex-wrap">
-                        <h4 id="toast-chat-sender-name" class="text-sm font-bold text-slate-900 dark:text-white truncate max-w-[190px]"></h4>
+                        <h4 id="toast-chat-sender-name" class="text-sm font-bold text-white truncate max-w-[190px]"></h4>
                         <span id="toast-chat-sender-role" class="text-[10px] font-semibold text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/70 border border-indigo-200/50 dark:border-indigo-800/50 px-2 py-0.5 rounded-full"></span>
                     </div>
                     <div class="mt-1.5 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/60 dark:border-white/5">
@@ -914,7 +914,7 @@
 
                             <!-- Title & Description -->
                             <div class="text-left mb-6">
-                                <h3 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+                                <h3 class="text-xl sm:text-2xl font-black text-white tracking-tight">
                                     Indeks Kepuasan Layanan BBM
                                 </h3>
                                 <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-2 leading-relaxed">

@@ -348,12 +348,12 @@
                                         <td class="px-4 py-3 whitespace-nowrap">
                                             <div class="flex items-center gap-3">
                                                 <div
-                                                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-slate-800 dark:text-white font-bold text-sm shadow-sm ring-2 ring-white">
+                                                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-sm ring-2 ring-white">
                                                     {{ strtoupper(substr($personel->nama, 0, 2)) }}
                                                 </div>
                                                 <div>
                                                     <p
-                                                        class="text-sm font-bold text-slate-800 dark:text-white group-hover:text-indigo-600 transition-colors">
+                                                        class="text-sm font-bold text-white group-hover:text-indigo-600 transition-colors">
                                                         {{ $personel->nama }}
                                                     </p>
                                                     <p class="text-[11px] font-medium text-slate-600 dark:text-slate-400 mt-0.5">NRP:
@@ -380,7 +380,7 @@
                                         <td class="px-4 py-3 whitespace-nowrap hidden lg:table-cell">
                                             <div class="flex items-baseline gap-1">
                                                 <span
-                                                    class="text-sm font-black text-slate-800 dark:text-white">{{ rtrim(rtrim(number_format($personel->saldo, 2, ',', '.'), '0'), ',') }}</span>
+                                                    class="text-sm font-black text-white">{{ rtrim(rtrim(number_format($personel->saldo, 2, ',', '.'), '0'), ',') }}</span>
                                                 <span class="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase">Liter</span>
                                             </div>
                                         </td>
@@ -388,7 +388,7 @@
                                             <!-- Desktop Actions -->
                                             <div class="hidden lg:flex items-center justify-end gap-2">
                                                 <a href="{{ route('satker.personels.print', $personel) }}"
-                                                    class="p-2 text-slate-700 dark:text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"
+                                                    class="p-2 text-slate-500 dark:text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"
                                                     title="Cetak Kartu">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
@@ -505,7 +505,7 @@
                                                                             <span class="text-[9px] bg-slate-50 dark:bg-slate-800 px-2 py-0.5 rounded text-amber-500/70 border border-slate-200 dark:border-white/5">Saldo Tersisa</span>
                                                                         </span>
                                                                     @else
-                                                                        <a href="{{ route('satker.personels.edit', $personel) }}" class="flex items-center gap-3 w-full p-3 bg-slate-50 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-800 dark:text-white hover:bg-slate-100 dark:bg-slate-700 transition">
+                                                                        <a href="{{ route('satker.personels.edit', $personel) }}" class="flex items-center gap-3 w-full p-3 bg-slate-50 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:bg-slate-700 transition">
                                                                             <div class="p-1.5 bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 rounded-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></div>
                                                                             <span class="font-semibold text-xs">Edit Personel</span>
                                                                         </a>
@@ -579,7 +579,7 @@
                         </div>
                         <div class="relative flex items-center gap-3">
                             <div
-                                class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-violet-700 flex items-center justify-center text-slate-800 dark:text-white shadow-lg shadow-indigo-500/20 shrink-0 transform hover:rotate-6 transition-transform duration-300">
+                                class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-violet-700 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20 shrink-0 transform hover:rotate-6 transition-transform duration-300">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 4.354l1.1 3.383h3.558l-2.877 2.09 1.1 3.383-2.877-2.09-2.877 2.09 1.1-3.383-2.877-2.09h3.558l1.1-3.383z" />
@@ -588,7 +588,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="text-lg font-black text-slate-800 dark:text-white tracking-tight">Import Personel</h3>
+                                <h3 class="text-lg font-black text-white tracking-tight">Import Personel</h3>
                                 <div class="flex items-center gap-1.5 mt-0.5">
                                     <span class="w-1 h-1 rounded-full bg-emerald-500 animate-pulse"></span>
                                     <p class="text-[9px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em]">Sistem
@@ -598,7 +598,7 @@
                             </div>
                         </div>
                         <button @click="closeModal()"
-                            class="relative w-8 h-8 flex items-center justify-center rounded-lg text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-50 dark:bg-slate-800 transition-all duration-300 group">
+                            class="relative w-8 h-8 flex items-center justify-center rounded-lg text-slate-500 dark:text-slate-400 hover:text-white hover:bg-slate-50 dark:bg-slate-800 transition-all duration-300 group">
                             <svg class="w-5 h-5 transform group-hover:rotate-90 transition-transform duration-300"
                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -633,7 +633,7 @@
                                         </div>
                                         <span
                                             class="text-[9px] font-black uppercase tracking-[0.15em] transition-colors duration-300"
-                                            :class="step >= i+1 ? 'text-slate-800 dark:text-white' : 'text-slate-600 dark:text-slate-400'"
+                                            :class="step >= i+1 ? 'text-white' : 'text-slate-600 dark:text-slate-400'"
                                             x-text="s"></span>
                                     </div>
                                     <template x-if="i < 2">
@@ -661,14 +661,14 @@
                                 <div
                                     class="relative flex flex-col items-center justify-center py-6 transition-all duration-700 group-hover:scale-105">
                                     <div
-                                        class="w-14 h-14 mb-4 rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-700 shadow-xl shadow-indigo-500/20 flex items-center justify-center text-slate-800 dark:text-white ring-4 ring-indigo-50 group-hover:rotate-[8deg] transition-all duration-500">
+                                        class="w-14 h-14 mb-4 rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-700 shadow-xl shadow-indigo-500/20 flex items-center justify-center text-white ring-4 ring-indigo-50 group-hover:rotate-[8deg] transition-all duration-500">
                                         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
                                             </path>
                                         </svg>
                                     </div>
-                                    <h4 class="text-base font-black text-slate-800 dark:text-white mb-1">Lepaskan berkas di sini</h4>
+                                    <h4 class="text-base font-black text-white mb-1">Lepaskan berkas di sini</h4>
                                     <p
                                         class="text-[9px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] group-hover:text-indigo-500 transition-colors">
                                         Atau klik untuk memilih file Excel/CSV</p>
@@ -676,7 +676,7 @@
                                 <input type="file" class="hidden" @change="handleFileUpload" accept=".xlsx,.xls,.csv" />
 
                                 <div x-show="uploading"
-                                    class="absolute inset-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/98 flex flex-col items-center justify-center p-6 z-20">
+                                    class="absolute inset-0 bg-white/98 flex flex-col items-center justify-center p-6 z-20">
                                     <div
                                         class="w-48 h-1.5 bg-slate-50 dark:bg-slate-800 rounded-full overflow-hidden mb-4 ring-2 ring-indigo-50">
                                         <div class="h-full bg-gradient-to-r from-indigo-600 to-violet-600 transition-all duration-500"
@@ -756,9 +756,9 @@
                         class="p-0 overflow-hidden">
                         <div class="p-6 pb-3 grid grid-cols-3 gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 shrink-0">
                             <div
-                                class="group p-4 rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-800 text-slate-800 dark:text-white shadow-lg shadow-indigo-500/20 relative overflow-hidden transform hover:-translate-y-1 transition-all duration-300">
+                                class="group p-4 rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-800 text-white shadow-lg shadow-indigo-500/20 relative overflow-hidden transform hover:-translate-y-1 transition-all duration-300">
                                 <div
-                                    class="absolute inset-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/10 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity">
                                 </div>
                                 <div class="relative z-10">
                                     <p
@@ -813,7 +813,7 @@
 
                         <div
                             class="px-7 py-3 bg-slate-50 dark:bg-slate-800/50 border-y border-slate-200 dark:border-white/5 flex items-center justify-between">
-                            <h4 class="text-[10px] font-black text-slate-800 dark:text-white uppercase tracking-[0.2em]">Analisis Data
+                            <h4 class="text-[10px] font-black text-white uppercase tracking-[0.2em]">Analisis Data
                             </h4>
                             <div class="flex items-center gap-4">
                                 <div class="flex items-center gap-1.5">
@@ -829,7 +829,7 @@
 
                         <div class="bg-white dark:bg-slate-900 dark:text-white max-h-[320px] overflow-auto border-b border-slate-200 dark:border-white/5 scrollbar-thin">
                             <table class="w-full border-separate border-spacing-0">
-                                <thead class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/95 sticky top-0 z-20 shadow-sm text-center">
+                                <thead class="bg-white/95 sticky top-0 z-20 shadow-sm text-center">
                                     <tr>
                                         <th
                                             class="bg-white dark:bg-slate-900 dark:text-white pl-7 pr-3 py-3 text-[9px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] border-b border-slate-200 dark:border-white/5">
@@ -879,7 +879,7 @@
                                         <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
                                             <td class="px-4 py-3 text-[10px] font-black text-slate-600 dark:text-slate-400"
                                                 x-text="item.row"></td>
-                                            <td class="px-4 py-3 text-[10px] font-bold text-slate-800 dark:text-white text-center"
+                                            <td class="px-4 py-3 text-[10px] font-bold text-white text-center"
                                                 x-text="item.nama"></td>
                                             <td class="px-4 py-3 whitespace-nowrap text-center">
                                                 <span
@@ -933,7 +933,7 @@
                                             class="text-[9px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] mb-0.5">
                                             Opsi
                                             Duplikat</p>
-                                        <p class="text-[11px] font-bold text-slate-800 dark:text-white">Perlakuan jika NRP terdaftar</p>
+                                        <p class="text-[11px] font-bold text-white">Perlakuan jika NRP terdaftar</p>
                                     </div>
                                 </div>
                                 <div class="flex items-center p-1 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-white/5">
@@ -974,7 +974,7 @@
                         </template>
                         <template x-if="step === 2">
                             <button @click="backToStep1()" :disabled="importing"
-                                class="w-full sm:w-auto px-5 py-2.5 text-[10px] font-black text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:text-white transition-all uppercase tracking-[0.2em] disabled:opacity-50 flex items-center justify-center sm:justify-start gap-2 group">
+                                class="w-full sm:w-auto px-5 py-2.5 text-[10px] font-black text-slate-500 dark:text-slate-400 hover:text-white transition-all uppercase tracking-[0.2em] disabled:opacity-50 flex items-center justify-center sm:justify-start gap-2 group">
                                 <svg class="w-3.5 h-3.5 transition-transform group-hover:-translate-x-1" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

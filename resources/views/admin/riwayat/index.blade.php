@@ -9,7 +9,7 @@
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-bold text-slate-800 dark:text-white tracking-tight">Riwayat Pengisian BBM</h1>
+                    <h1 class="text-2xl font-bold text-white tracking-tight">Riwayat Pengisian BBM</h1>
                     <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-0.5">Histori pengisian BBM seluruh kendaraan dari semua Satuan Kerja.</p>
                 </div>
             </div>
@@ -32,7 +32,7 @@
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 p-4 shadow-sm flex items-center justify-between">
                 <div>
                     <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Transaksi</p>
-                    <h3 class="text-xl font-black text-slate-800 dark:text-white mt-1">{{ number_format($stats['total_transaksi']) }}</h3>
+                    <h3 class="text-xl font-black text-white mt-1">{{ number_format($stats['total_transaksi']) }}</h3>
                     <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 font-medium">Catatan riwayat</p>
                 </div>
                 <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-100 dark:border-indigo-500/20 shrink-0">
@@ -92,7 +92,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                         </svg>
                     </div>
-                    <h3 class="text-xs font-bold text-slate-800 dark:text-white uppercase tracking-wider">Filter & Pencarian Riwayat</h3>
+                    <h3 class="text-xs font-bold text-white uppercase tracking-wider">Filter & Pencarian Riwayat</h3>
                 </div>
 
                 <!-- Presets & Filter Status in Header -->
@@ -226,7 +226,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-sm font-bold text-slate-800 dark:text-white">Daftar Transaksi BBM</h3>
+                        <h3 class="text-sm font-bold text-white">Daftar Transaksi BBM</h3>
                         <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Menampilkan {{ $transaksis->firstItem() ?? 0 }}-{{ $transaksis->lastItem() ?? 0 }} dari total {{ $transaksis->total() }} catatan transaksi</p>
                     </div>
                 </div>
@@ -286,7 +286,7 @@
                                         <div class="w-5 h-5 rounded-md {{ $isPotong ? 'bg-gradient-to-br from-amber-500 to-orange-600' : 'bg-gradient-to-br from-indigo-500 to-indigo-600' }} flex items-center justify-center text-white font-bold text-[9px] shadow-sm shrink-0">
                                             {{ strtoupper(substr($satkerNama, 0, 2)) }}
                                         </div>
-                                        <span class="text-xs font-bold text-slate-800 dark:text-white truncate" title="{{ $satkerNama }}">
+                                        <span class="text-xs font-bold text-white truncate" title="{{ $satkerNama }}">
                                             {{ $satkerNama }}
                                         </span>
                                     </div>

@@ -67,7 +67,7 @@
                 <div>
                     <label class="block text-xs font-black text-slate-600 dark:text-slate-400 uppercase mb-2">Dokumentasi (Foto) - Opsional</label>
                     <input type="file" name="dokumentasi" accept="image/*"
-                           class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-white/10 rounded-xl text-white file:mr-4 file:py-3 file:px-4 file:rounded-l-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 cursor-pointer">
+                           class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-white/10 rounded-xl text-slate-800 dark:text-white file:mr-4 file:py-3 file:px-4 file:rounded-l-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 cursor-pointer">
                     <p class="text-[10px] text-slate-500 mt-2">Biarkan kosong jika tidak ingin mengubah foto.</p>
                 </div>
 

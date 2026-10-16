@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <div class="mt-3 flex items-baseline gap-1.5">
-                    <span class="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white tabular-nums">
+                    <span class="text-2xl sm:text-3xl font-black text-white tabular-nums">
                         {{ number_format($totalPendapatan, 0, ',', '.') }}
                     </span>
                     <span class="text-xs font-bold text-slate-400">Liter</span>
@@ -80,7 +80,7 @@
                     </div>
                 </div>
                 <div class="mt-3 flex items-baseline gap-1.5">
-                    <span class="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white tabular-nums">
+                    <span class="text-2xl sm:text-3xl font-black text-white tabular-nums">
                         {{ number_format($totalPemakaian, 0, ',', '.') }}
                     </span>
                     <span class="text-xs font-bold text-slate-400">Liter</span>

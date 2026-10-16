@@ -102,6 +102,10 @@ class HutangController extends Controller
             return back()->with('error', 'Kendaraan ' . $kendaraan->no_polisi . ' masih memiliki saldo ' . number_format($kendaraan->saldo, 0, ',', '.') . ' L. Hutang BBM hanya dapat dibuat jika saldo kendaraan kosong atau 0.');
         }
 
+        if ($kendaraan->hasUnpaidBon()) {
+            return back()->with('error', "Kendaraan {$kendaraan->no_polisi} tidak dapat melakukan BON lagi karena masih memiliki tanggungan bon hutang sebesar " . number_format($kendaraan->totalUnpaidBon(), 0, ',', '.') . " L yang belum lunas (saldo masih terkunci). Harap lunasi hutang terlebih dahulu.");
+        }
+
         // Validasi Real Physical Tank Stock
         $latestSync = \App\Models\SinkronisasiBbm::orderBy('created_at', 'desc')->first();
         $saldoTangki = 0;
@@ -264,6 +268,12 @@ class HutangController extends Controller
         }
 
         $kendaraans = $query->get();
+
+        if (!$request->boolean('include_all')) {
+            $kendaraans = $kendaraans->filter(function($k) {
+                return !$k->hasUnpaidBon();
+            })->values();
+        }
 
         return response()->json($kendaraans);
     }

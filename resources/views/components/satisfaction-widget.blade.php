@@ -44,7 +44,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
                     </svg>
                 </div>
-                <h4 class="text-base font-black text-slate-800 dark:text-white">Terima Kasih Atas Penilaian Anda!</h4>
+                <h4 class="text-base font-black text-white">Terima Kasih Atas Penilaian Anda!</h4>
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-md mx-auto">
                     Masukan dan penilaian Anda telah berhasil kami simpan dan sangat berharga dalam meningkatkan mutu pelayanan logistik BBM Polda NTB.
                 </p>
@@ -120,7 +120,7 @@
                         Catatan & Masukan (Opsional)
                     </label>
                     <input type="text" name="note" placeholder="Tuliskan saran atau masukan untuk petugas kami..."
-                        class="w-full text-xs font-medium bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-white rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-brand-primary p-3 transition-all outline-none placeholder:text-slate-400">
+                        class="w-full text-xs font-medium bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 text-white rounded-xl focus:ring-2 focus:ring-brand-primary focus:border-brand-primary p-3 transition-all outline-none placeholder:text-slate-400">
                 </div>
 
                 <!-- Submit Button -->

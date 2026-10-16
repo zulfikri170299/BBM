@@ -7,10 +7,10 @@
         <!-- Page Header -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-slate-800 dark:text-white">Data Kendaraan</h1>
-                <p class="mt-1 text-slate-600 dark:text-slate-400">Semua kendaraan dari seluruh Satuan Kerja.</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white">Data Kendaraan</h1>
+                <p class="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400">Semua kendaraan dari seluruh Satuan Kerja.</p>
             </div>
-            <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+            <div class="flex items-center gap-2 sm:gap-3 overflow-x-auto max-w-full pb-1 sm:pb-0 shrink-0">
                 @if(auth()->user()->role === 'super_admin')
                     <button @click="$dispatch('open-import-kendaraan')"
                         class="inline-flex items-center justify-center w-10 h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-violet-600 dark:text-violet-400 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
@@ -188,12 +188,11 @@
                         <input type="hidden" name="satker_id" value="{{ request('satker_id') }}">
                     @endif
 
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Tampilkan:</span>
+                    <div class="flex items-center gap-2 shrink-0">
                         <x-per-page :current="request('per_page', 15)" />
                     </div>
 
-                    <div class="relative flex-1 min-w-[200px] max-w-sm">
+                    <div class="relative flex-1 min-w-[180px] w-full sm:w-auto max-w-sm">
                         <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -225,8 +224,8 @@
                 </div>
             </div>
 
-            <!-- Table -->
-            <div class="overflow-x-auto">
+            <!-- Desktop Table (Hidden on Mobile) -->
+            <div class="hidden md:block overflow-x-auto">
                 <table class="w-full text-left text-xs border-collapse">
                     <thead>
                         <tr class="bg-slate-50/80 dark:bg-slate-800/50 border-b border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[10px] font-black">
@@ -248,7 +247,7 @@
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-white/5">
                         @forelse($kendaraans as $kendaraan)
-                            <tr class="hover:bg-slate-50/50 dark:hover:bg-white/[0.02] transition-colors {{ $kendaraan->status_approval === 'pending' ? 'bg-amber-500/[0.02]' : '' }}">
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-white/[0.02] transition-colors {{ $kendaraan->status_approval === 'pending' ? 'bg-amber-500/[0.02]' : ($kendaraan->hasUnpaidBon() ? 'bg-rose-500/[0.04]' : '') }}">
                                 @if(auth()->user()->role !== 'kasubbag')
                                     <td class="py-3.5 px-4 text-center">
                                         <input type="checkbox" value="{{ $kendaraan->id }}"
@@ -273,6 +272,12 @@
                                 <td class="py-3.5 px-4 whitespace-nowrap">
                                     <div class="flex flex-wrap items-center gap-1.5">
                                         <span class="font-black text-slate-900 dark:text-white tracking-wide font-mono text-xs">{{ $kendaraan->no_polisi }}</span>
+                                        @if($kendaraan->hasUnpaidBon())
+                                            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-wider bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30" title="Saldo kendaraan dikunci karena ada hutang {{ rtrim(rtrim(number_format($kendaraan->totalUnpaidBon(), 2, ',', '.'), '0'), ',') }} L">
+                                                <svg class="w-2.5 h-2.5 text-rose-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+                                                Terkunci
+                                            </span>
+                                        @endif
                                         @if($kendaraan->status_approval === 'pending')
                                             <a href="{{ route('admin.persetujuan-kendaraan.index', ['status' => 'pending']) }}" class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 transition" title="Menunggu persetujuan Super Admin (Klik untuk tinjau)">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
@@ -303,22 +308,20 @@
                                 </td>
                                 <td class="py-3.5 px-4 text-right whitespace-nowrap">
                                     @if($kendaraan->hasUnpaidBon())
-                                        <div class="inline-flex flex-col items-end">
-                                            <div class="inline-flex items-center gap-1.5 text-rose-600 dark:text-rose-400 font-black">
+                                        <div class="inline-flex flex-col items-end gap-1">
+                                            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-500/15 dark:bg-rose-500/25 border border-rose-500/30 text-rose-600 dark:text-rose-400 font-black text-xs shadow-sm" title="Kendaraan Masih Mempunyai Hutang {{ rtrim(rtrim(number_format($kendaraan->totalUnpaidBon(), 2, ',', '.'), '0'), ',') }} Ltr">
+                                                <svg class="w-3.5 h-3.5 text-rose-600 dark:text-rose-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                                                </svg>
                                                 <span>{{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter</span>
-                                                <span class="relative group/lock inline-flex items-center cursor-pointer">
-                                                    <svg class="w-4 h-4 text-rose-600 dark:text-rose-400" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
-                                                    </svg>
-                                                    <span class="pointer-events-none absolute bottom-full right-0 mb-1.5 hidden group-hover/lock:block z-50 whitespace-nowrap rounded-lg bg-red-600 text-white text-[11px] font-bold py-1 px-2.5 shadow-xl border border-red-500">
-                                                        Kendaraan Masih Mempunyai Hutang {{ rtrim(rtrim(number_format($kendaraan->totalUnpaidBon(), 2, ',', '.'), '0'), ',') }} Ltr
-                                                    </span>
-                                                </span>
+                                                <span class="text-[9px] font-black uppercase tracking-wider bg-rose-600 text-white px-1.5 py-0.5 rounded leading-none">TERKUNCI</span>
                                             </div>
-                                            <span class="text-[10px] font-bold text-rose-500">Ada Hutang</span>
+                                            <span class="text-[10px] font-bold text-rose-600 dark:text-rose-400">
+                                                Ada Hutang: {{ rtrim(rtrim(number_format($kendaraan->totalUnpaidBon(), 2, ',', '.'), '0'), ',') }} L
+                                            </span>
                                         </div>
                                     @elseif($kendaraan->saldo > 10)
-                                        <div class="font-black text-slate-800 dark:text-white">
+                                        <div class="font-black text-white">
                                             {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
                                         </div>
                                     @elseif($kendaraan->saldo >= 1)
@@ -330,10 +333,10 @@
                                         </div>
                                     @else
                                         <div class="inline-flex flex-col items-end">
-                                            <span class="font-black text-rose-600 dark:text-rose-400">
+                                            <span class="font-bold text-slate-400 dark:text-slate-500">
                                                 {{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }} Liter
                                             </span>
-                                            <span class="text-[10px] font-bold text-rose-500">Saldo habis</span>
+                                            <span class="text-[10px] font-medium text-slate-400 dark:text-slate-500">Saldo habis</span>
                                         </div>
                                     @endif
                                 </td>
@@ -344,6 +347,34 @@
                                 </td>
                                 <td class="py-3.5 px-4 text-center whitespace-nowrap">
                                     <div class="inline-flex items-center justify-center gap-1">
+                                        <button type="button"
+                                            @click="$dispatch('open-detail-kendaraan', {
+                                                id: {{ $kendaraan->id }},
+                                                nopol: '{{ addslashes($kendaraan->no_polisi) }}',
+                                                jenis: '{{ addslashes($kendaraan->jenis_kendaraan) }}',
+                                                satker: '{{ addslashes($kendaraan->satker->nama_satker ?? '-') }}',
+                                                roda: '{{ $kendaraan->roda ?: '-' }}',
+                                                bbm: '{{ addslashes($kendaraan->jenis_bbm) }}',
+                                                saldo: '{{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }}',
+                                                raw_saldo: {{ $kendaraan->saldo }},
+                                                pin: '{{ $kendaraan->pin }}',
+                                                has_unpaid: {{ $kendaraan->hasUnpaidBon() ? 'true' : 'false' }},
+                                                unpaid_bon: '{{ rtrim(rtrim(number_format($kendaraan->totalUnpaidBon(), 2, ',', '.'), '0'), ',') }}',
+                                                status_approval: '{{ $kendaraan->status_approval }}',
+                                                alasan_penolakan: '{{ addslashes($kendaraan->alasan_penolakan ?? '') }}',
+                                                print_url: '{{ route('admin.kendaraans.print', $kendaraan) }}',
+                                                edit_url: '{{ route('admin.kendaraans.edit', $kendaraan) }}',
+                                                delete_url: '{{ route('admin.kendaraans.destroy', $kendaraan) }}',
+                                                reset_pin_url: '{{ route('admin.kendaraans.reset-pin', $kendaraan) }}'
+                                            })"
+                                            class="p-2 text-slate-500 dark:text-slate-400 hover:text-brand-primary dark:hover:text-white hover:bg-brand-primary/10 dark:hover:bg-white/10 rounded-xl transition-all"
+                                            title="Detail Kendaraan">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                            </svg>
+                                        </button>
+
                                         <a href="{{ route('admin.kendaraans.print', $kendaraan) }}"
                                             class="p-2 text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-500/10 rounded-xl transition-all"
                                             title="Print Kartu Kendaraan">
@@ -433,6 +464,93 @@
                                     </div>
                                     <p class="text-sm font-bold text-slate-600 dark:text-slate-400">Belum ada kendaraan terdaftar</p>
                                     <p class="text-xs text-slate-400 mt-1">Belum ada data yang cocok dengan kriteria filter saat ini.</p>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Mobile 1-Line Table View (Visible on mobile screens) -->
+            <div class="block md:hidden w-full overflow-hidden">
+                <table class="w-full text-left text-xs border-collapse table-fixed">
+                    <thead>
+                        <tr class="bg-slate-50/80 dark:bg-slate-800/50 border-b border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[10px] font-black">
+                            @if(auth()->user()->role !== 'kasubbag')
+                                <th class="py-2.5 px-1.5 w-7 text-center">
+                                    <input type="checkbox" id="checkAllMobile"
+                                        class="rounded border-slate-300 dark:border-white/20 text-brand-primary focus:ring-brand-primary scale-90 cursor-pointer bg-white dark:bg-slate-900">
+                                </th>
+                            @endif
+                            <th class="py-2.5 px-2 w-[34%]">Satker</th>
+                            <th class="py-2.5 px-2">Kendaraan</th>
+                            <th class="py-2.5 px-1.5 text-center w-10">Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 dark:divide-white/5">
+                        @forelse($kendaraans as $kendaraan)
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-white/[0.02] transition-colors {{ $kendaraan->status_approval === 'pending' ? 'bg-amber-500/[0.02]' : ($kendaraan->hasUnpaidBon() ? 'bg-rose-500/[0.04]' : '') }}">
+                                @if(auth()->user()->role !== 'kasubbag')
+                                    <td class="py-2.5 px-1.5 text-center" @click.stop>
+                                        <input type="checkbox" value="{{ $kendaraan->id }}"
+                                            class="item-checkbox rounded border-slate-300 dark:border-white/20 text-brand-primary focus:ring-brand-primary scale-90 cursor-pointer bg-white dark:bg-slate-900">
+                                    </td>
+                                @endif
+                                <td class="py-2.5 px-2 overflow-hidden">
+                                    <span class="font-bold text-slate-800 dark:text-white truncate block leading-tight text-xs" title="{{ $kendaraan->satker->nama_satker ?? '-' }}">
+                                        {{ $kendaraan->satker->nama_satker ?? '-' }}
+                                    </span>
+                                </td>
+                                <td class="py-2.5 px-2 overflow-hidden">
+                                    <div class="flex flex-col min-w-0">
+                                        <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 truncate block leading-tight uppercase" title="{{ $kendaraan->jenis_kendaraan }}">
+                                            {{ $kendaraan->jenis_kendaraan }}
+                                        </span>
+                                        <div class="flex items-center gap-1 mt-0.5 whitespace-nowrap overflow-hidden">
+                                            <span class="font-black text-slate-900 dark:text-white tracking-wide font-mono text-xs">{{ $kendaraan->no_polisi }}</span>
+                                            @if($kendaraan->hasUnpaidBon())
+                                                <svg class="w-3 h-3 text-rose-500 shrink-0" fill="currentColor" viewBox="0 0 20 20" title="Saldo Terkunci (Ada Hutang)"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+                                            @endif
+                                            @if($kendaraan->status_approval === 'pending')
+                                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 animate-pulse" title="Menunggu Persetujuan"></span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-2.5 px-1.5 text-center whitespace-nowrap">
+                                    <button type="button"
+                                        @click="$dispatch('open-detail-kendaraan', {
+                                            id: {{ $kendaraan->id }},
+                                            nopol: '{{ addslashes($kendaraan->no_polisi) }}',
+                                            jenis: '{{ addslashes($kendaraan->jenis_kendaraan) }}',
+                                            satker: '{{ addslashes($kendaraan->satker->nama_satker ?? '-') }}',
+                                            roda: '{{ $kendaraan->roda ?: '-' }}',
+                                            bbm: '{{ addslashes($kendaraan->jenis_bbm) }}',
+                                            saldo: '{{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }}',
+                                            raw_saldo: {{ $kendaraan->saldo }},
+                                            pin: '{{ $kendaraan->pin }}',
+                                            has_unpaid: {{ $kendaraan->hasUnpaidBon() ? 'true' : 'false' }},
+                                            unpaid_bon: '{{ rtrim(rtrim(number_format($kendaraan->totalUnpaidBon(), 2, ',', '.'), '0'), ',') }}',
+                                            status_approval: '{{ $kendaraan->status_approval }}',
+                                            alasan_penolakan: '{{ addslashes($kendaraan->alasan_penolakan ?? '') }}',
+                                            print_url: '{{ route('admin.kendaraans.print', $kendaraan) }}',
+                                            edit_url: '{{ route('admin.kendaraans.edit', $kendaraan) }}',
+                                            delete_url: '{{ route('admin.kendaraans.destroy', $kendaraan) }}',
+                                            reset_pin_url: '{{ route('admin.kendaraans.reset-pin', $kendaraan) }}'
+                                        })"
+                                        class="inline-flex items-center justify-center w-7 h-7 bg-emerald-500/15 hover:bg-emerald-600 text-emerald-600 dark:text-emerald-400 hover:text-white dark:hover:text-white border border-emerald-500/30 rounded-lg transition active:scale-95 shadow-sm"
+                                        title="Detail Kendaraan">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="{{ auth()->user()->role !== 'kasubbag' ? 4 : 3 }}" class="py-8 text-center text-slate-500">
+                                    <p class="font-bold text-xs">Belum ada kendaraan terdaftar</p>
                                 </td>
                             </tr>
                         @endforelse
@@ -588,7 +706,7 @@
                     <div class="px-4 sm:px-4 sm:px-6 py-4 sm:py-5 bg-gradient-to-r from-emerald-500 to-green-600 shrink-0">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2 sm:gap-3">
-                                <div class="p-1.5 sm:p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/20 rounded-xl">
+                                <div class="p-1.5 sm:p-2 bg-white/20 rounded-xl">
                                     <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -596,13 +714,13 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-base sm:text-lg font-bold text-slate-800 dark:text-white">Top Up Saldo</h3>
+                                    <h3 class="text-base sm:text-lg font-bold text-white">Top Up Saldo</h3>
                                     <p class="text-xs sm:text-sm text-emerald-100" x-text="topupNopol || 'Pilih kendaraan'">
                                     </p>
                                 </div>
                             </div>
                             <button @click="showTopup = false"
-                                class="p-1 text-slate-800 dark:text-white/70 hover:text-slate-800 dark:text-white rounded-lg hover:bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/10 transition">
+                                class="p-1 text-white/70 hover:text-white rounded-lg hover:bg-white/10 transition">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M6 18L18 6M6 6l12 12"></path>
@@ -834,7 +952,7 @@
                             <button type="button" @click="reset()"
                                 class="flex-1 px-3 py-2 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold rounded-xl hover:bg-slate-200 transition-all active:scale-95 text-[10px] sm:text-xs uppercase tracking-wider">Batal</button>
                             <button type="submit"
-                                class="flex-[2] px-3 py-2 bg-gradient-to-r from-emerald-500 to-green-600 text-slate-800 dark:text-white font-black rounded-xl hover:from-emerald-600 hover:to-green-700 shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/40 transition-all hover:-translate-y-0.5 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:grayscale text-[10px] sm:text-xs uppercase tracking-widest flex items-center justify-center gap-1.5"
+                                class="flex-[2] px-3 py-2 bg-gradient-to-r from-emerald-500 to-green-600 text-white font-black rounded-xl hover:from-emerald-600 hover:to-green-700 shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/40 transition-all hover:-translate-y-0.5 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:grayscale text-[10px] sm:text-xs uppercase tracking-widest flex items-center justify-center gap-1.5"
                                 :disabled="!canSubmitManual">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -956,7 +1074,7 @@
                     <div class="px-4 sm:px-4 sm:px-6 py-4 sm:py-5 bg-gradient-to-r from-blue-500 to-indigo-600 shrink-0">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2 sm:gap-3">
-                                <div class="p-1.5 sm:p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/20 rounded-xl">
+                                <div class="p-1.5 sm:p-2 bg-white/20 rounded-xl">
                                     <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -965,12 +1083,12 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-base sm:text-lg font-bold text-slate-800 dark:text-white">Import Top Up Saldo</h3>
+                                    <h3 class="text-base sm:text-lg font-bold text-white">Import Top Up Saldo</h3>
                                     <p class="text-xs sm:text-sm text-blue-100">Upload file Excel (.xlsx, .xls, .csv)</p>
                                 </div>
                             </div>
                             <button @click="showImport = false"
-                                class="p-1 text-slate-800 dark:text-white/70 hover:text-slate-800 dark:text-white rounded-lg hover:bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/10 transition">
+                                class="p-1 text-white/70 hover:text-white rounded-lg hover:bg-white/10 transition">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M6 18L18 6M6 6l12 12"></path>
@@ -1122,7 +1240,7 @@
                             <button type="button" @click="showImport = false"
                                 class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-sm font-semibold rounded-xl hover:bg-slate-200 transition-colors">Batal</button>
                             <button type="submit"
-                                class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-slate-800 dark:text-white text-sm font-bold rounded-xl hover:from-blue-600 hover:to-indigo-700 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 transition-all hover:-translate-y-0.5">
+                                class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-sm font-bold rounded-xl hover:from-blue-600 hover:to-indigo-700 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 transition-all hover:-translate-y-0.5">
                                 <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
@@ -1164,7 +1282,7 @@
                     <div class="px-4 sm:px-4 sm:px-6 py-4 sm:py-5 bg-gradient-to-r from-violet-500 to-indigo-600 shrink-0">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2 sm:gap-3">
-                                <div class="p-1.5 sm:p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/20 rounded-xl">
+                                <div class="p-1.5 sm:p-2 bg-white/20 rounded-xl">
                                     <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1173,13 +1291,13 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-base sm:text-lg font-bold text-slate-800 dark:text-white">Import Data Kendaraan</h3>
+                                    <h3 class="text-base sm:text-lg font-bold text-white">Import Data Kendaraan</h3>
                                     <p class="text-xs sm:text-sm text-violet-100">Upload file Excel untuk menambah data
                                         kendaraan</p>
                                 </div>
                             </div>
                             <button @click="closeModal()"
-                                class="p-1 text-slate-800 dark:text-white/70 hover:text-slate-800 dark:text-white rounded-lg hover:bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/10 transition">
+                                class="p-1 text-white/70 hover:text-white rounded-lg hover:bg-white/10 transition">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M6 18L18 6M6 6l12 12"></path>
@@ -1189,26 +1307,26 @@
                         <!-- Step Indicator -->
                         <div class="flex items-center gap-2 mt-3">
                             <div class="flex items-center gap-1.5">
-                                <div :class="step >= 1 ? 'bg-white border border-slate-200 dark:border-white/5 text-violet-600' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/30 text-slate-800 dark:text-white'"
+                                <div :class="step >= 1 ? 'bg-white text-violet-600' : 'bg-white/30 text-white'"
                                     class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors">
                                     1</div>
-                                <span class="text-xs text-slate-800 dark:text-white/80 hidden sm:inline">Upload</span>
+                                <span class="text-xs text-white/80 hidden sm:inline">Upload</span>
                             </div>
-                            <div :class="step >= 2 ? 'bg-white border border-slate-200 dark:border-white/5/60' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/20'"
+                            <div :class="step >= 2 ? 'bg-white border-white/60' : 'bg-white/20'"
                                 class="flex-1 h-0.5 rounded transition-colors"></div>
                             <div class="flex items-center gap-1.5">
-                                <div :class="step >= 2 ? 'bg-white border border-slate-200 dark:border-white/5 text-violet-600' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/30 text-slate-800 dark:text-white'"
+                                <div :class="step >= 2 ? 'bg-white text-violet-600' : 'bg-white/30 text-white'"
                                     class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors">
                                     2</div>
-                                <span class="text-xs text-slate-800 dark:text-white/80 hidden sm:inline">Preview</span>
+                                <span class="text-xs text-white/80 hidden sm:inline">Preview</span>
                             </div>
-                            <div :class="step >= 3 ? 'bg-white border border-slate-200 dark:border-white/5/60' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/20'"
+                            <div :class="step >= 3 ? 'bg-white border-white/60' : 'bg-white/20'"
                                 class="flex-1 h-0.5 rounded transition-colors"></div>
                             <div class="flex items-center gap-1.5">
-                                <div :class="step >= 3 ? 'bg-white border border-slate-200 dark:border-white/5 text-violet-600' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/30 text-slate-800 dark:text-white'"
+                                <div :class="step >= 3 ? 'bg-white text-violet-600' : 'bg-white/30 text-white'"
                                     class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors">
                                     3</div>
-                                <span class="text-xs text-slate-800 dark:text-white/80 hidden sm:inline">Confirm</span>
+                                <span class="text-xs text-white/80 hidden sm:inline">Confirm</span>
                             </div>
                         </div>
                     </div>
@@ -1274,7 +1392,7 @@
                                         </p>
                                         <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">atau</p>
                                         <button @click="$refs.fileInput.click()" type="button"
-                                            class="px-4 py-2 bg-violet-600 text-slate-800 dark:text-white text-xs sm:text-sm font-semibold rounded-lg hover:bg-violet-700 transition shadow-md shadow-violet-500/20">
+                                            class="px-4 py-2 bg-violet-600 text-white text-xs sm:text-sm font-semibold rounded-lg hover:bg-violet-700 transition shadow-md shadow-violet-500/20">
                                             Pilih File
                                         </button>
                                         <p class="mt-3 text-[10px] sm:text-xs text-slate-600 dark:text-slate-400">Maksimal 2MB. Format: .xlsx,
@@ -1570,7 +1688,7 @@
                             <!-- Step 1: Preview Button -->
                             <button x-show="step === 1" @click="previewImport()" type="button"
                                 :disabled="!selectedFile || isLoading"
-                                class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-violet-500 to-indigo-600 text-slate-800 dark:text-white text-sm font-bold rounded-xl hover:from-violet-600 hover:to-indigo-700 shadow-lg shadow-violet-500/30 hover:shadow-violet-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                                class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-violet-500 to-indigo-600 text-white text-sm font-bold rounded-xl hover:from-violet-600 hover:to-indigo-700 shadow-lg shadow-violet-500/30 hover:shadow-violet-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
                                 <span x-show="!isLoading"><svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1589,7 +1707,7 @@
                             <!-- Step 2: Next Button -->
                             <button x-show="step === 2" @click="step = 3" type="button"
                                 :disabled="!previewData || (previewData.new_count === 0 && previewData.duplicate_count === 0)"
-                                class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-violet-500 to-indigo-600 text-slate-800 dark:text-white text-sm font-bold rounded-xl hover:from-violet-600 hover:to-indigo-700 shadow-lg shadow-violet-500/30 hover:shadow-violet-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                                class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-violet-500 to-indigo-600 text-white text-sm font-bold rounded-xl hover:from-violet-600 hover:to-indigo-700 shadow-lg shadow-violet-500/30 hover:shadow-violet-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
                                 Lanjutkan <svg class="w-4 h-4 inline ml-1" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1600,7 +1718,7 @@
                             <!-- Step 3: Confirm Import -->
                             <button x-show="step === 3" @click="confirmImport()" type="button"
                                 :disabled="isImporting || (previewData?.duplicate_count > 0 && !duplicateAction)"
-                                class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-800 dark:text-white text-sm font-bold rounded-xl hover:from-emerald-600 hover:to-teal-700 shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                                class="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-sm font-bold rounded-xl hover:from-emerald-600 hover:to-teal-700 shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
                                 <span x-show="!isImporting"><svg class="w-4 h-4 inline mr-1" fill="none"
                                         stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1803,7 +1921,7 @@
                 <div class="px-6 py-5 bg-gradient-to-r from-rose-500 to-rose-600">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
-                            <div class="p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/20 rounded-xl">
+                            <div class="p-2 bg-white/20 rounded-xl">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
@@ -1811,12 +1929,12 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-slate-800 dark:text-white">Laporan Bulanan Satker</h3>
+                                <h3 class="text-lg font-bold text-white">Laporan Bulanan Satker</h3>
                                 <p class="text-sm text-rose-100">Pilih Satker dan Periode Laporan</p>
                             </div>
                         </div>
                         <button @click="showMonthlyReport = false"
-                            class="p-1 text-slate-800 dark:text-white/70 hover:text-slate-800 dark:text-white rounded-lg hover:bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/10 transition">
+                            class="p-1 text-white/70 hover:text-white rounded-lg hover:bg-white/10 transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M6 18L18 6M6 6l12 12"></path>
@@ -1866,7 +1984,7 @@
                         <button type="button" @click="showMonthlyReport = false"
                             class="flex-1 px-4 py-3 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-semibold rounded-xl hover:bg-slate-200 transition-colors">Batal</button>
                         <button type="submit"
-                            class="flex-1 px-4 py-3 bg-gradient-to-r from-rose-500 to-rose-600 text-slate-800 dark:text-white font-bold rounded-xl hover:from-rose-600 hover:to-rose-700 shadow-lg shadow-rose-500/30 hover:shadow-rose-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                            class="flex-1 px-4 py-3 bg-gradient-to-r from-rose-500 to-rose-600 text-white font-bold rounded-xl hover:from-rose-600 hover:to-rose-700 shadow-lg shadow-rose-500/30 hover:shadow-rose-500/40 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
                             :disabled="!satkerId">
                             Buka Laporan
                         </button>
@@ -1881,36 +1999,57 @@
     @push('scripts')
         <script>
             const checkAll = document.getElementById('checkAll');
-            const itemCheckboxes = document.querySelectorAll('.item-checkbox');
             const bulkActions = document.getElementById('bulkActions');
             const selectedCountLabel = document.getElementById('selectedCount');
 
+            function getSelectedIds() {
+                const checked = document.querySelectorAll('.item-checkbox:checked');
+                return [...new Set(Array.from(checked).map(cb => cb.value))];
+            }
+
             function updateBulkUI() {
-                const checkedCount = document.querySelectorAll('.item-checkbox:checked').length;
-                selectedCountLabel.innerText = checkedCount;
-                if (checkedCount > 0) {
-                    bulkActions.classList.remove('hidden');
-                    bulkActions.classList.add('flex');
-                } else {
-                    bulkActions.classList.add('hidden');
-                    bulkActions.classList.remove('flex');
+                const uniqueIds = getSelectedIds();
+                if (selectedCountLabel) {
+                    selectedCountLabel.innerText = uniqueIds.length;
+                }
+                if (bulkActions) {
+                    if (uniqueIds.length > 0) {
+                        bulkActions.classList.remove('hidden');
+                        bulkActions.classList.add('flex');
+                    } else {
+                        bulkActions.classList.add('hidden');
+                        bulkActions.classList.remove('flex');
+                    }
                 }
             }
 
-            checkAll.addEventListener('change', () => {
-                itemCheckboxes.forEach(cb => { cb.checked = checkAll.checked; });
-                updateBulkUI();
+            [document.getElementById('checkAll'), document.getElementById('checkAllMobile')].forEach(chk => {
+                if (chk) {
+                    chk.addEventListener('change', () => {
+                        document.querySelectorAll('.item-checkbox').forEach(cb => { cb.checked = chk.checked; });
+                        const other = chk.id === 'checkAll' ? document.getElementById('checkAllMobile') : document.getElementById('checkAll');
+                        if (other) other.checked = chk.checked;
+                        updateBulkUI();
+                    });
+                }
             });
 
-            itemCheckboxes.forEach(cb => { cb.addEventListener('change', updateBulkUI); });
+            document.querySelectorAll('.item-checkbox').forEach(cb => {
+                cb.addEventListener('change', () => {
+                    document.querySelectorAll(`.item-checkbox[value="${cb.value}"]`).forEach(el => {
+                        el.checked = cb.checked;
+                    });
+                    updateBulkUI();
+                });
+            });
 
-            document.getElementById('bulkDeleteBtn').addEventListener('click', function () {
-                const selected = document.querySelectorAll('.item-checkbox:checked');
-                if (selected.length === 0) return;
+            document.getElementById('bulkDeleteBtn')?.addEventListener('click', function () {
+                const uniqueIds = getSelectedIds();
+                if (uniqueIds.length === 0) return;
 
                 Swal.fire({
                     title: 'Hapus Data Massal',
-                    text: `Apakah Anda yakin ingin menghapus ${selected.length} kendaraan yang terpilih? Tindakan ini tidak dapat dibatalkan.`,
+                    text: `Apakah Anda yakin ingin menghapus ${uniqueIds.length} kendaraan yang terpilih? Tindakan ini tidak dapat dibatalkan.`,
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#e11d48',
@@ -1921,11 +2060,11 @@
                     if (result.isConfirmed) {
                         const container = document.getElementById('bulkIdsContainer');
                         container.innerHTML = '';
-                        selected.forEach(cb => {
+                        uniqueIds.forEach(id => {
                             const input = document.createElement('input');
                             input.type = 'hidden';
                             input.name = 'ids[]';
-                            input.value = cb.value;
+                            input.value = id;
                             container.appendChild(input);
                         });
                         document.getElementById('bulkDeleteForm').submit();
@@ -1983,18 +2122,18 @@
                         <div class="px-6 py-5 bg-gradient-to-r from-violet-600 to-indigo-600 shrink-0">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-3">
-                                    <div class="p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/20 rounded-xl text-slate-800 dark:text-white">
+                                    <div class="p-2 bg-white/20 rounded-xl text-white">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
                                         </svg>
                                     </div>
                                     <div>
-                                        <h3 class="text-lg font-bold text-slate-800 dark:text-white">Pindah Satker</h3>
+                                        <h3 class="text-lg font-bold text-white">Pindah Satker</h3>
                                         <p class="text-sm text-violet-100" x-text="transferNopol"></p>
                                     </div>
                                 </div>
-                                <button @click="reset()" class="text-slate-800 dark:text-white/70 hover:text-slate-800 dark:text-white transition">
+                                <button @click="reset()" class="text-white/70 hover:text-white transition">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M6 18L18 6M6 6l12 12"></path>
@@ -2092,7 +2231,7 @@
                                     Batal
                                 </button>
                                 <button type="submit" :disabled="!selectedSatkerId"
-                                    class="flex-[2] px-4 py-2.5 bg-violet-600 text-slate-800 dark:text-white font-bold rounded-xl hover:bg-violet-700 transition shadow-lg shadow-violet-500/30 disabled:opacity-50 disabled:shadow-none">
+                                    class="flex-[2] px-4 py-2.5 bg-violet-600 text-white font-bold rounded-xl hover:bg-violet-700 transition shadow-lg shadow-violet-500/30 disabled:opacity-50 disabled:shadow-none">
                                     Pindahkan Sekarang
                                 </button>
                             </div>
@@ -2143,8 +2282,8 @@
                 <!-- Header -->
                 <div class="px-4 sm:px-6 py-4 bg-rose-600 shrink-0">
                     <div class="flex items-center justify-between">
-                        <h3 class="text-lg font-bold text-slate-800 dark:text-white">Potong Saldo Kendaraan</h3>
-                        <button type="button" @click="reset()" class="text-slate-800 dark:text-white/70 hover:text-slate-800 dark:text-white">
+                        <h3 class="text-lg font-bold text-white">Potong Saldo Kendaraan</h3>
+                        <button type="button" @click="reset()" class="text-white/70 hover:text-white">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                         </button>
                     </div>
@@ -2204,6 +2343,200 @@
             </div>
         </div>
     </template>
+    </div>
+
+    <!-- Modal Detail Kendaraan (Mobile & Desktop) -->
+    <div x-cloak
+        x-data="{
+            showDetail: false,
+            detail: {},
+            openDetail(data) {
+                this.detail = data;
+                this.showDetail = true;
+            },
+            closeDetail() {
+                this.showDetail = false;
+            }
+        }"
+        @open-detail-kendaraan.window="openDetail($event.detail)"
+        @turbo:before-cache.window="closeDetail()">
+
+        <template x-teleport="body">
+            <div x-show="showDetail" style="display: none;" class="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center p-0 sm:p-4">
+                <!-- Backdrop -->
+                <div x-show="showDetail"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100"
+                    class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm"
+                    @click="closeDetail()"></div>
+
+                <!-- Modal Dialog -->
+                <div x-show="showDetail"
+                    x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0 translate-y-8 sm:scale-95 sm:translate-y-0"
+                    x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                    class="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-t-3xl sm:rounded-2xl shadow-2xl w-full max-w-lg flex flex-col max-h-[90vh] overflow-hidden"
+                    @click.stop>
+
+                    <!-- Header -->
+                    <div class="px-5 py-4 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 shrink-0">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-brand-primary/10 text-brand-primary dark:bg-white/10 dark:text-white flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <h3 class="text-base font-black text-slate-800 dark:text-white" x-text="detail.nopol"></h3>
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-mono font-extrabold uppercase bg-brand-primary/10 text-brand-primary dark:bg-white/10 dark:text-white" x-text="detail.roda"></span>
+                                </div>
+                                <p class="text-xs text-slate-500 dark:text-slate-400" x-text="detail.jenis"></p>
+                            </div>
+                        </div>
+                        <button type="button" @click="closeDetail()" class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white rounded-xl transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="p-5 overflow-y-auto space-y-4">
+                        <!-- Alert jika Terkunci -->
+                        <template x-if="detail.has_unpaid">
+                            <div class="p-3.5 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 rounded-xl flex items-start gap-3 text-rose-700 dark:text-rose-300">
+                                <svg class="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                                </svg>
+                                <div class="text-xs">
+                                    <p class="font-black uppercase tracking-wider">Saldo Terkunci!</p>
+                                    <p class="mt-0.5">Kendaraan masih memiliki tanggungan hutang BON sebesar <span class="font-bold underline" x-text="detail.unpaid_bon + ' Liter'"></span>. Kendaraan tidak dapat mengisi BBM sebelum hutang diselesaikan.</p>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- Status Persetujuan -->
+                        <template x-if="detail.status_approval === 'pending'">
+                            <div class="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50 rounded-xl flex items-center gap-2.5 text-amber-700 dark:text-amber-300 text-xs">
+                                <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                                <span class="font-bold">Menunggu Persetujuan Super Admin</span>
+                            </div>
+                        </template>
+                        <template x-if="detail.status_approval === 'ditolak'">
+                            <div class="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 rounded-xl text-rose-700 dark:text-rose-300 text-xs">
+                                <span class="font-bold">Pengajuan Kendaraan Ditolak</span>
+                                <p class="mt-0.5 text-[11px]" x-show="detail.alasan_penolakan" x-text="'Alasan: ' + detail.alasan_penolakan"></p>
+                            </div>
+                        </template>
+
+                        <!-- Detail Grid -->
+                        <div class="grid grid-cols-2 gap-3 text-xs">
+                            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Satuan Kerja</span>
+                                <span class="font-bold text-slate-800 dark:text-white block mt-1" x-text="detail.satker"></span>
+                            </div>
+                            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Jenis Kendaraan</span>
+                                <span class="font-bold text-slate-800 dark:text-white block mt-1" x-text="detail.jenis"></span>
+                            </div>
+                            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Jenis BBM</span>
+                                <span class="font-black text-brand-primary dark:text-white block mt-1 uppercase" x-text="detail.bbm"></span>
+                            </div>
+                            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Saldo BBM</span>
+                                <span class="font-black text-emerald-600 dark:text-emerald-400 block mt-1" x-text="detail.saldo + ' Liter'"></span>
+                            </div>
+                            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">PIN Keamanan</span>
+                                <span class="font-mono font-bold text-amber-600 dark:text-amber-400 text-sm tracking-widest block mt-1" x-text="detail.pin"></span>
+                            </div>
+                            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Klasifikasi Roda</span>
+                                <span class="font-bold text-slate-800 dark:text-white block mt-1" x-text="detail.roda"></span>
+                            </div>
+                        </div>
+
+                        <!-- Menu Aksi -->
+                        <div class="pt-3 border-t border-slate-200 dark:border-white/10 space-y-2">
+                            <span class="text-[11px] font-black uppercase tracking-wider text-slate-400 block mb-2">Tindakan / Menu Aksi:</span>
+
+                            <!-- Cetak Kartu -->
+                            <a :href="detail.print_url" target="_blank"
+                                class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 font-bold text-xs transition">
+                                <div class="p-1.5 bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-lg">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                                </div>
+                                <span>Cetak Kartu Kendaraan</span>
+                            </a>
+
+                            @if(auth()->user()->role !== 'kasubbag')
+                                <!-- Pindah Satker -->
+                                <button type="button"
+                                    @click="closeDetail(); $dispatch('open-transfer', { id: detail.id, nopol: detail.nopol, current_satker: detail.satker })"
+                                    class="flex items-center gap-3 w-full p-3 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 font-bold text-xs transition text-left">
+                                    <div class="p-1.5 bg-purple-500/10 text-purple-600 dark:text-purple-400 rounded-lg">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                                    </div>
+                                    <span>Pindah Satker</span>
+                                </button>
+
+                                <!-- Potong Saldo -->
+                                <button type="button"
+                                    @click="closeDetail(); $dispatch('open-potong-saldo', { id: detail.id, nopol: detail.nopol, saldo: detail.raw_saldo, jenis_bbm: detail.bbm })"
+                                    class="flex items-center gap-3 w-full p-3 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 font-bold text-xs transition text-left">
+                                    <div class="p-1.5 bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-lg">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
+                                    </div>
+                                    <span>Potong Saldo</span>
+                                </button>
+
+                                <!-- Reset PIN -->
+                                <form :action="detail.reset_pin_url" method="POST" class="w-full">
+                                    @csrf
+                                    <button type="submit"
+                                        :data-confirm="'Reset PIN kendaraan ' + detail.nopol + '? PIN baru akan di-generate secara acak.'"
+                                        data-confirm-title="Reset PIN"
+                                        data-confirm-text="Ya, Reset PIN"
+                                        data-confirm-type="warning"
+                                        class="flex items-center gap-3 w-full p-3 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 font-bold text-xs transition text-left">
+                                        <div class="p-1.5 bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded-lg">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+                                        </div>
+                                        <span>Reset PIN Kendaraan</span>
+                                    </button>
+                                </form>
+
+                                <!-- Edit Kendaraan -->
+                                <a :href="detail.edit_url"
+                                    class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 font-bold text-xs transition">
+                                    <div class="p-1.5 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-lg">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                    </div>
+                                    <span>Edit Data Kendaraan</span>
+                                </a>
+
+                                <!-- Hapus Kendaraan -->
+                                <form :action="detail.delete_url" method="POST" class="w-full">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        data-confirm="Yakin ingin menghapus kendaraan ini?"
+                                        data-confirm-type="error"
+                                        class="flex items-center gap-3 w-full p-3 bg-rose-50/60 dark:bg-rose-950/20 hover:bg-rose-600 hover:text-white dark:hover:bg-rose-600 border border-rose-200/60 dark:border-rose-900/30 rounded-xl text-rose-600 dark:text-rose-400 font-bold text-xs transition text-left group">
+                                        <div class="p-1.5 bg-rose-500/15 group-hover:bg-white/20 rounded-lg text-rose-600 dark:text-rose-400 group-hover:text-white transition">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                        </div>
+                                        <span>Hapus Kendaraan</span>
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
     </div>
 </div>
 </x-app-layout>

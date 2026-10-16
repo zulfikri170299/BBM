@@ -14,7 +14,21 @@ class MeterReadingController extends Controller
         $today = $request->input('tanggal', Carbon::now('Asia/Makassar')->toDateString());
         $readings = DailyMeterReading::where('tanggal', $today)->get()->keyBy('jenis_bbm');
         
-        return view('petugas.meter.index', compact('today', 'readings'));
+        $lastReadings = [];
+        foreach (['PERTAMAX', 'PERTAMINA DEX'] as $bbm) {
+            $last = DailyMeterReading::where('jenis_bbm', $bbm)
+                ->where('tanggal', '<', $today)
+                ->orderBy('tanggal', 'desc')
+                ->first();
+            $lastReadings[$bbm] = $last;
+        }
+
+        $recentReadings = DailyMeterReading::orderBy('tanggal', 'desc')
+            ->orderBy('id', 'desc')
+            ->take(10)
+            ->get();
+        
+        return view('petugas.meter.index', compact('today', 'readings', 'lastReadings', 'recentReadings'));
     }
 
     public function store(Request $request)

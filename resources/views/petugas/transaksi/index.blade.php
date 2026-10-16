@@ -41,7 +41,7 @@
                     <div class="w-full max-w-[260px] aspect-square bg-slate-50 dark:bg-slate-800/50 rounded-xl relative overflow-hidden border-2 border-slate-200 dark:border-white/5">
                         <div id="reader" class="w-full h-full"></div>
                         <div id="scanner-placeholder" x-show="!isScannerActive || isLoadingScanner" 
-                             class="absolute inset-0 flex flex-col items-center justify-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/90">
+                             class="absolute inset-0 flex flex-col items-center justify-center bg-white/90">
                             <div x-show="isLoadingScanner" class="mb-2">
                                 <svg class="animate-spin h-7 w-7 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -113,7 +113,7 @@
         <!-- Step 2: Form (Extreme Anti-Autofill) -->
         <div x-show="step === 'form'" x-transition:enter="transition duration-300" class="space-y-2.5" x-cloak>
             <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl overflow-hidden shadow-lg">
-                <div class="bg-indigo-600 px-4 py-3.5 text-slate-800 dark:text-white flex justify-between items-end">
+                <div class="bg-indigo-600 px-4 py-3.5 text-white flex justify-between items-end">
                     <div>
                         <p class="text-[7px] font-black uppercase tracking-widest opacity-70">NO POLISI</p>
                         <h2 class="text-xl font-black leading-none mt-0.5 tracking-tight" x-text="target.no_polisi"></h2>

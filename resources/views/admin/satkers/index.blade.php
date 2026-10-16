@@ -11,7 +11,7 @@
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-bold text-slate-800 dark:text-white tracking-tight">Satuan Kerja</h1>
+                    <h1 class="text-2xl font-bold text-white tracking-tight">Satuan Kerja</h1>
                     <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-0.5">Kelola unit Satuan Kerja, distribusi armada kendaraan, dan hak akses pengguna.</p>
                 </div>
             </div>
@@ -55,7 +55,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-sm font-bold text-slate-800 dark:text-white">Daftar Satker</h3>
+                        <h3 class="text-sm font-bold text-white">Daftar Satker</h3>
                         <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">{{ $satkers->total() }} satker terdaftar dalam sistem</p>
                     </div>
                 </div>

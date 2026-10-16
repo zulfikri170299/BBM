@@ -11,7 +11,7 @@
                 </div>
                 <div>
                     <div class="flex items-center gap-2.5">
-                        <h1 class="text-2xl font-bold text-slate-800 dark:text-white tracking-tight">Pengaturan Sistem</h1>
+                        <h1 class="text-2xl font-bold text-white tracking-tight">Pengaturan Sistem</h1>
                         <span class="inline-flex items-center px-2 py-0.5 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-500/20 rounded-md text-[10px] font-bold">
                             Super Admin
                         </span>
@@ -64,7 +64,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="text-sm font-bold text-slate-800 dark:text-white">Hak Akses Kendaraan Satker</h3>
+                                <h3 class="text-sm font-bold text-white">Hak Akses Kendaraan Satker</h3>
                                 <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Kontrol kewenangan input, edit, dan import data kendaraan.</p>
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h4 class="text-xs font-bold text-slate-800 dark:text-white">Tambah Data Kendaraan</h4>
+                                    <h4 class="text-xs font-bold text-white">Tambah Data Kendaraan</h4>
                                     <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Izinkan akun Satker menambah kendaraan manual.</p>
                                 </div>
                             </div>
@@ -102,7 +102,7 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h4 class="text-xs font-bold text-slate-800 dark:text-white">Edit Data Kendaraan</h4>
+                                    <h4 class="text-xs font-bold text-white">Edit Data Kendaraan</h4>
                                     <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Izinkan akun Satker mengubah rincian kendaraan.</p>
                                 </div>
                             </div>
@@ -121,7 +121,7 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h4 class="text-xs font-bold text-slate-800 dark:text-white">Import Data via Excel</h4>
+                                    <h4 class="text-xs font-bold text-white">Import Data via Excel</h4>
                                     <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Izinkan akun Satker import kendaraan dari spreadsheet.</p>
                                 </div>
                             </div>
@@ -145,7 +145,7 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-sm font-bold text-slate-800 dark:text-white">Otorisasi Login Satker</h3>
+                                    <h3 class="text-sm font-bold text-white">Otorisasi Login Satker</h3>
                                     <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Penguncian autentikasi seluruh Satker.</p>
                                 </div>
                             </div>
@@ -160,7 +160,7 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <h4 class="text-xs font-bold text-slate-800 dark:text-white">Akses Akun Seluruh Satker</h4>
+                                        <h4 class="text-xs font-bold text-white">Akses Akun Seluruh Satker</h4>
                                         <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
                                             Jika dimatikan, seluruh Admin Satker tidak dapat login ke sistem.
                                         </p>

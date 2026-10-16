@@ -11,7 +11,7 @@
                 </div>
                 <div class="min-w-0">
                     <div class="flex items-center gap-2 flex-wrap">
-                        <h1 class="text-xl sm:text-2xl font-black text-slate-800 dark:text-white tracking-tight">
+                        <h1 class="text-xl sm:text-2xl font-black text-white tracking-tight">
                             Monitoring Hutang BBM
                         </h1>
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
@@ -223,7 +223,7 @@
                                             {{ strtoupper(substr($hutang->satker->nama_satker ?? 'S', 0, 1)) }}
                                         </div>
                                         <div>
-                                            <div class="text-xs font-bold text-slate-800 dark:text-white leading-tight">
+                                            <div class="text-xs font-bold text-white leading-tight">
                                                 {{ $hutang->satker->nama_satker }}
                                             </div>
                                         </div>
@@ -232,7 +232,7 @@
 
                                 <!-- Kendaraan -->
                                 <td class="px-4 py-3">
-                                    <div class="text-xs font-black text-slate-800 dark:text-white tracking-wide uppercase">
+                                    <div class="text-xs font-black text-white tracking-wide uppercase">
                                         {{ $hutang->nopol }}
                                     </div>
                                     <div class="text-[10px] text-slate-500 dark:text-slate-400">
@@ -463,7 +463,7 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-base font-black tracking-tight text-slate-900 dark:text-white uppercase" id="modal-title-edit">Edit Data Bon Hutang</h3>
+                                    <h3 class="text-base font-black tracking-tight text-white uppercase" id="modal-title-edit">Edit Data Bon Hutang</h3>
                                     <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Perbarui informasi catatan bon hutang BBM</p>
                                 </div>
                             </div>
@@ -512,15 +512,20 @@
                                         Memuat data...
                                     </span>
                                 </div>
-                                <div class="mt-1.5">
+                                <div class="mt-1.5 relative">
                                     <select name="kendaraan_id" id="edit_kendaraan_id" x-model="editData.kendaraan_id" required
-                                        :disabled="loadingFormKendaraan || !editData.satker_id"
-                                        class="tom-select-dynamic w-full disabled:opacity-50">
-                                        <option value="" disabled x-text="loadingFormKendaraan ? 'Sedang mengambil data...' : '-- Pilih Kendaraan --'"></option>
+                                        :disabled="loadingFormKendaraan || !editData.satker_id || formKendaraans.length === 0"
+                                        class="block w-full px-4 py-2.5 pr-10 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 focus:bg-white dark:focus:bg-slate-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 rounded-xl transition-all shadow-sm font-semibold text-xs text-slate-800 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed appearance-none cursor-pointer">
+                                        <option value="" disabled selected x-text="!editData.satker_id ? '-- Pilih Satker Terlebih Dahulu --' : (loadingFormKendaraan ? 'Sedang memuat data kendaraan...' : (formKendaraans.length ? '-- Pilih Kendaraan --' : 'Tidak ada kendaraan pada satker ini'))"></option>
                                         <template x-for="kend in formKendaraans" :key="kend.id">
-                                            <option :value="kend.id" x-text="`${kend.no_polisi} - ${kend.jenis_kendaraan} (${kend.jenis_bbm})`"></option>
+                                            <option :value="kend.id" x-text="`${kend.no_polisi} - ${kend.jenis_kendaraan} (${kend.jenis_bbm})`" class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white py-1.5"></option>
                                         </template>
                                     </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
 
@@ -625,7 +630,7 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-base font-black tracking-tight text-slate-900 dark:text-white uppercase" id="modal-title-create">Tambah Bon Hutang BBM</h3>
+                                    <h3 class="text-base font-black tracking-tight text-white uppercase" id="modal-title-create">Tambah Bon Hutang BBM</h3>
                                     <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Catat pengambilan BBM darurat saat kupon habis</p>
                                 </div>
                             </div>
@@ -675,44 +680,49 @@
                                         Memuat kendaraan...
                                     </span>
                                 </div>
-                                <div class="mt-1.5">
+                                <div class="mt-1.5 relative">
                                     <select name="kendaraan_id" id="create_kendaraan_id" x-model="createData.kendaraan_id" required
-                                        :disabled="loadingFormKendaraan || !createData.satker_id"
-                                        class="tom-select-dynamic w-full disabled:opacity-50">
-                                        <option value="" disabled x-text="loadingFormKendaraan ? 'Sedang mengambil data...' : (createKendaraans.length ? '-- Pilih Kendaraan (Saldo 0 L) --' : 'Tidak ada kendaraan bersaldo 0 L')"></option>
+                                        :disabled="loadingFormKendaraan || !createData.satker_id || createKendaraans.length === 0"
+                                        class="block w-full px-4 py-2.5 pr-10 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 focus:bg-white dark:focus:bg-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl transition-all shadow-sm font-semibold text-xs text-slate-800 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed appearance-none cursor-pointer">
+                                        <option value="" disabled selected x-text="!createData.satker_id ? '-- Pilih Satker Terlebih Dahulu --' : (loadingFormKendaraan ? 'Sedang memuat data kendaraan...' : (createKendaraans.length ? '-- Pilih Kendaraan (Saldo 0 L) --' : 'Tidak ada kendaraan bersaldo 0 L pada satker ini'))"></option>
                                         <template x-for="kend in createKendaraans" :key="kend.id">
-                                            <option :value="kend.id" x-text="`${kend.no_polisi} - ${kend.jenis_kendaraan} (${kend.jenis_bbm})`"></option>
+                                            <option :value="kend.id" x-text="`${kend.no_polisi} - ${kend.jenis_kendaraan} (${kend.jenis_bbm})`" class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white py-1.5"></option>
                                         </template>
                                     </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </div>
                                 </div>
 
-                                <!-- Alert jika semua kendaraan pada satker masih punya saldo -->
+                                <!-- Alert jika semua kendaraan pada satker masih punya saldo atau terkunci hutang -->
                                 <div x-show="createData.satker_id && !loadingFormKendaraan && createKendaraans.length === 0" x-cloak class="mt-2.5 p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs flex items-center gap-3">
                                     <div class="p-1.5 rounded-xl bg-amber-500/20 text-amber-400 shrink-0">
                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
                                     </div>
-                                    <span class="leading-relaxed font-medium">Semua kendaraan dinas pada Satker ini masih memiliki saldo kupon BBM. Bon hutang hanya dapat diajukan jika saldo kendaraan sudah 0 Liter.</span>
+                                    <span class="leading-relaxed font-medium">Semua kendaraan pada Satker ini masih memiliki saldo kupon BBM atau masih memiliki hutang belum lunas (saldo terkunci). Bon hutang baru hanya dapat diajukan jika saldo kendaraan 0 Liter dan tidak memiliki hutang belum lunas.</span>
                                 </div>
 
                                 <!-- Vehicle Saldo Alert / Status Box (Ketika kendaraan dipilih) -->
                                 <div x-show="createSelectedKendaraan" x-cloak class="mt-2.5 transition-all">
-                                    <div class="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 flex items-center justify-between">
+                                    <div class="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 flex items-center justify-between">
                                         <div class="flex items-center gap-2.5 text-xs">
-                                            <div class="p-1 rounded-lg bg-emerald-500/20 text-emerald-400 shrink-0">
+                                            <div class="p-1.5 rounded-xl bg-emerald-500/20 text-emerald-400 shrink-0">
                                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
                                                 </svg>
                                             </div>
                                             <div>
-                                                <span class="font-bold text-emerald-200">Saldo Kendaraan: 0 Liter</span>
-                                                <span class="block text-[10px] text-emerald-300/80">Layak untuk pengajuan bon hutang darurat</span>
+                                                <span class="font-bold text-emerald-200 block text-xs" x-text="`${createSelectedKendaraan?.no_polisi} - ${createSelectedKendaraan?.jenis_kendaraan}`"></span>
+                                                <span class="text-[10px] text-emerald-300/80">Saldo: 0 Liter • Siap mengajukan bon hutang</span>
                                             </div>
                                         </div>
-                                        <div class="text-right">
-                                            <span class="text-[10px] text-slate-400 block font-semibold">Jenis BBM</span>
-                                            <span class="text-xs font-bold text-white uppercase tracking-wider" x-text="createSelectedKendaraan?.jenis_bbm"></span>
+                                        <div class="text-right pl-3 border-l border-emerald-500/20">
+                                            <span class="text-[9px] text-slate-400 block font-semibold uppercase">Jenis BBM</span>
+                                            <span class="text-xs font-black text-white uppercase tracking-wider" x-text="createSelectedKendaraan?.jenis_bbm"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -729,7 +739,7 @@
                                 </label>
                                 <div class="mt-1.5">
                                     <input id="create_nama_driver" name="nama_driver" type="text" x-model="createData.nama_driver" 
-                                        class="block w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 focus:bg-white dark:focus:bg-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl transition-all shadow-sm font-semibold text-xs text-slate-800 dark:text-white" 
+                                        class="block w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 focus:bg-white dark:focus:bg-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl transition-all shadow-sm font-semibold text-xs text-white" 
                                         placeholder="Masukkan nama driver yang membon" required />
                                 </div>
                             </div>
@@ -746,7 +756,7 @@
                                     </label>
                                     <div class="mt-1.5">
                                         <input id="create_tanggal_bon" name="tanggal_bon" type="date" x-model="createData.tanggal_bon" 
-                                            class="flatpickr block w-full py-2.5 px-3.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 focus:bg-white dark:focus:bg-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl transition-all shadow-sm font-bold text-xs text-slate-800 dark:text-white" 
+                                            class="flatpickr block w-full py-2.5 px-3.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 focus:bg-white dark:focus:bg-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl transition-all shadow-sm font-bold text-xs text-white" 
                                             required />
                                     </div>
                                 </div>
@@ -860,30 +870,14 @@
                 },
                 init() {
                     this.$watch('createData.satker_id', val => {
+                        this.createData.kendaraan_id = '';
                         if (val) this.fetchFormKendaraans(val, false);
-                        else { 
-                            this.formKendaraans = []; 
-                            this.createData.kendaraan_id = '';
-                            const el = document.getElementById('create_kendaraan_id');
-                            if (el && el.tomselect) {
-                                el.tomselect.clear();
-                                el.tomselect.clearOptions();
-                                el.tomselect.disable();
-                            }
-                        }
+                        else this.formKendaraans = [];
                     });
                     this.$watch('editData.satker_id', val => {
+                        this.editData.kendaraan_id = '';
                         if (val) this.fetchFormKendaraans(val, true);
-                        else { 
-                            this.formKendaraans = []; 
-                            this.editData.kendaraan_id = '';
-                            const el = document.getElementById('edit_kendaraan_id');
-                            if (el && el.tomselect) {
-                                el.tomselect.clear();
-                                el.tomselect.clearOptions();
-                                el.tomselect.disable();
-                            }
-                        }
+                        else this.formKendaraans = [];
                     });
                 },
                 async fetchFormKendaraans(satkerId, includeAll = false) {
@@ -895,74 +889,9 @@
                     try {
                         const response = await fetch(`/admin/hutang/get-kendaraan?satker_id=${satkerId}${includeAll ? '&include_all=1' : ''}`);
                         this.formKendaraans = await response.json();
-                        
-                        // Sync TomSelect after Alpine updates the DOM
-                        this.$nextTick(() => {
-                            // Sync create_kendaraan_id (Hanya kendaraan dengan saldo <= 0)
-                            const createEl = document.getElementById('create_kendaraan_id');
-                            if (createEl) {
-                                const zeroSaldoOptions = this.formKendaraans
-                                    .filter(k => Number(k.saldo || 0) <= 0)
-                                    .map(k => ({
-                                        value: k.id,
-                                        text: `${k.no_polisi} - ${k.jenis_kendaraan} (${k.jenis_bbm}) | Saldo: 0 L`
-                                    }));
-
-                                if (createEl.tomselect) {
-                                    createEl.tomselect.clear();
-                                    createEl.tomselect.clearOptions();
-                                    createEl.tomselect.addOptions(zeroSaldoOptions);
-                                    createEl.tomselect.refreshOptions(false);
-                                    if (zeroSaldoOptions.length > 0) {
-                                        createEl.tomselect.enable();
-                                    } else {
-                                        createEl.tomselect.disable();
-                                    }
-                                } else {
-                                    new TomSelect(createEl, {
-                                        create: false,
-                                        dropdownParent: 'body',
-                                        onDropdownOpen: (dropdown) => {
-                                            dropdown.style.zIndex = "9999";
-                                        },
-                                        labelField: 'text',
-                                        valueField: 'value',
-                                        searchField: ['text'],
-                                        options: zeroSaldoOptions
-                                    });
-                                }
-                            }
-
-                            // Sync edit_kendaraan_id (Daftar semua kendaraan untuk edit)
-                            const editEl = document.getElementById('edit_kendaraan_id');
-                            if (editEl) {
-                                const editOptions = this.formKendaraans.map(k => ({
-                                    value: k.id,
-                                    text: `${k.no_polisi} - ${k.jenis_kendaraan} (${k.jenis_bbm}) | Saldo: ${this.formatLiter(k.saldo)} L`
-                                }));
-
-                                if (editEl.tomselect) {
-                                    editEl.tomselect.clearOptions();
-                                    editEl.tomselect.addOptions(editOptions);
-                                    editEl.tomselect.refreshOptions(false);
-                                    editEl.tomselect.enable();
-                                } else {
-                                    new TomSelect(editEl, {
-                                        create: false,
-                                        dropdownParent: 'body',
-                                        onDropdownOpen: (dropdown) => {
-                                            dropdown.style.zIndex = "9999";
-                                        },
-                                        labelField: 'text',
-                                        valueField: 'value',
-                                        searchField: ['text'],
-                                        options: editOptions
-                                    });
-                                }
-                            }
-                        });
                     } catch (error) {
                         console.error('Gagal mengambil data kendaraan:', error);
+                        this.formKendaraans = [];
                     } finally {
                         this.loadingFormKendaraan = false;
                     }
@@ -1001,35 +930,44 @@
                         original_jumlah_bon: hutang.jumlah_bon,
                         tanggal_bon: hutang.tanggal_bon
                     };
+                    this.showEditModal = true;
                     
+                    this.$nextTick(() => {
+                        const satkerEl = document.getElementById('edit_satker_id');
+                        if (satkerEl && satkerEl.tomselect) {
+                            satkerEl.tomselect.setValue(hutang.satker_id);
+                            satkerEl.tomselect.off('change');
+                            satkerEl.tomselect.on('change', (val) => {
+                                this.editData.satker_id = val;
+                                this.editData.kendaraan_id = '';
+                                if (val) this.fetchFormKendaraans(val, true);
+                            });
+                        }
+                    });
+
                     await this.fetchFormKendaraans(hutang.satker_id, true);
                     const foundKend = this.formKendaraans.find(k => k.no_polisi === hutang.nopol);
                     if (foundKend) {
                         this.editData.kendaraan_id = foundKend.id;
-                        this.$nextTick(() => {
-                            const el = document.getElementById('edit_kendaraan_id');
-                            if (el && el.tomselect) el.tomselect.setValue(foundKend.id);
-                        });
                     }
-                    this.showEditModal = true;
                 },
                 openCreateModal() {
                     this.createData = { satker_id: '', kendaraan_id: '', nama_driver: '', jumlah_bon: '', tanggal_bon: '{{ date('Y-m-d') }}' };
                     this.formKendaraans = [];
+                    this.showCreateModal = true;
                     
-                    // Sync TomSelect
                     this.$nextTick(() => {
                         const satkerEl = document.getElementById('create_satker_id');
-                        if (satkerEl && satkerEl.tomselect) satkerEl.tomselect.clear();
-                        const kendEl = document.getElementById('create_kendaraan_id');
-                        if (kendEl && kendEl.tomselect) {
-                            kendEl.tomselect.clear();
-                            kendEl.tomselect.clearOptions();
-                            kendEl.tomselect.disable();
+                        if (satkerEl && satkerEl.tomselect) {
+                            satkerEl.tomselect.clear();
+                            satkerEl.tomselect.off('change');
+                            satkerEl.tomselect.on('change', (val) => {
+                                this.createData.satker_id = val;
+                                this.createData.kendaraan_id = '';
+                                if (val) this.fetchFormKendaraans(val, false);
+                            });
                         }
                     });
-
-                    this.showCreateModal = true;
                 }
             });
             

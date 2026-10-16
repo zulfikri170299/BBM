@@ -22,7 +22,7 @@
                     @endif
                 </div>
             </div>
-            <h1 class="text-xl font-bold text-slate-900 dark:text-white mb-0.5 uppercase tracking-tight">{{ $title }}</h1>
+            <h1 class="text-xl font-bold text-white mb-0.5 uppercase tracking-tight">{{ $title }}</h1>
             <p class="text-slate-600 dark:text-slate-400 text-xs uppercase tracking-widest font-semibold">{{ $name }}</p>
         </div>
 
@@ -30,14 +30,14 @@
         <div class="bg-slate-200/50 dark:bg-slate-950/50 rounded-2xl border border-slate-200 dark:border-white/5 p-4 mb-6 text-left space-y-3">
             <div class="flex items-center justify-between group">
                 <span class="text-[9px] text-slate-600 dark:text-slate-400 font-bold uppercase tracking-widest">{{ $id_label }}</span>
-                <span class="text-slate-900 dark:text-white text-xs font-bold tracking-widest group-hover:text-amber-500 transition-colors uppercase">{{ $id_value }}</span>
+                <span class="text-white text-xs font-bold tracking-widest group-hover:text-amber-500 transition-colors uppercase">{{ $id_value }}</span>
             </div>
-            <div class="w-full h-px bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/5"></div>
+            <div class="w-full h-px bg-white/5"></div>
             <div class="flex items-center justify-between group">
                 <span class="text-[9px] text-slate-600 dark:text-slate-400 font-bold uppercase tracking-widest">Jenis BBM</span>
-                <span class="px-2 py-0.5 bg-amber-500 text-slate-900 dark:text-white text-[9px] font-black rounded-lg uppercase tracking-wider group-hover:scale-110 transition-transform">{{ $jenis_bbm ?? 'BELUM SET' }}</span>
+                <span class="px-2 py-0.5 bg-amber-500 text-white text-[9px] font-black rounded-lg uppercase tracking-wider group-hover:scale-110 transition-transform">{{ $jenis_bbm ?? 'BELUM SET' }}</span>
             </div>
-            <div class="w-full h-px bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/5"></div>
+            <div class="w-full h-px bg-white/5"></div>
             <div class="flex items-center justify-between group">
                 <span class="text-[9px] text-slate-600 dark:text-slate-400 font-bold uppercase tracking-widest">Waktu Pengecekan</span>
                 <span class="text-slate-700 dark:text-slate-300 text-[10px] font-semibold uppercase">{{ now()->isoFormat('HH:mm - D MMMM Y') }}</span>
@@ -56,7 +56,7 @@
                 </div>
                 <p class="text-[9px] text-emerald-100/70 font-bold uppercase tracking-[0.2em] mb-1">Sisa Saldo Anda</p>
                 <div class="flex items-baseline justify-center gap-1">
-                    <span class="text-slate-900 dark:text-white text-4xl font-black tracking-tight">{{ rtrim(rtrim(number_format($saldo, 2, ',', '.'), '0'), ',') }}</span>
+                    <span class="text-white text-4xl font-black tracking-tight">{{ rtrim(rtrim(number_format($saldo, 2, ',', '.'), '0'), ',') }}</span>
                     <span class="text-emerald-100 text-base font-bold">LITER</span>
                 </div>
             </div>
@@ -69,13 +69,13 @@
 
         <!-- Actions -->
         <div class="mt-6 flex flex-col gap-2">
-            <a href="{{ route('cek-saldo.index') }}" class="w-full py-3 px-4 bg-slate-50 hover:bg-slate-100 dark:bg-slate-700/50 text-slate-900 dark:text-white font-bold rounded-xl transition-all duration-200 text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 border border-slate-300 dark:border-white/10 group">
+            <a href="{{ route('cek-saldo.index') }}" class="w-full py-3 px-4 bg-slate-50 hover:bg-slate-100 dark:bg-slate-700/50 text-slate-700 dark:text-white font-bold rounded-xl transition-all duration-200 text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 border border-slate-300 dark:border-white/10 group">
                 <svg class="w-3.5 h-3.5 text-amber-500 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
                 Cek Lainnya
             </a>
-            <a href="{{ route('login') }}" class="w-full py-3 px-4 bg-gradient-to-r from-red-700 to-amber-700 hover:from-red-600 hover:to-amber-600 text-slate-900 dark:text-white font-bold rounded-xl shadow-md shadow-red-900/20 transform hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 text-[11px] uppercase tracking-widest border-t border-slate-300 dark:border-white/10">
+            <a href="{{ route('login') }}" class="w-full py-3 px-4 bg-gradient-to-r from-red-700 to-amber-700 hover:from-red-600 hover:to-amber-600 text-white font-bold rounded-xl shadow-md shadow-red-900/20 transform hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 text-[11px] uppercase tracking-widest border-t border-slate-300 dark:border-white/10">
                 KEMBALI KE LOGIN
             </a>
         </div>

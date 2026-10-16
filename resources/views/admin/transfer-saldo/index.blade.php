@@ -105,9 +105,9 @@
                                 <div>
                                     <label class="block text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Kendaraan Tujuan</label>
                                     <select name="tujuan_kendaraan_id" id="transfer_tujuan_kendaraan_id" :required="tipeTujuan === 'kendaraan'" class="w-full" x-ref="tujuanKendaraanSelect">
-                                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">-- Pilih Kendaraan Tujuan --</option>
+                                        <option class="bg-white text-white dark:bg-slate-900 dark:text-white" value="">-- Pilih Kendaraan Tujuan --</option>
                                         @foreach($kendaraans as $k)
-                                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $k->id }}">{{ $k->no_polisi }} ({{ $k->jenis_bbm }} - {{ rtrim(rtrim(number_format($k->saldo, 2, ',', '.'), '0'), ',') }} L)</option>
+                                            <option class="bg-white text-white dark:bg-slate-900 dark:text-white" value="{{ $k->id }}">{{ $k->no_polisi }} ({{ $k->jenis_bbm }} - {{ rtrim(rtrim(number_format($k->saldo, 2, ',', '.'), '0'), ',') }} L)</option>
                                         @endforeach
                                     </select>
                                 </div>

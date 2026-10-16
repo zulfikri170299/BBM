@@ -79,11 +79,11 @@
                     <img src="{{ asset('rolog.png') }}" alt="Logo" class="w-16 h-16 object-contain drop-shadow-lg animate-float">
                 </div>
                 <div class="md:hidden">
-                    <h4 class="text-2xl font-bold text-slate-900 dark:text-white mb-1">SIM-BBM</h4>
+                    <h4 class="text-2xl font-bold text-white mb-1">SIM-BBM</h4>
                     <p class="text-amber-500 text-xs font-semibold tracking-wider uppercase mb-2">(SISTEM INFORMASI MANAJEMEN BBM)</p>
                 </div>
                 <div class="hidden md:block">
-                    <h4 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Selamat Datang</h4>
+                    <h4 class="text-2xl font-bold text-white mb-2">Selamat Datang</h4>
                     <p class="text-slate-600 dark:text-slate-400 text-sm">Silakan masuk menggunakan akun kredensial Anda.</p>
                 </div>
             </div>
@@ -189,7 +189,7 @@
                 <!-- Submit Button -->
                 <div class="pt-2">
                     <button type="submit"
-                        class="w-full py-4 px-6 bg-gradient-to-r from-red-700 to-amber-700 hover:from-red-600 hover:to-amber-600 text-slate-900 dark:text-white font-bold rounded-xl shadow-lg shadow-red-900/30 transform hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 text-sm uppercase tracking-widest border-t border-slate-300 dark:border-white/10 relative overflow-hidden group">
+                        class="w-full py-4 px-6 bg-gradient-to-r from-red-700 to-amber-700 hover:from-red-600 hover:to-amber-600 text-white font-bold rounded-xl shadow-lg shadow-red-900/30 transform hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200 text-sm uppercase tracking-widest border-t border-slate-300 dark:border-white/10 relative overflow-hidden group">
                         <span class="relative z-10 flex items-center justify-center gap-2">
                             LOGIN
                             <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none"

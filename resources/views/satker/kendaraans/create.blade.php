@@ -90,7 +90,7 @@
 
                     <!-- Submit -->
                     <div class="flex items-center gap-3 pt-4">
-                        <button type="submit" class="px-4 py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 text-slate-800 dark:text-white font-bold rounded-xl shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 transition-all duration-300 hover:-translate-y-0.5">
+                        <button type="submit" class="px-4 py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 transition-all duration-300 hover:-translate-y-0.5">
                             <span class="flex items-center gap-2">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                                 Tambah Kendaraan

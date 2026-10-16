@@ -17,7 +17,7 @@
                     ];
                 @endphp
                 <div class="bg-gradient-to-br {{ $bbmStyle[$stock->jenis_bbm] ?? 'from-slate-500 to-slate-600' }} p-4 sm:p-5 rounded-2xl text-slate-800 dark:text-white shadow-lg relative overflow-hidden group">
-                    <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+                    <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
                     <div class="relative z-10">
                         <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest opacity-80">{{ $stock->jenis_bbm }}</p>
                         <div class="flex items-baseline gap-1 mt-1 sm:mt-2">

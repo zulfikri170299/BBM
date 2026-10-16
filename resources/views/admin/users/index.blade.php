@@ -204,11 +204,11 @@
                                 <td class="px-4 py-3 whitespace-nowrap">
                                     <div class="flex items-center gap-3">
                                         <div
-                                            class="w-10 h-10 rounded-xl bg-gradient-to-br {{ $loop->index % 2 == 0 ? 'from-indigo-500 to-purple-600' : 'from-emerald-500 to-teal-600' }} flex items-center justify-center text-slate-800 dark:text-white font-bold text-sm shadow-md ring-2 ring-white">
+                                            class="w-10 h-10 rounded-xl bg-gradient-to-br {{ $loop->index % 2 == 0 ? 'from-indigo-500 to-purple-600' : 'from-emerald-500 to-teal-600' }} flex items-center justify-center text-white font-bold text-sm shadow-md ring-2 ring-white">
                                             {{ strtoupper(substr($user->name, 0, 2)) }}
                                         </div>
                                         <div>
-                                            <p class="text-sm font-bold text-slate-800 dark:text-white">{{ $user->name }}</p>
+                                            <p class="text-sm font-bold text-white">{{ $user->name }}</p>
                                             <p class="text-[11px] font-medium text-slate-600 dark:text-slate-400 mt-0.5">ID: #{{ $user->id }}
                                             </p>
                                         </div>

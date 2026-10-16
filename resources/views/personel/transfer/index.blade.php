@@ -10,7 +10,7 @@
 
             <!-- Saldo Card with Gradient -->
             <div
-                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-700 p-5 sm:p-8 shadow-xl text-slate-900 dark:text-white">
+                class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-700 p-5 sm:p-8 shadow-xl text-white">
                 <div
                     class="relative z-10 flex flex-col md:flex-row justify-between items-center sm:items-start md:items-center gap-4">
                     <div class="text-center sm:text-left">
@@ -29,7 +29,7 @@
                         </p>
                     </div>
                     <div
-                        class="p-2 sm:p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/10 rounded-full border border-slate-400 dark:border-white/20 hidden sm:block">
+                        class="p-2 sm:p-3 bg-white/10 rounded-full border border-slate-400 dark:border-white/20 hidden sm:block">
                         <svg class="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -40,7 +40,7 @@
                 </div>
                 <!-- Decorative Circles -->
                 <div
-                    class="absolute top-0 right-0 -mt-10 -mr-10 w-32 h-32 sm:w-40 sm:h-40 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/10 rounded-full blur-3xl">
+                    class="absolute top-0 right-0 -mt-10 -mr-10 w-32 h-32 sm:w-40 sm:h-40 bg-white/10 rounded-full blur-3xl">
                 </div>
                 <div
                     class="absolute bottom-0 left-0 -mb-10 -ml-10 w-32 h-32 sm:w-40 sm:h-40 bg-indigo-500/30 rounded-full blur-3xl">

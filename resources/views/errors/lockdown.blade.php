@@ -34,7 +34,7 @@
         </p>
 
         <div class="pt-8">
-            <a href="/login" class="text-slate-500 hover:text-slate-900 dark:text-white transition-colors text-sm">
+            <a href="/login" class="text-slate-500 hover:text-white transition-colors text-sm">
                 Login Administrator
             </a>
         </div>

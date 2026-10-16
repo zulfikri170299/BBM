@@ -190,7 +190,7 @@
                     <span class="text-2xl">🙂</span>
                 </div>
                 <div class="flex items-baseline gap-2">
-                    <span class="text-2xl sm:text-3xl font-extrabold text-slate-800 dark:text-white tabular-nums">
+                    <span class="text-2xl sm:text-3xl font-extrabold text-white tabular-nums">
                         {{ $stats['puas'] }}
                     </span>
                     <span class="text-xs font-bold text-amber-600 dark:text-amber-400">
@@ -211,7 +211,7 @@
                     <span class="text-2xl">😡</span>
                 </div>
                 <div class="flex items-baseline gap-2">
-                    <span class="text-2xl sm:text-3xl font-extrabold text-slate-800 dark:text-white tabular-nums">
+                    <span class="text-2xl sm:text-3xl font-extrabold text-white tabular-nums">
                         {{ $stats['tidak_puas'] }}
                     </span>
                     <span class="text-xs font-bold text-rose-600 dark:text-rose-400">
@@ -285,7 +285,7 @@
                                             {{ strtoupper(substr($rating->user->name ?? 'U', 0, 1)) }}
                                         </div>
                                         <div class="min-w-0">
-                                            <div class="font-bold text-slate-900 dark:text-white truncate max-w-xs">
+                                            <div class="font-bold text-white truncate max-w-xs">
                                                 {{ $rating->user->name ?? 'User Terhapus' }}
                                             </div>
                                             @if($rating->user && $rating->user->satker)

@@ -36,7 +36,7 @@
                 <div class="relative">
                     <div class="flex items-center gap-4 mb-8">
                         <div
-                            class="p-3 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-2xl text-slate-800 dark:text-white shadow-lg shadow-indigo-500/30">
+                            class="p-3 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-2xl text-white shadow-lg shadow-indigo-500/30">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                     d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -97,7 +97,7 @@
                             class="bg-gradient-to-br from-slate-100 dark:from-slate-900 to-indigo-900 rounded-2xl p-4 text-slate-800 dark:text-white shadow-lg space-y-3 hidden animate-in fade-in slide-in-from-top-4 duration-300">
                             <div class="flex justify-between items-start">
                                 <span
-                                    class="px-2 py-0.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/20 rounded-md text-[10px] font-bold uppercase tracking-widest text-slate-800 dark:text-white/80">Info
+                                    class="px-2 py-0.5 bg-white/20 rounded-md text-[10px] font-bold uppercase tracking-widest text-slate-800 dark:text-white/80">Info
                                     Kendaraan</span>
                                 <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400" fill="currentColor" viewBox="0 0 20 20">
                                     <path
@@ -199,7 +199,7 @@
 
                         <div class="pt-2">
                             <button type="submit"
-                                class="w-full inline-flex justify-center items-center px-6 py-4 bg-gradient-to-r from-indigo-600 to-blue-600 border-none rounded-2xl font-black text-slate-800 dark:text-white uppercase tracking-widest hover:from-indigo-700 hover:to-blue-700 active:scale-[0.98] transition-all duration-200 shadow-xl shadow-indigo-500/30 group/btn">
+                                class="w-full inline-flex justify-center items-center px-6 py-4 bg-gradient-to-r from-indigo-600 to-blue-600 border-none rounded-2xl font-black text-white uppercase tracking-widest hover:from-indigo-700 hover:to-blue-700 active:scale-[0.98] transition-all duration-200 shadow-xl shadow-indigo-500/30 group/btn">
                                 <span>Simpan Data Hutang</span>
                                 <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">

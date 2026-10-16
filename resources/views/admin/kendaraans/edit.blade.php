@@ -26,7 +26,7 @@
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
             <div class="px-6 py-5 border-b border-slate-200 dark:border-white/5 bg-gradient-to-r from-amber-500 to-orange-600">
                 <div class="flex items-center gap-3">
-                    <div class="p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/20 rounded-xl">
+                    <div class="p-2 bg-white/20 rounded-xl">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                     </div>
                     <div>

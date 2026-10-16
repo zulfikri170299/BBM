@@ -30,11 +30,11 @@
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
             <div class="px-6 py-5 border-b border-slate-200 dark:border-white/5 bg-gradient-to-r from-indigo-500 to-purple-600">
                 <div class="flex items-center gap-3">
-                    <div class="p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5/20 rounded-xl">
+                    <div class="p-2 bg-white/20 rounded-xl">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                     </div>
                     <div>
-                        <h3 class="text-lg font-bold text-slate-800 dark:text-white">Data Kendaraan Baru</h3>
+                        <h3 class="text-lg font-bold text-white">Data Kendaraan Baru</h3>
                         <p class="text-sm text-indigo-100">Lengkapi form berikut untuk menambah kendaraan</p>
                     </div>
                 </div>
@@ -112,7 +112,7 @@
                 <!-- Submit -->
                 <div class="flex gap-3 pt-2">
                     <a href="{{ route('admin.kendaraans.index') }}" class="flex-1 px-4 py-3 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-semibold rounded-xl hover:bg-slate-200 transition-colors text-center">Batal</a>
-                    <button type="submit" class="flex-1 px-4 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-slate-800 dark:text-white font-bold rounded-xl hover:from-indigo-600 hover:to-purple-700 shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/40 transition-all hover:-translate-y-0.5">
+                    <button type="submit" class="flex-1 px-4 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold rounded-xl hover:from-indigo-600 hover:to-purple-700 shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/40 transition-all hover:-translate-y-0.5">
                         🚗 Simpan Kendaraan
                     </button>
                 </div>

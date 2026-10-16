@@ -85,6 +85,10 @@ class HutangController extends Controller
             ->where('saldo', '<=', 0)
             ->select('id', 'no_polisi', 'jenis_kendaraan', 'jenis_bbm')
             ->get();
+
+        $kendaraans = $kendaraans->filter(function($k) {
+            return !$k->hasUnpaidBon();
+        })->values();
             
         return response()->json($kendaraans);
     }
@@ -110,6 +114,12 @@ class HutangController extends Controller
             return back()
                 ->withInput()
                 ->withErrors(['nopol' => "Kendaraan dengan No. Polisi {$request->nopol} masih memiliki saldo BBM ({$kendaraan->saldo} L), tidak diizinkan untuk hutang."]);
+        }
+
+        if ($kendaraan && $kendaraan->hasUnpaidBon()) {
+            return back()
+                ->withInput()
+                ->withErrors(['nopol' => "Kendaraan dengan No. Polisi {$request->nopol} tidak diizinkan BON lagi karena masih memiliki tanggungan bon hutang sebesar " . number_format($kendaraan->totalUnpaidBon(), 0, ',', '.') . " L yang belum lunas (saldo masih terkunci). Harap lunasi hutang terlebih dahulu."]);
         }
 
         // Validasi stok tangki BBM (Real physical tank)

@@ -1,24 +1,30 @@
 <x-app-layout>
     <div class="p-3 sm:p-6 lg:p-8 space-y-6 w-full max-w-full overflow-x-hidden">
-        <!-- Executive Welcome Banner (Satker) -->
-        <div class="relative overflow-hidden bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-white/10 p-5 sm:p-7 shadow-sm">
+        <!-- Executive Welcome Banner (Compact di Mobile, Mewah di Desktop) -->
+        <div class="relative overflow-hidden bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-white/10 p-3.5 sm:p-7 shadow-sm">
             <div class="absolute -top-24 -right-24 w-96 h-96 bg-brand-primary/10 dark:bg-brand-primary/15 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-                <div>
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-brand-primary/10 text-brand-primary dark:bg-white/10 dark:text-white mb-2.5">
+            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-1.5 sm:gap-5">
+                <div class="min-w-0">
+                    <div class="hidden sm:inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-brand-primary/10 text-brand-primary dark:bg-white/10 dark:text-white mb-2.5">
                         <span class="w-2 h-2 rounded-full bg-brand-primary dark:bg-emerald-400 animate-pulse"></span>
                         SIM BBM • {{ strtoupper(auth()->user()->satker->nama_satker ?? 'SATKER') }}
                     </div>
-                    <h1 class="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white tracking-tight">
-                        Dashboard Operasional Satker
-                    </h1>
-                    <p class="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-2xl">
-                        Pusat kendali armada kendaraan, ketersediaan saldo BBM aktif, status bon hutang, dan riwayat transaksi pengisian secara realtime.
+                    <div class="flex items-center justify-between gap-2">
+                        <h1 class="text-base sm:text-3xl font-black text-slate-800 dark:text-white tracking-tight truncate">
+                            Dashboard <span class="hidden sm:inline">Operasional</span> Satker
+                        </h1>
+                        <!-- Tanggal Ringkas di Mobile -->
+                        <span class="lg:hidden text-[10px] font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-white/10 shrink-0">
+                            {{ now()->translatedFormat('d M Y') }}
+                        </span>
+                    </div>
+                    <p class="mt-0.5 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                        <span class="sm:hidden font-bold text-slate-700 dark:text-slate-200">{{ auth()->user()->satker->nama_satker ?? 'Satker' }} • </span>Pusat kendali armada & saldo BBM.<span class="hidden sm:inline"> Ketersediaan saldo BBM aktif, status bon hutang, dan riwayat transaksi pengisian secara realtime.</span>
                     </p>
                 </div>
 
-                <!-- Date & Status Chips -->
-                <div class="flex flex-wrap items-center gap-2.5 self-start lg:self-auto">
+                <!-- Date & Status Chips di Desktop / Layar Besar -->
+                <div class="hidden lg:flex flex-wrap items-center gap-2.5 shrink-0">
                     <div class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 text-xs font-bold text-slate-700 dark:text-slate-300 shadow-sm">
                         <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -35,15 +41,15 @@
             </div>
         </div>
 
-        <!-- Main Stats Grid (Executive Modern Cards) -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
+        <!-- Main Stats Grid (Executive Modern Cards - 2 Kolom di Mobile) -->
+        <div class="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-2.5 sm:gap-5">
             <!-- Card 1: Total Kendaraan -->
-            <div class="relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-white/10 p-5 shadow-sm hover:shadow-xl hover:border-amber-500/40 transition-all duration-300 group flex flex-col justify-between">
+            <div class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-white/10 p-3 sm:p-5 shadow-sm hover:shadow-xl hover:border-amber-500/40 transition-all duration-300 group flex flex-col justify-between">
                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-amber-500/10 dark:bg-amber-500/15 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500 pointer-events-none"></div>
                 <div class="relative z-10">
                     <div class="flex items-center justify-between">
-                        <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 flex items-center justify-center shrink-0">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 flex items-center justify-center shrink-0">
+                            <svg class="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -51,148 +57,148 @@
                             </svg>
                         </div>
                         <a href="{{ route('satker.kendaraans.index') }}"
-                            class="relative z-20 cursor-pointer inline-flex items-center gap-1 text-[11px] font-bold text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 px-2.5 py-1 rounded-lg transition-colors uppercase tracking-wider">
+                            class="relative z-20 cursor-pointer inline-flex items-center gap-1 text-[9px] sm:text-[11px] font-bold text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg transition-colors uppercase tracking-wider">
                             Kelola
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                            <svg class="w-2.5 h-2.5 sm:w-3 sm:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                         </a>
                     </div>
-                    <div class="mt-4">
-                        <span class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">Total Kendaraan Satker</span>
-                        <div class="mt-1 flex items-baseline gap-2">
-                            <span class="text-3xl sm:text-4xl font-black text-slate-800 dark:text-white tabular-nums">
+                    <div class="mt-2.5 sm:mt-4">
+                        <span class="text-[9px] sm:text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 block truncate">Total Kendaraan</span>
+                        <div class="mt-0.5 sm:mt-1 flex items-baseline gap-1 sm:gap-2">
+                            <span class="text-xl sm:text-4xl font-black text-slate-900 dark:text-white tabular-nums">
                                 {{ $totalKendaraan }}
                             </span>
-                            <span class="text-xs font-bold text-slate-400">Unit</span>
+                            <span class="text-[10px] sm:text-xs font-bold text-slate-400">Unit</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="relative z-10 mt-5 pt-3.5 border-t border-slate-100 dark:border-white/5 grid grid-cols-4 gap-1 text-center">
-                    <div class="bg-slate-50 dark:bg-slate-800/60 rounded-lg py-1 px-1 border border-slate-100 dark:border-white/5">
-                        <span class="block text-[9px] font-bold text-slate-400">R2</span>
-                        <span class="text-xs font-black text-slate-700 dark:text-slate-300">{{ $rodaR2 }}</span>
+                <div class="relative z-10 mt-3 sm:mt-5 pt-2 sm:pt-3.5 border-t border-slate-100 dark:border-white/5 grid grid-cols-4 gap-1 text-center">
+                    <div class="bg-slate-50 dark:bg-slate-800/60 rounded py-0.5 sm:py-1 px-0.5 border border-slate-100 dark:border-white/5">
+                        <span class="block text-[8px] sm:text-[9px] font-bold text-slate-400">R2</span>
+                        <span class="text-[10px] sm:text-xs font-black text-slate-700 dark:text-slate-300">{{ $rodaR2 }}</span>
                     </div>
-                    <div class="bg-slate-50 dark:bg-slate-800/60 rounded-lg py-1 px-1 border border-slate-100 dark:border-white/5">
-                        <span class="block text-[9px] font-bold text-slate-400">R4</span>
-                        <span class="text-xs font-black text-slate-700 dark:text-slate-300">{{ $rodaR4 }}</span>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 rounded py-0.5 sm:py-1 px-0.5 border border-slate-100 dark:border-white/5">
+                        <span class="block text-[8px] sm:text-[9px] font-bold text-slate-400">R4</span>
+                        <span class="text-[10px] sm:text-xs font-black text-slate-700 dark:text-slate-300">{{ $rodaR4 }}</span>
                     </div>
-                    <div class="bg-slate-50 dark:bg-slate-800/60 rounded-lg py-1 px-1 border border-slate-100 dark:border-white/5">
-                        <span class="block text-[9px] font-bold text-slate-400">R6</span>
-                        <span class="text-xs font-black text-slate-700 dark:text-slate-300">{{ $rodaR6 }}</span>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 rounded py-0.5 sm:py-1 px-0.5 border border-slate-100 dark:border-white/5">
+                        <span class="block text-[8px] sm:text-[9px] font-bold text-slate-400">R6</span>
+                        <span class="text-[10px] sm:text-xs font-black text-slate-700 dark:text-slate-300">{{ $rodaR6 }}</span>
                     </div>
-                    <div class="bg-slate-50 dark:bg-slate-800/60 rounded-lg py-1 px-1 border border-slate-100 dark:border-white/5">
-                        <span class="block text-[9px] font-bold text-slate-400">NON</span>
-                        <span class="text-xs font-black text-slate-700 dark:text-slate-300">{{ $rodaNon }}</span>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 rounded py-0.5 sm:py-1 px-0.5 border border-slate-100 dark:border-white/5">
+                        <span class="block text-[8px] sm:text-[9px] font-bold text-slate-400">NON</span>
+                        <span class="text-[10px] sm:text-xs font-black text-slate-700 dark:text-slate-300">{{ $rodaNon }}</span>
                     </div>
                 </div>
             </div>
 
             <!-- Card 2: Total Transaksi BBM -->
-            <div class="relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-white/10 p-5 shadow-sm hover:shadow-xl hover:border-rose-500/40 transition-all duration-300 group flex flex-col justify-between">
+            <div class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-white/10 p-3 sm:p-5 shadow-sm hover:shadow-xl hover:border-rose-500/40 transition-all duration-300 group flex flex-col justify-between">
                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-rose-500/10 dark:bg-rose-500/15 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500 pointer-events-none"></div>
                 <div class="relative z-10">
                     <div class="flex items-center justify-between">
-                        <div class="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 flex items-center justify-center shrink-0">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 flex items-center justify-center shrink-0">
+                            <svg class="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                             </svg>
                         </div>
                         <a href="{{ route('satker.riwayat.index') }}"
-                            class="relative z-20 cursor-pointer inline-flex items-center gap-1 text-[11px] font-bold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 px-2.5 py-1 rounded-lg transition-colors uppercase tracking-wider">
+                            class="relative z-20 cursor-pointer inline-flex items-center gap-1 text-[9px] sm:text-[11px] font-bold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg transition-colors uppercase tracking-wider">
                             Riwayat
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                            <svg class="w-2.5 h-2.5 sm:w-3 sm:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                         </a>
                     </div>
-                    <div class="mt-4">
-                        <span class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">Total Transaksi BBM</span>
-                        <div class="mt-1 flex items-baseline gap-2">
-                            <span class="text-3xl sm:text-4xl font-black text-slate-800 dark:text-white tabular-nums">
+                    <div class="mt-2.5 sm:mt-4">
+                        <span class="text-[9px] sm:text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 block truncate">Total Transaksi</span>
+                        <div class="mt-0.5 sm:mt-1 flex items-baseline gap-1 sm:gap-2">
+                            <span class="text-xl sm:text-4xl font-black text-slate-900 dark:text-white tabular-nums">
                                 {{ number_format($totalTransaksi, 0, ',', '.') }}
                             </span>
-                            <span class="text-xs font-bold text-slate-400">Pengisian</span>
+                            <span class="text-[10px] sm:text-xs font-bold text-slate-400">Log</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="relative z-10 mt-5 pt-3.5 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs">
-                    <span class="text-slate-500 dark:text-slate-400">Pencatatan</span>
-                    <span class="inline-flex items-center gap-1.5 font-bold text-emerald-600 dark:text-emerald-400">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Realtime & Tervalidasi
+                <div class="relative z-10 mt-3 sm:mt-5 pt-2 sm:pt-3.5 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-[10px] sm:text-xs">
+                    <span class="text-slate-500 dark:text-slate-400 hidden sm:inline">Pencatatan</span>
+                    <span class="inline-flex items-center gap-1 font-bold text-emerald-600 dark:text-emerald-400 text-[9px] sm:text-xs">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Realtime
                     </span>
                 </div>
             </div>
 
             <!-- Card 3: Saldo Kendaraan -->
-            <div class="relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-white/10 p-5 shadow-sm hover:shadow-xl hover:border-blue-500/40 transition-all duration-300 group flex flex-col justify-between">
+            <div class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-white/10 p-3 sm:p-5 shadow-sm hover:shadow-xl hover:border-blue-500/40 transition-all duration-300 group flex flex-col justify-between">
                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/10 dark:bg-blue-500/15 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500 pointer-events-none"></div>
                 <div class="relative z-10">
                     <div class="flex items-center justify-between">
-                        <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center justify-center shrink-0">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center justify-center shrink-0">
+                            <svg class="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                             </svg>
                         </div>
                         <a href="{{ route('satker.kendaraans.index') }}"
-                            class="relative z-20 cursor-pointer inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 px-2.5 py-1 rounded-lg transition-colors uppercase tracking-wider">
+                            class="relative z-20 cursor-pointer inline-flex items-center gap-1 text-[9px] sm:text-[11px] font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg transition-colors uppercase tracking-wider">
                             Rincian
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                            <svg class="w-2.5 h-2.5 sm:w-3 sm:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                         </a>
                     </div>
-                    <div class="mt-4">
-                        <span class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">Total Saldo Armada</span>
-                        <div class="mt-1 flex items-baseline gap-2">
-                            <span class="text-3xl sm:text-4xl font-black text-slate-800 dark:text-white tabular-nums">
+                    <div class="mt-2.5 sm:mt-4">
+                        <span class="text-[9px] sm:text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 block truncate">Total Saldo Armada</span>
+                        <div class="mt-0.5 sm:mt-1 flex items-baseline gap-1 sm:gap-2">
+                            <span class="text-xl sm:text-4xl font-black text-slate-900 dark:text-white tabular-nums">
                                 {{ rtrim(rtrim(number_format($totalSaldoKendaraan, 2, ',', '.'), '0'), ',') }}
                             </span>
-                            <span class="text-xs font-bold text-slate-400">Liter</span>
+                            <span class="text-[10px] sm:text-xs font-bold text-slate-400">Liter</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="relative z-10 mt-5 pt-3.5 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs">
-                    <span class="text-slate-500 dark:text-slate-400 font-medium">Pertamax: <strong class="text-blue-600 dark:text-blue-400">{{ rtrim(rtrim(number_format($saldoKendaraanPerBbm['Pertamax'] ?? 0, 2, ',', '.'), '0'), ',') }} L</strong></span>
-                    <span class="text-slate-500 dark:text-slate-400 font-medium">Dex: <strong class="text-emerald-600 dark:text-emerald-400">{{ rtrim(rtrim(number_format($saldoKendaraanPerBbm['Pertamina Dex'] ?? 0, 2, ',', '.'), '0'), ',') }} L</strong></span>
+                <div class="relative z-10 mt-3 sm:mt-5 pt-2 sm:pt-3.5 border-t border-slate-100 dark:border-white/5 flex flex-col sm:flex-row sm:items-center justify-between text-[9px] sm:text-xs gap-0.5">
+                    <span class="text-slate-500 dark:text-slate-400 font-medium truncate">P: <strong class="text-blue-600 dark:text-blue-400">{{ rtrim(rtrim(number_format($saldoKendaraanPerBbm['Pertamax'] ?? 0, 0, ',', '.'), '0'), ',') }}L</strong></span>
+                    <span class="text-slate-500 dark:text-slate-400 font-medium truncate">D: <strong class="text-emerald-600 dark:text-emerald-400">{{ rtrim(rtrim(number_format($saldoKendaraanPerBbm['Pertamina Dex'] ?? 0, 0, ',', '.'), '0'), ',') }}L</strong></span>
                 </div>
             </div>
 
             <!-- Card 4: Total Hutang (Bon) -->
-            <div class="relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-white/10 p-5 shadow-sm hover:shadow-xl hover:border-slate-400/40 transition-all duration-300 group flex flex-col justify-between">
+            <div class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-white/10 p-3 sm:p-5 shadow-sm hover:shadow-xl hover:border-slate-400/40 transition-all duration-300 group flex flex-col justify-between">
                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-slate-500/10 dark:bg-slate-500/15 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500 pointer-events-none"></div>
                 <div class="relative z-10">
                     <div class="flex items-center justify-between">
-                        <div class="w-12 h-12 rounded-2xl bg-slate-500/10 text-slate-600 dark:text-slate-400 border border-slate-500/20 flex items-center justify-center shrink-0">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-slate-500/10 text-slate-600 dark:text-slate-400 border border-slate-500/20 flex items-center justify-center shrink-0">
+                            <svg class="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
                         <a href="{{ route('satker.hutang.index') }}"
-                            class="relative z-20 cursor-pointer inline-flex items-center gap-1 text-[11px] font-bold text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 bg-slate-500/10 hover:bg-slate-500/20 px-2.5 py-1 rounded-lg transition-colors uppercase tracking-wider">
+                            class="relative z-20 cursor-pointer inline-flex items-center gap-1 text-[9px] sm:text-[11px] font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white bg-slate-500/10 hover:bg-slate-500/20 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg transition-colors uppercase tracking-wider">
                             Kelola
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                            <svg class="w-2.5 h-2.5 sm:w-3 sm:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
                         </a>
                     </div>
-                    <div class="mt-4">
-                        <span class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">Total Hutang (Bon BBM)</span>
-                        <div class="mt-1 flex items-baseline gap-2">
-                            <span class="text-3xl sm:text-4xl font-black {{ $totalHutang > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-slate-800 dark:text-white' }} tabular-nums">
+                    <div class="mt-2.5 sm:mt-4">
+                        <span class="text-[9px] sm:text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 block truncate">Total Hutang</span>
+                        <div class="mt-0.5 sm:mt-1 flex items-baseline gap-1 sm:gap-2">
+                            <span class="text-xl sm:text-4xl font-black {{ $totalHutang > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-slate-900 dark:text-white' }} tabular-nums">
                                 {{ rtrim(rtrim(number_format($totalHutang, 2, ',', '.'), '0'), ',') }}
                             </span>
-                            <span class="text-xs font-bold text-slate-400">Liter</span>
+                            <span class="text-[10px] sm:text-xs font-bold text-slate-400">Liter</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="mt-5 pt-3.5 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs">
-                    <span class="text-slate-500 dark:text-slate-400">Status Bon</span>
+                <div class="mt-3 sm:mt-5 pt-2 sm:pt-3.5 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-[10px] sm:text-xs">
+                    <span class="text-slate-500 dark:text-slate-400 hidden sm:inline">Status</span>
                     @if($totalHutang > 0)
-                        <span class="inline-flex items-center gap-1 font-bold text-rose-600 dark:text-rose-400">
-                            <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span> Ada Tunggakan Bon
+                        <span class="inline-flex items-center gap-1 font-bold text-rose-600 dark:text-rose-400 text-[9px] sm:text-xs">
+                            <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span> Ada Bon
                         </span>
                     @else
-                        <span class="inline-flex items-center gap-1 font-bold text-emerald-600 dark:text-emerald-400">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Nihil (Tidak Ada Bon)
+                        <span class="inline-flex items-center gap-1 font-bold text-emerald-600 dark:text-emerald-400 text-[9px] sm:text-xs">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Nihil
                         </span>
                     @endif
                 </div>
@@ -207,7 +213,7 @@
                     <div class="flex items-center gap-2.5">
                         <div class="w-2.5 h-6 bg-emerald-500 rounded-full"></div>
                         <div>
-                            <h3 class="text-base font-black text-slate-800 dark:text-white">Diagram Batang: Konsumsi Harian BBM Armada Satker</h3>
+                            <h3 class="text-base font-black text-white">Diagram Batang: Konsumsi Harian BBM Armada Satker</h3>
                             <p class="text-xs text-slate-400">Volume pengisian bahan bakar minyak harian armada (7 hari terakhir)</p>
                         </div>
                     </div>
@@ -227,7 +233,7 @@
                         <div class="flex items-center gap-2.5">
                             <div class="w-2.5 h-6 bg-blue-500 rounded-full"></div>
                             <div>
-                                <h3 class="text-base font-black text-slate-800 dark:text-white">Diagram Lingkar: Saldo BBM</h3>
+                                <h3 class="text-base font-black text-white">Diagram Lingkar: Saldo BBM</h3>
                                 <p class="text-xs text-slate-400">Proporsi Pertamax vs Pertamina Dex</p>
                             </div>
                         </div>
@@ -267,7 +273,7 @@
                         <div class="flex items-center gap-2.5">
                             <div class="w-2.5 h-6 bg-purple-500 rounded-full"></div>
                             <div>
-                                <h3 class="text-base font-black text-slate-800 dark:text-white">Diagram Lingkar: Tipe Roda</h3>
+                                <h3 class="text-base font-black text-white">Diagram Lingkar: Tipe Roda</h3>
                                 <p class="text-xs text-slate-400">Komposisi armada kendaraan</p>
                             </div>
                         </div>

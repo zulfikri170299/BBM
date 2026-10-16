@@ -9,7 +9,7 @@
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-xl sm:text-2xl font-bold text-slate-800 dark:text-white tracking-tight">
+                    <h1 class="text-xl sm:text-2xl font-bold text-white tracking-tight">
                         Chat & Konsultasi Internal
                     </h1>
                     <p class="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400 mt-0.5">
@@ -199,7 +199,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                     </div>
-                    <h4 class="text-sm font-bold text-slate-800 dark:text-white">Kontak tidak ditemukan</h4>
+                    <h4 class="text-sm font-bold text-white">Kontak tidak ditemukan</h4>
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm">
                         Tidak ada rekan kerja yang cocok dengan kata kunci atau filter yang Anda pilih.
                     </p>

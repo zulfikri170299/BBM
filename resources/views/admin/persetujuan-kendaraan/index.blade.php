@@ -66,24 +66,24 @@
             <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-3">
                 <div class="flex items-center gap-1.5 p-1 bg-slate-100 dark:bg-slate-800/60 rounded-xl">
                     <a href="{{ route('admin.persetujuan-kendaraan.index', array_merge(request()->except(['page']), ['status' => 'pending'])) }}"
-                        class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 {{ $status === 'pending' ? 'bg-white dark:bg-slate-900 text-amber-600 dark:text-amber-400 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">
+                        class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 {{ $status === 'pending' ? 'bg-white dark:bg-slate-900 text-amber-600 dark:text-amber-400 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-white dark:hover:text-white' }}">
                         <span>Menunggu Persetujuan</span>
                         @if($counts['pending'] > 0)
                             <span class="px-1.5 py-0.2 bg-amber-500 text-white text-[10px] rounded-full font-black">{{ $counts['pending'] }}</span>
                         @endif
                     </a>
                     <a href="{{ route('admin.persetujuan-kendaraan.index', array_merge(request()->except(['page']), ['status' => 'disetujui'])) }}"
-                        class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 {{ $status === 'disetujui' ? 'bg-white dark:bg-slate-900 text-emerald-600 dark:text-emerald-400 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">
+                        class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 {{ $status === 'disetujui' ? 'bg-white dark:bg-slate-900 text-emerald-600 dark:text-emerald-400 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-white dark:hover:text-white' }}">
                         <span>Disetujui</span>
                         <span class="text-[10px] opacity-75">({{ $counts['disetujui'] }})</span>
                     </a>
                     <a href="{{ route('admin.persetujuan-kendaraan.index', array_merge(request()->except(['page']), ['status' => 'ditolak'])) }}"
-                        class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 {{ $status === 'ditolak' ? 'bg-white dark:bg-slate-900 text-rose-600 dark:text-rose-400 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">
+                        class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 {{ $status === 'ditolak' ? 'bg-white dark:bg-slate-900 text-rose-600 dark:text-rose-400 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-white dark:hover:text-white' }}">
                         <span>Ditolak</span>
                         <span class="text-[10px] opacity-75">({{ $counts['ditolak'] }})</span>
                     </a>
                     <a href="{{ route('admin.persetujuan-kendaraan.index', array_merge(request()->except(['page']), ['status' => 'all'])) }}"
-                        class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all {{ $status === 'all' ? 'bg-white dark:bg-slate-900 text-brand-primary dark:text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">
+                        class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all {{ $status === 'all' ? 'bg-white dark:bg-slate-900 text-brand-primary dark:text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-white dark:hover:text-white' }}">
                         Semua Data
                     </a>
                 </div>

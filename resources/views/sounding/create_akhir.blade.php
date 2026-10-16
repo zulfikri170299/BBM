@@ -107,7 +107,7 @@
                 docSection.style.opacity = '1';
                 docSection.style.pointerEvents = 'auto';
                 submitBtn.disabled = false;
-                submitBtn.className = "px-8 py-3 bg-rose-600 hover:bg-rose-500 text-slate-900 dark:text-white font-bold rounded-xl transition-colors shadow-lg shadow-rose-500/30";
+                submitBtn.className = "px-8 py-3 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl transition-colors shadow-lg shadow-rose-500/30";
             } else {
                 calcSection.style.opacity = '0.5';
                 calcSection.style.pointerEvents = 'none';
