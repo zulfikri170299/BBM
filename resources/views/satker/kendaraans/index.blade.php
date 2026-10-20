@@ -412,34 +412,6 @@
                                 </td>
                                 <td class="py-3.5 px-4 text-center whitespace-nowrap">
                                     <div class="inline-flex items-center justify-center gap-1">
-                                        <button type="button"
-                                            @click="$dispatch('open-detail-kendaraan', {
-                                                id: {{ $kendaraan->id }},
-                                                nopol: '{{ addslashes($kendaraan->no_polisi) }}',
-                                                jenis: '{{ addslashes($kendaraan->jenis_kendaraan) }}',
-                                                satker: '{{ addslashes($kendaraan->satker->nama_satker ?? Auth::user()->satker->nama_satker ?? 'Satker') }}',
-                                                roda: '{{ $kendaraan->roda ?: '-' }}',
-                                                bbm: '{{ addslashes($kendaraan->jenis_bbm) }}',
-                                                saldo: '{{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }}',
-                                                raw_saldo: {{ $kendaraan->saldo }},
-                                                pin: '{{ $kendaraan->pin }}',
-                                                has_unpaid: {{ $kendaraan->hasUnpaidBon() ? 'true' : 'false' }},
-                                                unpaid_bon: '{{ rtrim(rtrim(number_format($kendaraan->totalUnpaidBon(), 2, ',', '.'), '0'), ',') }}',
-                                                status_approval: '{{ $kendaraan->status_approval }}',
-                                                alasan_penolakan: '{{ addslashes($kendaraan->alasan_penolakan ?? '') }}',
-                                                print_url: '{{ route('satker.kendaraans.print', $kendaraan) }}',
-                                                edit_url: '{{ route('satker.kendaraans.edit', $kendaraan) }}',
-                                                reset_pin_url: '{{ route('satker.kendaraans.reset-pin', $kendaraan) }}',
-                                                can_edit: {{ (\App\Models\Setting::where('key', 'satker_can_edit_kendaraan')->value('value') ?? 1) ? 'true' : 'false' }}
-                                            })"
-                                            class="p-2 text-slate-500 dark:text-slate-400 hover:text-brand-primary dark:hover:text-white hover:bg-brand-primary/10 dark:hover:bg-white/10 rounded-xl transition-all"
-                                            title="Detail Kendaraan">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                            </svg>
-                                        </button>
-
                                         <a href="{{ route('satker.kendaraans.print', $kendaraan) }}"
                                             class="p-2 text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-500/10 rounded-xl transition-all"
                                             title="Print Barcode">

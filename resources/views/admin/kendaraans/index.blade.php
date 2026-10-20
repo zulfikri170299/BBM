@@ -10,12 +10,12 @@
                 <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white">Data Kendaraan</h1>
                 <p class="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400">Semua kendaraan dari seluruh Satuan Kerja.</p>
             </div>
-            <div class="flex items-center gap-2 sm:gap-3 overflow-x-auto max-w-full pb-1 sm:pb-0 shrink-0">
+            <div class="flex items-center gap-1 sm:gap-2 shrink-0">
                 @if(auth()->user()->role === 'super_admin')
                     <button @click="$dispatch('open-import-kendaraan')"
-                        class="inline-flex items-center justify-center w-10 h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-violet-600 dark:text-violet-400 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
+                        class="inline-flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-violet-600 dark:text-violet-400 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative shrink-0"
                         title="Import Data Kendaraan">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                             </path>
@@ -25,9 +25,9 @@
                             Data Kendaraan</span>
                     </button>
                     <button @click="$dispatch('open-import')"
-                        class="inline-flex items-center justify-center w-10 h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-blue-600 dark:text-blue-400 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
+                        class="inline-flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-blue-600 dark:text-blue-400 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative shrink-0"
                         title="Import Top Up">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10">
                             </path>
@@ -37,9 +37,9 @@
                             Top Up</span>
                     </button>
                     <button @click="$dispatch('open-topup-select')"
-                        class="inline-flex items-center justify-center w-10 h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-emerald-600 dark:text-emerald-400 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
+                        class="inline-flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-emerald-600 dark:text-emerald-400 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative shrink-0"
                         title="Top Up Saldo">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a1 1 0 11-2 0 1 1 0 012 0z">
                             </path>
@@ -51,9 +51,9 @@
                 @endif
                 <a href="{{ route('admin.kendaraans.export', ['satker_id' => request('satker_id')]) }}" target="_blank"
                     rel="nofollow"
-                    class="inline-flex items-center justify-center w-10 h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-amber-600 dark:text-amber-400 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
+                    class="inline-flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-amber-600 dark:text-amber-400 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative shrink-0"
                     title="Export Excel">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                     </svg>
@@ -62,9 +62,9 @@
                         Excel</span>
                 </a>
                 <button @click="$dispatch('open-monthly-report')"
-                    class="inline-flex items-center justify-center w-10 h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-rose-600 dark:text-rose-400 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
+                    class="inline-flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-rose-600 dark:text-rose-400 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative shrink-0"
                     title="Laporan Bulanan">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                         </path>
@@ -75,9 +75,9 @@
                 </button>
                 @if(auth()->user()->role !== 'kasubbag')
                     <a href="{{ route('admin.kendaraans.create') }}"
-                        class="inline-flex items-center justify-center w-10 h-10 bg-brand-primary hover:bg-brand-primary/90 text-white rounded-xl shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative"
+                        class="inline-flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-brand-primary hover:bg-brand-primary/90 text-white rounded-xl shadow-sm transition-all duration-200 hover:-translate-y-0.5 group relative shrink-0"
                         title="Tambah Kendaraan">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                         </svg>
                         <span
@@ -86,50 +86,25 @@
                     </a>
                 @endif
 
-                <!-- Filter Satker (Icon-only) -->
-                <div x-data="{ open: false }" class="relative">
-                    <button @click="open = !open"
-                        class="inline-flex items-center justify-center w-10 h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 shadow-sm transition-all duration-200 group relative"
-                        :class="{ 'border-brand-primary text-brand-primary ring-2 ring-brand-primary/20': open || '{{ request('satker_id') }}' != '' }"
-                        title="Filter Satker">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
-                            </path>
-                        </svg>
+                <!-- Filter Satker Button (Membuka Modal Filter) -->
+                <button type="button" @click="$dispatch('open-filter-satker')"
+                    class="inline-flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 shadow-sm transition-all duration-200 group relative shrink-0 {{ request('satker_id') ? '!border-brand-primary !text-brand-primary ring-2 ring-brand-primary/20 bg-brand-primary/5' : '' }}"
+                    title="Filter Satker">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                        </path>
+                    </svg>
 
-                        @if(request('satker_id'))
-                            <span class="absolute top-2 right-2 w-2 h-2 bg-brand-primary rounded-full ring-2 ring-white dark:ring-slate-900"></span>
-                        @endif
+                    @if(request('satker_id'))
+                        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-brand-primary rounded-full ring-2 ring-white dark:ring-slate-900"></span>
+                    @endif
 
-                        <span
-                            class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-[11px] font-semibold rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-20">
-                            Filter Satker {{ request('satker_id') ? '(Aktif)' : '' }}
-                        </span>
-                    </button>
-
-                    <!-- Dropdown Content -->
-                    <div x-show="open" @click.away="open = false" x-cloak
-                        x-transition:enter="transition ease-out duration-200"
-                        x-transition:enter-start="opacity-0 scale-95 translate-y-2"
-                        x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                        class="absolute right-0 mt-3 w-72 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl shadow-xl border border-slate-200 dark:border-white/5 p-4 z-50">
-                        <div class="mb-3">
-                            <h4 class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">Pilih Satuan Kerja</h4>
-                        </div>
-                        <form action="{{ route('admin.kendaraans.index') }}" method="GET">
-                            <select name="satker_id" id="filter_satker_id" onchange="this.form.submit()"
-                                class="tom-select w-full">
-                                <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua Satker</option>
-                                @foreach($satkers as $satker)
-                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
-                                        {{ $satker->nama_satker }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </form>
-                    </div>
-                </div>
+                    <span
+                        class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-[11px] font-semibold rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-20">
+                        Filter Satker {{ request('satker_id') ? '(Aktif)' : '' }}
+                    </span>
+                </button>
             </div>
         </div>
 
@@ -138,10 +113,10 @@
         <!-- Table Card -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
             <!-- Table Header Info & Bulk Actions -->
-            <div class="px-4 sm:px-6 py-4 border-b border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div class="flex items-center gap-3">
-                    <div class="p-2.5 bg-brand-primary/10 text-brand-primary dark:bg-white/10 dark:text-white rounded-xl">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="px-3.5 sm:px-6 py-3 sm:py-4 border-b border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+                <div class="flex items-center gap-2.5 sm:gap-3">
+                    <div class="p-2 sm:p-2.5 bg-brand-primary/10 text-brand-primary dark:bg-white/10 dark:text-white rounded-xl shrink-0">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -149,9 +124,14 @@
                             </path>
                         </svg>
                     </div>
-                    <div>
-                        <h2 class="text-base sm:text-lg font-black text-slate-800 dark:text-white">Daftar Kendaraan</h2>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ number_format($kendaraans->total()) }} kendaraan dari seluruh satker</p>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2">
+                            <h2 class="text-sm sm:text-lg font-black text-slate-800 dark:text-white leading-tight">Daftar Kendaraan</h2>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-brand-primary/10 text-brand-primary dark:bg-white/10 dark:text-white shrink-0">
+                                {{ number_format($kendaraans->total()) }}
+                            </span>
+                        </div>
+                        <p class="hidden sm:block text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ number_format($kendaraans->total()) }} kendaraan dari seluruh satker</p>
                     </div>
                 </div>
 
@@ -182,17 +162,13 @@
             @endif
 
             <!-- Filter & Controls Toolbar -->
-            <div class="p-3.5 sm:p-4 bg-slate-50/50 dark:bg-slate-800/30 border-b border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-                <form action="{{ route('admin.kendaraans.index') }}" method="GET" class="flex flex-wrap items-center gap-2.5 flex-1">
+            <div class="p-2.5 sm:p-4 bg-slate-50/50 dark:bg-slate-800/30 border-b border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-3">
+                <form action="{{ route('admin.kendaraans.index') }}" method="GET" class="flex items-center gap-2 flex-1 w-full">
                     @if(request('satker_id'))
                         <input type="hidden" name="satker_id" value="{{ request('satker_id') }}">
                     @endif
 
-                    <div class="flex items-center gap-2 shrink-0">
-                        <x-per-page :current="request('per_page', 15)" />
-                    </div>
-
-                    <div class="relative flex-1 min-w-[180px] w-full sm:w-auto max-w-sm">
+                    <div class="relative flex-1 min-w-0">
                         <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -209,17 +185,21 @@
                         @endif
                     </div>
 
+                    <div class="shrink-0">
+                        <x-per-page :current="request('per_page', 15)" />
+                    </div>
+
                     @if(request('search') || request('satker_id'))
                         <a href="{{ route('admin.kendaraans.index') }}"
-                            class="py-2 px-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-semibold rounded-xl transition flex items-center gap-1.5 shrink-0"
+                            class="py-2 px-2.5 sm:px-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-semibold rounded-xl transition flex items-center gap-1 shrink-0"
                             title="Reset Semua Filter">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                            <span>Reset</span>
+                            <span class="hidden sm:inline">Reset</span>
                         </a>
                     @endif
                 </form>
 
-                <div class="text-[11px] font-bold text-slate-500 dark:text-slate-400 self-end sm:self-auto shrink-0">
+                <div class="hidden sm:block text-[11px] font-bold text-slate-500 dark:text-slate-400 self-end sm:self-auto shrink-0">
                     Menampilkan <span class="text-slate-800 dark:text-white font-extrabold">{{ $kendaraans->firstItem() ?? 0 }}-{{ $kendaraans->lastItem() ?? 0 }}</span> dari <span class="text-slate-800 dark:text-white font-extrabold">{{ number_format($kendaraans->total()) }}</span> data
                 </div>
             </div>
@@ -347,34 +327,6 @@
                                 </td>
                                 <td class="py-3.5 px-4 text-center whitespace-nowrap">
                                     <div class="inline-flex items-center justify-center gap-1">
-                                        <button type="button"
-                                            @click="$dispatch('open-detail-kendaraan', {
-                                                id: {{ $kendaraan->id }},
-                                                nopol: '{{ addslashes($kendaraan->no_polisi) }}',
-                                                jenis: '{{ addslashes($kendaraan->jenis_kendaraan) }}',
-                                                satker: '{{ addslashes($kendaraan->satker->nama_satker ?? '-') }}',
-                                                roda: '{{ $kendaraan->roda ?: '-' }}',
-                                                bbm: '{{ addslashes($kendaraan->jenis_bbm) }}',
-                                                saldo: '{{ rtrim(rtrim(number_format($kendaraan->saldo, 2, ',', '.'), '0'), ',') }}',
-                                                raw_saldo: {{ $kendaraan->saldo }},
-                                                pin: '{{ $kendaraan->pin }}',
-                                                has_unpaid: {{ $kendaraan->hasUnpaidBon() ? 'true' : 'false' }},
-                                                unpaid_bon: '{{ rtrim(rtrim(number_format($kendaraan->totalUnpaidBon(), 2, ',', '.'), '0'), ',') }}',
-                                                status_approval: '{{ $kendaraan->status_approval }}',
-                                                alasan_penolakan: '{{ addslashes($kendaraan->alasan_penolakan ?? '') }}',
-                                                print_url: '{{ route('admin.kendaraans.print', $kendaraan) }}',
-                                                edit_url: '{{ route('admin.kendaraans.edit', $kendaraan) }}',
-                                                delete_url: '{{ route('admin.kendaraans.destroy', $kendaraan) }}',
-                                                reset_pin_url: '{{ route('admin.kendaraans.reset-pin', $kendaraan) }}'
-                                            })"
-                                            class="p-2 text-slate-500 dark:text-slate-400 hover:text-brand-primary dark:hover:text-white hover:bg-brand-primary/10 dark:hover:bg-white/10 rounded-xl transition-all"
-                                            title="Detail Kendaraan">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                            </svg>
-                                        </button>
-
                                         <a href="{{ route('admin.kendaraans.print', $kendaraan) }}"
                                             class="p-2 text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-500/10 rounded-xl transition-all"
                                             title="Print Kartu Kendaraan">
@@ -2538,5 +2490,169 @@
             </div>
         </template>
     </div>
-</div>
+
+    <!-- Modal Filter Satker -->
+    <div x-cloak
+        x-data="{
+            showFilterSatker: false,
+            searchQuery: '',
+            selectedSatkerId: '{{ request('satker_id', '') }}',
+            satkers: [
+                @foreach($satkers as $satker)
+                    { id: '{{ $satker->id }}', nama: '{{ addslashes($satker->nama_satker) }}' },
+                @endforeach
+            ],
+            get filteredSatkers() {
+                if (!this.searchQuery.trim()) return this.satkers;
+                return this.satkers.filter(s => s.nama.toLowerCase().includes(this.searchQuery.toLowerCase().trim()));
+            },
+            selectSatker(id) {
+                this.selectedSatkerId = id;
+            }
+        }"
+        @open-filter-satker.window="showFilterSatker = true; searchQuery = ''"
+        @keydown.escape.window="showFilterSatker = false"
+        class="relative z-[100]">
+
+        <template x-if="showFilterSatker">
+            <div class="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-4">
+                <!-- Backdrop -->
+                <div x-transition:enter="ease-out duration-300"
+                    x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100"
+                    x-transition:leave="ease-in duration-200"
+                    x-transition:leave-start="opacity-100"
+                    x-transition:leave-end="opacity-0"
+                    @click="showFilterSatker = false"
+                    class="fixed inset-0 bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm transition-opacity"></div>
+
+                <!-- Modal Dialog -->
+                <div x-transition:enter="ease-out duration-300"
+                    x-transition:enter-start="opacity-0 scale-95"
+                    x-transition:enter-end="opacity-100 scale-100"
+                    x-transition:leave="ease-in duration-200"
+                    x-transition:leave-start="opacity-100 scale-100"
+                    x-transition:leave-end="opacity-0 scale-95"
+                    class="relative bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 dark:border-white/10 w-full max-w-md max-h-[88vh] flex flex-col overflow-hidden z-10 transition-all">
+
+                    <!-- Header -->
+                    <div class="px-4 sm:px-5 py-3.5 sm:py-4 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/40 shrink-0">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 sm:p-2.5 bg-brand-primary/10 text-brand-primary rounded-xl shrink-0">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                                    </path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-sm sm:text-base text-slate-800 dark:text-white leading-tight">Filter Satuan Kerja</h3>
+                                <p class="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5">Pilih Satker untuk memfilter kendaraan</p>
+                            </div>
+                        </div>
+                        <button type="button" @click="showFilterSatker = false"
+                            class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Search Box -->
+                    <div class="p-3 sm:p-4 border-b border-slate-100 dark:border-white/5 bg-slate-50/30 dark:bg-slate-800/20 shrink-0">
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </span>
+                            <input type="text"
+                                x-model="searchQuery"
+                                placeholder="Ketik nama Satker..."
+                                class="w-full pl-9 pr-8 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl text-xs sm:text-sm text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-primary/30 focus:border-brand-primary transition">
+                            <button type="button" x-show="searchQuery" @click="searchQuery = ''" class="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-slate-600">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Form Body -->
+                    <form action="{{ route('admin.kendaraans.index') }}" method="GET" class="flex-1 flex flex-col overflow-hidden min-h-0">
+                        @if(request('search'))
+                            <input type="hidden" name="search" value="{{ request('search') }}">
+                        @endif
+                        @if(request('per_page'))
+                            <input type="hidden" name="per_page" value="{{ request('per_page') }}">
+                        @endif
+                        <input type="hidden" name="satker_id" :value="selectedSatkerId">
+
+                        <!-- Scrollable Satker List -->
+                        <div class="flex-1 overflow-y-auto p-3 sm:p-4 space-y-1.5 min-h-[140px] max-h-[340px]">
+                            <!-- Opsi Semua Satker -->
+                            <button type="button"
+                                @click="selectSatker('')"
+                                class="w-full flex items-center justify-between p-2.5 sm:p-3 rounded-xl border text-left transition-all"
+                                :class="selectedSatkerId === '' ? 'border-brand-primary bg-brand-primary/10 dark:bg-brand-primary/20 text-brand-primary font-bold' : 'border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium'">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-4 h-4 rounded-full border flex items-center justify-center shrink-0"
+                                        :class="selectedSatkerId === '' ? 'border-brand-primary bg-brand-primary' : 'border-slate-300 dark:border-slate-600'">
+                                        <div x-show="selectedSatkerId === ''" class="w-1.5 h-1.5 rounded-full bg-white"></div>
+                                    </div>
+                                    <span class="text-xs sm:text-sm">Semua Satker</span>
+                                </div>
+                                <span class="text-[10px] sm:text-[11px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 font-semibold shrink-0">{{ count($satkers) }} satker</span>
+                            </button>
+
+                            <!-- List per Satker -->
+                            <template x-for="s in filteredSatkers" :key="s.id">
+                                <button type="button"
+                                    @click="selectSatker(s.id)"
+                                    class="w-full flex items-center justify-between p-2.5 sm:p-3 rounded-xl border text-left transition-all"
+                                    :class="selectedSatkerId == s.id ? 'border-brand-primary bg-brand-primary/10 dark:bg-brand-primary/20 text-brand-primary font-bold' : 'border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium'">
+                                    <div class="flex items-center gap-2.5 min-w-0">
+                                        <div class="w-4 h-4 rounded-full border flex items-center justify-center shrink-0"
+                                            :class="selectedSatkerId == s.id ? 'border-brand-primary bg-brand-primary' : 'border-slate-300 dark:border-slate-600'">
+                                            <div x-show="selectedSatkerId == s.id" class="w-1.5 h-1.5 rounded-full bg-white"></div>
+                                        </div>
+                                        <span class="text-xs sm:text-sm truncate" x-text="s.nama"></span>
+                                    </div>
+                                    <svg x-show="selectedSatkerId == s.id" class="w-4 h-4 text-brand-primary shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </button>
+                            </template>
+
+                            <div x-show="filteredSatkers.length === 0" class="py-6 text-center text-slate-400">
+                                <p class="text-xs font-semibold">Satker tidak ditemukan</p>
+                            </div>
+                        </div>
+
+                        <!-- Footer Actions -->
+                        <div class="p-3 sm:p-4 border-t border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/40 flex items-center justify-between gap-2.5 shrink-0">
+                            @if(request('satker_id'))
+                                <a href="{{ route('admin.kendaraans.index', array_filter(['search' => request('search'), 'per_page' => request('per_page')])) }}"
+                                    class="px-3 py-2 sm:py-2.5 rounded-xl border border-rose-200 dark:border-rose-900/50 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-xs font-bold transition flex items-center gap-1.5">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                    <span>Reset Filter</span>
+                                </a>
+                            @else
+                                <button type="button" @click="showFilterSatker = false"
+                                    class="px-3.5 py-2 sm:py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold transition">
+                                    Batal
+                                </button>
+                            @endif
+
+                            <button type="submit"
+                                class="flex-1 sm:flex-none px-4 sm:px-5 py-2 sm:py-2.5 bg-brand-primary hover:bg-brand-primary/90 text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-brand-primary/25 transition flex items-center justify-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                <span>Terapkan Filter</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </template>
+    </div>
 </x-app-layout>
