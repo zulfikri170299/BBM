@@ -179,18 +179,49 @@ class BackupDatabaseController extends Controller
 
         $connection = config('database.default');
 
+        // Simpan sesi dan user login saat ini sebelum restore agar tidak hilang saat SQLite di-overwrite
+        $currentSessionId = session()->getId();
+        $currentSessionData = null;
+        try {
+            $currentSessionData = DB::table('sessions')->where('id', $currentSessionId)->first();
+        } catch (\Throwable $e) {}
+        $currentUserId = auth()->id();
+
         try {
             if ($connection === 'sqlite' && in_array($extension, ['sqlite', 'db'])) {
                 $dbPath = config('database.connections.sqlite.database');
                 File::copy($file->getRealPath(), $dbPath);
-                return back()->with('success', 'Database SQLite berhasil di-restore dan dipulihkan sepenuhnya!');
+
+                // Pulihkan session user yang sedang aktif ke database yang baru
+                if ($currentSessionData) {
+                    try {
+                        DB::table('sessions')->updateOrInsert(
+                            ['id' => $currentSessionId],
+                            (array) $currentSessionData
+                        );
+                    } catch (\Throwable $e) {}
+                }
+
+                if ($currentUserId) {
+                    try {
+                        auth()->loginUsingId($currentUserId);
+                    } catch (\Throwable $e) {}
+                }
+
+                session()->flash('success', 'Database SQLite berhasil di-restore dan seluruh data telah dipulihkan sepenuhnya!');
+                session()->save();
+
+                return back();
             }
 
             $sql = file_get_contents($file->getRealPath());
             DB::unprepared($sql);
             
-            return back()->with('success', 'Database berhasil di-restore dan dipulihkan sepenuhnya!');
-        } catch (\Exception $e) {
+            session()->flash('success', 'Database berhasil di-restore dan seluruh data telah dipulihkan sepenuhnya!');
+            session()->save();
+
+            return back();
+        } catch (\Throwable $e) {
             return back()->withErrors(['message' => 'Gagal memulihkan database: ' . $e->getMessage()]);
         }
     }
@@ -243,29 +274,42 @@ class BackupDatabaseController extends Controller
             Setting::updateOrCreate(['key' => 'backup_gdrive_service_account_json'], ['value' => $jsonContent]);
         }
 
-        return back()->with('success', 'Pengaturan otomatisasi Backup Google Drive (Pukul 23:00) berhasil disimpan!');
+        session()->flash('success', 'Pengaturan otomatisasi Backup Google Drive berhasil disimpan!');
+        session()->save();
+
+        return back();
     }
 
     public function testGoogleDriveBackup()
     {
+        @set_time_limit(300);
+        @ini_set('max_execution_time', '300');
+        @ini_set('memory_limit', '512M');
+
         try {
             Artisan::call('backup:database-to-drive', ['--force' => true]);
             $lastStatus = Setting::where('key', 'backup_gdrive_last_status')->value('value') ?? '';
 
             if ($lastStatus === 'success') {
-                return back()->with('success', 'Tes Berhasil! Database telah diekspor dan sukses terunggah ke Google Drive Anda.');
+                session()->flash('success', 'Tes Berhasil! Database telah diekspor dan sukses terunggah ke Google Drive Anda.');
+                session()->save();
+                return back();
             }
 
             if (str_starts_with($lastStatus, 'warning:')) {
-                return back()->with('warning', substr($lastStatus, 8));
+                session()->flash('warning', substr($lastStatus, 8));
+                session()->save();
+                return back();
             }
 
             if (str_starts_with($lastStatus, 'error:')) {
                 return back()->withErrors(['message' => 'Gagal upload: ' . substr($lastStatus, 6)]);
             }
 
-            return back()->with('success', 'Proses backup selesai.');
-        } catch (\Exception $e) {
+            session()->flash('success', 'Proses backup selesai.');
+            session()->save();
+            return back();
+        } catch (\Throwable $e) {
             return back()->withErrors(['message' => 'Terjadi kesalahan saat menguji backup: ' . $e->getMessage()]);
         }
     }

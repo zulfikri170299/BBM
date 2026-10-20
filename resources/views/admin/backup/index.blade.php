@@ -394,11 +394,23 @@
                             </h4>
                             <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Ingin mengetes koneksi tanpa menunggu jam {{ $gdriveTime }} {{ $gdriveTimezone }}? Klik tombol di samping untuk mengekspor database dan mengunggahnya sekarang juga.</p>
                         </div>
-                        <form action="{{ route('admin.backup.gdrive.test') }}" method="POST" class="shrink-0 w-full sm:w-auto">
+                        <form action="{{ route('admin.backup.gdrive.test') }}" method="POST" class="shrink-0 w-full sm:w-auto" x-data="{ loading: false }" @submit="loading = true">
                             @csrf
-                            <button type="submit" class="w-full sm:w-auto px-4 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-emerald-600/20 transition-all hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                                Tes Backup & Upload Sekarang
+                            <button type="submit" 
+                                :disabled="loading"
+                                class="w-full sm:w-auto px-4 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 disabled:opacity-75 disabled:cursor-not-allowed text-white rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-emerald-600/20 transition-all hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+                                <template x-if="!loading">
+                                    <span class="inline-flex items-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                        <span>Tes Backup & Upload Sekarang</span>
+                                    </span>
+                                </template>
+                                <template x-if="loading">
+                                    <span class="inline-flex items-center gap-2">
+                                        <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+                                        <span>Mengunggah ke Drive... Mohon tunggu</span>
+                                    </span>
+                                </template>
                             </button>
                         </form>
                     </div>

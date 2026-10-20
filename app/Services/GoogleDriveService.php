@@ -103,6 +103,9 @@ class GoogleDriveService
      */
     public static function uploadViaServiceAccount(string $filePath, string $fileName, string $folderId, array $credentials): array
     {
+        @set_time_limit(300);
+        @ini_set('max_execution_time', '300');
+
         if (!file_exists($filePath)) {
             throw new Exception("File backup lokal tidak ditemukan di: {$filePath}");
         }
@@ -137,7 +140,7 @@ class GoogleDriveService
             'Authorization' => 'Bearer ' . $accessToken,
             'Content-Type' => 'multipart/related; boundary=' . $boundary,
             'Content-Length' => strlen($multipartBody),
-        ])->timeout(120)->withBody($multipartBody, 'multipart/related; boundary=' . $boundary)->post($uploadUrl);
+        ])->timeout(180)->withBody($multipartBody, 'multipart/related; boundary=' . $boundary)->post($uploadUrl);
 
         if (!$response->successful()) {
             $errorData = $response->json('error') ?? [];
@@ -162,6 +165,9 @@ class GoogleDriveService
      */
     public static function uploadViaWebhook(string $filePath, string $fileName, string $folderId, string $webhookUrl): array
     {
+        @set_time_limit(300);
+        @ini_set('max_execution_time', '300');
+
         if (!file_exists($filePath)) {
             throw new Exception("File backup lokal tidak ditemukan: {$filePath}");
         }
@@ -169,17 +175,31 @@ class GoogleDriveService
         $fileContent = base64_encode(file_get_contents($filePath));
         $mimeType = str_ends_with($fileName, '.sqlite') ? 'application/x-sqlite3' : 'application/sql';
 
-        $response = Http::withOptions([
-            'allow_redirects' => true,
-        ])->timeout(120)->post($webhookUrl, [
-            'filename' => $fileName,
-            'folder_id' => $folderId,
-            'mimetype' => $mimeType,
-            'file_data' => $fileContent,
-        ]);
+        try {
+            // Gunakan allow_redirects false agar kita dapat menangani redirect 302 dari Google Apps Script secara presisi via GET
+            $response = Http::withOptions([
+                'allow_redirects' => false,
+                'connect_timeout' => 30,
+            ])->timeout(240)->post($webhookUrl, [
+                'filename' => $fileName,
+                'folder_id' => $folderId,
+                'mimetype' => $mimeType,
+                'file_data' => $fileContent,
+            ]);
+
+            // Jika Google Apps Script mengembalikan 301/302/303 redirect, ikuti URL redirect tersebut menggunakan method GET
+            if ($response->status() >= 300 && $response->status() < 400 && $response->header('Location')) {
+                $redirectUrl = $response->header('Location');
+                $response = Http::timeout(60)->get($redirectUrl);
+            }
+        } catch (\Illuminate\Http\Client\ConnectionException $e) {
+            throw new Exception('Koneksi timeout saat mengunggah ke Google Drive. Proses memakan waktu lebih dari batas toleransi atau koneksi internet terputus. Silakan coba lagi.');
+        } catch (\Throwable $e) {
+            throw new Exception('Gagal menghubungi Web App Google Drive: ' . $e->getMessage());
+        }
 
         if (!$response->successful()) {
-            throw new Exception('Gagal menghubungi Web App Google Drive: ' . $response->body());
+            throw new Exception('Gagal menghubungi Web App Google Drive (Status ' . $response->status() . '): ' . substr($response->body(), 0, 200));
         }
 
         $res = $response->json();

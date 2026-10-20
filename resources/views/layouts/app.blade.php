@@ -326,7 +326,11 @@
                     (function() {
                         let triggered = false;
                         function triggerFlashPopup() {
-                            if (triggered || typeof Swal === 'undefined') return;
+                            if (triggered) return;
+                            if (typeof Swal === 'undefined') {
+                                setTimeout(triggerFlashPopup, 60);
+                                return;
+                            }
                             triggered = true;
 
                             const isDark = document.documentElement.classList.contains('dark');
