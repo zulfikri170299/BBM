@@ -23,7 +23,11 @@ class AdminController extends Controller
             'rodaR2' => \App\Models\Kendaraan::where('roda', 'R2')->count(),
             'rodaR4' => \App\Models\Kendaraan::where('roda', 'R4')->count(),
             'rodaR6' => \App\Models\Kendaraan::where('roda', 'R6')->count(),
-            'rodaNon' => \App\Models\Kendaraan::where('roda', 'Non Kendaraan')->count(),
+            'rodaNon' => \App\Models\Kendaraan::where(function($q) {
+                $q->where('roda', 'Non Kendaraan')
+                  ->orWhereNull('roda')
+                  ->orWhereNotIn('roda', ['R2', 'R4', 'R6']);
+            })->count(),
         ];
 
         $recentTransactions = \App\Models\TransaksiBbm::with(['kendaraan', 'petugas'])

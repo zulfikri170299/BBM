@@ -40,7 +40,7 @@
                 </div>
 
                 <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-300 dark:border-white/10 shadow-sm overflow-hidden p-2">
-                    <nav class="space-y-1">
+                    <nav class="space-y-1" data-turbo="false">
                         <a href="#profile-info"
                             class="flex items-center gap-3 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:bg-slate-800/50 rounded-xl transition-colors">
                             <svg class="w-4 h-4 sm:w-5 sm:h-5 text-indigo-500" fill="none" stroke="currentColor"
@@ -111,7 +111,7 @@
                         </header>
 
                         <form method="post" action="{{ route('profile.photo.update') }}"
-                            class="mt-4 sm:mt-6 space-y-4 sm:space-y-6" enctype="multipart/form-data">
+                            class="mt-4 sm:mt-6 space-y-4 sm:space-y-6" enctype="multipart/form-data" data-turbo="false">
                             @csrf
 
                             <div class="flex items-center gap-4">

@@ -208,10 +208,10 @@
                 x-transition:leave-end="transform opacity-0 scale-95" 
                 class="absolute right-0 z-10 mt-2.5 w-48 origin-top-right rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 py-2 shadow-2xl ring-1 ring-black/5 dark:ring-white/5 focus:outline-none transition-colors duration-300" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1" style="display: none;">
                 
-                <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm leading-6 text-slate-700 dark:text-slate-300 hover:text-white dark:hover:text-white dark:text-white hover:bg-slate-50 dark:hover:bg-white/5 transition-colors" role="menuitem" tabindex="-1">Profil Anda</a>
+                <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm font-medium leading-6 text-slate-700 dark:text-slate-200 hover:text-brand-primary dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors" role="menuitem" tabindex="-1">Profil Anda</a>
                 
                 @if(auth()->user()->is_developer)
-                    <div class="h-px bg-slate-200 dark:bg-white/5 my-1 transition-colors"></div>
+                    <div class="h-px bg-slate-200 dark:bg-white/10 my-1 transition-colors"></div>
                     <form method="POST" action="{{ route('dev.lockdown.toggle') }}">
                         @csrf
                         <button type="submit"
@@ -221,10 +221,10 @@
                     </form>
                 @endif
                 
-                <div class="h-px bg-white/5 my-1"></div>
+                <div class="h-px bg-slate-100 dark:bg-white/10 my-1"></div>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="w-full text-left block px-4 py-2 text-sm leading-6 text-red-600 dark:text-red-400 hover:text-red-300 hover:bg-red-400/10" role="menuitem" tabindex="-1">Log out</button>
+                    <button type="submit" class="w-full text-left block px-4 py-2 text-sm font-medium leading-6 text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-colors" role="menuitem" tabindex="-1">Log out</button>
                 </form>
             </div>
         </div>

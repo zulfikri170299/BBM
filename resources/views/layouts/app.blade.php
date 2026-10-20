@@ -1567,7 +1567,24 @@
                 } catch (err) {}
             }, { passive: true, capture: true });
 
+            let loadingTimeout = null;
+            const isAnchorOnSamePage = (targetUrl) => {
+                if (!targetUrl) return true;
+                if (typeof targetUrl !== 'string') return false;
+                if (targetUrl.startsWith('#') || targetUrl.startsWith('javascript:')) return true;
+                try {
+                    const u = new URL(targetUrl, window.location.href);
+                    return u.origin === window.location.origin &&
+                           u.pathname === window.location.pathname &&
+                           u.search === window.location.search &&
+                           u.hash !== '';
+                } catch (e) {
+                    return false;
+                }
+            };
+
             const showLoading = () => {
+                if (loadingTimeout) clearTimeout(loadingTimeout);
                 const indicator = document.getElementById('turbo-loading-indicator');
                 if (indicator) {
                     indicator.classList.remove('opacity-0', 'pointer-events-none');
@@ -1583,9 +1600,18 @@
                     main.classList.remove('content-ready');
                     main.classList.add('content-loading');
                 }
+
+                // Failsafe auto-dismiss setelah 5 detik agar user tidak pernah terjebak jika terjadi kendala jaringan/hash
+                loadingTimeout = setTimeout(() => {
+                    hideLoading();
+                }, 5000);
             };
 
             const hideLoading = () => {
+                if (loadingTimeout) {
+                    clearTimeout(loadingTimeout);
+                    loadingTimeout = null;
+                }
                 const indicator = document.getElementById('turbo-loading-indicator');
                 if (indicator) {
                     indicator.classList.remove('opacity-100');
@@ -1607,19 +1633,54 @@
             window.showPageLoading = showLoading;
             window.hidePageLoading = hideLoading;
 
-            document.addEventListener('turbo:click', showLoading);
-            document.addEventListener('turbo:before-visit', showLoading);
+            // Klik pada overlay loading untuk menutup darurat jika stuck
+            const indicatorEl = document.getElementById('turbo-loading-indicator');
+            if (indicatorEl) {
+                indicatorEl.addEventListener('click', hideLoading);
+            }
+
+            // Turbo events (abaikan anchor link # di halaman yang sama)
+            document.addEventListener('turbo:click', function(e) {
+                const href = e.detail?.url || e.target?.getAttribute?.('href') || '';
+                if (isAnchorOnSamePage(href)) {
+                    hideLoading();
+                    return;
+                }
+                showLoading();
+            });
+
+            document.addEventListener('turbo:before-visit', function(e) {
+                const url = e.detail?.url || '';
+                if (isAnchorOnSamePage(url)) {
+                    hideLoading();
+                    return;
+                }
+                showLoading();
+            });
+
             document.addEventListener('turbo:request-start', showLoading);
             document.addEventListener('turbo:load', hideLoading);
             document.addEventListener('turbo:render', hideLoading);
             document.addEventListener('turbo:request-end', hideLoading);
 
-            // Tampilkan loading saat form submit (misal filter tanggal / pencarian)
-            document.addEventListener('submit', function (e) {
-                // Abaikan jika form memiliki attribute data-no-loading
-                if (e.target && !e.target.hasAttribute('data-no-loading')) {
-                    showLoading();
+            // Jika user klik link anchor (#) di halaman, segera sembunyikan loading
+            document.addEventListener('click', function(e) {
+                const link = e.target.closest('a[href]');
+                if (link && isAnchorOnSamePage(link.getAttribute('href') || link.href)) {
+                    hideLoading();
                 }
+            });
+
+            // Tampilkan loading saat form submit (hanya jika form valid secara HTML5 dan tidak dicegah)
+            document.addEventListener('submit', function (e) {
+                if (e.defaultPrevented) return;
+                const form = e.target;
+                if (!form || form.hasAttribute('data-no-loading')) return;
+                // Jangan tampilkan jika HTML5 form invalid (misal file belum dipilih pada input required)
+                if (typeof form.checkValidity === 'function' && !form.checkValidity()) {
+                    return;
+                }
+                showLoading();
             });
         }
 

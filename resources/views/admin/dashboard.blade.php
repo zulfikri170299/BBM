@@ -1044,6 +1044,11 @@
                 // 2. DIAGRAM LINGKAR (DONUT CHART): Komposisi Armada Kendaraan
                 var fleetEl = document.querySelector("#fleetDonutChart");
                 if (fleetEl && typeof ApexCharts !== 'undefined') {
+                    var r2 = {{ (int) $stats['rodaR2'] }};
+                    var r4 = {{ (int) $stats['rodaR4'] }};
+                    var r6 = {{ (int) $stats['rodaR6'] }};
+                    var rNon = {{ (int) $stats['rodaNon'] }};
+                    var hasArmada = (r2 + r4 + r6 + rNon) > 0;
                     var fleetOptions = {
                         chart: {
                             type: 'donut',
@@ -1051,14 +1056,9 @@
                             width: '100%',
                             fontFamily: 'Outfit, sans-serif',
                         },
-                        series: [
-                            {{ (int) $stats['rodaR2'] }},
-                            {{ (int) $stats['rodaR4'] }},
-                            {{ (int) $stats['rodaR6'] }},
-                            {{ (int) $stats['rodaNon'] }}
-                        ],
-                        labels: ['Roda 2 (R2)', 'Roda 4 (R4)', 'Roda 6 (R6)', 'Non Kendaraan'],
-                        colors: ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6'],
+                        series: hasArmada ? [r2, r4, r6, rNon] : [1],
+                        labels: hasArmada ? ['Roda 2 (R2)', 'Roda 4 (R4)', 'Roda 6 (R6)', 'Non Kendaraan'] : ['Belum Ada Armada'],
+                        colors: hasArmada ? ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6'] : ['#94a3b840'],
                         legend: {
                             position: 'bottom',
                             fontSize: '11px',

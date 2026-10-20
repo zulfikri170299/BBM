@@ -37,7 +37,11 @@ class DashboardController extends Controller
         $rodaR2 = (clone $qRoda)->where('roda', 'R2')->count();
         $rodaR4 = (clone $qRoda)->where('roda', 'R4')->count();
         $rodaR6 = (clone $qRoda)->where('roda', 'R6')->count();
-        $rodaNon = (clone $qRoda)->where('roda', 'Non Kendaraan')->count();
+        $rodaNon = (clone $qRoda)->where(function($q) {
+            $q->where('roda', 'Non Kendaraan')
+              ->orWhereNull('roda')
+              ->orWhereNotIn('roda', ['R2', 'R4', 'R6']);
+        })->count();
 
         $querySaldoK = Kendaraan::query();
         $queryTransfer = \App\Models\RiwayatTransferSaldoPersonel::query();

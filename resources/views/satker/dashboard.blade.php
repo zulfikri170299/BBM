@@ -557,7 +557,12 @@
             var satkerFleetEl = document.querySelector("#satkerFleetDonutChart");
             if (satkerFleetEl && typeof ApexCharts !== 'undefined') {
                 var isDark = document.documentElement.classList.contains('dark');
-                var hasArmada = {{ $totalKendaraan > 0 ? 'true' : 'false' }};
+                var r2 = {{ (int) $rodaR2 }};
+                var r4 = {{ (int) $rodaR4 }};
+                var r6 = {{ (int) $rodaR6 }};
+                var rNon = {{ (int) $rodaNon }};
+                var totalRoda = r2 + r4 + r6 + rNon;
+                var hasArmada = totalRoda > 0;
                 var satkerFleetOptions = {
                     chart: {
                         type: 'donut',
@@ -565,14 +570,9 @@
                         width: '100%',
                         fontFamily: 'Outfit, sans-serif',
                     },
-                    series: hasArmada ? [
-                        {{ (int) $rodaR2 }},
-                        {{ (int) $rodaR4 }},
-                        {{ (int) $rodaR6 }},
-                        {{ (int) $rodaNon }}
-                    ] : [1],
+                    series: hasArmada ? [r2, r4, r6, rNon] : [1],
                     labels: hasArmada ? ['Roda 2 (R2)', 'Roda 4 (R4)', 'Roda 6 (R6)', 'Non Kendaraan'] : ['Belum Ada Armada'],
-                    colors: hasArmada ? ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6'] : ['#94a3b840'],
+                    colors: hasArmada ? ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6'] : [isDark ? '#334155' : '#cbd5e1'],
                     legend: {
                         position: 'bottom',
                         fontSize: '11px',
