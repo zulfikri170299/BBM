@@ -192,7 +192,7 @@ class TransaksiController extends Controller
             'aktivitas' => "(Admin) Memproses pengisian BBM: {$request->liter} L untuk " . ($request->kendaraan_id ? "Kendaraan ({$target->no_polisi})" : "Personel ({$target->nama})")
         ]);
 
-        return redirect()->route('admin.transaksi.print', $transaksi);
+        return redirect()->route('admin.transaksi.print', $transaksi)->with('success', 'Transaksi pengisian BBM berhasil diproses!');
     }
 
     public function print(TransaksiBbm $transaksi)

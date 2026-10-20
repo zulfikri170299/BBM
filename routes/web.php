@@ -212,6 +212,9 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
     Route::get('/backup', [\App\Http\Controllers\Admin\BackupDatabaseController::class, 'index'])->name('backup.index')->middleware('role:super_admin');
     Route::post('/backup/export', [\App\Http\Controllers\Admin\BackupDatabaseController::class, 'export'])->name('backup.export')->middleware('role:super_admin');
     Route::post('/backup/import', [\App\Http\Controllers\Admin\BackupDatabaseController::class, 'import'])->name('backup.import')->middleware('role:super_admin');
+    Route::post('/backup/gdrive-settings', [\App\Http\Controllers\Admin\BackupDatabaseController::class, 'saveGoogleDriveSettings'])->name('backup.gdrive.settings')->middleware('role:super_admin');
+    Route::post('/backup/gdrive-test', [\App\Http\Controllers\Admin\BackupDatabaseController::class, 'testGoogleDriveBackup'])->name('backup.gdrive.test')->middleware('role:super_admin');
+    Route::get('/backup/download/{fileName}', [\App\Http\Controllers\Admin\BackupDatabaseController::class, 'downloadLocalBackup'])->name('backup.download')->middleware('role:super_admin');
 
     // Hapus Data Tahunan
     Route::get('/hapus-data-tahunan', [\App\Http\Controllers\Admin\HapusDataTahunanController::class, 'index'])->name('hapus-data-tahunan.index')->middleware('role:super_admin');

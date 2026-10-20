@@ -2445,14 +2445,23 @@
                                 </button>
 
                                 <!-- Reset PIN -->
-                                <form :action="detail.reset_pin_url" method="POST" class="w-full">
+                                <form id="form-reset-pin-mobile-detail" :action="detail.reset_pin_url" method="POST" class="w-full">
                                     @csrf
-                                    <button type="submit"
-                                        :data-confirm="'Reset PIN kendaraan ' + detail.nopol + '? PIN baru akan di-generate secara acak.'"
-                                        data-confirm-title="Reset PIN"
-                                        data-confirm-text="Ya, Reset PIN"
-                                        data-confirm-type="warning"
-                                        class="flex items-center gap-3 w-full p-3 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 font-bold text-xs transition text-left">
+                                    <button type="button"
+                                        @click="
+                                            const nopol = detail.nopol;
+                                            closeDetail();
+                                            window.confirmDialog({
+                                                title: 'Reset PIN Kendaraan?',
+                                                message: 'Reset PIN kendaraan ' + nopol + '? PIN baru akan di-generate secara acak.',
+                                                type: 'warning',
+                                                confirmText: 'Ya, Reset PIN',
+                                                cancelText: 'Batal'
+                                            }, () => {
+                                                document.getElementById('form-reset-pin-mobile-detail').submit();
+                                            });
+                                        "
+                                        class="flex items-center gap-3 w-full p-3 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 font-bold text-xs transition text-left cursor-pointer">
                                         <div class="p-1.5 bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded-lg">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
                                         </div>
@@ -2470,13 +2479,24 @@
                                 </a>
 
                                 <!-- Hapus Kendaraan -->
-                                <form :action="detail.delete_url" method="POST" class="w-full">
+                                <form id="form-delete-mobile-detail" :action="detail.delete_url" method="POST" class="w-full">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit"
-                                        data-confirm="Yakin ingin menghapus kendaraan ini?"
-                                        data-confirm-type="error"
-                                        class="flex items-center gap-3 w-full p-3 bg-rose-50/60 dark:bg-rose-950/20 hover:bg-rose-600 hover:text-white dark:hover:bg-rose-600 border border-rose-200/60 dark:border-rose-900/30 rounded-xl text-rose-600 dark:text-rose-400 font-bold text-xs transition text-left group">
+                                    <button type="button"
+                                        @click="
+                                            const nopol = detail.nopol;
+                                            closeDetail();
+                                            window.confirmDialog({
+                                                title: 'Hapus Kendaraan?',
+                                                message: 'Apakah Anda yakin ingin menghapus kendaraan ' + nopol + '? Tindakan ini tidak dapat dibatalkan.',
+                                                type: 'danger',
+                                                confirmText: 'Ya, Hapus!',
+                                                cancelText: 'Batal'
+                                            }, () => {
+                                                document.getElementById('form-delete-mobile-detail').submit();
+                                            });
+                                        "
+                                        class="flex items-center gap-3 w-full p-3 bg-rose-50/60 dark:bg-rose-950/20 hover:bg-rose-600 hover:text-white dark:hover:bg-rose-600 border border-rose-200/60 dark:border-rose-900/30 rounded-xl text-rose-600 dark:text-rose-400 font-bold text-xs transition text-left group cursor-pointer">
                                         <div class="p-1.5 bg-rose-500/15 group-hover:bg-white/20 rounded-lg text-rose-600 dark:text-rose-400 group-hover:text-white transition">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                         </div>

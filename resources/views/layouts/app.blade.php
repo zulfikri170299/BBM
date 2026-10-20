@@ -299,6 +299,11 @@
                 scrollbar-width: thin;
             }
         }
+        
+        /* Pastikan pop-up SweetAlert selalu di atas elemen modal apapun */
+        .swal2-container {
+            z-index: 999999 !important;
+        }
     </style>
     @stack('styles')
 </head>
@@ -315,92 +320,87 @@
         <div class="flex flex-1 flex-col overflow-hidden relative z-0">
             @include('layouts.header')
 
-            <!-- Global Notification Modals -->
-            @if(session('success') || session('error') || $errors->any())
-                <div x-data="{ show: true }" x-show="show" x-cloak
-                    class="fixed inset-0 z-[9999] flex flex-col items-center justify-center p-4 sm:p-0 gap-4 pointer-events-none">
-                    <!-- Backdrop -->
-                    <div class="fixed inset-0 bg-slate-200/80 dark:bg-slate-950/80 transition-opacity pointer-events-auto" @click="show = false"
-                        x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
-                        x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
-                        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"></div>
+            <!-- Global Notification Pop-Up (SweetAlert2) -->
+            @if(session('success') || session('error') || session('warning') || session('status') || $errors->any())
+                <script>
+                    (function() {
+                        let triggered = false;
+                        function triggerFlashPopup() {
+                            if (triggered || typeof Swal === 'undefined') return;
+                            triggered = true;
 
-                    @if(session('success'))
-                        <div class="relative w-full max-w-sm bg-white dark:bg-slate-900 border border-slate-300 dark:border-white/10 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center p-8 text-center pointer-events-auto"
-                            @click.stop x-transition:enter="transition ease-out duration-300 transform"
-                            x-transition:enter-start="opacity-0 translate-y-8 scale-95"
-                            x-transition:enter-end="opacity-100 translate-y-0 scale-100"
-                            x-transition:leave="transition ease-in duration-200 transform"
-                            x-transition:leave-start="opacity-100 translate-y-0 scale-100"
-                            x-transition:leave-end="opacity-0 translate-y-4 scale-95">
+                            const isDark = document.documentElement.classList.contains('dark');
+                            const baseConfig = {
+                                background: isDark ? '#0f172a' : '#ffffff',
+                                color: isDark ? '#f8fafc' : '#1e293b',
+                                confirmButtonColor: '#0062ff',
+                                buttonsStyling: true,
+                                customClass: {
+                                    popup: 'border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl p-6 sm:p-8',
+                                    title: 'text-xl sm:text-2xl font-black ' + (isDark ? 'text-white' : 'text-slate-800') + ' mb-2',
+                                    htmlContainer: 'text-slate-600 dark:text-slate-300 font-medium text-sm sm:text-base mt-2',
+                                    confirmButton: 'rounded-xl px-8 py-3 font-bold uppercase tracking-wider text-xs shadow-lg'
+                                }
+                            };
 
-                            <div class="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mb-6 border border-emerald-500/30">
-                                <svg class="w-10 h-10 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                            </div>
+                            @if(session('success'))
+                                Swal.fire({
+                                    ...baseConfig,
+                                    icon: 'success',
+                                    title: 'Berhasil!',
+                                    html: `{!! addslashes(session('success')) !!}`,
+                                    confirmButtonText: 'OK, Mengerti',
+                                    timer: 3500,
+                                    timerProgressBar: true
+                                });
+                            @elseif(session('error'))
+                                Swal.fire({
+                                    ...baseConfig,
+                                    icon: 'error',
+                                    title: 'Oops, Terjadi Kesalahan!',
+                                    html: `{!! addslashes(session('error')) !!}`,
+                                    confirmButtonColor: '#e11d48',
+                                    confirmButtonText: 'Tutup'
+                                });
+                            @elseif(session('warning'))
+                                Swal.fire({
+                                    ...baseConfig,
+                                    icon: 'warning',
+                                    title: 'Perhatian!',
+                                    html: `{!! addslashes(session('warning')) !!}`,
+                                    confirmButtonColor: '#f59e0b',
+                                    confirmButtonText: 'OK'
+                                });
+                            @elseif(session('status'))
+                                Swal.fire({
+                                    ...baseConfig,
+                                    icon: 'info',
+                                    title: 'Informasi',
+                                    html: `{!! addslashes(session('status')) !!}`,
+                                    confirmButtonText: 'OK',
+                                    timer: 3500,
+                                    timerProgressBar: true
+                                });
+                            @elseif($errors->any())
+                                Swal.fire({
+                                    ...baseConfig,
+                                    icon: 'error',
+                                    title: 'Periksa Inputan Anda',
+                                    html: `<ul class="text-left text-sm space-y-1 list-disc list-inside mt-2">@foreach($errors->all() as $error)<li>{!! addslashes($error) !!}</li>@endforeach</ul>`,
+                                    confirmButtonColor: '#e11d48',
+                                    confirmButtonText: 'Tutup & Perbaiki'
+                                });
+                            @endif
+                        }
 
-                            <h3 class="text-[22px] font-bold text-white mb-2">Berhasil!</h3>
-                            <div class="text-[15px] font-medium text-slate-600 dark:text-slate-400 mb-8">{!! session('success') !!}</div>
-
-                            <button @click="show = false"
-                                class="w-full py-3.5 bg-brand-primary hover:bg-blue-600 text-white rounded-[1rem] font-bold transition-colors shadow-[0_0_15px_rgba(0,98,255,0.4)]">OK, Mengerti</button>
-                        </div>
-                    @endif
-
-                    @if(session('error'))
-                        <div class="relative w-full max-w-sm bg-white dark:bg-slate-900 border border-slate-300 dark:border-white/10 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center p-8 text-center pointer-events-auto"
-                            @click.stop x-transition:enter="transition ease-out duration-300 transform"
-                            x-transition:enter-start="opacity-0 translate-y-8 scale-95"
-                            x-transition:enter-end="opacity-100 translate-y-0 scale-100"
-                            x-transition:leave="transition ease-in duration-200 transform"
-                            x-transition:leave-start="opacity-100 translate-y-0 scale-100"
-                            x-transition:leave-end="opacity-0 translate-y-4 scale-95">
-
-                            <div class="w-20 h-20 bg-rose-500/20 rounded-full flex items-center justify-center mb-6 border border-rose-500/30">
-                                <svg class="w-10 h-10 text-rose-600 dark:text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                                </svg>
-                            </div>
-
-                            <h3 class="text-[22px] font-bold text-slate-900 dark:text-white mb-2">Oops, Terjadi Kesalahan!</h3>
-                            <div class="text-[15px] font-medium text-slate-600 dark:text-slate-400 mb-8">{!! session('error') !!}</div>
-
-                            <button @click="show = false"
-                                class="w-full py-3.5 bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-white/5 text-slate-800 dark:text-white rounded-[1rem] font-bold transition-colors">OK, Mengerti</button>
-                        </div>
-                    @endif
-
-                    @if ($errors->any())
-                        <div class="relative w-full max-w-sm bg-white dark:bg-slate-900 border border-slate-300 dark:border-white/10 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center p-8 text-center pointer-events-auto"
-                            @click.stop x-transition:enter="transition ease-out duration-300 transform"
-                            x-transition:enter-start="opacity-0 translate-y-8 scale-95"
-                            x-transition:enter-end="opacity-100 translate-y-0 scale-100"
-                            x-transition:leave="transition ease-in duration-200 transform"
-                            x-transition:leave-start="opacity-100 translate-y-0 scale-100"
-                            x-transition:leave-end="opacity-0 translate-y-4 scale-95">
-
-                            <div class="w-20 h-20 bg-amber-500/20 rounded-full flex items-center justify-center mb-6 border border-amber-500/30">
-                                <svg class="w-10 h-10 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-
-                            <h3 class="text-[22px] font-bold text-slate-900 dark:text-white mb-3">Periksa Inputan Anda</h3>
-                            <div class="text-[14px] font-medium text-slate-600 dark:text-slate-400 w-full mb-8">
-                                <ul class="space-y-1">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-
-                            <button @click="show = false"
-                                class="w-full py-3.5 bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-white/5 text-slate-800 dark:text-white rounded-[1rem] font-bold transition-colors">Tutup & Perbaiki</button>
-                        </div>
-                    @endif
-                </div>
+                        if (document.readyState === 'loading') {
+                            document.addEventListener('DOMContentLoaded', triggerFlashPopup, { once: true });
+                        } else {
+                            triggerFlashPopup();
+                        }
+                        document.addEventListener('turbo:load', triggerFlashPopup, { once: true });
+                    })();
+                </script>
             @endif
 
             <!-- Main Content Area -->
@@ -527,7 +527,7 @@
                 confirmButtonText: 'Tutup',
                 customClass: {
                     popup: 'border border-slate-300 dark:border-white/10 rounded-[2rem] shadow-2xl',
-                    title: 'text-2xl font-bold text-white',
+                    title: 'text-2xl font-bold ' + (isDark ? 'text-white' : 'text-slate-800'),
                     confirmButton: 'rounded-xl px-10 py-3 font-bold uppercase tracking-wider text-sm shadow-[0_0_15px_rgba(0,98,255,0.4)]'
                 }
             });
@@ -563,7 +563,7 @@
                 reverseButtons: true,
                 customClass: {
                     popup: 'border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl p-6 sm:p-8',
-                    title: 'text-xl sm:text-2xl font-black text-white mb-2',
+                    title: 'text-xl sm:text-2xl font-black ' + (isDark ? 'text-white' : 'text-slate-800') + ' mb-2',
                     htmlContainer: 'text-slate-600 dark:text-slate-300 font-medium mb-6 text-sm',
                     confirmButton: 'rounded-xl px-6 py-2.5 font-black uppercase tracking-wider text-xs shadow-lg ml-2',
                     cancelButton: 'rounded-xl px-6 py-2.5 font-bold uppercase tracking-wider text-xs text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/5'
@@ -732,6 +732,7 @@
                 const target = e.target.closest('[data-confirm]');
                 if (target) {
                     e.preventDefault();
+                    e.stopPropagation();
                     window.confirmDialog({
                         message: target.getAttribute('data-confirm'),
                         type: target.getAttribute('data-confirm-type') || 'warning',
@@ -739,11 +740,37 @@
                         title: target.getAttribute('data-confirm-title') || 'Konfirmasi'
                     }, () => {
                         const form = target.closest('form');
-                        if (form) form.submit();
+                        if (form) {
+                            form.dataset.confirmed = 'true';
+                            form.submit();
+                        }
                         else if (target.tagName === 'A') typeof Turbo !== 'undefined' ? Turbo.visit(target.href) : window.location.href = target.href;
                     });
                 }
-            });
+            }, true);
+
+            // Cegah bypass submit di mobile browser (misal Safari iOS)
+            document.addEventListener('submit', function (e) {
+                if (e.target.dataset.confirmed === 'true') {
+                    delete e.target.dataset.confirmed;
+                    return;
+                }
+                const submitter = e.submitter || document.activeElement;
+                const target = submitter ? submitter.closest('[data-confirm]') : e.target.querySelector('[data-confirm]');
+                if (target) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.confirmDialog({
+                        message: target.getAttribute('data-confirm'),
+                        type: target.getAttribute('data-confirm-type') || 'warning',
+                        confirmText: target.getAttribute('data-confirm-text') || 'Ya, Lanjutkan!',
+                        title: target.getAttribute('data-confirm-title') || 'Konfirmasi'
+                    }, () => {
+                        e.target.dataset.confirmed = 'true';
+                        e.target.submit();
+                    });
+                }
+            }, true);
         }
 
         if (!window.sidebarLogicBound) {
