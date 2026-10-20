@@ -386,6 +386,7 @@ Route::middleware(['auth'])->group(function () {
         $setting = \App\Models\Setting::firstOrNew(['key' => 'system_lockdown']);
         $setting->value = ($setting->value === '1') ? '0' : '1';
         $setting->save();
+        \App\Models\Setting::clearLockdownCache();
 
         return back()->with('status', 'System lockdown status updated to: ' . ($setting->value === '1' ? 'ACTIVE' : 'INACTIVE'));
     })->name('dev.lockdown.toggle');

@@ -35,7 +35,7 @@
                         </svg>
                         <span>Audit Fisik Nozzle Pompa</span>
                     </div>
-                    <h1 class="text-xl sm:text-3xl font-black text-white tracking-tight">
+                    <h1 class="text-xl sm:text-3xl font-black text-slate-800 dark:text-white tracking-tight">
                         Input Meter Pompa BBM
                     </h1>
                     <p class="hidden sm:block text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-1">
@@ -291,7 +291,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="text-sm font-black uppercase tracking-wider text-white">
+                                <h3 class="text-sm font-black uppercase tracking-wider text-slate-800 dark:text-white">
                                     Riwayat Pencatatan Meteran Terakhir
                                 </h3>
                                 <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">
@@ -322,7 +322,7 @@
                                     @endphp
                                     <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors {{ $item->tanggal === $today ? 'bg-indigo-50/30 dark:bg-indigo-950/20' : '' }}">
                                         <td class="px-6 py-4">
-                                            <span class="text-white font-bold block">
+                                            <span class="text-slate-800 dark:text-white font-bold block">
                                                 {{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}
                                             </span>
                                             <span class="text-[10px] text-slate-400">

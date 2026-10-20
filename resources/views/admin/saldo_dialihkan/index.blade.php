@@ -119,7 +119,7 @@
         </div>
 
         <!-- Filter Card -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-4 sm:p-5">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-4 sm:p-5 relative z-30">
             <form action="{{ route('admin.saldo-dialihkan.index') }}" method="GET"
                 class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
                 <div>
@@ -132,12 +132,14 @@
                             Satker
                         </span>
                     </label>
-                    <select name="satker_id" class="tom-select w-full text-xs font-semibold bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-200 rounded-xl px-3.5 py-2.5 focus:ring-2 focus:ring-brand-primary outline-none">
-                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua Satker</option>
-                        @foreach($satkers as $satker)
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>{{ $satker->nama_satker }}</option>
-                        @endforeach
-                    </select>
+                    <x-filter-select 
+                        name="satker_id" 
+                        :value="request('satker_id')" 
+                        placeholder="Semua Satker" 
+                        search-placeholder="Cari nama satker..." 
+                        icon="building" 
+                        :options="$satkers" 
+                    />
                 </div>
 
                 <div>
@@ -150,7 +152,7 @@
                             Mulai Tanggal
                         </span>
                     </label>
-                    <input type="date" name="start_date" value="{{ request('start_date') }}" placeholder="Pilih Mulai Tanggal"
+                    <input type="text" name="start_date" value="{{ request('start_date') }}" placeholder="Pilih Mulai Tanggal"
                         class="flatpickr w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-brand-primary transition-all">
                 </div>
 
@@ -164,7 +166,7 @@
                             Sampai Tanggal
                         </span>
                     </label>
-                    <input type="date" name="end_date" value="{{ request('end_date') }}" placeholder="Pilih Sampai Tanggal"
+                    <input type="text" name="end_date" value="{{ request('end_date') }}" placeholder="Pilih Sampai Tanggal"
                         class="flatpickr w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-brand-primary transition-all">
                 </div>
 

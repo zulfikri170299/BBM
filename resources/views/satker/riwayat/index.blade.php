@@ -9,7 +9,7 @@
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-bold text-white tracking-tight">Riwayat Pengisian BBM</h1>
+                    <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Riwayat Pengisian BBM</h1>
                     <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-0.5">
                         Histori pengisian dan mutasi saldo BBM kendaraan {{ auth()->user()->satker->nama_satker ?? '' }}.
                     </p>
@@ -34,7 +34,7 @@
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 p-4 shadow-sm flex items-center justify-between">
                 <div>
                     <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Transaksi</p>
-                    <h3 class="text-xl font-black text-white mt-1">{{ number_format($stats['total_transaksi']) }}</h3>
+                    <h3 class="text-xl font-black text-slate-900 dark:text-white mt-1">{{ number_format($stats['total_transaksi']) }}</h3>
                     <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 font-medium">Catatan riwayat</p>
                 </div>
                 <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-100 dark:border-indigo-500/20 shrink-0">
@@ -89,16 +89,16 @@
         </div>
 
         <!-- 1-Row Compact Filter & Search Card -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm relative z-30">
             <!-- Header with Title & Presets in 1 sleek bar -->
-            <div class="px-5 py-3 bg-slate-50/70 dark:bg-slate-800/40 border-b border-slate-200 dark:border-white/10 flex flex-wrap items-center justify-between gap-3">
+            <div class="px-5 py-3 bg-slate-50/70 dark:bg-slate-800/40 border-b border-slate-200 dark:border-white/10 flex flex-wrap items-center justify-between gap-3 rounded-t-2xl">
                 <div class="flex items-center gap-2.5">
                     <div class="w-7 h-7 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-lg flex items-center justify-center border border-indigo-100 dark:border-indigo-500/20">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                         </svg>
                     </div>
-                    <h3 class="text-xs font-bold text-white uppercase tracking-wider">Filter & Pencarian Riwayat</h3>
+                    <h3 class="text-xs font-bold text-slate-800 dark:text-white uppercase tracking-wider">Filter & Pencarian Riwayat</h3>
                 </div>
 
                 <!-- Presets & Filter Status in Header -->
@@ -172,14 +172,20 @@
                         <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5 ml-0.5">
                             Kendaraan
                         </label>
-                        <select name="kendaraan_id" id="filter_kendaraan_id" class="tom-select w-full">
-                            <option value="">Semua Kendaraan</option>
-                            @foreach($kendaraans as $k)
-                                <option value="{{ $k->id }}" {{ request('kendaraan_id') == $k->id ? 'selected' : '' }}>
-                                    {{ $k->no_polisi }} — {{ $k->jenis_kendaraan }}
-                                </option>
-                            @endforeach
-                        </select>
+                        @php
+                            $kendaraanOptions = $kendaraans->map(fn($k) => [
+                                'value' => $k->id,
+                                'label' => $k->no_polisi . ' — ' . $k->jenis_kendaraan
+                            ])->toArray();
+                        @endphp
+                        <x-filter-select 
+                            name="kendaraan_id" 
+                            :value="request('kendaraan_id')" 
+                            placeholder="Semua Kendaraan" 
+                            search-placeholder="Cari nopol atau kendaraan..." 
+                            icon="car" 
+                            :options="$kendaraanOptions" 
+                        />
                     </div>
 
                     <!-- Tombol Filter & Reset (2 cols) -->
@@ -215,7 +221,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-sm font-bold text-white">Daftar Pengisian BBM</h3>
+                        <h3 class="text-sm font-bold text-slate-800 dark:text-white">Daftar Pengisian BBM</h3>
                         <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Menampilkan {{ $transaksis->firstItem() ?? 0 }}-{{ $transaksis->lastItem() ?? 0 }} dari total {{ $transaksis->total() }} catatan transaksi</p>
                     </div>
                 </div>

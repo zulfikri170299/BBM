@@ -56,7 +56,7 @@
         @endif
 
         <!-- Filter Bar -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 p-3 sm:p-4 rounded-2xl border border-slate-200 dark:border-white/10/70 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 p-3 sm:p-4 rounded-2xl border border-slate-200 dark:border-white/10/70 shadow-sm relative z-30">
             <form action="{{ route('admin.users.index') }}" method="GET" class="flex flex-col lg:flex-row items-stretch lg:items-center gap-4">
                 <div class="flex-1">
                     <div class="relative group">
@@ -73,15 +73,14 @@
                 </div>
 
                 <div class="w-full lg:w-72">
-                    <select name="satker_id"
-                        class="tom-select w-full">
-                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua Satker</option>
-                        @foreach($satkers as $satker)
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
-                                {{ $satker->nama_satker }}
-                            </option>
-                        @endforeach
-                    </select>
+                    <x-filter-select 
+                        name="satker_id" 
+                        :value="request('satker_id')" 
+                        placeholder="Semua Satker" 
+                        search-placeholder="Cari nama satker..." 
+                        icon="building" 
+                        :options="$satkers" 
+                    />
                 </div>
 
                 <div class="flex items-center gap-2 w-full lg:w-auto">
@@ -208,7 +207,7 @@
                                             {{ strtoupper(substr($user->name, 0, 2)) }}
                                         </div>
                                         <div>
-                                            <p class="text-sm font-bold text-white">{{ $user->name }}</p>
+                                            <p class="text-sm font-bold text-slate-800 dark:text-white">{{ $user->name }}</p>
                                             <p class="text-[11px] font-medium text-slate-600 dark:text-slate-400 mt-0.5">ID: #{{ $user->id }}
                                             </p>
                                         </div>

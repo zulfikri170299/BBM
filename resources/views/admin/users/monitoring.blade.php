@@ -8,7 +8,7 @@
             </div>
         </div>
 
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 p-3 sm:p-4 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 p-3 sm:p-4 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm relative z-30">
             <form action="{{ route('admin.users.monitoring') }}" method="GET"
                 class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <!-- Search -->
@@ -32,23 +32,30 @@
                 <div>
                     <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-1">Filter
                         Satker</label>
-                    <select name="satker_id" id="filter_satker_id"
-                        class="tom-select w-full">
-                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua Satker</option>
-                        @foreach($satkers as $satker)
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
-                                {{ $satker->nama_satker }}
-                            </option>
-                        @endforeach
-                    </select>
+                    <x-filter-select 
+                        name="satker_id" 
+                        :value="request('satker_id')" 
+                        placeholder="Semua Satker" 
+                        search-placeholder="Cari nama satker..." 
+                        icon="building" 
+                        :options="$satkers" 
+                    />
                 </div>
 
                 <!-- Tanggal -->
                 <div>
                     <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-1">Filter
                         Tanggal Aktif</label>
-                    <input type="date" name="tanggal" value="{{ request('tanggal') }}"
-                        class="flatpickr w-full py-2 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-white/10 rounded-xl text-sm focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 z-10">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <input type="text" name="tanggal" value="{{ request('tanggal') }}" placeholder="Pilih Tanggal Aktif"
+                            style="padding-left: 2.35rem !important;"
+                            class="flatpickr w-full !pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-white/10 rounded-xl text-sm focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                    </div>
                 </div>
 
                 <!-- Actions -->

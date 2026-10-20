@@ -213,7 +213,7 @@
             </div>
 
             <!-- Tabel Riwayat -->
-            <div class="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-6 overflow-hidden">
+            <div class="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-6 relative z-10">
                 <div class="space-y-6 mb-6">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div class="flex items-center gap-3">
@@ -252,27 +252,26 @@
                             <div>
                                 <x-input-label for="filter_satker" value="Filter Satker"
                                     class="text-xs font-bold text-slate-600 dark:text-slate-400 mb-1" />
-                                <select name="satker_id" id="filter_satker"
-                                    class="tom-select w-full">
-                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua Satker</option>
-                                    @foreach($satkers as $sat)
-                                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $sat->id }}" {{ request('satker_id') == $sat->id ? 'selected' : '' }}>
-                                            {{ $sat->nama_satker }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <x-filter-select 
+                                    name="satker_id" 
+                                    :value="request('satker_id')" 
+                                    placeholder="Semua Satker" 
+                                    search-placeholder="Cari nama satker..." 
+                                    icon="building" 
+                                    :options="$satkers" 
+                                />
                             </div>
                             <div>
                                 <x-input-label for="filter_status" value="Filter Status"
                                     class="text-xs font-bold text-slate-600 dark:text-slate-400 mb-1" />
-                                <select name="status" id="filter_status"
-                                    class="tom-select w-full">
-                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua Status</option>
-                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="belum_dibayar" {{ request('status') === 'belum_dibayar' ? 'selected' : '' }}>
-                                        BELUM BAYAR</option>
-                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="sudah_dibayar" {{ request('status') === 'sudah_dibayar' ? 'selected' : '' }}>
-                                        LUNAS</option>
-                                </select>
+                                <x-filter-select 
+                                    name="status" 
+                                    :value="request('status')" 
+                                    placeholder="Semua Status" 
+                                    icon="shield" 
+                                    :searchable="false" 
+                                    :options="['belum_dibayar' => 'BELUM BAYAR', 'sudah_dibayar' => 'LUNAS']" 
+                                />
                             </div>
                             <div class="flex items-end gap-2 text-xs">
                                 <button type="submit"

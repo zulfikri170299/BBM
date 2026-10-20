@@ -18,45 +18,68 @@
         </div>
 
         <!-- Filter Card -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl shadow-sm p-4">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl shadow-sm p-4 sm:p-5 relative z-30">
             <form action="{{ route('admin.laporan-transfer-saldo.index') }}" method="GET" class="space-y-4">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div>
-                        <label class="block text-[10px] font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1 ml-1">Mulai Tanggal</label>
-                        <input type="date" name="start_date" value="{{ request('start_date') }}"
-                            class="w-full h-9 px-3 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-white/10 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 sm:gap-4 items-end">
+                    <!-- Mulai Tanggal (3 cols) -->
+                    <div class="lg:col-span-3">
+                        <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5 ml-0.5">Mulai Tanggal</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 z-10">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <input type="text" name="start_date" value="{{ request('start_date') }}" placeholder="Dari Tanggal"
+                                style="padding-left: 2.35rem !important;"
+                                class="flatpickr w-full h-10 !pl-9 pr-2.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-white/10 rounded-xl text-xs font-semibold text-slate-800 dark:text-white focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition">
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-[10px] font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1 ml-1">Sampai Tanggal</label>
-                        <input type="date" name="end_date" value="{{ request('end_date') }}"
-                            class="w-full h-9 px-3 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-white/10 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all">
+
+                    <!-- Sampai Tanggal (3 cols) -->
+                    <div class="lg:col-span-3">
+                        <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5 ml-0.5">Sampai Tanggal</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 z-10">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <input type="text" name="end_date" value="{{ request('end_date') }}" placeholder="Sampai Tanggal"
+                                style="padding-left: 2.35rem !important;"
+                                class="flatpickr w-full h-10 !pl-9 pr-2.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-white/10 rounded-xl text-xs font-semibold text-slate-800 dark:text-white focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition">
+                        </div>
                     </div>
-                    <div class="lg:col-span-1">
-                        <label class="block text-[10px] font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1 ml-1">Satker</label>
-                        <select name="satker_id"
-                            class="w-full h-9 px-3 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-white/10 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all">
-                            <option value="" class="bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200">Semua Satker</option>
-                            @foreach($satkers as $satker)
-                                <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $satker->id }}" class="bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
-                                    {{ $satker->nama_satker }}
-                                </option>
-                            @endforeach
-                        </select>
+
+                    <!-- Satker (4 cols) -->
+                    <div class="lg:col-span-4">
+                        <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5 ml-0.5">Satker</label>
+                        <x-filter-select 
+                            name="satker_id" 
+                            :value="request('satker_id')" 
+                            placeholder="Semua Satker" 
+                            search-placeholder="Cari nama satker..." 
+                            icon="building" 
+                            :options="$satkers" 
+                        />
                     </div>
-                    <div class="flex items-end gap-2">
+
+                    <!-- Tombol Filter & Reset (2 cols) -->
+                    <div class="lg:col-span-2 flex items-center gap-1.5">
                         <button type="submit"
-                            class="flex-1 h-9 bg-rose-600 text-white rounded-lg font-semibold text-[11px] uppercase tracking-wider hover:bg-rose-700 shadow-lg shadow-rose-500/20 transition-all active:scale-95 flex items-center justify-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                            class="flex-1 h-10 bg-rose-600 hover:bg-rose-700 active:scale-95 text-white rounded-xl text-xs font-bold shadow-sm shadow-rose-600/20 transition-all flex items-center justify-center gap-1.5 px-3">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                             </svg>
-                            Filter
+                            <span>Filter</span>
                         </button>
                         <a href="{{ route('admin.laporan-transfer-saldo.index') }}"
-                            class="flex-1 h-9 bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-lg font-semibold text-[11px] uppercase tracking-wider hover:bg-slate-200 transition-all active:scale-95 flex items-center justify-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            class="h-10 px-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 active:scale-95 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold border border-slate-200 dark:border-white/10 transition-all flex items-center justify-center gap-1"
+                            title="Reset Filter">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
-                            Reset
+                            <span>Reset</span>
                         </a>
                     </div>
                 </div>

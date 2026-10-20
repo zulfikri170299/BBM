@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <div class="mt-3 flex items-baseline gap-1.5">
-                    <span class="text-2xl sm:text-3xl font-black text-white tabular-nums">
+                    <span class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tabular-nums">
                         {{ number_format($totalPendapatan, 0, ',', '.') }}
                     </span>
                     <span class="text-xs font-bold text-slate-400">Liter</span>
@@ -80,7 +80,7 @@
                     </div>
                 </div>
                 <div class="mt-3 flex items-baseline gap-1.5">
-                    <span class="text-2xl sm:text-3xl font-black text-white tabular-nums">
+                    <span class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tabular-nums">
                         {{ number_format($totalPemakaian, 0, ',', '.') }}
                     </span>
                     <span class="text-xs font-bold text-slate-400">Liter</span>
@@ -128,7 +128,7 @@
         </div>
 
         <!-- Filter Card -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-4 sm:p-5">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-4 sm:p-5 relative z-30">
             <form action="{{ route('satker.laporan-triwulan.index') }}" method="GET" class="flex flex-col sm:flex-row items-stretch sm:items-end gap-3.5">
                 <div class="flex-1">
                     <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
@@ -138,17 +138,22 @@
                             </svg>
                             Tahun
                         </span>
-                    </label>
-                    <select name="tahun" id="filter_tahun" required onchange="this.form.submit()" class="tom-select w-full">
-                        @php
-                            $currentYear = date('Y');
-                        @endphp
-                        @for($i = $currentYear - 2; $i <= $currentYear + 1; $i++)
-                            <option value="{{ $i }}" {{ request('tahun', date('Y')) == $i ? 'selected' : '' }}>
-                                {{ $i }}
-                            </option>
-                        @endfor
-                    </select>
+                    @php
+                        $currentYear = date('Y');
+                        $tahunOptions = [];
+                        for($i = $currentYear - 2; $i <= $currentYear + 1; $i++) {
+                            $tahunOptions[$i] = (string)$i;
+                        }
+                    @endphp
+                    <x-filter-select 
+                        name="tahun" 
+                        :value="request('tahun', date('Y'))" 
+                        placeholder="Pilih Tahun" 
+                        icon="calendar" 
+                        :searchable="false" 
+                        :auto-submit="true" 
+                        :options="$tahunOptions" 
+                    />
                 </div>
 
                 <div class="flex-1">
@@ -160,12 +165,20 @@
                             Triwulan
                         </span>
                     </label>
-                    <select name="triwulan" id="filter_triwulan" required onchange="this.form.submit()" class="tom-select w-full">
-                        <option value="1" {{ request('triwulan', 1) == 1 ? 'selected' : '' }}>Triwulan I (Jan - Mar)</option>
-                        <option value="2" {{ request('triwulan') == 2 ? 'selected' : '' }}>Triwulan II (Apr - Jun)</option>
-                        <option value="3" {{ request('triwulan') == 3 ? 'selected' : '' }}>Triwulan III (Jul - Sep)</option>
-                        <option value="4" {{ request('triwulan') == 4 ? 'selected' : '' }}>Triwulan IV (Okt - Des)</option>
-                    </select>
+                    <x-filter-select 
+                        name="triwulan" 
+                        :value="request('triwulan', 1)" 
+                        placeholder="Pilih Triwulan" 
+                        icon="calendar" 
+                        :searchable="false" 
+                        :auto-submit="true" 
+                        :options="[
+                            '1' => 'Triwulan I (Jan - Mar)',
+                            '2' => 'Triwulan II (Apr - Jun)',
+                            '3' => 'Triwulan III (Jul - Sep)',
+                            '4' => 'Triwulan IV (Okt - Des)'
+                        ]" 
+                    />
                 </div>
 
                 <div class="flex items-center gap-2">

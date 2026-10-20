@@ -67,7 +67,7 @@
 
             <!-- History Table -->
             <div class="lg:col-span-2 space-y-6">
-                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl border border-slate-300 dark:border-white/10 shadow-sm overflow-hidden">
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl border border-slate-300 dark:border-white/10 shadow-sm relative">
                     <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-slate-800/50 flex flex-col gap-4">
                         <div class="flex items-center gap-3">
                             <h3 class="text-base font-bold text-slate-800 dark:text-slate-200">Riwayat Pembelian BBM</h3>
@@ -80,11 +80,14 @@
                             <!-- Date Inputs -->
                             <div class="flex flex-nowrap items-center gap-2 flex-grow min-w-0">
                                 <div class="relative group/input w-1/3">
-                                    <select name="jenis_bbm" class="px-2 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 border-slate-300 dark:border-white/10 rounded-lg text-[10px] sm:text-[11px] font-bold text-slate-700 dark:text-slate-300 focus:ring-4 focus:ring-indigo-500/5 transition-all w-full">
-                                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua BBM</option>
-                                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Pertamax" {{ request('jenis_bbm') == 'Pertamax' ? 'selected' : '' }}>Pertamax</option>
-                                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Pertamina Dex" {{ request('jenis_bbm') == 'Pertamina Dex' ? 'selected' : '' }}>Pertamina Dex</option>
-                                    </select>
+                                    <x-filter-select 
+                                        name="jenis_bbm" 
+                                        :value="request('jenis_bbm')" 
+                                        placeholder="Semua BBM" 
+                                        icon="bbm" 
+                                        :searchable="false" 
+                                        :options="['Pertamax' => 'Pertamax', 'Pertamina Dex' => 'Pertamina Dex']" 
+                                    />
                                 </div>
                                 <div class="relative group/input w-1/3">
                                     <input type="date" name="start_date" value="{{ request('start_date') }}" 

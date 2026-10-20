@@ -588,7 +588,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="text-lg font-black text-white tracking-tight">Import Personel</h3>
+                                <h3 class="text-lg font-black text-slate-900 dark:text-white tracking-tight">Import Personel</h3>
                                 <div class="flex items-center gap-1.5 mt-0.5">
                                     <span class="w-1 h-1 rounded-full bg-emerald-500 animate-pulse"></span>
                                     <p class="text-[9px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em]">Sistem
@@ -668,7 +668,7 @@
                                             </path>
                                         </svg>
                                     </div>
-                                    <h4 class="text-base font-black text-white mb-1">Lepaskan berkas di sini</h4>
+                                    <h4 class="text-base font-black text-slate-900 dark:text-white mb-1">Lepaskan berkas di sini</h4>
                                     <p
                                         class="text-[9px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] group-hover:text-indigo-500 transition-colors">
                                         Atau klik untuk memilih file Excel/CSV</p>
@@ -813,7 +813,7 @@
 
                         <div
                             class="px-7 py-3 bg-slate-50 dark:bg-slate-800/50 border-y border-slate-200 dark:border-white/5 flex items-center justify-between">
-                            <h4 class="text-[10px] font-black text-white uppercase tracking-[0.2em]">Analisis Data
+                            <h4 class="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-[0.2em]">Analisis Data
                             </h4>
                             <div class="flex items-center gap-4">
                                 <div class="flex items-center gap-1.5">
@@ -879,7 +879,7 @@
                                         <tr class="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
                                             <td class="px-4 py-3 text-[10px] font-black text-slate-600 dark:text-slate-400"
                                                 x-text="item.row"></td>
-                                            <td class="px-4 py-3 text-[10px] font-bold text-white text-center"
+                                            <td class="px-4 py-3 text-[10px] font-bold text-slate-800 dark:text-white text-center"
                                                 x-text="item.nama"></td>
                                             <td class="px-4 py-3 whitespace-nowrap text-center">
                                                 <span
@@ -933,7 +933,7 @@
                                             class="text-[9px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.2em] mb-0.5">
                                             Opsi
                                             Duplikat</p>
-                                        <p class="text-[11px] font-bold text-white">Perlakuan jika NRP terdaftar</p>
+                                        <p class="text-[11px] font-bold text-slate-800 dark:text-white">Perlakuan jika NRP terdaftar</p>
                                     </div>
                                 </div>
                                 <div class="flex items-center p-1 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-white/5">

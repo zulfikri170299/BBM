@@ -44,7 +44,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
                     </svg>
                 </div>
-                <h4 class="text-base font-black text-white">Terima Kasih Atas Penilaian Anda!</h4>
+                <h4 class="text-base font-black text-slate-900 dark:text-white">Terima Kasih Atas Penilaian Anda!</h4>
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-md mx-auto">
                     Masukan dan penilaian Anda telah berhasil kami simpan dan sangat berharga dalam meningkatkan mutu pelayanan logistik BBM Polda NTB.
                 </p>

@@ -113,7 +113,7 @@
             <div class="flex items-center justify-between mb-2.5">
                 <div class="flex items-center gap-2">
                     <div class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></div>
-                    <h2 class="text-xs sm:text-sm font-extrabold text-white uppercase tracking-wider">
+                    <h2 class="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-white uppercase tracking-wider">
                         Aktivitas Penyaluran BBM Hari Ini
                     </h2>
                 </div>
@@ -257,7 +257,7 @@
                 <div class="flex items-center justify-between mb-2.5">
                     <div class="flex items-center gap-2">
                         <div class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
-                        <h2 class="text-xs sm:text-sm font-extrabold text-white uppercase tracking-wider">
+                        <h2 class="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-white uppercase tracking-wider">
                             Kondisi Stok Fisik di Tangki Pendam
                         </h2>
                     </div>
@@ -355,7 +355,7 @@
         <div>
             <div class="flex items-center gap-2 mb-2.5">
                 <div class="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></div>
-                <h2 class="text-xs sm:text-sm font-extrabold text-white uppercase tracking-wider">
+                <h2 class="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-white uppercase tracking-wider">
                     Penyaluran dari Stok Pusat (Super Admin) Hari Ini
                 </h2>
             </div>
@@ -393,7 +393,7 @@
             <div class="flex items-center justify-between mb-2.5">
                 <div class="flex items-center gap-2">
                     <div class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></div>
-                    <h2 class="text-xs sm:text-sm font-extrabold text-white uppercase tracking-wider">
+                    <h2 class="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-white uppercase tracking-wider">
                         Total Bon BBM Belum Dibayar (Tunggakan)
                     </h2>
                 </div>

@@ -25,7 +25,11 @@
                 Kendaraan
             </a>
 
-            @php $pendingCountNav = \App\Models\Kendaraan::where('status_approval', 'pending')->count(); @endphp
+            @php 
+                $pendingCountNav = \Illuminate\Support\Facades\Cache::remember('nav_pending_approval_count', 15, function() {
+                    return \App\Models\Kendaraan::where('status_approval', 'pending')->count();
+                }); 
+            @endphp
             <a href="{{ route('admin.persetujuan-kendaraan.index') }}"
                 class="group flex items-center justify-between rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('admin.persetujuan-kendaraan.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
                 <div class="flex items-center gap-x-2.5">
@@ -352,8 +356,13 @@
             </a>
 
             @php 
-                $satkerPendingNav = \App\Models\Kendaraan::where('satker_id', auth()->user()->satker_id)->where('status_approval', 'pending')->count();
-                $satkerRejectedNav = \App\Models\Kendaraan::where('satker_id', auth()->user()->satker_id)->where('status_approval', 'ditolak')->count();
+                $userSatkerId = auth()->user()->satker_id;
+                $satkerPendingNav = \Illuminate\Support\Facades\Cache::remember('nav_satker_pending_' . $userSatkerId, 15, function() use ($userSatkerId) {
+                    return \App\Models\Kendaraan::where('satker_id', $userSatkerId)->where('status_approval', 'pending')->count();
+                });
+                $satkerRejectedNav = \Illuminate\Support\Facades\Cache::remember('nav_satker_rejected_' . $userSatkerId, 15, function() use ($userSatkerId) {
+                    return \App\Models\Kendaraan::where('satker_id', $userSatkerId)->where('status_approval', 'ditolak')->count();
+                });
             @endphp
             <a href="{{ route('satker.persetujuan-kendaraan.index') }}"
                 class="group flex items-center justify-between rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('satker.persetujuan-kendaraan.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">

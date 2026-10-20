@@ -285,7 +285,7 @@
                                             {{ strtoupper(substr($rating->user->name ?? 'U', 0, 1)) }}
                                         </div>
                                         <div class="min-w-0">
-                                            <div class="font-bold text-white truncate max-w-xs">
+                                            <div class="font-bold text-slate-800 dark:text-white truncate max-w-xs">
                                                 {{ $rating->user->name ?? 'User Terhapus' }}
                                             </div>
                                             @if($rating->user && $rating->user->satker)

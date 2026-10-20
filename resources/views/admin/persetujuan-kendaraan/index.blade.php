@@ -30,17 +30,17 @@
         <div class="max-w-7xl mx-auto space-y-6">
 
             <!-- Header Card -->
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 p-5 rounded-2xl shadow-sm">
-                <div>
-                    <div class="flex items-center gap-3">
-                        <div class="p-2.5 bg-brand-primary/10 text-brand-primary dark:bg-white/10 dark:text-white rounded-xl">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 p-4 sm:p-5 rounded-2xl shadow-sm">
+                <div class="w-full sm:w-auto">
+                    <div class="flex items-center gap-2.5 sm:gap-3">
+                        <div class="p-2 sm:p-2.5 bg-brand-primary/10 text-brand-primary dark:bg-white/10 dark:text-white rounded-xl shrink-0">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
-                        <div>
-                            <h1 class="text-xl sm:text-2xl font-black text-slate-800 dark:text-white">Persetujuan Data Kendaraan</h1>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Tinjau dan setujui penambahan, pembaruan, serta import kendaraan dari Admin Satker</p>
+                        <div class="min-w-0">
+                            <h1 class="text-base sm:text-2xl font-black text-slate-800 dark:text-white whitespace-nowrap tracking-tight">Persetujuan Data Kendaraan</h1>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1 sm:line-clamp-none">Tinjau dan setujui penambahan, pembaruan, serta import kendaraan dari Admin Satker</p>
                         </div>
                     </div>
                 </div>
@@ -356,14 +356,15 @@
                     <table class="w-full text-left text-xs border-collapse">
                         <thead>
                             <tr class="bg-slate-50/80 dark:bg-slate-800/50 border-b border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[10px] font-black">
-                                <th class="py-3 px-4 w-10 text-center">
+                                <th class="py-3 px-2 sm:px-4 w-8 sm:w-10 text-center">
                                     <input type="checkbox" x-model="allSelected" @change="toggleAll()" class="rounded border-slate-300 dark:border-white/20 text-brand-primary focus:ring-brand-primary scale-95">
                                 </th>
-                                <th class="py-3 px-4">Satker & Pengaju</th>
-                                <th class="py-3 px-4">Tipe Pengajuan</th>
-                                <th class="py-3 px-4">Data Kendaraan</th>
-                                <th class="py-3 px-4">Status</th>
-                                <th class="py-3 px-4 text-center">Aksi Persetujuan</th>
+                                <th class="py-3 px-2 sm:px-4">Satker & Pengaju</th>
+                                <th class="py-3 px-4 hidden sm:table-cell">Tipe Pengajuan</th>
+                                <th class="py-3 px-4 hidden sm:table-cell">Data Kendaraan</th>
+                                <th class="py-3 px-2 sm:px-4 text-center sm:text-left">Status</th>
+                                <th class="py-3 px-4 text-center hidden sm:table-cell">Aksi Persetujuan</th>
+                                <th class="py-3 px-2 text-center sm:hidden w-16">Detail</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100 dark:divide-white/5">
@@ -375,28 +376,39 @@
                                         ? (is_array($k->pending_changes) ? $k->pending_changes : json_decode($k->pending_changes, true)) 
                                         : [];
                                 @endphp
-                                <tr class="hover:bg-slate-50/50 dark:hover:bg-white/[0.02] transition-colors {{ $isPending ? 'bg-amber-500/[0.02]' : '' }}">
+                                <tr class="hover:bg-slate-50/50 dark:hover:bg-white/[0.02] transition-colors {{ $isPending ? 'bg-amber-500/[0.02]' : '' }}" x-data="{ showDetail: false }">
                                     <!-- Checkbox -->
-                                    <td class="py-3.5 px-4 text-center">
+                                    <td class="py-3.5 px-2 sm:px-4 text-center">
                                         <input type="checkbox" value="{{ $k->id }}" x-model="selectedIds" class="item-checkbox rounded border-slate-300 dark:border-white/20 text-brand-primary focus:ring-brand-primary scale-95">
                                     </td>
 
-                                    <!-- Satker & Pengaju -->
-                                    <td class="py-3.5 px-4">
+                                    <!-- Satker & Pengaju (Responsive Mobile Content Included) -->
+                                    <td class="py-3.5 px-2 sm:px-4">
                                         <div class="font-bold text-slate-800 dark:text-white leading-tight">
-                                            {{ $k->satker->nama_satker ?? '-' }}
+                                            <span class="sm:hidden font-mono font-bold text-xs block text-slate-900 dark:text-white">{{ $k->no_polisi }}</span>
+                                            <span class="text-xs">{{ $k->satker->nama_satker ?? '-' }}</span>
                                         </div>
-                                        <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 flex items-center gap-1">
-                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                                            {{ $k->diajukanOleh->name ?? 'Admin Satker' }}
+                                        <div class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 flex items-center gap-1">
+                                            <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                            <span class="truncate max-w-[120px] sm:max-w-none">{{ $k->diajukanOleh->name ?? 'Admin Satker' }}</span>
                                         </div>
-                                        <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">
+                                        <!-- Mobile Badge for Action Type -->
+                                        <div class="sm:hidden mt-1">
+                                            @if($k->aksi_approval === 'edit')
+                                                <span class="inline-flex items-center px-1.5 py-0.2 rounded text-[9px] font-bold bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">Edit Data</span>
+                                            @elseif($k->aksi_approval === 'import')
+                                                <span class="inline-flex items-center px-1.5 py-0.2 rounded text-[9px] font-bold bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20">Import Excel</span>
+                                            @else
+                                                <span class="inline-flex items-center px-1.5 py-0.2 rounded text-[9px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">Tambah Baru</span>
+                                            @endif
+                                        </div>
+                                        <div class="hidden sm:block text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">
                                             {{ $k->updated_at ? $k->updated_at->timezone('Asia/Makassar')->format('d M Y, H:i') . ' WITA' : '-' }}
                                         </div>
                                     </td>
 
-                                    <!-- Tipe Pengajuan -->
-                                    <td class="py-3.5 px-4">
+                                    <!-- Tipe Pengajuan (Desktop Only) -->
+                                    <td class="py-3.5 px-4 hidden sm:table-cell">
                                         @if($k->aksi_approval === 'edit')
                                             <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">
                                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
@@ -415,8 +427,8 @@
                                         @endif
                                     </td>
 
-                                    <!-- Data Kendaraan -->
-                                    <td class="py-3.5 px-4">
+                                    <!-- Data Kendaraan (Desktop Only) -->
+                                    <td class="py-3.5 px-4 hidden sm:table-cell">
                                         @if($isEdit && count($changes) > 0)
                                             <!-- Edit Diff View -->
                                             <div class="space-y-1.5 p-2 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-white/5">
@@ -429,30 +441,30 @@
                                                 <div class="text-[10px] text-slate-500 dark:text-slate-400 space-y-0.5">
                                                     @if(isset($changes['jenis_kendaraan']) && $changes['jenis_kendaraan'] !== $k->jenis_kendaraan)
                                                         <div class="flex items-center gap-1">
-                                                            <span class="font-semibold text-slate-600 dark:text-slate-300">Jenis:</span>
-                                                            <span class="line-through text-rose-500">{{ $k->jenis_kendaraan }}</span>
-                                                            <span class="text-emerald-600 dark:text-emerald-400 font-bold">➔ {{ $changes['jenis_kendaraan'] }}</span>
+                                                             <span class="font-semibold text-slate-600 dark:text-slate-300">Jenis:</span>
+                                                             <span class="line-through text-rose-500">{{ $k->jenis_kendaraan }}</span>
+                                                             <span class="text-emerald-600 dark:text-emerald-400 font-bold">➔ {{ $changes['jenis_kendaraan'] }}</span>
                                                         </div>
                                                     @endif
                                                     @if(isset($changes['jenis_bbm']) && $changes['jenis_bbm'] !== $k->jenis_bbm)
                                                         <div class="flex items-center gap-1">
-                                                            <span class="font-semibold text-slate-600 dark:text-slate-300">BBM:</span>
-                                                            <span class="line-through text-rose-500">{{ $k->jenis_bbm }}</span>
-                                                            <span class="text-emerald-600 dark:text-emerald-400 font-bold">➔ {{ $changes['jenis_bbm'] }}</span>
+                                                             <span class="font-semibold text-slate-600 dark:text-slate-300">BBM:</span>
+                                                             <span class="line-through text-rose-500">{{ $k->jenis_bbm }}</span>
+                                                             <span class="text-emerald-600 dark:text-emerald-400 font-bold">➔ {{ $changes['jenis_bbm'] }}</span>
                                                         </div>
                                                     @endif
                                                     @if(isset($changes['roda']) && $changes['roda'] !== $k->roda)
                                                         <div class="flex items-center gap-1">
-                                                            <span class="font-semibold text-slate-600 dark:text-slate-300">Roda:</span>
-                                                            <span class="line-through text-rose-500">{{ $k->roda ?: '-' }}</span>
-                                                            <span class="text-emerald-600 dark:text-emerald-400 font-bold">➔ {{ $changes['roda'] }}</span>
+                                                             <span class="font-semibold text-slate-600 dark:text-slate-300">Roda:</span>
+                                                             <span class="line-through text-rose-500">{{ $k->roda ?: '-' }}</span>
+                                                             <span class="text-emerald-600 dark:text-emerald-400 font-bold">➔ {{ $changes['roda'] }}</span>
                                                         </div>
                                                     @endif
                                                     @if(isset($changes['cc']) && $changes['cc'] !== $k->cc)
                                                         <div class="flex items-center gap-1">
-                                                            <span class="font-semibold text-slate-600 dark:text-slate-300">CC:</span>
-                                                            <span class="line-through text-rose-500">{{ $k->cc ?: '-' }}</span>
-                                                            <span class="text-emerald-600 dark:text-emerald-400 font-bold">➔ {{ $changes['cc'] }}</span>
+                                                             <span class="font-semibold text-slate-600 dark:text-slate-300">CC:</span>
+                                                             <span class="line-through text-rose-500">{{ $k->cc ?: '-' }}</span>
+                                                             <span class="text-emerald-600 dark:text-emerald-400 font-bold">➔ {{ $changes['cc'] }}</span>
                                                         </div>
                                                     @endif
                                                 </div>
@@ -475,25 +487,25 @@
                                     </td>
 
                                     <!-- Status -->
-                                    <td class="py-3.5 px-4">
+                                    <td class="py-3.5 px-2 sm:px-4 text-center sm:text-left">
                                         @if($k->status_approval === 'pending')
-                                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 animate-pulse">
+                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 animate-pulse">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
                                                 Menunggu
                                             </span>
                                         @elseif($k->status_approval === 'disetujui')
-                                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                                                 Disetujui
                                             </span>
                                         @else
                                             <div class="space-y-1">
-                                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/30">
+                                                <span class="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/30">
                                                     <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
                                                     Ditolak
                                                 </span>
                                                 @if($k->alasan_penolakan)
-                                                    <div class="text-[10px] text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40 p-1.5 rounded border border-rose-200 dark:border-rose-900/50 max-w-xs">
+                                                    <div class="hidden sm:block text-[10px] text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40 p-1.5 rounded border border-rose-200 dark:border-rose-900/50 max-w-xs">
                                                         <span class="font-bold">Alasan:</span> {{ $k->alasan_penolakan }}
                                                     </div>
                                                 @endif
@@ -501,8 +513,8 @@
                                         @endif
                                     </td>
 
-                                    <!-- Action Buttons -->
-                                    <td class="py-3.5 px-4 text-center">
+                                    <!-- Action Buttons (Desktop Only) -->
+                                    <td class="py-3.5 px-4 text-center hidden sm:table-cell">
                                         @if($isPending)
                                             <div class="flex items-center justify-center gap-1.5">
                                                 <!-- Tombol Setujui -->
@@ -528,10 +540,198 @@
                                             <span class="text-[11px] text-slate-400 italic">Selesai</span>
                                         @endif
                                     </td>
+
+                                    <!-- Detail Button (Mobile Only) -->
+                                    <td class="py-3.5 px-2 text-center sm:hidden">
+                                        <button type="button" @click="showDetail = true" class="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-brand-primary dark:bg-white/10 dark:hover:bg-white/15 dark:text-white text-[11px] font-bold shadow-sm transition active:scale-95 border border-brand-primary/20 dark:border-white/10">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                            </svg>
+                                            <span>Detail</span>
+                                        </button>
+
+                                        <!-- Mobile Detail Modal -->
+                                        <template x-teleport="body">
+                                            <div x-show="showDetail" class="fixed inset-0 z-[9000] flex items-end sm:items-center justify-center p-3 sm:p-4" style="display: none;">
+                                                <!-- Backdrop -->
+                                                <div x-show="showDetail" x-transition.opacity @click="showDetail = false" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm"></div>
+
+                                                <!-- Modal Card -->
+                                                <div x-show="showDetail" 
+                                                    x-transition:enter="transition ease-out duration-200" 
+                                                    x-transition:enter-start="opacity-0 translate-y-8 sm:scale-95" 
+                                                    x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" 
+                                                    x-transition:leave="transition ease-in duration-150" 
+                                                    x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" 
+                                                    x-transition:leave-end="opacity-0 translate-y-8 sm:scale-95"
+                                                    @click.outside="showDetail = false"
+                                                    class="relative w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden z-10 max-h-[90vh] flex flex-col text-slate-800 dark:text-slate-100 text-left">
+                                                    
+                                                    <!-- Modal Header -->
+                                                    <div class="p-4 sm:p-5 border-b border-slate-100 dark:border-white/10 flex items-center justify-between bg-slate-50/70 dark:bg-slate-800/40">
+                                                        <div class="flex items-center gap-2.5">
+                                                            <div class="p-2 rounded-xl bg-brand-primary/10 text-brand-primary dark:bg-white/10 dark:text-white shrink-0">
+                                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                                            </div>
+                                                            <div>
+                                                                <h3 class="text-sm sm:text-base font-black text-slate-800 dark:text-white leading-tight">Detail Pengajuan Kendaraan</h3>
+                                                                <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">{{ $k->satker->nama_satker ?? '-' }}</p>
+                                                            </div>
+                                                        </div>
+                                                        <button type="button" @click="showDetail = false" class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                                        </button>
+                                                    </div>
+
+                                                    <!-- Modal Body (Scrollable) -->
+                                                    <div class="p-4 sm:p-6 overflow-y-auto space-y-4 text-xs">
+                                                        <!-- Nopol & Status Row -->
+                                                        <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-white/5">
+                                                            <div>
+                                                                <span class="text-[10px] uppercase font-bold text-slate-400 block">Nomor Polisi</span>
+                                                                <span class="text-base font-black font-mono text-slate-900 dark:text-white">{{ $k->no_polisi }}</span>
+                                                            </div>
+                                                            <div class="text-right">
+                                                                <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Status</span>
+                                                                @if($k->status_approval === 'pending')
+                                                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 animate-pulse">
+                                                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Menunggu
+                                                                    </span>
+                                                                @elseif($k->status_approval === 'disetujui')
+                                                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                                                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Disetujui
+                                                                    </span>
+                                                                @else
+                                                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/30">
+                                                                        <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Ditolak
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Info Grid -->
+                                                        <div class="grid grid-cols-2 gap-2.5">
+                                                            <div class="p-3 rounded-xl bg-slate-50/70 dark:bg-slate-800/30 border border-slate-200/60 dark:border-white/5">
+                                                                <span class="text-[10px] font-bold text-slate-400 uppercase block">Tipe Pengajuan</span>
+                                                                <div class="mt-1">
+                                                                    @if($k->aksi_approval === 'edit')
+                                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">Edit Data</span>
+                                                                    @elseif($k->aksi_approval === 'import')
+                                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20">Import Excel</span>
+                                                                    @else
+                                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">Tambah Baru</span>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                            <div class="p-3 rounded-xl bg-slate-50/70 dark:bg-slate-800/30 border border-slate-200/60 dark:border-white/5">
+                                                                <span class="text-[10px] font-bold text-slate-400 uppercase block">Jenis BBM</span>
+                                                                <span class="mt-1 font-bold text-xs inline-block text-slate-800 dark:text-slate-200">{{ $k->jenis_bbm }}</span>
+                                                            </div>
+                                                            <div class="p-3 rounded-xl bg-slate-50/70 dark:bg-slate-800/30 border border-slate-200/60 dark:border-white/5">
+                                                                <span class="text-[10px] font-bold text-slate-400 uppercase block">Jenis Kendaraan</span>
+                                                                <span class="mt-1 font-bold text-xs inline-block text-slate-800 dark:text-slate-200">{{ $k->jenis_kendaraan }}</span>
+                                                            </div>
+                                                            <div class="p-3 rounded-xl bg-slate-50/70 dark:bg-slate-800/30 border border-slate-200/60 dark:border-white/5">
+                                                                <span class="text-[10px] font-bold text-slate-400 uppercase block">Spesifikasi</span>
+                                                                <span class="mt-1 font-bold text-xs inline-block text-slate-800 dark:text-slate-200">{{ $k->roda ?: 'Non Roda' }} {{ $k->cc ? '• ' . $k->cc . ' cc' : '' }}</span>
+                                                            </div>
+                                                            <div class="p-3 rounded-xl bg-slate-50/70 dark:bg-slate-800/30 border border-slate-200/60 dark:border-white/5">
+                                                                <span class="text-[10px] font-bold text-slate-400 uppercase block">Diajukan Oleh</span>
+                                                                <span class="mt-1 font-bold text-xs inline-block text-slate-800 dark:text-slate-200 truncate block">{{ $k->diajukanOleh->name ?? 'Admin Satker' }}</span>
+                                                            </div>
+                                                            <div class="p-3 rounded-xl bg-slate-50/70 dark:bg-slate-800/30 border border-slate-200/60 dark:border-white/5">
+                                                                <span class="text-[10px] font-bold text-slate-400 uppercase block">Waktu Pengajuan</span>
+                                                                <span class="mt-1 font-bold text-[11px] inline-block text-slate-800 dark:text-slate-200">{{ $k->updated_at ? $k->updated_at->timezone('Asia/Makassar')->format('d/m/y H:i') . ' WITA' : '-' }}</span>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Edit Diffs (jika tipe edit) -->
+                                                        @if($isEdit && count($changes) > 0)
+                                                            <div class="p-3.5 rounded-2xl bg-amber-500/5 border border-amber-500/20 space-y-2">
+                                                                <span class="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+                                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                                                    Rincian Perubahan Data:
+                                                                </span>
+                                                                <div class="space-y-1.5">
+                                                                    @if(isset($changes['no_polisi']) && $changes['no_polisi'] !== $k->no_polisi)
+                                                                        <div class="p-2 rounded-lg bg-white dark:bg-slate-800 text-[11px] flex items-center justify-between border border-slate-100 dark:border-white/5">
+                                                                            <span class="font-bold text-slate-500">Nopol:</span>
+                                                                            <div><span class="line-through text-rose-500">{{ $k->no_polisi }}</span> ➔ <span class="text-emerald-600 dark:text-emerald-400 font-bold">{{ $changes['no_polisi'] }}</span></div>
+                                                                        </div>
+                                                                    @endif
+                                                                    @if(isset($changes['jenis_kendaraan']) && $changes['jenis_kendaraan'] !== $k->jenis_kendaraan)
+                                                                        <div class="p-2 rounded-lg bg-white dark:bg-slate-800 text-[11px] flex items-center justify-between border border-slate-100 dark:border-white/5">
+                                                                            <span class="font-bold text-slate-500">Jenis:</span>
+                                                                            <div><span class="line-through text-rose-500">{{ $k->jenis_kendaraan }}</span> ➔ <span class="text-emerald-600 dark:text-emerald-400 font-bold">{{ $changes['jenis_kendaraan'] }}</span></div>
+                                                                        </div>
+                                                                    @endif
+                                                                    @if(isset($changes['jenis_bbm']) && $changes['jenis_bbm'] !== $k->jenis_bbm)
+                                                                        <div class="p-2 rounded-lg bg-white dark:bg-slate-800 text-[11px] flex items-center justify-between border border-slate-100 dark:border-white/5">
+                                                                            <span class="font-bold text-slate-500">BBM:</span>
+                                                                            <div><span class="line-through text-rose-500">{{ $k->jenis_bbm }}</span> ➔ <span class="text-emerald-600 dark:text-emerald-400 font-bold">{{ $changes['jenis_bbm'] }}</span></div>
+                                                                        </div>
+                                                                    @endif
+                                                                    @if(isset($changes['roda']) && $changes['roda'] !== $k->roda)
+                                                                        <div class="p-2 rounded-lg bg-white dark:bg-slate-800 text-[11px] flex items-center justify-between border border-slate-100 dark:border-white/5">
+                                                                            <span class="font-bold text-slate-500">Roda:</span>
+                                                                            <div><span class="line-through text-rose-500">{{ $k->roda ?: '-' }}</span> ➔ <span class="text-emerald-600 dark:text-emerald-400 font-bold">{{ $changes['roda'] }}</span></div>
+                                                                        </div>
+                                                                    @endif
+                                                                    @if(isset($changes['cc']) && $changes['cc'] !== $k->cc)
+                                                                        <div class="p-2 rounded-lg bg-white dark:bg-slate-800 text-[11px] flex items-center justify-between border border-slate-100 dark:border-white/5">
+                                                                            <span class="font-bold text-slate-500">CC:</span>
+                                                                            <div><span class="line-through text-rose-500">{{ $k->cc ?: '-' }}</span> ➔ <span class="text-emerald-600 dark:text-emerald-400 font-bold">{{ $changes['cc'] }}</span></div>
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        @endif
+
+                                                        <!-- Alasan Ditolak jika ada -->
+                                                        @if($k->status_approval === 'ditolak' && $k->alasan_penolakan)
+                                                            <div class="p-3.5 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 text-rose-700 dark:text-rose-300">
+                                                                <span class="font-bold block text-xs">Alasan Penolakan:</span>
+                                                                <p class="mt-1 text-[11px] leading-relaxed">{{ $k->alasan_penolakan }}</p>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+                                                    <!-- Modal Footer / Actions -->
+                                                    <div class="p-4 border-t border-slate-100 dark:border-white/10 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-end gap-2">
+                                                        @if($isPending)
+                                                            <!-- Tombol Tolak -->
+                                                            <button type="button" @click="showDetail = false; openRejectModal('{{ $k->id }}', '{{ $k->no_polisi }}')" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1.5">
+                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                                                Tolak
+                                                            </button>
+                                                            <!-- Tombol Setujui -->
+                                                            <form action="{{ route('admin.persetujuan-kendaraan.approve', $k) }}" method="POST" onsubmit="event.preventDefault(); window.confirmDialog({
+                                                                title: 'Setujui Kendaraan?',
+                                                                message: 'Setujui pengajuan unit kendaraan {{ $k->no_polisi }}?',
+                                                                type: 'question',
+                                                                confirmText: 'Ya, Setujui',
+                                                                cancelText: 'Batal'
+                                                            }, () => this.submit());">
+                                                                @csrf
+                                                                <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1.5">
+                                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                                                    Setujui
+                                                                </button>
+                                                            </form>
+                                                        @endif
+                                                        <button type="button" @click="showDetail = false" class="px-4 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold transition">
+                                                            Tutup
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="py-12 text-center">
+                                    <td colspan="7" class="py-12 text-center">
                                         <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 mx-auto flex items-center justify-center mb-3">
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                                         </div>

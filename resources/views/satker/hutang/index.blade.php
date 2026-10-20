@@ -70,24 +70,30 @@
         </div>
 
         <!-- Filter Card -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-4 relative z-30">
             <form action="{{ route('satker.hutang.index') }}" method="GET" class="flex flex-col md:flex-row items-stretch md:items-end gap-3">
                 <div class="flex-1 space-y-1">
                     <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider pl-0.5">BBM</label>
-                    <select name="jenis_bbm" class="tom-select w-full">
-                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua BBM</option>
-                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Pertamax" {{ request('jenis_bbm') == 'Pertamax' ? 'selected' : '' }}>Pertamax</option>
-                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="Pertamina Dex" {{ request('jenis_bbm') == 'Pertamina Dex' ? 'selected' : '' }}>Pertamina Dex</option>
-                    </select>
+                    <x-filter-select 
+                        name="jenis_bbm" 
+                        :value="request('jenis_bbm')" 
+                        placeholder="Semua BBM" 
+                        search-placeholder="Cari BBM..." 
+                        icon="bbm" 
+                        :options="['Pertamax' => 'Pertamax', 'Pertamina Dex' => 'Pertamina Dex']" 
+                    />
                 </div>
 
                 <div class="flex-1 space-y-1">
                     <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider pl-0.5">Status</label>
-                    <select name="status" class="tom-select w-full">
-                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua Status</option>
-                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="belum_dibayar" {{ request('status') == 'belum_dibayar' ? 'selected' : '' }}>Belum Bayar</option>
-                        <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="sudah_dibayar" {{ request('status') == 'sudah_dibayar' ? 'selected' : '' }}>Lunas</option>
-                    </select>
+                    <x-filter-select 
+                        name="status" 
+                        :value="request('status')" 
+                        placeholder="Semua Status" 
+                        icon="shield" 
+                        :searchable="false" 
+                        :options="['belum_dibayar' => 'Belum Bayar', 'sudah_dibayar' => 'Lunas']" 
+                    />
                 </div>
 
                 <div class="flex items-center gap-2 pt-1 md:pt-0">

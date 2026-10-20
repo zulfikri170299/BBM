@@ -18,57 +18,73 @@
         </div>
 
         <!-- Filter & Search -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-4 sm:p-5 mb-6">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-4 sm:p-5 mb-6 relative z-30">
             <form action="{{ route('admin.laporan-hutang.index') }}" method="GET" class="space-y-4">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
                     <div>
                         <label class="block text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Dari Tanggal</label>
-                        <input id="start_date" name="start_date" type="date"
-                            class="flatpickr w-full h-11 px-4 border-slate-200 dark:border-white/10 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all bg-slate-50 dark:bg-slate-800/50"
-                            value="{{ request('start_date') }}" />
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 z-10">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <input id="start_date" name="start_date" type="text" placeholder="Dari Tanggal"
+                                style="padding-left: 2.35rem !important;"
+                                class="flatpickr w-full h-11 !pl-9 pr-3 border border-slate-200 dark:border-white/10 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all bg-slate-50 dark:bg-slate-800/50"
+                                value="{{ request('start_date') }}" />
+                        </div>
                     </div>
 
                     <div>
                         <label class="block text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Sampai Tanggal</label>
-                        <input id="end_date" name="end_date" type="date"
-                            class="flatpickr w-full h-11 px-4 border-slate-200 dark:border-white/10 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all bg-slate-50 dark:bg-slate-800/50"
-                            value="{{ request('end_date') }}" />
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 z-10">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <input id="end_date" name="end_date" type="text" placeholder="Sampai Tanggal"
+                                style="padding-left: 2.35rem !important;"
+                                class="flatpickr w-full h-11 !pl-9 pr-3 border border-slate-200 dark:border-white/10 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all bg-slate-50 dark:bg-slate-800/50"
+                                value="{{ request('end_date') }}" />
+                        </div>
                     </div>
 
                     <div>
                         <label class="block text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Filter Satker</label>
-                        <select name="satker_id" id="filter_satker_id"
-                            class="tom-select w-full">
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua Satker</option>
-                            @foreach($satkers as $satker)
-                                <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
-                                    {{ $satker->nama_satker }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <x-filter-select 
+                            name="satker_id" 
+                            :value="request('satker_id')" 
+                            placeholder="Semua Satker" 
+                            search-placeholder="Cari nama satker..." 
+                            icon="building" 
+                            :options="$satkers" 
+                        />
                     </div>
 
                     <div>
                         <label class="block text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Jenis BBM</label>
-                        <select name="jenis_bbm" id="filter_jenis_bbm"
-                            class="tom-select w-full">
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua Jenis</option>
-                            @foreach($jenisBbm as $jenis)
-                                <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $jenis }}" {{ request('jenis_bbm') == $jenis ? 'selected' : '' }}>
-                                    {{ $jenis }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <x-filter-select 
+                            name="jenis_bbm" 
+                            :value="request('jenis_bbm')" 
+                            placeholder="Semua Jenis" 
+                            search-placeholder="Cari jenis BBM..." 
+                            icon="bbm" 
+                            :options="$jenisBbm" 
+                        />
                     </div>
 
                     <div>
                         <label class="block text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Status</label>
-                        <select name="status" id="filter_status"
-                            class="tom-select w-full">
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua Status</option>
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="sudah_dibayar" {{ request('status') === 'sudah_dibayar' ? 'selected' : '' }}>Lunas</option>
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="belum_dibayar" {{ request('status') === 'belum_dibayar' ? 'selected' : '' }}>Belum Lunas</option>
-                        </select>
+                        <x-filter-select 
+                            name="status" 
+                            :value="request('status')" 
+                            placeholder="Semua Status" 
+                            icon="shield" 
+                            :searchable="false" 
+                            :options="['sudah_dibayar' => 'Lunas', 'belum_dibayar' => 'Belum Lunas']" 
+                        />
                     </div>
 
                     <div class="flex items-end gap-2">

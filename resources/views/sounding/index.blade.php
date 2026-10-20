@@ -9,7 +9,7 @@
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-black text-white tracking-tight">Data Sounding BBM</h1>
+                    <h1 class="text-2xl font-black text-slate-800 dark:text-white tracking-tight">Data Sounding BBM</h1>
                     <p class="text-slate-600 dark:text-slate-400 text-sm font-medium mt-1 uppercase tracking-widest flex items-center gap-2">
                         Monitoring Stok Fisik dan Pengeluaran
                     </p>
@@ -45,52 +45,88 @@
         @endif
 
         <!-- Filter Card -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-3xl shadow-sm overflow-hidden mb-6">
-            <div class="p-5 border-b border-slate-200 dark:border-white/5 bg-white dark:bg-slate-800/30">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-3xl shadow-sm mb-6 relative">
+            <div class="p-5 border-b border-slate-200 dark:border-white/5 bg-white dark:bg-slate-800/30 rounded-3xl">
+                @php
+                    $bulanOptions = [];
+                    foreach(range(1, 12) as $m) {
+                        $padM = str_pad($m, 2, '0', STR_PAD_LEFT);
+                        $bulanOptions[$padM] = \Carbon\Carbon::create()->month($m)->translatedFormat('F');
+                    }
+                    $tahunOptions = [];
+                    foreach(range(date('Y') - 2, date('Y')) as $y) {
+                        $tahunOptions[$y] = (string)$y;
+                    }
+                    $twOptions = [
+                        '1' => 'Triwulan 1',
+                        '2' => 'Triwulan 2',
+                        '3' => 'Triwulan 3',
+                        '4' => 'Triwulan 4',
+                    ];
+                    $bbmOptions = [
+                        'PERTAMAX' => 'PERTAMAX',
+                        'PERTAMINA DEX' => 'PERTAMINA DEX',
+                    ];
+                @endphp
                 <form action="{{ route($rolePrefix.'.sounding.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-5 items-end gap-3">
                     <div>
                         <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-1.5">Bulan</label>
-                        <select name="bulan" class="tom-select w-full" data-placeholder="Pilih Bulan">
-                            @foreach(range(1, 12) as $m)
-                                <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ str_pad($m, 2, '0', STR_PAD_LEFT) }}" {{ $bulan == str_pad($m, 2, '0', STR_PAD_LEFT) ? 'selected' : '' }}>
-                                    {{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <x-filter-select 
+                            name="bulan" 
+                            :value="$bulan" 
+                            placeholder="Pilih Bulan" 
+                            icon="calendar" 
+                            :searchable="false" 
+                            :options="$bulanOptions" 
+                        />
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-1.5">Tahun</label>
-                        <select name="tahun" class="tom-select w-full" data-placeholder="Pilih Tahun">
-                            @foreach(range(date('Y') - 2, date('Y')) as $y)
-                                <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>{{ $y }}</option>
-                            @endforeach
-                        </select>
+                        <x-filter-select 
+                            name="tahun" 
+                            :value="$tahun" 
+                            placeholder="Pilih Tahun" 
+                            icon="calendar" 
+                            :searchable="false" 
+                            :options="$tahunOptions" 
+                        />
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-1.5">Triwulan</label>
-                        <select name="tw" class="tom-select w-full" data-placeholder="Semua (Opsional)">
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua (Opsional)</option>
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="1" {{ $tw == '1' ? 'selected' : '' }}>Triwulan 1</option>
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="2" {{ $tw == '2' ? 'selected' : '' }}>Triwulan 2</option>
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="3" {{ $tw == '3' ? 'selected' : '' }}>Triwulan 3</option>
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="4" {{ $tw == '4' ? 'selected' : '' }}>Triwulan 4</option>
-                        </select>
+                        <x-filter-select 
+                            name="tw" 
+                            :value="$tw" 
+                            placeholder="Semua (Opsional)" 
+                            icon="calendar" 
+                            :searchable="false" 
+                            :options="$twOptions" 
+                        />
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-1.5">Jenis BBM</label>
-                        <select name="jenis_bbm" class="tom-select w-full" data-placeholder="Semua BBM">
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">Semua BBM</option>
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="PERTAMAX" {{ $jenis_bbm == 'PERTAMAX' ? 'selected' : '' }}>PERTAMAX</option>
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="PERTAMINA DEX" {{ $jenis_bbm == 'PERTAMINA DEX' ? 'selected' : '' }}>PERTAMINA DEX</option>
-                        </select>
+                        <x-filter-select 
+                            name="jenis_bbm" 
+                            :value="$jenis_bbm" 
+                            placeholder="Semua BBM" 
+                            icon="bbm" 
+                            :searchable="false" 
+                            :options="$bbmOptions" 
+                        />
                     </div>
-                    <div>
-                        <button type="submit" class="w-full px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold rounded-xl shadow-lg shadow-indigo-500/30 transition-all flex items-center justify-center gap-2">
+                    <div class="flex items-center gap-2">
+                        <button type="submit" class="flex-1 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-indigo-500/30 transition-all flex items-center justify-center gap-1.5 active:scale-95">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                             </svg>
                             TERAPKAN
                         </button>
+                        @if(request()->anyFilled(['bulan', 'tahun', 'tw', 'jenis_bbm']))
+                            <a href="{{ route($rolePrefix.'.sounding.index') }}" class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold transition-all flex items-center justify-center" title="Reset Filter">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                            </a>
+                        @endif
                     </div>
                 </form>
             </div>

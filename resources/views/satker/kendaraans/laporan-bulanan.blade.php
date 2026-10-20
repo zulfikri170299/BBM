@@ -44,28 +44,43 @@
         </div>
 
         <!-- Filter -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-lg border border-slate-200 dark:border-white/10 p-4">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl border border-slate-200 dark:border-white/10 p-4">
+            @php
+                $bulanBulananOptions = [];
+                for($m = 1; $m <= 12; $m++) {
+                    $bulanBulananOptions[$m] = \Carbon\Carbon::create(null, $m, 1)->translatedFormat('F');
+                }
+                $tahunBulananOptions = [];
+                for($y = now()->year; $y >= now()->year - 5; $y--) {
+                    $tahunBulananOptions[$y] = (string)$y;
+                }
+            @endphp
             <form action="{{ route('satker.kendaraans.laporan-bulanan') }}" method="GET"
                 class="flex flex-wrap gap-3 items-end">
-                <div>
+                <div class="w-48">
                     <label class="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1 block">Bulan</label>
-                    <select name="bulan" class="px-3 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 border border-slate-300 dark:border-white/20 rounded-lg text-sm">
-                        @for($m = 1; $m <= 12; $m++)
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $m }}" {{ $bulan == $m ? 'selected' : '' }}>
-                                {{ \Carbon\Carbon::create(null, $m, 1)->translatedFormat('F') }}</option>
-                        @endfor
-                    </select>
+                    <x-filter-select 
+                        name="bulan" 
+                        :value="$bulan" 
+                        placeholder="Pilih Bulan" 
+                        icon="calendar" 
+                        :searchable="false" 
+                        :options="$bulanBulananOptions" 
+                    />
                 </div>
-                <div>
+                <div class="w-36">
                     <label class="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1 block">Tahun</label>
-                    <select name="tahun" class="px-3 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 border border-slate-300 dark:border-white/20 rounded-lg text-sm">
-                        @for($y = now()->year; $y >= now()->year - 5; $y--)
-                            <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>{{ $y }}</option>
-                        @endfor
-                    </select>
+                    <x-filter-select 
+                        name="tahun" 
+                        :value="$tahun" 
+                        placeholder="Pilih Tahun" 
+                        icon="calendar" 
+                        :searchable="false" 
+                        :options="$tahunBulananOptions" 
+                    />
                 </div>
                 <button type="submit"
-                    class="px-4 py-2 bg-emerald-600 text-white rounded-lg font-semibold text-sm hover:bg-emerald-700 transition-all">Filter</button>
+                    class="h-11 px-5 bg-emerald-600 text-white rounded-xl font-bold text-xs hover:bg-emerald-700 transition-all shadow-sm">Filter</button>
             </form>
         </div>
 

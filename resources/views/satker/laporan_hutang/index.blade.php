@@ -97,16 +97,16 @@
         </div>
 
         <!-- 1-Row Compact Filter & Search Card -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm relative z-30">
             <!-- Header with Title & Presets in 1 sleek bar -->
-            <div class="px-5 py-3 bg-slate-50/70 dark:bg-slate-800/40 border-b border-slate-200 dark:border-white/10 flex flex-wrap items-center justify-between gap-3">
+            <div class="px-5 py-3 bg-slate-50/70 dark:bg-slate-800/40 border-b border-slate-200 dark:border-white/10 flex flex-wrap items-center justify-between gap-3 rounded-t-2xl">
                 <div class="flex items-center gap-2.5">
                     <div class="w-7 h-7 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-lg flex items-center justify-center border border-indigo-100 dark:border-indigo-500/20">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                         </svg>
                     </div>
-                    <h3 class="text-xs font-bold text-white uppercase tracking-wider">Filter Laporan Hutang</h3>
+                    <h3 class="text-xs font-bold text-slate-800 dark:text-white uppercase tracking-wider">Filter Laporan Hutang</h3>
                 </div>
 
                 <!-- Presets & Filter Status in Header -->
@@ -180,11 +180,14 @@
                         <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5 ml-0.5">
                             Status Pembayaran
                         </label>
-                        <select name="status" id="status" class="tom-select w-full">
-                            <option value="">Semua Status</option>
-                            <option value="sudah_dibayar" {{ request('status') === 'sudah_dibayar' ? 'selected' : '' }}>Lunas</option>
-                            <option value="belum_dibayar" {{ request('status') === 'belum_dibayar' ? 'selected' : '' }}>Belum Lunas</option>
-                        </select>
+                        <x-filter-select 
+                            name="status" 
+                            :value="request('status')" 
+                            placeholder="Semua Status" 
+                            icon="shield" 
+                            :searchable="false" 
+                            :options="['sudah_dibayar' => 'Lunas', 'belum_dibayar' => 'Belum Lunas']" 
+                        />
                     </div>
 
                     <!-- Tombol Filter & Reset (2 cols) -->
@@ -220,7 +223,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-sm font-bold text-white">Daftar Riwayat Hutang BBM Satker</h3>
+                        <h3 class="text-sm font-bold text-slate-800 dark:text-white">Daftar Riwayat Hutang BBM Satker</h3>
                         <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
                             Menampilkan {{ $hutangs->firstItem() ?? 0 }}-{{ $hutangs->lastItem() ?? 0 }} dari total {{ $hutangs->total() }} catatan hutang
                         </p>

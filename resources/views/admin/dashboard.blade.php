@@ -202,32 +202,34 @@
         <!-- DUA DIAGRAM BATANG TERPISAH: STOK TANGKI FISIK & HUTANG BBM -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 w-full min-w-0">
             <!-- DIAGRAM BATANG 1: STOK TANGKI FISIK BBM -->
-            <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-white/10 rounded-3xl p-5 sm:p-6 shadow-sm relative overflow-hidden flex flex-col justify-between w-full min-w-0 group hover:border-blue-500/30 transition-all">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-white/10 rounded-3xl p-4 sm:p-6 shadow-sm relative overflow-hidden flex flex-col justify-between w-full min-w-0 group hover:border-blue-500/30 transition-all">
                 <div class="absolute -top-16 -right-16 w-60 h-60 bg-blue-500/10 dark:bg-blue-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
                 <div>
                     <!-- Header -->
-                    <div class="relative z-10 flex items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-white/5">
-                        <div class="flex items-center gap-3">
-                            <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/20 shrink-0">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="relative z-10 flex items-center justify-between gap-2.5 sm:gap-3 pb-3.5 sm:pb-4 border-b border-slate-100 dark:border-white/5">
+                        <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/20 shrink-0">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                                 </svg>
                             </div>
-                            <div>
-                                <div class="flex items-center gap-2">
-                                    <h3 class="text-base font-black text-white">Diagram Batang: Stok Tangki Fisik</h3>
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-1.5 sm:gap-2">
+                                    <h3 class="text-xs sm:text-base font-black text-slate-800 dark:text-white whitespace-nowrap">
+                                        <span class="hidden sm:inline">Diagram Batang: </span>Stok Tangki Fisik
+                                    </h3>
+                                    <span class="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-black uppercase bg-blue-500/10 text-blue-600 dark:text-blue-400 shrink-0">
                                         Tersedia
                                     </span>
                                 </div>
-                                <p class="text-xs text-slate-400 mt-0.5">Ketersediaan volume riil BBM di tangki fisik SPBP</p>
+                                <p class="text-[11px] sm:text-xs text-slate-400 mt-0.5 truncate sm:whitespace-normal">Ketersediaan volume riil BBM di tangki fisik SPBP</p>
                             </div>
                         </div>
 
                         <a href="{{ route('admin.laporan-stok-bbm.index') }}"
-                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold transition shrink-0">
-                            Laporan
+                            class="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-[11px] sm:text-xs font-bold transition shrink-0">
+                            <span>Laporan</span>
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                         </a>
                     </div>
@@ -243,7 +245,7 @@
                     <div class="p-3 rounded-2xl bg-blue-50/50 dark:bg-blue-500/5 border border-blue-500/20 flex items-center justify-between">
                         <div>
                             <span class="text-[10px] font-bold text-blue-600 dark:text-blue-400 block uppercase">Pertamax</span>
-                            <span class="text-lg font-black text-white tabular-nums">
+                            <span class="text-lg font-black text-slate-800 dark:text-white tabular-nums">
                                 {{ number_format($tankStock['pertamax'], 0, ',', '.') }}
                             </span>
                             <span class="text-[10px] font-bold text-slate-400"> L</span>
@@ -254,7 +256,7 @@
                     <div class="p-3 rounded-2xl bg-emerald-50/50 dark:bg-emerald-500/5 border border-emerald-500/20 flex items-center justify-between">
                         <div>
                             <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 block uppercase">Pertamina Dex</span>
-                            <span class="text-lg font-black text-white tabular-nums">
+                            <span class="text-lg font-black text-slate-800 dark:text-white tabular-nums">
                                 {{ number_format($tankStock['dex'], 0, ',', '.') }}
                             </span>
                             <span class="text-[10px] font-bold text-slate-400"> L</span>
@@ -265,32 +267,34 @@
             </div>
 
             <!-- DIAGRAM BATANG 2: HUTANG BBM TERTUNDA (BELUM BAYAR) -->
-            <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-white/10 rounded-3xl p-5 sm:p-6 shadow-sm relative overflow-hidden flex flex-col justify-between w-full min-w-0 group hover:border-rose-500/30 transition-all">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-white/10 rounded-3xl p-4 sm:p-6 shadow-sm relative overflow-hidden flex flex-col justify-between w-full min-w-0 group hover:border-rose-500/30 transition-all">
                 <div class="absolute -top-16 -right-16 w-60 h-60 bg-rose-500/10 dark:bg-rose-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
                 <div>
                     <!-- Header -->
-                    <div class="relative z-10 flex items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-white/5">
-                        <div class="flex items-center gap-3">
-                            <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-500 to-rose-600 text-white flex items-center justify-center shadow-lg shadow-rose-500/20 shrink-0">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="relative z-10 flex items-center justify-between gap-2.5 sm:gap-3 pb-3.5 sm:pb-4 border-b border-slate-100 dark:border-white/5">
+                        <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-gradient-to-br from-amber-500 to-rose-600 text-white flex items-center justify-center shadow-lg shadow-rose-500/20 shrink-0">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                 </svg>
                             </div>
-                            <div>
-                                <div class="flex items-center gap-2">
-                                    <h3 class="text-base font-black text-white">Diagram Batang: Hutang BBM</h3>
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-1.5 sm:gap-2">
+                                    <h3 class="text-xs sm:text-base font-black text-slate-800 dark:text-white whitespace-nowrap">
+                                        <span class="hidden sm:inline">Diagram Batang: </span>Hutang BBM
+                                    </h3>
+                                    <span class="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-black uppercase bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 shrink-0">
                                         Tertunda
                                     </span>
                                 </div>
-                                <p class="text-xs text-slate-400 mt-0.5">Akumulasi volume bon BBM yang belum diselesaikan</p>
+                                <p class="text-[11px] sm:text-xs text-slate-400 mt-0.5 truncate sm:whitespace-normal">Akumulasi volume bon BBM yang belum diselesaikan</p>
                             </div>
                         </div>
 
                         <a href="{{ route('admin.hutang.index') }}"
-                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-bold transition border border-rose-500/20 shrink-0">
-                            Kelola
+                            class="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 text-[11px] sm:text-xs font-bold transition border border-rose-500/20 shrink-0">
+                            <span>Kelola</span>
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                         </a>
                     </div>
@@ -340,7 +344,7 @@
                     <div>
                         <span class="text-[11px] font-black uppercase tracking-wider text-amber-700 dark:text-amber-400">Hutang Pertamax (Belum Bayar)</span>
                         <div class="mt-0.5 flex items-baseline gap-1.5">
-                            <span class="text-2xl font-black text-white tabular-nums">
+                            <span class="text-2xl font-black text-slate-800 dark:text-white tabular-nums">
                                 {{ number_format($stats['totalHutangPertamax'], 0, ',', '.') }}
                             </span>
                             <span class="text-xs font-bold text-slate-500 dark:text-slate-400">Liter</span>
@@ -362,7 +366,7 @@
                     <div>
                         <span class="text-[11px] font-black uppercase tracking-wider text-rose-700 dark:text-rose-400">Hutang Dex (Belum Bayar)</span>
                         <div class="mt-0.5 flex items-baseline gap-1.5">
-                            <span class="text-2xl font-black text-white tabular-nums">
+                            <span class="text-2xl font-black text-slate-800 dark:text-white tabular-nums">
                                 {{ number_format($stats['totalHutangDex'], 0, ',', '.') }}
                             </span>
                             <span class="text-xs font-bold text-slate-500 dark:text-slate-400">Liter</span>
@@ -384,7 +388,7 @@
                     <div class="flex items-center gap-2.5">
                         <div class="w-2.5 h-6 bg-indigo-600 rounded-full"></div>
                         <div>
-                            <h3 class="text-base font-black text-white">Diagram Batang: Transaksi & Konsumsi BBM Harian</h3>
+                            <h3 class="text-sm sm:text-base font-black text-slate-800 dark:text-white"><span class="hidden sm:inline">Diagram Batang: </span>Transaksi & Konsumsi BBM Harian</h3>
                             <p class="text-xs text-slate-400">Pantauan frekuensi transaksi dan pergerakan volume liter selama 7 hari terakhir</p>
                         </div>
                     </div>
@@ -404,7 +408,7 @@
                         <div class="flex items-center gap-2.5">
                             <div class="w-2.5 h-6 bg-emerald-500 rounded-full"></div>
                             <div>
-                                <h3 class="text-base font-black text-white">Diagram Lingkar: Armada Roda</h3>
+                                <h3 class="text-sm sm:text-base font-black text-slate-800 dark:text-white"><span class="hidden sm:inline">Diagram Lingkar: </span>Armada Roda</h3>
                                 <p class="text-xs text-slate-400">Komposisi tipe roda kendaraan</p>
                             </div>
                         </div>
@@ -435,7 +439,7 @@
                         <div class="flex items-center gap-2.5">
                             <div class="w-2.5 h-6 bg-amber-500 rounded-full"></div>
                             <div>
-                                <h3 class="text-base font-black text-white">Diagram Lingkar: Indeks Kepuasan</h3>
+                                <h3 class="text-sm sm:text-base font-black text-slate-800 dark:text-white"><span class="hidden sm:inline">Diagram Lingkar: </span>Indeks Kepuasan</h3>
                                 <p class="text-xs text-slate-400">Evaluasi respon kepuasan petugas BBM</p>
                             </div>
                         </div>
@@ -491,7 +495,7 @@
                         <div class="flex items-center gap-2.5">
                             <div class="w-2.5 h-6 bg-blue-500 rounded-full"></div>
                             <div>
-                                <h3 class="text-base font-black text-white">Ketersediaan Saldo BBM Armada & Pusat</h3>
+                                <h3 class="text-base font-black text-slate-800 dark:text-white">Ketersediaan Saldo BBM Armada & Pusat</h3>
                                 <p class="text-xs text-slate-400">Distribusi saldo bahan bakar aktif</p>
                             </div>
                         </div>
@@ -517,7 +521,7 @@
                                         <span class="w-2 h-2 rounded-full {{ $isDex ? 'bg-emerald-500' : 'bg-blue-500' }}"></span>
                                     </div>
                                     <div class="mt-1.5 flex items-baseline gap-1.5">
-                                        <span class="text-xl font-black text-white tabular-nums">
+                                        <span class="text-xl font-black text-slate-800 dark:text-white tabular-nums">
                                             {{ number_format($kFuel->total, 0, ',', '.') }}
                                         </span>
                                         <span class="text-xs font-bold text-slate-400">Liter</span>
@@ -535,7 +539,7 @@
                                 <div class="p-3 rounded-xl border {{ $isDexStock ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-blue-500/5 border-blue-500/20' }} flex items-center justify-between">
                                     <div>
                                         <span class="text-[10px] font-bold text-slate-400 block">{{ $aStock->jenis_bbm }}</span>
-                                        <span class="text-base font-black text-white tabular-nums">
+                                        <span class="text-base font-black text-slate-800 dark:text-white tabular-nums">
                                             {{ rtrim(rtrim(number_format($aStock->saldo, 2, ',', '.'), '0'), ',') }} L
                                         </span>
                                     </div>
@@ -609,7 +613,7 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-sm font-black text-white">Peta Sebaran Lokasi Operator & Personel</h3>
+                            <h3 class="text-sm font-black text-slate-800 dark:text-white">Peta Sebaran Lokasi Operator & Personel</h3>
                             <p class="text-[10px] text-slate-400">Pemantauan lokasi aktif petugas di wilayah hukum Polda NTB</p>
                         </div>
                     </div>
@@ -717,7 +721,7 @@
                                     <div class="flex items-center gap-2 mb-2">
                                         <span class="w-8 h-8 rounded-full ${roleColor} flex items-center justify-center text-white text-xs font-bold shadow-sm">${initials}</span>
                                         <div>
-                                            <h4 class="font-bold text-white text-sm leading-tight">${user.name}</h4>
+                                            <h4 class="font-bold text-slate-800 text-sm leading-tight">${user.name}</h4>
                                             <p class="text-[10px] text-indigo-600 font-bold tracking-wide">${roleLabel}</p>
                                         </div>
                                     </div>

@@ -9,7 +9,7 @@
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-bold text-white tracking-tight">Data BBM Pada Tangki</h1>
+                    <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Data BBM Pada Tangki</h1>
                     <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-0.5 flex items-center gap-2">
                         <span class="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></span>
                         Sinkronisasi Fisik Tangki (Pertamax & Dex)
@@ -49,7 +49,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-sm font-bold text-white">Input Stok Fisik Tangki</h3>
+                        <h3 class="text-sm font-bold text-slate-800 dark:text-white">Input Stok Fisik Tangki</h3>
                         <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Masukkan hasil pengukuran terbaru dari tongkat ukur tangki</p>
                     </div>
                 </div>

@@ -29,7 +29,7 @@
                             </div>
                         @endif
                     </div>
-                    <h3 class="text-base sm:text-lg font-bold text-white">{{ Auth::user()->name }}</h3>
+                    <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">{{ Auth::user()->name }}</h3>
                     <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-medium break-all">{{ Auth::user()->email }}</p>
                     <div class="mt-3 sm:mt-4 flex justify-center">
                         <span
@@ -101,7 +101,7 @@
                     class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-300 dark:border-white/10 shadow-sm overflow-hidden scroll-mt-6">
                     <div class="p-2 sm:p-6 lg:p-8">
                         <header>
-                            <h2 class="text-base sm:text-lg font-medium text-white">
+                            <h2 class="text-base sm:text-lg font-medium text-slate-900 dark:text-white">
                                 {{ __('Foto Profil') }}
                             </h2>
 

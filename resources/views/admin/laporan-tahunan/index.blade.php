@@ -70,7 +70,7 @@
                     </div>
                 </div>
                 <div class="mt-3 flex items-baseline gap-1.5">
-                    <span class="text-2xl sm:text-3xl font-black text-white tabular-nums">
+                    <span class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tabular-nums">
                         {{ number_format($grandPendapatan, 0, ',', '.') }}
                     </span>
                     <span class="text-xs font-bold text-slate-400">Liter</span>
@@ -98,7 +98,7 @@
                     </div>
                 </div>
                 <div class="mt-3 flex items-baseline gap-1.5">
-                    <span class="text-2xl sm:text-3xl font-black text-white tabular-nums">
+                    <span class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tabular-nums">
                         {{ number_format($grandPemakaian, 0, ',', '.') }}
                     </span>
                     <span class="text-xs font-bold text-slate-400">Liter</span>
@@ -149,7 +149,7 @@
         </div>
 
         <!-- Filter Card -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-4 sm:p-5">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-4 sm:p-5 relative z-30">
             <form action="{{ route('admin.laporan-tahunan.index') }}" method="GET" class="flex flex-col sm:flex-row items-stretch sm:items-end gap-3.5">
                 <div class="flex-1">
                     <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
@@ -160,13 +160,21 @@
                             Tahun Laporan
                         </span>
                     </label>
-                    <select name="year" onchange="this.form.submit()" class="tom-select w-full">
-                        @foreach($availableYears as $y)
-                            <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>
-                                Tahun {{ $y }}
-                            </option>
-                        @endforeach
-                    </select>
+                    @php
+                        $yearOptions = [];
+                        foreach($availableYears as $y) {
+                            $yearOptions[$y] = 'Tahun ' . $y;
+                        }
+                    @endphp
+                    <x-filter-select 
+                        name="year" 
+                        :value="$year" 
+                        placeholder="Pilih Tahun" 
+                        icon="calendar" 
+                        :searchable="false" 
+                        :auto-submit="true" 
+                        :options="$yearOptions" 
+                    />
                 </div>
 
                 <div class="flex items-center gap-2">

@@ -64,13 +64,43 @@ class DashboardController extends Controller
             $date = now()->subDays($i);
             $qChart = \App\Models\TransaksiBbm::whereDate('created_at', $date);
             if ($user->role !== 'super_admin') {
-                $qChart->whereHas('kendaraan', function($q) use ($satkerId) {
-                    $q->where('satker_id', $satkerId);
+                $qChart->where(function($q) use ($satkerId) {
+                    $q->where('satker_id', $satkerId)
+                      ->orWhereHas('kendaraan', function($qk) use ($satkerId) {
+                          $qk->where('satker_id', $satkerId);
+                      });
                 });
             }
             $count = (clone $qChart)->count();
             $liter = (clone $qChart)->sum('liter');
-            $chartData[] = ['date' => $date->format('d M'), 'count' => $count, 'liter' => round($liter, 1)];
+
+            $pertamax = (clone $qChart)->where(function($q) {
+                $q->where('jenis_bbm', 'like', '%Pertamax%')
+                  ->orWhere(function($sub) {
+                      $sub->whereNull('jenis_bbm')
+                          ->whereHas('kendaraan', function($qk) {
+                              $qk->where('jenis_bbm', 'like', '%Pertamax%');
+                          });
+                  });
+            })->sum('liter');
+
+            $dex = (clone $qChart)->where(function($q) {
+                $q->where('jenis_bbm', 'like', '%Dex%')
+                  ->orWhere(function($sub) {
+                      $sub->whereNull('jenis_bbm')
+                          ->whereHas('kendaraan', function($qk) {
+                              $qk->where('jenis_bbm', 'like', '%Dex%');
+                          });
+                  });
+            })->sum('liter');
+
+            $chartData[] = [
+                'date' => $date->format('d M'),
+                'count' => $count,
+                'liter' => round($liter, 1),
+                'pertamax' => round($pertamax, 1),
+                'dex' => round($dex, 1),
+            ];
         }
 
         // Breakdown per Jenis BBM

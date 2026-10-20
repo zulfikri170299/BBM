@@ -9,7 +9,7 @@
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-bold text-white tracking-tight">Laporan Top Up</h1>
+                    <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Laporan Top Up</h1>
                     <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-0.5">Riwayat dan rekapitulasi pengisian saldo BBM kendaraan dinas.</p>
                 </div>
             </div>
@@ -32,7 +32,7 @@
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 p-4 shadow-sm flex items-center justify-between">
                 <div>
                     <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Transaksi</p>
-                    <h3 class="text-xl font-black text-white mt-1">{{ number_format($riwayats->total(), 0, ',', '.') }}</h3>
+                    <h3 class="text-xl font-black text-slate-900 dark:text-white mt-1">{{ number_format($riwayats->total(), 0, ',', '.') }}</h3>
                     <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 font-medium">Catatan pengisian saldo</p>
                 </div>
                 <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-100 dark:border-indigo-500/20 shrink-0">
@@ -87,7 +87,7 @@
         </div>
 
         <!-- Filter Card -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-4 sm:p-5">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-4 sm:p-5 relative z-30">
             <form action="{{ route('admin.laporan-topup.index') }}" method="GET">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
                     <!-- Mulai Tanggal -->
@@ -96,8 +96,14 @@
                             Mulai Tanggal
                         </label>
                         <div class="relative">
-                            <input type="date" name="start_date" value="{{ request('start_date') }}"
-                                class="flatpickr w-full h-10 px-3.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-white/10 rounded-xl text-xs font-semibold text-slate-800 dark:text-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 z-10">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <input type="text" name="start_date" value="{{ request('start_date') }}" placeholder="Dari Tanggal"
+                                style="padding-left: 2.35rem !important;"
+                                class="flatpickr w-full h-10 !pl-9 pr-3.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-white/10 rounded-xl text-xs font-semibold text-slate-800 dark:text-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition">
                         </div>
                     </div>
 
@@ -107,8 +113,14 @@
                             Sampai Tanggal
                         </label>
                         <div class="relative">
-                            <input type="date" name="end_date" value="{{ request('end_date') }}"
-                                class="flatpickr w-full h-10 px-3.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-white/10 rounded-xl text-xs font-semibold text-slate-800 dark:text-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 z-10">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <input type="text" name="end_date" value="{{ request('end_date') }}" placeholder="Sampai Tanggal"
+                                style="padding-left: 2.35rem !important;"
+                                class="flatpickr w-full h-10 !pl-9 pr-3.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-white/10 rounded-xl text-xs font-semibold text-slate-800 dark:text-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition">
                         </div>
                     </div>
 
@@ -117,14 +129,14 @@
                         <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1.5 ml-0.5">
                             Satker
                         </label>
-                        <select name="satker_id" id="filter_satker_id" class="tom-select w-full">
-                            <option value="">Semua Satker</option>
-                            @foreach($satkers as $satker)
-                                <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
-                                    {{ $satker->nama_satker }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <x-filter-select 
+                            name="satker_id" 
+                            :value="request('satker_id')" 
+                            placeholder="Semua Satker" 
+                            search-placeholder="Cari nama satker..." 
+                            icon="building" 
+                            :options="$satkers" 
+                        />
                     </div>
 
                     <!-- Action Buttons -->
@@ -161,7 +173,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-sm font-bold text-white">Riwayat Transaksi Top Up</h3>
+                        <h3 class="text-sm font-bold text-slate-800 dark:text-white">Riwayat Transaksi Top Up</h3>
                         <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Menampilkan {{ $riwayats->firstItem() ?? 0 }}-{{ $riwayats->lastItem() ?? 0 }} dari total {{ $riwayats->total() }} catatan</p>
                     </div>
                 </div>

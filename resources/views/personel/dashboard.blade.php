@@ -231,8 +231,7 @@ box-shadow: 0 8px 20px rgba(0,0,0,0.4);
     <div class="p-2 sm:p-6 lg:p-8 space-y-4 sm:space-y-8">
         <!-- Page Title -->
         <div>
-            <h1 class="text-xl sm:text-2xl font-bold text-white">Dashboard</h1>
-
+            <h1 class="text-xl sm:text-2xl font-bold text-slate-800 dark:text-white">Dashboard</h1>
         </div>
 
         <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-8 items-start">

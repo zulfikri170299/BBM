@@ -1,3 +1,4 @@
+@import 'flatpickr/dist/flatpickr.min.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -28,10 +29,20 @@
         box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.4);
     }
 
+    /* Global Native Select & Option Colors in Light/Dark Mode */
+    select, 
+    select.tom-select {
+        @apply bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-white/10;
+    }
+
+    select option {
+        @apply bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100;
+    }
+
     /* TomSelect Premium Styling */
     .ts-wrapper .ts-control {
-        @apply border border-slate-300 dark:border-white/10 bg-white dark:bg-slate-900 rounded-lg px-3 py-2 text-xs font-medium text-slate-800 dark:text-slate-200 shadow-none transition-all flex items-center;
-        min-height: 36px;
+        @apply border border-slate-300 dark:border-white/10 bg-white dark:bg-slate-900 rounded-lg px-3 py-2 text-xs font-semibold text-slate-900 dark:text-slate-100 shadow-none transition-all flex items-center;
+        min-height: 38px;
     }
 
     .ts-wrapper.focus .ts-control {
@@ -43,7 +54,7 @@
     }
 
     .ts-wrapper .ts-dropdown .option {
-        @apply px-3 py-2.5 rounded-lg font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer;
+        @apply px-3 py-2.5 rounded-lg font-medium text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer;
     }
 
     .ts-wrapper .ts-dropdown .active {
@@ -51,7 +62,7 @@
     }
 
     .ts-wrapper .ts-control .item {
-        @apply font-medium text-slate-800 dark:text-slate-200 uppercase tracking-wider;
+        @apply font-semibold text-slate-900 dark:text-slate-100 uppercase tracking-wider;
     }
 
     /* Flatpickr Premium Indigo Styling */

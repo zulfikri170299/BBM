@@ -12,17 +12,17 @@
         <div class="max-w-7xl mx-auto space-y-6">
 
             <!-- Header Card -->
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 p-5 rounded-2xl shadow-sm">
-                <div>
-                    <div class="flex items-center gap-3">
-                        <div class="p-2.5 bg-brand-primary/10 text-brand-primary dark:bg-white/10 dark:text-white rounded-xl">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 p-4 sm:p-5 rounded-2xl shadow-sm">
+                <div class="w-full sm:w-auto">
+                    <div class="flex items-center gap-2.5 sm:gap-3">
+                        <div class="p-2 sm:p-2.5 bg-brand-primary/10 text-brand-primary dark:bg-white/10 dark:text-white rounded-xl shrink-0">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
-                        <div>
-                            <h1 class="text-xl sm:text-2xl font-black text-slate-800 dark:text-white">Persetujuan Kendaraan</h1>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Monitoring status pengajuan kendaraan (Tambah, Edit, Import) dari {{ auth()->user()->satker->nama_satker ?? 'Satker Anda' }}</p>
+                        <div class="min-w-0">
+                            <h1 class="text-base sm:text-2xl font-black text-slate-800 dark:text-white whitespace-nowrap tracking-tight">Persetujuan Data Kendaraan</h1>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1 sm:line-clamp-none">Monitoring status pengajuan kendaraan (Tambah, Edit, Import) dari {{ auth()->user()->satker->nama_satker ?? 'Satker Anda' }}</p>
                         </div>
                     </div>
                 </div>
@@ -97,43 +97,25 @@
             </div>
 
             <!-- Filter Toolbar -->
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 p-3 sm:p-4 rounded-2xl shadow-sm"
-                x-data="{
-                    aksiOpen: false,
-                    selectedAksi: '{{ $aksi ?? '' }}',
-                    selectedAksiLabel: '{{ empty($aksi) ? 'Semua Aksi' : ($aksi === 'tambah' ? 'Tambah Baru' : ($aksi === 'edit' ? 'Edit Data' : 'Import Excel')) }}'
-                }">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 p-3 sm:p-4 rounded-2xl shadow-sm">
                 <form id="filterForm" action="{{ route('satker.persetujuan-kendaraan.index') }}" method="GET" class="flex flex-col lg:flex-row items-stretch lg:items-center gap-2.5">
                     <input type="hidden" name="status" value="{{ $status }}">
-                    <input type="hidden" name="aksi" :value="selectedAksi">
 
-                    <!-- Custom Dropdown: Filter Aksi -->
-                    <div class="relative w-full lg:w-48 flex-shrink-0" @click.outside="aksiOpen = false">
-                        <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 lg:hidden">Aksi</label>
-                        <button type="button" @click="aksiOpen = !aksiOpen"
-                            class="w-full h-10 px-3 bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-white/10 rounded-xl text-left text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center justify-between gap-2 transition focus:outline-none focus:ring-2 focus:ring-brand-primary">
-                            <span class="truncate" x-text="selectedAksiLabel"></span>
-                            <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 flex-shrink-0" :class="aksiOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                        </button>
-                        <div x-show="aksiOpen" x-transition.origin.top.duration.150ms
-                            class="absolute z-50 left-0 right-0 mt-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl shadow-xl py-1 text-xs" style="display: none;">
-                            <button type="button" @click="selectedAksi = ''; selectedAksiLabel = 'Semua Aksi'; aksiOpen = false; $nextTick(() => $el.closest('form').submit());"
-                                class="w-full px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold" :class="selectedAksi === '' ? 'text-brand-primary font-bold bg-brand-primary/5' : 'text-slate-700 dark:text-slate-300'">
-                                Semua Aksi
-                            </button>
-                            <button type="button" @click="selectedAksi = 'tambah'; selectedAksiLabel = 'Tambah Baru'; aksiOpen = false; $nextTick(() => $el.closest('form').submit());"
-                                class="w-full px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold" :class="selectedAksi === 'tambah' ? 'text-brand-primary font-bold bg-brand-primary/5' : 'text-slate-700 dark:text-slate-300'">
-                                Tambah Baru
-                            </button>
-                            <button type="button" @click="selectedAksi = 'edit'; selectedAksiLabel = 'Edit Data'; aksiOpen = false; $nextTick(() => $el.closest('form').submit());"
-                                class="w-full px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold" :class="selectedAksi === 'edit' ? 'text-brand-primary font-bold bg-brand-primary/5' : 'text-slate-700 dark:text-slate-300'">
-                                Edit Data
-                            </button>
-                            <button type="button" @click="selectedAksi = 'import'; selectedAksiLabel = 'Import Excel'; aksiOpen = false; $nextTick(() => $el.closest('form').submit());"
-                                class="w-full px-3 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold" :class="selectedAksi === 'import' ? 'text-brand-primary font-bold bg-brand-primary/5' : 'text-slate-700 dark:text-slate-300'">
-                                Import Excel
-                            </button>
-                        </div>
+                    <!-- Filter Aksi -->
+                    <div class="w-full lg:w-48 flex-shrink-0">
+                        <x-filter-select 
+                            name="aksi" 
+                            :value="$aksi" 
+                            placeholder="Semua Aksi" 
+                            icon="filter" 
+                            :searchable="false" 
+                            :auto-submit="true" 
+                            :options="[
+                                'tambah' => 'Tambah Baru',
+                                'edit' => 'Edit Data',
+                                'import' => 'Import Excel'
+                            ]" 
+                        />
                     </div>
 
                     <!-- Search Input -->
@@ -166,40 +148,54 @@
             <!-- Table Card -->
             <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl shadow-sm overflow-hidden">
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-slate-200 dark:divide-white/5 text-left text-xs whitespace-nowrap">
+                    <table class="w-full sm:min-w-full divide-y divide-slate-200 dark:divide-white/5 text-left text-xs">
                         <thead class="bg-slate-50 dark:bg-slate-800/70 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[11px]">
                             <tr>
-                                <th class="px-4 py-3.5 text-center w-12 whitespace-nowrap">No</th>
-                                <th class="px-4 py-3.5 whitespace-nowrap">Kendaraan</th>
-                                <th class="px-4 py-3.5 whitespace-nowrap">Nopol</th>
-                                <th class="px-4 py-3.5 text-center whitespace-nowrap">BBM / Roda</th>
-                                <th class="px-4 py-3.5 text-center whitespace-nowrap">Aksi Pengajuan</th>
-                                <th class="px-4 py-3.5">Perubahan / Catatan</th>
-                                <th class="px-4 py-3.5 text-center whitespace-nowrap">Status</th>
-                                <th class="px-4 py-3.5 text-center whitespace-nowrap">Tanggal</th>
-                                <th class="px-4 py-3.5 text-center w-28 whitespace-nowrap">Opsi</th>
+                                <th class="px-2.5 sm:px-4 py-3.5 text-center w-8 sm:w-12 whitespace-nowrap">No</th>
+                                <th class="px-2.5 sm:px-4 py-3.5">Kendaraan</th>
+                                <th class="px-4 py-3.5 whitespace-nowrap hidden sm:table-cell">Nopol</th>
+                                <th class="px-4 py-3.5 text-center whitespace-nowrap hidden sm:table-cell">BBM / Roda</th>
+                                <th class="px-4 py-3.5 text-center whitespace-nowrap hidden sm:table-cell">Aksi Pengajuan</th>
+                                <th class="px-4 py-3.5 hidden sm:table-cell">Perubahan / Catatan</th>
+                                <th class="px-2.5 sm:px-4 py-3.5 text-center whitespace-nowrap">Status</th>
+                                <th class="px-4 py-3.5 text-center whitespace-nowrap hidden sm:table-cell">Tanggal</th>
+                                <th class="px-4 py-3.5 text-center w-28 whitespace-nowrap hidden sm:table-cell">Opsi</th>
+                                <th class="px-2.5 py-3.5 text-center w-16 sm:hidden">Detail</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-200 dark:divide-white/5 text-slate-700 dark:text-slate-300">
                             @forelse($kendaraans as $kendaraan)
-                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
-                                    <td class="px-4 py-3 text-center font-bold text-slate-400 whitespace-nowrap">
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition" x-data="{ showDetail: false }">
+                                    <td class="px-2.5 sm:px-4 py-3 text-center font-bold text-slate-400 whitespace-nowrap">
                                         {{ $loop->iteration + ($kendaraans->currentPage() - 1) * $kendaraans->perPage() }}
                                     </td>
-                                    <td class="px-4 py-3 whitespace-nowrap">
-                                        <div class="font-bold text-slate-900 dark:text-white">{{ $kendaraan->jenis_kendaraan }}</div>
+                                    <td class="px-2.5 sm:px-4 py-3">
+                                        <!-- Mobile Nopol & Badge -->
+                                        <div class="sm:hidden mb-1 flex items-center gap-1.5 flex-wrap">
+                                            <span class="font-mono font-bold text-xs px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-200">
+                                                {{ $kendaraan->no_polisi }}
+                                            </span>
+                                            @if($kendaraan->aksi_approval === 'edit')
+                                                <span class="inline-flex items-center px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">Edit</span>
+                                            @elseif($kendaraan->aksi_approval === 'import')
+                                                <span class="inline-flex items-center px-1.5 py-0.2 rounded text-[9px] font-bold bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300">Import</span>
+                                            @else
+                                                <span class="inline-flex items-center px-1.5 py-0.2 rounded text-[9px] font-bold bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300">Tambah</span>
+                                            @endif
+                                        </div>
+                                        <div class="font-bold text-slate-900 dark:text-white text-xs leading-tight">{{ $kendaraan->jenis_kendaraan }}</div>
                                         <div class="text-[10px] text-slate-400">Kode: {{ $kendaraan->kode_kendaraan ?? '-' }}</div>
                                     </td>
-                                    <td class="px-4 py-3 whitespace-nowrap">
+                                    <td class="px-4 py-3 whitespace-nowrap hidden sm:table-cell">
                                         <span class="inline-block font-mono font-bold text-xs px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-200 whitespace-nowrap">
                                             {{ $kendaraan->no_polisi }}
                                         </span>
                                     </td>
-                                    <td class="px-4 py-3 text-center whitespace-nowrap">
+                                    <td class="px-4 py-3 text-center whitespace-nowrap hidden sm:table-cell">
                                         <div class="font-semibold">{{ $kendaraan->jenis_bbm }}</div>
                                         <div class="text-[10px] text-slate-400">Roda {{ $kendaraan->roda ?? '-' }}</div>
                                     </td>
-                                    <td class="px-4 py-3 text-center">
+                                    <td class="px-4 py-3 text-center hidden sm:table-cell">
                                         @if($kendaraan->aksi_approval === 'edit')
                                             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
                                                 Edit Data
@@ -214,7 +210,7 @@
                                             </span>
                                         @endif
                                     </td>
-                                    <td class="px-4 py-3 max-w-sm">
+                                    <td class="px-4 py-3 max-w-sm hidden sm:table-cell">
                                         @if($kendaraan->aksi_approval === 'edit' && !empty($kendaraan->pending_changes))
                                             @php
                                                 $changes = is_array($kendaraan->pending_changes) 
@@ -292,28 +288,28 @@
                                             </div>
                                         @endif
                                     </td>
-                                    <td class="px-4 py-3 text-center">
+                                    <td class="px-2.5 sm:px-4 py-3 text-center">
                                         @if($kendaraan->status_approval === 'pending')
-                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800/50">
+                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800/50">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
                                                 Menunggu
                                             </span>
                                         @elseif($kendaraan->status_approval === 'disetujui')
-                                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/50">
+                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/50">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                                                 Disetujui
                                             </span>
                                         @elseif($kendaraan->status_approval === 'ditolak')
-                                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-300 border border-rose-200 dark:border-rose-800/50">
+                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-300 border border-rose-200 dark:border-rose-800/50">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
                                                 Ditolak
                                             </span>
                                         @endif
                                     </td>
-                                    <td class="px-4 py-3 text-center text-[11px] text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                                    <td class="px-4 py-3 text-center text-[11px] text-slate-500 dark:text-slate-400 whitespace-nowrap hidden sm:table-cell">
                                         {{ ($kendaraan->updated_at ?: $kendaraan->created_at) ? ($kendaraan->updated_at ?: $kendaraan->created_at)->timezone('Asia/Makassar')->format('d/m/Y H:i') : '-' }}
                                     </td>
-                                    <td class="px-4 py-3 text-center">
+                                    <td class="px-4 py-3 text-center hidden sm:table-cell">
                                         <div class="flex items-center justify-center gap-1.5">
                                             @if($kendaraan->status_approval === 'ditolak')
                                                 @if(\App\Models\Setting::where('key', 'satker_can_edit_kendaraan')->value('value') ?? 1)
@@ -359,10 +355,194 @@
                                             @endif
                                         </div>
                                     </td>
+                                    <!-- Detail Button (Mobile Only) -->
+                                    <td class="px-2.5 py-3 text-center sm:hidden">
+                                        <button type="button" @click="showDetail = true" class="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-brand-primary dark:bg-white/10 dark:hover:bg-white/15 dark:text-white text-[11px] font-bold shadow-sm transition active:scale-95 border border-brand-primary/20 dark:border-white/10">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                            </svg>
+                                            <span>Detail</span>
+                                        </button>
+
+                                        <!-- Mobile Detail Modal for Satker -->
+                                        <template x-teleport="body">
+                                            <div x-show="showDetail" class="fixed inset-0 z-[9000] flex items-end sm:items-center justify-center p-3 sm:p-4" style="display: none;">
+                                                <!-- Backdrop -->
+                                                <div x-show="showDetail" x-transition.opacity @click="showDetail = false" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm"></div>
+
+                                                <!-- Modal Card -->
+                                                <div x-show="showDetail" 
+                                                    x-transition:enter="transition ease-out duration-200" 
+                                                    x-transition:enter-start="opacity-0 translate-y-8 sm:scale-95" 
+                                                    x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" 
+                                                    x-transition:leave="transition ease-in duration-150" 
+                                                    x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" 
+                                                    x-transition:leave-end="opacity-0 translate-y-8 sm:scale-95"
+                                                    @click.outside="showDetail = false"
+                                                    class="relative w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden z-10 max-h-[90vh] flex flex-col text-slate-800 dark:text-slate-100 text-left">
+                                                    
+                                                    <!-- Modal Header -->
+                                                    <div class="p-4 sm:p-5 border-b border-slate-100 dark:border-white/10 flex items-center justify-between bg-slate-50/70 dark:bg-slate-800/40">
+                                                        <div class="flex items-center gap-2.5">
+                                                            <div class="p-2 rounded-xl bg-brand-primary/10 text-brand-primary dark:bg-white/10 dark:text-white shrink-0">
+                                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                                            </div>
+                                                            <div>
+                                                                <h3 class="text-sm sm:text-base font-black text-slate-800 dark:text-white leading-tight">Detail Pengajuan Kendaraan</h3>
+                                                                <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">{{ $kendaraan->jenis_kendaraan }}</p>
+                                                            </div>
+                                                        </div>
+                                                        <button type="button" @click="showDetail = false" class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                                        </button>
+                                                    </div>
+
+                                                    <!-- Modal Body (Scrollable) -->
+                                                    <div class="p-4 sm:p-6 overflow-y-auto space-y-4 text-xs">
+                                                        <!-- Nopol & Status Row -->
+                                                        <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-white/5">
+                                                            <div>
+                                                                <span class="text-[10px] uppercase font-bold text-slate-400 block">Nomor Polisi</span>
+                                                                <span class="text-base font-black font-mono text-slate-900 dark:text-white">{{ $kendaraan->no_polisi }}</span>
+                                                            </div>
+                                                            <div class="text-right">
+                                                                <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Status</span>
+                                                                @if($kendaraan->status_approval === 'pending')
+                                                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800/50">
+                                                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> Menunggu
+                                                                    </span>
+                                                                @elseif($kendaraan->status_approval === 'disetujui')
+                                                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/50">
+                                                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Disetujui
+                                                                    </span>
+                                                                @elseif($kendaraan->status_approval === 'ditolak')
+                                                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-300 border border-rose-200 dark:border-rose-800/50">
+                                                                        <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Ditolak
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Info Grid -->
+                                                        <div class="grid grid-cols-2 gap-2.5">
+                                                            <div class="p-3 rounded-xl bg-slate-50/70 dark:bg-slate-800/30 border border-slate-200/60 dark:border-white/5">
+                                                                <span class="text-[10px] font-bold text-slate-400 uppercase block">Aksi Pengajuan</span>
+                                                                <div class="mt-1">
+                                                                    @if($kendaraan->aksi_approval === 'edit')
+                                                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">Edit Data</span>
+                                                                    @elseif($kendaraan->aksi_approval === 'import')
+                                                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300">Import Excel</span>
+                                                                    @else
+                                                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300">Tambah Baru</span>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                            <div class="p-3 rounded-xl bg-slate-50/70 dark:bg-slate-800/30 border border-slate-200/60 dark:border-white/5">
+                                                                <span class="text-[10px] font-bold text-slate-400 uppercase block">Jenis BBM</span>
+                                                                <span class="mt-1 font-bold text-xs inline-block text-slate-800 dark:text-slate-200">{{ $kendaraan->jenis_bbm }}</span>
+                                                            </div>
+                                                            <div class="p-3 rounded-xl bg-slate-50/70 dark:bg-slate-800/30 border border-slate-200/60 dark:border-white/5">
+                                                                <span class="text-[10px] font-bold text-slate-400 uppercase block">Jenis Kendaraan</span>
+                                                                <span class="mt-1 font-bold text-xs inline-block text-slate-800 dark:text-slate-200">{{ $kendaraan->jenis_kendaraan }}</span>
+                                                            </div>
+                                                            <div class="p-3 rounded-xl bg-slate-50/70 dark:bg-slate-800/30 border border-slate-200/60 dark:border-white/5">
+                                                                <span class="text-[10px] font-bold text-slate-400 uppercase block">Roda & CC</span>
+                                                                <span class="mt-1 font-bold text-xs inline-block text-slate-800 dark:text-slate-200">Roda {{ $kendaraan->roda ?: '-' }} {{ $kendaraan->cc ? '• ' . $kendaraan->cc . ' cc' : '' }}</span>
+                                                            </div>
+                                                            <div class="p-3 rounded-xl bg-slate-50/70 dark:bg-slate-800/30 border border-slate-200/60 dark:border-white/5">
+                                                                <span class="text-[10px] font-bold text-slate-400 uppercase block">Kode Kendaraan</span>
+                                                                <span class="mt-1 font-bold text-xs inline-block text-slate-800 dark:text-slate-200">{{ $kendaraan->kode_kendaraan ?? '-' }}</span>
+                                                            </div>
+                                                            <div class="p-3 rounded-xl bg-slate-50/70 dark:bg-slate-800/30 border border-slate-200/60 dark:border-white/5">
+                                                                <span class="text-[10px] font-bold text-slate-400 uppercase block">Tanggal Pengajuan</span>
+                                                                <span class="mt-1 font-bold text-[11px] inline-block text-slate-800 dark:text-slate-200">{{ ($kendaraan->updated_at ?: $kendaraan->created_at) ? ($kendaraan->updated_at ?: $kendaraan->created_at)->timezone('Asia/Makassar')->format('d/m/Y H:i') . ' WITA' : '-' }}</span>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Edit Diffs (jika tipe edit) -->
+                                                        @if($kendaraan->aksi_approval === 'edit' && !empty($diffs))
+                                                            <div class="p-3.5 rounded-2xl bg-amber-500/5 border border-amber-500/20 space-y-2">
+                                                                <span class="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+                                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                                                    Perubahan yang Diajukan:
+                                                                </span>
+                                                                <div class="space-y-1.5">
+                                                                    @foreach($diffs as $diff)
+                                                                        <div class="p-2 rounded-lg bg-white dark:bg-slate-800 text-[11px] flex items-center justify-between border border-slate-100 dark:border-white/5">
+                                                                            <span class="font-bold text-slate-500">{{ $diff['label'] }}:</span>
+                                                                            <div><span class="line-through text-rose-500">{{ $diff['old'] }}</span> ➔ <span class="text-emerald-600 dark:text-emerald-400 font-bold">{{ $diff['new'] }}</span></div>
+                                                                        </div>
+                                                                    @endforeach
+                                                                </div>
+                                                            </div>
+                                                        @endif
+
+                                                        <!-- Alasan Ditolak jika ada -->
+                                                        @if($kendaraan->status_approval === 'ditolak' && $kendaraan->alasan_penolakan)
+                                                            <div class="p-3.5 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 text-rose-700 dark:text-rose-300">
+                                                                <span class="font-bold block text-xs">Alasan Penolakan:</span>
+                                                                <p class="mt-1 text-[11px] leading-relaxed">{{ $kendaraan->alasan_penolakan }}</p>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+                                                    <!-- Modal Footer / Actions -->
+                                                    <div class="p-4 border-t border-slate-100 dark:border-white/10 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-end gap-2">
+                                                        @if($kendaraan->status_approval === 'ditolak')
+                                                            @if(\App\Models\Setting::where('key', 'satker_can_edit_kendaraan')->value('value') ?? 1)
+                                                                <a href="{{ route('satker.kendaraans.edit', $kendaraan) }}" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1.5">
+                                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                                                    Perbaiki
+                                                                </a>
+                                                            @endif
+                                                            <form action="{{ route('satker.persetujuan-kendaraan.destroy', $kendaraan) }}" method="POST" onsubmit="event.preventDefault(); window.confirmDialog({
+title: 'Hapus Pengajuan?',
+message: 'Apakah Anda yakin ingin membatalkan dan menghapus pengajuan kendaraan ini?',
+type: 'danger',
+confirmText: 'Ya, Hapus!',
+cancelText: 'Batal'
+}, () => this.submit());">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1.5">
+                                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                                                    Hapus
+                                                                </button>
+                                                            </form>
+                                                        @elseif($kendaraan->status_approval === 'pending')
+                                                            <form action="{{ route('satker.persetujuan-kendaraan.destroy', $kendaraan) }}" method="POST" onsubmit="event.preventDefault(); window.confirmDialog({
+title: 'Batalkan Pengajuan?',
+message: 'Apakah Anda yakin ingin membatalkan pengajuan kendaraan ini?',
+type: 'danger',
+confirmText: 'Ya, Batalkan!',
+cancelText: 'Kembali'
+}, () => this.submit());">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1.5">
+                                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                                                    Batalkan
+                                                                </button>
+                                                            </form>
+                                                        @elseif($kendaraan->status_approval === 'disetujui')
+                                                            <a href="{{ route('satker.kendaraans.index', ['search' => $kendaraan->no_polisi]) }}" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1.5">
+                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                                                Lihat Kendaraan
+                                                            </a>
+                                                        @endif
+                                                        <button type="button" @click="showDetail = false" class="px-4 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold transition">
+                                                            Tutup
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="9" class="px-6 py-12 text-center">
+                                    <td colspan="10" class="px-6 py-12 text-center">
                                         <div class="flex flex-col items-center justify-center">
                                             <div class="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 mb-3">
                                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

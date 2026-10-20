@@ -27,33 +27,39 @@
                 <!-- Filter & Action Controls -->
                 <div class="flex flex-wrap sm:flex-nowrap items-center gap-2.5">
                     <!-- Form Filter Bulan & Tahun -->
+                    @php
+                        $monthOptions = [];
+                        foreach(range(1, 12) as $m) {
+                            $monthOptions[$m] = \Carbon\Carbon::create()->month($m)->translatedFormat('F');
+                        }
+                        $yearOptions = [];
+                        foreach(range(date('Y'), 2024) as $y) {
+                            $yearOptions[$y] = (string)$y;
+                        }
+                    @endphp
                     <form action="{{ route('petugas.rekapan.index') }}" method="GET" class="flex items-center gap-2 w-full sm:w-auto">
-                        <div class="relative flex-1 sm:flex-none">
-                            <select name="month" onchange="this.form.submit()"
-                                class="appearance-none w-full sm:w-auto pl-3.5 pr-8 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-200 text-xs font-bold rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer shadow-sm transition-all">
-                                @foreach(range(1, 12) as $m)
-                                    <option class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white" value="{{ $m }}" {{ $selectedMonth == $m ? 'selected' : '' }}>
-                                        {{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2.5 text-slate-400">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                            </div>
+                        <div class="w-40">
+                            <x-filter-select 
+                                name="month" 
+                                :value="$selectedMonth" 
+                                placeholder="Pilih Bulan" 
+                                icon="calendar" 
+                                :searchable="false" 
+                                :auto-submit="true" 
+                                :options="$monthOptions" 
+                            />
                         </div>
 
-                        <div class="relative flex-1 sm:flex-none">
-                            <select name="year" onchange="this.form.submit()"
-                                class="appearance-none w-full sm:w-auto pl-3.5 pr-8 py-2.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-200 text-xs font-bold rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer shadow-sm transition-all">
-                                @foreach(range(date('Y'), 2024) as $y)
-                                    <option class="bg-white dark:bg-slate-900 text-slate-900 dark:text-white" value="{{ $y }}" {{ $selectedYear == $y ? 'selected' : '' }}>
-                                        {{ $y }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2.5 text-slate-400">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                            </div>
+                        <div class="w-28">
+                            <x-filter-select 
+                                name="year" 
+                                :value="$selectedYear" 
+                                placeholder="Pilih Tahun" 
+                                icon="calendar" 
+                                :searchable="false" 
+                                :auto-submit="true" 
+                                :options="$yearOptions" 
+                            />
                         </div>
                     </form>
 

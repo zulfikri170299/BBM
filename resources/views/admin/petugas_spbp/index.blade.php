@@ -9,7 +9,7 @@
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-bold text-white tracking-tight">Petugas SPBP Polda NTB</h1>
+                    <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Petugas SPBP Polda NTB</h1>
                     <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-0.5">Daftar petugas penanda tangan yang tercantum pada dokumen dan laporan PDF SPBP.</p>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-sm font-bold text-white">Daftar Urutan Tanda Tangan</h3>
+                        <h3 class="text-sm font-bold text-slate-800 dark:text-white">Daftar Urutan Tanda Tangan</h3>
                         <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">{{ count($petugas) }} petugas terdaftar untuk tanda tangan laporan</p>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
                                         <div class="w-8 h-8 rounded-xl bg-gradient-to-br {{ $color }} flex items-center justify-center text-white font-bold text-xs shadow-sm shrink-0">
                                             {{ strtoupper(substr($p->nama, 0, 2)) }}
                                         </div>
-                                        <div class="text-xs font-bold text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                                        <div class="text-xs font-bold text-slate-800 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                                             {{ $p->nama }}
                                         </div>
                                     </div>

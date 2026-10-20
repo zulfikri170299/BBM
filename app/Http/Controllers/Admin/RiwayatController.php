@@ -16,8 +16,8 @@ class RiwayatController extends Controller
 
     public function index(Request $request)
     {
-        // 1. Ambil TransaksiBbm
-        $queryTrx = TransaksiBbm::with(['satker', 'kendaraan.satker', 'personel', 'petugas']);
+        // 1. Query TransaksiBbm (tanpa eager loading relasi di awal agar ringan dan cepat)
+        $queryTrx = TransaksiBbm::query();
         $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
         if ($personelAccessControl == '0') {
             $queryTrx->whereNull('personel_id');
@@ -32,15 +32,23 @@ class RiwayatController extends Controller
                   ->orWhereHas('personel', function ($sub) use ($search) { $sub->where('nama', 'like', "%$search%"); });
             });
         }
+
+        // Hitung statistik langsung di Database (kecepatan tinggi, tanpa load ribuan objek ke RAM PHP)
+        $totalLiterMurni = (clone $queryTrx)->sum('liter') ?: 0;
+        $summaryBbm = (clone $queryTrx)
+            ->selectRaw('jenis_bbm, SUM(liter) as total')
+            ->groupBy('jenis_bbm')
+            ->pluck('total', 'jenis_bbm')
+            ->sortKeys();
+
         $trxs = $queryTrx->get()->map(function($item) {
             $item->row_type = 'pengisian';
             $item->sort_date = $item->tanggal;
             return $item;
         });
 
-        // 2. Ambil RiwayatTopup (Hanya yang keluar / potong saldo)
-        $queryTopup = \App\Models\RiwayatTopup::with(['satker', 'kendaraan.satker', 'user'])
-            ->where('tipe', 'keluar');
+        // 2. Query RiwayatTopup (Hanya yang keluar / potong saldo, tanpa relasi di awal)
+        $queryTopup = \App\Models\RiwayatTopup::query()->where('tipe', 'keluar');
         if ($request->filled('dari')) $queryTopup->whereDate('created_at', '>=', $request->dari);
         if ($request->filled('sampai')) $queryTopup->whereDate('created_at', '<=', $request->sampai);
         if ($request->filled('satker_id')) $queryTopup->where('satker_id', $request->satker_id);
@@ -66,26 +74,30 @@ class RiwayatController extends Controller
         // 4. Paginate Manual
         $currentPage = \Illuminate\Pagination\Paginator::resolveCurrentPage() ?: 1;
         $perPage = $this->getPerPage($request);
-        $currentItems = $merged->slice(($currentPage - 1) * $perPage, $perPage)->all();
-        $transaksis = new \Illuminate\Pagination\LengthAwarePaginator($currentItems, $merged->count(), $perPage, $currentPage, [
+        $currentItems = $merged->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        // 5. Eager load relasi HANYA untuk 15-25 baris yang ditampilkan di halaman aktif
+        $pageTrxs = $currentItems->filter(fn($item) => $item instanceof TransaksiBbm);
+        $pageTopups = $currentItems->filter(fn($item) => $item instanceof \App\Models\RiwayatTopup);
+
+        if ($pageTrxs->isNotEmpty()) {
+            $pageTrxs->load(['satker', 'kendaraan.satker', 'personel.satker', 'petugas']);
+        }
+        if ($pageTopups->isNotEmpty()) {
+            $pageTopups->load(['satker', 'kendaraan.satker', 'user']);
+        }
+
+        $transaksis = new \Illuminate\Pagination\LengthAwarePaginator($currentItems->all(), $merged->count(), $perPage, $currentPage, [
             'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath(),
             'query' => $request->query(),
         ]);
 
         $satkers = Satker::orderBy('nama_satker')->get();
 
-        // Statistik (Tampilkan semua data sesuai filter)
-        $totalLiterMurni = $trxs->sum('liter');
-        
         $stats = [
             'total_transaksi' => $merged->count(),
             'total_liter' => $totalLiterMurni,
         ];
-
-        // Summary per Jenis BBM
-        $summaryBbm = $trxs->groupBy('jenis_bbm')->map(function ($group) {
-            return $group->sum('liter');
-        })->sortKeys();
 
         return view('admin.riwayat.index', compact('transaksis', 'satkers', 'stats', 'summaryBbm'));
     }

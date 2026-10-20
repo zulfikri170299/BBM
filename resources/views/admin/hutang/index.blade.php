@@ -79,43 +79,62 @@
         @endif
 
         <!-- Filter & Action Card -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl shadow-sm p-4 sm:p-5 relative overflow-hidden">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl shadow-sm p-4 sm:p-5 relative z-30">
             <form action="{{ route('admin.hutang.index') }}" method="GET" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 sm:gap-4 items-end">
                 <!-- Satker (4 cols) -->
                 <div class="lg:col-span-4">
                     <x-input-label for="filter_satker_id" value="Satuan Kerja (Satker)" class="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider ml-0.5 mb-1.5" />
-                    <select name="satker_id" id="filter_satker_id" class="tom-select w-full">
-                        <option value="">Semua Satker</option>
-                        @foreach($satkers as $satker)
-                            <option value="{{ $satker->id }}" {{ request('satker_id') == $satker->id ? 'selected' : '' }}>
-                                {{ $satker->nama_satker }}
-                            </option>
-                        @endforeach
-                    </select>
+                    <x-filter-select 
+                        name="satker_id" 
+                        :value="request('satker_id')" 
+                        placeholder="Semua Satker" 
+                        search-placeholder="Cari nama satker..." 
+                        icon="building" 
+                        :options="$satkers" 
+                    />
                 </div>
 
                 <!-- Status (2 cols) -->
                 <div class="lg:col-span-2">
                     <x-input-label for="filter_status" value="Status" class="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider ml-0.5 mb-1.5" />
-                    <select name="status" id="filter_status" class="tom-select w-full">
-                        <option value="">Semua Status</option>
-                        <option value="belum_dibayar" {{ request('status') === 'belum_dibayar' ? 'selected' : '' }}>Belum Bayar</option>
-                        <option value="sudah_dibayar" {{ request('status') === 'sudah_dibayar' ? 'selected' : '' }}>Lunas</option>
-                    </select>
+                    <x-filter-select 
+                        name="status" 
+                        :value="request('status')" 
+                        placeholder="Semua Status" 
+                        icon="shield" 
+                        :searchable="false" 
+                        :options="['belum_dibayar' => 'Belum Bayar', 'sudah_dibayar' => 'Lunas']" 
+                    />
                 </div>
 
                 <!-- Dari (2 cols) -->
                 <div class="lg:col-span-2">
                     <x-input-label for="start_date" value="Dari Tanggal" class="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider ml-0.5 mb-1.5" />
-                    <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}"
-                        class="flatpickr block w-full py-2 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm" />
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 z-10">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <input type="text" name="start_date" id="start_date" value="{{ request('start_date') }}" placeholder="Dari Tanggal"
+                            style="padding-left: 2.35rem !important;"
+                            class="flatpickr block w-full h-10 !pl-9 pr-3 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm" />
+                    </div>
                 </div>
 
                 <!-- Sampai (2 cols) -->
                 <div class="lg:col-span-2">
                     <x-input-label for="end_date" value="Sampai Tanggal" class="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider ml-0.5 mb-1.5" />
-                    <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}"
-                        class="flatpickr block w-full py-2 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm" />
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 z-10">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <input type="text" name="end_date" id="end_date" value="{{ request('end_date') }}" placeholder="Sampai Tanggal"
+                            style="padding-left: 2.35rem !important;"
+                            class="flatpickr block w-full h-10 !pl-9 pr-3 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm" />
+                    </div>
                 </div>
 
                 <!-- Buttons Group (2 cols) -->
