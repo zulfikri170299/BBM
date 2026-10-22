@@ -44,13 +44,16 @@ class KendaraanApprovalController extends Controller
         $perPage = $this->getPerPage($request, 15);
         $kendaraans = $query->paginate($perPage)->withQueryString();
 
-        $baseCount = Kendaraan::where('satker_id', $satkerId);
+        $statusCounts = Kendaraan::where('satker_id', $satkerId)
+            ->selectRaw('status_approval, count(*) as total')
+            ->groupBy('status_approval')
+            ->pluck('total', 'status_approval');
 
         $counts = [
-            'pending' => (clone $baseCount)->where('status_approval', 'pending')->count(),
-            'disetujui' => (clone $baseCount)->where('status_approval', 'disetujui')->count(),
-            'ditolak' => (clone $baseCount)->where('status_approval', 'ditolak')->count(),
-            'all' => (clone $baseCount)->count(),
+            'pending' => (int) ($statusCounts['pending'] ?? 0),
+            'disetujui' => (int) ($statusCounts['disetujui'] ?? 0),
+            'ditolak' => (int) ($statusCounts['ditolak'] ?? 0),
+            'all' => (int) $statusCounts->sum(),
         ];
 
         return view('satker.persetujuan-kendaraan.index', compact(

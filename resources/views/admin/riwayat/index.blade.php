@@ -27,7 +27,7 @@
         </div>
 
         <!-- KPI Summary Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
             <!-- Total Transaksi -->
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 p-4 shadow-sm flex items-center justify-between">
                 <div>
@@ -217,28 +217,30 @@
 
         <!-- Table Card -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
-            <!-- Table Header Info & Per-Page Toolbar -->
-            <div class="px-5 py-3.5 bg-slate-50/70 dark:bg-slate-800/40 border-b border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-xl flex items-center justify-center border border-indigo-100 dark:border-indigo-500/20">
+            <!-- Table Header Info & Per-Page Toolbar (Always 1 Single Row) -->
+            <div class="px-4 py-3 sm:px-5 sm:py-3.5 bg-slate-50/70 dark:bg-slate-800/40 border-b border-slate-200 dark:border-white/10 flex items-center justify-between gap-2.5 sm:gap-4">
+                <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                    <div class="w-8 h-8 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-xl flex items-center justify-center border border-indigo-100 dark:border-indigo-500/20 shrink-0">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
-                    <div>
-                        <h3 class="text-sm font-bold text-slate-800 dark:text-white">Daftar Transaksi BBM</h3>
-                        <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Menampilkan {{ $transaksis->firstItem() ?? 0 }}-{{ $transaksis->lastItem() ?? 0 }} dari total {{ $transaksis->total() }} catatan transaksi</p>
+                    <div class="min-w-0">
+                        <h3 class="text-xs sm:text-sm font-bold text-slate-800 dark:text-white truncate">Daftar Transaksi BBM</h3>
+                        <p class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 font-medium truncate">Menampilkan {{ $transaksis->firstItem() ?? 0 }}-{{ $transaksis->lastItem() ?? 0 }} dari total {{ $transaksis->total() }} catatan transaksi</p>
                     </div>
                 </div>
 
-                <!-- Per Page Selector Form -->
-                <form action="{{ route('admin.riwayat.index') }}" method="GET" class="flex items-center">
-                    <x-per-page :current="request('per_page', 15)" />
-                </form>
+                <!-- Per Page Selector Form (Sejajar di Mobile & Desktop) -->
+                <div class="shrink-0">
+                    <form action="{{ route('admin.riwayat.index') }}" method="GET" class="flex items-center">
+                        <x-per-page :current="request('per_page', 15)" />
+                    </form>
+                </div>
             </div>
 
-            <!-- Table (Responsive without scroll on standard desktop) -->
-            <div class="overflow-x-auto">
+            <!-- Desktop Table View -->
+            <div class="hidden md:block overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50/75 dark:bg-slate-800/50 border-b border-slate-200 dark:border-white/10 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
@@ -250,13 +252,25 @@
                             <th scope="col" class="py-3 px-3 text-center w-24 whitespace-nowrap">Jenis BBM</th>
                             <th scope="col" class="py-3 px-3 text-left max-w-[140px]">Nama Driver / Ket</th>
                             <th scope="col" class="py-3 px-3 text-right w-24 whitespace-nowrap">Jumlah Liter</th>
-                            <th scope="col" class="py-3 px-3 text-center w-16 whitespace-nowrap">Aksi</th>
+                            <th scope="col" class="py-3 px-3 text-center w-20 whitespace-nowrap">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-white/5">
                         @forelse($transaksis as $trx)
                             @php
                                 $isPotong = ($trx->row_type ?? 'pengisian') === 'potong_saldo';
+                                $jenisBbm = $trx->jenis_bbm;
+                                $isPtx = str_contains(strtoupper($jenisBbm ?? ''), 'PERTAMAX');
+                                $satker = $trx->satker ?? ($trx->kendaraan->satker ?? ($trx->personel->satker ?? null));
+                                $satkerNama = $satker->nama_satker ?? '-';
+                                $nopol = $trx->kendaraan?->no_polisi ?? ($trx->nopol ?? '-');
+                                $jenisKendaraan = $trx->kendaraan?->jenis_kendaraan ?? '-';
+                                $roda = $trx->kendaraan?->roda ?? '';
+                                $tglStr = \Carbon\Carbon::parse($trx->tanggal)->setTimezone('Asia/Makassar')->format('d M Y, H:i') . ' WITA';
+                                $literStr = ($isPotong ? '-' : '') . number_format($trx->liter, 0, ',', '.') . ' Liter';
+                                $driverStr = $isPotong ? 'Pemotongan Saldo' : ($trx->nama_driver ?? ($trx->personel->nama ?? '-'));
+                                $petugasStr = !$isPotong ? ($trx->petugas?->name ?? 'Petugas SPBP') : ($trx->user?->name ?? 'Admin');
+                                $ketStr = $trx->keterangan ?? ($isPotong ? 'Pemotongan saldo otomatis' : '-');
                             @endphp
                             <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors">
                                 <!-- No -->
@@ -278,10 +292,6 @@
 
                                 <!-- Satker -->
                                 <td class="px-3 py-2.5 max-w-[130px]">
-                                    @php
-                                        $satker = $trx->satker ?? ($trx->kendaraan->satker ?? ($trx->personel->satker ?? null));
-                                        $satkerNama = $satker->nama_satker ?? '-';
-                                    @endphp
                                     <div class="flex items-center gap-1.5 truncate">
                                         <div class="w-5 h-5 rounded-md {{ $isPotong ? 'bg-gradient-to-br from-amber-500 to-orange-600' : 'bg-gradient-to-br from-indigo-500 to-indigo-600' }} flex items-center justify-center text-white font-bold text-[9px] shadow-sm shrink-0">
                                             {{ strtoupper(substr($satkerNama, 0, 2)) }}
@@ -298,40 +308,33 @@
                                 </td>
 
                                 <!-- Jenis Kendaraan -->
-                                <td class="px-3 py-2.5 max-w-[110px] truncate text-xs font-medium text-slate-700 dark:text-slate-300" title="{{ $trx->kendaraan?->jenis_kendaraan ?? '-' }}">
-                                    {{ $trx->kendaraan?->jenis_kendaraan ?? '-' }}
+                                <td class="px-3 py-2.5 max-w-[110px] truncate text-xs font-medium text-slate-700 dark:text-slate-300" title="{{ $jenisKendaraan }}">
+                                    {{ $jenisKendaraan }}
                                 </td>
 
                                 <!-- Nopol -->
                                 <td class="px-3 py-2.5 whitespace-nowrap">
                                     <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-slate-900 text-amber-300 dark:bg-slate-950 dark:text-amber-400 text-xs font-mono font-bold tracking-wider border border-slate-700">
-                                        {{ $trx->kendaraan?->no_polisi ?? $trx->nopol ?? '-' }}
+                                        {{ $nopol }}
                                     </span>
                                 </td>
 
                                 <!-- Jenis BBM -->
                                 <td class="px-3 py-2.5 whitespace-nowrap text-center">
-                                    @php
-                                        $jenisBbm = $trx->jenis_bbm;
-                                        $isPtx = str_contains(strtoupper($jenisBbm ?? ''), 'PERTAMAX');
-                                    @endphp
                                     <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold {{ $isPtx ? 'bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20' : 'bg-cyan-50 text-cyan-700 dark:bg-cyan-500/10 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-500/20' }}">
                                         {{ $jenisBbm ?? '-' }}
                                     </span>
                                 </td>
 
-                                <!-- Nama Driver / Keterangan (Truncated with tooltip) -->
+                                <!-- Nama Driver / Keterangan -->
                                 <td class="px-3 py-2.5 max-w-[140px]">
                                     @if($isPotong)
-                                        <span class="text-xs text-slate-500 dark:text-slate-400 italic block truncate" title="{{ $trx->keterangan }}">
-                                            {{ $trx->keterangan ?: 'Potong Saldo Otomatis' }}
+                                        <span class="text-xs text-slate-500 dark:text-slate-400 italic block truncate" title="{{ $ketStr }}">
+                                            {{ $ketStr }}
                                         </span>
                                     @else
-                                        @php
-                                            $driverNama = $trx->nama_driver ?? ($trx->personel->nama ?? '-');
-                                        @endphp
-                                        <span class="text-xs font-medium text-slate-700 dark:text-slate-300 block truncate" title="{{ $driverNama }}">
-                                            {{ $driverNama }}
+                                        <span class="text-xs font-medium text-slate-700 dark:text-slate-300 block truncate" title="{{ $driverStr }}">
+                                            {{ $driverStr }}
                                         </span>
                                     @endif
                                 </td>
@@ -346,29 +349,59 @@
                                     </div>
                                 </td>
 
-                                <!-- Aksi (Selalu Tampak) -->
+                                <!-- Aksi (Detail & Batal) -->
                                 <td class="px-3 py-2.5 whitespace-nowrap text-center">
-                                    @if(!$isPotong)
-                                        <form id="delete-form-{{ $trx->id }}"
-                                            action="{{ route('admin.riwayat.destroy', $trx->id) }}" method="POST"
-                                            class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <input type="hidden" name="topup_password_confirm" id="pwd-{{ $trx->id }}">
-                                            <button type="button"
-                                                class="w-7 h-7 inline-flex items-center justify-center text-rose-500 hover:text-white bg-rose-50 hover:bg-rose-600 dark:bg-rose-950/40 dark:hover:bg-rose-600 border border-rose-200/80 dark:border-rose-800/40 rounded-lg transition-all active:scale-95 shadow-sm"
-                                                onclick="confirmDelete('{{ $trx->id }}', '{{ number_format($trx->liter, 0, ',', '.') }}')"
-                                                title="Batalkan & Kembalikan Saldo">
-                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                </svg>
-                                            </button>
-                                        </form>
-                                    @else
-                                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/5" title="Transaksi pemotongan saldo tidak dapat dibatalkan manual di sini">
-                                            Fixed
-                                        </span>
-                                    @endif
+                                    <div class="inline-flex items-center gap-1.5">
+                                        <!-- Tombol Detail -->
+                                        <button type="button"
+                                            @click="$dispatch('open-detail-transaksi', {
+                                                id: {{ $trx->id ?? 0 }},
+                                                title: '{{ $isPotong ? 'Potong Saldo' : 'Pengisian BBM' }}',
+                                                badge: '{{ $isPotong ? 'POTONG SALDO' : 'PENGISIAN BBM' }}',
+                                                is_potong: {{ $isPotong ? 'true' : 'false' }},
+                                                is_ptx: {{ $isPtx ? 'true' : 'false' }},
+                                                tanggal: '{{ addslashes($tglStr) }}',
+                                                nopol: '{{ addslashes($nopol) }}',
+                                                jenis_kendaraan: '{{ addslashes($jenisKendaraan) }}',
+                                                roda: '{{ addslashes($roda) }}',
+                                                satker: '{{ addslashes($satkerNama) }}',
+                                                jenis_bbm: '{{ addslashes($jenisBbm ?? '-') }}',
+                                                liter: '{{ addslashes($literStr) }}',
+                                                liter_raw: '{{ number_format($trx->liter, 0, ',', '.') }}',
+                                                driver: '{{ addslashes($driverStr) }}',
+                                                petugas: '{{ addslashes($petugasStr) }}',
+                                                keterangan: '{{ addslashes($ketStr) }}'
+                                            })"
+                                            class="w-7 h-7 inline-flex items-center justify-center text-emerald-600 dark:text-emerald-400 hover:text-white dark:hover:text-white bg-emerald-500/15 hover:bg-emerald-600 border border-emerald-500/30 rounded-lg transition-all active:scale-95 shadow-sm"
+                                            title="Detail Transaksi">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                            </svg>
+                                        </button>
+
+                                        @if(!$isPotong)
+                                            <form id="delete-form-{{ $trx->id }}"
+                                                action="{{ route('admin.riwayat.destroy', $trx->id) }}" method="POST"
+                                                class="inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <input type="hidden" name="topup_password_confirm" id="pwd-{{ $trx->id }}">
+                                                <button type="button"
+                                                    class="w-7 h-7 inline-flex items-center justify-center text-rose-500 hover:text-white bg-rose-50 hover:bg-rose-600 dark:bg-rose-950/40 dark:hover:bg-rose-600 border border-rose-200/80 dark:border-rose-800/40 rounded-lg transition-all active:scale-95 shadow-sm"
+                                                    onclick="confirmDelete('{{ $trx->id }}', '{{ number_format($trx->liter, 0, ',', '.') }}')"
+                                                    title="Batalkan & Kembalikan Saldo">
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        @else
+                                            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/5" title="Transaksi pemotongan saldo tidak dapat dibatalkan manual">
+                                                Fixed
+                                            </span>
+                                        @endif
+                                    </div>
                                 </td>
                             </tr>
                         @empty
@@ -406,6 +439,129 @@
                 </table>
             </div>
 
+            <!-- Mobile Table View (Visible on mobile screens) -->
+            <div class="block md:hidden w-full overflow-hidden">
+                <table class="w-full text-left text-xs border-collapse table-fixed">
+                    <thead>
+                        <tr class="bg-slate-50/80 dark:bg-slate-800/50 border-b border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[10px] font-black">
+                            <th class="py-2.5 px-2 w-9 text-center">No</th>
+                            <th class="py-2.5 px-2 w-[32%]">Tanggal</th>
+                            <th class="py-2.5 px-2">Satker & Kendaraan</th>
+                            <th class="py-2.5 px-1.5 text-center w-16">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 dark:divide-white/5">
+                        @forelse($transaksis as $trx)
+                            @php
+                                $isPotong = ($trx->row_type ?? 'pengisian') === 'potong_saldo';
+                                $jenisBbm = $trx->jenis_bbm;
+                                $isPtx = str_contains(strtoupper($jenisBbm ?? ''), 'PERTAMAX');
+                                $satker = $trx->satker ?? ($trx->kendaraan->satker ?? ($trx->personel->satker ?? null));
+                                $satkerNama = $satker->nama_satker ?? '-';
+                                $nopol = $trx->kendaraan?->no_polisi ?? ($trx->nopol ?? '-');
+                                $jenisKendaraan = $trx->kendaraan?->jenis_kendaraan ?? '-';
+                                $roda = $trx->kendaraan?->roda ?? '';
+                                $tglStr = \Carbon\Carbon::parse($trx->tanggal)->setTimezone('Asia/Makassar')->format('d M Y, H:i') . ' WITA';
+                                $literStr = ($isPotong ? '-' : '') . number_format($trx->liter, 0, ',', '.') . ' Liter';
+                                $driverStr = $isPotong ? 'Pemotongan Saldo' : ($trx->nama_driver ?? ($trx->personel->nama ?? '-'));
+                                $petugasStr = !$isPotong ? ($trx->petugas?->name ?? 'Petugas SPBP') : ($trx->user?->name ?? 'Admin');
+                                $ketStr = $trx->keterangan ?? ($isPotong ? 'Pemotongan saldo otomatis' : '-');
+                            @endphp
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-white/[0.02] transition-colors">
+                                <td class="py-2.5 px-2 text-center">
+                                    <span class="font-bold text-slate-500 dark:text-slate-400 text-xs">
+                                        {{ $loop->iteration + ($transaksis->currentPage() - 1) * $transaksis->perPage() }}
+                                    </span>
+                                </td>
+                                <td class="py-2.5 px-2 overflow-hidden">
+                                    <span class="font-bold text-slate-800 dark:text-white truncate block leading-tight text-xs">
+                                        {{ \Carbon\Carbon::parse($trx->tanggal)->setTimezone('Asia/Makassar')->format('d M Y') }}
+                                    </span>
+                                    <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium block mt-0.5">
+                                        {{ \Carbon\Carbon::parse($trx->tanggal)->setTimezone('Asia/Makassar')->format('H:i') }} WITA
+                                    </span>
+                                </td>
+                                <td class="py-2.5 px-2 overflow-hidden">
+                                    <div class="flex flex-col min-w-0">
+                                        <!-- Satker & Badge -->
+                                        <div class="flex items-center gap-1.5 truncate">
+                                            <span class="text-[11px] font-black text-indigo-600 dark:text-indigo-400 truncate" title="{{ $satkerNama }}">
+                                                {{ $satkerNama }}
+                                            </span>
+                                            @if($isPotong)
+                                                <span class="px-1 py-0.2 rounded text-[8px] font-black uppercase tracking-wider bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 shrink-0">
+                                                    POTONG
+                                                </span>
+                                            @endif
+                                        </div>
+                                        <!-- Nopol, Kendaraan, dan Liter -->
+                                        <div class="flex items-center gap-1.5 mt-0.5 whitespace-nowrap overflow-hidden">
+                                            <span class="font-black text-slate-900 dark:text-white tracking-wide font-mono text-[11px]">{{ $nopol }}</span>
+                                            <span class="text-[10px] text-slate-400 truncate">({{ $jenisKendaraan }})</span>
+                                        </div>
+                                        <div class="mt-0.5">
+                                            <span class="text-[11px] font-black {{ $isPotong ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400' }}">
+                                                {{ $isPotong ? '-' : '' }}{{ number_format($trx->liter, 0, ',', '.') }} L
+                                            </span>
+                                            <span class="text-[10px] font-bold text-slate-400 ml-1">({{ $jenisBbm ?? '-' }})</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-2.5 px-1.5 text-center whitespace-nowrap">
+                                    <div class="inline-flex items-center justify-center gap-1">
+                                        <!-- Detail Button -->
+                                        <button type="button"
+                                            @click="$dispatch('open-detail-transaksi', {
+                                                id: {{ $trx->id ?? 0 }},
+                                                title: '{{ $isPotong ? 'Potong Saldo' : 'Pengisian BBM' }}',
+                                                badge: '{{ $isPotong ? 'POTONG SALDO' : 'PENGISIAN BBM' }}',
+                                                is_potong: {{ $isPotong ? 'true' : 'false' }},
+                                                is_ptx: {{ $isPtx ? 'true' : 'false' }},
+                                                tanggal: '{{ addslashes($tglStr) }}',
+                                                nopol: '{{ addslashes($nopol) }}',
+                                                jenis_kendaraan: '{{ addslashes($jenisKendaraan) }}',
+                                                roda: '{{ addslashes($roda) }}',
+                                                satker: '{{ addslashes($satkerNama) }}',
+                                                jenis_bbm: '{{ addslashes($jenisBbm ?? '-') }}',
+                                                liter: '{{ addslashes($literStr) }}',
+                                                liter_raw: '{{ number_format($trx->liter, 0, ',', '.') }}',
+                                                driver: '{{ addslashes($driverStr) }}',
+                                                petugas: '{{ addslashes($petugasStr) }}',
+                                                keterangan: '{{ addslashes($ketStr) }}'
+                                            })"
+                                            class="w-7 h-7 inline-flex items-center justify-center text-emerald-600 dark:text-emerald-400 hover:text-white dark:hover:text-white bg-emerald-500/15 hover:bg-emerald-600 border border-emerald-500/30 rounded-lg transition-all active:scale-95 shadow-sm"
+                                            title="Detail Transaksi">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                            </svg>
+                                        </button>
+
+                                        <!-- Delete / Batalkan Button -->
+                                        @if(!$isPotong)
+                                            <button type="button"
+                                                class="w-7 h-7 inline-flex items-center justify-center text-rose-500 hover:text-white bg-rose-50 hover:bg-rose-600 dark:bg-rose-950/40 dark:hover:bg-rose-600 border border-rose-200/80 dark:border-rose-800/40 rounded-lg transition-all active:scale-95 shadow-sm"
+                                                onclick="confirmDelete('{{ $trx->id }}', '{{ number_format($trx->liter, 0, ',', '.') }}')"
+                                                title="Batalkan & Kembalikan Saldo">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                            </button>
+                                        @endif
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="py-8 text-center text-slate-500">
+                                    <p class="font-bold text-xs">Belum ada riwayat transaksi</p>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
             <!-- Pagination -->
             @if($transaksis->hasPages())
                 <div class="px-5 py-3.5 bg-slate-50/70 dark:bg-slate-800/40 border-t border-slate-200 dark:border-white/10">
@@ -413,6 +569,166 @@
                 </div>
             @endif
         </div>
+    </div>
+
+    <!-- Modal Detail Transaksi -->
+    <div x-data="{
+            showDetail: false,
+            detail: {},
+            openDetail(data) {
+                this.detail = data;
+                this.showDetail = true;
+                document.body.style.overflow = 'hidden';
+            },
+            closeDetail() {
+                this.showDetail = false;
+                document.body.style.overflow = '';
+            }
+        }"
+        @open-detail-transaksi.window="openDetail($event.detail)"
+        @turbo:before-cache.window="closeDetail()"
+        @keydown.escape.window="closeDetail()">
+
+        <template x-teleport="body">
+            <div x-show="showDetail" style="display: none;" class="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center p-0 sm:p-4">
+                <!-- Backdrop -->
+                <div x-show="showDetail"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100"
+                    x-transition:leave="transition ease-in duration-150"
+                    x-transition:leave-start="opacity-100"
+                    x-transition:leave-end="opacity-0"
+                    class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm"
+                    @click="closeDetail()"></div>
+
+                <!-- Modal Dialog -->
+                <div x-show="showDetail"
+                    x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0 translate-y-8 sm:scale-95 sm:translate-y-0"
+                    x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                    x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                    x-transition:leave-end="opacity-0 translate-y-8 sm:scale-95 sm:translate-y-0"
+                    class="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-t-3xl sm:rounded-2xl shadow-2xl w-full max-w-lg flex flex-col max-h-[90vh] overflow-hidden"
+                    @click.stop>
+
+                    <!-- Header -->
+                    <div class="px-5 py-4 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 shrink-0">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                                :class="detail.is_potong ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400' : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'">
+                                <template x-if="detail.is_potong">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </template>
+                                <template x-if="!detail.is_potong">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                                    </svg>
+                                </template>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-2">
+                                    <h3 class="text-base font-black text-slate-800 dark:text-white truncate" x-text="detail.title || 'Detail Transaksi'"></h3>
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-mono font-extrabold uppercase shrink-0"
+                                        :class="detail.is_potong ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30' : 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30'"
+                                        x-text="detail.badge"></span>
+                                </div>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5" x-text="detail.tanggal"></p>
+                            </div>
+                        </div>
+                        <button type="button" @click="closeDetail()" class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white rounded-xl transition shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="p-5 overflow-y-auto space-y-4">
+                        <!-- Volume Highlight Card -->
+                        <div class="p-4 rounded-2xl border"
+                            :class="detail.is_potong ? 'bg-rose-50/60 dark:bg-rose-950/20 border-rose-200 dark:border-rose-900/40' : 'bg-emerald-50/60 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-900/40'">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-[10px] font-black tracking-wider uppercase"
+                                        :class="detail.is_potong ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'">
+                                        <span x-text="detail.is_potong ? 'Volume Saldo Terpotong' : 'Volume Pengisian BBM'"></span>
+                                    </span>
+                                    <div class="flex items-baseline gap-1 mt-1">
+                                        <span class="text-2xl font-black font-mono"
+                                            :class="detail.is_potong ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'"
+                                            x-text="detail.liter"></span>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Jenis BBM</span>
+                                    <span class="inline-block mt-1 px-2.5 py-1 rounded-lg text-xs font-black uppercase tracking-wider"
+                                        :class="detail.is_ptx ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20' : 'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20'"
+                                        x-text="detail.jenis_bbm"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Detail Grid -->
+                        <div class="grid grid-cols-2 gap-3 text-xs">
+                            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Satuan Kerja</span>
+                                <span class="font-bold text-slate-800 dark:text-white block mt-1 truncate" x-text="detail.satker"></span>
+                            </div>
+                            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">No. Polisi</span>
+                                <span class="font-black text-slate-900 dark:text-white font-mono text-xs block mt-1" x-text="detail.nopol"></span>
+                            </div>
+                            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Jenis Kendaraan</span>
+                                <div class="flex items-center gap-1.5 mt-1">
+                                    <span class="font-bold text-slate-800 dark:text-white truncate" x-text="detail.jenis_kendaraan"></span>
+                                    <span class="text-[10px] font-mono px-1 rounded bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300" x-show="detail.roda" x-text="detail.roda"></span>
+                                </div>
+                            </div>
+                            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Pengemudi / Driver</span>
+                                <span class="font-bold text-slate-800 dark:text-white block mt-1 truncate" x-text="detail.driver"></span>
+                            </div>
+                            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Petugas / Operator</span>
+                                <span class="font-bold text-slate-800 dark:text-white block mt-1 truncate" x-text="detail.petugas"></span>
+                            </div>
+                            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Waktu Transaksi</span>
+                                <span class="font-bold text-slate-800 dark:text-white block mt-1 text-[11px]" x-text="detail.tanggal"></span>
+                            </div>
+                            <div class="col-span-2 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Keterangan / Catatan</span>
+                                <p class="text-xs text-slate-700 dark:text-slate-300 mt-1 leading-relaxed font-medium" x-text="detail.keterangan"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="px-5 py-3 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-between shrink-0">
+                        <template x-if="!detail.is_potong">
+                            <button type="button"
+                                @click="closeDetail(); confirmDelete(detail.id, detail.liter_raw)"
+                                class="px-3.5 py-2 bg-rose-50 hover:bg-rose-600 dark:bg-rose-950/40 dark:hover:bg-rose-600 text-rose-600 hover:text-white dark:text-rose-400 dark:hover:text-white border border-rose-200 dark:border-rose-800/40 text-xs font-bold rounded-xl transition active:scale-95 flex items-center gap-1.5 shadow-sm">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                                <span>Batalkan Transaksi</span>
+                            </button>
+                        </template>
+                        <template x-if="detail.is_potong">
+                            <div></div>
+                        </template>
+
+                        <button type="button" @click="closeDetail()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition active:scale-95">
+                            Tutup
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </template>
     </div>
 
     @push('scripts')

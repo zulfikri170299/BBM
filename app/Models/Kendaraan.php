@@ -88,7 +88,9 @@ class Kendaraan extends Model
         if (array_key_exists('has_unpaid_bon', $this->attributes)) {
             return (bool) $this->attributes['has_unpaid_bon'];
         }
-        return $this->hutangBelumLunas()->exists();
+        $exists = $this->hutangBelumLunas()->exists();
+        $this->attributes['has_unpaid_bon'] = $exists;
+        return $exists;
     }
 
     public function totalUnpaidBon(): int
@@ -96,7 +98,9 @@ class Kendaraan extends Model
         if (array_key_exists('unpaid_bon_total', $this->attributes)) {
             return (int) $this->attributes['unpaid_bon_total'];
         }
-        return (int) $this->hutangBelumLunas()->sum('jumlah_bon');
+        $total = (int) $this->hutangBelumLunas()->sum('jumlah_bon');
+        $this->attributes['unpaid_bon_total'] = $total;
+        return $total;
     }
 
     public function getIsLockedAttribute(): bool

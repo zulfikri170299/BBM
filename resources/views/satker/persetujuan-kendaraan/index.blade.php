@@ -312,7 +312,7 @@
                                     <td class="px-4 py-3 text-center hidden sm:table-cell">
                                         <div class="flex items-center justify-center gap-1.5">
                                             @if($kendaraan->status_approval === 'ditolak')
-                                                @if(\App\Models\Setting::where('key', 'satker_can_edit_kendaraan')->value('value') ?? 1)
+                                                @if(\App\Models\Setting::get('satker_can_edit_kendaraan', 1))
                                                     <a href="{{ route('satker.kendaraans.edit', $kendaraan) }}"
                                                         class="p-1.5 bg-amber-100 hover:bg-amber-200 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 rounded-lg transition"
                                                         title="Perbaiki & Ajukan Ulang">
@@ -490,7 +490,7 @@
                                                     <!-- Modal Footer / Actions -->
                                                     <div class="p-4 border-t border-slate-100 dark:border-white/10 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-end gap-2">
                                                         @if($kendaraan->status_approval === 'ditolak')
-                                                            @if(\App\Models\Setting::where('key', 'satker_can_edit_kendaraan')->value('value') ?? 1)
+                                                            @if(\App\Models\Setting::get('satker_can_edit_kendaraan', 1))
                                                                 <a href="{{ route('satker.kendaraans.edit', $kendaraan) }}" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1.5">
                                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                                                                     Perbaiki

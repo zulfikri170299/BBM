@@ -437,7 +437,7 @@
                     // Warna card berdasarkan stok
                     if (stokTangkiCard) {
                         stokTangkiCard.classList.remove('hidden', 'border-rose-200', 'bg-rose-50', 'border-amber-200', 'bg-amber-50', 'border-emerald-200', 'bg-emerald-50');
-                        if (stokTangkiNilai) stokTangkiNilai.classList.remove('text-rose-600', 'text-amber-600', 'text-emerald-600', 'text-slate-800 dark:text-slate-200');
+                        if (stokTangkiNilai) stokTangkiNilai.classList.remove('text-rose-600', 'text-amber-600', 'text-emerald-600', 'text-slate-800', 'dark:text-slate-200');
                         if (currentStok <= 0) {
                             stokTangkiCard.classList.add('border-rose-200', 'bg-rose-50');
                             if (stokTangkiNilai) stokTangkiNilai.classList.add('text-rose-600');

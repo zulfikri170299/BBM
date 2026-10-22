@@ -34,6 +34,11 @@ Route::middleware('auth')->group(function () {
         return response()->json(['success' => true]);
     })->name('notifications.read');
 
+    Route::post('/notifications/mark-all-read', function () {
+        auth()->user()->unreadNotifications()->update(['read_at' => now()]);
+        return response()->json(['success' => true]);
+    })->name('notifications.markAllRead');
+
     // Filter Tahun Route
     Route::post('/set-filter-tahun', function (\Illuminate\Http\Request $request) {
         $request->validate(['tahun' => 'required|integer|min:2020|max:' . date('Y')]);

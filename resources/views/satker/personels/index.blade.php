@@ -1015,56 +1015,61 @@
 
 @push('scripts')
     <script>
-        // Bulk Delete Checkboxes
-        const checkAll = document.getElementById('checkAll');
-        const itemCheckboxes = document.querySelectorAll('.item-checkbox');
-        const bulkActionsBar = document.getElementById('bulkActionsBar');
-        const selectedCountEl = document.getElementById('selectedCount');
+        (function() {
+            // Bulk Delete Checkboxes
+            const checkAll = document.getElementById('checkAll');
+            const itemCheckboxes = document.querySelectorAll('.item-checkbox');
+            const bulkActionsBar = document.getElementById('bulkActionsBar');
+            const selectedCountEl = document.getElementById('selectedCount');
 
-        function updateBulkUI() {
-            if (!selectedCountEl) return;
-            const checked = document.querySelectorAll('.item-checkbox:checked');
-            selectedCountEl.textContent = checked.length;
-            if (bulkActionsBar) bulkActionsBar.classList.toggle('hidden', checked.length === 0);
-            if (checkAll) {
-                checkAll.checked = checked.length === itemCheckboxes.length && itemCheckboxes.length > 0;
-                checkAll.indeterminate = checked.length > 0 && checked.length < itemCheckboxes.length;
-            }
-        }
-
-        if (checkAll && itemCheckboxes.length > 0) {
-            checkAll.addEventListener('change', function () {
-                itemCheckboxes.forEach(cb => cb.checked = this.checked);
-                updateBulkUI();
-            });
-        }
-
-        itemCheckboxes.forEach(cb => cb.addEventListener('change', updateBulkUI));
-
-        function bulkDeletePersonel() {
-            const checked = document.querySelectorAll('.item-checkbox:checked');
-            if (checked.length === 0) return;
-            Swal.fire({
-                title: 'Hapus Massal?',
-                text: 'Hapus ' + checked.length + ' data terpilih?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#e11d48',
-                confirmButtonText: 'Ya, Hapus!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const inputsDiv = document.getElementById('bulkDeleteInputs');
-                    inputsDiv.innerHTML = '';
-                    checked.forEach(cb => {
-                        const input = document.createElement('input');
-                        input.type = 'hidden';
-                        input.name = 'ids[]';
-                        input.value = cb.value;
-                        inputsDiv.appendChild(input);
-                    });
-                    document.getElementById('bulkDeleteForm').submit();
+            function updateBulkUI() {
+                if (!selectedCountEl) return;
+                const checked = document.querySelectorAll('.item-checkbox:checked');
+                selectedCountEl.textContent = checked.length;
+                if (bulkActionsBar) bulkActionsBar.classList.toggle('hidden', checked.length === 0);
+                if (checkAll) {
+                    checkAll.checked = checked.length === itemCheckboxes.length && itemCheckboxes.length > 0;
+                    checkAll.indeterminate = checked.length > 0 && checked.length < itemCheckboxes.length;
                 }
-            });
-        }
+            }
+
+            if (checkAll && itemCheckboxes.length > 0) {
+                checkAll.addEventListener('change', function () {
+                    itemCheckboxes.forEach(cb => cb.checked = this.checked);
+                    updateBulkUI();
+                });
+            }
+
+            itemCheckboxes.forEach(cb => cb.addEventListener('change', updateBulkUI));
+
+            window.bulkDeletePersonel = function() {
+                const checked = document.querySelectorAll('.item-checkbox:checked');
+                if (checked.length === 0) return;
+                Swal.fire({
+                    title: 'Hapus Massal?',
+                    text: 'Hapus ' + checked.length + ' data terpilih?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#e11d48',
+                    confirmButtonText: 'Ya, Hapus!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const inputsDiv = document.getElementById('bulkDeleteInputs');
+                        if (inputsDiv) {
+                            inputsDiv.innerHTML = '';
+                            checked.forEach(cb => {
+                                const input = document.createElement('input');
+                                input.type = 'hidden';
+                                input.name = 'ids[]';
+                                input.value = cb.value;
+                                inputsDiv.appendChild(input);
+                            });
+                        }
+                        const form = document.getElementById('bulkDeleteForm');
+                        if (form) form.submit();
+                    }
+                });
+            };
+        })();
     </script>
 @endpush

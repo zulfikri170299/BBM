@@ -37,6 +37,7 @@
         </div>
 
         <nav class="mt-4 flex-1 px-4 space-y-1 overflow-y-auto custom-scrollbar pb-24"
+            @click="if ($event.target.closest('a')) { sidebarOpen = false; }"
             x-data="{ 
                 reportsOpen: {{ (request()->routeIs('admin.laporan-slog.*') || request()->routeIs('admin.nominatif.*') || request()->routeIs('admin.laporan-topup.*') || request()->routeIs('admin.laporan-triwulan.*') || request()->routeIs('admin.laporan-stok-bbm.*') || request()->routeIs('admin.laporan-harian.*') || request()->routeIs('admin.riwayat.*') || request()->routeIs('admin.ba.*') || request()->routeIs('admin.laporan-sisa.*') || request()->routeIs('admin.laporan-hutang.*') || request()->routeIs('admin.laporan-potong.*') || request()->routeIs('admin.saldo-dialihkan.*')) ? 'true' : 'false' }},
                 transactionsOpen: {{ (request()->routeIs('admin.transaksi.*') || request()->routeIs('admin.transfer-saldo.*') || request()->routeIs('admin.bulk-potong.*') || request()->routeIs('admin.meter.*') || request()->routeIs('admin.hutang.*') || request()->routeIs('petugas.transaksi.*') || request()->routeIs('petugas.hutang.*')) ? 'true' : 'false' }},

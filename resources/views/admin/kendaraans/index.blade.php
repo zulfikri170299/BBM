@@ -1950,79 +1950,81 @@
 
     @push('scripts')
         <script>
-            const checkAll = document.getElementById('checkAll');
-            const bulkActions = document.getElementById('bulkActions');
-            const selectedCountLabel = document.getElementById('selectedCount');
+            (function() {
+                const checkAll = document.getElementById('checkAll');
+                const bulkActions = document.getElementById('bulkActions');
+                const selectedCountLabel = document.getElementById('selectedCount');
 
-            function getSelectedIds() {
-                const checked = document.querySelectorAll('.item-checkbox:checked');
-                return [...new Set(Array.from(checked).map(cb => cb.value))];
-            }
-
-            function updateBulkUI() {
-                const uniqueIds = getSelectedIds();
-                if (selectedCountLabel) {
-                    selectedCountLabel.innerText = uniqueIds.length;
+                function getSelectedIds() {
+                    const checked = document.querySelectorAll('.item-checkbox:checked');
+                    return [...new Set(Array.from(checked).map(cb => cb.value))];
                 }
-                if (bulkActions) {
-                    if (uniqueIds.length > 0) {
-                        bulkActions.classList.remove('hidden');
-                        bulkActions.classList.add('flex');
-                    } else {
-                        bulkActions.classList.add('hidden');
-                        bulkActions.classList.remove('flex');
+
+                function updateBulkUI() {
+                    const uniqueIds = getSelectedIds();
+                    if (selectedCountLabel) {
+                        selectedCountLabel.innerText = uniqueIds.length;
+                    }
+                    if (bulkActions) {
+                        if (uniqueIds.length > 0) {
+                            bulkActions.classList.remove('hidden');
+                            bulkActions.classList.add('flex');
+                        } else {
+                            bulkActions.classList.add('hidden');
+                            bulkActions.classList.remove('flex');
+                        }
                     }
                 }
-            }
 
-            [document.getElementById('checkAll'), document.getElementById('checkAllMobile')].forEach(chk => {
-                if (chk) {
-                    chk.addEventListener('change', () => {
-                        document.querySelectorAll('.item-checkbox').forEach(cb => { cb.checked = chk.checked; });
-                        const other = chk.id === 'checkAll' ? document.getElementById('checkAllMobile') : document.getElementById('checkAll');
-                        if (other) other.checked = chk.checked;
+                [document.getElementById('checkAll'), document.getElementById('checkAllMobile')].forEach(chk => {
+                    if (chk) {
+                        chk.addEventListener('change', () => {
+                            document.querySelectorAll('.item-checkbox').forEach(cb => { cb.checked = chk.checked; });
+                            const other = chk.id === 'checkAll' ? document.getElementById('checkAllMobile') : document.getElementById('checkAll');
+                            if (other) other.checked = chk.checked;
+                            updateBulkUI();
+                        });
+                    }
+                });
+
+                document.querySelectorAll('.item-checkbox').forEach(cb => {
+                    cb.addEventListener('change', () => {
+                        document.querySelectorAll(`.item-checkbox[value="${cb.value}"]`).forEach(el => {
+                            el.checked = cb.checked;
+                        });
                         updateBulkUI();
                     });
-                }
-            });
+                });
 
-            document.querySelectorAll('.item-checkbox').forEach(cb => {
-                cb.addEventListener('change', () => {
-                    document.querySelectorAll(`.item-checkbox[value="${cb.value}"]`).forEach(el => {
-                        el.checked = cb.checked;
+                document.getElementById('bulkDeleteBtn')?.addEventListener('click', function () {
+                    const uniqueIds = getSelectedIds();
+                    if (uniqueIds.length === 0) return;
+
+                    Swal.fire({
+                        title: 'Hapus Data Massal',
+                        text: `Apakah Anda yakin ingin menghapus ${uniqueIds.length} kendaraan yang terpilih? Tindakan ini tidak dapat dibatalkan.`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#e11d48',
+                        cancelButtonColor: '#64748b',
+                        confirmButtonText: 'Ya, Hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const container = document.getElementById('bulkIdsContainer');
+                            container.innerHTML = '';
+                            uniqueIds.forEach(id => {
+                                const input = document.createElement('input');
+                                input.type = 'hidden';
+                                input.name = 'ids[]';
+                                input.value = id;
+                                container.appendChild(input);
+                            });
+                            document.getElementById('bulkDeleteForm').submit();
+                        }
                     });
-                    updateBulkUI();
                 });
-            });
-
-            document.getElementById('bulkDeleteBtn')?.addEventListener('click', function () {
-                const uniqueIds = getSelectedIds();
-                if (uniqueIds.length === 0) return;
-
-                Swal.fire({
-                    title: 'Hapus Data Massal',
-                    text: `Apakah Anda yakin ingin menghapus ${uniqueIds.length} kendaraan yang terpilih? Tindakan ini tidak dapat dibatalkan.`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#e11d48',
-                    cancelButtonColor: '#64748b',
-                    confirmButtonText: 'Ya, Hapus!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        const container = document.getElementById('bulkIdsContainer');
-                        container.innerHTML = '';
-                        uniqueIds.forEach(id => {
-                            const input = document.createElement('input');
-                            input.type = 'hidden';
-                            input.name = 'ids[]';
-                            input.value = id;
-                            container.appendChild(input);
-                        });
-                        document.getElementById('bulkDeleteForm').submit();
-                    }
-                });
-            });
+            })();
         </script>
     @endpush
     @if(auth()->user()->role === 'super_admin')

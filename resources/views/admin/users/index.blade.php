@@ -340,114 +340,122 @@
 
     @push('scripts')
         <script>
-            const checkAll = document.getElementById('checkAll');
-            const userCheckboxes = document.querySelectorAll('.user-checkbox');
-            const bulkActions = document.getElementById('bulkActions');
-            const selectedCountLabel = document.getElementById('selectedCount');
-            const bulkStatusInput = document.getElementById('bulkStatusInput');
-            const bulkForm = document.getElementById('bulkForm');
+            (function() {
+                const checkAll = document.getElementById('checkAll');
+                const userCheckboxes = document.querySelectorAll('.user-checkbox');
+                const bulkActions = document.getElementById('bulkActions');
+                const selectedCountLabel = document.getElementById('selectedCount');
+                const bulkStatusInput = document.getElementById('bulkStatusInput');
+                const bulkForm = document.getElementById('bulkForm');
 
-            function updateBulkUI() {
-                const checkedCount = document.querySelectorAll('.user-checkbox:checked').length;
-                selectedCountLabel.innerText = checkedCount;
-                if (checkedCount > 0) {
-                    bulkActions.classList.remove('hidden');
-                } else {
-                    bulkActions.classList.add('hidden');
+                function updateBulkUI() {
+                    const checkedCount = document.querySelectorAll('.user-checkbox:checked').length;
+                    if (selectedCountLabel) selectedCountLabel.innerText = checkedCount;
+                    if (bulkActions) {
+                        if (checkedCount > 0) {
+                            bulkActions.classList.remove('hidden');
+                        } else {
+                            bulkActions.classList.add('hidden');
+                        }
+                    }
                 }
-            }
 
-            checkAll.addEventListener('change', () => {
+                if (checkAll) {
+                    checkAll.addEventListener('change', () => {
+                        userCheckboxes.forEach(cb => {
+                            cb.checked = checkAll.checked;
+                        });
+                        updateBulkUI();
+                    });
+                }
+
                 userCheckboxes.forEach(cb => {
-                    cb.checked = checkAll.checked;
+                    cb.addEventListener('change', updateBulkUI);
                 });
-                updateBulkUI();
-            });
 
-            userCheckboxes.forEach(cb => {
-                cb.addEventListener('change', updateBulkUI);
-            });
+                window.submitBulk = function(status) {
+                    const actionText = status === 'active' ? 'mengaktifkan' : 'menonaktifkan';
+                    const selected = document.querySelectorAll('.user-checkbox:checked');
 
-            function submitBulk(status) {
-                const actionText = status === 'active' ? 'mengaktifkan' : 'menonaktifkan';
-                const selected = document.querySelectorAll('.user-checkbox:checked');
-
-                if (selected.length === 0) {
-                    Swal.fire({
-                        icon: 'info',
-                        title: 'Ops!',
-                        text: 'Pilih setidaknya satu user.',
-                        confirmButtonColor: '#4338ca',
-                    });
-                    return;
-                }
-
-                Swal.fire({
-                    title: 'Konfirmasi Massal',
-                    text: `Apakah Anda yakin ingin ${actionText} ${selected.length} akun yang terpilih?`,
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: status === 'active' ? '#10b981' : '#e11d48',
-                    cancelButtonColor: '#64748b',
-                    confirmButtonText: 'Ya, Lanjutkan!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        const container = document.getElementById('bulkIdsContainer');
-                        container.innerHTML = '';
-
-                        selected.forEach(cb => {
-                            const input = document.createElement('input');
-                            input.type = 'hidden';
-                            input.name = 'user_ids[]';
-                            input.value = cb.value;
-                            container.appendChild(input);
+                    if (selected.length === 0) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Ops!',
+                            text: 'Pilih setidaknya satu user.',
+                            confirmButtonColor: '#4338ca',
                         });
-
-                        bulkStatusInput.value = status;
-                        bulkForm.submit();
+                        return;
                     }
-                });
-            }
-            function submitBulkDelete() {
-                const selected = document.querySelectorAll('.user-checkbox:checked');
 
-                if (selected.length === 0) {
                     Swal.fire({
-                        icon: 'info',
-                        title: 'Ops!',
-                        text: 'Pilih setidaknya satu user.',
-                        confirmButtonColor: '#4338ca',
+                        title: 'Konfirmasi Massal',
+                        text: `Apakah Anda yakin ingin ${actionText} ${selected.length} akun yang terpilih?`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: status === 'active' ? '#10b981' : '#e11d48',
+                        cancelButtonColor: '#64748b',
+                        confirmButtonText: 'Ya, Lanjutkan!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const container = document.getElementById('bulkIdsContainer');
+                            container.innerHTML = '';
+
+                            selected.forEach(cb => {
+                                const input = document.createElement('input');
+                                input.type = 'hidden';
+                                input.name = 'user_ids[]';
+                                input.value = cb.value;
+                                container.appendChild(input);
+                            });
+
+                            if (bulkStatusInput) bulkStatusInput.value = status;
+                            if (bulkForm) bulkForm.submit();
+                        }
                     });
-                    return;
-                }
+                };
 
-                Swal.fire({
-                    title: 'Hapus Data Massal',
-                    text: `Apakah Anda yakin ingin menghapus ${selected.length} user yang terpilih? Tindakan ini tidak dapat dibatalkan.`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#e11d48',
-                    cancelButtonColor: '#64748b',
-                    confirmButtonText: 'Ya, Hapus!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        const container = document.getElementById('bulkDeleteIdsContainer');
-                        container.innerHTML = '';
+                window.submitBulkDelete = function() {
+                    const selected = document.querySelectorAll('.user-checkbox:checked');
 
-                        selected.forEach(cb => {
-                            const input = document.createElement('input');
-                            input.type = 'hidden';
-                            input.name = 'ids[]';
-                            input.value = cb.value;
-                            container.appendChild(input);
+                    if (selected.length === 0) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Ops!',
+                            text: 'Pilih setidaknya satu user.',
+                            confirmButtonColor: '#4338ca',
                         });
-
-                        document.getElementById('bulkDeleteForm').submit();
+                        return;
                     }
-                });
-            }
+
+                    Swal.fire({
+                        title: 'Hapus Data Massal',
+                        text: `Apakah Anda yakin ingin menghapus ${selected.length} user yang terpilih? Tindakan ini tidak dapat dibatalkan.`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#e11d48',
+                        cancelButtonColor: '#64748b',
+                        confirmButtonText: 'Ya, Hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const container = document.getElementById('bulkDeleteIdsContainer');
+                            container.innerHTML = '';
+
+                            selected.forEach(cb => {
+                                const input = document.createElement('input');
+                                input.type = 'hidden';
+                                input.name = 'ids[]';
+                                input.value = cb.value;
+                                container.appendChild(input);
+                            });
+
+                            const deleteForm = document.getElementById('bulkDeleteForm');
+                            if (deleteForm) deleteForm.submit();
+                        }
+                    });
+                };
+            })();
         </script>
     @endpush
 </x-app-layout>

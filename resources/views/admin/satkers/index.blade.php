@@ -275,58 +275,67 @@
 
     @push('scripts')
         <script>
-            const checkAll = document.getElementById('checkAll');
-            const itemCheckboxes = document.querySelectorAll('.item-checkbox');
-            const bulkActions = document.getElementById('bulkActions');
-            const selectedCountLabel = document.getElementById('selectedCount');
+            (function() {
+                const checkAll = document.getElementById('checkAll');
+                const itemCheckboxes = document.querySelectorAll('.item-checkbox');
+                const bulkActions = document.getElementById('bulkActions');
+                const selectedCountLabel = document.getElementById('selectedCount');
 
-            function updateBulkUI() {
-                const checkedCount = document.querySelectorAll('.item-checkbox:checked').length;
-                selectedCountLabel.innerText = checkedCount;
-                if (checkedCount > 0) {
-                    bulkActions.classList.remove('hidden');
-                    bulkActions.classList.add('flex');
-                } else {
-                    bulkActions.classList.add('hidden');
-                    bulkActions.classList.remove('flex');
-                }
-            }
-
-            checkAll.addEventListener('change', () => {
-                itemCheckboxes.forEach(cb => { cb.checked = checkAll.checked; });
-                updateBulkUI();
-            });
-
-            itemCheckboxes.forEach(cb => { cb.addEventListener('change', updateBulkUI); });
-
-            document.getElementById('bulkDeleteBtn').addEventListener('click', function () {
-                const selected = document.querySelectorAll('.item-checkbox:checked');
-                if (selected.length === 0) return;
-
-                Swal.fire({
-                    title: 'Hapus Data Massal',
-                    text: `Apakah Anda yakin ingin menghapus ${selected.length} satker yang terpilih? Tindakan ini tidak dapat dibatalkan.`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#e11d48',
-                    cancelButtonColor: '#64748b',
-                    confirmButtonText: 'Ya, Hapus!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        const container = document.getElementById('bulkIdsContainer');
-                        container.innerHTML = '';
-                        selected.forEach(cb => {
-                            const input = document.createElement('input');
-                            input.type = 'hidden';
-                            input.name = 'ids[]';
-                            input.value = cb.value;
-                            container.appendChild(input);
-                        });
-                        document.getElementById('bulkDeleteForm').submit();
+                function updateBulkUI() {
+                    const checkedCount = document.querySelectorAll('.item-checkbox:checked').length;
+                    if (selectedCountLabel) selectedCountLabel.innerText = checkedCount;
+                    if (bulkActions) {
+                        if (checkedCount > 0) {
+                            bulkActions.classList.remove('hidden');
+                            bulkActions.classList.add('flex');
+                        } else {
+                            bulkActions.classList.add('hidden');
+                            bulkActions.classList.remove('flex');
+                        }
                     }
-                });
-            });
+                }
+
+                if (checkAll) {
+                    checkAll.addEventListener('change', () => {
+                        itemCheckboxes.forEach(cb => { cb.checked = checkAll.checked; });
+                        updateBulkUI();
+                    });
+                }
+
+                itemCheckboxes.forEach(cb => { cb.addEventListener('change', updateBulkUI); });
+
+                const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
+                if (bulkDeleteBtn) {
+                    bulkDeleteBtn.addEventListener('click', function () {
+                        const selected = document.querySelectorAll('.item-checkbox:checked');
+                        if (selected.length === 0) return;
+
+                        Swal.fire({
+                            title: 'Hapus Data Massal',
+                            text: `Apakah Anda yakin ingin menghapus ${selected.length} satker yang terpilih? Tindakan ini tidak dapat dibatalkan.`,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#e11d48',
+                            cancelButtonColor: '#64748b',
+                            confirmButtonText: 'Ya, Hapus!',
+                            cancelButtonText: 'Batal'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                const container = document.getElementById('bulkIdsContainer');
+                                container.innerHTML = '';
+                                selected.forEach(cb => {
+                                    const input = document.createElement('input');
+                                    input.type = 'hidden';
+                                    input.name = 'ids[]';
+                                    input.value = cb.value;
+                                    container.appendChild(input);
+                                });
+                                document.getElementById('bulkDeleteForm').submit();
+                            }
+                        });
+                    });
+                }
+            })();
         </script>
     @endpush
 </x-app-layout>

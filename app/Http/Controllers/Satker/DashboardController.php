@@ -20,28 +20,29 @@ class DashboardController extends Controller
 
         if ($user->role !== 'super_admin') {
             $queryKendaraan->where('satker_id', $satkerId);
-            $queryTransaksi->whereHas('kendaraan', function($q) use ($satkerId) {
-                $q->where('satker_id', $satkerId);
-            });
+            $queryTransaksi->where('satker_id', $satkerId);
         }
 
         $totalKendaraan = $queryKendaraan->count();
         $totalPersonel = 0;
         $totalTransaksi = $queryTransaksi->count();
+        $totalLiterTransaksi = (clone $queryTransaksi)->sum('liter') ?: 0;
 
-        // Rincian per jenis roda
+        // Rincian per jenis roda (1 single query groupBy)
         $qRoda = Kendaraan::query();
         if ($user->role !== 'super_admin') {
             $qRoda->where('satker_id', $satkerId);
         }
-        $rodaR2 = (clone $qRoda)->where('roda', 'R2')->count();
-        $rodaR4 = (clone $qRoda)->where('roda', 'R4')->count();
-        $rodaR6 = (clone $qRoda)->where('roda', 'R6')->count();
-        $rodaNon = (clone $qRoda)->where(function($q) {
-            $q->where('roda', 'Non Kendaraan')
-              ->orWhereNull('roda')
-              ->orWhereNotIn('roda', ['R2', 'R4', 'R6']);
-        })->count();
+        $rodaCounts = (clone $qRoda)
+            ->selectRaw("COALESCE(roda, 'Non Kendaraan') as roda_type, COUNT(*) as aggregate")
+            ->groupBy('roda_type')
+            ->pluck('aggregate', 'roda_type');
+
+        $rodaR2 = $rodaCounts['R2'] ?? 0;
+        $rodaR4 = $rodaCounts['R4'] ?? 0;
+        $rodaR6 = $rodaCounts['R6'] ?? 0;
+        $rodaNon = $totalKendaraan - ($rodaR2 + $rodaR4 + $rodaR6);
+        if ($rodaNon < 0) $rodaNon = 0;
 
         $querySaldoK = Kendaraan::query();
         $queryTransfer = \App\Models\RiwayatTransferSaldoPersonel::query();
@@ -63,47 +64,37 @@ class DashboardController extends Controller
             ->take(7)
             ->get();
 
+        // 1 single query for 7 days aggregation instead of 28 queries in a loop
+        $startDate = now()->subDays(6)->startOfDay();
+        $endDate = now()->endOfDay();
+
+        $chartQuery = \App\Models\TransaksiBbm::whereBetween('created_at', [$startDate, $endDate]);
+        if ($user->role !== 'super_admin') {
+            $chartQuery->where('satker_id', $satkerId);
+        }
+
+        $chartRecords = $chartQuery
+            ->selectRaw("DATE(created_at) as date_key, 
+                         COUNT(*) as count, 
+                         SUM(liter) as total_liter, 
+                         SUM(CASE WHEN jenis_bbm LIKE '%Pertamax%' THEN liter ELSE 0 END) as pertamax,
+                         SUM(CASE WHEN jenis_bbm LIKE '%Dex%' THEN liter ELSE 0 END) as dex")
+            ->groupBy('date_key')
+            ->get()
+            ->keyBy('date_key');
+
         $chartData = [];
         for ($i = 6; $i >= 0; $i--) {
             $date = now()->subDays($i);
-            $qChart = \App\Models\TransaksiBbm::whereDate('created_at', $date);
-            if ($user->role !== 'super_admin') {
-                $qChart->where(function($q) use ($satkerId) {
-                    $q->where('satker_id', $satkerId)
-                      ->orWhereHas('kendaraan', function($qk) use ($satkerId) {
-                          $qk->where('satker_id', $satkerId);
-                      });
-                });
-            }
-            $count = (clone $qChart)->count();
-            $liter = (clone $qChart)->sum('liter');
-
-            $pertamax = (clone $qChart)->where(function($q) {
-                $q->where('jenis_bbm', 'like', '%Pertamax%')
-                  ->orWhere(function($sub) {
-                      $sub->whereNull('jenis_bbm')
-                          ->whereHas('kendaraan', function($qk) {
-                              $qk->where('jenis_bbm', 'like', '%Pertamax%');
-                          });
-                  });
-            })->sum('liter');
-
-            $dex = (clone $qChart)->where(function($q) {
-                $q->where('jenis_bbm', 'like', '%Dex%')
-                  ->orWhere(function($sub) {
-                      $sub->whereNull('jenis_bbm')
-                          ->whereHas('kendaraan', function($qk) {
-                              $qk->where('jenis_bbm', 'like', '%Dex%');
-                          });
-                  });
-            })->sum('liter');
+            $key = $date->format('Y-m-d');
+            $record = $chartRecords[$key] ?? null;
 
             $chartData[] = [
                 'date' => $date->format('d M'),
-                'count' => $count,
-                'liter' => round($liter, 1),
-                'pertamax' => round($pertamax, 1),
-                'dex' => round($dex, 1),
+                'count' => $record ? (int)$record->count : 0,
+                'liter' => $record ? round((float)$record->total_liter, 1) : 0,
+                'pertamax' => $record ? round((float)$record->pertamax, 1) : 0,
+                'dex' => $record ? round((float)$record->dex, 1) : 0,
             ];
         }
 
@@ -137,7 +128,7 @@ class DashboardController extends Controller
             ->pluck('total', 'jenis_bbm');
 
         return view('satker.dashboard', compact(
-            'totalKendaraan', 'totalPersonel', 'totalTransaksi',
+            'totalKendaraan', 'totalPersonel', 'totalTransaksi', 'totalLiterTransaksi',
             'totalSaldoKendaraan', 'totalSaldoPersonel',
             'totalTransfer', 'totalLiterTransfer',
             'recentTransactions', 'chartData',

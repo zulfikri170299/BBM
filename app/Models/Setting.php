@@ -10,6 +10,15 @@ class Setting extends Model
 {
     protected $fillable = ['key', 'value'];
 
+    public static function get(string $key, $default = null)
+    {
+        static $settings = null;
+        if ($settings === null) {
+            $settings = self::pluck('value', 'key')->toArray();
+        }
+        return $settings[$key] ?? $default;
+    }
+
     public static function isSystemLocked(): bool
     {
         static $requestCache = null;

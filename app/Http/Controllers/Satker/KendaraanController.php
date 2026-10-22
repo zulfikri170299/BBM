@@ -28,7 +28,7 @@ class KendaraanController extends Controller
         $search = $request->input('search');
 
         // Tabel utama kendaraan HANYA menampilkan kendaraan yang SUDAH DISETUJUI
-        $query = Kendaraan::query()->where(function ($q) {
+        $query = Kendaraan::with('satker')->where(function ($q) {
             $q->where('status_approval', 'disetujui')
               ->orWhere(function ($sub) {
                   $sub->where('status_approval', 'ditolak')
@@ -48,6 +48,24 @@ class KendaraanController extends Controller
         }
 
         $kendaraans = $query->latest()->paginate($this->getPerPage($request))->withQueryString();
+
+        // Batch pre-load status hutang belum dibayar dalam 1 query untuk menghindari N+1 query per baris
+        $unpaidHutangs = \App\Models\Hutang::where('status', 'belum_dibayar');
+        if ($user->role !== 'super_admin') {
+            $unpaidHutangs->where('satker_id', $satkerId);
+        }
+        $unpaidHutangList = $unpaidHutangs->get(['nopol', 'jumlah_bon', 'satker_id']);
+
+        $kendaraans->getCollection()->each(function ($kendaraan) use ($unpaidHutangList) {
+            $cleanNopol = preg_replace('/[^A-Za-z0-9]/', '', strtoupper($kendaraan->no_polisi));
+            $matched = $unpaidHutangList->filter(function ($h) use ($kendaraan, $cleanNopol) {
+                if ($h->satker_id != $kendaraan->satker_id) return false;
+                $cleanH = preg_replace('/[^A-Za-z0-9]/', '', strtoupper($h->nopol));
+                return $cleanH === $cleanNopol || trim(strtoupper($h->nopol)) === trim(strtoupper($kendaraan->no_polisi));
+            });
+            $kendaraan->setAttribute('has_unpaid_bon', $matched->isNotEmpty());
+            $kendaraan->setAttribute('unpaid_bon_total', (int) $matched->sum('jumlah_bon'));
+        });
         
         // Data pengajuan yang belum disetujui (dipisahkan agar tidak mencemari tabel kendaraan aktif)
         $submissionQuery = Kendaraan::query();

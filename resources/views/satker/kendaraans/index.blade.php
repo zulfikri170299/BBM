@@ -99,7 +99,7 @@
                     <span>Transfer Saldo</span>
                 </button>
 
-                @if((\App\Models\Setting::where('key', 'satker_can_import_kendaraan')->value('value') ?? '1') == '1')
+                @if((\App\Models\Setting::get('satker_can_import_kendaraan', '1')) == '1')
                     <button @click="$dispatch('open-import-kendaraan')"
                         class="px-3 py-2 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold rounded-xl shadow-sm shadow-blue-600/20 transition-all text-xs flex items-center gap-1.5 shrink-0 whitespace-nowrap"
                         title="Import Kendaraan dari Excel">
@@ -112,7 +112,7 @@
                     </button>
                 @endif
 
-                @if(\App\Models\Setting::where('key', 'satker_can_create_kendaraan')->value('value') ?? 1)
+                @if(\App\Models\Setting::get('satker_can_create_kendaraan', 1))
                     <a href="{{ route('satker.kendaraans.create') }}"
                         class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold rounded-xl shadow-sm shadow-indigo-600/20 transition-all text-xs flex items-center gap-1.5 shrink-0 whitespace-nowrap"
                         title="Tambah Kendaraan Baru">
@@ -422,7 +422,7 @@
                                             </svg>
                                         </a>
 
-                                        @if(\App\Models\Setting::where('key', 'satker_can_edit_kendaraan')->value('value') ?? 1)
+                                        @if(\App\Models\Setting::get('satker_can_edit_kendaraan', 1))
                                             <a href="{{ route('satker.kendaraans.edit', $kendaraan) }}"
                                                 class="p-2 text-slate-500 dark:text-slate-400 hover:text-brand-primary dark:hover:text-white hover:bg-brand-primary/10 dark:hover:bg-white/10 rounded-xl transition-all"
                                                 title="Edit Kendaraan">
@@ -467,7 +467,7 @@
                                     </div>
                                     <p class="text-sm font-bold text-slate-600 dark:text-slate-400">Belum ada kendaraan terdaftar</p>
                                     <p class="text-xs text-slate-400 mt-1">Belum ada data yang cocok dengan kriteria filter saat ini.</p>
-                                    @if(\App\Models\Setting::where('key', 'satker_can_create_kendaraan')->value('value') ?? 1)
+                                    @if(\App\Models\Setting::get('satker_can_create_kendaraan', 1))
                                         <a href="{{ route('satker.kendaraans.create') }}"
                                             class="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-brand-primary hover:underline">
                                             Tambah kendaraan pertama &rarr;
@@ -541,7 +541,7 @@
                                             print_url: '{{ route('satker.kendaraans.print', $kendaraan) }}',
                                             edit_url: '{{ route('satker.kendaraans.edit', $kendaraan) }}',
                                             reset_pin_url: '{{ route('satker.kendaraans.reset-pin', $kendaraan) }}',
-                                            can_edit: {{ (\App\Models\Setting::where('key', 'satker_can_edit_kendaraan')->value('value') ?? 1) ? 'true' : 'false' }}
+                                            can_edit: {{ (\App\Models\Setting::get('satker_can_edit_kendaraan', 1)) ? 'true' : 'false' }}
                                         })"
                                         class="inline-flex items-center justify-center w-7 h-7 bg-emerald-500/15 hover:bg-emerald-600 text-emerald-600 dark:text-emerald-400 hover:text-white dark:hover:text-white border border-emerald-500/30 rounded-lg transition active:scale-95 shadow-sm"
                                         title="Detail Kendaraan">
@@ -647,7 +647,7 @@
                     <form action="{{ route('satker.kendaraans.transfer') }}" method="POST" class="flex flex-col h-full min-h-0">
                         @csrf
                         @php
-                            $personelAccessControl = \App\Models\Setting::where('key', 'personel_access_control')->value('value') ?? '1';
+                            $personelAccessControl = \App\Models\Setting::get('personel_access_control', '1');
                         @endphp
 
                         <!-- Header with Gradient -->
@@ -1002,7 +1002,7 @@
         </div>
 
         <!-- Import Kendaraan Modal (Multi-Step) -->
-        @if((\App\Models\Setting::where('key', 'satker_can_import_kendaraan')->value('value') ?? '1') == '1')
+        @if((\App\Models\Setting::get('satker_can_import_kendaraan', '1')) == '1')
             <div x-cloak x-data="importKendaraanModal()" @open-import-kendaraan.window="openModal()"
                 @turbo:before-cache.window="showModal = false">
     <template x-teleport="body">

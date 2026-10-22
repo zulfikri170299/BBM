@@ -1502,10 +1502,11 @@
                 const sidebar = document.getElementById('sidebar-nav') || document;
                 const allLinks = sidebar.querySelectorAll('nav a[href]');
                 
-                const mainActive = ['bg-brand-primary', 'text-white', 'shadow-lg', 'shadow-brand-primary/20'];
-                const mainInactive = ['text-white', 'dark:text-slate-400', 'hover:text-white', 'dark:hover:text-white dark:text-white', 'hover:bg-slate-200/50', 'dark:hover:bg-white/5', 'transition-colors'];
-                const subActive = ['text-brand-primary', 'dark:text-white', 'bg-brand-primary/10', 'dark:bg-white/10', 'font-semibold'];
-                const subInactive = ['text-slate-600', 'dark:text-slate-400', 'hover:text-white', 'dark:hover:text-white dark:text-white', 'hover:bg-slate-100', 'dark:hover:bg-white/5', 'transition-colors'];
+                const safeTokens = (arr) => arr.flatMap(item => (typeof item === 'string' ? item.trim().split(/\s+/) : [])).filter(Boolean);
+                const mainActive = safeTokens(['bg-brand-primary', 'text-white', 'shadow-lg', 'shadow-brand-primary/20']);
+                const mainInactive = safeTokens(['text-white', 'dark:text-slate-400', 'hover:text-white', 'dark:hover:text-white', 'dark:text-white', 'hover:bg-slate-200/50', 'dark:hover:bg-white/5', 'transition-colors']);
+                const subActive = safeTokens(['text-brand-primary', 'dark:text-white', 'bg-brand-primary/10', 'dark:bg-white/10', 'font-semibold']);
+                const subInactive = safeTokens(['text-slate-600', 'dark:text-slate-400', 'hover:text-white', 'dark:hover:text-white', 'dark:text-white', 'hover:bg-slate-100', 'dark:hover:bg-white/5', 'transition-colors']);
 
                 let activeSubmenuDropdown = null, bestMatchLink = null, bestMatchLength = 0;
 
@@ -1539,9 +1540,18 @@
         if (!window.turboFastNavBound) {
             window.turboFastNavBound = true;
 
+            const safeAnchor = (target) => {
+                if (!target) return null;
+                if (typeof target.closest === 'function') return target.closest('a[href]');
+                if (target.parentElement && typeof target.parentElement.closest === 'function') {
+                    return target.parentElement.closest('a[href]');
+                }
+                return null;
+            };
+
             // Prefetch on mouse hover
             document.addEventListener('pointerenter', function (e) {
-                const link = e.target.closest('a[href]');
+                const link = safeAnchor(e.target);
                 if (!link) return;
                 const href = link.getAttribute('href');
                 if (!href || href === '#' || href.startsWith('javascript:') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
@@ -1555,7 +1565,7 @@
 
             // Prefetch on touchstart (mobile)
             document.addEventListener('touchstart', function (e) {
-                const link = e.target.closest('a[href]');
+                const link = safeAnchor(e.target);
                 if (!link) return;
                 const href = link.getAttribute('href');
                 if (!href || href === '#' || href.startsWith('javascript:')) return;
@@ -1568,7 +1578,9 @@
             }, { passive: true, capture: true });
 
             let loadingTimeout = null;
-            const isAnchorOnSamePage = (targetUrl) => {
+            let showDelayTimeout = null;
+
+            const isSamePageOrAnchor = (targetUrl) => {
                 if (!targetUrl) return true;
                 if (typeof targetUrl !== 'string') return false;
                 if (targetUrl.startsWith('#') || targetUrl.startsWith('javascript:')) return true;
@@ -1576,38 +1588,52 @@
                     const u = new URL(targetUrl, window.location.href);
                     return u.origin === window.location.origin &&
                            u.pathname === window.location.pathname &&
-                           u.search === window.location.search &&
-                           u.hash !== '';
+                           u.search === window.location.search;
                 } catch (e) {
                     return false;
                 }
             };
 
-            const showLoading = () => {
+            const showLoading = (immediate = false) => {
+                if (showDelayTimeout) clearTimeout(showDelayTimeout);
                 if (loadingTimeout) clearTimeout(loadingTimeout);
-                const indicator = document.getElementById('turbo-loading-indicator');
-                if (indicator) {
-                    indicator.classList.remove('opacity-0', 'pointer-events-none');
-                    indicator.classList.add('opacity-100');
-                    const box = document.getElementById('turbo-loading-box');
-                    if (box) {
-                        box.classList.remove('scale-95');
-                        box.classList.add('scale-100');
-                    }
-                }
-                const main = document.getElementById('main-content');
-                if (main) {
-                    main.classList.remove('content-ready');
-                    main.classList.add('content-loading');
-                }
 
-                // Failsafe auto-dismiss setelah 5 detik agar user tidak pernah terjebak jika terjadi kendala jaringan/hash
-                loadingTimeout = setTimeout(() => {
-                    hideLoading();
-                }, 5000);
+                const triggerVisuals = () => {
+                    const indicator = document.getElementById('turbo-loading-indicator');
+                    if (indicator) {
+                        indicator.classList.remove('opacity-0', 'pointer-events-none');
+                        indicator.classList.add('opacity-100');
+                        const box = document.getElementById('turbo-loading-box');
+                        if (box) {
+                            box.classList.remove('scale-95');
+                            box.classList.add('scale-100');
+                        }
+                    }
+                    const main = document.getElementById('main-content');
+                    if (main) {
+                        main.classList.remove('content-ready');
+                        main.classList.add('content-loading');
+                    }
+
+                    // Failsafe auto-dismiss setelah 8 detik agar user tidak pernah terjebak jika terjadi kendala jaringan/interupsi
+                    loadingTimeout = setTimeout(() => {
+                        hideLoading();
+                    }, 8000);
+                };
+
+                if (immediate) {
+                    triggerVisuals();
+                } else {
+                    // Buffer 80ms agar navigasi instan / cached Turbo tidak memunculkan flash popup loading
+                    showDelayTimeout = setTimeout(triggerVisuals, 80);
+                }
             };
 
             const hideLoading = () => {
+                if (showDelayTimeout) {
+                    clearTimeout(showDelayTimeout);
+                    showDelayTimeout = null;
+                }
                 if (loadingTimeout) {
                     clearTimeout(loadingTimeout);
                     loadingTimeout = null;
@@ -1639,10 +1665,13 @@
                 indicatorEl.addEventListener('click', hideLoading);
             }
 
-            // Turbo events (abaikan anchor link # di halaman yang sama)
+            // Turbo events
             document.addEventListener('turbo:click', function(e) {
+                // Selalu tutup mobile sidebar seketika agar layar langsung merespon sentuhan
+                window.dispatchEvent(new CustomEvent('sidebar-close'));
+                
                 const href = e.detail?.url || e.target?.getAttribute?.('href') || '';
-                if (isAnchorOnSamePage(href)) {
+                if (isSamePageOrAnchor(href)) {
                     hideLoading();
                     return;
                 }
@@ -1650,26 +1679,50 @@
             });
 
             document.addEventListener('turbo:before-visit', function(e) {
+                window.dispatchEvent(new CustomEvent('sidebar-close'));
+                
                 const url = e.detail?.url || '';
-                if (isAnchorOnSamePage(url)) {
+                if (isSamePageOrAnchor(url)) {
                     hideLoading();
                     return;
                 }
                 showLoading();
             });
 
-            document.addEventListener('turbo:request-start', showLoading);
-            document.addEventListener('turbo:load', hideLoading);
-            document.addEventListener('turbo:render', hideLoading);
-            document.addEventListener('turbo:request-end', hideLoading);
-
-            // Jika user klik link anchor (#) di halaman, segera sembunyikan loading
-            document.addEventListener('click', function(e) {
-                const link = e.target.closest('a[href]');
-                if (link && isAnchorOnSamePage(link.getAttribute('href') || link.href)) {
-                    hideLoading();
-                }
+            document.addEventListener('turbo:request-start', function() {
+                showLoading();
             });
+            document.addEventListener('turbo:load', function() {
+                hideLoading();
+                window.dispatchEvent(new CustomEvent('sidebar-close'));
+            });
+            document.addEventListener('turbo:render', function() {
+                hideLoading();
+                window.dispatchEvent(new CustomEvent('sidebar-close'));
+            });
+            // CATATAN: JANGAN hideLoading pada 'turbo:request-end'!
+            // 'turbo:request-end' hanya menandakan respons jaringan selesai, sedangkan HTML halaman baru belum ditukar oleh Turbo ke DOM.
+            // Menutup loading di request-end membuat user merasa loading selesai padahal masih berada di halaman lama.
+            document.addEventListener('turbo:fetch-request-error', hideLoading);
+            window.addEventListener('pageshow', hideLoading);
+            window.addEventListener('popstate', function() {
+                hideLoading();
+                window.dispatchEvent(new CustomEvent('sidebar-close'));
+            });
+
+            // Tangkap klik link navigasi di fase capture untuk responsivitas instan
+            document.addEventListener('click', function(e) {
+                const link = safeAnchor(e.target);
+                if (link) {
+                    const href = link.getAttribute('href') || link.href;
+                    if (!href.startsWith('javascript:') && !link.hasAttribute('target')) {
+                        window.dispatchEvent(new CustomEvent('sidebar-close'));
+                    }
+                    if (isSamePageOrAnchor(href)) {
+                        hideLoading();
+                    }
+                }
+            }, true);
 
             // Tampilkan loading saat form submit (hanya jika form valid secara HTML5 dan tidak dicegah)
             document.addEventListener('submit', function (e) {

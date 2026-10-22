@@ -41,7 +41,7 @@
         <!-- Notifications -->
         <div x-data="{ 
             notificationsOpen: false, 
-            unreadCount: {{ auth()->user()->unreadNotifications->count() }},
+            unreadCount: {{ auth()->user()->unreadNotifications()->count() }},
             markAsRead(id) {
                 fetch(`/notifications/${id}/read`, {
                     method: 'POST',
@@ -55,6 +55,21 @@
                         this.unreadCount = Math.max(0, this.unreadCount - 1);
                         const el = document.getElementById(`notification-${id}`);
                         if (el) el.remove();
+                    }
+                });
+            },
+            markAllAsRead() {
+                fetch('{{ route('notifications.markAllRead') }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        this.unreadCount = 0;
+                        this.notificationsOpen = false;
                     }
                 });
             }
@@ -77,13 +92,20 @@
                 style="display: none;">
 
                 <div class="p-4 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50 transition-colors">
-                    <h3 class="font-bold text-slate-800 dark:text-white">Notifikasi</h3>
-                    <span class="px-2 py-0.5 bg-brand-primary/20 text-brand-primary border border-brand-primary/30 text-[10px] font-bold rounded-full"
-                        x-text="unreadCount + ' Baru'"></span>
+                    <div class="flex items-center gap-2">
+                        <h3 class="font-bold text-slate-800 dark:text-white">Notifikasi</h3>
+                        <span class="px-2 py-0.5 bg-brand-primary/20 text-brand-primary border border-brand-primary/30 text-[10px] font-bold rounded-full"
+                            x-text="unreadCount + ' Baru'"></span>
+                    </div>
+                    <template x-if="unreadCount > 0">
+                        <button @click="markAllAsRead()" class="text-[10px] font-bold text-slate-500 hover:text-brand-primary transition">
+                            Tandai Semua Dibaca
+                        </button>
+                    </template>
                 </div>
 
                 <div class="max-h-96 overflow-y-auto custom-scrollbar">
-                    @forelse(auth()->user()->unreadNotifications as $notification)
+                    @forelse(auth()->user()->unreadNotifications()->latest()->take(10)->get() as $notification)
                         <div id="notification-{{ $notification->id }}"
                             class="p-4 border-b border-slate-100 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors group relative">
                             <div class="flex gap-3">
@@ -123,6 +145,11 @@
                             <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Tidak ada notifikasi baru</p>
                         </div>
                     @endforelse
+                    @if(auth()->user()->unreadNotifications()->count() > 10)
+                        <div class="p-2.5 text-center bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-white/5 text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                            Menampilkan 10 notifikasi terbaru
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
