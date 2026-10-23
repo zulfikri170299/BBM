@@ -11,6 +11,23 @@ class Satker extends Model
 
     protected $guarded = [];
 
+    protected static function booted()
+    {
+        static::saved(function () {
+            \Illuminate\Support\Facades\Cache::forget('all_satkers_ordered');
+        });
+        static::deleted(function () {
+            \Illuminate\Support\Facades\Cache::forget('all_satkers_ordered');
+        });
+    }
+
+    public static function getAllCached()
+    {
+        return \Illuminate\Support\Facades\Cache::remember('all_satkers_ordered', 3600, function () {
+            return self::select('id', 'nama_satker')->orderBy('nama_satker')->get();
+        });
+    }
+
     public function kendaraans()
     {
         return $this->hasMany(Kendaraan::class);

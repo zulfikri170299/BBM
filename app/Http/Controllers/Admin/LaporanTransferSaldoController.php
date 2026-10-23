@@ -13,8 +13,12 @@ class LaporanTransferSaldoController extends Controller
 {
     public function index(Request $request)
     {
-        $query = RiwayatTransferSaldoPersonel::with(['satker', 'tujuanKendaraan', 'kendaraan', 'personel'])
-            ->latest();
+        $query = RiwayatTransferSaldoPersonel::with([
+            'satker:id,nama_satker',
+            'tujuanKendaraan:id,no_polisi,merk,tipe',
+            'kendaraan:id,no_polisi,merk,tipe',
+            'personel:id,nama,nrp'
+        ])->latest();
 
         // Filter Satker
         if ($request->filled('satker_id')) {
@@ -34,7 +38,7 @@ class LaporanTransferSaldoController extends Controller
         }
 
         $riwayat = $query->paginate(20)->withQueryString();
-        $satkers = Satker::orderBy('nama_satker')->get();
+        $satkers = Satker::getAllCached();
 
         return view('admin.laporan_transfer_saldo.index', compact('riwayat', 'satkers'));
     }

@@ -96,16 +96,10 @@
             pointer-events: none !important;
         }
 
-        .content-ready {
+        .content-ready,
+        .content-loading {
             opacity: 1;
             transform: none !important;
-            transition: opacity 0.2s ease;
-        }
-        .content-loading {
-            opacity: 0.65;
-            filter: blur(0.3px);
-            transform: none !important;
-            transition: opacity 0.15s ease, filter 0.15s ease;
         }
         
         body {
@@ -690,23 +684,10 @@
 </head>
 
 <body class="h-full font-sans antialiased text-slate-800 dark:text-slate-200 overflow-hidden bg-white dark:bg-slate-900 relative selection:bg-brand-primary/30 selection:text-slate-900 dark:text-white transition-colors duration-300" x-data="{ sidebarOpen: false, desktopSidebarOpen: $persist(true) }" @sidebar-close.window="sidebarOpen = false" @sidebar-open.window="sidebarOpen = true">
-    <!-- Global Centered Loading Screen / Spinner for Seamless Turbo Navigation -->
-    <div id="turbo-loading-indicator"
-         class="fixed inset-0 z-[999999] pointer-events-none transition-all duration-300 opacity-0 flex items-center justify-center bg-slate-950/40 dark:bg-black/60 backdrop-blur-[2px]">
-        <div id="turbo-loading-box"
-             class="relative flex flex-col items-center justify-center gap-3.5 px-8 py-7 rounded-3xl bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-white/10 shadow-2xl shadow-brand-primary/10 dark:shadow-black/70 backdrop-blur-xl transform transition-all duration-300 scale-95">
-            <!-- Modern Dual Spinner Ring -->
-            <div class="relative flex items-center justify-center w-12 h-12">
-                <div class="w-12 h-12 rounded-full border-[3px] border-slate-200 dark:border-slate-800"></div>
-                <div class="absolute w-12 h-12 rounded-full border-[3px] border-transparent border-t-brand-primary border-r-cyan-400 animate-spin"></div>
-                <div class="absolute w-3 h-3 rounded-full bg-brand-primary/80 animate-ping"></div>
-                <div class="w-2 h-2 rounded-full bg-brand-primary"></div>
-            </div>
-            <div class="flex flex-col items-center text-center">
-                <span class="text-xs font-bold tracking-wider uppercase text-slate-800 dark:text-slate-100">Memuat Data...</span>
-                <span class="text-[10px] font-medium text-slate-600 dark:text-slate-300 mt-0.5">Mohon tunggu sebentar</span>
-            </div>
-        </div>
+    <!-- Ultra-Fast Nano Top Progress Bar (Satu-satunya indikator loading modern secepat kilat) -->
+    <div id="turbo-top-progress"
+         class="fixed top-0 left-0 right-0 h-[3.5px] z-[99999999] pointer-events-none opacity-0 transition-opacity duration-150"
+         style="width: 0%; background: linear-gradient(90deg, #0062ff 0%, #00d2ff 50%, #38bdf8 100%); box-shadow: 0 0 12px rgba(0, 210, 255, 0.9), 0 0 4px rgba(0, 98, 255, 0.8);">
     </div>
 
     <!-- Solid clean background instead of blur -->
@@ -1484,13 +1465,9 @@
         if (!window.sidebarLogicBound) {
             window.sidebarLogicBound = true;
             document.addEventListener('turbo:load', function () {
-                // Animate main content in
+                // Animate main content in smoothly
                 const main = document.getElementById('main-content');
                 if (main) {
-                    main.classList.remove('content-ready');
-                    main.classList.add('content-loading');
-                    // Force reflow
-                    main.offsetHeight;
                     main.classList.remove('content-loading');
                     main.classList.add('content-ready');
                 }
@@ -1579,6 +1556,49 @@
 
             let loadingTimeout = null;
             let showDelayTimeout = null;
+            let topBarProgress = 0;
+            let topBarTimer = null;
+
+            const getTopBar = () => document.getElementById('turbo-top-progress');
+
+            const startTopProgress = () => {
+                const bar = getTopBar();
+                if (!bar) return;
+                if (topBarTimer) clearInterval(topBarTimer);
+                topBarProgress = 20;
+                bar.style.transition = 'width 0.15s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.1s ease';
+                bar.style.width = topBarProgress + '%';
+                bar.style.opacity = '1';
+
+                topBarTimer = setInterval(() => {
+                    if (topBarProgress < 65) {
+                        topBarProgress += Math.random() * 15 + 8;
+                    } else if (topBarProgress < 85) {
+                        topBarProgress += Math.random() * 4 + 2;
+                    }
+                    if (topBarProgress > 90) topBarProgress = 90;
+                    bar.style.width = topBarProgress + '%';
+                }, 150);
+            };
+
+            const finishTopProgress = () => {
+                const bar = getTopBar();
+                if (!bar) return;
+                if (topBarTimer) {
+                    clearInterval(topBarTimer);
+                    topBarTimer = null;
+                }
+                bar.style.transition = 'width 0.12s ease-out, opacity 0.15s ease 0.08s';
+                bar.style.width = '100%';
+                setTimeout(() => {
+                    bar.style.opacity = '0';
+                    setTimeout(() => {
+                        bar.style.transition = 'none';
+                        bar.style.width = '0%';
+                        topBarProgress = 0;
+                    }, 160);
+                }, 120);
+            };
 
             const isSamePageOrAnchor = (targetUrl) => {
                 if (!targetUrl) return true;
@@ -1594,80 +1614,21 @@
                 }
             };
 
-            const showLoading = (immediate = false) => {
-                if (showDelayTimeout) clearTimeout(showDelayTimeout);
-                if (loadingTimeout) clearTimeout(loadingTimeout);
-
-                const triggerVisuals = () => {
-                    const indicator = document.getElementById('turbo-loading-indicator');
-                    if (indicator) {
-                        indicator.classList.remove('opacity-0', 'pointer-events-none');
-                        indicator.classList.add('opacity-100');
-                        const box = document.getElementById('turbo-loading-box');
-                        if (box) {
-                            box.classList.remove('scale-95');
-                            box.classList.add('scale-100');
-                        }
-                    }
-                    const main = document.getElementById('main-content');
-                    if (main) {
-                        main.classList.remove('content-ready');
-                        main.classList.add('content-loading');
-                    }
-
-                    // Failsafe auto-dismiss setelah 8 detik agar user tidak pernah terjebak jika terjadi kendala jaringan/interupsi
-                    loadingTimeout = setTimeout(() => {
-                        hideLoading();
-                    }, 8000);
-                };
-
-                if (immediate) {
-                    triggerVisuals();
-                } else {
-                    // Buffer 80ms agar navigasi instan / cached Turbo tidak memunculkan flash popup loading
-                    showDelayTimeout = setTimeout(triggerVisuals, 80);
-                }
+            const showLoading = () => {
+                // Selalu jalankan satu indikator saja: Top Progress Bar secepat kilat (0 latency)
+                startTopProgress();
             };
 
             const hideLoading = () => {
-                if (showDelayTimeout) {
-                    clearTimeout(showDelayTimeout);
-                    showDelayTimeout = null;
-                }
-                if (loadingTimeout) {
-                    clearTimeout(loadingTimeout);
-                    loadingTimeout = null;
-                }
-                const indicator = document.getElementById('turbo-loading-indicator');
-                if (indicator) {
-                    indicator.classList.remove('opacity-100');
-                    indicator.classList.add('opacity-0', 'pointer-events-none');
-                    const box = document.getElementById('turbo-loading-box');
-                    if (box) {
-                        box.classList.remove('scale-100');
-                        box.classList.add('scale-95');
-                    }
-                }
-                const main = document.getElementById('main-content');
-                if (main) {
-                    main.classList.remove('content-loading');
-                    main.classList.add('content-ready');
-                }
+                finishTopProgress();
             };
 
             // Global indicator hooks
             window.showPageLoading = showLoading;
             window.hidePageLoading = hideLoading;
 
-            // Klik pada overlay loading untuk menutup darurat jika stuck
-            const indicatorEl = document.getElementById('turbo-loading-indicator');
-            if (indicatorEl) {
-                indicatorEl.addEventListener('click', hideLoading);
-            }
-
             // Turbo events
             document.addEventListener('turbo:click', function(e) {
-                // Selalu tutup mobile sidebar seketika agar layar langsung merespon sentuhan
                 window.dispatchEvent(new CustomEvent('sidebar-close'));
                 
                 const href = e.detail?.url || e.target?.getAttribute?.('href') || '';
@@ -1700,11 +1661,9 @@
                 hideLoading();
                 window.dispatchEvent(new CustomEvent('sidebar-close'));
             });
-            // CATATAN: JANGAN hideLoading pada 'turbo:request-end'!
-            // 'turbo:request-end' hanya menandakan respons jaringan selesai, sedangkan HTML halaman baru belum ditukar oleh Turbo ke DOM.
-            // Menutup loading di request-end membuat user merasa loading selesai padahal masih berada di halaman lama.
             document.addEventListener('turbo:fetch-request-error', hideLoading);
             window.addEventListener('pageshow', hideLoading);
+            document.addEventListener('DOMContentLoaded', hideLoading);
             window.addEventListener('popstate', function() {
                 hideLoading();
                 window.dispatchEvent(new CustomEvent('sidebar-close'));
@@ -1729,7 +1688,6 @@
                 if (e.defaultPrevented) return;
                 const form = e.target;
                 if (!form || form.hasAttribute('data-no-loading')) return;
-                // Jangan tampilkan jika HTML5 form invalid (misal file belum dipilih pada input required)
                 if (typeof form.checkValidity === 'function' && !form.checkValidity()) {
                     return;
                 }
@@ -1740,10 +1698,20 @@
         if (!window.turboCacheBound) {
             window.turboCacheBound = true;
             document.addEventListener("turbo:before-cache", function() {
+                // Selalu bersihkan loading indicator sebelum Turbo menyimpan snapshot cache!
+                if (typeof window.hidePageLoading === 'function') {
+                    window.hidePageLoading();
+                }
+                const topB = document.getElementById('turbo-top-progress');
+                if (topB) {
+                    topB.style.opacity = '0';
+                    topB.style.width = '0%';
+                }
+
                 document.querySelectorAll('.tomselected').forEach(el => { if (el.tomselect) el.tomselect.destroy(); });
                 document.querySelectorAll('.flatpickr-input').forEach(el => { if (el._flatpickr) el._flatpickr.destroy(); });
                 window.dispatchEvent(new CustomEvent('sidebar-close'));
-                if (Swal.isVisible()) Swal.close();
+                if (typeof Swal !== 'undefined' && Swal.isVisible()) Swal.close();
             });
         }
 

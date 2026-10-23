@@ -43,7 +43,7 @@ class SaldoDialihkanController extends Controller
         }
 
         $riwayat = $query->paginate($perPage)->withQueryString();
-        $satkers = \App\Models\Satker::orderBy('nama_satker')->get();
+        $satkers = \App\Models\Satker::getAllCached();
 
         return view('admin.saldo_dialihkan.index', compact('riwayat', 'satkers', 'summary'));
     }

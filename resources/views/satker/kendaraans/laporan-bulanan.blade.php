@@ -56,9 +56,9 @@
                 }
             @endphp
             <form action="{{ route('satker.kendaraans.laporan-bulanan') }}" method="GET"
-                class="flex flex-wrap gap-3 items-end">
-                <div class="w-48">
-                    <label class="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1 block">Bulan</label>
+                class="flex items-end gap-2.5">
+                <div class="flex-1 min-w-0">
+                    <label class="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 block">Bulan</label>
                     <x-filter-select 
                         name="bulan" 
                         :value="$bulan" 
@@ -68,8 +68,8 @@
                         :options="$bulanBulananOptions" 
                     />
                 </div>
-                <div class="w-36">
-                    <label class="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1 block">Tahun</label>
+                <div class="w-28 sm:w-36 shrink-0">
+                    <label class="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 block">Tahun</label>
                     <x-filter-select 
                         name="tahun" 
                         :value="$tahun" 
@@ -79,8 +79,15 @@
                         :options="$tahunBulananOptions" 
                     />
                 </div>
-                <button type="submit"
-                    class="h-11 px-5 bg-emerald-600 text-white rounded-xl font-bold text-xs hover:bg-emerald-700 transition-all shadow-sm">Filter</button>
+                <div class="shrink-0">
+                    <button type="submit"
+                        class="h-10 px-4 sm:px-5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white rounded-xl font-bold text-xs transition-all shadow-sm flex items-center justify-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                        </svg>
+                        <span>Filter</span>
+                    </button>
+                </div>
             </form>
         </div>
 
