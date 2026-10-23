@@ -94,7 +94,7 @@
                 <!-- Submit -->
                 <div class="flex gap-3 pt-2">
                     <a href="{{ route('admin.kendaraans.index') }}" class="flex-1 px-4 py-3 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-semibold rounded-xl hover:bg-slate-200 transition-colors text-center">Batal</a>
-                    <button type="submit" class="flex-1 px-4 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-slate-800 dark:text-white font-bold rounded-xl hover:from-amber-600 hover:to-orange-700 shadow-lg shadow-amber-500/30 transition-all hover:-translate-y-0.5">
+                    <button type="submit" class="flex-1 px-4 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold rounded-xl hover:from-amber-600 hover:to-orange-700 shadow-lg shadow-amber-500/30 transition-all hover:-translate-y-0.5">
                         ✏️ Update Kendaraan
                     </button>
                 </div>

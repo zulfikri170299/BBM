@@ -99,7 +99,7 @@
 
                     <!-- Submit -->
                     <div class="flex items-center gap-3 pt-4">
-                        <button type="submit" class="px-4 py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-800 dark:text-white font-bold rounded-xl shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 transition-all duration-300 hover:-translate-y-0.5">
+                        <button type="submit" class="px-4 py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold rounded-xl shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 transition-all duration-300 hover:-translate-y-0.5">
                             <span class="flex items-center gap-2">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                                 Simpan Perubahan

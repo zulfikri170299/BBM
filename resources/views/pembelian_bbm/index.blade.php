@@ -160,7 +160,7 @@
                                             <p class="text-[10px] text-slate-600 dark:text-slate-400">Dibuat: {{ $item->created_at->format('d/m/Y H:i') }}</p>
                                         </td>
                                         <td class="px-4 py-3 text-center">
-                                            <span class="px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] font-bold text-slate-900 dark:text-white bg-gradient-to-r {{ $bbmStyle[$item->jenis_bbm] ?? 'from-slate-500 to-slate-600' }} whitespace-nowrap">
+                                            <span class="px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] font-bold text-white bg-gradient-to-r {{ $bbmStyle[$item->jenis_bbm] ?? 'from-slate-500 to-slate-600' }} whitespace-nowrap">
                                                 {{ $item->jenis_bbm }}
                                             </span>
                                         </td>

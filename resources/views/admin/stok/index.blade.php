@@ -16,13 +16,13 @@
                         'Pertamina Dex' => 'from-rose-500 to-red-600',
                     ];
                 @endphp
-                <div class="bg-gradient-to-br {{ $bbmStyle[$stock->jenis_bbm] ?? 'from-slate-500 to-slate-600' }} p-4 sm:p-5 rounded-2xl text-slate-800 dark:text-white shadow-lg relative overflow-hidden group">
+                <div class="bg-gradient-to-br {{ $bbmStyle[$stock->jenis_bbm] ?? 'from-slate-500 to-slate-600' }} p-4 sm:p-5 rounded-2xl text-white shadow-lg relative overflow-hidden group">
                     <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
-                    <div class="relative z-10">
-                        <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest opacity-80">{{ $stock->jenis_bbm }}</p>
-                        <div class="flex items-baseline gap-1 mt-1 sm:mt-2">
-                            <span class="text-2xl sm:text-3xl font-black">{{ rtrim(rtrim(number_format($stock->saldo, 2, ',', '.'), '0'), ',') }}</span>
-                            <span class="text-[10px] sm:text-sm font-bold opacity-70">Liter</span>
+                    <div class="relative z-10 text-white">
+                        <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-white/90">{{ $stock->jenis_bbm }}</p>
+                        <div class="flex items-baseline gap-1 mt-1 sm:mt-2 text-white">
+                            <span class="text-2xl sm:text-3xl font-black text-white">{{ rtrim(rtrim(number_format($stock->saldo, 2, ',', '.'), '0'), ',') }}</span>
+                            <span class="text-[10px] sm:text-sm font-bold text-white/80">Liter</span>
                         </div>
                     </div>
                 </div>
@@ -182,7 +182,7 @@
                                             <p class="text-[9px] sm:text-[10px] text-slate-600 dark:text-slate-400">{{ $item->created_at->timezone('Asia/Makassar')->format('H:i') }} WITA</p>
                                         </td>
                                         <td class="px-2 py-3 sm:px-6 sm:py-4 text-center">
-                                            <span class="px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[8px] sm:text-[10px] font-bold text-slate-800 dark:text-white bg-gradient-to-r {{ $bbmStyle[$item->jenis_bbm] ?? 'from-slate-500 to-slate-600' }} whitespace-nowrap">
+                                            <span class="px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[8px] sm:text-[10px] font-bold text-white bg-gradient-to-r {{ $bbmStyle[$item->jenis_bbm] ?? 'from-slate-500 to-slate-600' }} whitespace-nowrap">
                                                 {{ $item->jenis_bbm }}
                                             </span>
                                         </td>
