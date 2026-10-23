@@ -1476,41 +1476,59 @@
                 window.dispatchEvent(new CustomEvent('close-reports'));
 
                 const currentPath = window.location.pathname;
-                const sidebar = document.getElementById('sidebar-nav') || document;
-                const allLinks = sidebar.querySelectorAll('nav a[href]');
+                const allLinks = document.querySelectorAll('nav a[href]');
                 
                 const safeTokens = (arr) => arr.flatMap(item => (typeof item === 'string' ? item.trim().split(/\s+/) : [])).filter(Boolean);
                 const mainActive = safeTokens(['bg-brand-primary', 'text-white', 'shadow-lg', 'shadow-brand-primary/20']);
-                const mainInactive = safeTokens(['text-white', 'dark:text-slate-400', 'hover:text-white', 'dark:hover:text-white', 'dark:text-white', 'hover:bg-slate-200/50', 'dark:hover:bg-white/5', 'transition-colors']);
+                const mainInactive = safeTokens(['text-slate-700', 'dark:text-slate-400', 'hover:text-slate-900', 'dark:hover:text-white', 'hover:bg-slate-200/50', 'dark:hover:bg-white/5', 'transition-colors']);
                 const subActive = safeTokens(['text-brand-primary', 'dark:text-white', 'bg-brand-primary/10', 'dark:bg-white/10', 'font-semibold']);
-                const subInactive = safeTokens(['text-slate-600', 'dark:text-slate-400', 'hover:text-white', 'dark:hover:text-white', 'dark:text-white', 'hover:bg-slate-100', 'dark:hover:bg-white/5', 'transition-colors']);
+                const subInactive = safeTokens(['text-slate-600', 'dark:text-slate-400', 'hover:text-slate-900', 'dark:hover:text-white', 'hover:bg-slate-100', 'dark:hover:bg-white/5', 'transition-colors']);
 
-                let activeSubmenuDropdown = null, bestMatchLink = null, bestMatchLength = 0;
-
+                let bestMatchPath = '';
                 allLinks.forEach(link => {
-                    const isInsideSubmenu = !!link.closest('.submenu-line');
-                    if (isInsideSubmenu) { link.classList.remove(...subActive); link.classList.add(...subInactive); }
-                    else { link.classList.remove(...mainActive); link.classList.add(...mainInactive); }
-
                     const href = link.getAttribute('href');
                     if (!href || href === '#' || href.startsWith('javascript:')) return;
                     try {
                         const linkPath = new URL(href, window.location.origin).pathname;
-                        if (currentPath.startsWith(linkPath)) {
-                            if (linkPath.length > bestMatchLength) { bestMatchLength = linkPath.length; bestMatchLink = link; }
+                        if (currentPath === linkPath || (linkPath !== '/' && currentPath.startsWith(linkPath))) {
+                            if (linkPath.length > bestMatchPath.length) {
+                                bestMatchPath = linkPath;
+                            }
                         }
                     } catch (e) {}
                 });
 
-                if (bestMatchLink) {
-                    const isInsideSubmenu = !!bestMatchLink.closest('div[x-show]');
-                    if (isInsideSubmenu) {
-                        bestMatchLink.classList.remove(...subInactive); bestMatchLink.classList.add(...subActive);
-                        activeSubmenuDropdown = bestMatchLink.closest('div[x-show]');
-                    } else {
-                        bestMatchLink.classList.remove(...mainInactive); bestMatchLink.classList.add(...mainActive);
+                allLinks.forEach(link => {
+                    const isInsideSubmenu = !!link.closest('.submenu-line');
+                    const href = link.getAttribute('href');
+                    let isMatch = false;
+                    if (href && href !== '#' && !href.startsWith('javascript:')) {
+                        try {
+                            const linkPath = new URL(href, window.location.origin).pathname;
+                            if (bestMatchPath && linkPath === bestMatchPath) {
+                                isMatch = true;
+                            }
+                        } catch (e) {}
                     }
-                }
+
+                    if (isMatch) {
+                        if (isInsideSubmenu) {
+                            link.classList.remove(...subInactive, ...mainActive, ...mainInactive, 'text-white');
+                            link.classList.add(...subActive);
+                        } else {
+                            link.classList.remove(...mainInactive, ...subActive, ...subInactive, 'text-brand-primary', 'bg-brand-primary/10');
+                            link.classList.add(...mainActive);
+                        }
+                    } else {
+                        if (isInsideSubmenu) {
+                            link.classList.remove(...subActive, ...mainActive, 'text-white');
+                            link.classList.add(...subInactive);
+                        } else {
+                            link.classList.remove(...mainActive, ...subActive, 'text-white');
+                            link.classList.add(...mainInactive);
+                        }
+                    }
+                });
             });
         }
 

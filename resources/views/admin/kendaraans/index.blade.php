@@ -112,48 +112,6 @@
 
         <!-- Table Card -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
-            <!-- Table Header Info & Bulk Actions -->
-            <div class="px-3.5 sm:px-6 py-3 sm:py-4 border-b border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-                <div class="flex items-center gap-2.5 sm:gap-3">
-                    <div class="p-2 sm:p-2.5 bg-brand-primary/10 text-brand-primary dark:bg-white/10 dark:text-white rounded-xl shrink-0">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1">
-                            </path>
-                        </svg>
-                    </div>
-                    <div class="min-w-0">
-                        <div class="flex items-center gap-2">
-                            <h2 class="text-sm sm:text-lg font-black text-slate-800 dark:text-white leading-tight">Daftar Kendaraan</h2>
-                            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-brand-primary/10 text-brand-primary dark:bg-white/10 dark:text-white shrink-0">
-                                {{ number_format($kendaraans->total()) }}
-                            </span>
-                        </div>
-                        <p class="hidden sm:block text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ number_format($kendaraans->total()) }} kendaraan dari seluruh satker</p>
-                    </div>
-                </div>
-
-                <!-- Bulk Actions -->
-                @if(auth()->user()->role !== 'kasubbag')
-                    <div id="bulkActions" class="hidden items-center gap-2.5 animate-fade-in">
-                        <span class="text-xs font-bold text-slate-600 dark:text-slate-400">
-                            <span id="selectedCount" class="text-brand-primary font-black">0</span> dipilih:
-                        </span>
-                        <button type="button" id="bulkDeleteBtn"
-                            class="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl shadow-sm flex items-center gap-1.5 transition">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                </path>
-                            </svg>
-                            Hapus Terpilih
-                        </button>
-                    </div>
-                @endif
-            </div>
-
             @if(auth()->user()->role !== 'kasubbag')
                 <form id="bulkDeleteForm" action="{{ route('admin.kendaraans.bulk-delete') }}" method="POST" class="hidden">
                     @csrf
@@ -198,6 +156,24 @@
                         </a>
                     @endif
                 </form>
+
+                <!-- Bulk Actions -->
+                @if(auth()->user()->role !== 'kasubbag')
+                    <div id="bulkActions" class="hidden items-center gap-2.5 animate-fade-in shrink-0">
+                        <span class="text-xs font-bold text-slate-600 dark:text-slate-400">
+                            <span id="selectedCount" class="text-brand-primary font-black">0</span> dipilih:
+                        </span>
+                        <button type="button" id="bulkDeleteBtn"
+                            class="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl shadow-sm flex items-center gap-1.5 transition">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                </path>
+                            </svg>
+                            Hapus Terpilih
+                        </button>
+                    </div>
+                @endif
 
                 <div class="hidden sm:block text-[11px] font-bold text-slate-500 dark:text-slate-400 self-end sm:self-auto shrink-0">
                     Menampilkan <span class="text-slate-800 dark:text-white font-extrabold">{{ $kendaraans->firstItem() ?? 0 }}-{{ $kendaraans->lastItem() ?? 0 }}</span> dari <span class="text-slate-800 dark:text-white font-extrabold">{{ number_format($kendaraans->total()) }}</span> data
@@ -252,12 +228,6 @@
                                 <td class="py-3.5 px-4 whitespace-nowrap">
                                     <div class="flex flex-wrap items-center gap-1.5">
                                         <span class="font-black text-slate-900 dark:text-white tracking-wide font-mono text-xs">{{ $kendaraan->no_polisi }}</span>
-                                        @if($kendaraan->hasUnpaidBon())
-                                            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-wider bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30" title="Saldo kendaraan dikunci karena ada hutang {{ rtrim(rtrim(number_format($kendaraan->totalUnpaidBon(), 2, ',', '.'), '0'), ',') }} L">
-                                                <svg class="w-2.5 h-2.5 text-rose-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
-                                                Terkunci
-                                            </span>
-                                        @endif
                                         @if($kendaraan->status_approval === 'pending')
                                             <a href="{{ route('admin.persetujuan-kendaraan.index', ['status' => 'pending']) }}" class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 transition" title="Menunggu persetujuan Super Admin (Klik untuk tinjau)">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
@@ -461,7 +431,7 @@
                                         <div class="flex items-center gap-1 mt-0.5 whitespace-nowrap overflow-hidden">
                                             <span class="font-black text-slate-900 dark:text-white tracking-wide font-mono text-xs">{{ $kendaraan->no_polisi }}</span>
                                             @if($kendaraan->hasUnpaidBon())
-                                                <svg class="w-3 h-3 text-rose-500 shrink-0" fill="currentColor" viewBox="0 0 20 20" title="Saldo Terkunci (Ada Hutang)"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+                                                <svg class="w-[18px] h-[18px] text-rose-500 dark:text-rose-400 shrink-0 drop-shadow-sm" fill="currentColor" viewBox="0 0 20 20" title="Saldo Terkunci (Ada Hutang)"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
                                             @endif
                                             @if($kendaraan->status_approval === 'pending')
                                                 <span class="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0 animate-pulse" title="Menunggu Persetujuan"></span>

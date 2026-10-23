@@ -6,92 +6,152 @@
         $totalDex = $summary->get('Pertamina Dex') ?? $riwayat->where('jenis_bbm', 'Pertamina Dex')->sum('jumlah');
     @endphp
 
-    <div class="p-4 sm:p-6 lg:p-8 space-y-6">
+    <div class="p-3.5 sm:p-6 lg:p-8 space-y-3.5 sm:space-y-6">
         <!-- Page Header -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
-            <div class="flex items-center gap-3.5">
-                <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0 border border-amber-500/20">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white dark:bg-slate-900 p-3.5 sm:p-6 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0 border border-amber-500/20">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                     </svg>
                 </div>
                 <div>
                     <div class="flex items-center gap-2">
-                        <h1 class="text-xl sm:text-2xl font-black text-slate-800 dark:text-white tracking-tight">Saldo Yang di Alihkan</h1>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20">
+                        <h1 class="text-base sm:text-2xl font-black text-slate-800 dark:text-white tracking-tight">Saldo Yang di Alihkan</h1>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20">
                             {{ number_format($riwayat->total()) }} Pemotongan
                         </span>
                     </div>
-                    <p class="mt-0.5 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                    <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
                         Laporan pemotongan atau pengalihan saldo BBM kendaraan oleh Admin.
                     </p>
                 </div>
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex items-center gap-2.5 self-stretch sm:self-auto">
+            <div class="flex items-center gap-2 w-full sm:w-auto">
                 <a href="{{ route('satker.saldo-dialihkan.print', request()->query()) }}" target="_blank"
-                    class="flex-1 sm:flex-initial inline-flex items-center justify-center px-4 py-2.5 bg-rose-600 hover:bg-rose-700 active:scale-95 text-white rounded-xl font-bold text-xs sm:text-sm shadow-lg shadow-rose-600/20 hover:shadow-rose-600/30 transition-all duration-200">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="flex-1 sm:flex-initial inline-flex items-center justify-center px-3.5 py-2 sm:py-2.5 bg-rose-600 hover:bg-rose-700 active:scale-95 text-white rounded-xl font-bold text-xs sm:text-sm shadow-md shadow-rose-600/20 transition-all duration-200 gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                     </svg>
-                    Cetak PDF
+                    <span>Cetak PDF</span>
                 </a>
                 <a href="{{ route('satker.kendaraans.index') }}"
-                    class="flex-1 sm:flex-initial inline-flex items-center justify-center px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="flex-1 sm:flex-initial inline-flex items-center justify-center px-3.5 py-2 sm:py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl font-bold text-xs sm:text-sm border border-slate-200 dark:border-white/10 transition-all duration-200 gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
-                    Kembali
+                    <span>Kembali</span>
                 </a>
             </div>
         </div>
 
-        <!-- KPI Summary Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <!-- Card 1: Total Saldo Dialihkan -->
-            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 p-5 shadow-sm relative overflow-hidden group hover:border-amber-500/40 transition-all">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Saldo Dialihkan</span>
-                    <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- Filter Card (Ditempatkan di Atas KPI Cards, 1 Baris di Mobile) -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-3 sm:p-4 relative z-30">
+            <form action="{{ route('satker.saldo-dialihkan.index') }}" method="GET"
+                class="flex items-end gap-2 sm:gap-3">
+                <div class="flex-1 min-w-0">
+                    <label class="block text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
+                        Mulai
+                    </label>
+                    <input type="text" name="start_date" value="{{ request('start_date') }}" placeholder="Mulai"
+                        class="flatpickr w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 rounded-xl px-2.5 sm:px-3.5 py-2 text-xs font-semibold text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-brand-primary transition-all">
+                </div>
+
+                <div class="flex-1 min-w-0">
+                    <label class="block text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
+                        Sampai
+                    </label>
+                    <input type="text" name="end_date" value="{{ request('end_date') }}" placeholder="Sampai"
+                        class="flatpickr w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 rounded-xl px-2.5 sm:px-3.5 py-2 text-xs font-semibold text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-brand-primary transition-all">
+                </div>
+
+                <div class="shrink-0 flex items-center gap-1.5">
+                    <button type="submit"
+                        class="h-9 sm:h-10 px-3 bg-brand-primary hover:bg-brand-primary/90 active:scale-95 text-white rounded-xl font-bold text-xs transition flex items-center justify-center gap-1 shadow-sm">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                         </svg>
+                        <span class="hidden sm:inline">Filter</span>
+                    </button>
+                    <a href="{{ route('satker.saldo-dialihkan.index') }}"
+                        class="h-9 sm:h-10 px-2.5 sm:px-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1 border border-slate-200 dark:border-white/10"
+                        title="Reset Filter">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        <span class="hidden sm:inline">Reset</span>
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- KPI Summary Cards (Compact 3 Kolom di Mobile, Tidak Menghabiskan Layar) -->
+        <div class="grid grid-cols-3 gap-2 sm:gap-4">
+            <!-- Card 1: Total Saldo Dialihkan -->
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 p-2.5 sm:p-5 shadow-sm relative overflow-hidden group hover:border-amber-500/40 transition-all flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider truncate">Dialihkan</span>
+                        <div class="hidden sm:flex w-8 h-8 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 items-center justify-center">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="mt-1.5 sm:mt-3 flex items-baseline gap-1">
+                        <span class="text-sm sm:text-3xl font-black text-slate-800 dark:text-white tabular-nums">
+                            {{ number_format($totalSemuaLiter, 0, ',', '.') }}
+                        </span>
+                        <span class="text-[10px] sm:text-xs font-bold text-slate-400">L</span>
                     </div>
                 </div>
-                <div class="mt-3 flex items-baseline gap-1.5">
-                    <span class="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white tabular-nums">
-                        {{ number_format($totalSemuaLiter, 0, ',', '.') }}
-                    </span>
-                    <span class="text-xs font-bold text-slate-400">Liter</span>
+
+                <!-- Sub details di mobile -->
+                <div class="mt-2 text-[9px] text-amber-600 dark:text-amber-400 sm:hidden flex flex-col gap-0.5 border-t border-slate-100 dark:border-white/5 pt-1.5 font-bold">
+                    <span class="truncate">{{ number_format($riwayat->total()) }} Pemotongan</span>
                 </div>
-                <div class="mt-3.5 pt-3 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+
+                <!-- Desktop Footer -->
+                <div class="hidden sm:flex mt-3.5 pt-3 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                     <span>Total Transaksi</span>
                     <span class="font-bold text-amber-600 dark:text-amber-400">{{ number_format($riwayat->total()) }} Pemotongan</span>
                 </div>
             </div>
 
             <!-- Card 2: Dialihkan Pertamax -->
-            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 p-5 shadow-sm relative overflow-hidden group hover:border-blue-500/40 transition-all">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Dialihkan Pertamax</span>
-                    <div class="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                        </svg>
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 p-2.5 sm:p-5 shadow-sm relative overflow-hidden group hover:border-blue-500/40 transition-all flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] sm:text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider truncate">Pertamax</span>
+                        <div class="hidden sm:flex w-8 h-8 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 items-center justify-center">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="mt-1.5 sm:mt-3 flex items-baseline gap-1">
+                        <span class="text-sm sm:text-3xl font-black text-blue-600 dark:text-blue-400 tabular-nums">
+                            {{ number_format($totalPertamax, 0, ',', '.') }}
+                        </span>
+                        <span class="text-[10px] sm:text-xs font-bold text-slate-400">L</span>
                     </div>
                 </div>
-                <div class="mt-3 flex items-baseline gap-1.5">
-                    <span class="text-2xl sm:text-3xl font-black text-blue-600 dark:text-blue-400 tabular-nums">
-                        {{ number_format($totalPertamax, 0, ',', '.') }}
-                    </span>
-                    <span class="text-xs font-bold text-slate-400">Liter</span>
+
+                <!-- Sub details di mobile -->
+                <div class="mt-2 text-[9px] text-blue-500 dark:text-blue-400 sm:hidden flex flex-col gap-0.5 border-t border-slate-100 dark:border-white/5 pt-1.5 font-bold">
+                    <span>Pertamax</span>
                 </div>
-                <div class="mt-3.5 pt-3 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+
+                <!-- Desktop Footer -->
+                <div class="hidden sm:flex mt-3.5 pt-3 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                     <span>Jenis BBM</span>
                     <span class="inline-flex items-center gap-1 font-bold text-blue-600 dark:text-blue-400">
                         <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Pertamax
@@ -100,23 +160,32 @@
             </div>
 
             <!-- Card 3: Dialihkan Pertamina Dex -->
-            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 p-5 shadow-sm relative overflow-hidden group hover:border-emerald-500/40 transition-all">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Dialihkan Pertamina Dex</span>
-                    <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                        </svg>
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 p-2.5 sm:p-5 shadow-sm relative overflow-hidden group hover:border-emerald-500/40 transition-all flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] sm:text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider truncate">Dex</span>
+                        <div class="hidden sm:flex w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 items-center justify-center">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="mt-1.5 sm:mt-3 flex items-baseline gap-1">
+                        <span class="text-sm sm:text-3xl font-black text-emerald-600 dark:text-emerald-400 tabular-nums">
+                            {{ number_format($totalDex, 0, ',', '.') }}
+                        </span>
+                        <span class="text-[10px] sm:text-xs font-bold text-slate-400">L</span>
                     </div>
                 </div>
-                <div class="mt-3 flex items-baseline gap-1.5">
-                    <span class="text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400 tabular-nums">
-                        {{ number_format($totalDex, 0, ',', '.') }}
-                    </span>
-                    <span class="text-xs font-bold text-slate-400">Liter</span>
+
+                <!-- Sub details di mobile -->
+                <div class="mt-2 text-[9px] text-emerald-500 dark:text-emerald-400 sm:hidden flex flex-col gap-0.5 border-t border-slate-100 dark:border-white/5 pt-1.5 font-bold">
+                    <span>Dex</span>
                 </div>
-                <div class="mt-3.5 pt-3 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+
+                <!-- Desktop Footer -->
+                <div class="hidden sm:flex mt-3.5 pt-3 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                     <span>Jenis BBM</span>
                     <span class="inline-flex items-center gap-1 font-bold text-emerald-600 dark:text-emerald-400">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Pertamina Dex
@@ -125,86 +194,33 @@
             </div>
         </div>
 
-        <!-- Filter Card -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-4 sm:p-5">
-            <form action="{{ route('satker.saldo-dialihkan.index') }}" method="GET"
-                class="flex flex-col sm:flex-row items-stretch sm:items-end gap-3.5">
-                <div class="flex-1">
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
-                        <span class="flex items-center gap-1.5">
-                            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            Mulai Tanggal
-                        </span>
-                    </label>
-                    <input type="text" name="start_date" value="{{ request('start_date') }}" placeholder="Pilih Mulai Tanggal"
-                        class="flatpickr w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-brand-primary transition-all">
-                </div>
-
-                <div class="flex-1">
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
-                        <span class="flex items-center gap-1.5">
-                            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            Sampai Tanggal
-                        </span>
-                    </label>
-                    <input type="text" name="end_date" value="{{ request('end_date') }}" placeholder="Pilih Sampai Tanggal"
-                        class="flatpickr w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-brand-primary transition-all">
-                </div>
-
-                <div class="flex items-center gap-2">
-                    <button type="submit"
-                        class="px-5 py-2.5 bg-brand-primary hover:bg-brand-primary/90 text-white rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-sm active:scale-95">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                        </svg>
-                        Filter
-                    </button>
-                    <a href="{{ route('satker.saldo-dialihkan.index') }}"
-                        class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5 active:scale-95">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                        </svg>
-                        Reset
-                    </a>
-                </div>
-            </form>
-        </div>
-
         <!-- Table Card -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
             <!-- Table Header Info & Toolbar -->
-            <div class="px-5 py-4 border-b border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="px-3.5 py-3 sm:px-5 sm:py-4 border-b border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 sm:gap-3">
+                <div class="flex items-center gap-2.5 sm:gap-3 min-w-0 w-full sm:w-auto">
+                    <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
                     </div>
-                    <div>
-                        <h2 class="text-base font-black text-slate-800 dark:text-white">Riwayat Pemotongan Saldo</h2>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">Total {{ number_format($riwayat->total()) }} transaksi tercatat.</p>
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-xs sm:text-base font-black text-slate-800 dark:text-white tracking-tight leading-snug">Riwayat Pemotongan Saldo</h2>
+                        <p class="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5 hidden sm:block">Total {{ number_format($riwayat->total()) }} transaksi tercatat.</p>
                     </div>
                 </div>
 
                 <!-- Per Page Toolbar & Range Count -->
-                <div class="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
-                    <form action="{{ route('satker.saldo-dialihkan.index') }}" method="GET" class="flex items-center gap-2">
+                <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto justify-between sm:justify-end">
+                    <form action="{{ route('satker.saldo-dialihkan.index') }}" method="GET" class="flex items-center gap-1.5">
                         <input type="hidden" name="start_date" value="{{ request('start_date') }}">
                         <input type="hidden" name="end_date" value="{{ request('end_date') }}">
-                        <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Tampilkan:</span>
+                        <span class="text-[11px] sm:text-xs font-semibold text-slate-500 dark:text-slate-400">Tampilkan:</span>
                         <x-per-page :current="request('per_page', 15)" />
                     </form>
-                    <div class="text-[11px] font-bold text-slate-500 dark:text-slate-400">
-                        Menampilkan {{ $riwayat->firstItem() ?? 0 }}-{{ $riwayat->lastItem() ?? 0 }} dari {{ $riwayat->total() }} data
+                    <div class="text-[10px] sm:text-[11px] font-bold text-slate-500 dark:text-slate-400">
+                        {{ $riwayat->firstItem() ?? 0 }}-{{ $riwayat->lastItem() ?? 0 }} dari {{ $riwayat->total() }} data
                     </div>
                 </div>
             </div>

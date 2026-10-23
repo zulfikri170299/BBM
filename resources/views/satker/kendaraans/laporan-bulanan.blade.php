@@ -4,47 +4,57 @@
 @endphp
 
 <x-app-layout>
-    <div class="p-4 lg:p-6 space-y-4">
+    <div class="p-3.5 sm:p-6 lg:p-8 space-y-3.5 sm:space-y-6">
         <!-- Page Header -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-            <div>
-                <h1 class="text-2xl font-bold text-slate-800 dark:text-white">Laporan Bulanan BBM</h1>
-                <p class="text-xs text-slate-600 dark:text-slate-400">Satker: <strong>{{ $satker->nama_satker ?? '-' }}</strong> | Periode:
-                    {{ $namaBulan }} {{ $tahun }}</p>
-            </div>
-            <div class="flex gap-2">
-                <a href="{{ route('satker.kendaraans.laporan-bulanan.export', ['bulan' => $bulan, 'tahun' => $tahun]) }}"
-                    target="_blank" rel="nofollow"
-                    class="inline-flex items-center px-3 py-2 sm:px-4 sm:py-2 bg-emerald-600 text-white rounded-lg font-semibold text-sm hover:bg-emerald-700 shadow transition-all" title="Export Excel">
-                    <svg class="w-4 h-4 sm:mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                        </path>
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white dark:bg-slate-900 p-3.5 sm:p-6 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
+            <div class="flex items-center gap-2.5 sm:gap-3.5 w-full sm:w-auto">
+                <a href="{{ route('satker.kendaraans.index') }}"
+                    class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/15 text-slate-600 dark:text-slate-200 flex items-center justify-center shrink-0 transition-all active:scale-95 border border-slate-200 dark:border-white/10 shadow-sm"
+                    title="Kembali ke Daftar Kendaraan">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
-                    <span class="hidden sm:inline">Export Excel</span>
                 </a>
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <h1 class="text-base sm:text-2xl font-black text-slate-800 dark:text-white tracking-tight">Laporan Bulanan BBM</h1>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-brand-primary/10 text-brand-primary dark:bg-white/10 dark:text-white">
+                            {{ $namaBulan }} {{ $tahun }}
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+                        Satker: <strong class="text-slate-700 dark:text-slate-200">{{ $satker->nama_satker ?? '-' }}</strong>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-2 w-full sm:w-auto">
                 <a href="{{ route('satker.kendaraans.laporan-bulanan.print', ['bulan' => $bulan, 'tahun' => $tahun]) }}"
                     target="_blank" rel="nofollow"
-                    class="inline-flex items-center px-3 py-2 sm:px-4 sm:py-2 bg-red-600 text-white rounded-lg font-semibold text-sm hover:bg-red-700 shadow transition-all" title="Cetak PDF">
-                    <svg class="w-4 h-4 sm:mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="flex-1 sm:flex-initial inline-flex items-center justify-center px-3.5 py-2 sm:py-2.5 bg-rose-600 hover:bg-rose-700 active:scale-95 text-white rounded-xl font-bold text-xs sm:text-sm shadow-md shadow-rose-600/20 transition-all duration-200 gap-1.5"
+                    title="Cetak PDF">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
-                        </path>
+                            d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                     </svg>
-                    <span class="hidden sm:inline">Cetak PDF</span>
+                    <span>Cetak PDF</span>
                 </a>
-                <a href="{{ route('satker.kendaraans.index') }}"
-                    class="inline-flex items-center px-3 py-2 sm:px-4 sm:py-2 bg-indigo-600 text-white rounded-lg font-semibold text-sm hover:bg-indigo-700 shadow-lg shadow-indigo-500/30 transition-all hover:-translate-y-0.5" title="Kembali">
-                    <svg class="w-4 h-4 sm:mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                <a href="{{ route('satker.kendaraans.laporan-bulanan.export', ['bulan' => $bulan, 'tahun' => $tahun]) }}"
+                    target="_blank" rel="nofollow"
+                    class="flex-1 sm:flex-initial inline-flex items-center justify-center px-3.5 py-2 sm:py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white rounded-xl font-bold text-xs sm:text-sm shadow-md shadow-emerald-600/20 transition-all duration-200 gap-1.5"
+                    title="Export Excel">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    <span class="hidden sm:inline">Kembali</span>
+                    <span>Excel</span>
                 </a>
             </div>
         </div>
 
-        <!-- Filter -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl border border-slate-200 dark:border-white/10 p-4">
+        <!-- Filter Card (1 Baris Lega, Tidak Terpotong) -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm p-3 sm:p-4 relative z-30">
             @php
                 $bulanBulananOptions = [];
                 for($m = 1; $m <= 12; $m++) {
@@ -56,37 +66,40 @@
                 }
             @endphp
             <form action="{{ route('satker.kendaraans.laporan-bulanan') }}" method="GET"
-                class="flex items-end gap-2.5">
+                class="flex items-end gap-2 sm:gap-3">
                 <div class="flex-1 min-w-0">
-                    <label class="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 block">Bulan</label>
+                    <label class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1 block">Bulan</label>
                     <x-filter-select 
                         name="bulan" 
                         :value="$bulan" 
                         placeholder="Pilih Bulan" 
                         icon="calendar" 
                         :searchable="false" 
+                        :auto-submit="true" 
                         :options="$bulanBulananOptions" 
                     />
                 </div>
-                <div class="w-28 sm:w-36 shrink-0">
-                    <label class="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 block">Tahun</label>
+                <div class="w-24 sm:w-36 shrink-0">
+                    <label class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1 block">Tahun</label>
                     <x-filter-select 
                         name="tahun" 
                         :value="$tahun" 
                         placeholder="Pilih Tahun" 
                         icon="calendar" 
                         :searchable="false" 
+                        :auto-submit="true" 
                         :options="$tahunBulananOptions" 
                     />
                 </div>
                 <div class="shrink-0">
-                    <button type="submit"
-                        class="h-10 px-4 sm:px-5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white rounded-xl font-bold text-xs transition-all shadow-sm flex items-center justify-center gap-1.5">
+                    <a href="{{ route('satker.kendaraans.laporan-bulanan') }}"
+                        class="h-10 px-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1 border border-slate-200 dark:border-white/10"
+                        title="Reset Filter">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                         </svg>
-                        <span>Filter</span>
-                    </button>
+                        <span class="hidden sm:inline">Reset</span>
+                    </a>
                 </div>
             </form>
         </div>

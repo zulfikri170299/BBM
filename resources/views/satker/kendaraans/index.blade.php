@@ -214,26 +214,48 @@
 
         <!-- Table Card -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
-            <!-- Table Header Info & Bulk Actions -->
-            <div class="px-4 sm:px-6 py-4 border-b border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div class="flex items-center gap-3">
-                    <div class="p-2.5 bg-brand-primary/10 text-brand-primary dark:bg-white/10 dark:text-white rounded-xl">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1">
-                            </path>
-                        </svg>
+            <!-- Hidden form for bulk delete -->
+            <form id="bulkDeleteForm" action="{{ route('satker.kendaraans.bulk-delete') }}" method="POST" class="hidden">
+                @csrf
+                <div id="bulkDeleteInputs"></div>
+            </form>
+
+            <!-- Filter & Controls Toolbar -->
+            <div class="p-3 sm:p-4 bg-slate-50/50 dark:bg-slate-800/30 border-b border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-3">
+                <form action="{{ route('satker.kendaraans.index') }}" method="GET" class="flex items-center gap-2 flex-1 w-full min-w-0">
+                    <div class="shrink-0">
+                        <x-per-page :current="request('per_page', 10)" />
                     </div>
-                    <div>
-                        <h2 class="text-base sm:text-lg font-black text-slate-800 dark:text-white">Daftar Kendaraan Aktif</h2>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ number_format($kendaraans->total()) }} kendaraan disetujui</p>
+
+                    <div class="relative flex-1 min-w-0 max-w-none sm:max-w-sm">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </span>
+                        <input type="text" name="search" value="{{ request('search') }}"
+                            placeholder="Cari nopol, jenis kendaraan..."
+                            class="w-full pl-9 pr-8 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl text-xs font-medium text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all">
+                        @if(request('search'))
+                            <a href="{{ route('satker.kendaraans.index', array_merge(request()->except('search', 'page'))) }}"
+                                class="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-rose-500 transition-colors" title="Hapus pencarian">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                            </a>
+                        @endif
                     </div>
-                </div>
+
+                    @if(request('search'))
+                        <a href="{{ route('satker.kendaraans.index') }}"
+                            class="py-2 px-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-semibold rounded-xl transition flex items-center gap-1 shrink-0"
+                            title="Reset Filter">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                            <span class="hidden sm:inline">Reset</span>
+                        </a>
+                    @endif
+                </form>
 
                 <!-- Bulk Actions Bar -->
-                <div id="bulkActionsBar" class="hidden items-center gap-2.5 animate-fade-in">
+                <div id="bulkActionsBar" class="hidden items-center gap-2.5 animate-fade-in shrink-0">
                     <span class="text-xs font-bold text-slate-600 dark:text-slate-400">
                         <span id="selectedCount" class="text-brand-primary font-black">0</span> data dipilih:
                     </span>
@@ -247,49 +269,8 @@
                         Hapus Terpilih
                     </button>
                 </div>
-            </div>
 
-            <!-- Hidden form for bulk delete -->
-            <form id="bulkDeleteForm" action="{{ route('satker.kendaraans.bulk-delete') }}" method="POST" class="hidden">
-                @csrf
-                <div id="bulkDeleteInputs"></div>
-            </form>
-
-            <!-- Filter & Controls Toolbar -->
-            <div class="p-3.5 sm:p-4 bg-slate-50/50 dark:bg-slate-800/30 border-b border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-                <form action="{{ route('satker.kendaraans.index') }}" method="GET" class="flex flex-wrap items-center gap-2.5 flex-1">
-                    <div class="flex items-center gap-2">
-                        <x-per-page :current="request('per_page', 10)" />
-                    </div>
-
-                    <div class="relative flex-1 min-w-[200px] max-w-sm">
-                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </span>
-                        <input type="text" name="search" value="{{ request('search') }}"
-                            placeholder="Cari nopol, jenis kendaraan..."
-                            class="w-full pl-9 pr-9 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl text-xs font-medium text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all">
-                        @if(request('search'))
-                            <a href="{{ route('satker.kendaraans.index', array_merge(request()->except('search', 'page'))) }}"
-                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-rose-500 transition-colors" title="Hapus pencarian">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                            </a>
-                        @endif
-                    </div>
-
-                    @if(request('search'))
-                        <a href="{{ route('satker.kendaraans.index') }}"
-                            class="py-2 px-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-semibold rounded-xl transition flex items-center gap-1.5 shrink-0"
-                            title="Reset Filter">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                            <span>Reset</span>
-                        </a>
-                    @endif
-                </form>
-
-                <div class="text-[11px] font-bold text-slate-500 dark:text-slate-400 self-end sm:self-auto shrink-0">
+                <div class="hidden sm:block text-[11px] font-bold text-slate-500 dark:text-slate-400 self-end sm:self-auto shrink-0">
                     Menampilkan <span class="text-slate-800 dark:text-white font-extrabold">{{ $kendaraans->firstItem() ?? 0 }}-{{ $kendaraans->lastItem() ?? 0 }}</span> dari <span class="text-slate-800 dark:text-white font-extrabold">{{ number_format($kendaraans->total()) }}</span> data
                 </div>
             </div>
@@ -340,12 +321,6 @@
                                 <td class="py-3.5 px-4 whitespace-nowrap">
                                     <div class="flex flex-wrap items-center gap-1.5">
                                         <span class="font-black text-slate-900 dark:text-white tracking-wide font-mono text-xs">{{ $kendaraan->no_polisi }}</span>
-                                        @if($kendaraan->hasUnpaidBon())
-                                            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-wider bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30" title="Saldo kendaraan dikunci karena ada hutang {{ rtrim(rtrim(number_format($kendaraan->totalUnpaidBon(), 2, ',', '.'), '0'), ',') }} L">
-                                                <svg class="w-2.5 h-2.5 text-rose-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
-                                                Terkunci
-                                            </span>
-                                        @endif
                                         @if($kendaraan->status_approval === 'ditolak' && $kendaraan->aksi_approval === 'edit')
                                             <a href="{{ route('satker.persetujuan-kendaraan.index', ['status' => 'ditolak', 'search' => $kendaraan->no_polisi]) }}"
                                                 class="inline-flex items-center px-1.5 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-wider bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 hover:bg-rose-500/20 transition"
@@ -514,7 +489,7 @@
                                         <div class="flex items-center gap-1 mt-0.5 whitespace-nowrap overflow-hidden">
                                             <span class="font-black text-slate-900 dark:text-white tracking-wide font-mono text-xs">{{ $kendaraan->no_polisi }}</span>
                                             @if($kendaraan->hasUnpaidBon())
-                                                <svg class="w-3 h-3 text-rose-500 shrink-0" fill="currentColor" viewBox="0 0 20 20" title="Saldo Terkunci (Ada Hutang)"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+                                                <svg class="w-[18px] h-[18px] text-rose-500 dark:text-rose-400 shrink-0 drop-shadow-sm" fill="currentColor" viewBox="0 0 20 20" title="Saldo Terkunci (Ada Hutang)"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
                                             @endif
                                             @if($kendaraan->status_approval === 'ditolak')
                                                 <span class="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0" title="Ditolak"></span>

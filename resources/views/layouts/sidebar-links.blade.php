@@ -4,7 +4,7 @@
             <div class="mt-2 mb-2 px-3 text-[9px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-400">Administration</div>
 
             <a href="{{ route('admin.dashboard') }}"
-                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
+                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
                 <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
@@ -14,7 +14,7 @@
             </a>
 
             <a href="{{ route('admin.kendaraans.index') }}"
-                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ (request()->routeIs('admin.kendaraans.*') && !request()->routeIs('admin.kendaraans.laporan-*')) ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
+                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ (request()->routeIs('admin.kendaraans.*') && !request()->routeIs('admin.kendaraans.laporan-*')) ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
                 <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -31,7 +31,7 @@
                 }); 
             @endphp
             <a href="{{ route('admin.persetujuan-kendaraan.index') }}"
-                class="group flex items-center justify-between rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('admin.persetujuan-kendaraan.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
+                class="group flex items-center justify-between rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('admin.persetujuan-kendaraan.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
                 <div class="flex items-center gap-x-2.5">
                     <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -49,7 +49,7 @@
 
             <div class="space-y-1">
                 <button @click="masterBbmOpen = !masterBbmOpen"
-                    class="w-full flex items-center justify-between px-3 py-1.5 text-sm rounded-xl transition-all duration-200 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 focus:outline-none active:scale-[0.98]">
+                    class="w-full flex items-center justify-between px-3 py-1.5 text-sm rounded-xl transition-all duration-200 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 focus:outline-none active:scale-[0.98]">
                     <div class="flex items-center gap-x-2.5">
                         <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -67,22 +67,22 @@
                 <div x-show="masterBbmOpen" x-collapse style="display: none;" class="ml-9 submenu-line space-y-1 my-1">
                     @if(auth()->user()->role === 'super_admin')
                         <a href="{{ route('admin.stok.index') }}"
-                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.stok.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.stok.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                             <div class="submenu-dot {{ request()->routeIs('admin.stok.*') ? 'active-dot' : '' }}"></div>
                             Saldo BBM
                         </a>
                         <a href="{{ route('pembelian-bbm.index') }}"
-                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('pembelian-bbm.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('pembelian-bbm.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                             <div class="submenu-dot {{ request()->routeIs('pembelian-bbm.*') ? 'active-dot' : '' }}"></div>
                             Pembelian BBM
                         </a>
                         <a href="{{ route('admin.rendis.index') }}"
-                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.rendis.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.rendis.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                             <div class="submenu-dot {{ request()->routeIs('admin.rendis.*') ? 'active-dot' : '' }}"></div>
                             Rendis BBM
                         </a>
                         <a href="{{ route('admin.sounding.index') }}"
-                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.sounding.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.sounding.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                             <div class="submenu-dot {{ request()->routeIs('admin.sounding.*') ? 'active-dot' : '' }}"></div>
                             Data Sounding
                         </a>
@@ -93,7 +93,7 @@
             @if(auth()->user()->role === 'super_admin')
                 <div class="space-y-1">
                     <button @click="transactionsOpen = !transactionsOpen"
-                        class="w-full flex items-center justify-between px-3 py-1.5 text-sm rounded-xl transition-all duration-200 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 focus:outline-none active:scale-[0.98]">
+                        class="w-full flex items-center justify-between px-3 py-1.5 text-sm rounded-xl transition-all duration-200 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 focus:outline-none active:scale-[0.98]">
                         <div class="flex items-center gap-x-2.5">
                             <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -110,23 +110,23 @@
 
                     <div x-show="transactionsOpen" x-collapse style="display: none;" class="ml-9 submenu-line space-y-1 my-1">
                         <a href="{{ route('admin.transaksi.index') }}"
-                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.transaksi.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.transaksi.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                             <div class="submenu-dot {{ request()->routeIs('admin.transaksi.*') ? 'active-dot' : '' }}"></div>
                             Transaksi BBM
                         </a>
                         <a href="{{ route('admin.hutang.index') }}"
-                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.hutang.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.hutang.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                             <div class="submenu-dot {{ request()->routeIs('admin.hutang.*') ? 'active-dot' : '' }}"></div>
                             Hutang BBM
                         </a>
 
                         <a href="{{ route('admin.bulk-potong.index') }}"
-                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.bulk-potong.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.bulk-potong.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                             <div class="submenu-dot {{ request()->routeIs('admin.bulk-potong.*') ? 'active-dot' : '' }}"></div>
                             Potong Saldo Masal
                         </a>
                         <a href="{{ route('admin.meter.index') }}"
-                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.meter.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.meter.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                             <div class="submenu-dot {{ request()->routeIs('admin.meter.*') ? 'active-dot' : '' }}"></div>
                             Input Meter Pompa
                         </a>
@@ -139,7 +139,7 @@
             {{-- Reports Dropdown --}}
             <div class="space-y-1">
                 <button @click="reportsOpen = !reportsOpen"
-                    class="w-full flex items-center justify-between px-3 py-1.5 text-sm rounded-xl transition-all duration-200 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 focus:outline-none active:scale-[0.98]">
+                    class="w-full flex items-center justify-between px-3 py-1.5 text-sm rounded-xl transition-all duration-200 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 focus:outline-none active:scale-[0.98]">
                     <div class="flex items-center gap-x-2.5">
                         <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -156,73 +156,73 @@
 
                 <div x-show="reportsOpen" x-collapse style="display: none;" class="ml-9 submenu-line space-y-1 my-1">
                     <a href="{{ route('admin.laporan-slog.index') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-slog.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-slog.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('admin.laporan-slog.*') ? 'active-dot' : '' }}"></div>
                         Laporan Rutin
                     </a>
                     <a href="{{ route('admin.laporan-topup.index') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-topup.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-topup.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('admin.laporan-topup.*') ? 'active-dot' : '' }}"></div>
                         Laporan Top Up
                     </a>
                     <a href="{{ route('admin.laporan-hutang.index') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-hutang.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-hutang.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('admin.laporan-hutang.*') ? 'active-dot' : '' }}"></div>
                         Laporan Bayar Hutang
                     </a>
                     <a href="{{ route('admin.laporan-potong.index') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-potong.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-potong.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('admin.laporan-potong.*') ? 'active-dot' : '' }}"></div>
                         Laporan Potong Saldo
                     </a>
                     <a href="{{ route('admin.laporan-transfer-saldo.index') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-transfer-saldo.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-transfer-saldo.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('admin.laporan-transfer-saldo.*') ? 'active-dot' : '' }}"></div>
                         Laporan Transfer Saldo
                     </a>
                     <a href="{{ route('admin.saldo-dialihkan.index') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.saldo-dialihkan.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.saldo-dialihkan.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('admin.saldo-dialihkan.*') ? 'active-dot' : '' }}"></div>
                         Saldo Yang di Alihkan
                     </a>
                     <a href="{{ route('admin.laporan-harian.index') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-harian.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-harian.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('admin.laporan-harian.*') ? 'active-dot' : '' }}"></div>
                         Laporan Harian
                     </a>
                     <a href="{{ route('admin.laporan-triwulan.index') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-triwulan.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-triwulan.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('admin.laporan-triwulan.*') ? 'active-dot' : '' }}"></div>
                         Laporan Per 3 Bulan
                     </a>
                     <a href="{{ route('admin.laporan-tahunan.index') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-tahunan.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-tahunan.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('admin.laporan-tahunan.*') ? 'active-dot' : '' }}"></div>
                         Laporan Tahunan
                     </a>
                     <a href="{{ route('admin.laporan-stok-bbm.index') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-stok-bbm.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-stok-bbm.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('admin.laporan-stok-bbm.*') ? 'active-dot' : '' }}"></div>
                         Data BBM Pada Tangki
                     </a>
                     <a href="{{ route('admin.riwayat.index') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.riwayat.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.riwayat.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('admin.riwayat.*') ? 'active-dot' : '' }}"></div>
                         Riwayat BBM
                     </a>
 
                     <a href="{{ route('admin.ba.index') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.ba.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.ba.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('admin.ba.*') ? 'active-dot' : '' }}"></div>
                         Berita Acara
                     </a>
                     <a href="{{ route('admin.nominatif.index') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.nominatif.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.nominatif.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('admin.nominatif.*') ? 'active-dot' : '' }}"></div>
                         Nominatif
                     </a>
                     <a href="{{ route('admin.laporan-sisa.kendaraan') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-sisa.kendaraan') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.laporan-sisa.kendaraan') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('admin.laporan-sisa.kendaraan') ? 'active-dot' : '' }}"></div>
                         Sisa BBM Kendaraan
                     </a>
@@ -233,7 +233,7 @@
             @if(auth()->user()->role === 'super_admin')
                 <div class="space-y-1">
                     <button @click="userManagementOpen = !userManagementOpen"
-                        class="w-full flex items-center justify-between px-3 py-1.5 text-sm rounded-xl transition-all duration-200 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 focus:outline-none active:scale-[0.98]">
+                        class="w-full flex items-center justify-between px-3 py-1.5 text-sm rounded-xl transition-all duration-200 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 focus:outline-none active:scale-[0.98]">
                         <div class="flex items-center gap-x-2.5">
                             <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -250,17 +250,17 @@
 
                     <div x-show="userManagementOpen" x-collapse style="display: none;" class="ml-9 submenu-line space-y-1 my-1">
                         <a href="{{ route('admin.users.index') }}"
-                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.users.index') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.users.index') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                             <div class="submenu-dot {{ request()->routeIs('admin.users.index') ? 'active-dot' : '' }}"></div>
                             Users
                         </a>
                         <a href="{{ route('admin.users.monitoring') }}"
-                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.users.monitoring') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.users.monitoring') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                             <div class="submenu-dot {{ request()->routeIs('admin.users.monitoring') ? 'active-dot' : '' }}"></div>
                             Monitoring User
                         </a>
                         <a href="{{ route('admin.pin-management.index') }}"
-                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.pin-management.index') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.pin-management.index') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                             <div class="submenu-dot {{ request()->routeIs('admin.pin-management.index') ? 'active-dot' : '' }}"></div>
                             Manajemen PIN
                         </a>
@@ -271,7 +271,7 @@
             @if(auth()->user()->role === 'super_admin')
                 <div class="space-y-1">
                     <button @click="settingsOpen = !settingsOpen"
-                        class="w-full flex items-center justify-between px-3 py-1.5 text-sm rounded-xl transition-all duration-200 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 focus:outline-none active:scale-[0.98]">
+                        class="w-full flex items-center justify-between px-3 py-1.5 text-sm rounded-xl transition-all duration-200 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 focus:outline-none active:scale-[0.98]">
                         <div class="flex items-center gap-x-2.5">
                             <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -290,32 +290,32 @@
 
                     <div x-show="settingsOpen" x-collapse style="display: none;" class="ml-9 submenu-line space-y-1 my-1">
                         <a href="{{ route('admin.satkers.index') }}"
-                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.satkers.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.satkers.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                             <div class="submenu-dot {{ request()->routeIs('admin.satkers.*') ? 'active-dot' : '' }}"></div>
                             Satkers
                         </a>
                         <a href="{{ route('admin.penanda-tangan.index') }}"
-                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.penanda-tangan.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.penanda-tangan.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                             <div class="submenu-dot {{ request()->routeIs('admin.penanda-tangan.*') ? 'active-dot' : '' }}"></div>
                             Penanda Tangan
                         </a>
                         <a href="{{ route('admin.petugas-spbp.index') }}"
-                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.petugas-spbp.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.petugas-spbp.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                             <div class="submenu-dot {{ request()->routeIs('admin.petugas-spbp.*') ? 'active-dot' : '' }}"></div>
                             Petugas SPBP
                         </a>
                         <a href="{{ route('admin.settings.index') }}"
-                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.settings.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.settings.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                             <div class="submenu-dot {{ request()->routeIs('admin.settings.*') ? 'active-dot' : '' }}"></div>
                             Sistem
                         </a>
                         <a href="{{ route('admin.backup.index') }}"
-                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.backup.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.backup.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                             <div class="submenu-dot {{ request()->routeIs('admin.backup.*') ? 'active-dot' : '' }}"></div>
                             Backup Database
                         </a>
                         <a href="{{ route('admin.hapus-data-tahunan.index') }}"
-                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.hapus-data-tahunan.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.hapus-data-tahunan.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                             <div class="submenu-dot {{ request()->routeIs('admin.hapus-data-tahunan.*') ? 'active-dot' : '' }}"></div>
                             Hapus Data Tahunan
                         </a>
@@ -332,7 +332,7 @@
             <p class="px-3 py-1.5 mt-2 text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">Satker Management</p>
 
             <a href="{{ route('satker.dashboard') }}"
-                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('satker.dashboard') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
+                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('satker.dashboard') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
                 <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
@@ -344,7 +344,7 @@
 
 
             <a href="{{ route('satker.kendaraans.index') }}"
-                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ (request()->routeIs('satker.kendaraans.*') && !request()->routeIs('satker.kendaraans.laporan-*')) ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
+                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ (request()->routeIs('satker.kendaraans.*') && !request()->routeIs('satker.kendaraans.laporan-*')) ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
                 <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -365,7 +365,7 @@
                 });
             @endphp
             <a href="{{ route('satker.persetujuan-kendaraan.index') }}"
-                class="group flex items-center justify-between rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('satker.persetujuan-kendaraan.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
+                class="group flex items-center justify-between rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('satker.persetujuan-kendaraan.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
                 <div class="flex items-center gap-x-2.5">
                     <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -389,7 +389,7 @@
 
 
             <a href="{{ route('satker.hutang.index') }}"
-                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('satker.hutang.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
+                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('satker.hutang.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
                 <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
@@ -399,7 +399,7 @@
             </a>
 
             <a href="{{ route('satker.penanda-tangan.index') }}"
-                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('satker.penanda-tangan.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
+                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('satker.penanda-tangan.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
                 <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
                 </svg>
@@ -409,7 +409,7 @@
             {{-- Reports Dropdown (Satker) --}}
             <div class="space-y-1">
                 <button @click="satkerReportsOpen = !satkerReportsOpen"
-                    class="w-full flex items-center justify-between px-3 py-1.5 text-sm rounded-xl transition-all duration-200 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 focus:outline-none active:scale-[0.98]">
+                    class="w-full flex items-center justify-between px-3 py-1.5 text-sm rounded-xl transition-all duration-200 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 focus:outline-none active:scale-[0.98]">
                     <div class="flex items-center gap-x-2.5">
                         <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -427,37 +427,37 @@
 
                 <div x-show="satkerReportsOpen" x-collapse style="display: none;" class="ml-9 submenu-line space-y-1 my-1">
                     <a href="{{ route('satker.riwayat.index') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.riwayat.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.riwayat.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('satker.riwayat.*') ? 'active-dot' : '' }}"></div>
                         Riwayat BBM
                     </a>
                     <a href="{{ route('satker.laporan-hutang.index') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.laporan-hutang.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.laporan-hutang.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('satker.laporan-hutang.*') ? 'active-dot' : '' }}"></div>
                         Laporan Bayar Hutang
                     </a>
                     <a href="{{ route('satker.laporan-triwulan.index') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.laporan-triwulan.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.laporan-triwulan.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('satker.laporan-triwulan.*') ? 'active-dot' : '' }}"></div>
                         Laporan Per 3 Bulan
                     </a>
                     <a href="{{ route('satker.laporan-tahunan.index') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.laporan-tahunan.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.laporan-tahunan.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('satker.laporan-tahunan.*') ? 'active-dot' : '' }}"></div>
                         Laporan Tahunan
                     </a>
                     <a href="{{ route('satker.kendaraans.laporan-bulanan') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.kendaraans.laporan-bulanan.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.kendaraans.laporan-bulanan.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('satker.kendaraans.laporan-bulanan.*') ? 'active-dot' : '' }}"></div>
                         Laporan Bulanan
                     </a>
                     <a href="{{ route('satker.kendaraans.laporan-transfer') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.kendaraans.laporan-transfer.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.kendaraans.laporan-transfer.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('satker.kendaraans.laporan-transfer.*') ? 'active-dot' : '' }}"></div>
                         Laporan Transfer
                     </a>
                     <a href="{{ route('satker.saldo-dialihkan.index') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.saldo-dialihkan.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('satker.saldo-dialihkan.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('satker.saldo-dialihkan.*') ? 'active-dot' : '' }}"></div>
                         Saldo Yang di Alihkan
                     </a>
@@ -470,7 +470,7 @@
             <div class="mt-2 mb-2 px-3 text-[9px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-400">Petugas Area</div>
 
             <a href="{{ route('petugas.dashboard') }}"
-                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('petugas.dashboard') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
+                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('petugas.dashboard') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
                 <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
@@ -481,7 +481,7 @@
 
             <div class="space-y-1">
                 <button @click="transactionsOpen = !transactionsOpen"
-                    class="w-full flex items-center justify-between px-3 py-1.5 text-sm rounded-xl transition-all duration-200 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 focus:outline-none active:scale-[0.98]">
+                    class="w-full flex items-center justify-between px-3 py-1.5 text-sm rounded-xl transition-all duration-200 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 focus:outline-none active:scale-[0.98]">
                     <div class="flex items-center gap-x-2.5">
                         <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -498,12 +498,12 @@
 
                 <div x-show="transactionsOpen" x-collapse style="display: none;" class="ml-9 submenu-line space-y-1 my-1">
                     <a href="{{ route('petugas.transaksi.index') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('petugas.transaksi.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('petugas.transaksi.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('petugas.transaksi.*') ? 'active-dot' : '' }}"></div>
                         Transaksi BBM
                     </a>
                     <a href="{{ route('petugas.hutang.index') }}"
-                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('petugas.hutang.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                        class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('petugas.hutang.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                         <div class="submenu-dot {{ request()->routeIs('petugas.hutang.*') ? 'active-dot' : '' }}"></div>
                         Catat Hutang BBM
                     </a>
@@ -511,7 +511,7 @@
             </div>
 
             <a href="{{ route('petugas.meter.index') }}"
-                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('petugas.meter.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
+                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('petugas.meter.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
                 <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z">
@@ -521,7 +521,7 @@
             </a>
 
             <a href="{{ route('petugas.sinkronisasi.index') }}"
-                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('petugas.sinkronisasi.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
+                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('petugas.sinkronisasi.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
                 <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                 </svg>
@@ -529,7 +529,7 @@
             </a>
 
             <a href="{{ route('pembelian-bbm.index') }}"
-                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('pembelian-bbm.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
+                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('pembelian-bbm.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
                 <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
@@ -539,7 +539,7 @@
             </a>
 
             <a href="{{ route('petugas.rekapan.index') }}"
-                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('petugas.rekapan.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
+                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('petugas.rekapan.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
                 <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
@@ -549,7 +549,7 @@
             </a>
 
             <a href="{{ route('petugas.riwayat.index') }}"
-                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('petugas.riwayat.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
+                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('petugas.riwayat.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
                 <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
@@ -559,7 +559,7 @@
             </a>
 
             <a href="{{ route('petugas.sounding.index') }}"
-                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('petugas.sounding.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
+                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('petugas.sounding.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
                 <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                 </svg>
@@ -572,7 +572,7 @@
         <p class="px-4 py-1 mt-2 text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">Komunikasi</p>
         @if(in_array(auth()->user()->role, ['super_admin', 'kasubbag']))
             <a href="{{ route('admin.broadcast.index') }}"
-                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('admin.broadcast.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
+                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('admin.broadcast.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
                 <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z">
@@ -582,7 +582,7 @@
             </a>
         @endif
         <a href="{{ route('chat.index') }}"
-            class="relative group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('chat.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
+            class="relative group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('chat.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
             <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z">
@@ -598,7 +598,7 @@
 
         @if(in_array(auth()->user()->role, ['super_admin', 'kasubbag']))
             <a href="{{ route('admin.satisfaction.index') }}"
-                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('admin.satisfaction.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
+                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('admin.satisfaction.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
                 <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -607,7 +607,7 @@
             </a>
         @else
             <a href="{{ route('satisfaction.create') }}"
-                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('satisfaction.create') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
+                class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('satisfaction.create') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
                 <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -617,7 +617,7 @@
         @endif
 
         <a href="{{ route('catatan.index') }}"
-            class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('catatan.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white dark:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
+            class="group flex items-center gap-x-2.5 rounded-xl px-3 py-1.5 text-xs font-bold leading-6 transition-all {{ request()->routeIs('catatan.*') ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20' : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors' }}">
             <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
