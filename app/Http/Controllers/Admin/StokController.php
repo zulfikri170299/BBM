@@ -29,6 +29,10 @@ class StokController extends Controller
             $query->whereDate('created_at', '<=', $request->end_date);
         }
 
+        if ($request->filled('jenis_bbm')) {
+            $query->where('jenis_bbm', $request->jenis_bbm);
+        }
+
         // Hitung ringkasan mutasi (filtered)
         $summaryQuery = RiwayatStokAdmin::query();
         if ($request->filled('start_date')) {
@@ -64,6 +68,10 @@ class StokController extends Controller
 
         if ($request->filled('end_date')) {
             $query->whereDate('created_at', '<=', $request->end_date);
+        }
+
+        if ($request->filled('jenis_bbm')) {
+            $query->where('jenis_bbm', $request->jenis_bbm);
         }
 
         $history = $query->get();

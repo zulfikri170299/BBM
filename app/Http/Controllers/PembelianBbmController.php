@@ -29,7 +29,18 @@ class PembelianBbmController extends Controller
 
         $latestDate = date('Y-m-d');
 
-        return view('pembelian_bbm.index', compact('pembelians', 'latestDate'));
+        // Total akumulasi untuk kartu ringkasan
+        $totalPertamax = PembelianBbm::where(function($q) {
+            $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX');
+        })->sum('jumlah');
+
+        $totalDex = PembelianBbm::where(function($q) {
+            $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX');
+        })->sum('jumlah');
+
+        $totalTransaksi = PembelianBbm::count();
+
+        return view('pembelian_bbm.index', compact('pembelians', 'latestDate', 'totalPertamax', 'totalDex', 'totalTransaksi'));
     }
 
     public function print(Request $request)

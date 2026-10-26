@@ -110,8 +110,8 @@
             </div>
 
             <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
-                <!-- Card 1: Frekuensi Pelayanan (Vibrant Indigo / Purple) -->
-                <div class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 text-white p-2.5 sm:p-4 shadow-md sm:shadow-lg shadow-indigo-500/20 border border-indigo-400/30 group hover:shadow-xl hover:shadow-indigo-500/30 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between">
+                <!-- Card 1: Frekuensi Pelayanan (Vibrant Amber / Warm Gold - Memecah dominasi warna biru) -->
+                <div class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-amber-500 via-orange-600 to-amber-700 text-white p-2.5 sm:p-4 shadow-md sm:shadow-lg shadow-amber-500/20 border border-amber-400/30 group hover:shadow-xl hover:shadow-amber-500/30 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between">
                     <div class="absolute -top-10 -right-10 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500 pointer-events-none"></div>
                     <div class="relative z-10">
                         <div class="flex items-center justify-between">
@@ -121,21 +121,21 @@
                                         d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                                 </svg>
                             </div>
-                            <span class="inline-flex items-center gap-1 text-[9px] sm:text-[10px] font-extrabold text-indigo-100 bg-white/20 backdrop-blur-sm px-1.5 sm:px-2 py-0.5 rounded border border-white/20">
+                            <span class="inline-flex items-center gap-1 text-[9px] sm:text-[10px] font-extrabold text-amber-100 bg-white/20 backdrop-blur-sm px-1.5 sm:px-2 py-0.5 rounded border border-white/20">
                                 Hari Ini
                             </span>
                         </div>
                         <div class="mt-2 sm:mt-3">
-                            <span class="text-[9px] sm:text-[10px] font-bold text-indigo-100/90 uppercase tracking-wider block truncate">Frekuensi Pelayanan</span>
+                            <span class="text-[9px] sm:text-[10px] font-bold text-amber-100/90 uppercase tracking-wider block truncate">Frekuensi Pelayanan</span>
                             <div class="mt-0.5 flex items-baseline gap-1 sm:gap-1.5">
                                 <span class="text-xl sm:text-3xl font-black text-white tabular-nums">
                                     {{ number_format($todayTransactions, 0, ',', '.') }}
                                 </span>
-                                <span class="text-[10px] sm:text-xs font-bold text-indigo-200">Transaksi</span>
+                                <span class="text-[10px] sm:text-xs font-bold text-amber-200">Transaksi</span>
                             </div>
                         </div>
                     </div>
-                    <div class="relative z-10 mt-2 sm:mt-3 pt-1.5 sm:pt-2 border-t border-white/20 text-[9px] sm:text-[10px] text-indigo-100/80 truncate">
+                    <div class="relative z-10 mt-2 sm:mt-3 pt-1.5 sm:pt-2 border-t border-white/20 text-[9px] sm:text-[10px] text-amber-100/80 truncate">
                         Total kendaraan & personel
                     </div>
                 </div>
@@ -170,8 +170,8 @@
                     </div>
                 </div>
 
-                <!-- Card 3: Penyaluran Pertamax (Vibrant Royal Blue / Indigo) -->
-                <div class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-blue-800 text-white p-2.5 sm:p-4 shadow-md sm:shadow-lg shadow-blue-500/20 border border-blue-400/30 group hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between">
+                <!-- Card 3: Penyaluran Pertamax (Sleek Cyan / Sky Blue Pertamax) -->
+                <div class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-700 text-white p-2.5 sm:p-4 shadow-md sm:shadow-lg shadow-blue-500/20 border border-sky-400/30 group hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between">
                     <div class="absolute -top-10 -right-10 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500 pointer-events-none"></div>
                     <div class="relative z-10">
                         <div class="flex items-center justify-between">
@@ -230,7 +230,7 @@
             </div>
         </div>
 
-        <!-- 2. Kondisi Stok Fisik di Tangki Pendam (Cards 5 & 6) -->
+        <!-- 2. Kondisi Stok Fisik di Tangki Pendam (Cards 5 & 6: Dark Executive Glassmorphic Cards) -->
         @if($tankStock)
             @php
                 $persenPertamax = $tankStock->stok_awal_pertamax > 0 
@@ -243,7 +243,7 @@
             <div>
                 <div class="flex items-center justify-between mb-2.5">
                     <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+                        <div class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></div>
                         <h2 class="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-white uppercase tracking-wider">
                             Kondisi Stok Fisik di Tangki Pendam
                         </h2>
@@ -254,78 +254,78 @@
                 </div>
 
                 <div class="grid grid-cols-2 sm:grid-cols-2 gap-2.5 sm:gap-4">
-                    <!-- Card 5: Sisa Pertamax Tank Card (Vibrant Royal Blue Gradient) -->
-                    <div class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-900 text-white p-2.5 sm:p-4 shadow-md sm:shadow-lg shadow-blue-500/20 border border-blue-400/30 group hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between">
-                        <div class="absolute -right-8 -top-8 w-24 h-24 bg-cyan-400/20 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
+                    <!-- Card 5: Sisa Pertamax Tank Card (Vibrant Hijau Muda / Emerald-Mint Gradient) -->
+                    <div class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-emerald-500 via-teal-500 to-emerald-700 text-white p-2.5 sm:p-4 shadow-md sm:shadow-lg shadow-emerald-500/20 border border-emerald-300/40 group hover:shadow-xl hover:shadow-emerald-500/30 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between">
+                        <div class="absolute -right-8 -top-8 w-24 h-24 bg-white/20 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
 
                         <div class="relative z-10 flex flex-col justify-between h-full space-y-2 sm:space-y-2.5">
                             <div class="flex items-center justify-between">
-                                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center shrink-0 shadow-inner">
-                                    <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center shrink-0 shadow-inner text-white">
+                                    <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                                     </svg>
                                 </div>
-                                <span class="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-extrabold bg-white/20 backdrop-blur-sm text-cyan-200 border border-white/25">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-300 animate-pulse"></span>
+                                <span class="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-extrabold bg-white/20 backdrop-blur-sm text-white border border-white/25">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-200 animate-pulse"></span>
                                     {{ $persenPertamax }}% Sisa
                                 </span>
                             </div>
 
                             <div>
-                                <span class="text-[9px] sm:text-[10px] font-bold text-blue-100/90 uppercase tracking-wider block truncate">Sisa Pertamax</span>
+                                <span class="text-[9px] sm:text-[10px] font-bold text-emerald-100/90 uppercase tracking-wider block truncate">Sisa Pertamax</span>
                                 <div class="flex items-baseline gap-1 mt-0.5">
                                     <span class="text-lg sm:text-2xl font-black text-white tracking-tight tabular-nums">
                                         {{ number_format($tankStock->sisa_pertamax, 0, ',', '.') }}
                                     </span>
-                                    <span class="text-[10px] sm:text-xs font-extrabold text-blue-200">Liter</span>
+                                    <span class="text-[10px] sm:text-xs font-extrabold text-emerald-200">Liter</span>
                                 </div>
                             </div>
 
                             <div class="space-y-1 pt-0.5 sm:pt-1">
-                                <div class="w-full bg-black/30 rounded-full h-1.5 p-0.5 backdrop-blur-sm overflow-hidden border border-white/20">
-                                    <div class="bg-gradient-to-r from-cyan-300 to-white h-full rounded-full transition-all duration-700 shadow-sm"
+                                <div class="w-full bg-black/25 rounded-full h-1.5 p-0.5 backdrop-blur-sm overflow-hidden border border-white/20">
+                                    <div class="bg-gradient-to-r from-emerald-200 via-teal-100 to-white h-full rounded-full transition-all duration-700 shadow-sm"
                                         style="width: {{ $persenPertamax }}%"></div>
                                 </div>
-                                <div class="text-[9px] sm:text-[10px] text-blue-100/80 truncate">
+                                <div class="text-[9px] sm:text-[10px] text-emerald-100/90 truncate">
                                     Awal: {{ number_format($tankStock->stok_awal_pertamax, 0, ',', '.') }} L
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Card 6: Sisa Dex Tank Card (Vibrant Ruby / Crimson Gradient) -->
-                    <div class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-rose-600 via-rose-700 to-red-900 text-white p-2.5 sm:p-4 shadow-md sm:shadow-lg shadow-rose-500/20 border border-rose-400/30 group hover:shadow-xl hover:shadow-rose-500/30 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between">
-                        <div class="absolute -right-8 -top-8 w-24 h-24 bg-amber-400/20 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
+                    <!-- Card 6: Sisa Dex Tank Card (Vibrant Biru Ungu / Indigo-Purple Gradient) -->
+                    <div class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-indigo-600 via-purple-600 to-violet-800 text-white p-2.5 sm:p-4 shadow-md sm:shadow-lg shadow-indigo-500/20 border border-purple-400/30 group hover:shadow-xl hover:shadow-indigo-500/30 hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between">
+                        <div class="absolute -right-8 -top-8 w-24 h-24 bg-white/20 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
 
                         <div class="relative z-10 flex flex-col justify-between h-full space-y-2 sm:space-y-2.5">
                             <div class="flex items-center justify-between">
-                                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center shrink-0 shadow-inner">
-                                    <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center shrink-0 shadow-inner text-white">
+                                    <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                                     </svg>
                                 </div>
-                                <span class="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-extrabold bg-white/20 backdrop-blur-sm text-rose-100 border border-white/25">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-rose-300 animate-pulse"></span>
+                                <span class="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-extrabold bg-white/20 backdrop-blur-sm text-white border border-white/25">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-purple-200 animate-pulse"></span>
                                     {{ $persenDex }}% Sisa
                                 </span>
                             </div>
 
                             <div>
-                                <span class="text-[9px] sm:text-[10px] font-bold text-rose-100/90 uppercase tracking-wider block truncate">Sisa Dex</span>
+                                <span class="text-[9px] sm:text-[10px] font-bold text-purple-100/90 uppercase tracking-wider block truncate">Sisa Dex</span>
                                 <div class="flex items-baseline gap-1 mt-0.5">
                                     <span class="text-lg sm:text-2xl font-black text-white tracking-tight tabular-nums">
                                         {{ number_format($tankStock->sisa_dex, 0, ',', '.') }}
                                     </span>
-                                    <span class="text-[10px] sm:text-xs font-extrabold text-rose-200">Liter</span>
+                                    <span class="text-[10px] sm:text-xs font-extrabold text-purple-200">Liter</span>
                                 </div>
                             </div>
 
                             <div class="space-y-1 pt-0.5 sm:pt-1">
-                                <div class="w-full bg-black/30 rounded-full h-1.5 p-0.5 backdrop-blur-sm overflow-hidden border border-white/20">
-                                    <div class="bg-gradient-to-r from-amber-300 to-white h-full rounded-full transition-all duration-700 shadow-sm"
+                                <div class="w-full bg-black/25 rounded-full h-1.5 p-0.5 backdrop-blur-sm overflow-hidden border border-white/20">
+                                    <div class="bg-gradient-to-r from-purple-200 via-indigo-100 to-white h-full rounded-full transition-all duration-700 shadow-sm"
                                         style="width: {{ $persenDex }}%"></div>
                                 </div>
-                                <div class="text-[9px] sm:text-[10px] text-rose-100/80 truncate">
+                                <div class="text-[9px] sm:text-[10px] text-purple-100/90 truncate">
                                     Awal: {{ number_format($tankStock->stok_awal_dex, 0, ',', '.') }} L
                                 </div>
                             </div>
