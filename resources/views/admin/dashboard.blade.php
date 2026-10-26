@@ -388,8 +388,8 @@
                     <div class="flex items-center gap-2.5">
                         <div class="w-2.5 h-6 bg-indigo-600 rounded-full"></div>
                         <div>
-                            <h3 class="text-sm sm:text-base font-black text-slate-800 dark:text-white"><span class="hidden sm:inline">Diagram Batang: </span>Transaksi & Konsumsi BBM Harian</h3>
-                            <p class="text-xs text-slate-400">Pantauan frekuensi transaksi dan pergerakan volume liter selama 7 hari terakhir</p>
+                            <h3 class="text-sm sm:text-base font-black text-slate-800 dark:text-white"><span class="hidden sm:inline">Diagram Batang: </span>Konsumsi BBM Harian</h3>
+                            <p class="text-xs text-slate-400">Pantauan volume konsumsi BBM jenis Pertamax dan Pertamina Dex selama 7 hari terakhir</p>
                         </div>
                     </div>
                     <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 self-start sm:self-auto">
@@ -629,12 +629,16 @@
         for ($i = 6; $i >= 0; $i--) {
             $date = now()->subDays($i);
             $q = \App\Models\TransaksiBbm::whereDate('created_at', $date);
-            $count = (clone $q)->count();
-            $liter = (clone $q)->sum('liter');
+            $pertamax = (clone $q)->where(function($sub) {
+                $sub->where('jenis_bbm', 'like', '%Pertamax%')->orWhere('jenis_bbm', 'like', '%pertamax%');
+            })->sum('liter');
+            $dex = (clone $q)->where(function($sub) {
+                $sub->where('jenis_bbm', 'like', '%Dex%')->orWhere('jenis_bbm', 'like', '%dex%');
+            })->sum('liter');
             $chartData[] = [
                 'date' => $date->format('d M'), 
-                'count' => $count,
-                'liter' => round($liter, 1)
+                'pertamax' => round((float)$pertamax, 1),
+                'dex' => round((float)$dex, 1)
             ];
         }
     @endphp
@@ -990,7 +994,7 @@
                         dataLabels: {
                             enabled: true,
                             formatter: function (val) {
-                                return val > 0 ? val : '';
+                                return val > 0 ? val + ' L' : '';
                             },
                             offsetY: -20,
                             style: {
@@ -1001,11 +1005,11 @@
                             }
                         },
                         series: [{
-                            name: 'Volume Liter',
-                            data: {!! json_encode(array_column($chartData, 'liter')) !!}
+                            name: 'Pertamax',
+                            data: {!! json_encode(array_column($chartData, 'pertamax')) !!}
                         }, {
-                            name: 'Frekuensi Transaksi',
-                            data: {!! json_encode(array_column($chartData, 'count')) !!}
+                            name: 'Pertamina Dex',
+                            data: {!! json_encode(array_column($chartData, 'dex')) !!}
                         }],
                         xaxis: {
                             categories: {!! json_encode(array_column($chartData, 'date')) !!},
@@ -1017,10 +1021,13 @@
                         },
                         yaxis: {
                             labels: {
-                                style: { colors: '#94a3b8', fontSize: '11px' }
+                                style: { colors: '#94a3b8', fontSize: '11px' },
+                                formatter: function (val) {
+                                    return val.toLocaleString('id-ID') + ' L';
+                                }
                             }
                         },
-                        colors: ['#4f46e5', '#06b6d4'], // Indigo & Cyan
+                        colors: ['#3b82f6', '#10b981'], // Biru (Pertamax) & Emerald (Pertamina Dex)
                         grid: {
                             borderColor: '#33415520',
                             strokeDashArray: 4
@@ -1034,7 +1041,12 @@
                             }
                         },
                         tooltip: {
-                            theme: 'dark'
+                            theme: 'dark',
+                            y: {
+                                formatter: function (val) {
+                                    return val.toLocaleString('id-ID') + ' Liter';
+                                }
+                            }
                         }
                     };
                     window.myAdminBarChart = new ApexCharts(barEl, barOptions);

@@ -39,23 +39,10 @@
             </div>
         </div>
 
-        <!-- Quick Shortcut Actions Grid (Colorful Cards) -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
-            <a href="{{ route('petugas.transaksi.index') }}"
-                class="group p-2.5 sm:p-3 rounded-xl bg-gradient-to-br from-indigo-50 to-indigo-100/70 dark:from-slate-900 dark:to-indigo-950/40 border border-indigo-200 dark:border-indigo-500/30 hover:border-indigo-500 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-sm shadow-indigo-500/40 group-hover:scale-105 transition-transform">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                </div>
-                <div class="min-w-0">
-                    <p class="text-xs font-bold text-slate-800 dark:text-white truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Pelayanan BBM</p>
-                    <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">Scan / Transaksi</p>
-                </div>
-            </a>
-
+        <!-- Quick Shortcut Actions Grid (3 Kolom Simetris) -->
+        <div class="grid grid-cols-3 gap-2 sm:gap-3">
             <a href="{{ route('petugas.hutang.index') }}"
-                class="group p-2.5 sm:p-3 rounded-xl bg-gradient-to-br from-amber-50 to-amber-100/70 dark:from-slate-900 dark:to-amber-950/40 border border-amber-200 dark:border-amber-500/30 hover:border-amber-500 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2.5">
+                class="group p-2 sm:p-3 rounded-xl bg-gradient-to-br from-amber-50 to-amber-100/70 dark:from-slate-900 dark:to-amber-950/40 border border-amber-200 dark:border-amber-500/30 hover:border-amber-500 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col sm:flex-row items-center sm:items-center text-center sm:text-left gap-1.5 sm:gap-2.5">
                 <div class="w-8 h-8 rounded-lg bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-sm shadow-amber-500/40 group-hover:scale-105 transition-transform">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -63,12 +50,12 @@
                 </div>
                 <div class="min-w-0">
                     <p class="text-xs font-bold text-slate-800 dark:text-white truncate group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">Bon BBM</p>
-                    <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">Catat / Pelunasan</p>
+                    <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate hidden sm:block">Catat / Pelunasan</p>
                 </div>
             </a>
 
             <a href="{{ route('petugas.sinkronisasi.index') }}"
-                class="group p-2.5 sm:p-3 rounded-xl bg-gradient-to-br from-cyan-50 to-cyan-100/70 dark:from-slate-900 dark:to-cyan-950/40 border border-cyan-200 dark:border-cyan-500/30 hover:border-cyan-500 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2.5">
+                class="group p-2 sm:p-3 rounded-xl bg-gradient-to-br from-cyan-50 to-cyan-100/70 dark:from-slate-900 dark:to-cyan-950/40 border border-cyan-200 dark:border-cyan-500/30 hover:border-cyan-500 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col sm:flex-row items-center sm:items-center text-center sm:text-left gap-1.5 sm:gap-2.5">
                 <div class="w-8 h-8 rounded-lg bg-cyan-600 text-white flex items-center justify-center shrink-0 shadow-sm shadow-cyan-500/40 group-hover:scale-105 transition-transform">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -76,12 +63,12 @@
                 </div>
                 <div class="min-w-0">
                     <p class="text-xs font-bold text-slate-800 dark:text-white truncate group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">Sinkronisasi Tangki</p>
-                    <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">Update Stok Fisik</p>
+                    <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate hidden sm:block">Update Stok Fisik</p>
                 </div>
             </a>
 
             <a href="{{ route('petugas.riwayat.index') }}"
-                class="group p-2.5 sm:p-3 rounded-xl bg-gradient-to-br from-emerald-50 to-emerald-100/70 dark:from-slate-900 dark:to-emerald-950/40 border border-emerald-200 dark:border-emerald-500/30 hover:border-emerald-500 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2.5">
+                class="group p-2 sm:p-3 rounded-xl bg-gradient-to-br from-emerald-50 to-emerald-100/70 dark:from-slate-900 dark:to-emerald-950/40 border border-emerald-200 dark:border-emerald-500/30 hover:border-emerald-500 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col sm:flex-row items-center sm:items-center text-center sm:text-left gap-1.5 sm:gap-2.5">
                 <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm shadow-emerald-500/40 group-hover:scale-105 transition-transform">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -89,7 +76,7 @@
                 </div>
                 <div class="min-w-0">
                     <p class="text-xs font-bold text-slate-800 dark:text-white truncate group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">Riwayat Penyaluran</p>
-                    <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">Laporan & Arsip</p>
+                    <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate hidden sm:block">Laporan & Arsip</p>
                 </div>
             </a>
         </div>
@@ -406,4 +393,132 @@
             </div>
         </div>
     </div>
+
+    <!-- Floating Draggable Icon Menu Transaksi BBM -->
+    <div x-data="draggableFab()" 
+         x-init="init()"
+         class="fixed z-50 select-none touch-none"
+         :style="`left: ${x}px; top: ${y}px; position: fixed;`"
+         style="display: none;"
+         x-show="isReady"
+         x-cloak>
+        
+        <button type="button"
+                @mousedown="startDrag($event)"
+                @touchstart="startDrag($event)"
+                @click="handleClick($event)"
+                title="Pelayanan Transaksi BBM (Ketuk untuk buka, geser untuk ubah posisi)"
+                class="relative group w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-tr from-indigo-600 via-indigo-700 to-cyan-500 shadow-2xl shadow-indigo-600/50 border-2 border-white/70 flex items-center justify-center text-white cursor-grab active:cursor-grabbing hover:scale-110 active:scale-95 transition-transform duration-150">
+            
+            <!-- Animated Pulse Ring Halo -->
+            <span class="absolute inset-0 rounded-full bg-cyan-400 animate-ping opacity-30 pointer-events-none"></span>
+
+            <!-- Icon Dispenser BBM / Petir Kilat -->
+            <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white filter drop-shadow-md pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+
+            <!-- Mini Pulse Indicator Badge -->
+            <span class="absolute top-0 right-0 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-white pointer-events-none shadow-sm animate-pulse"></span>
+        </button>
+    </div>
+
+    @push('scripts')
+    <script>
+        function draggableFab() {
+            return {
+                x: 0,
+                y: 0,
+                isReady: false,
+                isDragging: false,
+                startX: 0,
+                startY: 0,
+                initialX: 0,
+                initialY: 0,
+                hasMoved: false,
+                init() {
+                    const btnSize = window.innerWidth >= 640 ? 64 : 56;
+                    const savedX = localStorage.getItem('petugas_fab_x');
+                    const savedY = localStorage.getItem('petugas_fab_y');
+                    
+                    if (savedX !== null && savedY !== null) {
+                        this.x = Math.max(10, Math.min(window.innerWidth - btnSize - 10, parseInt(savedX)));
+                        this.y = Math.max(10, Math.min(window.innerHeight - btnSize - 10, parseInt(savedY)));
+                    } else {
+                        // Posisi Standar: Kanan Bawah Mengambang
+                        this.x = Math.max(10, window.innerWidth - btnSize - 20);
+                        this.y = Math.max(10, window.innerHeight - btnSize - 90);
+                    }
+                    this.isReady = true;
+
+                    window.addEventListener('resize', () => {
+                        const size = window.innerWidth >= 640 ? 64 : 56;
+                        this.x = Math.max(10, Math.min(window.innerWidth - size - 10, this.x));
+                        this.y = Math.max(10, Math.min(window.innerHeight - size - 10, this.y));
+                    });
+                },
+                startDrag(e) {
+                    this.isDragging = true;
+                    this.hasMoved = false;
+                    const clientX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+                    const clientY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
+                    this.startX = clientX;
+                    this.startY = clientY;
+                    this.initialX = this.x;
+                    this.initialY = this.y;
+
+                    const onMove = (moveEvent) => {
+                        if (!this.isDragging) return;
+                        const curX = moveEvent.type.startsWith('touch') ? moveEvent.touches[0].clientX : moveEvent.clientX;
+                        const curY = moveEvent.type.startsWith('touch') ? moveEvent.touches[0].clientY : moveEvent.clientY;
+                        const dx = curX - this.startX;
+                        const dy = curY - this.startY;
+
+                        if (Math.hypot(dx, dy) > 6) {
+                            this.hasMoved = true;
+                        }
+
+                        const btnSize = window.innerWidth >= 640 ? 64 : 56;
+                        const nextX = this.initialX + dx;
+                        const nextY = this.initialY + dy;
+
+                        this.x = Math.max(8, Math.min(window.innerWidth - btnSize - 8, nextX));
+                        this.y = Math.max(8, Math.min(window.innerHeight - btnSize - 8, nextY));
+
+                        if (moveEvent.cancelable && moveEvent.type.startsWith('touch')) {
+                            moveEvent.preventDefault();
+                        }
+                    };
+
+                    const onEnd = () => {
+                        if (!this.isDragging) return;
+                        this.isDragging = false;
+                        window.removeEventListener('mousemove', onMove);
+                        window.removeEventListener('mouseup', onEnd);
+                        window.removeEventListener('touchmove', onMove);
+                        window.removeEventListener('touchend', onEnd);
+
+                        if (this.hasMoved) {
+                            localStorage.setItem('petugas_fab_x', this.x);
+                            localStorage.setItem('petugas_fab_y', this.y);
+                        }
+                    };
+
+                    window.addEventListener('mousemove', onMove);
+                    window.addEventListener('mouseup', onEnd);
+                    window.addEventListener('touchmove', onMove, { passive: false });
+                    window.addEventListener('touchend', onEnd);
+                },
+                handleClick(e) {
+                    if (this.hasMoved) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        return;
+                    }
+                    window.location.href = "{{ route('petugas.transaksi.index') }}";
+                }
+            }
+        }
+    </script>
+    @endpush
 </x-app-layout>
