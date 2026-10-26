@@ -261,11 +261,9 @@
                             Kondisi Stok Fisik di Tangki Pendam
                         </h2>
                     </div>
-                    <a href="{{ route('petugas.sinkronisasi.index') }}" 
-                        class="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1">
-                        <span>Sinkronkan Stok</span>
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                    </a>
+                    <span class="text-[10px] sm:text-[11px] font-bold text-slate-500 dark:text-slate-400">
+                        Sinkronisasi: {{ $tankStock->created_at ? $tankStock->created_at->timezone('Asia/Makassar')->translatedFormat('d M Y, H:i') . ' WITA' : '-' }}
+                    </span>
                 </div>
 
                 <div class="grid grid-cols-2 sm:grid-cols-2 gap-2.5 sm:gap-4">
@@ -350,44 +348,6 @@
             </div>
         @endif
 
-        <!-- Penyaluran dari Stok Pusat (Super Admin) jika ada -->
-        @if($adminTransactions->isNotEmpty())
-        <div>
-            <div class="flex items-center gap-2 mb-2.5">
-                <div class="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></div>
-                <h2 class="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-white uppercase tracking-wider">
-                    Penyaluran dari Stok Pusat (Super Admin) Hari Ini
-                </h2>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-                @foreach($adminTransactions as $at)
-                    <div class="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-purple-700 via-indigo-800 to-slate-900 text-white p-3.5 sm:p-4 shadow-lg shadow-purple-500/20 border border-purple-400/30 hover:-translate-y-0.5 transition-all duration-300 group">
-                        <div class="absolute -top-10 -right-10 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500 pointer-events-none"></div>
-                        <div class="relative z-10 flex items-center justify-between">
-                            <div class="flex items-center gap-2.5">
-                                <div class="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center shrink-0">
-                                    <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <span class="text-[9px] font-black uppercase tracking-wider text-purple-200 bg-white/20 backdrop-blur-sm px-1.5 py-0.5 rounded border border-white/20">{{ $at->jenis_bbm }}</span>
-                                    <div class="flex items-baseline gap-1 mt-0.5">
-                                        <span class="text-xl sm:text-2xl font-black text-white tabular-nums">{{ number_format($at->total_liter, 0, ',', '.') }}</span>
-                                        <span class="text-xs font-bold text-purple-200">Liter</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-[11px] font-bold text-purple-200">{{ $at->total_transaksi }} Transaksi</span>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-        @endif
-
         <!-- Hutang / Bon Belum Dibayar Section (Colorful Cards) -->
         <div>
             <div class="flex items-center justify-between mb-2.5">
@@ -397,11 +357,9 @@
                         Total Bon BBM Belum Dibayar (Tunggakan)
                     </h2>
                 </div>
-                <a href="{{ route('petugas.hutang.index') }}" 
-                    class="text-[11px] font-bold text-rose-600 dark:text-rose-400 hover:underline flex items-center gap-1">
-                    <span>Kelola Semua Bon</span>
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                </a>
+                <span class="text-[10px] sm:text-[11px] font-bold text-slate-500 dark:text-slate-400">
+                    Status: Belum Lunas
+                </span>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
@@ -432,11 +390,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <a href="{{ route('petugas.hutang.index') }}" 
-                            class="px-2.5 py-1 rounded-lg bg-white/20 hover:bg-white/30 text-white text-[11px] font-bold border border-white/30 backdrop-blur-sm transition-colors">
-                            Rincian
-                        </a>
                     </div>
                 @empty
                     <div class="col-span-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl sm:rounded-2xl p-3.5 sm:p-4 flex items-center justify-center gap-2.5 shadow-md shadow-emerald-500/20 border border-emerald-400/30">
@@ -452,21 +405,5 @@
                 @endforelse
             </div>
         </div>
-    </div>
-
-    <!-- Floating Action Button (Mulai Transaksi Baru) -->
-    <div class="fixed bottom-6 right-4 sm:bottom-8 sm:right-8 z-50 pointer-events-auto">
-        <a href="{{ route('petugas.transaksi.index') }}" title="Mulai Transaksi Baru"
-            class="relative flex items-center justify-center w-12 h-12 sm:w-auto sm:px-4 sm:py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white rounded-full shadow-2xl shadow-indigo-600/50 hover:shadow-indigo-600/80 hover:-translate-y-1 hover:scale-105 active:scale-95 transition-all duration-300 group border border-white/20">
-            <svg class="w-6 h-6 text-white shrink-0 group-hover:rotate-12 transition-transform duration-300" fill="none"
-                stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-            <span class="text-xs font-black uppercase tracking-wider hidden sm:inline-block ml-2">Transaksi Baru</span>
-            <span class="absolute -top-1 -right-1 flex h-3.5 w-3.5">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500 border-2 border-white shadow-sm"></span>
-            </span>
-        </a>
     </div>
 </x-app-layout>

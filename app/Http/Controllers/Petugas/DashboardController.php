@@ -20,29 +20,12 @@ class DashboardController extends Controller
         $todayLiter = TransaksiBbm::whereDate('created_at', $todayWita)
             ->sum('liter');
 
-        // Breakdown per Jenis BBM
-        $literKendaraan = TransaksiBbm::whereDate('transaksi_bbms.created_at', $todayWita)
-            ->whereNotNull('kendaraan_id')
-            ->join('kendaraans', 'transaksi_bbms.kendaraan_id', '=', 'kendaraans.id')
-            ->select('kendaraans.jenis_bbm', DB::raw('SUM(transaksi_bbms.liter) as total'))
-            ->groupBy('kendaraans.jenis_bbm')
-            ->get();
-
-        $literPersonel = TransaksiBbm::whereDate('transaksi_bbms.created_at', $todayWita)
-            ->whereNotNull('personel_id')
-            ->join('personels', 'transaksi_bbms.personel_id', '=', 'personels.id')
-            ->select('personels.jenis_bbm', DB::raw('SUM(transaksi_bbms.liter) as total'))
-            ->groupBy('personels.jenis_bbm')
-            ->get();
-
-        // Gabungkan hasil
-        $breakdownBbm = [];
-        foreach ($literKendaraan as $item) {
-            $breakdownBbm[$item->jenis_bbm] = ($breakdownBbm[$item->jenis_bbm] ?? 0) + $item->total;
-        }
-        foreach ($literPersonel as $item) {
-            $breakdownBbm[$item->jenis_bbm] = ($breakdownBbm[$item->jenis_bbm] ?? 0) + $item->total;
-        }
+        // Breakdown per Jenis BBM langsung dari transaksi_bbms hari ini
+        $breakdownBbm = TransaksiBbm::whereDate('created_at', $todayWita)
+            ->select('jenis_bbm', DB::raw('SUM(liter) as total'))
+            ->groupBy('jenis_bbm')
+            ->pluck('total', 'jenis_bbm')
+            ->toArray();
 
         // Hutang Stats
         $hutangPerBbm = \App\Models\Hutang::where('status', 'belum_dibayar')
@@ -82,14 +65,7 @@ class DashboardController extends Controller
             $tankStock->sisa_pertamax = $tankStock->stok_awal_pertamax - $tankStock->pemakaian_pertamax;
             $tankStock->sisa_dex = $tankStock->stok_awal_dex - $tankStock->pemakaian_dex;
         }
-        $adminTransactions = TransaksiBbm::whereDate('created_at', $todayWita)
-            ->whereHas('petugas', function($q) {
-                $q->whereIn('role', ['super_admin', 'kasubbag', 'admin_satker']);
-            })
-            ->select('jenis_bbm', DB::raw('SUM(liter) as total_liter'), DB::raw('COUNT(*) as total_transaksi'))
-            ->groupBy('jenis_bbm')
-            ->get();
 
-        return view('petugas.dashboard', compact('todayTransactions', 'todayLiter', 'breakdownBbm', 'hutangPerBbm', 'tankStock', 'adminTransactions'));
+        return view('petugas.dashboard', compact('todayTransactions', 'todayLiter', 'breakdownBbm', 'hutangPerBbm', 'tankStock'));
     }
 }
