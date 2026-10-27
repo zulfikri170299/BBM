@@ -108,22 +108,23 @@
                 <!-- Stage Visual Container -->
                 <div class="relative w-72 h-64 flex items-center justify-center">
                     
-                    <!-- Glowing Shadow Stage (Tanpa Garis Lingkaran di Belakang) -->
-                    <div class="absolute -bottom-2 w-56 h-12 bg-blue-950/45 rounded-full blur-xl pointer-events-none"></div>
-
                     @php
                         $customHero = !empty($mobileHeroImage) ? $mobileHeroImage : \App\Models\Setting::where('key', 'mobile_hero_image')->value('value');
                         $heroFit = !empty($heroFit) ? $heroFit : (\App\Models\Setting::where('key', 'mobile_hero_fit')->value('value') ?? 'cover');
                         $heroZoom = !empty($heroZoom) ? $heroZoom : (\App\Models\Setting::where('key', 'mobile_hero_zoom')->value('value') ?? '100');
                         $heroBg = !empty($heroBg) ? $heroBg : (\App\Models\Setting::where('key', 'mobile_hero_bg')->value('value') ?? 'transparent');
+                        $heroShape = !empty($heroShape) ? $heroShape : (\App\Models\Setting::where('key', 'mobile_hero_shape')->value('value') ?? 'circle');
                     @endphp
+
+                    <!-- Glowing Shadow Stage (Menyesuaikan Bentuk Hero) -->
+                    <div class="absolute -bottom-2 {{ $heroShape === 'rectangle' ? 'w-72 h-10' : 'w-56 h-12' }} bg-blue-950/45 rounded-full blur-xl pointer-events-none"></div>
 
                     <!-- Container Gambar Hero Mobile (Hasil Upload Pengaturan Super Admin) -->
                     @if(!empty($customHero) && file_exists(public_path($customHero)))
-                        <div class="relative z-10 w-64 h-64 rounded-full overflow-hidden flex items-center justify-center shadow-[0_20px_50px_rgba(0,10,40,0.65)] border-2 border-white/35 transform hover:scale-105 transition-transform duration-500 animate-float"
-                             style="{{ !empty($heroBg) && $heroBg !== 'transparent' ? 'background-color: '.$heroBg.';' : '' }}">
+                        <div class="relative z-10 {{ $heroShape === 'rectangle' ? 'w-72 h-44 sm:w-80 sm:h-48 rounded-2xl' : 'w-64 h-64 rounded-full' }} overflow-hidden flex items-center justify-center transform hover:scale-105 transition-all duration-500 animate-float"
+                             style="{{ !empty($heroBg) && $heroBg !== 'transparent' ? 'background-color: '.$heroBg.';' : '' }} -webkit-mask-image: radial-gradient({{ $heroShape === 'rectangle' ? 'ellipse' : 'circle' }} at center, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 99%); mask-image: radial-gradient({{ $heroShape === 'rectangle' ? 'ellipse' : 'circle' }} at center, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 99%);">
                             <img src="/{{ ltrim($customHero, '/') }}" alt="SPBP Hero Banner" 
-                                 class="w-full h-full {{ $heroFit === 'contain' ? 'object-contain p-2' : 'object-cover' }} transition-all duration-300"
+                                 class="w-full h-full {{ $heroFit === 'contain' ? 'object-contain p-1' : 'object-cover' }} transition-all duration-300"
                                  style="{{ !empty($heroZoom) && $heroZoom != 100 ? 'transform: scale('.($heroZoom/100).');' : '' }}">
                         </div>
                     @else
@@ -268,10 +269,10 @@
         <!-- ========================================================
              2. DESKTOP VIEW (Modern Glass Card yang Elegan & Proporsional)
              ======================================================== -->
-        <div class="hidden md:flex bg-white/30 backdrop-blur-2xl rounded-[2rem] shadow-[0_25px_70px_rgba(2,10,35,0.45)] ring-1 ring-white/70 overflow-hidden flex-row w-full max-w-4xl mx-auto border border-white/40 transition-all duration-300">
+        <div class="hidden md:flex bg-white/30 backdrop-blur-2xl rounded-[2rem] shadow-[0_25px_70px_rgba(2,10,35,0.45)] ring-1 ring-white/70 overflow-hidden flex-row w-full max-w-4xl mx-auto border border-white/40 transition-all duration-300 md:min-h-[520px] lg:min-h-[560px]">
             
             <!-- Left Side: Branding, Panggung Hero & Identitas Institusi Presisi -->
-            <div class="w-1/2 bg-gradient-to-b from-[#4a0613]/85 via-[#081e54]/90 to-[#004fcf]/90 backdrop-blur-2xl text-white relative items-center justify-between overflow-hidden flex flex-col p-6 lg:p-7 text-center select-none border-r border-white/20">
+            <div class="w-1/2 bg-gradient-to-b from-[#4a0613]/85 via-[#081e54]/90 to-[#004fcf]/90 backdrop-blur-2xl text-white relative items-center justify-between overflow-hidden flex flex-col py-7 px-6 lg:py-8 lg:px-7 text-center select-none border-r border-white/20">
                 <!-- Ambient Dynamic Lights -->
                 <div class="absolute -top-14 left-1/2 -translate-x-1/2 w-full h-40 bg-gradient-to-b from-[#8a0a1e]/60 via-[#540815]/30 to-transparent blur-3xl pointer-events-none"></div>
                 <div class="absolute -top-10 -left-10 w-40 h-40 bg-rose-950/30 rounded-full blur-3xl pointer-events-none"></div>
@@ -279,61 +280,61 @@
 
                 <!-- Top Badge: Status Portal Resmi -->
                 <div class="relative z-10">
-                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/25 shadow-sm text-[10px] font-black tracking-wide text-cyan-200">
+                    <div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/25 shadow-sm text-[10px] font-black tracking-wide text-cyan-200">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]"></span>
                         <span class="tracking-widest uppercase">PORTAL RESMI BIRO LOGISTIK</span>
                     </div>
                 </div>
 
                 <!-- Center Content: Panggung Dome & Banner Hero -->
-                <div class="relative z-10 flex flex-col items-center max-w-sm my-auto py-1">
+                <div class="relative z-10 flex flex-col items-center max-w-sm my-auto py-2">
                     <!-- Stage Visual Container -->
-                    <div class="relative w-48 h-44 flex items-center justify-center my-0.5">
-                        <!-- Glowing Shadow Stage (Tanpa Garis Lingkaran di Belakang) -->
-                        <div class="absolute -bottom-1 w-40 h-8 bg-blue-950/60 rounded-full blur-lg pointer-events-none"></div>
+                    <div class="relative {{ $heroShape === 'rectangle' ? 'w-64 h-48' : 'w-52 h-48' }} flex items-center justify-center my-1.5 transition-all duration-300">
+                        <!-- Glowing Shadow Stage (Menyesuaikan Bentuk Hero) -->
+                        <div class="absolute -bottom-1 {{ $heroShape === 'rectangle' ? 'w-60' : 'w-44' }} h-8 bg-blue-950/60 rounded-full blur-lg pointer-events-none"></div>
 
                         @if(!empty($customHero) && file_exists(public_path($customHero)))
-                            <div class="relative z-10 w-40 h-40 rounded-full overflow-hidden flex items-center justify-center shadow-[0_15px_35px_rgba(0,10,40,0.65)] border border-white/35 transform hover:scale-105 transition-all duration-500 animate-float"
-                                 style="{{ !empty($heroBg) && $heroBg !== 'transparent' ? 'background-color: '.$heroBg.';' : '' }}">
+                            <div class="relative z-10 {{ $heroShape === 'rectangle' ? 'w-56 h-36 lg:w-60 lg:h-38 rounded-2xl' : 'w-44 h-44 rounded-full' }} overflow-hidden flex items-center justify-center transform hover:scale-105 transition-all duration-500 animate-float"
+                                 style="{{ !empty($heroBg) && $heroBg !== 'transparent' ? 'background-color: '.$heroBg.';' : '' }} -webkit-mask-image: radial-gradient({{ $heroShape === 'rectangle' ? 'ellipse' : 'circle' }} at center, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 99%); mask-image: radial-gradient({{ $heroShape === 'rectangle' ? 'ellipse' : 'circle' }} at center, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 99%);">
                                 <img src="/{{ ltrim($customHero, '/') }}" alt="SPBP Hero Banner" 
-                                     class="w-full h-full {{ $heroFit === 'contain' ? 'object-contain p-2' : 'object-cover' }} transition-all duration-300"
+                                     class="w-full h-full {{ $heroFit === 'contain' ? 'object-contain p-1' : 'object-cover' }} transition-all duration-300"
                                      style="{{ !empty($heroZoom) && $heroZoom != 100 ? 'transform: scale('.($heroZoom/100).');' : '' }}">
                             </div>
                         @else
-                            <div class="relative z-10 max-w-[180px] max-h-[160px] flex items-center justify-center p-1.5 transform hover:scale-105 transition-transform duration-500 animate-float">
-                                <img src="/rolog.png" onerror="this.onerror=null; this.src='/TRIBRATA.png';" alt="SPBP Logo" class="w-24 h-24 object-contain drop-shadow-[0_12px_28px_rgba(0,0,0,0.55)]">
+                            <div class="relative z-10 max-w-[200px] max-h-[180px] flex items-center justify-center p-1.5 transform hover:scale-105 transition-transform duration-500 animate-float">
+                                <img src="/rolog.png" onerror="this.onerror=null; this.src='/TRIBRATA.png';" alt="SPBP Logo" class="w-28 h-28 object-contain drop-shadow-[0_14px_30px_rgba(0,0,0,0.55)]">
                             </div>
                         @endif
                     </div>
 
-                    <h2 class="text-xl lg:text-2xl font-black text-white tracking-tight drop-shadow-md mt-1">SIM-BBM POLDA NTB</h2>
+                    <h2 class="text-xl lg:text-2xl font-black text-white tracking-tight drop-shadow-md mt-2">SIM-BBM POLDA NTB</h2>
                     
-                    <div class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-blue-500/25 border border-blue-400/35 text-cyan-200 text-[9px] font-extrabold uppercase tracking-widest mt-1 mb-1.5 shadow-sm">
+                    <div class="inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-blue-500/25 border border-blue-400/35 text-cyan-200 text-[9px] font-extrabold uppercase tracking-widest mt-1.5 mb-2 shadow-sm">
                         <span>Sistem Informasi Manajemen BBM</span>
                     </div>
 
-                    <p class="text-blue-100/90 text-[11px] leading-relaxed max-w-xs font-normal mb-1 drop-shadow">
+                    <p class="text-blue-100/90 text-[11.5px] leading-relaxed max-w-xs font-normal mb-2 drop-shadow">
                         Platform logistik terpadu untuk monitoring dan alokasi BBM kendaraan dinas secara akuntabel, transparan, dan presisi.
                     </p>
                 </div>
 
                 <!-- Bottom Features / Core Values: 3 Glass Pill Cards -->
-                <div class="relative z-10 grid grid-cols-3 gap-2 w-full max-w-xs pt-1">
-                    <div class="flex flex-col items-center justify-center p-1.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-md transition-all group shadow-sm">
-                        <div class="w-6 h-6 rounded-lg bg-blue-500/30 border border-blue-400/40 flex items-center justify-center text-cyan-300 mb-0.5 group-hover:scale-110 transition-transform">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                <div class="relative z-10 grid grid-cols-3 gap-2.5 w-full max-w-xs pt-2">
+                    <div class="flex flex-col items-center justify-center py-2 px-1.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-md transition-all group shadow-sm">
+                        <div class="w-7 h-7 rounded-lg bg-blue-500/30 border border-blue-400/40 flex items-center justify-center text-cyan-300 mb-1 group-hover:scale-110 transition-transform">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
                         </div>
                         <span class="text-[9px] text-white font-extrabold tracking-wide uppercase">Efisien</span>
                     </div>
-                    <div class="flex flex-col items-center justify-center p-1.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-md transition-all group shadow-sm">
-                        <div class="w-6 h-6 rounded-lg bg-emerald-500/30 border border-emerald-400/40 flex items-center justify-center text-emerald-300 mb-0.5 group-hover:scale-110 transition-transform">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    <div class="flex flex-col items-center justify-center py-2 px-1.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-md transition-all group shadow-sm">
+                        <div class="w-7 h-7 rounded-lg bg-emerald-500/30 border border-emerald-400/40 flex items-center justify-center text-emerald-300 mb-1 group-hover:scale-110 transition-transform">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                         </div>
                         <span class="text-[9px] text-white font-extrabold tracking-wide uppercase">Aman</span>
                     </div>
-                    <div class="flex flex-col items-center justify-center p-1.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-md transition-all group shadow-sm">
-                        <div class="w-6 h-6 rounded-lg bg-purple-500/30 border border-purple-400/40 flex items-center justify-center text-purple-300 mb-0.5 group-hover:scale-110 transition-transform">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                    <div class="flex flex-col items-center justify-center py-2 px-1.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-md transition-all group shadow-sm">
+                        <div class="w-7 h-7 rounded-lg bg-purple-500/30 border border-purple-400/40 flex items-center justify-center text-purple-300 mb-1 group-hover:scale-110 transition-transform">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                         </div>
                         <span class="text-[9px] text-white font-extrabold tracking-wide uppercase">Terukur</span>
                     </div>
@@ -341,14 +342,14 @@
             </div>
 
             <!-- Right Side: Desktop Fast Menu & Action Panel (Modern Frosted Glass Panel) -->
-            <div class="w-1/2 p-6 lg:p-7 relative bg-white/92 backdrop-blur-2xl text-slate-800 flex flex-col justify-between">
+            <div class="w-1/2 py-7 px-6 lg:py-8 lg:px-7 relative bg-white/92 backdrop-blur-2xl text-slate-800 flex flex-col justify-between">
                 
                 <!-- Header Atas: Logo & Badge Identitas SPBP NTB -->
-                <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                     <div class="flex items-center gap-2.5">
-                        <img src="/rolog.png" onerror="this.onerror=null; this.src='/TRIBRATA.png';" alt="Logo Biro Logistik Polda NTB" class="h-10 w-auto object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.15)] hover:scale-105 transition-transform duration-300 shrink-0">
+                        <img src="/rolog.png" onerror="this.onerror=null; this.src='/TRIBRATA.png';" alt="Logo Biro Logistik Polda NTB" class="h-11 w-auto object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.15)] hover:scale-105 transition-transform duration-300 shrink-0">
                         <div>
-                            <h3 class="text-lg font-black text-slate-900 leading-tight tracking-tight">Portal SIM-BBM</h3>
+                            <h3 class="text-lg lg:text-xl font-black text-slate-900 leading-tight tracking-tight">Portal SIM-BBM</h3>
                             <p class="text-[11px] text-slate-500 font-semibold">Biro Logistik Polda Nusa Tenggara Barat</p>
                         </div>
                     </div>
@@ -364,10 +365,10 @@
                 </div>
 
                 <!-- Bagian Tengah: Fast Menu & Keterangan Navigasi -->
-                <div class="my-auto py-3 space-y-3">
+                <div class="my-auto py-3.5 space-y-3.5">
                     
                     <!-- Fast Menu Card Container Modern -->
-                    <div class="bg-gradient-to-b from-slate-50/95 to-blue-50/50 rounded-2xl p-3.5 sm:p-4 border border-blue-100/90 shadow-[0_6px_20px_rgba(0,40,120,0.04)]">
+                    <div class="bg-gradient-to-b from-slate-50/95 to-blue-50/50 rounded-2xl p-4 border border-blue-100/90 shadow-[0_6px_20px_rgba(0,40,120,0.04)]">
                         <div class="flex items-center justify-between mb-2.5 px-0.5">
                             <div class="flex items-center gap-1.5">
                                 <span class="w-5 h-5 rounded-md bg-blue-600 text-white flex items-center justify-center shadow-sm">
@@ -384,7 +385,7 @@
                         <div class="grid grid-cols-5 gap-1.5 text-center pb-0.5">
                             <!-- 1. KENDARAAN -->
                             <button type="button" 
-                                    @click="openMenu('kendaraan', 'Menu Kendaraan Dinas')"
+                                     @click="openMenu('kendaraan', 'Menu Kendaraan Dinas')"
                                     class="flex flex-col items-center group active:scale-95 transition-all">
                                 <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-b from-blue-50 to-blue-100/80 border border-blue-200 text-blue-600 flex items-center justify-center shadow-sm group-hover:shadow-md group-hover:bg-blue-100 group-hover:-translate-y-0.5 transition-all duration-200">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -445,14 +446,14 @@
                         </div>
 
                         <!-- Slider Dots Indicator (Gaya Modern) -->
-                        <div class="flex items-center justify-center gap-1.5 mt-2">
+                        <div class="flex items-center justify-center gap-1.5 mt-2.5">
                             <span class="w-6 h-1 rounded-full bg-[#0062ff] shadow-sm shadow-blue-500/50"></span>
                             <span class="w-1.5 h-1 rounded-full bg-slate-300"></span>
                         </div>
                     </div>
 
                     <!-- Keterangan Petunjuk Masuk Berbentuk Info Strip -->
-                    <div class="flex items-center gap-2 px-3 py-2 rounded-xl bg-blue-50/70 border border-blue-100/90 text-slate-600 text-[11px] leading-relaxed">
+                    <div class="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-blue-50/70 border border-blue-100/90 text-slate-600 text-[11px] leading-relaxed">
                         <svg class="w-3.5 h-3.5 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
@@ -461,11 +462,11 @@
                 </div>
 
                 <!-- Bagian Bawah: Tombol Login, Shortcut Cek Saldo & Security Badge -->
-                <div class="space-y-2 pt-0.5">
+                <div class="space-y-2.5 pt-1">
                     <!-- Tombol Utama Login -->
                     <button type="button" 
                             @click="openMenu('', 'Masuk Akun SIM-BBM')"
-                            class="group w-full py-3 px-5 rounded-xl bg-gradient-to-r from-[#0055ff] via-[#0062ff] to-[#0047d4] hover:from-[#0047d4] hover:to-[#003cb0] text-white font-black text-xs uppercase tracking-wider shadow-[0_10px_24px_rgba(0,98,255,0.32)] hover:shadow-[0_14px_30px_rgba(0,98,255,0.45)] active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer">
+                            class="group w-full py-3.5 px-5 rounded-xl bg-gradient-to-r from-[#0055ff] via-[#0062ff] to-[#0047d4] hover:from-[#0047d4] hover:to-[#003cb0] text-white font-black text-xs uppercase tracking-wider shadow-[0_10px_24px_rgba(0,98,255,0.32)] hover:shadow-[0_14px_30px_rgba(0,98,255,0.45)] active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer">
                         <span>LOGIN KE SISTEM</span>
                         <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -474,7 +475,7 @@
 
                     <!-- Tombol Cek Saldo Tanpa Login -->
                     <a href="{{ route('cek-saldo.index') }}"
-                       class="group w-full py-2.5 px-4 bg-white hover:bg-blue-50/90 text-[#0055ff] border-2 border-blue-200/90 hover:border-blue-400 font-black rounded-xl transition-all duration-200 text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm active:scale-[0.99]">
+                       class="group w-full py-3 px-4 bg-white hover:bg-blue-50/90 text-[#0055ff] border-2 border-blue-200/90 hover:border-blue-400 font-black rounded-xl transition-all duration-200 text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm active:scale-[0.99]">
                         <svg class="w-3.5 h-3.5 text-[#0055ff] group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                                   d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
@@ -483,7 +484,7 @@
                     </a>
 
                     <!-- Security & Verifikasi Footer -->
-                    <div class="flex items-center justify-center gap-1.5 text-[9px] font-bold text-slate-500 tracking-wider uppercase pt-0.5">
+                    <div class="flex items-center justify-center gap-1.5 text-[9px] font-bold text-slate-500 tracking-wider uppercase pt-1.5">
                         <svg class="w-3 h-3 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM11 14a1 1 0 11-2 0 1 1 0 012 0zm0-7a1 1 0 10-2 0v3a1 1 0 102 0V7z" clip-rule="evenodd"/>
                         </svg>

@@ -23,7 +23,8 @@ class AuthenticatedSessionController extends Controller
         $heroFit = \App\Models\Setting::where('key', 'mobile_hero_fit')->value('value') ?? 'cover';
         $heroZoom = \App\Models\Setting::where('key', 'mobile_hero_zoom')->value('value') ?? '100';
         $heroBg = \App\Models\Setting::where('key', 'mobile_hero_bg')->value('value') ?? 'transparent';
-        return view('auth.login', compact('personelAccessControl', 'mobileHeroImage', 'heroFit', 'heroZoom', 'heroBg'));
+        $heroShape = \App\Models\Setting::where('key', 'mobile_hero_shape')->value('value') ?? 'circle';
+        return view('auth.login', compact('personelAccessControl', 'mobileHeroImage', 'heroFit', 'heroZoom', 'heroBg', 'heroShape'));
     }
 
     /**

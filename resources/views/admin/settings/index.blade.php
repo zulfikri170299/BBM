@@ -223,12 +223,19 @@
                             previewSrc: '{{ !empty($settings['mobile_hero_image']) && file_exists(public_path($settings['mobile_hero_image'])) ? asset($settings['mobile_hero_image']) : '' }}', 
                             removeCustomImage: false,
                             croppedBase64: '',
+                            shapeMode: '{{ $settings['mobile_hero_shape'] ?? 'circle' }}',
                             fitMode: '{{ $settings['mobile_hero_fit'] ?? 'cover' }}',
                             zoomLevel: {{ $settings['mobile_hero_zoom'] ?? 100 }},
                             bgColor: '{{ $settings['mobile_hero_bg'] ?? 'transparent' }}',
                             showCropperModal: false,
                             cropperInstance: null,
                             rawImageSrc: '',
+
+                            onShapeChange() {
+                                if (this.cropperInstance) {
+                                    this.cropperInstance.setAspectRatio(this.shapeMode === 'circle' ? 1 : 16 / 10);
+                                }
+                            },
 
                             fileChosen(event) {
                                 const file = event.target.files[0];
@@ -252,7 +259,7 @@
                                     }
                                     img.src = this.rawImageSrc;
                                     this.cropperInstance = new Cropper(img, {
-                                        aspectRatio: 1,
+                                        aspectRatio: this.shapeMode === 'circle' ? 1 : 16 / 10,
                                         viewMode: 1,
                                         dragMode: 'move',
                                         autoCropArea: 0.95,
@@ -288,9 +295,10 @@
 
                             applyCroppedImage() {
                                 if (!this.cropperInstance) return;
+                                const isCircle = this.shapeMode === 'circle';
                                 const canvas = this.cropperInstance.getCroppedCanvas({
-                                    width: 800,
-                                    height: 800,
+                                    width: isCircle ? 800 : 960,
+                                    height: isCircle ? 800 : 600,
                                     imageSmoothingEnabled: true,
                                     imageSmoothingQuality: 'high',
                                 });
@@ -326,68 +334,92 @@
                          }">
                         
                         <!-- Header Card -->
-                        <div class="px-5 py-4 bg-slate-50/70 dark:bg-slate-800/40 border-b border-slate-200 dark:border-white/10 flex items-center justify-between">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 bg-sky-50 dark:bg-sky-500/10 text-sky-600 dark:text-sky-400 rounded-xl flex items-center justify-center border border-sky-100 dark:border-sky-500/20">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="px-4 py-3 bg-slate-50/70 dark:bg-slate-800/40 border-b border-slate-200 dark:border-white/10 flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-7 h-7 bg-sky-50 dark:bg-sky-500/10 text-sky-600 dark:text-sky-400 rounded-lg flex items-center justify-center border border-sky-100 dark:border-sky-500/20">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">Gambar Hero Lingkaran Login</h3>
-                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Gambar bulat di tengah login mobile & desktop.</p>
+                                    <h3 class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">Gambar Hero Login (Mobile & Desktop)</h3>
+                                    <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Gambar bulat atau persegi panjang di tengah portal login.</p>
                                 </div>
                             </div>
-                            <span class="px-2.5 py-1 text-[10px] font-bold rounded-lg border"
+                            <span class="px-2 py-0.5 text-[9px] font-bold rounded-lg border"
                                   :class="(hasPreview || previewSrc) && !removeCustomImage ? 'bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400 border-sky-200 dark:border-sky-800/50' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-white/10'">
                                 <span x-text="(hasPreview || previewSrc) && !removeCustomImage ? 'Gambar Khusus' : 'Model Bawaan'"></span>
                             </span>
                         </div>
 
                         <!-- Card Body -->
-                        <div class="p-5 space-y-4">
+                        <div class="p-3.5 sm:p-4 space-y-3">
                             
-                            <!-- Visual Preview Lingkaran WYSIWYG & Tombol Aksi -->
-                            <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 p-4 rounded-2xl bg-gradient-to-b from-[#14081c]/70 via-[#07183d]/80 to-[#022b7a]/85 border border-white/15 text-white shadow-inner relative overflow-hidden">
+                            <!-- Visual Preview Hero WYSIWYG & Tombol Aksi -->
+                            <div class="flex flex-col sm:flex-row items-center sm:items-start gap-3 p-3 rounded-xl bg-gradient-to-b from-[#14081c]/70 via-[#07183d]/80 to-[#022b7a]/85 border border-white/15 text-white shadow-inner relative overflow-hidden">
                                 
-                                <!-- Lingkaran Hero Miniatur Preview -->
+                                <!-- Lingkaran / Persegi Panjang Hero Miniatur Preview -->
                                 <div class="relative shrink-0 flex items-center justify-center">
-                                    <div class="w-32 h-32 rounded-full overflow-hidden flex items-center justify-center shadow-[0_10px_25px_rgba(0,0,0,0.6)] border-2 border-white/40 relative"
+                                    <div :class="shapeMode === 'circle' ? 'w-24 h-24 sm:w-28 sm:h-28 rounded-full' : 'w-36 h-24 sm:w-40 sm:h-24 rounded-xl'"
+                                         class="overflow-hidden flex items-center justify-center border border-white/20 shadow-md relative transition-all duration-300"
                                          :style="bgColor !== 'transparent' ? 'background-color: ' + bgColor + ';' : ''">
                                         
                                         <!-- Template Gambar Kustom -->
                                         <template x-if="(hasPreview || previewSrc) && !removeCustomImage">
                                             <img :src="previewSrc" alt="Preview Hero" 
                                                  class="w-full h-full transition-all duration-200"
-                                                 :class="fitMode === 'contain' ? 'object-contain p-1.5' : 'object-cover'"
+                                                 :class="fitMode === 'contain' ? 'object-contain p-1' : 'object-cover'"
                                                  :style="'transform: scale(' + (zoomLevel / 100) + ');'">
                                         </template>
 
                                         <!-- Template Model Bawaan Logo Polda -->
                                         <template x-if="(!hasPreview && !previewSrc) || removeCustomImage">
                                             <div class="w-full h-full flex items-center justify-center p-2 bg-[#022b7a]/40">
-                                                <img src="/rolog.png" onerror="this.onerror=null; this.src='/TRIBRATA.png';" alt="Default Logo" class="w-20 h-20 object-contain drop-shadow">
+                                                <img src="/rolog.png" onerror="this.onerror=null; this.src='/TRIBRATA.png';" alt="Default Logo" class="w-16 h-16 object-contain drop-shadow">
                                             </div>
                                         </template>
                                     </div>
-
-                                    <div class="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full bg-black/60 border border-white/20 text-[9px] font-bold text-cyan-300 backdrop-blur-sm pointer-events-none">
-                                        Bulat Pas
-                                    </div>
                                 </div>
 
-                                <!-- Keterangan & Tombol Unggah -->
+                                <!-- Keterangan, Switch Model & Tombol Unggah -->
                                 <div class="flex-1 space-y-2 text-center sm:text-left">
                                     <div>
-                                        <h4 class="text-xs font-bold text-white tracking-wide">Status Tampilan:
-                                            <span class="text-cyan-300 font-black" x-text="(hasPreview || previewSrc) && !removeCustomImage ? 'Gambar Khusus Aktif' : 'Model Bawaan (Logo Polda)'"></span>
-                                        </h4>
-                                        <p class="text-[11px] text-slate-300 mt-0.5 leading-relaxed">
-                                            Format: <strong>PNG/WEBP/JPG</strong>. Disarankan lingkaran 500×500 px.
+                                        <div class="flex flex-wrap items-center justify-center sm:justify-start gap-1.5">
+                                            <h4 class="text-xs font-bold text-white tracking-wide">Status Tampilan:
+                                                <span class="text-cyan-300 font-black" x-text="(hasPreview || previewSrc) && !removeCustomImage ? 'Gambar Khusus Aktif' : 'Model Bawaan (Logo Polda)'"></span>
+                                            </h4>
+                                            <span class="px-1.5 py-0.5 rounded-md bg-white/10 border border-white/20 text-[9px] font-bold text-cyan-200"
+                                                  x-text="shapeMode === 'circle' ? 'Bulat Pas' : 'Persegi Panjang'"></span>
+                                        </div>
+                                        <p class="text-[10px] text-slate-300 mt-0.5 leading-relaxed">
+                                            Format: <strong>PNG/WEBP/JPG</strong>. Rekomendasi: 500×500 px (Bulat) / 800×500 px (Persegi).
                                         </p>
                                     </div>
 
-                                    <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-1">
+                                    <!-- Switch Model Bentuk: Lingkaran vs Persegi Panjang (Bebas Focus Scroll Bug) -->
+                                    <div class="flex flex-col sm:flex-row sm:items-center gap-1.5 pt-0.5">
+                                        <span class="text-[10px] font-bold text-slate-300 shrink-0">Bentuk:</span>
+                                        <div class="inline-flex p-0.5 rounded-lg bg-black/40 border border-white/15 backdrop-blur-sm">
+                                            <button type="button" 
+                                                    @click="shapeMode = 'circle'; onShapeChange()"
+                                                    class="px-2.5 py-1 rounded-md text-[11px] font-bold transition flex items-center gap-1 select-none"
+                                                    :class="shapeMode === 'circle' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-300 hover:text-white'">
+                                                <span class="w-2 h-2 rounded-full border border-current"></span>
+                                                <span>Lingkaran</span>
+                                            </button>
+                                            <button type="button" 
+                                                    @click="shapeMode = 'rectangle'; onShapeChange()"
+                                                    class="px-2.5 py-1 rounded-md text-[11px] font-bold transition flex items-center gap-1 select-none"
+                                                    :class="shapeMode === 'rectangle' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-300 hover:text-white'">
+                                                <span class="w-2.5 h-1.5 rounded-[1px] border border-current"></span>
+                                                <span>Persegi Panjang</span>
+                                            </button>
+                                            <input type="hidden" name="mobile_hero_shape" :value="shapeMode">
+                                        </div>
+                                    </div>
+
+                                    <!-- Tombol Aksi Upload / Crop / Reset -->
+                                    <div class="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 pt-0.5">
                                         <input type="file" 
                                                name="mobile_hero_image" 
                                                x-ref="fileInput"
@@ -397,7 +429,7 @@
                                                id="hero-file-input">
                                         
                                         <label for="hero-file-input" 
-                                               class="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-900 rounded-xl text-xs font-bold shadow-sm active:scale-95 transition">
+                                               class="cursor-pointer inline-flex items-center gap-1 px-2.5 py-1.5 bg-white hover:bg-slate-100 text-slate-900 rounded-lg text-[11px] font-bold shadow-sm active:scale-95 transition">
                                             <svg class="w-3.5 h-3.5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                                             </svg>
@@ -407,18 +439,18 @@
                                         <button type="button" 
                                                 x-show="(hasPreview || previewSrc) && !removeCustomImage"
                                                 @click="openReCrop()"
-                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-500/25 hover:bg-sky-500/40 text-cyan-200 border border-cyan-400/30 rounded-xl text-xs font-bold transition">
-                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-sky-500/25 hover:bg-sky-500/40 text-cyan-200 border border-cyan-400/30 rounded-lg text-[11px] font-bold transition">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
                                             </svg>
-                                            <span>Crop Bulat</span>
+                                            <span x-text="shapeMode === 'circle' ? 'Crop Bulat' : 'Crop Persegi'"></span>
                                         </button>
 
                                         <button type="button" 
                                                 x-show="(hasPreview || previewSrc) && !removeCustomImage"
                                                 @click="resetImage()"
-                                                class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-rose-500/20 hover:bg-rose-500/35 text-rose-200 border border-rose-400/30 rounded-xl text-xs font-bold transition">
-                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                class="inline-flex items-center gap-1 px-2 py-1.5 bg-rose-500/20 hover:bg-rose-500/35 text-rose-200 border border-rose-400/30 rounded-lg text-[11px] font-bold transition">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                             </svg>
                                             <span>Reset</span>
@@ -430,38 +462,41 @@
                                 </div>
                             </div>
 
-                            <!-- Panel 3 Pengaturan Tampilan Lingkaran (Fit, Zoom & Warna Background) -->
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                            <!-- Panel 3 Pengaturan Tampilan Lingkaran / Persegi Panjang (Fit, Zoom & Warna Background) -->
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-0.5">
                                 
-                                <!-- 1. Mode Pas (Fit Mode) -->
-                                <div class="p-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/30 space-y-1.5">
-                                    <label class="block text-[11px] font-bold text-slate-800 dark:text-white uppercase tracking-wider">
+                                <!-- 1. Mode Pas (Fit Mode - Bebas Focus Scroll Bug) -->
+                                <div class="p-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/30 space-y-1">
+                                    <label class="block text-[10px] font-bold text-slate-800 dark:text-white uppercase tracking-wider">
                                         1. Mode Pas
                                     </label>
-                                    <div class="grid grid-cols-2 gap-1.5">
-                                        <label class="cursor-pointer flex flex-col items-center justify-center p-1.5 rounded-lg border text-center transition select-none"
-                                               :class="fitMode === 'cover' ? 'border-indigo-600 bg-indigo-50/80 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 font-bold' : 'border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'">
-                                            <input type="radio" name="mobile_hero_fit" value="cover" x-model="fitMode" class="sr-only">
+                                    <div class="grid grid-cols-2 gap-1">
+                                        <button type="button" 
+                                                @click="fitMode = 'cover'"
+                                                class="flex flex-col items-center justify-center p-1 rounded-lg border text-center transition select-none"
+                                                :class="fitMode === 'cover' ? 'border-indigo-600 bg-indigo-50/80 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 font-bold' : 'border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'">
                                             <span class="text-xs">Penuh</span>
-                                            <span class="text-[9px] text-slate-400 font-normal">Cover</span>
-                                        </label>
+                                            <span class="text-[8px] text-slate-400 font-normal">Cover</span>
+                                        </button>
 
-                                        <label class="cursor-pointer flex flex-col items-center justify-center p-1.5 rounded-lg border text-center transition select-none"
-                                               :class="fitMode === 'contain' ? 'border-indigo-600 bg-indigo-50/80 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 font-bold' : 'border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'">
-                                            <input type="radio" name="mobile_hero_fit" value="contain" x-model="fitMode" class="sr-only">
+                                        <button type="button" 
+                                                @click="fitMode = 'contain'"
+                                                class="flex flex-col items-center justify-center p-1 rounded-lg border text-center transition select-none"
+                                                :class="fitMode === 'contain' ? 'border-indigo-600 bg-indigo-50/80 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 font-bold' : 'border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'">
                                             <span class="text-xs">Utuh</span>
-                                            <span class="text-[9px] text-slate-400 font-normal">Contain</span>
-                                        </label>
+                                            <span class="text-[8px] text-slate-400 font-normal">Contain</span>
+                                        </button>
+                                        <input type="hidden" name="mobile_hero_fit" :value="fitMode">
                                     </div>
                                 </div>
 
                                 <!-- 2. Skala Perbesaran (Zoom Level Slider) -->
-                                <div class="p-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/30 space-y-1.5">
+                                <div class="p-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/30 space-y-1">
                                     <div class="flex items-center justify-between">
-                                        <label class="block text-[11px] font-bold text-slate-800 dark:text-white uppercase tracking-wider">
+                                        <label class="block text-[10px] font-bold text-slate-800 dark:text-white uppercase tracking-wider">
                                             2. Skala Zoom
                                         </label>
-                                        <span class="text-[11px] font-black text-indigo-600 dark:text-indigo-400" x-text="zoomLevel + '%'"></span>
+                                        <span class="text-[10px] font-black text-indigo-600 dark:text-indigo-400" x-text="zoomLevel + '%'"></span>
                                     </div>
                                     <input type="range" 
                                            name="mobile_hero_zoom" 
@@ -469,51 +504,60 @@
                                            max="150" 
                                            step="5" 
                                            x-model="zoomLevel" 
-                                           class="w-full accent-indigo-600 cursor-pointer h-1.5 pt-2">
-                                    <div class="flex justify-between text-[9px] text-slate-400 pt-1">
+                                           class="w-full accent-indigo-600 cursor-pointer h-1.5 pt-1">
+                                    <div class="flex justify-between text-[8px] text-slate-400 pt-0.5">
                                         <span>50%</span>
                                         <button type="button" @click="zoomLevel = 100" class="text-indigo-500 hover:underline">100%</button>
                                         <span>150%</span>
                                     </div>
                                 </div>
 
-                                <!-- 3. Warna Latar Lingkaran (Background) -->
-                                <div class="p-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/30 space-y-1.5">
-                                    <label class="block text-[11px] font-bold text-slate-800 dark:text-white uppercase tracking-wider">
+                                <!-- 3. Warna Latar (Background - Bebas Focus Scroll Bug) -->
+                                <div class="p-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/30 space-y-1">
+                                    <label class="block text-[10px] font-bold text-slate-800 dark:text-white uppercase tracking-wider">
                                         3. Warna Latar
                                     </label>
-                                    <div class="flex items-center gap-1.5 pt-1">
+                                    <div class="flex items-center gap-1.5 pt-0.5">
                                         <!-- Transparan -->
-                                        <label class="cursor-pointer relative" title="Transparan">
-                                            <input type="radio" name="mobile_hero_bg" value="transparent" x-model="bgColor" class="sr-only">
-                                            <div class="w-6 h-6 rounded-full border-2 transition-all flex items-center justify-center"
-                                                 :class="bgColor === 'transparent' ? 'ring-2 ring-indigo-500 ring-offset-2 border-indigo-600 bg-white' : 'border-slate-300 bg-slate-200'">
-                                                <svg class="w-3 h-3 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>
+                                        <button type="button" 
+                                                @click="bgColor = 'transparent'"
+                                                class="relative focus:outline-none" 
+                                                title="Transparan">
+                                            <div class="w-5 h-5 rounded-full border-2 transition-all flex items-center justify-center"
+                                                 :class="bgColor === 'transparent' ? 'ring-2 ring-indigo-500 ring-offset-1 border-indigo-600 bg-white' : 'border-slate-300 bg-slate-200'">
+                                                <svg class="w-2.5 h-2.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>
                                             </div>
-                                        </label>
+                                        </button>
 
                                         <!-- Hitam Gelap -->
-                                        <label class="cursor-pointer relative" title="Hitam Gelap">
-                                            <input type="radio" name="mobile_hero_bg" value="#0a0a0c" x-model="bgColor" class="sr-only">
-                                            <div class="w-6 h-6 rounded-full bg-[#0a0a0c] border-2 transition-all"
-                                                 :class="bgColor === '#0a0a0c' ? 'ring-2 ring-indigo-500 ring-offset-2 border-white' : 'border-transparent'"></div>
-                                        </label>
+                                        <button type="button" 
+                                                @click="bgColor = '#0a0a0c'"
+                                                class="relative focus:outline-none" 
+                                                title="Hitam Gelap">
+                                            <div class="w-5 h-5 rounded-full bg-[#0a0a0c] border-2 transition-all"
+                                                 :class="bgColor === '#0a0a0c' ? 'ring-2 ring-indigo-500 ring-offset-1 border-white' : 'border-transparent'"></div>
+                                        </button>
 
                                         <!-- Biru Polri -->
-                                        <label class="cursor-pointer relative" title="Biru Polri">
-                                            <input type="radio" name="mobile_hero_bg" value="#0e2c7a" x-model="bgColor" class="sr-only">
-                                            <div class="w-6 h-6 rounded-full bg-[#0e2c7a] border-2 transition-all"
-                                                 :class="bgColor === '#0e2c7a' ? 'ring-2 ring-indigo-500 ring-offset-2 border-white' : 'border-transparent'"></div>
-                                        </label>
+                                        <button type="button" 
+                                                @click="bgColor = '#0e2c7a'"
+                                                class="relative focus:outline-none" 
+                                                title="Biru Polri">
+                                            <div class="w-5 h-5 rounded-full bg-[#0e2c7a] border-2 transition-all"
+                                                 :class="bgColor === '#0e2c7a' ? 'ring-2 ring-indigo-500 ring-offset-1 border-white' : 'border-transparent'"></div>
+                                        </button>
 
                                         <!-- Biru SPBP Cerah -->
-                                        <label class="cursor-pointer relative" title="Biru SPBP">
-                                            <input type="radio" name="mobile_hero_bg" value="#004fcf" x-model="bgColor" class="sr-only">
-                                            <div class="w-6 h-6 rounded-full bg-[#004fcf] border-2 transition-all"
-                                                 :class="bgColor === '#004fcf' ? 'ring-2 ring-indigo-500 ring-offset-2 border-white' : 'border-transparent'"></div>
-                                        </label>
+                                        <button type="button" 
+                                                @click="bgColor = '#004fcf'"
+                                                class="relative focus:outline-none" 
+                                                title="Biru SPBP">
+                                            <div class="w-5 h-5 rounded-full bg-[#004fcf] border-2 transition-all"
+                                                 :class="bgColor === '#004fcf' ? 'ring-2 ring-indigo-500 ring-offset-1 border-white' : 'border-transparent'"></div>
+                                        </button>
+                                        <input type="hidden" name="mobile_hero_bg" :value="bgColor">
                                     </div>
-                                    <p class="text-[9px] text-slate-400">Efektif saat mode Utuh / transparan.</p>
+                                    <p class="text-[8px] text-slate-400">Efektif saat mode Utuh / transparan.</p>
                                 </div>
 
                             </div>
@@ -548,8 +592,8 @@
                                             </svg>
                                         </div>
                                         <div>
-                                            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Sesuaikan Potongan Lingkaran</h3>
-                                            <p class="text-[11px] text-slate-500 dark:text-slate-400">Geser & zoom gambar agar pas di dalam lingkaran login.</p>
+                                            <h3 class="text-sm font-bold text-slate-900 dark:text-white" x-text="shapeMode === 'circle' ? 'Sesuaikan Potongan Lingkaran' : 'Sesuaikan Potongan Persegi Panjang'"></h3>
+                                            <p class="text-[11px] text-slate-500 dark:text-slate-400" x-text="shapeMode === 'circle' ? 'Geser & zoom gambar agar pas di dalam lingkaran login.' : 'Geser & zoom gambar agar pas di dalam bingkai persegi panjang login.'"></p>
                                         </div>
                                     </div>
                                     <button type="button" @click="closeCropper()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-white transition">
@@ -558,11 +602,11 @@
                                 </div>
 
                                 <div class="p-4 bg-slate-950 flex items-center justify-center relative overflow-hidden" style="min-height: 340px; max-height: 420px;">
-                                    <div class="circular-cropper w-full h-full max-h-[380px] flex items-center justify-center">
+                                    <div :class="shapeMode === 'circle' ? 'circular-cropper' : 'rectangular-cropper'" class="w-full h-full max-h-[380px] flex items-center justify-center">
                                         <img id="cropper-target-image" src="" alt="Crop Source" class="max-w-full max-h-full block">
                                     </div>
-                                    <div class="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-black/60 backdrop-blur-md rounded-full text-[10px] font-bold text-cyan-200 border border-white/20 pointer-events-none">
-                                        Bagian di dalam lingkaran akan tampil di Login
+                                    <div class="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-black/60 backdrop-blur-md rounded-full text-[10px] font-bold text-cyan-200 border border-white/20 pointer-events-none"
+                                         x-text="shapeMode === 'circle' ? 'Bagian di dalam lingkaran akan tampil di Login' : 'Bagian di dalam persegi panjang akan tampil di Login'">
                                     </div>
                                 </div>
 
@@ -591,7 +635,7 @@
                                         </button>
                                         <button type="button" @click="applyCroppedImage()" class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white rounded-xl text-xs font-bold shadow-md shadow-indigo-600/30 active:scale-95 transition flex items-center gap-1.5">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                            <span>Terapkan ke Lingkaran</span>
+                                            <span x-text="shapeMode === 'circle' ? 'Terapkan ke Lingkaran' : 'Terapkan ke Persegi Panjang'"></span>
                                         </button>
                                     </div>
                                 </div>
@@ -638,36 +682,36 @@
                          }">
                         
                         <!-- Header Card -->
-                        <div class="px-5 py-4 bg-slate-50/70 dark:bg-slate-800/40 border-b border-slate-200 dark:border-white/10 flex items-center justify-between">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center border border-blue-100 dark:border-blue-500/20">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="px-4 py-3 bg-slate-50/70 dark:bg-slate-800/40 border-b border-slate-200 dark:border-white/10 flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-7 h-7 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center border border-blue-100 dark:border-blue-500/20">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">Gambar Background Gedung (Desktop)</h3>
-                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Latar belakang gedung halaman login komputer.</p>
+                                    <h3 class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">Gambar Background Gedung (Desktop)</h3>
+                                    <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Latar belakang gedung halaman login komputer.</p>
                                 </div>
                             </div>
-                            <span class="px-2.5 py-1 text-[10px] font-bold rounded-lg border"
+                            <span class="px-2 py-0.5 text-[9px] font-bold rounded-lg border"
                                   :class="hasCustomBg && !removeCustomBg ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800/50' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-white/10'">
                                 <span x-text="hasCustomBg && !removeCustomBg ? 'Gedung Kustom' : 'Gedung Bawaan'"></span>
                             </span>
                         </div>
 
                         <!-- Card Body -->
-                        <div class="p-5 space-y-4">
+                        <div class="p-3.5 sm:p-4 space-y-3">
                             
                             <!-- Visual Preview Miniatur Layar Desktop 16:9 Live Interaktif -->
-                            <div class="space-y-1.5">
+                            <div class="space-y-1">
                                 <div class="flex items-center justify-between text-xs">
-                                    <span class="font-bold text-slate-700 dark:text-slate-300">Live Preview Background Desktop</span>
-                                    <span class="text-[11px] text-slate-400 font-medium">Simulasi Layar 16:9</span>
+                                    <span class="font-bold text-slate-700 dark:text-slate-300 text-[11px]">Live Preview Background Desktop</span>
+                                    <span class="text-[10px] text-slate-400 font-medium">Simulasi Layar 16:9</span>
                                 </div>
 
                                 <!-- Desktop Screen Mockup Frame -->
-                                <div class="relative w-full h-44 sm:h-48 rounded-2xl overflow-hidden border-2 border-slate-300 dark:border-slate-700 shadow-md group bg-slate-950">
+                                <div class="relative w-full h-32 sm:h-36 rounded-xl overflow-hidden border-2 border-slate-300 dark:border-slate-700 shadow-md group bg-slate-950">
                                     <!-- Background Image with dynamic position and zoom -->
                                     <img :src="previewSrc" alt="Preview Background Gedung" 
                                          class="w-full h-full object-cover transition-all duration-300 origin-center"
@@ -678,50 +722,50 @@
                                          :style="'opacity: ' + (overlayLevel / 100) + ';'"></div>
 
                                     <!-- Miniatur Kartu Login di Depan (Proporsi Akurat 1:1 dengan Halaman Login Asli) -->
-                                    <div class="absolute inset-0 flex items-center justify-center p-3 pointer-events-none">
-                                        <div class="w-56 h-28 rounded-2xl bg-white/30 backdrop-blur-md border border-white/40 shadow-xl flex items-center justify-between p-2 gap-2">
+                                    <div class="absolute inset-0 flex items-center justify-center p-2 pointer-events-none">
+                                        <div class="w-48 h-24 rounded-xl bg-white/30 backdrop-blur-md border border-white/40 shadow-xl flex items-center justify-between p-1.5 gap-1.5">
                                             <!-- Sisi Kiri: Branding Miniatur -->
-                                            <div class="w-1/2 h-full rounded-xl bg-gradient-to-b from-[#4a0613]/90 via-[#081e54]/90 to-[#004fcf]/90 flex flex-col items-center justify-between text-center p-1.5 border-r border-white/20">
-                                                <div class="px-1.5 py-0.5 rounded-full bg-white/10 border border-white/20 text-[5px] text-cyan-200 font-bold uppercase tracking-widest">
+                                            <div class="w-1/2 h-full rounded-lg bg-gradient-to-b from-[#4a0613]/90 via-[#081e54]/90 to-[#004fcf]/90 flex flex-col items-center justify-between text-center p-1 border-r border-white/20">
+                                                <div class="px-1 py-0.5 rounded-full bg-white/10 border border-white/20 text-[5px] text-cyan-200 font-bold uppercase tracking-widest leading-none">
                                                     PORTAL RESMI
                                                 </div>
-                                                <div class="w-7 h-7 rounded-full bg-white/20 border border-white/40 flex items-center justify-center shadow-sm">
-                                                    <div class="w-5 h-5 rounded-full bg-amber-400/30 border border-amber-300/40"></div>
+                                                <div class="w-6 h-6 rounded-full bg-white/20 border border-white/40 flex items-center justify-center shadow-sm">
+                                                    <div class="w-4 h-4 rounded-full bg-amber-400/30 border border-amber-300/40"></div>
                                                 </div>
                                                 <div>
-                                                    <div class="text-[7px] font-black text-white leading-none">SIM-BBM</div>
-                                                    <div class="text-[5px] text-blue-200">POLDA NTB</div>
+                                                    <div class="text-[6.5px] font-black text-white leading-none">SIM-BBM</div>
+                                                    <div class="text-[4.5px] text-blue-200 leading-none">POLDA NTB</div>
                                                 </div>
                                             </div>
                                             <!-- Sisi Kanan: Action Panel Miniatur -->
-                                            <div class="w-1/2 h-full rounded-xl bg-white/95 p-1.5 flex flex-col justify-between">
+                                            <div class="w-1/2 h-full rounded-lg bg-white/95 p-1 flex flex-col justify-between">
                                                 <div class="flex items-center gap-1">
-                                                    <div class="w-2.5 h-2.5 rounded bg-blue-600 shrink-0"></div>
-                                                    <div class="h-1 w-10 bg-slate-300 rounded"></div>
+                                                    <div class="w-2 h-2 rounded bg-blue-600 shrink-0"></div>
+                                                    <div class="h-1 w-8 bg-slate-300 rounded"></div>
                                                 </div>
                                                 <div class="grid grid-cols-5 gap-0.5 my-0.5">
-                                                    <div class="h-2 rounded bg-blue-100"></div>
-                                                    <div class="h-2 rounded bg-amber-100"></div>
-                                                    <div class="h-2 rounded bg-emerald-100"></div>
-                                                    <div class="h-2 rounded bg-cyan-100"></div>
-                                                    <div class="h-2 rounded bg-purple-100"></div>
+                                                    <div class="h-1.5 rounded bg-blue-100"></div>
+                                                    <div class="h-1.5 rounded bg-amber-100"></div>
+                                                    <div class="h-1.5 rounded bg-emerald-100"></div>
+                                                    <div class="h-1.5 rounded bg-cyan-100"></div>
+                                                    <div class="h-1.5 rounded bg-purple-100"></div>
                                                 </div>
-                                                <div class="h-3 w-full bg-blue-600 rounded flex items-center justify-center text-[5px] font-black text-white">LOGIN KE SISTEM</div>
+                                                <div class="h-2.5 w-full bg-blue-600 rounded flex items-center justify-center text-[5px] font-black text-white">LOGIN KE SISTEM</div>
                                                 <div class="h-2 w-full bg-slate-100 rounded border border-slate-200 flex items-center justify-center text-[4px] text-blue-600 font-bold">CEK SALDO</div>
                                             </div>
                                         </div>
                                     </div>
 
                                     <!-- Badge Info Posisi Aktif -->
-                                    <div class="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-md text-[9px] text-white/90 font-medium border border-white/20 flex items-center gap-1 pointer-events-none">
+                                    <div class="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 rounded bg-black/60 backdrop-blur-md text-[8px] text-white/90 font-medium border border-white/20 flex items-center gap-1 pointer-events-none">
                                         <span>Posisi Y: <span x-text="posY + '%'"></span> | Zoom: <span x-text="zoomLevel + '%'"></span></span>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Tombol Aksi Upload & Reset -->
-                            <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
-                                <div class="flex flex-wrap items-center gap-2">
+                            <div class="flex flex-wrap items-center justify-between gap-1.5 pt-0.5">
+                                <div class="flex flex-wrap items-center gap-1.5">
                                     <input type="file" 
                                            name="login_background_image" 
                                            x-ref="bgFileInput"
@@ -731,7 +775,7 @@
                                            id="login-bg-file-input">
                                     
                                     <label for="login-bg-file-input" 
-                                           class="cursor-pointer inline-flex items-center gap-1.5 px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:hover:bg-indigo-900/60 dark:text-indigo-300 rounded-xl text-xs font-bold border border-indigo-200 dark:border-indigo-700/50 shadow-sm active:scale-95 transition">
+                                           class="cursor-pointer inline-flex items-center gap-1 px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:hover:bg-indigo-900/60 dark:text-indigo-300 rounded-lg text-[11px] font-bold border border-indigo-200 dark:border-indigo-700/50 shadow-sm active:scale-95 transition">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                         </svg>
@@ -741,8 +785,8 @@
                                     <button type="button" 
                                             x-show="hasCustomBg && !removeCustomBg"
                                             @click="resetToDefault()"
-                                            class="inline-flex items-center gap-1 px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:hover:bg-rose-900/50 dark:text-rose-300 rounded-xl text-xs font-bold border border-rose-200 dark:border-rose-700/50 transition">
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            class="inline-flex items-center gap-1 px-2 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:hover:bg-rose-900/50 dark:text-rose-300 rounded-lg text-[11px] font-bold border border-rose-200 dark:border-rose-700/50 transition">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                         </svg>
                                         <span>Bawaan</span>
@@ -751,32 +795,32 @@
                                     <input type="hidden" name="remove_login_background_image" :value="removeCustomBg ? '1' : '0'">
                                 </div>
 
-                                <span class="text-[10px] text-slate-400">
+                                <span class="text-[9px] text-slate-400">
                                     JPG/PNG/WEBP (Maks 8MB)
                                 </span>
                             </div>
 
                             <!-- Panel 3 Pengaturan Tampilan Gedung (Posisi, Zoom, dan Kegelapan) -->
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-0.5">
                                 
                                 <!-- 1. Posisi Vertikal Y (Geser Atas / Tengah / Bawah) -->
-                                <div class="p-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/30 space-y-1.5">
+                                <div class="p-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/30 space-y-1">
                                     <div class="flex items-center justify-between">
-                                        <label class="block text-[11px] font-bold text-slate-800 dark:text-white uppercase tracking-wider">
+                                        <label class="block text-[10px] font-bold text-slate-800 dark:text-white uppercase tracking-wider">
                                             1. Posisi Vertikal
                                         </label>
-                                        <span class="text-[11px] font-black text-indigo-600 dark:text-indigo-400" x-text="posY + '%'"></span>
+                                        <span class="text-[10px] font-black text-indigo-600 dark:text-indigo-400" x-text="posY + '%'"></span>
                                     </div>
                                     <div class="grid grid-cols-3 gap-1">
-                                        <button type="button" @click="posY = 15" class="py-1 px-1.5 text-[10px] font-bold rounded-lg border text-center transition"
+                                        <button type="button" @click="posY = 15" class="py-0.5 px-1 text-[9px] font-bold rounded-md border text-center transition"
                                                 :class="posY <= 25 ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-white/10'">
                                             Atas
                                         </button>
-                                        <button type="button" @click="posY = 50" class="py-1 px-1.5 text-[10px] font-bold rounded-lg border text-center transition"
+                                        <button type="button" @click="posY = 50" class="py-0.5 px-1 text-[9px] font-bold rounded-md border text-center transition"
                                                 :class="posY > 25 && posY < 75 ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-white/10'">
                                             Tengah
                                         </button>
-                                        <button type="button" @click="posY = 85" class="py-1 px-1.5 text-[10px] font-bold rounded-lg border text-center transition"
+                                        <button type="button" @click="posY = 85" class="py-0.5 px-1 text-[9px] font-bold rounded-md border text-center transition"
                                                 :class="posY >= 75 ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-white/10'">
                                             Bawah
                                         </button>
@@ -787,16 +831,16 @@
                                            max="100" 
                                            step="5" 
                                            x-model="posY" 
-                                           class="w-full accent-indigo-600 cursor-pointer h-1.5">
+                                           class="w-full accent-indigo-600 cursor-pointer h-1.5 pt-0.5">
                                 </div>
 
                                 <!-- 2. Skala Perbesaran (Zoom Level Gedung) -->
-                                <div class="p-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/30 space-y-1.5">
+                                <div class="p-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/30 space-y-1">
                                     <div class="flex items-center justify-between">
-                                        <label class="block text-[11px] font-bold text-slate-800 dark:text-white uppercase tracking-wider">
+                                        <label class="block text-[10px] font-bold text-slate-800 dark:text-white uppercase tracking-wider">
                                             2. Skala Zoom
                                         </label>
-                                        <span class="text-[11px] font-black text-indigo-600 dark:text-indigo-400" x-text="zoomLevel + '%'"></span>
+                                        <span class="text-[10px] font-black text-indigo-600 dark:text-indigo-400" x-text="zoomLevel + '%'"></span>
                                     </div>
                                     <input type="range" 
                                            name="login_bg_zoom" 
@@ -804,8 +848,8 @@
                                            max="180" 
                                            step="5" 
                                            x-model="zoomLevel" 
-                                           class="w-full accent-indigo-600 cursor-pointer h-1.5 pt-2">
-                                    <div class="flex justify-between text-[9px] text-slate-400 pt-1">
+                                           class="w-full accent-indigo-600 cursor-pointer h-1.5 pt-1">
+                                    <div class="flex justify-between text-[8px] text-slate-400 pt-0.5">
                                         <span>100%</span>
                                         <button type="button" @click="zoomLevel = 100" class="text-indigo-500 hover:underline">Reset</button>
                                         <span>180%</span>
@@ -813,12 +857,12 @@
                                 </div>
 
                                 <!-- 3. Tingkat Kegelapan Lapisan (Overlay) -->
-                                <div class="p-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/30 space-y-1.5">
+                                <div class="p-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/30 space-y-1">
                                     <div class="flex items-center justify-between">
-                                        <label class="block text-[11px] font-bold text-slate-800 dark:text-white uppercase tracking-wider">
+                                        <label class="block text-[10px] font-bold text-slate-800 dark:text-white uppercase tracking-wider">
                                             3. Kegelapan
                                         </label>
-                                        <span class="text-[11px] font-black text-indigo-600 dark:text-indigo-400" x-text="overlayLevel + '%'"></span>
+                                        <span class="text-[10px] font-black text-indigo-600 dark:text-indigo-400" x-text="overlayLevel + '%'"></span>
                                     </div>
                                     <input type="range" 
                                            name="login_bg_overlay" 
@@ -826,8 +870,8 @@
                                            max="70" 
                                            step="5" 
                                            x-model="overlayLevel" 
-                                           class="w-full accent-indigo-600 cursor-pointer h-1.5 pt-2">
-                                    <div class="flex justify-between text-[9px] text-slate-400 pt-1">
+                                           class="w-full accent-indigo-600 cursor-pointer h-1.5 pt-1">
+                                    <div class="flex justify-between text-[8px] text-slate-400 pt-0.5">
                                         <span>10%</span>
                                         <button type="button" @click="overlayLevel = 25" class="text-indigo-500 hover:underline">25%</button>
                                         <span>70%</span>
@@ -857,10 +901,29 @@
             outline-color: rgba(56, 189, 248, 0.9) !important;
             box-shadow: 0 0 0 1000px rgba(15, 23, 42, 0.75);
         }
+
+        /* Persegi panjang cropper visual rounded rectangle */
+        .rectangular-cropper .cropper-view-box,
+        .rectangular-cropper .cropper-face {
+            border-radius: 1rem !important;
+        }
+        .rectangular-cropper .cropper-view-box {
+            outline: 2px solid #38bdf8 !important;
+            outline-color: rgba(56, 189, 248, 0.9) !important;
+            box-shadow: 0 0 0 1000px rgba(15, 23, 42, 0.75);
+        }
     </style>
     @endpush
 
     @push('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+    <script>
+        // Mencegah window desync scroll bug saat interaksi form di layout overflow-hidden
+        window.addEventListener('scroll', function() {
+            if (window.scrollY !== 0 || window.scrollX !== 0) {
+                window.scrollTo(0, 0);
+            }
+        }, { passive: true });
+    </script>
     @endpush
 </x-app-layout>
