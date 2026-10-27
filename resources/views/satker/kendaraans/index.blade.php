@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="max-w-7xl mx-auto p-3 sm:p-6 lg:p-8 space-y-5 sm:space-y-6" x-data="{ 
-        showTransferModal: false, 
+        showTransferModal: {{ (request('open_transfer') || request('transfer')) ? 'true' : 'false' }}, 
         showMonthlyReportModal: false,
         showAlasan: false,
         alasanModal: '',

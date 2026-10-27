@@ -45,27 +45,19 @@
         }
     </script>
     <!-- Tailwind config moved to tailwind.config.js -->
+    @php
+        $bgSetting = \App\Models\Setting::where('key', 'login_background_image')->value('value');
+        $bgUrl = (!empty($bgSetting) && file_exists(public_path($bgSetting))) ? asset($bgSetting) : asset('polda.jpg');
+        $bgOverlay = (int) (\App\Models\Setting::where('key', 'login_bg_overlay')->value('value') ?? 25);
+        $bgPosY = (int) (\App\Models\Setting::where('key', 'login_bg_pos_y')->value('value') ?? 50);
+        $bgZoom = (int) (\App\Models\Setting::where('key', 'login_bg_zoom')->value('value') ?? 100);
+        $overlayAlpha1 = number_format(($bgOverlay * 0.72) / 100, 2);
+        $overlayAlpha2 = number_format(min(1.0, ($bgOverlay * 1.4) / 100), 2);
+    @endphp
     <style>
         /* body { font-family: 'Outfit', sans-serif; } - Handled by font-sans class */
 
-        .login-gradient {
-            background-color: #0f172a;
-            position: relative;
-        }
-
-        @media (min-width: 768px) {
-            .login-gradient {
-                background-image: url('/polda.jpg');
-                background-size: cover;
-                background-position: center;
-                background-attachment: fixed;
-            }
-        }
-
-        .login-gradient::before {
-            display: none;
-        }
-
+    <style>
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
@@ -82,12 +74,26 @@
     </style>
 </head>
 
-<body class="font-sans antialiased text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-900">
-    <div class="min-h-screen flex flex-col items-center justify-center p-0 md:p-4 login-gradient">
-        <div class="w-full {{ $maxWidth }} relative z-20 flex-1 flex flex-col justify-center">
+<body class="font-sans antialiased text-slate-800 dark:text-slate-200 bg-slate-950">
+    <!-- Dedicated Desktop Background Layer: Identik 1:1 dengan Live Preview Admin Settings -->
+    <div class="hidden md:block fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+        <img src="{{ $bgUrl }}" 
+             alt="Background Gedung Biro Logistik Polda NTB" 
+             class="w-full h-full object-cover origin-center transition-all duration-300"
+             style="object-position: center {{ $bgPosY }}%; transform: scale({{ $bgZoom / 100 }});">
+        
+        <!-- Dark Overlay Gradient -->
+        <div class="absolute inset-0 bg-slate-950 transition-opacity duration-300"
+             style="opacity: {{ $bgOverlay / 100 }};"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/40 pointer-events-none"></div>
+    </div>
+
+    <!-- Mobile Background Container -->
+    <div class="min-h-screen flex flex-col items-center justify-center p-0 md:p-4 relative z-10 md:bg-transparent bg-slate-900">
+        <div class="w-full {{ $maxWidth }} relative z-20 flex-1 flex flex-col justify-center py-2 md:py-4">
             {{ $slot }}
 
-            <p class="text-center text-xs text-slate-600 dark:text-slate-400 mt-8 mb-8 md:mb-0 font-medium">
+            <p class="hidden md:block text-center text-xs text-white/80 drop-shadow mt-4 mb-2 font-medium">
                 &copy; {{ date('Y') }} BIRO LOGISTIK. Polda Nusa Tenggara Barat.
             </p>
         </div>

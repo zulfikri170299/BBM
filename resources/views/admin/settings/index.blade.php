@@ -48,94 +48,99 @@
             </div>
         @endif
 
-        <!-- Form 2-Column Responsive Grid -->
-        <form id="settings-form" action="{{ route('admin.settings.update') }}" method="POST">
+        <!-- Form Pengaturan -->
+        <form id="settings-form" action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
 
+            <!-- ========================================================
+                 BAGIAN 1: HAK AKSES DATA & OTORISASI AKUN (2 KOLOM SEIMBANG)
+                 ======================================================== -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                <!-- Column 1: Hak Akses Data Kendaraan (7 cols) -->
-                <div class="lg:col-span-7 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
-                    <div class="px-5 py-4 bg-slate-50/70 dark:bg-slate-800/40 border-b border-slate-200 dark:border-white/10 flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center border border-blue-100 dark:border-blue-500/20">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="text-sm font-bold text-white">Hak Akses Kendaraan Satker</h3>
-                                <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Kontrol kewenangan input, edit, dan import data kendaraan.</p>
-                            </div>
-                        </div>
-                        <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded-lg border border-slate-200 dark:border-white/5">
-                            3 Modul
-                        </span>
-                    </div>
-
-                    <div class="p-5 space-y-3.5">
-                        <!-- Option 1: Tambah Kendaraan -->
-                        <div class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200/80 dark:border-white/5 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-50 dark:hover:bg-slate-800/70 transition">
-                            <div class="flex items-center gap-3 pr-3">
-                                <div class="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-100 dark:border-emerald-500/20">
+                
+                <!-- Hak Akses Kendaraan Satker (7 cols) -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
+                        <div class="px-5 py-4 bg-slate-50/70 dark:bg-slate-800/40 border-b border-slate-200 dark:border-white/10 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center border border-blue-100 dark:border-blue-500/20">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
                                     </svg>
                                 </div>
                                 <div>
-                                    <h4 class="text-xs font-bold text-white">Tambah Data Kendaraan</h4>
-                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Izinkan akun Satker menambah kendaraan manual.</p>
+                                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">Hak Akses Kendaraan Satker</h3>
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Kontrol kewenangan input, edit, dan import data kendaraan.</p>
                                 </div>
                             </div>
-                            <label class="relative inline-flex items-center cursor-pointer shrink-0 select-none">
-                                <input type="checkbox" name="satker_can_create_kendaraan" value="1" class="sr-only peer" {{ ($settings['satker_can_create_kendaraan'] ?? '1') == '1' ? 'checked' : '' }}>
-                                <div class="w-11 h-6 bg-slate-200 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all after:shadow-sm peer-checked:bg-indigo-600"></div>
-                            </label>
+                            <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded-lg border border-slate-200 dark:border-white/5">
+                                3 Modul
+                            </span>
                         </div>
 
-                        <!-- Option 2: Edit Kendaraan -->
-                        <div class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200/80 dark:border-white/5 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-50 dark:hover:bg-slate-800/70 transition">
-                            <div class="flex items-center gap-3 pr-3">
-                                <div class="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 border border-indigo-100 dark:border-indigo-500/20">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                    </svg>
+                        <div class="p-5 space-y-3.5">
+                            <!-- Option 1: Tambah Kendaraan -->
+                            <div class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200/80 dark:border-white/5 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-50 dark:hover:bg-slate-800/70 transition">
+                                <div class="flex items-center gap-3 pr-3">
+                                    <div class="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-100 dark:border-emerald-500/20">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xs font-bold text-slate-900 dark:text-white">Tambah Data Kendaraan</h4>
+                                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Izinkan akun Satker menambah kendaraan manual.</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h4 class="text-xs font-bold text-white">Edit Data Kendaraan</h4>
-                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Izinkan akun Satker mengubah rincian kendaraan.</p>
-                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer shrink-0 select-none">
+                                    <input type="checkbox" name="satker_can_create_kendaraan" value="1" class="sr-only peer" {{ ($settings['satker_can_create_kendaraan'] ?? '1') == '1' ? 'checked' : '' }}>
+                                    <div class="w-11 h-6 bg-slate-200 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all after:shadow-sm peer-checked:bg-indigo-600"></div>
+                                </label>
                             </div>
-                            <label class="relative inline-flex items-center cursor-pointer shrink-0 select-none">
-                                <input type="checkbox" name="satker_can_edit_kendaraan" value="1" class="sr-only peer" {{ ($settings['satker_can_edit_kendaraan'] ?? '1') == '1' ? 'checked' : '' }}>
-                                <div class="w-11 h-6 bg-slate-200 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all after:shadow-sm peer-checked:bg-indigo-600"></div>
-                            </label>
-                        </div>
 
-                        <!-- Option 3: Import Excel -->
-                        <div class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200/80 dark:border-white/5 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-50 dark:hover:bg-slate-800/70 transition">
-                            <div class="flex items-center gap-3 pr-3">
-                                <div class="w-8 h-8 rounded-xl bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 border border-purple-100 dark:border-purple-500/20">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
-                                    </svg>
+                            <!-- Option 2: Edit Kendaraan -->
+                            <div class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200/80 dark:border-white/5 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-50 dark:hover:bg-slate-800/70 transition">
+                                <div class="flex items-center gap-3 pr-3">
+                                    <div class="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 border border-indigo-100 dark:border-indigo-500/20">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xs font-bold text-slate-900 dark:text-white">Edit Data Kendaraan</h4>
+                                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Izinkan akun Satker mengubah rincian kendaraan.</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h4 class="text-xs font-bold text-white">Import Data via Excel</h4>
-                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Izinkan akun Satker import kendaraan dari spreadsheet.</p>
-                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer shrink-0 select-none">
+                                    <input type="checkbox" name="satker_can_edit_kendaraan" value="1" class="sr-only peer" {{ ($settings['satker_can_edit_kendaraan'] ?? '1') == '1' ? 'checked' : '' }}>
+                                    <div class="w-11 h-6 bg-slate-200 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all after:shadow-sm peer-checked:bg-indigo-600"></div>
+                                </label>
                             </div>
-                            <label class="relative inline-flex items-center cursor-pointer shrink-0 select-none">
-                                <input type="checkbox" name="satker_can_import_kendaraan" value="1" class="sr-only peer" {{ ($settings['satker_can_import_kendaraan'] ?? '1') == '1' ? 'checked' : '' }}>
-                                <div class="w-11 h-6 bg-slate-200 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all after:shadow-sm peer-checked:bg-indigo-600"></div>
-                            </label>
+
+                            <!-- Option 3: Import Excel -->
+                            <div class="flex items-center justify-between p-3.5 rounded-xl border border-slate-200/80 dark:border-white/5 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-50 dark:hover:bg-slate-800/70 transition">
+                                <div class="flex items-center gap-3 pr-3">
+                                    <div class="w-8 h-8 rounded-xl bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 border border-purple-100 dark:border-purple-500/20">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xs font-bold text-slate-900 dark:text-white">Import Data via Excel</h4>
+                                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Izinkan akun Satker import kendaraan dari spreadsheet.</p>
+                                    </div>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer shrink-0 select-none">
+                                    <input type="checkbox" name="satker_can_import_kendaraan" value="1" class="sr-only peer" {{ ($settings['satker_can_import_kendaraan'] ?? '1') == '1' ? 'checked' : '' }}>
+                                    <div class="w-11 h-6 bg-slate-200 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all after:shadow-sm peer-checked:bg-indigo-600"></div>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Column 2: Kontrol Akun & Panduan (5 cols) -->
+                <!-- Otorisasi Login Satker & Kebijakan (5 cols) -->
                 <div class="lg:col-span-5 space-y-6">
-                    <!-- Global Satker Login Control Card -->
                     <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
                         <div class="px-5 py-4 bg-slate-50/70 dark:bg-slate-800/40 border-b border-slate-200 dark:border-white/10 flex items-center justify-between">
                             <div class="flex items-center gap-3">
@@ -188,28 +193,674 @@
                         </div>
                     </div>
 
-                    <!-- Information & Bottom Save Card -->
-                    <div class="bg-gradient-to-br from-slate-900 to-indigo-950 text-white rounded-2xl border border-indigo-500/20 shadow-sm p-5 relative overflow-hidden">
-                        <div class="absolute -right-6 -bottom-6 w-28 h-28 bg-indigo-500/10 rounded-full blur-xl pointer-events-none"></div>
-                        <div class="flex items-center gap-2.5 mb-2.5">
-                            <svg class="w-4 h-4 text-indigo-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            <h4 class="text-xs font-bold text-white tracking-wide uppercase">Informasi Kebijakan</h4>
-                        </div>
-                        <p class="text-[11px] text-slate-300 leading-relaxed font-normal mb-4">
-                            Setiap perubahan pengaturan sistem akan diterapkan secara instan ke seluruh sesi aktif pengguna Satker di Polda NTB.
-                        </p>
-                        <button type="submit"
-                            class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white rounded-xl text-xs font-bold shadow-md shadow-indigo-600/30 transition-all">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
-                            </svg>
-                            <span>Simpan Semua Pengaturan</span>
-                        </button>
+                </div>
+            </div>
+
+            <!-- ========================================================
+                 BAGIAN 2: KUSTOMISASI VISUAL HALAMAN LOGIN (SEJAJAR KIRI & KANAN)
+                 ======================================================== -->
+            <div class="pt-4 space-y-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-xl flex items-center justify-center border border-indigo-100 dark:border-indigo-500/20 shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
                     </div>
+                    <div>
+                        <h2 class="text-base font-bold text-white tracking-tight">Kustomisasi Visual Halaman Login</h2>
+                        <p class="text-xs text-slate-400">Atur gambar hero lingkaran di tengah serta foto background gedung desktop secara presisi dan sejajar berdampingan.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+                    
+                    <!-- ========================================================
+                         KOLOM KIRI: GAMBAR HERO LINGKARAN LOGIN
+                         ======================================================== -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden"
+                         x-data="{ 
+                            hasPreview: false, 
+                            previewSrc: '{{ !empty($settings['mobile_hero_image']) && file_exists(public_path($settings['mobile_hero_image'])) ? asset($settings['mobile_hero_image']) : '' }}', 
+                            removeCustomImage: false,
+                            croppedBase64: '',
+                            fitMode: '{{ $settings['mobile_hero_fit'] ?? 'cover' }}',
+                            zoomLevel: {{ $settings['mobile_hero_zoom'] ?? 100 }},
+                            bgColor: '{{ $settings['mobile_hero_bg'] ?? 'transparent' }}',
+                            showCropperModal: false,
+                            cropperInstance: null,
+                            rawImageSrc: '',
+
+                            fileChosen(event) {
+                                const file = event.target.files[0];
+                                if (file) {
+                                    const reader = new FileReader();
+                                    reader.onload = (e) => {
+                                        this.rawImageSrc = e.target.result;
+                                        this.initCropper();
+                                    };
+                                    reader.readAsDataURL(file);
+                                }
+                            },
+
+                            initCropper() {
+                                this.showCropperModal = true;
+                                this.$nextTick(() => {
+                                    const img = document.getElementById('cropper-target-image');
+                                    if (!img) return;
+                                    if (this.cropperInstance) {
+                                        this.cropperInstance.destroy();
+                                    }
+                                    img.src = this.rawImageSrc;
+                                    this.cropperInstance = new Cropper(img, {
+                                        aspectRatio: 1,
+                                        viewMode: 1,
+                                        dragMode: 'move',
+                                        autoCropArea: 0.95,
+                                        restore: false,
+                                        guides: false,
+                                        center: true,
+                                        highlight: false,
+                                        cropBoxMovable: false,
+                                        cropBoxResizable: false,
+                                        toggleDragModeOnDblclick: false,
+                                        background: false,
+                                    });
+                                });
+                            },
+
+                            cropZoom(delta) {
+                                if (this.cropperInstance) {
+                                    this.cropperInstance.zoom(delta);
+                                }
+                            },
+
+                            cropRotate(degree) {
+                                if (this.cropperInstance) {
+                                    this.cropperInstance.rotate(degree);
+                                }
+                            },
+
+                            cropReset() {
+                                if (this.cropperInstance) {
+                                    this.cropperInstance.reset();
+                                }
+                            },
+
+                            applyCroppedImage() {
+                                if (!this.cropperInstance) return;
+                                const canvas = this.cropperInstance.getCroppedCanvas({
+                                    width: 800,
+                                    height: 800,
+                                    imageSmoothingEnabled: true,
+                                    imageSmoothingQuality: 'high',
+                                });
+                                this.croppedBase64 = canvas.toDataURL('image/png');
+                                this.previewSrc = this.croppedBase64;
+                                this.hasPreview = true;
+                                this.removeCustomImage = false;
+                                this.closeCropper();
+                            },
+
+                            openReCrop() {
+                                if (this.previewSrc) {
+                                    this.rawImageSrc = this.previewSrc;
+                                    this.initCropper();
+                                }
+                            },
+
+                            closeCropper() {
+                                if (this.cropperInstance) {
+                                    this.cropperInstance.destroy();
+                                    this.cropperInstance = null;
+                                }
+                                this.showCropperModal = false;
+                            },
+
+                            resetImage() {
+                                if (this.$refs.fileInput) this.$refs.fileInput.value = '';
+                                this.hasPreview = false;
+                                this.previewSrc = '';
+                                this.croppedBase64 = '';
+                                this.removeCustomImage = true;
+                            }
+                         }">
+                        
+                        <!-- Header Card -->
+                        <div class="px-5 py-4 bg-slate-50/70 dark:bg-slate-800/40 border-b border-slate-200 dark:border-white/10 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-sky-50 dark:bg-sky-500/10 text-sky-600 dark:text-sky-400 rounded-xl flex items-center justify-center border border-sky-100 dark:border-sky-500/20">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">Gambar Hero Lingkaran Login</h3>
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Gambar bulat di tengah login mobile & desktop.</p>
+                                </div>
+                            </div>
+                            <span class="px-2.5 py-1 text-[10px] font-bold rounded-lg border"
+                                  :class="(hasPreview || previewSrc) && !removeCustomImage ? 'bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400 border-sky-200 dark:border-sky-800/50' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-white/10'">
+                                <span x-text="(hasPreview || previewSrc) && !removeCustomImage ? 'Gambar Khusus' : 'Model Bawaan'"></span>
+                            </span>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="p-5 space-y-4">
+                            
+                            <!-- Visual Preview Lingkaran WYSIWYG & Tombol Aksi -->
+                            <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 p-4 rounded-2xl bg-gradient-to-b from-[#14081c]/70 via-[#07183d]/80 to-[#022b7a]/85 border border-white/15 text-white shadow-inner relative overflow-hidden">
+                                
+                                <!-- Lingkaran Hero Miniatur Preview -->
+                                <div class="relative shrink-0 flex items-center justify-center">
+                                    <div class="w-32 h-32 rounded-full overflow-hidden flex items-center justify-center shadow-[0_10px_25px_rgba(0,0,0,0.6)] border-2 border-white/40 relative"
+                                         :style="bgColor !== 'transparent' ? 'background-color: ' + bgColor + ';' : ''">
+                                        
+                                        <!-- Template Gambar Kustom -->
+                                        <template x-if="(hasPreview || previewSrc) && !removeCustomImage">
+                                            <img :src="previewSrc" alt="Preview Hero" 
+                                                 class="w-full h-full transition-all duration-200"
+                                                 :class="fitMode === 'contain' ? 'object-contain p-1.5' : 'object-cover'"
+                                                 :style="'transform: scale(' + (zoomLevel / 100) + ');'">
+                                        </template>
+
+                                        <!-- Template Model Bawaan Logo Polda -->
+                                        <template x-if="(!hasPreview && !previewSrc) || removeCustomImage">
+                                            <div class="w-full h-full flex items-center justify-center p-2 bg-[#022b7a]/40">
+                                                <img src="/rolog.png" onerror="this.onerror=null; this.src='/TRIBRATA.png';" alt="Default Logo" class="w-20 h-20 object-contain drop-shadow">
+                                            </div>
+                                        </template>
+                                    </div>
+
+                                    <div class="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full bg-black/60 border border-white/20 text-[9px] font-bold text-cyan-300 backdrop-blur-sm pointer-events-none">
+                                        Bulat Pas
+                                    </div>
+                                </div>
+
+                                <!-- Keterangan & Tombol Unggah -->
+                                <div class="flex-1 space-y-2 text-center sm:text-left">
+                                    <div>
+                                        <h4 class="text-xs font-bold text-white tracking-wide">Status Tampilan:
+                                            <span class="text-cyan-300 font-black" x-text="(hasPreview || previewSrc) && !removeCustomImage ? 'Gambar Khusus Aktif' : 'Model Bawaan (Logo Polda)'"></span>
+                                        </h4>
+                                        <p class="text-[11px] text-slate-300 mt-0.5 leading-relaxed">
+                                            Format: <strong>PNG/WEBP/JPG</strong>. Disarankan lingkaran 500×500 px.
+                                        </p>
+                                    </div>
+
+                                    <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-1">
+                                        <input type="file" 
+                                               name="mobile_hero_image" 
+                                               x-ref="fileInput"
+                                               @change="fileChosen($event)" 
+                                               accept="image/*" 
+                                               class="hidden" 
+                                               id="hero-file-input">
+                                        
+                                        <label for="hero-file-input" 
+                                               class="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-900 rounded-xl text-xs font-bold shadow-sm active:scale-95 transition">
+                                            <svg class="w-3.5 h-3.5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                            </svg>
+                                            <span>Pilih Gambar</span>
+                                        </label>
+
+                                        <button type="button" 
+                                                x-show="(hasPreview || previewSrc) && !removeCustomImage"
+                                                @click="openReCrop()"
+                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-500/25 hover:bg-sky-500/40 text-cyan-200 border border-cyan-400/30 rounded-xl text-xs font-bold transition">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                                            </svg>
+                                            <span>Crop Bulat</span>
+                                        </button>
+
+                                        <button type="button" 
+                                                x-show="(hasPreview || previewSrc) && !removeCustomImage"
+                                                @click="resetImage()"
+                                                class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-rose-500/20 hover:bg-rose-500/35 text-rose-200 border border-rose-400/30 rounded-xl text-xs font-bold transition">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                            <span>Reset</span>
+                                        </button>
+
+                                        <input type="hidden" name="mobile_hero_image_base64" :value="croppedBase64">
+                                        <input type="hidden" name="remove_mobile_hero_image" :value="removeCustomImage ? '1' : '0'">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Panel 3 Pengaturan Tampilan Lingkaran (Fit, Zoom & Warna Background) -->
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                                
+                                <!-- 1. Mode Pas (Fit Mode) -->
+                                <div class="p-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/30 space-y-1.5">
+                                    <label class="block text-[11px] font-bold text-slate-800 dark:text-white uppercase tracking-wider">
+                                        1. Mode Pas
+                                    </label>
+                                    <div class="grid grid-cols-2 gap-1.5">
+                                        <label class="cursor-pointer flex flex-col items-center justify-center p-1.5 rounded-lg border text-center transition select-none"
+                                               :class="fitMode === 'cover' ? 'border-indigo-600 bg-indigo-50/80 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 font-bold' : 'border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'">
+                                            <input type="radio" name="mobile_hero_fit" value="cover" x-model="fitMode" class="sr-only">
+                                            <span class="text-xs">Penuh</span>
+                                            <span class="text-[9px] text-slate-400 font-normal">Cover</span>
+                                        </label>
+
+                                        <label class="cursor-pointer flex flex-col items-center justify-center p-1.5 rounded-lg border text-center transition select-none"
+                                               :class="fitMode === 'contain' ? 'border-indigo-600 bg-indigo-50/80 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 font-bold' : 'border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'">
+                                            <input type="radio" name="mobile_hero_fit" value="contain" x-model="fitMode" class="sr-only">
+                                            <span class="text-xs">Utuh</span>
+                                            <span class="text-[9px] text-slate-400 font-normal">Contain</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- 2. Skala Perbesaran (Zoom Level Slider) -->
+                                <div class="p-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/30 space-y-1.5">
+                                    <div class="flex items-center justify-between">
+                                        <label class="block text-[11px] font-bold text-slate-800 dark:text-white uppercase tracking-wider">
+                                            2. Skala Zoom
+                                        </label>
+                                        <span class="text-[11px] font-black text-indigo-600 dark:text-indigo-400" x-text="zoomLevel + '%'"></span>
+                                    </div>
+                                    <input type="range" 
+                                           name="mobile_hero_zoom" 
+                                           min="50" 
+                                           max="150" 
+                                           step="5" 
+                                           x-model="zoomLevel" 
+                                           class="w-full accent-indigo-600 cursor-pointer h-1.5 pt-2">
+                                    <div class="flex justify-between text-[9px] text-slate-400 pt-1">
+                                        <span>50%</span>
+                                        <button type="button" @click="zoomLevel = 100" class="text-indigo-500 hover:underline">100%</button>
+                                        <span>150%</span>
+                                    </div>
+                                </div>
+
+                                <!-- 3. Warna Latar Lingkaran (Background) -->
+                                <div class="p-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/30 space-y-1.5">
+                                    <label class="block text-[11px] font-bold text-slate-800 dark:text-white uppercase tracking-wider">
+                                        3. Warna Latar
+                                    </label>
+                                    <div class="flex items-center gap-1.5 pt-1">
+                                        <!-- Transparan -->
+                                        <label class="cursor-pointer relative" title="Transparan">
+                                            <input type="radio" name="mobile_hero_bg" value="transparent" x-model="bgColor" class="sr-only">
+                                            <div class="w-6 h-6 rounded-full border-2 transition-all flex items-center justify-center"
+                                                 :class="bgColor === 'transparent' ? 'ring-2 ring-indigo-500 ring-offset-2 border-indigo-600 bg-white' : 'border-slate-300 bg-slate-200'">
+                                                <svg class="w-3 h-3 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>
+                                            </div>
+                                        </label>
+
+                                        <!-- Hitam Gelap -->
+                                        <label class="cursor-pointer relative" title="Hitam Gelap">
+                                            <input type="radio" name="mobile_hero_bg" value="#0a0a0c" x-model="bgColor" class="sr-only">
+                                            <div class="w-6 h-6 rounded-full bg-[#0a0a0c] border-2 transition-all"
+                                                 :class="bgColor === '#0a0a0c' ? 'ring-2 ring-indigo-500 ring-offset-2 border-white' : 'border-transparent'"></div>
+                                        </label>
+
+                                        <!-- Biru Polri -->
+                                        <label class="cursor-pointer relative" title="Biru Polri">
+                                            <input type="radio" name="mobile_hero_bg" value="#0e2c7a" x-model="bgColor" class="sr-only">
+                                            <div class="w-6 h-6 rounded-full bg-[#0e2c7a] border-2 transition-all"
+                                                 :class="bgColor === '#0e2c7a' ? 'ring-2 ring-indigo-500 ring-offset-2 border-white' : 'border-transparent'"></div>
+                                        </label>
+
+                                        <!-- Biru SPBP Cerah -->
+                                        <label class="cursor-pointer relative" title="Biru SPBP">
+                                            <input type="radio" name="mobile_hero_bg" value="#004fcf" x-model="bgColor" class="sr-only">
+                                            <div class="w-6 h-6 rounded-full bg-[#004fcf] border-2 transition-all"
+                                                 :class="bgColor === '#004fcf' ? 'ring-2 ring-indigo-500 ring-offset-2 border-white' : 'border-transparent'"></div>
+                                        </label>
+                                    </div>
+                                    <p class="text-[9px] text-slate-400">Efektif saat mode Utuh / transparan.</p>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- MODAL CIRCULAR CROPPER -->
+                        <div x-show="showCropperModal" 
+                             x-cloak 
+                             class="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-5"
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0"
+                             x-transition:enter-end="opacity-100"
+                             x-transition:leave="transition ease-in duration-200"
+                             x-transition:leave-start="opacity-100"
+                             x-transition:leave-end="opacity-0">
+                            
+                            <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-md" @click="closeCropper()"></div>
+
+                            <div class="relative z-10 w-full max-w-xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col text-slate-800 dark:text-slate-200"
+                                 x-transition:enter="transition ease-out duration-300 transform"
+                                 x-transition:enter-start="scale-95 translate-y-4"
+                                 x-transition:enter-end="scale-100 translate-y-0"
+                                 x-transition:leave="transition ease-in duration-200 transform"
+                                 x-transition:leave-start="scale-100 translate-y-0"
+                                 x-transition:leave-end="scale-95 translate-y-4">
+                                
+                                <div class="px-5 py-4 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50 dark:bg-slate-800/50">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Sesuaikan Potongan Lingkaran</h3>
+                                            <p class="text-[11px] text-slate-500 dark:text-slate-400">Geser & zoom gambar agar pas di dalam lingkaran login.</p>
+                                        </div>
+                                    </div>
+                                    <button type="button" @click="closeCropper()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-white transition">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                    </button>
+                                </div>
+
+                                <div class="p-4 bg-slate-950 flex items-center justify-center relative overflow-hidden" style="min-height: 340px; max-height: 420px;">
+                                    <div class="circular-cropper w-full h-full max-h-[380px] flex items-center justify-center">
+                                        <img id="cropper-target-image" src="" alt="Crop Source" class="max-w-full max-h-full block">
+                                    </div>
+                                    <div class="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-black/60 backdrop-blur-md rounded-full text-[10px] font-bold text-cyan-200 border border-white/20 pointer-events-none">
+                                        Bagian di dalam lingkaran akan tampil di Login
+                                    </div>
+                                </div>
+
+                                <div class="px-5 py-3 border-t border-slate-200 dark:border-white/10 flex flex-wrap items-center justify-between gap-2 bg-slate-50/70 dark:bg-slate-800/40">
+                                    <div class="flex items-center gap-1.5">
+                                        <button type="button" @click="cropZoom(0.1)" title="Perbesar" class="p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 transition shadow-sm">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                        </button>
+                                        <button type="button" @click="cropZoom(-0.1)" title="Perkecil" class="p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 transition shadow-sm">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
+                                        </button>
+                                        <button type="button" @click="cropRotate(-90)" title="Putar Kiri 90°" class="p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 transition shadow-sm">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a5 5 0 015 5v2m0 0l-3-3m3 3l3-3M3 10l3-3m-3 3l3 3"/></svg>
+                                        </button>
+                                        <button type="button" @click="cropRotate(90)" title="Putar Kanan 90°" class="p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 transition shadow-sm">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 10H11a5 5 0 00-5 5v2m0 0l3-3m-3 3l-3-3m17-7l-3-3m3 3l-3 3"/></svg>
+                                        </button>
+                                        <button type="button" @click="cropReset()" title="Reset Posisi" class="px-2.5 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 text-xs font-bold transition shadow-sm">
+                                            Reset
+                                        </button>
+                                    </div>
+
+                                    <div class="flex items-center gap-2">
+                                        <button type="button" @click="closeCropper()" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-100 text-xs font-bold transition">
+                                            Batal
+                                        </button>
+                                        <button type="button" @click="applyCroppedImage()" class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white rounded-xl text-xs font-bold shadow-md shadow-indigo-600/30 active:scale-95 transition flex items-center gap-1.5">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                            <span>Terapkan ke Lingkaran</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- ========================================================
+                         KOLOM KANAN: GAMBAR BACKGROUND GEDUNG (LOGIN DESKTOP)
+                         (Sejajar di samping form gambar hero lingkaran login)
+                         ======================================================== -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden"
+                         x-data="{ 
+                            hasCustomBg: {{ !empty($settings['login_background_image']) && file_exists(public_path($settings['login_background_image'])) ? 'true' : 'false' }},
+                            previewSrc: '{{ !empty($settings['login_background_image']) && file_exists(public_path($settings['login_background_image'])) ? asset($settings['login_background_image']) : asset('polda.jpg') }}',
+                            defaultSrc: '{{ asset('polda.jpg') }}',
+                            removeCustomBg: false,
+                            posY: {{ $settings['login_bg_pos_y'] ?? 50 }},
+                            zoomLevel: {{ $settings['login_bg_zoom'] ?? 100 }},
+                            overlayLevel: {{ $settings['login_bg_overlay'] ?? 25 }},
+                            
+                            fileChosen(event) {
+                                const file = event.target.files[0];
+                                if (file) {
+                                    const reader = new FileReader();
+                                    reader.onload = (e) => {
+                                        this.previewSrc = e.target.result;
+                                        this.hasCustomBg = true;
+                                        this.removeCustomBg = false;
+                                    };
+                                    reader.readAsDataURL(file);
+                                }
+                            },
+
+                            resetToDefault() {
+                                if (this.$refs.bgFileInput) this.$refs.bgFileInput.value = '';
+                                this.previewSrc = this.defaultSrc;
+                                this.hasCustomBg = false;
+                                this.removeCustomBg = true;
+                                this.posY = 50;
+                                this.zoomLevel = 100;
+                            }
+                         }">
+                        
+                        <!-- Header Card -->
+                        <div class="px-5 py-4 bg-slate-50/70 dark:bg-slate-800/40 border-b border-slate-200 dark:border-white/10 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center border border-blue-100 dark:border-blue-500/20">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">Gambar Background Gedung (Desktop)</h3>
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Latar belakang gedung halaman login komputer.</p>
+                                </div>
+                            </div>
+                            <span class="px-2.5 py-1 text-[10px] font-bold rounded-lg border"
+                                  :class="hasCustomBg && !removeCustomBg ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800/50' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-white/10'">
+                                <span x-text="hasCustomBg && !removeCustomBg ? 'Gedung Kustom' : 'Gedung Bawaan'"></span>
+                            </span>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="p-5 space-y-4">
+                            
+                            <!-- Visual Preview Miniatur Layar Desktop 16:9 Live Interaktif -->
+                            <div class="space-y-1.5">
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="font-bold text-slate-700 dark:text-slate-300">Live Preview Background Desktop</span>
+                                    <span class="text-[11px] text-slate-400 font-medium">Simulasi Layar 16:9</span>
+                                </div>
+
+                                <!-- Desktop Screen Mockup Frame -->
+                                <div class="relative w-full h-44 sm:h-48 rounded-2xl overflow-hidden border-2 border-slate-300 dark:border-slate-700 shadow-md group bg-slate-950">
+                                    <!-- Background Image with dynamic position and zoom -->
+                                    <img :src="previewSrc" alt="Preview Background Gedung" 
+                                         class="w-full h-full object-cover transition-all duration-300 origin-center"
+                                         :style="'object-position: center ' + posY + '%; transform: scale(' + (zoomLevel / 100) + ');'">
+                                    
+                                    <!-- Dynamic Overlay -->
+                                    <div class="absolute inset-0 bg-slate-950 transition-opacity duration-200 pointer-events-none"
+                                         :style="'opacity: ' + (overlayLevel / 100) + ';'"></div>
+
+                                    <!-- Miniatur Kartu Login di Depan (Proporsi Akurat 1:1 dengan Halaman Login Asli) -->
+                                    <div class="absolute inset-0 flex items-center justify-center p-3 pointer-events-none">
+                                        <div class="w-56 h-28 rounded-2xl bg-white/30 backdrop-blur-md border border-white/40 shadow-xl flex items-center justify-between p-2 gap-2">
+                                            <!-- Sisi Kiri: Branding Miniatur -->
+                                            <div class="w-1/2 h-full rounded-xl bg-gradient-to-b from-[#4a0613]/90 via-[#081e54]/90 to-[#004fcf]/90 flex flex-col items-center justify-between text-center p-1.5 border-r border-white/20">
+                                                <div class="px-1.5 py-0.5 rounded-full bg-white/10 border border-white/20 text-[5px] text-cyan-200 font-bold uppercase tracking-widest">
+                                                    PORTAL RESMI
+                                                </div>
+                                                <div class="w-7 h-7 rounded-full bg-white/20 border border-white/40 flex items-center justify-center shadow-sm">
+                                                    <div class="w-5 h-5 rounded-full bg-amber-400/30 border border-amber-300/40"></div>
+                                                </div>
+                                                <div>
+                                                    <div class="text-[7px] font-black text-white leading-none">SIM-BBM</div>
+                                                    <div class="text-[5px] text-blue-200">POLDA NTB</div>
+                                                </div>
+                                            </div>
+                                            <!-- Sisi Kanan: Action Panel Miniatur -->
+                                            <div class="w-1/2 h-full rounded-xl bg-white/95 p-1.5 flex flex-col justify-between">
+                                                <div class="flex items-center gap-1">
+                                                    <div class="w-2.5 h-2.5 rounded bg-blue-600 shrink-0"></div>
+                                                    <div class="h-1 w-10 bg-slate-300 rounded"></div>
+                                                </div>
+                                                <div class="grid grid-cols-5 gap-0.5 my-0.5">
+                                                    <div class="h-2 rounded bg-blue-100"></div>
+                                                    <div class="h-2 rounded bg-amber-100"></div>
+                                                    <div class="h-2 rounded bg-emerald-100"></div>
+                                                    <div class="h-2 rounded bg-cyan-100"></div>
+                                                    <div class="h-2 rounded bg-purple-100"></div>
+                                                </div>
+                                                <div class="h-3 w-full bg-blue-600 rounded flex items-center justify-center text-[5px] font-black text-white">LOGIN KE SISTEM</div>
+                                                <div class="h-2 w-full bg-slate-100 rounded border border-slate-200 flex items-center justify-center text-[4px] text-blue-600 font-bold">CEK SALDO</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Badge Info Posisi Aktif -->
+                                    <div class="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-md text-[9px] text-white/90 font-medium border border-white/20 flex items-center gap-1 pointer-events-none">
+                                        <span>Posisi Y: <span x-text="posY + '%'"></span> | Zoom: <span x-text="zoomLevel + '%'"></span></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tombol Aksi Upload & Reset -->
+                            <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <input type="file" 
+                                           name="login_background_image" 
+                                           x-ref="bgFileInput"
+                                           @change="fileChosen($event)" 
+                                           accept="image/jpeg,image/png,image/jpg,image/webp" 
+                                           class="hidden" 
+                                           id="login-bg-file-input">
+                                    
+                                    <label for="login-bg-file-input" 
+                                           class="cursor-pointer inline-flex items-center gap-1.5 px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:hover:bg-indigo-900/60 dark:text-indigo-300 rounded-xl text-xs font-bold border border-indigo-200 dark:border-indigo-700/50 shadow-sm active:scale-95 transition">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        <span>Ganti Foto Gedung</span>
+                                    </label>
+
+                                    <button type="button" 
+                                            x-show="hasCustomBg && !removeCustomBg"
+                                            @click="resetToDefault()"
+                                            class="inline-flex items-center gap-1 px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:hover:bg-rose-900/50 dark:text-rose-300 rounded-xl text-xs font-bold border border-rose-200 dark:border-rose-700/50 transition">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                        <span>Bawaan</span>
+                                    </button>
+
+                                    <input type="hidden" name="remove_login_background_image" :value="removeCustomBg ? '1' : '0'">
+                                </div>
+
+                                <span class="text-[10px] text-slate-400">
+                                    JPG/PNG/WEBP (Maks 8MB)
+                                </span>
+                            </div>
+
+                            <!-- Panel 3 Pengaturan Tampilan Gedung (Posisi, Zoom, dan Kegelapan) -->
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                                
+                                <!-- 1. Posisi Vertikal Y (Geser Atas / Tengah / Bawah) -->
+                                <div class="p-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/30 space-y-1.5">
+                                    <div class="flex items-center justify-between">
+                                        <label class="block text-[11px] font-bold text-slate-800 dark:text-white uppercase tracking-wider">
+                                            1. Posisi Vertikal
+                                        </label>
+                                        <span class="text-[11px] font-black text-indigo-600 dark:text-indigo-400" x-text="posY + '%'"></span>
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-1">
+                                        <button type="button" @click="posY = 15" class="py-1 px-1.5 text-[10px] font-bold rounded-lg border text-center transition"
+                                                :class="posY <= 25 ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-white/10'">
+                                            Atas
+                                        </button>
+                                        <button type="button" @click="posY = 50" class="py-1 px-1.5 text-[10px] font-bold rounded-lg border text-center transition"
+                                                :class="posY > 25 && posY < 75 ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-white/10'">
+                                            Tengah
+                                        </button>
+                                        <button type="button" @click="posY = 85" class="py-1 px-1.5 text-[10px] font-bold rounded-lg border text-center transition"
+                                                :class="posY >= 75 ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-white/10'">
+                                            Bawah
+                                        </button>
+                                    </div>
+                                    <input type="range" 
+                                           name="login_bg_pos_y" 
+                                           min="0" 
+                                           max="100" 
+                                           step="5" 
+                                           x-model="posY" 
+                                           class="w-full accent-indigo-600 cursor-pointer h-1.5">
+                                </div>
+
+                                <!-- 2. Skala Perbesaran (Zoom Level Gedung) -->
+                                <div class="p-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/30 space-y-1.5">
+                                    <div class="flex items-center justify-between">
+                                        <label class="block text-[11px] font-bold text-slate-800 dark:text-white uppercase tracking-wider">
+                                            2. Skala Zoom
+                                        </label>
+                                        <span class="text-[11px] font-black text-indigo-600 dark:text-indigo-400" x-text="zoomLevel + '%'"></span>
+                                    </div>
+                                    <input type="range" 
+                                           name="login_bg_zoom" 
+                                           min="100" 
+                                           max="180" 
+                                           step="5" 
+                                           x-model="zoomLevel" 
+                                           class="w-full accent-indigo-600 cursor-pointer h-1.5 pt-2">
+                                    <div class="flex justify-between text-[9px] text-slate-400 pt-1">
+                                        <span>100%</span>
+                                        <button type="button" @click="zoomLevel = 100" class="text-indigo-500 hover:underline">Reset</button>
+                                        <span>180%</span>
+                                    </div>
+                                </div>
+
+                                <!-- 3. Tingkat Kegelapan Lapisan (Overlay) -->
+                                <div class="p-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/30 space-y-1.5">
+                                    <div class="flex items-center justify-between">
+                                        <label class="block text-[11px] font-bold text-slate-800 dark:text-white uppercase tracking-wider">
+                                            3. Kegelapan
+                                        </label>
+                                        <span class="text-[11px] font-black text-indigo-600 dark:text-indigo-400" x-text="overlayLevel + '%'"></span>
+                                    </div>
+                                    <input type="range" 
+                                           name="login_bg_overlay" 
+                                           min="10" 
+                                           max="70" 
+                                           step="5" 
+                                           x-model="overlayLevel" 
+                                           class="w-full accent-indigo-600 cursor-pointer h-1.5 pt-2">
+                                    <div class="flex justify-between text-[9px] text-slate-400 pt-1">
+                                        <span>10%</span>
+                                        <button type="button" @click="overlayLevel = 25" class="text-indigo-500 hover:underline">25%</button>
+                                        <span>70%</span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </form>
     </div>
+
+    @push('head')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
+    <style>
+        /* Lingkaran cropper visual bulat */
+        .circular-cropper .cropper-view-box,
+        .circular-cropper .cropper-face {
+            border-radius: 50% !important;
+        }
+        .circular-cropper .cropper-view-box {
+            outline: 2px solid #38bdf8 !important;
+            outline-color: rgba(56, 189, 248, 0.9) !important;
+            box-shadow: 0 0 0 1000px rgba(15, 23, 42, 0.75);
+        }
+    </style>
+    @endpush
+
+    @push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+    @endpush
 </x-app-layout>

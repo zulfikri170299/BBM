@@ -25,6 +25,11 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (\Illuminate\Session\TokenMismatchException $e, \Illuminate\Http\Request $request) {
-            return redirect()->route('login')->with('error', 'Sesi Anda telah berakhir. Silakan login kembali.');
+            return redirect()->route('login')->with('error', 'Sesi Anda telah kedaluwarsa. Silakan login kembali.');
+        });
+        $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\HttpException $e, \Illuminate\Http\Request $request) {
+            if ($e->getStatusCode() === 419) {
+                return redirect()->route('login')->with('error', 'Sesi halaman telah kedaluwarsa. Silakan login kembali.');
+            }
         });
     })->create();

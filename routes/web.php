@@ -7,15 +7,65 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('/dashboard', function () {
+Route::get('/dashboard', function (\Illuminate\Http\Request $request) {
     $user = auth()->user();
+
+    // Safety net: Cek jika ada target menu yang tersimpan di cookie atau session
+    $cookieTarget = $request->cookie('simbbm_redirect_to') ?? session('simbbm_redirect_to');
+    if ($cookieTarget) {
+        \Illuminate\Support\Facades\Cookie::queue(\Illuminate\Support\Facades\Cookie::forget('simbbm_redirect_to'));
+        session()->forget('simbbm_redirect_to');
+
+        $target = strtolower(trim($cookieTarget));
+        $targetRoute = match ($target) {
+            'kendaraan', 'kendaraans' => match ($user->role) {
+                'super_admin', 'kasubbag', 'admin' => 'admin.kendaraans.index',
+                'admin_satker', 'satker' => 'satker.kendaraans.index',
+                'petugas_bbm', 'petugas' => 'petugas.dashboard',
+                default => null,
+            },
+            'hutang' => match ($user->role) {
+                'super_admin', 'kasubbag', 'admin' => 'admin.hutang.index',
+                'admin_satker', 'satker' => 'satker.hutang.index',
+                'petugas_bbm', 'petugas' => 'petugas.hutang.index',
+                default => null,
+            },
+            'riwayat', 'riwayat bbm' => match ($user->role) {
+                'super_admin', 'kasubbag', 'admin' => 'admin.riwayat.index',
+                'admin_satker', 'satker' => 'satker.riwayat.index',
+                'petugas_bbm', 'petugas' => 'petugas.riwayat.index',
+                default => null,
+            },
+            'transfer' => match ($user->role) {
+                'super_admin', 'kasubbag', 'admin' => 'admin.transfer-saldo.index',
+                'admin_satker', 'satker' => 'satker.kendaraans.index',
+                'petugas_bbm', 'petugas' => 'petugas.dashboard',
+                default => null,
+            },
+            'persetujuan', 'persetujuan kendaraan' => match ($user->role) {
+                'super_admin', 'kasubbag', 'admin' => 'admin.persetujuan-kendaraan.index',
+                'admin_satker', 'satker' => 'satker.persetujuan-kendaraan.index',
+                'petugas_bbm', 'petugas' => 'petugas.dashboard',
+                default => null,
+            },
+            default => null,
+        };
+
+        if ($targetRoute && \Illuminate\Support\Facades\Route::has($targetRoute)) {
+            $routeParams = [];
+            if ($target === 'transfer' && in_array($user->role, ['admin_satker', 'satker'])) {
+                $routeParams['open_transfer'] = 1;
+            }
+            return redirect()->route($targetRoute, $routeParams)->withCookie(\Illuminate\Support\Facades\Cookie::forget('simbbm_redirect_to'));
+        }
+    }
+
     if ($user->role === 'super_admin' || $user->role === 'kasubbag') {
         return redirect()->route('admin.dashboard');
     } elseif ($user->role === 'admin_satker') {
         return redirect()->route('satker.dashboard');
     } elseif ($user->role === 'petugas_bbm') {
         return redirect()->route('petugas.dashboard');
-
     }
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
