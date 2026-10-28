@@ -1,41 +1,50 @@
 <x-app-layout>
     <div class="p-3 sm:p-6 lg:p-8 space-y-6 w-full max-w-full overflow-x-hidden">
-        <!-- Executive Welcome Banner (Compact di Mobile, Mewah di Desktop) -->
-        <div class="relative overflow-hidden bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-white/10 p-3.5 sm:p-7 shadow-sm">
-            <div class="absolute -top-24 -right-24 w-96 h-96 bg-brand-primary/10 dark:bg-brand-primary/15 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-1.5 sm:gap-5">
-                <div class="min-w-0">
-                    <div class="hidden sm:inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-brand-primary/10 text-brand-primary dark:bg-white/10 dark:text-white mb-2.5">
-                        <span class="w-2 h-2 rounded-full bg-brand-primary dark:bg-emerald-400 animate-pulse"></span>
-                        SIM BBM • POLDA NTB
+        <!-- ═══════════════════════════════════════════════════════════════════
+             EXECUTIVE SLIM HEADER (MODERN & COMPACT SEPERTI DI ADMIN SATKER)
+        ═══════════════════════════════════════════════════════════════════ -->
+        <div class="relative overflow-hidden bg-white/80 dark:bg-slate-900/80 rounded-2xl border border-slate-200/70 dark:border-white/[0.08] px-4 py-3 sm:px-6 sm:py-3.5 shadow-sm dark:shadow-xl dark:shadow-black/20 backdrop-blur-xl">
+            <!-- Glowing Accent Top Border -->
+            <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-80"></div>
+            <div class="absolute -top-16 -right-16 w-44 h-44 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="relative z-10 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500/20 via-indigo-500/20 to-purple-500/20 border border-blue-500/30 text-blue-500 dark:text-blue-400 flex items-center justify-center shrink-0 shadow-sm shadow-blue-500/10">
+                        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
                     </div>
-                    <div class="flex items-center justify-between gap-2">
-                        <h1 class="text-base sm:text-3xl font-black text-slate-800 dark:text-white tracking-tight truncate">
-                            Pusat Komando & Monitoring Eksekutif
-                        </h1>
-                        <!-- Tanggal Ringkas di Mobile -->
-                        <span class="lg:hidden text-[10px] font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-white/10 shrink-0">
-                            {{ now()->translatedFormat('d M Y') }}
-                        </span>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2">
+                            <h1 class="text-sm sm:text-base font-black text-slate-800 dark:text-white tracking-tight truncate">
+                                Pusat Komando & Monitoring Eksekutif
+                            </h1>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shrink-0">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                Realtime
+                            </span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+                            <span class="font-bold text-slate-700 dark:text-slate-300">SIM BBM • POLDA NTB</span> • Pantauan alokasi BBM, stok tangki fisik & pergerakan seluruh jajaran Satker
+                        </p>
                     </div>
-                    <p class="mt-0.5 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-                        Pantauan alokasi BBM & pergerakan transaksi seluruh jajaran Satker.<span class="hidden sm:inline"> Pengawasan komprehensif kapasitas stok tangki fisik dan armada kendaraan.</span>
-                    </p>
                 </div>
 
-                <!-- Date & Status Chips di Desktop / Layar Besar -->
-                <div class="hidden lg:flex flex-wrap items-center gap-2.5 shrink-0">
-                    <div class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 text-xs font-bold text-slate-700 dark:text-slate-300 shadow-sm">
-                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                <!-- Tanggal & Status -->
+                <div class="flex items-center gap-2 shrink-0">
+                    <div class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100/80 dark:bg-white/[0.04] border border-slate-200/60 dark:border-white/[0.06] text-xs font-semibold text-slate-600 dark:text-slate-300">
+                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                         <span>{{ now()->translatedFormat('l, d F Y') }}</span>
                     </div>
-
-                    <div class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-xs font-bold shadow-sm">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                        <span>Sistem Realtime</span>
+                    <div class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-xs font-bold">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        <span>Aktif</span>
                     </div>
                 </div>
             </div>
@@ -320,7 +329,7 @@
 
                     <div class="p-3 rounded-2xl bg-rose-50/50 dark:bg-rose-500/5 border border-rose-500/20 flex items-center justify-between">
                         <div>
-                            <span class="text-[10px] font-bold text-rose-600 dark:text-rose-400 block uppercase">Bon Dex</span>
+                            <span class="text-[10px] font-bold text-rose-600 dark:text-rose-400 block uppercase">Bon Pertamina Dex</span>
                             <span class="text-lg font-black text-rose-600 dark:text-rose-400 tabular-nums">
                                 {{ number_format($stats['totalHutangDex'], 0, ',', '.') }}
                             </span>
@@ -380,24 +389,142 @@
         </div>
         @endif
 
-        <!-- DIAGRAM SECTION 1: DIAGRAM BATANG (TRANSAKSI HARIAN) & DIAGRAM LINGKAR (DISTRIBUSI ARMADA) -->
+        @php
+            $chartData = [];
+            for ($i = 6; $i >= 0; $i--) {
+                $date = now()->subDays($i);
+                $q = \App\Models\TransaksiBbm::whereDate('created_at', $date);
+                $pertamax = (clone $q)->where(function($sub) {
+                    $sub->where('jenis_bbm', 'like', '%Pertamax%')->orWhere('jenis_bbm', 'like', '%pertamax%');
+                })->sum('liter');
+                $dex = (clone $q)->where(function($sub) {
+                    $sub->where('jenis_bbm', 'like', '%Dex%')->orWhere('jenis_bbm', 'like', '%dex%');
+                })->sum('liter');
+                $chartData[] = [
+                    'date' => $date->format('d M'), 
+                    'pertamax' => round((float)$pertamax, 1),
+                    'dex' => round((float)$dex, 1)
+                ];
+            }
+
+            // Quick metrics 7 hari
+            $totalPertamax7Hari = array_sum(array_column($chartData, 'pertamax'));
+            $totalDex7Hari = array_sum(array_column($chartData, 'dex'));
+            $totalVolume7Hari = $totalPertamax7Hari + $totalDex7Hari;
+            $avgVolumeHarian = round($totalVolume7Hari / 7, 1);
+            $persenPertamax7Hari = $totalVolume7Hari > 0 ? round(($totalPertamax7Hari / $totalVolume7Hari) * 100, 1) : 0;
+            $persenDex7Hari = $totalVolume7Hari > 0 ? round(($totalDex7Hari / $totalVolume7Hari) * 100, 1) : 0;
+            $peakDay = '-';
+            $peakVal = 0;
+            foreach ($chartData as $cd) {
+                $dayTotal = ($cd['pertamax'] ?? 0) + ($cd['dex'] ?? 0);
+                if ($dayTotal > $peakVal) {
+                    $peakVal = $dayTotal;
+                    $peakDay = $cd['date'];
+                }
+            }
+        @endphp
+
+        <!-- DIAGRAM SECTION 1: DIAGRAM KONSUMSI BBM HARIAN & DIAGRAM LINGKAR (DISTRIBUSI ARMADA) -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 w-full min-w-0">
-            <!-- Diagram Batang (2 cols) -->
-            <div class="lg:col-span-2 w-full min-w-0 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-white/10 rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col justify-between overflow-hidden">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-2.5 h-6 bg-indigo-600 rounded-full"></div>
-                        <div>
-                            <h3 class="text-sm sm:text-base font-black text-slate-800 dark:text-white"><span class="hidden sm:inline">Diagram Batang: </span>Konsumsi BBM Harian</h3>
-                            <p class="text-xs text-slate-400">Pantauan volume konsumsi BBM jenis Pertamax dan Pertamina Dex selama 7 hari terakhir</p>
+            <!-- Diagram Konsumsi BBM (2 cols) -->
+            <div class="lg:col-span-2 w-full min-w-0 relative overflow-hidden bg-white dark:bg-slate-900/90 border border-slate-200/80 dark:border-white/10 rounded-2xl p-4 sm:p-6 shadow-sm dark:shadow-xl dark:shadow-black/20 backdrop-blur-xl flex flex-col justify-between">
+                <div class="absolute top-0 right-0 w-72 h-72 bg-gradient-to-bl from-blue-500/10 via-indigo-500/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                <div class="absolute inset-x-0 top-0 h-[2.5px] bg-gradient-to-r from-blue-500 via-indigo-500 to-emerald-400"></div>
+
+                <div>
+                    <!-- Header Diagram -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3 sm:mb-4">
+                        <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-blue-500/15 via-indigo-500/15 to-emerald-500/15 border border-blue-500/20 flex items-center justify-center text-blue-500 dark:text-cyan-400 shadow-sm shadow-blue-500/10 shrink-0">
+                                <svg class="w-4.5 h-4.5 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                </svg>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-2">
+                                    <h3 class="text-xs sm:text-base font-black text-slate-800 dark:text-white tracking-tight truncate">
+                                        Konsumsi BBM Harian Seluruh Satker
+                                    </h3>
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 shrink-0">
+                                        7 Hari
+                                    </span>
+                                </div>
+                                <p class="text-[10px] sm:text-[11px] text-slate-400 dark:text-slate-500 mt-0.5 truncate">
+                                    Total: <strong class="text-slate-700 dark:text-slate-200 font-bold font-mono">{{ number_format($totalVolume7Hari, 1, ',', '.') }} L</strong> • Rerata: <strong class="text-slate-700 dark:text-slate-200 font-bold font-mono">{{ $avgVolumeHarian }} L/hari</strong>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Controls: Mode Switcher & Legend -->
+                        <div class="flex items-center justify-between sm:justify-end gap-2 shrink-0 flex-wrap">
+                            <!-- View Mode Toggle Switcher -->
+                            <div class="inline-flex items-center p-0.5 rounded-xl bg-slate-100 dark:bg-white/[0.06] border border-slate-200/80 dark:border-white/[0.08] text-[10px] font-bold">
+                                <button type="button" id="btnAdminChartModeArea" onclick="setAdminChartMode('area')"
+                                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg transition-all duration-200 text-white bg-blue-600 shadow-sm">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18"/></svg>
+                                    <span>Tren</span>
+                                </button>
+                                <button type="button" id="btnAdminChartModeBar" onclick="setAdminChartMode('bar')"
+                                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg transition-all duration-200 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                                    <span>Pilar</span>
+                                </button>
+                            </div>
+
+                            <!-- Legend Chips -->
+                            <div class="flex items-center gap-1.5">
+                                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                                    <span class="w-2 h-2 rounded-full bg-blue-500 shadow-sm shadow-blue-500/50"></span> Pertamax
+                                </span>
+                                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/50"></span> Dex
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 self-start sm:self-auto">
-                        Batang Rounded • 7 Hari
-                    </span>
+
+                    <!-- Chart Area -->
+                    <div class="w-full min-w-0 overflow-hidden relative">
+                        <div id="barTransactionChart" class="w-full min-h-[290px] sm:min-h-[310px]"></div>
+                    </div>
                 </div>
-                <div class="w-full min-w-0 overflow-hidden">
-                    <div id="barTransactionChart" class="w-full min-h-[290px]"></div>
+
+                <!-- Micro-Summary 4 Metric Cards di Bawah Bagan -->
+                <div class="mt-3 pt-3 border-t border-slate-100 dark:border-white/[0.06] grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <div class="p-2 sm:p-2.5 rounded-xl bg-blue-50/60 dark:bg-blue-500/10 border border-blue-200/70 dark:border-blue-400/20 flex flex-col justify-between">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[9px] font-bold text-blue-700 dark:text-blue-300 uppercase tracking-wider">Pertamax</span>
+                            <span class="text-[8px] font-extrabold text-blue-600 dark:text-blue-300 font-mono">{{ $persenPertamax7Hari }}%</span>
+                        </div>
+                        <span class="text-xs sm:text-sm font-black text-slate-900 dark:text-white font-mono mt-0.5 tabular-nums">
+                            {{ number_format($totalPertamax7Hari, 1, ',', '.') }}<span class="text-[9px] font-sans font-bold text-blue-600 dark:text-blue-300"> L</span>
+                        </span>
+                    </div>
+
+                    <div class="p-2 sm:p-2.5 rounded-xl bg-emerald-50/60 dark:bg-emerald-500/10 border border-emerald-200/70 dark:border-emerald-400/20 flex flex-col justify-between">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[9px] font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider">Pertamina Dex</span>
+                            <span class="text-[8px] font-extrabold text-emerald-600 dark:text-emerald-300 font-mono">{{ $persenDex7Hari }}%</span>
+                        </div>
+                        <span class="text-xs sm:text-sm font-black text-slate-900 dark:text-white font-mono mt-0.5 tabular-nums">
+                            {{ number_format($totalDex7Hari, 1, ',', '.') }}<span class="text-[9px] font-sans font-bold text-emerald-600 dark:text-emerald-300"> L</span>
+                        </span>
+                    </div>
+
+                    <div class="p-2 sm:p-2.5 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200/70 dark:border-white/[0.06] flex flex-col justify-between">
+                        <span class="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider truncate">Rerata Harian</span>
+                        <span class="text-xs sm:text-sm font-black text-slate-900 dark:text-white font-mono mt-0.5 tabular-nums truncate">
+                            ~{{ $avgVolumeHarian }}<span class="text-[9px] font-sans font-bold text-slate-500 dark:text-slate-400"> L/hr</span>
+                        </span>
+                    </div>
+
+                    <div class="p-2 sm:p-2.5 rounded-xl bg-indigo-50/60 dark:bg-indigo-500/10 border border-indigo-200/70 dark:border-indigo-400/20 flex flex-col justify-between">
+                        <span class="text-[9px] font-bold text-indigo-700 dark:text-indigo-300 uppercase tracking-wider truncate">Puncak Pengisian</span>
+                        <span class="text-xs sm:text-sm font-black text-indigo-900 dark:text-indigo-200 font-mono mt-0.5 truncate">
+                            {{ $peakVal > 0 ? $peakDay . ' (' . number_format($peakVal, 0) . 'L)' : '-' }}
+                        </span>
+                    </div>
                 </div>
             </div>
 
@@ -623,26 +750,6 @@
         </div>
     </div>
 
-    <!-- Chart Script & Data -->
-    @php
-        $chartData = [];
-        for ($i = 6; $i >= 0; $i--) {
-            $date = now()->subDays($i);
-            $q = \App\Models\TransaksiBbm::whereDate('created_at', $date);
-            $pertamax = (clone $q)->where(function($sub) {
-                $sub->where('jenis_bbm', 'like', '%Pertamax%')->orWhere('jenis_bbm', 'like', '%pertamax%');
-            })->sum('liter');
-            $dex = (clone $q)->where(function($sub) {
-                $sub->where('jenis_bbm', 'like', '%Dex%')->orWhere('jenis_bbm', 'like', '%dex%');
-            })->sum('liter');
-            $chartData[] = [
-                'date' => $date->format('d M'), 
-                'pertamax' => round((float)$pertamax, 1),
-                'dex' => round((float)$dex, 1)
-            ];
-        }
-    @endphp
-
     @push('styles')
         <style>
             .leaflet-popup-content-wrapper {
@@ -764,6 +871,207 @@
 
         <!-- Charts Script (Diagram Batang & Diagram Lingkar) -->
         <script>
+            var currentAdminChartMode = 'area';
+
+            function setAdminChartMode(mode) {
+                currentAdminChartMode = mode;
+                var btnArea = document.querySelector("#btnAdminChartModeArea");
+                var btnBar = document.querySelector("#btnAdminChartModeBar");
+
+                if (mode === 'area') {
+                    if (btnArea) {
+                        btnArea.className = "inline-flex items-center gap-1 px-2.5 py-1 rounded-lg transition-all duration-200 text-white bg-blue-600 shadow-sm";
+                    }
+                    if (btnBar) {
+                        btnBar.className = "inline-flex items-center gap-1 px-2.5 py-1 rounded-lg transition-all duration-200 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
+                    }
+                } else {
+                    if (btnBar) {
+                        btnBar.className = "inline-flex items-center gap-1 px-2.5 py-1 rounded-lg transition-all duration-200 text-white bg-blue-600 shadow-sm";
+                    }
+                    if (btnArea) {
+                        btnArea.className = "inline-flex items-center gap-1 px-2.5 py-1 rounded-lg transition-all duration-200 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
+                    }
+                }
+
+                renderAdminConsumptionChart();
+            }
+
+            function renderAdminConsumptionChart() {
+                var barEl = document.querySelector("#barTransactionChart");
+                if (!barEl || typeof ApexCharts === 'undefined') return;
+
+                if (window.myAdminBarChart) {
+                    try { window.myAdminBarChart.destroy(); } catch (e) {}
+                    window.myAdminBarChart = null;
+                    barEl.innerHTML = '';
+                }
+
+                var isDark = document.documentElement.classList.contains('dark');
+                var isArea = currentAdminChartMode === 'area';
+                var pertamaxSeries = {!! json_encode(array_column($chartData, 'pertamax')) !!};
+                var dexSeries = {!! json_encode(array_column($chartData, 'dex')) !!};
+                var dateCategories = {!! json_encode(array_column($chartData, 'date')) !!};
+
+                var options = {
+                    chart: {
+                        type: isArea ? 'area' : 'bar',
+                        height: 310,
+                        width: '100%',
+                        fontFamily: 'Inter, Outfit, sans-serif',
+                        toolbar: { show: false },
+                        zoom: { enabled: false },
+                        background: 'transparent',
+                        animations: {
+                            enabled: true,
+                            easing: 'easeinout',
+                            speed: 550,
+                            animateGradually: { enabled: true, delay: 50 }
+                        },
+                        dropShadow: isArea ? {
+                            enabled: true,
+                            top: 4,
+                            left: 0,
+                            blur: 6,
+                            opacity: isDark ? 0.25 : 0.15,
+                            color: ['#3b82f6', '#10b981']
+                        } : { enabled: false }
+                    },
+                    series: [
+                        { name: 'Pertamax', data: pertamaxSeries },
+                        { name: 'Pertamina Dex', data: dexSeries }
+                    ],
+                    colors: ['#3b82f6', '#10b981'],
+                    stroke: {
+                        curve: 'smooth',
+                        width: isArea ? 3 : 0
+                    },
+                    fill: isArea ? {
+                        type: 'gradient',
+                        gradient: {
+                            shade: isDark ? 'dark' : 'light',
+                            type: 'vertical',
+                            shadeIntensity: 0.5,
+                            opacityFrom: isDark ? 0.45 : 0.35,
+                            opacityTo: 0.02,
+                            stops: [0, 90, 100]
+                        }
+                    } : {
+                        type: 'gradient',
+                        gradient: {
+                            shade: isDark ? 'dark' : 'light',
+                            type: 'vertical',
+                            shadeIntensity: 0.25,
+                            opacityFrom: 0.95,
+                            opacityTo: 0.8,
+                            stops: [0, 100]
+                        }
+                    },
+                    plotOptions: {
+                        bar: {
+                            horizontal: false,
+                            columnWidth: '50%',
+                            borderRadius: 8,
+                            borderRadiusApplication: 'end',
+                            dataLabels: { position: 'top' },
+                            colors: {
+                                backgroundBarColors: [isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)'],
+                                backgroundBarRadius: 8,
+                                backgroundBarOpacity: 1
+                            }
+                        }
+                    },
+                    markers: isArea ? {
+                        size: 4,
+                        strokeColors: isDark ? '#0f172a' : '#ffffff',
+                        strokeWidth: 2,
+                        hover: { size: 6 }
+                    } : { size: 0 },
+                    dataLabels: {
+                        enabled: !isArea,
+                        formatter: function (val) {
+                            return val > 0 ? val + 'L' : '';
+                        },
+                        offsetY: -20,
+                        style: {
+                            fontSize: '10px',
+                            fontFamily: 'Inter, Outfit, sans-serif',
+                            fontWeight: 'bold',
+                            colors: [isDark ? '#60a5fa' : '#3b82f6', isDark ? '#34d399' : '#10b981']
+                        }
+                    },
+                    legend: { show: false },
+                    xaxis: {
+                        categories: dateCategories,
+                        labels: {
+                            style: {
+                                colors: isDark ? '#64748b' : '#94a3b8',
+                                fontSize: '11px',
+                                fontFamily: 'Inter, Outfit, sans-serif',
+                                fontWeight: 600
+                            }
+                        },
+                        axisBorder: { show: false },
+                        axisTicks: { show: false }
+                    },
+                    yaxis: {
+                        labels: {
+                            style: {
+                                colors: isDark ? '#64748b' : '#94a3b8',
+                                fontSize: '11px',
+                                fontWeight: 500
+                            },
+                            formatter: function (val) {
+                                return val + ' L';
+                            }
+                        }
+                    },
+                    grid: {
+                        borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                        strokeDashArray: 4,
+                        xaxis: { lines: { show: false } },
+                        padding: { top: 10, right: 10, bottom: 0, left: 10 }
+                    },
+                    tooltip: {
+                        theme: isDark ? 'dark' : 'light',
+                        shared: true,
+                        intersect: false,
+                        custom: function({ series, seriesIndex, dataPointIndex, w }) {
+                            var pVal = series[0][dataPointIndex] || 0;
+                            var dVal = series[1][dataPointIndex] || 0;
+                            var totalVal = (pVal + dVal).toFixed(1);
+                            var dateLabel = w.globals.labels[dataPointIndex];
+
+                            return `
+                                <div class="p-2.5 rounded-xl text-xs font-sans shadow-xl border backdrop-blur-md ${isDark ? 'bg-slate-900/95 border-slate-700/80 text-white' : 'bg-white/95 border-slate-200 text-slate-800'}">
+                                    <div class="font-black pb-1.5 mb-1.5 border-b ${isDark ? 'border-slate-800 text-slate-300' : 'border-slate-100 text-slate-600'} flex items-center justify-between gap-3">
+                                        <span>📅 ${dateLabel}</span>
+                                        <span class="font-mono font-bold ${isDark ? 'text-indigo-400' : 'text-blue-600'}">Total: ${totalVal} L</span>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <div class="flex items-center justify-between gap-4">
+                                            <span class="inline-flex items-center gap-1.5 text-blue-500 font-bold">
+                                                <span class="w-2 h-2 rounded-full bg-blue-500"></span> Pertamax:
+                                            </span>
+                                            <span class="font-mono font-black">${pVal} L</span>
+                                        </div>
+                                        <div class="flex items-center justify-between gap-4">
+                                            <span class="inline-flex items-center gap-1.5 text-emerald-500 font-bold">
+                                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Pertamina Dex:
+                                            </span>
+                                            <span class="font-mono font-black">${dVal} L</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    }
+                };
+
+                window.myAdminBarChart = new ApexCharts(barEl, options);
+                window.myAdminBarChart.render();
+            }
+
             function destroyAdminCharts() {
                 if (window.myAdminTankStockChart) {
                     try { window.myAdminTankStockChart.destroy(); } catch (e) {}
@@ -799,6 +1107,8 @@
 
             function initAdminCharts() {
                 destroyAdminCharts();
+                var isDark = document.documentElement.classList.contains('dark');
+                var cardBorderColor = isDark ? '#0f172a' : '#ffffff';
 
                 // 0A. DIAGRAM BATANG 1: STOK TANGKI FISIK BBM
                 var tankStockEl = document.querySelector("#tankStockBarChart");
@@ -808,7 +1118,7 @@
                             type: 'bar',
                             height: 250,
                             width: '100%',
-                            fontFamily: 'Outfit, sans-serif',
+                            fontFamily: 'Inter, Outfit, sans-serif',
                             toolbar: { show: false },
                             zoom: { enabled: false }
                         },
@@ -821,6 +1131,10 @@
                                 distributed: true,
                                 dataLabels: {
                                     position: 'top'
+                                },
+                                colors: {
+                                    backgroundBarColors: [isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)'],
+                                    backgroundBarRadius: 10
                                 }
                             }
                         },
@@ -832,9 +1146,9 @@
                             offsetY: -22,
                             style: {
                                 fontSize: '11px',
-                                fontFamily: 'Outfit, sans-serif',
+                                fontFamily: 'Inter, Outfit, sans-serif',
                                 fontWeight: 'bold',
-                                colors: ["#64748b"]
+                                colors: [isDark ? '#cbd5e1' : '#64748b']
                             }
                         },
                         series: [{
@@ -848,9 +1162,9 @@
                             categories: ['Pertamax', 'Pertamina Dex'],
                             labels: {
                                 style: {
-                                    colors: '#94a3b8',
+                                    colors: isDark ? '#94a3b8' : '#64748b',
                                     fontSize: '12px',
-                                    fontFamily: 'Outfit, sans-serif',
+                                    fontFamily: 'Inter, Outfit, sans-serif',
                                     fontWeight: 'bold'
                                 }
                             },
@@ -859,7 +1173,7 @@
                         },
                         yaxis: {
                             labels: {
-                                style: { colors: '#94a3b8', fontSize: '11px' },
+                                style: { colors: isDark ? '#64748b' : '#94a3b8', fontSize: '11px' },
                                 formatter: function (val) {
                                     return val.toLocaleString('id-ID') + ' L';
                                 }
@@ -867,12 +1181,12 @@
                         },
                         colors: ['#0284c7', '#10b981'],
                         grid: {
-                            borderColor: '#33415520',
+                            borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
                             strokeDashArray: 4
                         },
                         legend: { show: false },
                         tooltip: {
-                            theme: 'dark',
+                            theme: isDark ? 'dark' : 'light',
                             y: {
                                 formatter: function (val) {
                                     return val.toLocaleString('id-ID') + ' Liter Tersedia';
@@ -892,7 +1206,7 @@
                             type: 'bar',
                             height: 250,
                             width: '100%',
-                            fontFamily: 'Outfit, sans-serif',
+                            fontFamily: 'Inter, Outfit, sans-serif',
                             toolbar: { show: false },
                             zoom: { enabled: false }
                         },
@@ -905,6 +1219,10 @@
                                 distributed: true,
                                 dataLabels: {
                                     position: 'top'
+                                },
+                                colors: {
+                                    backgroundBarColors: [isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)'],
+                                    backgroundBarRadius: 10
                                 }
                             }
                         },
@@ -916,9 +1234,9 @@
                             offsetY: -22,
                             style: {
                                 fontSize: '11px',
-                                fontFamily: 'Outfit, sans-serif',
+                                fontFamily: 'Inter, Outfit, sans-serif',
                                 fontWeight: 'bold',
-                                colors: ["#64748b"]
+                                colors: [isDark ? '#cbd5e1' : '#64748b']
                             }
                         },
                         series: [{
@@ -932,9 +1250,9 @@
                             categories: ['Pertamax (Bon)', 'Pertamina Dex (Bon)'],
                             labels: {
                                 style: {
-                                    colors: '#94a3b8',
+                                    colors: isDark ? '#94a3b8' : '#64748b',
                                     fontSize: '12px',
-                                    fontFamily: 'Outfit, sans-serif',
+                                    fontFamily: 'Inter, Outfit, sans-serif',
                                     fontWeight: 'bold'
                                 }
                             },
@@ -943,7 +1261,7 @@
                         },
                         yaxis: {
                             labels: {
-                                style: { colors: '#94a3b8', fontSize: '11px' },
+                                style: { colors: isDark ? '#64748b' : '#94a3b8', fontSize: '11px' },
                                 formatter: function (val) {
                                     return val.toLocaleString('id-ID') + ' L';
                                 }
@@ -951,12 +1269,12 @@
                         },
                         colors: ['#f59e0b', '#f43f5e'],
                         grid: {
-                            borderColor: '#33415520',
+                            borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
                             strokeDashArray: 4
                         },
                         legend: { show: false },
                         tooltip: {
-                            theme: 'dark',
+                            theme: isDark ? 'dark' : 'light',
                             y: {
                                 formatter: function (val) {
                                     return val.toLocaleString('id-ID') + ' Liter Tertunda';
@@ -968,90 +1286,8 @@
                     window.myAdminDebtStockChart.render();
                 }
 
-                // 1. DIAGRAM BATANG (BAR CHART): Transaksi & Liter 7 Hari
-                var barEl = document.querySelector("#barTransactionChart");
-                if (barEl && typeof ApexCharts !== 'undefined') {
-                    var barOptions = {
-                        chart: {
-                            type: 'bar',
-                            height: 290,
-                            width: '100%',
-                            fontFamily: 'Outfit, sans-serif',
-                            toolbar: { show: false },
-                            zoom: { enabled: false }
-                        },
-                        plotOptions: {
-                            bar: {
-                                horizontal: false,
-                                columnWidth: '45%',
-                                borderRadius: 8,
-                                borderRadiusApplication: 'end',
-                                dataLabels: {
-                                    position: 'top',
-                                }
-                            }
-                        },
-                        dataLabels: {
-                            enabled: true,
-                            formatter: function (val) {
-                                return val > 0 ? val + ' L' : '';
-                            },
-                            offsetY: -20,
-                            style: {
-                                fontSize: '10px',
-                                fontFamily: 'Outfit, sans-serif',
-                                fontWeight: 'bold',
-                                colors: ["#64748b"]
-                            }
-                        },
-                        series: [{
-                            name: 'Pertamax',
-                            data: {!! json_encode(array_column($chartData, 'pertamax')) !!}
-                        }, {
-                            name: 'Pertamina Dex',
-                            data: {!! json_encode(array_column($chartData, 'dex')) !!}
-                        }],
-                        xaxis: {
-                            categories: {!! json_encode(array_column($chartData, 'date')) !!},
-                            labels: {
-                                style: { colors: '#94a3b8', fontSize: '11px', fontFamily: 'Outfit, sans-serif' }
-                            },
-                            axisBorder: { show: false },
-                            axisTicks: { show: false }
-                        },
-                        yaxis: {
-                            labels: {
-                                style: { colors: '#94a3b8', fontSize: '11px' },
-                                formatter: function (val) {
-                                    return val.toLocaleString('id-ID') + ' L';
-                                }
-                            }
-                        },
-                        colors: ['#3b82f6', '#10b981'], // Biru (Pertamax) & Emerald (Pertamina Dex)
-                        grid: {
-                            borderColor: '#33415520',
-                            strokeDashArray: 4
-                        },
-                        legend: {
-                            position: 'top',
-                            horizontalAlign: 'right',
-                            fontFamily: 'Outfit, sans-serif',
-                            labels: {
-                                colors: '#94a3b8'
-                            }
-                        },
-                        tooltip: {
-                            theme: 'dark',
-                            y: {
-                                formatter: function (val) {
-                                    return val.toLocaleString('id-ID') + ' Liter';
-                                }
-                            }
-                        }
-                    };
-                    window.myAdminBarChart = new ApexCharts(barEl, barOptions);
-                    window.myAdminBarChart.render();
-                }
+                // 1. DIAGRAM KONSUMSI BBM HARIAN (MODERN AREA & PILLAR SWITCHABLE)
+                renderAdminConsumptionChart();
 
                 // 2. DIAGRAM LINGKAR (DONUT CHART): Komposisi Armada Kendaraan
                 var fleetEl = document.querySelector("#fleetDonutChart");
