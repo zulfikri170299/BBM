@@ -75,8 +75,27 @@ class SettingController extends Controller
             Setting::updateOrCreate(['key' => 'mobile_hero_image'], ['value' => '']);
         }
 
-        // Handle upload login background image (gambar gedung latar belakang desktop login)
-        if ($request->hasFile('login_background_image')) {
+        // Handle upload login background image (gambar gedung latar belakang desktop login - mendukung base64 dari crop 16:9 maupun file langsung)
+        if ($request->filled('login_background_image_base64') && str_starts_with($request->login_background_image_base64, 'data:image')) {
+            $base64Image = $request->login_background_image_base64;
+            $image_parts = explode(";base64,", $base64Image);
+            if (isset($image_parts[1])) {
+                $image_base64 = base64_decode($image_parts[1]);
+                $filename = 'bg_' . time() . '_' . uniqid() . '.jpg';
+                $destination = public_path('uploads/backgrounds');
+                if (!file_exists($destination)) {
+                    mkdir($destination, 0755, true);
+                }
+
+                $oldBg = Setting::where('key', 'login_background_image')->value('value');
+                if ($oldBg && file_exists(public_path($oldBg))) {
+                    @unlink(public_path($oldBg));
+                }
+
+                file_put_contents($destination . '/' . $filename, $image_base64);
+                Setting::updateOrCreate(['key' => 'login_background_image'], ['value' => 'uploads/backgrounds/' . $filename]);
+            }
+        } elseif ($request->hasFile('login_background_image')) {
             $file = $request->file('login_background_image');
             $filename = 'bg_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
             $destination = public_path('uploads/backgrounds');
@@ -106,6 +125,7 @@ class SettingController extends Controller
             'mobile_hero_image_base64', 
             'remove_mobile_hero_image',
             'login_background_image',
+            'login_background_image_base64',
             'remove_login_background_image'
         ]);
 

@@ -580,25 +580,27 @@
             <div class="w-1/2 py-7 px-6 lg:py-8 lg:px-7 relative backdrop-blur-2xl text-slate-800 flex flex-col justify-between" style="background: rgba(255,255,255,0.92);">
                 
                 <!-- Header Atas: Logo & Badge Premium -->
-                <div class="flex items-center justify-between pb-3.5 border-b border-slate-100/80">
-                    <div class="flex items-center gap-3">
-                        <div class="relative">
+                <div class="flex items-center justify-between gap-3 pb-3.5 border-b border-slate-100/80">
+                    <div class="flex items-center gap-3 min-w-0 flex-1">
+                        <div class="relative shrink-0 flex items-center justify-center">
                             <div class="absolute inset-0 bg-blue-500/20 rounded-full blur-md"></div>
-                            <img src="/rolog.png" onerror="this.onerror=null; this.src='/TRIBRATA.png';" alt="Logo Biro Logistik Polda NTB" class="relative h-12 w-auto object-contain drop-shadow-lg hover:scale-110 transition-transform duration-300 shrink-0">
+                            <img src="/rolog.png" onerror="this.onerror=null; this.src='/TRIBRATA.png';" alt="Logo Biro Logistik Polda NTB" class="relative h-11 lg:h-12 w-auto object-contain drop-shadow-md shrink-0">
                         </div>
-                        <div>
-                            <h3 class="text-lg lg:text-[20px] font-black text-slate-900 leading-tight tracking-tight">Portal SIM-BBM</h3>
-                            <p class="text-[10.5px] text-slate-500 font-semibold leading-tight mt-0.5">Biro Logistik Polda Nusa Tenggara Barat</p>
+                        <div class="min-w-0 flex-1">
+                            <h3 class="text-sm lg:text-[15.5px] font-black text-slate-900 leading-snug tracking-tight">
+                                {{ $mobileHeroSlogan ?? 'Portal SIM-BBM' }}
+                            </h3>
+                            <p class="text-[10px] lg:text-[10.5px] text-slate-500 font-medium leading-tight mt-0.5 truncate">Biro Logistik Polda Nusa Tenggara Barat</p>
                         </div>
                     </div>
 
-                    <!-- Badge SPBP NTB Modern -->
-                    <div class="inline-flex items-center gap-1.5 bg-gradient-to-r from-red-50 via-white to-blue-50 border border-slate-200 px-2.5 py-1.5 rounded-full text-xs font-black shadow-sm hover:shadow-md transition-shadow">
-                        <span class="w-3.5 h-3.5 rounded-full overflow-hidden flex flex-col shadow border border-slate-300 shrink-0">
+                    <!-- Badge SPBP NTB Modern (Always clean 1-line pill) -->
+                    <div class="shrink-0 inline-flex items-center gap-1.5 bg-gradient-to-r from-red-50 via-white to-blue-50 border border-slate-200/90 px-3 py-1.5 rounded-full shadow-sm whitespace-nowrap">
+                        <span class="w-3.5 h-3.5 rounded-full overflow-hidden flex flex-col shadow-sm border border-slate-300 shrink-0">
                             <span class="bg-red-600 h-1/2 w-full"></span>
                             <span class="bg-white h-1/2 w-full"></span>
                         </span>
-                        <span class="tracking-wider text-[9px] font-black uppercase text-blue-900">SPBP NTB</span>
+                        <span class="tracking-wider text-[10px] font-black uppercase text-blue-950 whitespace-nowrap">SPBP NTB</span>
                     </div>
                 </div>
 

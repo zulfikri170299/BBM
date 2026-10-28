@@ -369,14 +369,14 @@
                         <!-- Card Body -->
                         <div class="p-3.5 sm:p-4 space-y-3">
                             
-                            <!-- Input Teks Slogan Login Mobile -->
+                            <!-- Input Teks Slogan / Judul Login Mobile & Desktop -->
                             <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-white/10 space-y-1.5">
                                 <label for="mobile_hero_slogan" class="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-slate-200">
                                     <span class="flex items-center gap-1.5">
                                         <svg class="w-3.5 h-3.5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
-                                        <span>Teks Slogan / Judul Login Mobile</span>
+                                        <span>Teks Slogan / Judul Login (Mobile & Desktop)</span>
                                     </span>
                                     <span class="text-[9px] font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/40 px-2 py-0.5 rounded-full border border-indigo-200 dark:border-indigo-700/50">Dapat Diubah</span>
                                 </label>
@@ -387,7 +387,7 @@
                                        placeholder="Contoh: Ayok Mulai Transaksi dengan SIM-BBM Mobile"
                                        class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition shadow-sm font-semibold">
                                 <p class="text-[10px] text-slate-500 dark:text-slate-400">
-                                    Kalimat ajakan yang muncul di bagian atas halaman login HP (tepat di atas kubah gambar media).
+                                    Kalimat ajakan/judul yang tampil di bagian atas login HP dan pada header portal login desktop.
                                 </p>
                             </div>
 
@@ -686,21 +686,93 @@
                             previewSrc: '{{ !empty($settings['login_background_image']) && file_exists(public_path($settings['login_background_image'])) ? asset($settings['login_background_image']) : asset('polda.jpg') }}',
                             defaultSrc: '{{ asset('polda.jpg') }}',
                             removeCustomBg: false,
+                            croppedBase64: '',
                             posY: {{ $settings['login_bg_pos_y'] ?? 50 }},
                             zoomLevel: {{ $settings['login_bg_zoom'] ?? 100 }},
                             overlayLevel: {{ $settings['login_bg_overlay'] ?? 25 }},
+                            showCropperModal: false,
+                            cropperInstance: null,
+                            rawImageSrc: '',
                             
                             fileChosen(event) {
                                 const file = event.target.files[0];
                                 if (file) {
                                     const reader = new FileReader();
                                     reader.onload = (e) => {
-                                        this.previewSrc = e.target.result;
-                                        this.hasCustomBg = true;
-                                        this.removeCustomBg = false;
+                                        this.rawImageSrc = e.target.result;
+                                        this.initCropper();
                                     };
                                     reader.readAsDataURL(file);
                                 }
+                            },
+
+                            initCropper() {
+                                this.showCropperModal = true;
+                                this.$nextTick(() => {
+                                    const img = document.getElementById('bg-cropper-target-image');
+                                    if (!img) return;
+                                    if (this.cropperInstance) {
+                                        this.cropperInstance.destroy();
+                                    }
+                                    img.src = this.rawImageSrc;
+                                    this.cropperInstance = new Cropper(img, {
+                                        aspectRatio: 16 / 9,
+                                        viewMode: 1,
+                                        dragMode: 'move',
+                                        autoCropArea: 0.98,
+                                        restore: false,
+                                        guides: true,
+                                        center: true,
+                                        highlight: false,
+                                        cropBoxMovable: true,
+                                        cropBoxResizable: true,
+                                        toggleDragModeOnDblclick: false,
+                                        background: false,
+                                    });
+                                });
+                            },
+
+                            cropZoom(delta) {
+                                if (this.cropperInstance) this.cropperInstance.zoom(delta);
+                            },
+
+                            cropRotate(degree) {
+                                if (this.cropperInstance) this.cropperInstance.rotate(degree);
+                            },
+
+                            cropReset() {
+                                if (this.cropperInstance) this.cropperInstance.reset();
+                            },
+
+                            applyCroppedImage() {
+                                if (!this.cropperInstance) return;
+                                const canvas = this.cropperInstance.getCroppedCanvas({
+                                    width: 1920,
+                                    height: 1080,
+                                    imageSmoothingEnabled: true,
+                                    imageSmoothingQuality: 'high',
+                                });
+                                if (!canvas) return;
+                                this.croppedBase64 = canvas.toDataURL('image/jpeg', 0.92);
+                                this.previewSrc = this.croppedBase64;
+                                this.hasCustomBg = true;
+                                this.removeCustomBg = false;
+                                this.closeCropper();
+                            },
+
+                            openReCrop() {
+                                if (this.previewSrc) {
+                                    this.rawImageSrc = this.previewSrc;
+                                    this.initCropper();
+                                }
+                            },
+
+                            closeCropper() {
+                                if (this.cropperInstance) {
+                                    this.cropperInstance.destroy();
+                                    this.cropperInstance = null;
+                                }
+                                this.showCropperModal = false;
                             },
 
                             resetToDefault() {
@@ -708,6 +780,7 @@
                                 this.previewSrc = this.defaultSrc;
                                 this.hasCustomBg = false;
                                 this.removeCustomBg = true;
+                                this.croppedBase64 = '';
                                 this.posY = 50;
                                 this.zoomLevel = 100;
                             }
@@ -739,11 +812,11 @@
                             <div class="space-y-1">
                                 <div class="flex items-center justify-between text-xs">
                                     <span class="font-bold text-slate-700 dark:text-slate-300 text-[11px]">Live Preview Background Desktop</span>
-                                    <span class="text-[10px] text-slate-400 font-medium">Simulasi Layar 16:9</span>
+                                    <span class="text-[10px] text-cyan-600 dark:text-cyan-400 font-bold">Rasio Layar Lebar 16:9 (1920×1080)</span>
                                 </div>
 
-                                <!-- Desktop Screen Mockup Frame -->
-                                <div class="relative w-full h-32 sm:h-36 rounded-xl overflow-hidden border-2 border-slate-300 dark:border-slate-700 shadow-md group bg-slate-950">
+                                <!-- Desktop Screen Mockup Frame (Proporsional Layar Besar 16:9) -->
+                                <div class="relative w-full aspect-video max-h-[260px] sm:max-h-[300px] rounded-xl overflow-hidden border-2 border-slate-300 dark:border-slate-700 shadow-lg group bg-slate-950">
                                     <!-- Background Image with dynamic position and zoom -->
                                     <img :src="previewSrc" alt="Preview Background Gedung" 
                                          class="w-full h-full object-cover transition-all duration-300 origin-center"
@@ -755,18 +828,18 @@
 
                                     <!-- Miniatur Kartu Login di Depan (Proporsi Akurat 1:1 dengan Halaman Login Asli) -->
                                     <div class="absolute inset-0 flex items-center justify-center p-2 pointer-events-none">
-                                        <div class="w-48 h-24 rounded-xl bg-white/30 backdrop-blur-md border border-white/40 shadow-xl flex items-center justify-between p-1.5 gap-1.5">
+                                        <div class="w-52 h-28 sm:w-56 sm:h-30 rounded-xl bg-white/30 backdrop-blur-md border border-white/40 shadow-xl flex items-center justify-between p-1.5 gap-1.5">
                                             <!-- Sisi Kiri: Branding Miniatur -->
                                             <div class="w-1/2 h-full rounded-lg bg-gradient-to-b from-[#4a0613]/90 via-[#081e54]/90 to-[#004fcf]/90 flex flex-col items-center justify-between text-center p-1 border-r border-white/20">
                                                 <div class="px-1 py-0.5 rounded-full bg-white/10 border border-white/20 text-[5px] text-cyan-200 font-bold uppercase tracking-widest leading-none">
                                                     PORTAL RESMI
                                                 </div>
-                                                <div class="w-6 h-6 rounded-full bg-white/20 border border-white/40 flex items-center justify-center shadow-sm">
-                                                    <div class="w-4 h-4 rounded-full bg-amber-400/30 border border-amber-300/40"></div>
+                                                <div class="w-7 h-7 rounded-full bg-white/20 border border-white/40 flex items-center justify-center shadow-sm">
+                                                    <div class="w-5 h-5 rounded-full bg-amber-400/30 border border-amber-300/40"></div>
                                                 </div>
                                                 <div>
-                                                    <div class="text-[6.5px] font-black text-white leading-none">SIM-BBM</div>
-                                                    <div class="text-[4.5px] text-blue-200 leading-none">POLDA NTB</div>
+                                                    <div class="text-[7px] font-black text-white leading-none">SIM-BBM</div>
+                                                    <div class="text-[5px] text-blue-200 leading-none">POLDA NTB</div>
                                                 </div>
                                             </div>
                                             <!-- Sisi Kanan: Action Panel Miniatur -->
@@ -782,20 +855,20 @@
                                                     <div class="h-1.5 rounded bg-cyan-100"></div>
                                                     <div class="h-1.5 rounded bg-purple-100"></div>
                                                 </div>
-                                                <div class="h-2.5 w-full bg-blue-600 rounded flex items-center justify-center text-[5px] font-black text-white">LOGIN KE SISTEM</div>
-                                                <div class="h-2 w-full bg-slate-100 rounded border border-slate-200 flex items-center justify-center text-[4px] text-blue-600 font-bold">CEK SALDO</div>
+                                                <div class="h-3 w-full bg-blue-600 rounded flex items-center justify-center text-[5.5px] font-black text-white">LOGIN KE SISTEM</div>
+                                                <div class="h-2.5 w-full bg-slate-100 rounded border border-slate-200 flex items-center justify-center text-[4.5px] text-blue-600 font-bold">CEK SALDO</div>
                                             </div>
                                         </div>
                                     </div>
 
                                     <!-- Badge Info Posisi Aktif -->
                                     <div class="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 rounded bg-black/60 backdrop-blur-md text-[8px] text-white/90 font-medium border border-white/20 flex items-center gap-1 pointer-events-none">
-                                        <span>Posisi Y: <span x-text="posY + '%'"></span> | Zoom: <span x-text="zoomLevel + '%'"></span></span>
+                                        <span>Rasio 16:9 | Posisi Y: <span x-text="posY + '%'"></span> | Zoom: <span x-text="zoomLevel + '%'"></span></span>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Tombol Aksi Upload & Reset -->
+                            <!-- Tombol Aksi Upload, Crop 16:9 & Reset -->
                             <div class="flex flex-wrap items-center justify-between gap-1.5 pt-0.5">
                                 <div class="flex flex-wrap items-center gap-1.5">
                                     <input type="file" 
@@ -816,6 +889,16 @@
 
                                     <button type="button" 
                                             x-show="hasCustomBg && !removeCustomBg"
+                                            @click="openReCrop()"
+                                            class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-sky-500/25 hover:bg-sky-500/40 text-cyan-200 border border-cyan-400/30 rounded-lg text-[11px] font-bold transition">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                                        </svg>
+                                        <span>Crop 16:9 (Desktop)</span>
+                                    </button>
+
+                                    <button type="button" 
+                                            x-show="hasCustomBg && !removeCustomBg"
                                             @click="resetToDefault()"
                                             class="inline-flex items-center gap-1 px-2 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:hover:bg-rose-900/50 dark:text-rose-300 rounded-lg text-[11px] font-bold border border-rose-200 dark:border-rose-700/50 transition">
                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -824,11 +907,12 @@
                                         <span>Bawaan</span>
                                     </button>
 
+                                    <input type="hidden" name="login_background_image_base64" :value="croppedBase64">
                                     <input type="hidden" name="remove_login_background_image" :value="removeCustomBg ? '1' : '0'">
                                 </div>
 
                                 <span class="text-[9px] text-slate-400">
-                                    JPG/PNG/WEBP (Maks 8MB)
+                                    Format 16:9 (1920×1080 px)
                                 </span>
                             </div>
 
@@ -912,6 +996,85 @@
 
                             </div>
 
+                        </div>
+
+                        <!-- MODAL WIDESCREEN CROPPER DESKTOP (16:9) -->
+                        <div x-show="showCropperModal" 
+                             x-cloak 
+                             class="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-5"
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0"
+                             x-transition:enter-end="opacity-100"
+                             x-transition:leave="transition ease-in duration-200"
+                             x-transition:leave-start="opacity-100"
+                             x-transition:leave-end="opacity-0">
+                            
+                            <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-md" @click="closeCropper()"></div>
+
+                            <div class="relative z-10 w-full max-w-3xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col text-slate-800 dark:text-slate-200"
+                                 x-transition:enter="transition ease-out duration-300 transform"
+                                 x-transition:enter-start="scale-95 translate-y-4"
+                                 x-transition:enter-end="scale-100 translate-y-0"
+                                 x-transition:leave="transition ease-in duration-200 transform"
+                                 x-transition:leave-start="scale-100 translate-y-0"
+                                 x-transition:leave-end="scale-95 translate-y-4">
+                                
+                                <div class="px-5 py-4 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50 dark:bg-slate-800/50">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Sesuaikan Potongan Background Desktop (16:9 Widescreen)</h3>
+                                            <p class="text-[11px] text-slate-500 dark:text-slate-400">Posisikan dan potong gambar dalam format layar lebar 16:9 (1920×1080 px) agar pas dan proporsional di monitor komputer besar.</p>
+                                        </div>
+                                    </div>
+                                    <button type="button" @click="closeCropper()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-white transition">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                    </button>
+                                </div>
+
+                                <div class="p-4 bg-slate-950 flex items-center justify-center relative overflow-hidden" style="min-height: 360px; max-height: 480px;">
+                                    <div class="w-full h-full max-h-[440px] flex items-center justify-center">
+                                        <img id="bg-cropper-target-image" src="" alt="Crop Source Desktop" class="max-w-full max-h-full block">
+                                    </div>
+                                    <div class="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-black/70 backdrop-blur-md rounded-full text-[10px] font-bold text-cyan-200 border border-white/20 pointer-events-none">
+                                        Rasio Layar Desktop 16:9 (Widescreen 1920×1080 px)
+                                    </div>
+                                </div>
+
+                                <div class="px-5 py-3 border-t border-slate-200 dark:border-white/10 flex flex-wrap items-center justify-between gap-2 bg-slate-50/70 dark:bg-slate-800/40">
+                                    <div class="flex items-center gap-1.5">
+                                        <button type="button" @click="cropZoom(0.1)" title="Perbesar" class="p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 transition shadow-sm">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                        </button>
+                                        <button type="button" @click="cropZoom(-0.1)" title="Perkecil" class="p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 transition shadow-sm">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
+                                        </button>
+                                        <button type="button" @click="cropRotate(-90)" title="Putar Kiri 90°" class="p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 transition shadow-sm">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a5 5 0 015 5v2m0 0l-3-3m3 3l3-3M3 10l3-3m-3 3l3 3"/></svg>
+                                        </button>
+                                        <button type="button" @click="cropRotate(90)" title="Putar Kanan 90°" class="p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 transition shadow-sm">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 10H11a5 5 0 00-5 5v2m0 0l3-3m-3 3l-3-3m17-7l-3-3m3 3l-3 3"/></svg>
+                                        </button>
+                                        <button type="button" @click="cropReset()" title="Reset Posisi" class="px-2.5 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 text-xs font-bold transition shadow-sm">
+                                            Reset
+                                        </button>
+                                    </div>
+
+                                    <div class="flex items-center gap-2">
+                                        <button type="button" @click="closeCropper()" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-100 text-xs font-bold transition">
+                                            Batal
+                                        </button>
+                                        <button type="button" @click="applyCroppedImage()" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-xs font-bold shadow-md shadow-blue-600/30 active:scale-95 transition flex items-center gap-1.5">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                            <span>Terapkan ke Background Desktop (16:9)</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
