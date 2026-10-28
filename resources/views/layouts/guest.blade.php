@@ -89,8 +89,8 @@
     </div>
 
     <!-- Mobile Background Container -->
-    <div class="min-h-screen flex flex-col items-center justify-center p-0 md:p-4 relative z-10 md:bg-transparent bg-slate-900">
-        <div class="w-full {{ $maxWidth }} relative z-20 flex-1 flex flex-col justify-center py-2 md:py-4">
+    <div class="h-[100dvh] md:min-h-screen flex flex-col items-center justify-center p-0 md:p-4 relative z-10 md:bg-transparent bg-slate-900 overflow-hidden md:overflow-visible">
+        <div class="w-full {{ $maxWidth }} relative z-20 flex-1 flex flex-col justify-center py-0 md:py-4 h-full md:h-auto overflow-hidden md:overflow-visible">
             {{ $slot }}
 
             <p class="hidden md:block text-center text-xs text-white/80 drop-shadow mt-4 mb-2 font-medium">

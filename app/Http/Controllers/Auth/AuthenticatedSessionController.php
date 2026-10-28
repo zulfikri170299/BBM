@@ -24,7 +24,8 @@ class AuthenticatedSessionController extends Controller
         $heroZoom = \App\Models\Setting::where('key', 'mobile_hero_zoom')->value('value') ?? '100';
         $heroBg = \App\Models\Setting::where('key', 'mobile_hero_bg')->value('value') ?? 'transparent';
         $heroShape = \App\Models\Setting::where('key', 'mobile_hero_shape')->value('value') ?? 'circle';
-        return view('auth.login', compact('personelAccessControl', 'mobileHeroImage', 'heroFit', 'heroZoom', 'heroBg', 'heroShape'));
+        $mobileHeroSlogan = \App\Models\Setting::where('key', 'mobile_hero_slogan')->value('value') ?? 'Ayok Mulai Transaksi dengan SIM-BBM Mobile';
+        return view('auth.login', compact('personelAccessControl', 'mobileHeroImage', 'heroFit', 'heroZoom', 'heroBg', 'heroShape', 'mobileHeroSlogan'));
     }
 
     /**
@@ -79,7 +80,7 @@ class AuthenticatedSessionController extends Controller
                     'petugas_bbm', 'petugas' => 'petugas.dashboard',
                     default => 'dashboard',
                 },
-                'persetujuan', 'persetujuan kendaraan' => match ($user->role) {
+                'pengajuan', 'pengajuan kendaraan', 'persetujuan', 'persetujuan kendaraan' => match ($user->role) {
                     'super_admin', 'kasubbag', 'admin' => 'admin.persetujuan-kendaraan.index',
                     'admin_satker', 'satker' => 'satker.persetujuan-kendaraan.index',
                     'petugas_bbm', 'petugas' => 'petugas.dashboard',

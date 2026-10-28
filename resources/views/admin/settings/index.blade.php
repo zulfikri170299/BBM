@@ -223,7 +223,7 @@
                             previewSrc: '{{ !empty($settings['mobile_hero_image']) && file_exists(public_path($settings['mobile_hero_image'])) ? asset($settings['mobile_hero_image']) : '' }}', 
                             removeCustomImage: false,
                             croppedBase64: '',
-                            shapeMode: '{{ $settings['mobile_hero_shape'] ?? 'circle' }}',
+                            shapeMode: '{{ ($settings['mobile_hero_shape'] ?? 'circle') === 'rectangle' ? 'auto' : ($settings['mobile_hero_shape'] ?? 'circle') }}',
                             fitMode: '{{ $settings['mobile_hero_fit'] ?? 'cover' }}',
                             zoomLevel: {{ $settings['mobile_hero_zoom'] ?? 100 }},
                             bgColor: '{{ $settings['mobile_hero_bg'] ?? 'transparent' }}',
@@ -233,7 +233,7 @@
 
                             onShapeChange() {
                                 if (this.cropperInstance) {
-                                    this.cropperInstance.setAspectRatio(this.shapeMode === 'circle' ? 1 : 16 / 10);
+                                    this.cropperInstance.setAspectRatio(this.shapeMode === 'circle' ? 1 : NaN);
                                 }
                             },
 
@@ -258,17 +258,18 @@
                                         this.cropperInstance.destroy();
                                     }
                                     img.src = this.rawImageSrc;
+                                    const isCircle = this.shapeMode === 'circle';
                                     this.cropperInstance = new Cropper(img, {
-                                        aspectRatio: this.shapeMode === 'circle' ? 1 : 16 / 10,
+                                        aspectRatio: isCircle ? 1 : NaN,
                                         viewMode: 1,
                                         dragMode: 'move',
-                                        autoCropArea: 0.95,
+                                        autoCropArea: 0.98,
                                         restore: false,
-                                        guides: false,
+                                        guides: !isCircle,
                                         center: true,
                                         highlight: false,
-                                        cropBoxMovable: false,
-                                        cropBoxResizable: false,
+                                        cropBoxMovable: !isCircle,
+                                        cropBoxResizable: !isCircle,
                                         toggleDragModeOnDblclick: false,
                                         background: false,
                                     });
@@ -295,14 +296,27 @@
 
                             applyCroppedImage() {
                                 if (!this.cropperInstance) return;
-                                const isCircle = this.shapeMode === 'circle';
-                                const canvas = this.cropperInstance.getCroppedCanvas({
-                                    width: isCircle ? 800 : 960,
-                                    height: isCircle ? 800 : 600,
+                                const croppedCanvas = this.cropperInstance.getCroppedCanvas({
+                                    width: 800,
+                                    height: 800,
                                     imageSmoothingEnabled: true,
                                     imageSmoothingQuality: 'high',
                                 });
-                                this.croppedBase64 = canvas.toDataURL('image/png');
+                                if (!croppedCanvas) return;
+
+                                // Mask bulat transparan sempurna (1:1 circular mask)
+                                const circleCanvas = document.createElement('canvas');
+                                circleCanvas.width = 800;
+                                circleCanvas.height = 800;
+                                const ctx = circleCanvas.getContext('2d');
+                                
+                                ctx.beginPath();
+                                ctx.arc(400, 400, 400, 0, 2 * Math.PI);
+                                ctx.closePath();
+                                ctx.clip();
+                                ctx.drawImage(croppedCanvas, 0, 0, 800, 800);
+
+                                this.croppedBase64 = circleCanvas.toDataURL('image/png');
                                 this.previewSrc = this.croppedBase64;
                                 this.hasPreview = true;
                                 this.removeCustomImage = false;
@@ -355,67 +369,85 @@
                         <!-- Card Body -->
                         <div class="p-3.5 sm:p-4 space-y-3">
                             
+                            <!-- Input Teks Slogan Login Mobile -->
+                            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-white/10 space-y-1.5">
+                                <label for="mobile_hero_slogan" class="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-slate-200">
+                                    <span class="flex items-center gap-1.5">
+                                        <svg class="w-3.5 h-3.5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                        <span>Teks Slogan / Judul Login Mobile</span>
+                                    </span>
+                                    <span class="text-[9px] font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/40 px-2 py-0.5 rounded-full border border-indigo-200 dark:border-indigo-700/50">Dapat Diubah</span>
+                                </label>
+                                <input type="text" 
+                                       id="mobile_hero_slogan"
+                                       name="mobile_hero_slogan" 
+                                       value="{{ $settings['mobile_hero_slogan'] ?? 'Ayok Mulai Transaksi dengan SIM-BBM Mobile' }}" 
+                                       placeholder="Contoh: Ayok Mulai Transaksi dengan SIM-BBM Mobile"
+                                       class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition shadow-sm font-semibold">
+                                <p class="text-[10px] text-slate-500 dark:text-slate-400">
+                                    Kalimat ajakan yang muncul di bagian atas halaman login HP (tepat di atas kubah gambar media).
+                                </p>
+                            </div>
+
                             <!-- Visual Preview Hero WYSIWYG & Tombol Aksi -->
                             <div class="flex flex-col sm:flex-row items-center sm:items-start gap-3 p-3 rounded-xl bg-gradient-to-b from-[#14081c]/70 via-[#07183d]/80 to-[#022b7a]/85 border border-white/15 text-white shadow-inner relative overflow-hidden">
                                 
-                                <!-- Lingkaran / Persegi Panjang Hero Miniatur Preview -->
-                                <div class="relative shrink-0 flex items-center justify-center">
-                                    <div :class="shapeMode === 'circle' ? 'w-24 h-24 sm:w-28 sm:h-28 rounded-full' : 'w-36 h-24 sm:w-40 sm:h-24 rounded-xl'"
-                                         class="overflow-hidden flex items-center justify-center border border-white/20 shadow-md relative transition-all duration-300"
-                                         :style="bgColor !== 'transparent' ? 'background-color: ' + bgColor + ';' : ''">
+                                <!-- Lingkaran Hero Miniatur Preview Persis Mobile -->
+                                <div class="relative shrink-0 flex items-center justify-center p-1.5">
+                                    <!-- Soft Outer Halo -->
+                                    <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-blue-600/35 via-sky-500/25 to-indigo-500/30 blur-lg pointer-events-none"></div>
+
+                                    <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden flex items-center justify-center relative transition-all duration-300"
+                                         style="box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14), 0 0 20px rgba(56, 189, 248, 0.22), 0 12px 30px rgba(0, 0, 0, 0.7);"
+                                         :style="bgColor !== 'transparent' ? 'background-color: ' + bgColor + ';' : 'background-color: rgba(7,24,61,0.85);'">
                                         
                                         <!-- Template Gambar Kustom -->
                                         <template x-if="(hasPreview || previewSrc) && !removeCustomImage">
-                                            <img :src="previewSrc" alt="Preview Hero" 
-                                                 class="w-full h-full transition-all duration-200"
-                                                 :class="fitMode === 'contain' ? 'object-contain p-1' : 'object-cover'"
+                                            <img :src="previewSrc" alt="Preview Hero Mobile" 
+                                                 class="w-full h-full object-cover object-center transition-all duration-200"
                                                  :style="'transform: scale(' + (zoomLevel / 100) + ');'">
                                         </template>
 
                                         <!-- Template Model Bawaan Logo Polda -->
                                         <template x-if="(!hasPreview && !previewSrc) || removeCustomImage">
-                                            <div class="w-full h-full flex items-center justify-center p-2 bg-[#022b7a]/40">
-                                                <img src="/rolog.png" onerror="this.onerror=null; this.src='/TRIBRATA.png';" alt="Default Logo" class="w-16 h-16 object-contain drop-shadow">
+                                            <div class="w-full h-full flex items-center justify-center p-3 bg-white/10">
+                                                <img src="/rolog.png" onerror="this.onerror=null; this.src='/TRIBRATA.png';" alt="Default Logo" class="max-w-full max-h-full object-contain drop-shadow">
                                             </div>
                                         </template>
+
+                                        <!-- Soft Edge Inner Vignette -->
+                                        <div class="absolute inset-0 rounded-full pointer-events-none z-10"
+                                             style="box-shadow: inset 0 0 18px 5px rgba(7, 24, 61, 0.75), inset 0 0 0 1px rgba(255, 255, 255, 0.14);"></div>
                                     </div>
                                 </div>
 
-                                <!-- Keterangan, Switch Model & Tombol Unggah -->
-                                <div class="flex-1 space-y-2 text-center sm:text-left">
+                                <!-- Keterangan & Tombol Aksi Upload/Crop -->
+                                <div class="flex-1 space-y-2.5 text-center sm:text-left">
                                     <div>
                                         <div class="flex flex-wrap items-center justify-center sm:justify-start gap-1.5">
                                             <h4 class="text-xs font-bold text-white tracking-wide">Status Tampilan:
                                                 <span class="text-cyan-300 font-black" x-text="(hasPreview || previewSrc) && !removeCustomImage ? 'Gambar Khusus Aktif' : 'Model Bawaan (Logo Polda)'"></span>
                                             </h4>
-                                            <span class="px-1.5 py-0.5 rounded-md bg-white/10 border border-white/20 text-[9px] font-bold text-cyan-200"
-                                                  x-text="shapeMode === 'circle' ? 'Bulat Pas' : 'Persegi Panjang'"></span>
+                                            <span class="px-2 py-0.5 rounded-md bg-indigo-500/30 border border-indigo-400/40 text-[9.5px] font-black text-cyan-200 flex items-center gap-1">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                                                Lingkaran Mobile (1:1)
+                                            </span>
                                         </div>
-                                        <p class="text-[10px] text-slate-300 mt-0.5 leading-relaxed">
-                                            Format: <strong>PNG/WEBP/JPG</strong>. Rekomendasi: 500×500 px (Bulat) / 800×500 px (Persegi).
+                                        <p class="text-[10px] text-slate-300 mt-1 leading-relaxed">
+                                            Format: <strong>PNG/WEBP/JPG</strong>. Media krop otomatis berbentuk <strong>Lingkaran Bulat Penuh (1:1)</strong> persis seperti ukuran dan tampilan media di halaman login mobile.
                                         </p>
                                     </div>
 
-                                    <!-- Switch Model Bentuk: Lingkaran vs Persegi Panjang (Bebas Focus Scroll Bug) -->
-                                    <div class="flex flex-col sm:flex-row sm:items-center gap-1.5 pt-0.5">
-                                        <span class="text-[10px] font-bold text-slate-300 shrink-0">Bentuk:</span>
-                                        <div class="inline-flex p-0.5 rounded-lg bg-black/40 border border-white/15 backdrop-blur-sm">
-                                            <button type="button" 
-                                                    @click="shapeMode = 'circle'; onShapeChange()"
-                                                    class="px-2.5 py-1 rounded-md text-[11px] font-bold transition flex items-center gap-1 select-none"
-                                                    :class="shapeMode === 'circle' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-300 hover:text-white'">
-                                                <span class="w-2 h-2 rounded-full border border-current"></span>
-                                                <span>Lingkaran</span>
-                                            </button>
-                                            <button type="button" 
-                                                    @click="shapeMode = 'rectangle'; onShapeChange()"
-                                                    class="px-2.5 py-1 rounded-md text-[11px] font-bold transition flex items-center gap-1 select-none"
-                                                    :class="shapeMode === 'rectangle' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-300 hover:text-white'">
-                                                <span class="w-2.5 h-1.5 rounded-[1px] border border-current"></span>
-                                                <span>Persegi Panjang</span>
-                                            </button>
-                                            <input type="hidden" name="mobile_hero_shape" :value="shapeMode">
+                                    <!-- Indikator Bentuk Media Sesuai Mobile -->
+                                    <div class="flex items-center justify-center sm:justify-start gap-2 pt-0.5">
+                                        <span class="text-[10px] font-bold text-slate-300 shrink-0">Bentuk Media:</span>
+                                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-600/25 border border-indigo-400/30 text-indigo-200 text-xs font-bold shadow-sm">
+                                            <span class="w-2.5 h-2.5 rounded-full border-2 border-cyan-400 bg-cyan-400/40"></span>
+                                            <span>Lingkaran Bulat Mobile (1:1)</span>
                                         </div>
+                                        <input type="hidden" name="mobile_hero_shape" value="circle">
                                     </div>
 
                                     <!-- Tombol Aksi Upload / Crop / Reset -->
@@ -443,7 +475,7 @@
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
                                             </svg>
-                                            <span x-text="shapeMode === 'circle' ? 'Crop Bulat' : 'Crop Persegi'"></span>
+                                            <span x-text="shapeMode === 'circle' ? 'Crop Bulat' : 'Atur Crop Otomatis'"></span>
                                         </button>
 
                                         <button type="button" 
@@ -592,8 +624,8 @@
                                             </svg>
                                         </div>
                                         <div>
-                                            <h3 class="text-sm font-bold text-slate-900 dark:text-white" x-text="shapeMode === 'circle' ? 'Sesuaikan Potongan Lingkaran' : 'Sesuaikan Potongan Persegi Panjang'"></h3>
-                                            <p class="text-[11px] text-slate-500 dark:text-slate-400" x-text="shapeMode === 'circle' ? 'Geser & zoom gambar agar pas di dalam lingkaran login.' : 'Geser & zoom gambar agar pas di dalam bingkai persegi panjang login.'"></p>
+                                            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Sesuaikan Potongan Lingkaran Mobile (1:1)</h3>
+                                            <p class="text-[11px] text-slate-500 dark:text-slate-400">Geser & zoom gambar agar pas di dalam lingkaran mobile. Hasil potongan akan tampil bulat sempurna di login HP.</p>
                                         </div>
                                     </div>
                                     <button type="button" @click="closeCropper()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-white transition">
@@ -602,11 +634,11 @@
                                 </div>
 
                                 <div class="p-4 bg-slate-950 flex items-center justify-center relative overflow-hidden" style="min-height: 340px; max-height: 420px;">
-                                    <div :class="shapeMode === 'circle' ? 'circular-cropper' : 'rectangular-cropper'" class="w-full h-full max-h-[380px] flex items-center justify-center">
+                                    <div class="circular-cropper w-full h-full max-h-[380px] flex items-center justify-center">
                                         <img id="cropper-target-image" src="" alt="Crop Source" class="max-w-full max-h-full block">
                                     </div>
-                                    <div class="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-black/60 backdrop-blur-md rounded-full text-[10px] font-bold text-cyan-200 border border-white/20 pointer-events-none"
-                                         x-text="shapeMode === 'circle' ? 'Bagian di dalam lingkaran akan tampil di Login' : 'Bagian di dalam persegi panjang akan tampil di Login'">
+                                    <div class="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-black/60 backdrop-blur-md rounded-full text-[10px] font-bold text-cyan-200 border border-white/20 pointer-events-none">
+                                        Bagian di dalam lingkaran akan tampil di Login Mobile
                                     </div>
                                 </div>
 
@@ -635,7 +667,7 @@
                                         </button>
                                         <button type="button" @click="applyCroppedImage()" class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white rounded-xl text-xs font-bold shadow-md shadow-indigo-600/30 active:scale-95 transition flex items-center gap-1.5">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                            <span x-text="shapeMode === 'circle' ? 'Terapkan ke Lingkaran' : 'Terapkan ke Persegi Panjang'"></span>
+                                            <span x-text="shapeMode === 'circle' ? 'Terapkan ke Lingkaran' : 'Terapkan Gambar Otomatis'"></span>
                                         </button>
                                     </div>
                                 </div>
