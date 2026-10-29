@@ -451,7 +451,7 @@
                                     </span>
                                 </div>
                                 <p class="text-[10px] sm:text-[11px] text-slate-400 dark:text-slate-500 mt-0.5 truncate">
-                                    Total: <strong class="text-slate-700 dark:text-slate-200 font-bold font-mono">{{ number_format($totalVolume7Hari, 1, ',', '.') }} L</strong> • Rerata: <strong class="text-slate-700 dark:text-slate-200 font-bold font-mono">{{ $avgVolumeHarian }} L/hari</strong>
+                                    Total Konsumsi: <strong class="text-slate-700 dark:text-slate-200 font-bold font-mono">{{ number_format($totalVolume7Hari, 1, ',', '.') }} L</strong> • Akumulasi pengisian BBM seluruh jajaran Satker 7 hari terakhir
                                 </p>
                             </div>
                         </div>
@@ -490,11 +490,11 @@
                     </div>
                 </div>
 
-                <!-- Micro-Summary 4 Metric Cards di Bawah Bagan -->
-                <div class="mt-3 pt-3 border-t border-slate-100 dark:border-white/[0.06] grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <!-- Micro-Summary 3 Metric Cards di Bawah Bagan -->
+                <div class="mt-3 pt-3 border-t border-slate-100 dark:border-white/[0.06] grid grid-cols-1 sm:grid-cols-3 gap-2">
                     <div class="p-2 sm:p-2.5 rounded-xl bg-blue-50/60 dark:bg-blue-500/10 border border-blue-200/70 dark:border-blue-400/20 flex flex-col justify-between">
                         <div class="flex items-center justify-between">
-                            <span class="text-[9px] font-bold text-blue-700 dark:text-blue-300 uppercase tracking-wider">Pertamax</span>
+                            <span class="text-[9px] font-bold text-blue-700 dark:text-blue-300 uppercase tracking-wider">Pertamax (7 Hari)</span>
                             <span class="text-[8px] font-extrabold text-blue-600 dark:text-blue-300 font-mono">{{ $persenPertamax7Hari }}%</span>
                         </div>
                         <span class="text-xs sm:text-sm font-black text-slate-900 dark:text-white font-mono mt-0.5 tabular-nums">
@@ -504,18 +504,11 @@
 
                     <div class="p-2 sm:p-2.5 rounded-xl bg-emerald-50/60 dark:bg-emerald-500/10 border border-emerald-200/70 dark:border-emerald-400/20 flex flex-col justify-between">
                         <div class="flex items-center justify-between">
-                            <span class="text-[9px] font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider">Pertamina Dex</span>
+                            <span class="text-[9px] font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider">Pertamina Dex (7 Hari)</span>
                             <span class="text-[8px] font-extrabold text-emerald-600 dark:text-emerald-300 font-mono">{{ $persenDex7Hari }}%</span>
                         </div>
                         <span class="text-xs sm:text-sm font-black text-slate-900 dark:text-white font-mono mt-0.5 tabular-nums">
                             {{ number_format($totalDex7Hari, 1, ',', '.') }}<span class="text-[9px] font-sans font-bold text-emerald-600 dark:text-emerald-300"> L</span>
-                        </span>
-                    </div>
-
-                    <div class="p-2 sm:p-2.5 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200/70 dark:border-white/[0.06] flex flex-col justify-between">
-                        <span class="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider truncate">Rerata Harian</span>
-                        <span class="text-xs sm:text-sm font-black text-slate-900 dark:text-white font-mono mt-0.5 tabular-nums truncate">
-                            ~{{ $avgVolumeHarian }}<span class="text-[9px] font-sans font-bold text-slate-500 dark:text-slate-400"> L/hr</span>
                         </span>
                     </div>
 

@@ -133,28 +133,25 @@
                         </div>
                     </div>
 
-                    {{-- Pengisi Ruang Tengah: 2 Box Metrik Kompak & Berwarna --}}
-                    @php
-                        $avgLiter = $totalTransaksi > 0 ? round($totalLiterTransaksi / $totalTransaksi, 1) : 0;
-                    @endphp
+                    {{-- Pengisi Ruang Tengah: 2 Box Rincian Pertamax & Pertamina Dex Terisi --}}
                     <div class="grid grid-cols-2 gap-1 sm:gap-2 pt-0.5">
-                        <div class="p-1.5 sm:p-2.5 rounded-lg sm:rounded-xl bg-cyan-50/80 dark:bg-cyan-500/10 border border-cyan-200/80 dark:border-cyan-500/20 flex flex-col justify-between">
-                            <span class="text-[7.5px] sm:text-[9px] font-bold text-cyan-700 dark:text-cyan-300/80 uppercase tracking-wider flex items-center gap-0.5 sm:gap-1 truncate">
-                                <svg class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cyan-600 dark:text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
-                                Terisi
+                        <div class="p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-blue-50/80 dark:bg-blue-500/10 border border-blue-200/80 dark:border-blue-400/30 flex flex-col justify-between">
+                            <span class="text-[7.5px] sm:text-[9.5px] font-bold text-blue-700 dark:text-blue-300 uppercase tracking-wider flex items-center gap-1 truncate">
+                                <span class="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-sm shrink-0"></span>
+                                Pertamax
                             </span>
-                            <span class="text-[10px] sm:text-sm font-black text-slate-900 dark:text-white font-mono mt-0.5 tabular-nums truncate">
-                                {{ number_format($totalLiterTransaksi, 0, ',', '.') }}<span class="text-[8px] sm:text-[10px] text-cyan-600 dark:text-cyan-300 font-sans font-bold"> L</span>
+                            <span class="text-[10.5px] sm:text-sm font-black text-slate-900 dark:text-white font-mono mt-0.5 tabular-nums truncate">
+                                {{ rtrim(rtrim(number_format($transaksiPertamax ?? 0, 1, ',', '.'), '0'), ',') }}<span class="text-[8px] sm:text-[10px] text-blue-600 dark:text-blue-300 font-sans font-bold"> L</span>
                             </span>
                         </div>
 
-                        <div class="p-1.5 sm:p-2.5 rounded-lg sm:rounded-xl bg-blue-50/80 dark:bg-blue-500/10 border border-blue-200/80 dark:border-blue-500/20 flex flex-col justify-between">
-                            <span class="text-[7.5px] sm:text-[9px] font-bold text-blue-700 dark:text-blue-300/80 uppercase tracking-wider flex items-center gap-0.5 sm:gap-1 truncate">
-                                <svg class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-blue-600 dark:text-blue-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                                Rerata
+                        <div class="p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-emerald-50/80 dark:bg-emerald-500/10 border border-emerald-200/80 dark:border-emerald-400/30 flex flex-col justify-between">
+                            <span class="text-[7.5px] sm:text-[9.5px] font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider flex items-center gap-1 truncate">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-sm shrink-0"></span>
+                                Pertamina Dex
                             </span>
-                            <span class="text-[10px] sm:text-sm font-black text-slate-900 dark:text-white font-mono mt-0.5 tabular-nums truncate">
-                                ~{{ $avgLiter }}<span class="text-[8px] sm:text-[10px] text-blue-600 dark:text-blue-300 font-sans font-bold"> L</span>
+                            <span class="text-[10.5px] sm:text-sm font-black text-slate-900 dark:text-white font-mono mt-0.5 tabular-nums truncate">
+                                {{ rtrim(rtrim(number_format($transaksiDex ?? 0, 1, ',', '.'), '0'), ',') }}<span class="text-[8px] sm:text-[10px] text-emerald-600 dark:text-emerald-300 font-sans font-bold"> L</span>
                             </span>
                         </div>
                     </div>
@@ -162,11 +159,11 @@
 
                 {{-- Footer Info Box --}}
                 <div class="mt-2 sm:mt-4 pt-1.5 sm:pt-3 border-t border-slate-200/70 dark:border-cyan-500/20 flex items-center justify-between text-[8px] sm:text-[11px]">
-                    <span class="inline-flex items-center gap-1 text-slate-600 dark:text-cyan-200/90 font-medium truncate">
-                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-ping shrink-0"></span> Realtime
+                    <span class="text-slate-600 dark:text-cyan-200/90 font-medium truncate">
+                        Terisi: <strong class="text-slate-800 dark:text-white font-mono font-bold">{{ rtrim(rtrim(number_format($totalLiterTransaksi, 1, ',', '.'), '0'), ',') }} L</strong>
                     </span>
-                    <span class="font-bold text-cyan-800 dark:text-cyan-300 bg-cyan-100 dark:bg-cyan-500/20 px-1.5 py-0.5 rounded border border-cyan-300 dark:border-cyan-400/30 text-[7.5px] sm:text-[10px] shrink-0">
-                        Valid
+                    <span class="inline-flex items-center gap-1 font-bold text-cyan-800 dark:text-cyan-300 bg-cyan-100 dark:bg-cyan-500/20 px-1.5 py-0.5 rounded border border-cyan-300 dark:border-cyan-400/30 text-[7.5px] sm:text-[10px] shrink-0">
+                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-ping"></span> Realtime
                     </span>
                 </div>
             </div>
@@ -408,7 +405,7 @@
                                     </span>
                                 </div>
                                 <p class="text-[10px] sm:text-[11px] text-slate-400 dark:text-slate-500 mt-0.5 truncate">
-                                    Total: <strong class="text-slate-700 dark:text-slate-200 font-bold font-mono">{{ number_format($totalVolume7Hari, 1, ',', '.') }} L</strong> • Rerata: <strong class="text-slate-700 dark:text-slate-200 font-bold font-mono">{{ $avgVolumeHarian }} L/hari</strong>
+                                    Total Konsumsi: <strong class="text-slate-700 dark:text-slate-200 font-bold font-mono">{{ number_format($totalVolume7Hari, 1, ',', '.') }} L</strong> • Akumulasi pengisian BBM armada 7 hari terakhir
                                 </p>
                             </div>
                         </div>
@@ -447,11 +444,11 @@
                     </div>
                 </div>
 
-                {{-- Micro-Summary 4 Metric Cards di Bawah Bagan --}}
-                <div class="mt-3 pt-3 border-t border-slate-100 dark:border-white/[0.06] grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {{-- Micro-Summary 3 Metric Cards di Bawah Bagan --}}
+                <div class="mt-3 pt-3 border-t border-slate-100 dark:border-white/[0.06] grid grid-cols-1 sm:grid-cols-3 gap-2">
                     <div class="p-2 sm:p-2.5 rounded-xl bg-blue-50/60 dark:bg-blue-500/10 border border-blue-200/70 dark:border-blue-400/20 flex flex-col justify-between">
                         <div class="flex items-center justify-between">
-                            <span class="text-[9px] font-bold text-blue-700 dark:text-blue-300 uppercase tracking-wider">Pertamax</span>
+                            <span class="text-[9px] font-bold text-blue-700 dark:text-blue-300 uppercase tracking-wider">Pertamax (7 Hari)</span>
                             <span class="text-[8px] font-extrabold text-blue-600 dark:text-blue-300 font-mono">{{ $persenPertamax7Hari }}%</span>
                         </div>
                         <span class="text-xs sm:text-sm font-black text-slate-900 dark:text-white font-mono mt-0.5 tabular-nums">
@@ -461,18 +458,11 @@
 
                     <div class="p-2 sm:p-2.5 rounded-xl bg-emerald-50/60 dark:bg-emerald-500/10 border border-emerald-200/70 dark:border-emerald-400/20 flex flex-col justify-between">
                         <div class="flex items-center justify-between">
-                            <span class="text-[9px] font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider">Pertamina Dex</span>
+                            <span class="text-[9px] font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider">Pertamina Dex (7 Hari)</span>
                             <span class="text-[8px] font-extrabold text-emerald-600 dark:text-emerald-300 font-mono">{{ $persenDex7Hari }}%</span>
                         </div>
                         <span class="text-xs sm:text-sm font-black text-slate-900 dark:text-white font-mono mt-0.5 tabular-nums">
                             {{ number_format($totalDex7Hari, 1, ',', '.') }}<span class="text-[9px] font-sans font-bold text-emerald-600 dark:text-emerald-300"> L</span>
-                        </span>
-                    </div>
-
-                    <div class="p-2 sm:p-2.5 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200/70 dark:border-white/[0.06] flex flex-col justify-between">
-                        <span class="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider truncate">Rerata Harian</span>
-                        <span class="text-xs sm:text-sm font-black text-slate-900 dark:text-white font-mono mt-0.5 tabular-nums truncate">
-                            ~{{ $avgVolumeHarian }}<span class="text-[9px] font-sans font-bold text-slate-500 dark:text-slate-400"> L/hr</span>
                         </span>
                     </div>
 

@@ -28,6 +28,16 @@ class DashboardController extends Controller
         $totalTransaksi = $queryTransaksi->count();
         $totalLiterTransaksi = (clone $queryTransaksi)->sum('liter') ?: 0;
 
+        // Breakdown liter transaksi terisi per jenis BBM
+        $literTransaksiPerBbm = (clone $queryTransaksi)
+            ->selectRaw("
+                COALESCE(SUM(CASE WHEN jenis_bbm LIKE '%Pertamax%' THEN liter ELSE 0 END), 0) as pertamax,
+                COALESCE(SUM(CASE WHEN jenis_bbm LIKE '%Dex%' THEN liter ELSE 0 END), 0) as dex
+            ")
+            ->first();
+        $transaksiPertamax = (float) ($literTransaksiPerBbm->pertamax ?? 0);
+        $transaksiDex = (float) ($literTransaksiPerBbm->dex ?? 0);
+
         // Rincian per jenis roda (1 single query groupBy)
         $qRoda = Kendaraan::query();
         if ($user->role !== 'super_admin') {
@@ -129,6 +139,7 @@ class DashboardController extends Controller
 
         return view('satker.dashboard', compact(
             'totalKendaraan', 'totalPersonel', 'totalTransaksi', 'totalLiterTransaksi',
+            'transaksiPertamax', 'transaksiDex',
             'totalSaldoKendaraan', 'totalSaldoPersonel',
             'totalTransfer', 'totalLiterTransfer',
             'recentTransactions', 'chartData',
