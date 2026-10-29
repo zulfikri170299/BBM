@@ -208,6 +208,15 @@ class BackupDatabaseController extends Controller
                     } catch (\Throwable $e) {}
                 }
 
+                try {
+                    Artisan::call('migrate', ['--force' => true]);
+                    if (\Illuminate\Support\Facades\Schema::hasColumn('kendaraans', 'status_approval')) {
+                        DB::table('kendaraans')->whereNull('status_approval')->update(['status_approval' => 'disetujui']);
+                    }
+                } catch (\Throwable $mEx) {
+                    \Illuminate\Support\Facades\Log::warning('Auto-migrate after SQLite restore: ' . $mEx->getMessage());
+                }
+
                 session()->flash('success', 'Database SQLite berhasil di-restore dan seluruh data telah dipulihkan sepenuhnya!');
                 session()->save();
 
@@ -217,6 +226,15 @@ class BackupDatabaseController extends Controller
             $sql = file_get_contents($file->getRealPath());
             DB::unprepared($sql);
             
+            try {
+                Artisan::call('migrate', ['--force' => true]);
+                if (\Illuminate\Support\Facades\Schema::hasColumn('kendaraans', 'status_approval')) {
+                    DB::table('kendaraans')->whereNull('status_approval')->update(['status_approval' => 'disetujui']);
+                }
+            } catch (\Throwable $mEx) {
+                \Illuminate\Support\Facades\Log::warning('Auto-migrate after SQL restore: ' . $mEx->getMessage());
+            }
+
             session()->flash('success', 'Database berhasil di-restore dan seluruh data telah dipulihkan sepenuhnya!');
             session()->save();
 

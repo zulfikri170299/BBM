@@ -29,13 +29,17 @@ class KendaraanController extends Controller
 
     public function index(Request $request)
     {
-        $query = Kendaraan::with('satker')->where(function ($q) {
-            $q->where('status_approval', 'disetujui')
-              ->orWhere(function ($sub) {
-                  $sub->where('status_approval', 'ditolak')
-                      ->where('aksi_approval', 'edit');
-              });
-        })->latest();
+        $query = Kendaraan::with('satker')->latest();
+        if (\Illuminate\Support\Facades\Schema::hasColumn('kendaraans', 'status_approval')) {
+            $query->where(function ($q) {
+                $q->where('status_approval', 'disetujui')
+                  ->orWhereNull('status_approval')
+                  ->orWhere(function ($sub) {
+                      $sub->where('status_approval', 'ditolak')
+                          ->where('aksi_approval', 'edit');
+                  });
+            });
+        }
 
         if ($request->filled('satker_id')) {
             $query->where('satker_id', $request->satker_id);
@@ -53,13 +57,18 @@ class KendaraanController extends Controller
         $perPage = $this->getPerPage($request);
         $kendaraans = $query->paginate($perPage)->withQueryString();
         $satkers = Satker::orderBy('nama_satker')->get();
-        $allKendaraans = Kendaraan::where(function ($q) {
-            $q->where('status_approval', 'disetujui')
-              ->orWhere(function ($sub) {
-                  $sub->where('status_approval', 'ditolak')
-                      ->where('aksi_approval', 'edit');
-              });
-        })->select('id', 'satker_id', 'no_polisi', 'jenis_kendaraan', 'jenis_bbm', 'saldo')->get();
+        $allKendaraansQuery = Kendaraan::select('id', 'satker_id', 'no_polisi', 'jenis_kendaraan', 'jenis_bbm', 'saldo');
+        if (\Illuminate\Support\Facades\Schema::hasColumn('kendaraans', 'status_approval')) {
+            $allKendaraansQuery->where(function ($q) {
+                $q->where('status_approval', 'disetujui')
+                  ->orWhereNull('status_approval')
+                  ->orWhere(function ($sub) {
+                      $sub->where('status_approval', 'ditolak')
+                          ->where('aksi_approval', 'edit');
+                  });
+            });
+        }
+        $allKendaraans = $allKendaraansQuery->get();
         $adminStocks = \App\Models\AdminBbmStock::all();
 
         return view('admin.kendaraans.index', compact('kendaraans', 'satkers', 'allKendaraans', 'adminStocks'));

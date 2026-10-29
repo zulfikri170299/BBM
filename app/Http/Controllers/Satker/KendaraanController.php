@@ -28,13 +28,17 @@ class KendaraanController extends Controller
         $search = $request->input('search');
 
         // Tabel utama kendaraan HANYA menampilkan kendaraan yang SUDAH DISETUJUI
-        $query = Kendaraan::with('satker')->where(function ($q) {
-            $q->where('status_approval', 'disetujui')
-              ->orWhere(function ($sub) {
-                  $sub->where('status_approval', 'ditolak')
-                      ->where('aksi_approval', 'edit');
-              });
-        });
+        $query = Kendaraan::with('satker');
+        if (\Illuminate\Support\Facades\Schema::hasColumn('kendaraans', 'status_approval')) {
+            $query->where(function ($q) {
+                $q->where('status_approval', 'disetujui')
+                  ->orWhereNull('status_approval')
+                  ->orWhere(function ($sub) {
+                      $sub->where('status_approval', 'ditolak')
+                          ->where('aksi_approval', 'edit');
+                  });
+            });
+        }
         if ($user->role !== 'super_admin') {
             $query->where('satker_id', $satkerId);
         }
@@ -78,7 +82,7 @@ class KendaraanController extends Controller
 
         $availableKendaraans = ($user->role === 'super_admin' ? Kendaraan::query() : Kendaraan::where('satker_id', $satkerId))
             ->where(function ($q) {
-                $q->where('status_approval', 'disetujui')
+                $q->where('status_approval', 'disetujui')->orWhereNull('status_approval')
                   ->orWhere(function ($sub) {
                       $sub->where('status_approval', 'ditolak')
                           ->where('aksi_approval', 'edit');
