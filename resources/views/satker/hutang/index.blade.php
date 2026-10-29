@@ -8,63 +8,35 @@
             </div>
         </div>
 
-        <!-- Summary Statistics Cards -->
+        <!-- Summary Statistics Cards (Hanya Belum Bayar, 1 Baris) -->
         @php
             $pertamaxBelum = $belumDibayar['Pertamax'] ?? 0;
-            $pertamaxSudah = $sudahDibayar['Pertamax'] ?? 0;
             $dexBelum = $belumDibayar['Pertamina Dex'] ?? 0;
-            $dexSudah = $sudahDibayar['Pertamina Dex'] ?? 0;
         @endphp
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        <div class="grid grid-cols-2 gap-2.5 sm:gap-4">
             <!-- Belum Dibayar Pertamax -->
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl p-4 shadow-sm flex items-center justify-between">
-                <div>
-                    <span class="text-[9px] font-black uppercase tracking-wider text-slate-400">Belum Bayar (Pertamax)</span>
-                    <div class="text-2xl font-black text-rose-600 dark:text-rose-400 mt-1">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl p-3 sm:p-4 shadow-sm flex items-center justify-between min-w-0">
+                <div class="min-w-0 flex-1 pr-2">
+                    <span class="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-slate-400 block truncate">Belum Bayar (Pertamax)</span>
+                    <div class="text-xl sm:text-2xl font-black text-rose-600 dark:text-rose-400 mt-0.5 sm:mt-1 truncate">
                         {{ rtrim(rtrim(number_format($pertamaxBelum, 2, ',', '.'), '0'), ',') ?: '0' }} <span class="text-xs font-bold text-slate-400">L</span>
                     </div>
                 </div>
-                <div class="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center border border-rose-100 dark:border-rose-900/50">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                </div>
-            </div>
-
-            <!-- Sudah Dibayar Pertamax -->
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl p-4 shadow-sm flex items-center justify-between">
-                <div>
-                    <span class="text-[9px] font-black uppercase tracking-wider text-slate-400">Lunas (Pertamax)</span>
-                    <div class="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1">
-                        {{ rtrim(rtrim(number_format($pertamaxSudah, 2, ',', '.'), '0'), ',') ?: '0' }} <span class="text-xs font-bold text-slate-400">L</span>
-                    </div>
-                </div>
-                <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center border border-emerald-100 dark:border-emerald-900/50">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center border border-rose-100 dark:border-rose-900/50 shrink-0">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
             </div>
 
             <!-- Belum Dibayar Pertamina Dex -->
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl p-4 shadow-sm flex items-center justify-between">
-                <div>
-                    <span class="text-[9px] font-black uppercase tracking-wider text-slate-400">Belum Bayar (Dex)</span>
-                    <div class="text-2xl font-black text-rose-600 dark:text-rose-400 mt-1">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl p-3 sm:p-4 shadow-sm flex items-center justify-between min-w-0">
+                <div class="min-w-0 flex-1 pr-2">
+                    <span class="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-slate-400 block truncate">Belum Bayar (Dex)</span>
+                    <div class="text-xl sm:text-2xl font-black text-rose-600 dark:text-rose-400 mt-0.5 sm:mt-1 truncate">
                         {{ rtrim(rtrim(number_format($dexBelum, 2, ',', '.'), '0'), ',') ?: '0' }} <span class="text-xs font-bold text-slate-400">L</span>
                     </div>
                 </div>
-                <div class="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center border border-rose-100 dark:border-rose-900/50">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                </div>
-            </div>
-
-            <!-- Sudah Dibayar Pertamina Dex -->
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl p-4 shadow-sm flex items-center justify-between">
-                <div>
-                    <span class="text-[9px] font-black uppercase tracking-wider text-slate-400">Lunas (Dex)</span>
-                    <div class="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1">
-                        {{ rtrim(rtrim(number_format($dexSudah, 2, ',', '.'), '0'), ',') ?: '0' }} <span class="text-xs font-bold text-slate-400">L</span>
-                    </div>
-                </div>
-                <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center border border-emerald-100 dark:border-emerald-900/50">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center border border-rose-100 dark:border-rose-900/50 shrink-0">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
             </div>
         </div>
@@ -132,7 +104,7 @@
                         @foreach(request()->except('per_page') as $key => $value)
                             <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                         @endforeach
-                        <select name="per_page" onchange="this.form.submit()" class="h-8 px-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-lg text-xs font-bold text-slate-700 dark:text-slate-200 focus:ring-1 focus:ring-indigo-500">
+                        <select name="per_page" onchange="this.form.submit()" data-no-custom-select class="h-8 px-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-lg text-xs font-bold text-slate-700 dark:text-slate-200 focus:ring-1 focus:ring-indigo-500 cursor-pointer">
                             <option value="15" {{ request('per_page', 15) == 15 ? 'selected' : '' }}>15</option>
                             <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
                             <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>

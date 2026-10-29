@@ -352,34 +352,6 @@
                                 <!-- Aksi (Detail & Batal) -->
                                 <td class="px-3 py-2.5 whitespace-nowrap text-center">
                                     <div class="inline-flex items-center gap-1.5">
-                                        <!-- Tombol Detail -->
-                                        <button type="button"
-                                            @click="$dispatch('open-detail-transaksi', {
-                                                id: {{ $trx->id ?? 0 }},
-                                                title: '{{ $isPotong ? 'Potong Saldo' : 'Pengisian BBM' }}',
-                                                badge: '{{ $isPotong ? 'POTONG SALDO' : 'PENGISIAN BBM' }}',
-                                                is_potong: {{ $isPotong ? 'true' : 'false' }},
-                                                is_ptx: {{ $isPtx ? 'true' : 'false' }},
-                                                tanggal: '{{ addslashes($tglStr) }}',
-                                                nopol: '{{ addslashes($nopol) }}',
-                                                jenis_kendaraan: '{{ addslashes($jenisKendaraan) }}',
-                                                roda: '{{ addslashes($roda) }}',
-                                                satker: '{{ addslashes($satkerNama) }}',
-                                                jenis_bbm: '{{ addslashes($jenisBbm ?? '-') }}',
-                                                liter: '{{ addslashes($literStr) }}',
-                                                liter_raw: '{{ number_format($trx->liter, 0, ',', '.') }}',
-                                                driver: '{{ addslashes($driverStr) }}',
-                                                petugas: '{{ addslashes($petugasStr) }}',
-                                                keterangan: '{{ addslashes($ketStr) }}'
-                                            })"
-                                            class="w-7 h-7 inline-flex items-center justify-center text-emerald-600 dark:text-emerald-400 hover:text-white dark:hover:text-white bg-emerald-500/15 hover:bg-emerald-600 border border-emerald-500/30 rounded-lg transition-all active:scale-95 shadow-sm"
-                                            title="Detail Transaksi">
-                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                            </svg>
-                                        </button>
-
                                         @if(!$isPotong)
                                             <form id="delete-form-{{ $trx->id }}"
                                                 action="{{ route('admin.riwayat.destroy', $trx->id) }}" method="POST"

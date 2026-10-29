@@ -11,8 +11,8 @@
             @endforeach
         @endif
     @endforeach
-    <select name="per_page" id="per_page" onchange="this.form.submit()"
-        class="block py-2 pl-2.5 pr-7 border border-slate-200 dark:border-white/10 rounded-xl text-xs font-semibold text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all cursor-pointer bg-white dark:bg-slate-900 shrink-0">
+    <select name="per_page" id="per_page" onchange="this.form.submit()" data-no-custom-select
+        class="block py-1.5 pl-2.5 pr-7 border border-slate-200 dark:border-white/10 rounded-lg text-xs font-semibold text-slate-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-brand-primary transition-all cursor-pointer bg-white dark:bg-slate-900 shrink-0">
         @foreach([10, 15, 25, 50, 100] as $value)
             <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="{{ $value }}" {{ $current == $value ? 'selected' : '' }}>
                 {{ $value }} Baris

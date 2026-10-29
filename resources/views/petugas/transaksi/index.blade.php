@@ -175,127 +175,134 @@
         </div>
 
         <!-- Step 2: Form Konfirmasi & Pengisian BBM -->
-        <div x-show="step === 'form'" x-transition:enter="transition duration-300" class="space-y-4" x-cloak>
+        <div x-show="step === 'form'" x-transition:enter="transition duration-300" class="space-y-3.5" x-cloak>
             
-            <!-- Executive Vehicle Identity Card -->
-            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-5 border border-indigo-500/30 shadow-2xl shadow-indigo-950/30">
-                <div class="absolute -top-12 -right-12 w-40 h-40 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
-                <div class="absolute -bottom-12 -left-12 w-40 h-40 bg-cyan-500/20 rounded-full blur-2xl pointer-events-none"></div>
+            <!-- Kartu Info Kendaraan (Modern, Bersih & Elegan) -->
+            <div class="bg-white dark:bg-slate-900/90 rounded-2xl p-4 sm:p-5 border border-slate-200/90 dark:border-white/10 shadow-sm relative overflow-hidden">
+                <!-- Header Kartu: Satker & Jenis BBM -->
+                <div class="flex items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-100 dark:border-white/5">
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 truncate"
+                        x-text="target ? (target.satker ? target.satker.nama_satker : 'SATKER') : '-'"></span>
+                    
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold tracking-wide"
+                        :class="target && target.jenis_bbm && target.jenis_bbm.toLowerCase().includes('dex') 
+                            ? 'bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200/60 dark:border-rose-900/40' 
+                            : 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200/60 dark:border-blue-900/40'">
+                        <span class="w-1.5 h-1.5 rounded-full" 
+                            :class="target && target.jenis_bbm && target.jenis_bbm.toLowerCase().includes('dex') ? 'bg-rose-500' : 'bg-blue-500'"></span>
+                        <span x-text="target ? target.jenis_bbm : '-'"></span>
+                    </span>
+                </div>
 
-                <div class="relative z-10 space-y-3">
-                    <div class="flex items-center justify-between">
-                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/10 text-cyan-300 border border-white/10"
-                            x-text="target ? (target.satker ? target.satker.nama_satker : 'SATKER') : '-'"></span>
-                        
-                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider border"
-                            :class="target && target.jenis_bbm && target.jenis_bbm.toLowerCase().includes('dex') ? 'bg-rose-500/20 text-rose-300 border-rose-500/30' : 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30'"
-                            x-text="target ? target.jenis_bbm : '-'"></span>
+                <!-- Detail Kendaraan & Sisa Saldo -->
+                <div class="flex items-center justify-between gap-3">
+                    <div class="min-w-0 flex-1">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Nomor Polisi</span>
+                        <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-wide mt-0.5 truncate" 
+                            x-text="target ? target.no_polisi : '-'"></h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium truncate" 
+                            x-text="target ? target.jenis_kendaraan : ''"></p>
                     </div>
-
-                    <div class="flex items-baseline justify-between pt-1 border-t border-white/10">
-                        <div>
-                            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block">NOMOR POLISI</span>
-                            <h2 class="text-2xl sm:text-3xl font-mono font-black text-white tracking-wider mt-0.5" 
-                                x-text="target ? target.no_polisi : '-'"></h2>
-                            <p class="text-xs text-slate-300 font-medium" x-text="target ? target.jenis_kendaraan : ''"></p>
-                        </div>
-                        
-                        <div class="text-right">
-                            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block">SISA SALDO</span>
-                            <div class="flex items-baseline justify-end gap-1 mt-0.5">
-                                <span class="text-2xl sm:text-3xl font-black text-emerald-400 tabular-nums" 
-                                    x-text="target ? target.saldo : '0'"></span>
-                                <span class="text-xs font-black text-emerald-300">Liter</span>
-                            </div>
+                    
+                    <div class="text-right bg-slate-50 dark:bg-slate-800/60 px-3.5 py-2 rounded-xl border border-slate-100 dark:border-white/5 shrink-0">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Sisa Saldo</span>
+                        <div class="flex items-baseline justify-end gap-1 mt-0.5">
+                            <span class="text-2xl sm:text-3xl font-black text-emerald-600 dark:text-emerald-400 tabular-nums" 
+                                x-text="target ? target.saldo : '0'"></span>
+                            <span class="text-xs font-bold text-slate-500 dark:text-slate-400">Liter</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Form Proses Pengisian -->
-            <form action="{{ route('petugas.transaksi.process') }}" method="POST" class="space-y-4" autocomplete="off">
+            <form action="{{ route('petugas.transaksi.process') }}" method="POST" class="bg-white dark:bg-slate-900/90 border border-slate-200/90 dark:border-white/10 rounded-2xl p-4 sm:p-5 space-y-4 shadow-sm" autocomplete="off">
                 @csrf
-                <!-- Dummy Hidden Fields to Bait Autofill Away -->
                 <input type="text" name="prevent_autofill_username" style="display:none" autocomplete="username">
                 <input type="password" name="prevent_autofill_password" style="display:none" autocomplete="current-password">
 
                 <input type="hidden" name="kendaraan_id" :value="target ? target.id : ''">
 
-                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-3xl p-5 sm:p-6 space-y-4 shadow-xl shadow-black/10">
-                    
-                    <!-- Input Jumlah Liter & Preset Buttons -->
-                    <div>
-                        <div class="flex items-center justify-between mb-1.5">
-                            <label class="text-xs font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                                Volume Penyaluran
-                            </label>
-                            <span class="text-[10px] font-bold text-slate-400" x-text="'Maksimal ' + (target ? target.saldo : 0) + ' L'"></span>
-                        </div>
-                        
-                        <div class="relative">
-                            <input type="number" name="liter" step="1" min="1" :max="target ? target.saldo : 9999" required x-model="liter"
-                                class="w-full px-4 py-3.5 pr-20 bg-slate-50 dark:bg-slate-950 border-2 border-slate-200 dark:border-white/10 focus:border-indigo-500 dark:focus:border-indigo-400 rounded-2xl text-2xl sm:text-3xl font-black text-indigo-600 dark:text-indigo-400 outline-none transition-all shadow-inner"
-                                autocomplete="off" placeholder="0">
-                            
-                            <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                                <span class="text-xs font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 bg-slate-200 dark:bg-slate-800 px-2 py-1 rounded-lg">LITER</span>
-                            </div>
-                        </div>
-
-                        <!-- Quick Preset Buttons -->
-                        <div class="grid grid-cols-4 gap-2 mt-2.5">
-                            <button type="button" @click="setLiter(5)" 
-                                :disabled="target && target.saldo < 5"
-                                class="py-1.5 px-2 rounded-xl text-xs font-extrabold bg-slate-100 hover:bg-indigo-50 dark:bg-slate-800 dark:hover:bg-indigo-950/50 text-slate-700 dark:text-slate-300 hover:text-indigo-600 border border-slate-200 dark:border-white/5 transition-all disabled:opacity-40">
-                                5 L
-                            </button>
-                            <button type="button" @click="setLiter(10)" 
-                                :disabled="target && target.saldo < 10"
-                                class="py-1.5 px-2 rounded-xl text-xs font-extrabold bg-slate-100 hover:bg-indigo-50 dark:bg-slate-800 dark:hover:bg-indigo-950/50 text-slate-700 dark:text-slate-300 hover:text-indigo-600 border border-slate-200 dark:border-white/5 transition-all disabled:opacity-40">
-                                10 L
-                            </button>
-                            <button type="button" @click="setLiter(20)" 
-                                :disabled="target && target.saldo < 20"
-                                class="py-1.5 px-2 rounded-xl text-xs font-extrabold bg-slate-100 hover:bg-indigo-50 dark:bg-slate-800 dark:hover:bg-indigo-950/50 text-slate-700 dark:text-slate-300 hover:text-indigo-600 border border-slate-200 dark:border-white/5 transition-all disabled:opacity-40">
-                                20 L
-                            </button>
-                            <button type="button" @click="setLiter(target ? target.saldo : 0)" 
-                                class="py-1.5 px-2 rounded-xl text-xs font-extrabold bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:hover:bg-indigo-900/80 text-indigo-600 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30 transition-all">
-                                Max
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Input Nama Driver -->
-                    <div>
-                        <label class="block text-xs font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
-                            Nama Pengemudi / Driver
+                <!-- 1. Volume Penyaluran -->
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label class="text-xs font-bold text-slate-700 dark:text-slate-300">
+                            Volume Pengisian
                         </label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                </svg>
-                            </div>
-                            <input type="text" name="nama_driver" required
-                                class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-950 border-2 border-slate-200 dark:border-white/10 focus:border-indigo-500 dark:focus:border-indigo-400 rounded-2xl text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 outline-none transition-all"
-                                autocomplete="off" spellcheck="false" placeholder="Masukkan nama personel pembawa kendaraan">
+                        <span class="text-[11px] font-medium text-slate-400" x-text="'Maks. ' + (target ? target.saldo : 0) + ' L'"></span>
+                    </div>
+                    
+                    <div class="relative">
+                        <input type="number" name="liter" step="1" min="1" :max="target ? target.saldo : 9999" required x-model="liter"
+                            class="w-full px-4 py-2.5 sm:py-3 pr-16 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-white/10 focus:border-indigo-500 dark:focus:border-indigo-400 focus:bg-white dark:focus:bg-slate-800 rounded-xl text-xl sm:text-2xl font-black text-slate-900 dark:text-white outline-none transition-all placeholder:text-slate-300 dark:placeholder:text-slate-600 shadow-sm"
+                            autocomplete="off" placeholder="0">
+                        
+                        <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none">
+                            <span class="text-xs font-bold text-slate-400 dark:text-slate-400 bg-slate-200/70 dark:bg-slate-700/60 px-2 py-0.5 rounded-md">Liter</span>
                         </div>
                     </div>
 
-                    <!-- Input PIN Otorisasi -->
-                    <div>
-                        <div class="flex items-center justify-between mb-1.5">
-                            <label class="text-xs font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                                PIN Keamanan Otorisasi (6 Digit)
-                            </label>
-                            <span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                                Terenkripsi
-                            </span>
+                    <!-- Preset Quick Buttons (Clean Pills) -->
+                    <div class="grid grid-cols-4 gap-1.5 sm:gap-2 mt-2">
+                        <button type="button" @click="setLiter(5)" 
+                            :disabled="target && target.saldo < 5"
+                            :class="liter == 5 ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm font-bold' : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border-slate-200/80 dark:border-white/5 font-semibold'"
+                            class="py-1.5 px-2 rounded-lg text-xs border transition-all disabled:opacity-30">
+                            5 L
+                        </button>
+                        <button type="button" @click="setLiter(10)" 
+                            :disabled="target && target.saldo < 10"
+                            :class="liter == 10 ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm font-bold' : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border-slate-200/80 dark:border-white/5 font-semibold'"
+                            class="py-1.5 px-2 rounded-lg text-xs border transition-all disabled:opacity-30">
+                            10 L
+                        </button>
+                        <button type="button" @click="setLiter(20)" 
+                            :disabled="target && target.saldo < 20"
+                            :class="liter == 20 ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm font-bold' : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border-slate-200/80 dark:border-white/5 font-semibold'"
+                            class="py-1.5 px-2 rounded-lg text-xs border transition-all disabled:opacity-30">
+                            20 L
+                        </button>
+                        <button type="button" @click="setLiter(target ? target.saldo : 0)" 
+                            :class="target && liter == target.saldo && target.saldo > 0 ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm' : 'bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/40 dark:hover:bg-indigo-900/60 text-indigo-600 dark:text-indigo-400 border-indigo-200/70 dark:border-indigo-800/50'"
+                            class="py-1.5 px-2 rounded-lg text-xs font-bold border transition-all">
+                            Max
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. Nama Pengemudi -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                        Nama Pengemudi / Driver
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
                         </div>
+                        <input type="text" name="nama_driver" required
+                            class="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-white/10 focus:border-indigo-500 dark:focus:border-indigo-400 focus:bg-white dark:focus:bg-slate-800 rounded-xl text-xs sm:text-sm font-semibold text-slate-900 dark:text-white outline-none transition-all placeholder:text-slate-400 shadow-sm"
+                            autocomplete="off" spellcheck="false" placeholder="Masukkan nama personel pembawa kendaraan">
+                    </div>
+                </div>
+
+                <!-- 3. PIN Keamanan Otorisasi -->
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label class="text-xs font-bold text-slate-700 dark:text-slate-300">
+                            PIN Otorisasi (6 Digit)
+                        </label>
+                        <span class="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                            Terenkripsi
+                        </span>
+                    </div>
+                    <div class="relative">
                         <input type="text" name="pin" maxlength="6" inputmode="numeric" required
-                            class="w-full px-4 py-3.5 bg-slate-50 dark:bg-slate-950 border-2 border-slate-200 dark:border-white/10 focus:border-emerald-500 dark:focus:border-emerald-400 rounded-2xl text-xl sm:text-2xl text-center font-mono tracking-[0.4em] text-emerald-600 dark:text-emerald-400 outline-none transition-all shadow-inner"
+                            class="w-full px-4 py-2.5 sm:py-3 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-white/10 focus:border-emerald-500 dark:focus:border-emerald-400 focus:bg-white dark:focus:bg-slate-800 rounded-xl text-xl sm:text-2xl text-center font-mono tracking-[0.35em] text-slate-900 dark:text-white outline-none transition-all placeholder:text-slate-400 shadow-sm"
                             style="-webkit-text-security: disc;"
                             autocomplete="off"
                             spellcheck="false"
@@ -303,15 +310,18 @@
                     </div>
                 </div>
 
-                <!-- Action Buttons -->
-                <div class="flex items-center gap-3 pt-1">
+                <!-- 4. Tombol Aksi -->
+                <div class="flex items-center gap-2.5 pt-1">
                     <button type="button" @click="reset()" 
-                        class="flex-1 py-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-black rounded-2xl text-xs uppercase tracking-wider transition-all border border-slate-200 dark:border-white/5">
+                        class="w-1/3 py-3 px-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold rounded-xl text-xs uppercase tracking-wider transition-all border border-slate-200/80 dark:border-white/5">
                         Batal
                     </button>
                     <button type="submit" :disabled="liter <= 0 || (target && liter > target.saldo)"
-                        class="flex-[2] py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black rounded-2xl text-xs uppercase tracking-wider shadow-xl shadow-emerald-500/30 transition-all duration-300 active:scale-[0.98] disabled:opacity-50 border border-white/15">
-                        Selesaikan Transaksi
+                        class="w-2/3 py-3 px-4 bg-emerald-600 hover:bg-emerald-500 active:scale-[0.99] text-white font-bold rounded-xl text-xs uppercase tracking-wider shadow-md shadow-emerald-600/25 transition-all duration-200 disabled:opacity-40 disabled:pointer-events-none flex items-center justify-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Selesaikan Transaksi</span>
                     </button>
                 </div>
             </form>

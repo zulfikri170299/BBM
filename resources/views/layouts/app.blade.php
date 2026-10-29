@@ -823,7 +823,7 @@
                 return 'Cari...';
             };
 
-            const targets = document.querySelectorAll('select.tom-select:not([data-custom-select-init]), form[method="GET"] select:not([data-custom-select-init]):not([data-no-custom-select]), .filter-card select:not([data-custom-select-init])');
+            const targets = document.querySelectorAll('select.tom-select:not([data-custom-select-init]):not([data-no-custom-select]):not([name="per_page"]), form[method="GET"] select:not([data-custom-select-init]):not([data-no-custom-select]):not([name="per_page"]), .filter-card select:not([data-custom-select-init]):not([data-no-custom-select]):not([name="per_page"])');
             
             targets.forEach(select => {
                 if (select.dataset.customSelectInit) return;
@@ -831,7 +831,9 @@
                 select.style.display = 'none';
 
                 const wrapper = document.createElement('div');
-                wrapper.className = 'custom-select-wrapper ' + (select.className.replace('tom-select', '').trim());
+                wrapper.className = 'custom-select-wrapper';
+                if (select.classList.contains('w-full')) wrapper.classList.add('w-full');
+                if (select.classList.contains('flex-1')) wrapper.classList.add('flex-1');
 
                 const trigger = document.createElement('button');
                 trigger.type = 'button';
