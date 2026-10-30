@@ -126,7 +126,7 @@
         
         @if($searchable)
         <!-- Search input inside dropdown -->
-        <div class="p-2.5 border-b border-slate-200 dark:border-white/10 bg-slate-50/70 dark:bg-slate-800/40 sticky top-0 z-10">
+        <div class="p-2.5 border-b border-slate-200 dark:border-white/10 bg-slate-50/70 dark:bg-slate-800/40 sticky top-0 z-10 shrink-0">
             <div class="relative">
                 <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -138,7 +138,7 @@
         @endif
 
         <!-- Options List -->
-        <div class="overflow-y-auto divide-y divide-slate-100 dark:divide-white/5 custom-scrollbar p-1">
+        <div class="overflow-y-auto divide-y divide-slate-100 dark:divide-white/5 custom-scrollbar p-1 flex-1 min-h-0 overscroll-contain">
             <button type="button" @click="selectOption('', '{{ addslashes($placeholder) }}')"
                 class="w-full text-left px-3 py-2 rounded-lg text-xs flex items-center justify-between transition-colors"
                 :class="selectedVal === '' ? 'bg-blue-600/10 text-blue-600 dark:bg-blue-500/20 dark:text-white font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'">

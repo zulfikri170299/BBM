@@ -48,7 +48,7 @@
               <svg class="w-3 h-3 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
             </button>
             <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-              class="absolute right-0 mt-2 w-40 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-xl shadow-xl border border-slate-200 dark:border-white/5 z-50 overflow-hidden max-h-60 overflow-y-auto py-1 custom-scrollbar">
+              class="absolute right-0 mt-2 w-40 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-xl shadow-xl z-50 max-h-60 overflow-y-auto py-1 custom-scrollbar overscroll-contain">
               @foreach(range(1, 12) as $m)
                 @php $mStr = sprintf('%02d', $m); $mLabel = Carbon\Carbon::create()->month((int)$m)->translatedFormat('F'); @endphp
                 <button type="button" @click="bulan = '{{ $mStr }}'; bulanLabel = '{{ $mLabel }}'; open = false" 
