@@ -119,7 +119,11 @@
                             <div class="submenu-dot {{ request()->routeIs('admin.hutang.*') ? 'active-dot' : '' }}"></div>
                             Hutang BBM
                         </a>
-
+                        <a href="{{ route('admin.transfer-saldo.index') }}"
+                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.transfer-saldo.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                            <div class="submenu-dot {{ request()->routeIs('admin.transfer-saldo.*') ? 'active-dot' : '' }}"></div>
+                            Transfer Saldo
+                        </a>
                         <a href="{{ route('admin.bulk-potong.index') }}"
                             class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.bulk-potong.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                             <div class="submenu-dot {{ request()->routeIs('admin.bulk-potong.*') ? 'active-dot' : '' }}"></div>
