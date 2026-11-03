@@ -264,7 +264,21 @@
                                                 <i class="fas fa-gas-pump text-xs"></i>
                                             </div>
                                             <div>
-                                                <div class="text-xs font-black text-rose-600 dark:text-rose-400">STOK PUSAT</div>
+                                                @php
+                                                    $nopolAsal = null;
+                                                    if (!$riwayat->kendaraan_id && !empty($riwayat->keterangan)) {
+                                                        if (preg_match('/dari\s+Kendaraan\s*(?:\(([^)]+)\)|([A-Za-z0-9\s-]+))/i', $riwayat->keterangan, $m)) {
+                                                            $nopolAsal = trim($m[1] ?? $m[2] ?? '');
+                                                        }
+                                                    }
+                                                @endphp
+                                                @if($nopolAsal)
+                                                    <div class="text-xs font-mono font-bold text-slate-800 dark:text-slate-100">
+                                                        {{ $nopolAsal }}
+                                                    </div>
+                                                @else
+                                                    <div class="text-xs font-black text-rose-600 dark:text-rose-400">STOK PUSAT</div>
+                                                @endif
                                                 <div class="text-[10px] text-slate-400">SUPER ADMIN</div>
                                             </div>
                                         @else

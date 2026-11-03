@@ -474,6 +474,19 @@ class KendaraanController extends Controller
 
     public function destroy(Kendaraan $kendaraan)
     {
+        // Pertahankan riwayat transfer saldo keluar agar saldo penerima tetap permanen
+        $transfersKeluar = \App\Models\RiwayatTransferSaldoPersonel::where('kendaraan_id', $kendaraan->id)->get();
+        foreach ($transfersKeluar as $tf) {
+            $ket = $tf->keterangan ?: "Transfer saldo BBM dari Kendaraan ({$kendaraan->no_polisi})";
+            if (!str_contains($ket, $kendaraan->no_polisi)) {
+                $ket .= " ({$kendaraan->no_polisi})";
+            }
+            $tf->update([
+                'kendaraan_id' => null,
+                'keterangan' => $ket,
+            ]);
+        }
+
         $kendaraan->delete();
 
         LogAktivitas::create([
@@ -495,6 +508,19 @@ class KendaraanController extends Controller
         $count = $kendaraans->count();
 
         foreach ($kendaraans as $kendaraan) {
+            // Pertahankan riwayat transfer saldo keluar agar saldo penerima tetap permanen
+            $transfersKeluar = \App\Models\RiwayatTransferSaldoPersonel::where('kendaraan_id', $kendaraan->id)->get();
+            foreach ($transfersKeluar as $tf) {
+                $ket = $tf->keterangan ?: "Transfer saldo BBM dari Kendaraan ({$kendaraan->no_polisi})";
+                if (!str_contains($ket, $kendaraan->no_polisi)) {
+                    $ket .= " ({$kendaraan->no_polisi})";
+                }
+                $tf->update([
+                    'kendaraan_id' => null,
+                    'keterangan' => $ket,
+                ]);
+            }
+
             $kendaraan->delete();
         }
 
@@ -730,6 +756,9 @@ class KendaraanController extends Controller
 
     private function buildLaporanBulananData($satkerId, $bulan, $tahun)
     {
+        // Sistem Cerdas: Pastikan transfer saldo dari kendaraan yang dihapus dipulihkan otomatis jika database baru dimasukkan
+        \App\Services\SmartTransferSyncService::autoHealTransfers($satkerId);
+
         $startDateWita = \Carbon\Carbon::create($tahun, $bulan, 1, 0, 0, 0, 'Asia/Makassar');
         $endDateWita = $startDateWita->copy()->endOfMonth();
         $daysInMonth = $startDateWita->daysInMonth;

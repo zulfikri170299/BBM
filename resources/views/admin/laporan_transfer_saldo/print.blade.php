@@ -83,7 +83,15 @@
                     <td class="text-center">{{ $index + 1 }}</td>
                     <td class="text-center">{{ $r->created_at->setTimezone('Asia/Makassar')->format('d/m/Y H:i') }}</td>
                     <td>{{ $r->satker->nama_satker ?? '-' }}</td>
-                    <td>{{ $r->kendaraan->no_polisi ?? 'PUSAT' }}</td>
+                    @php
+                        $nopolAsal = null;
+                        if (!$r->kendaraan_id && !empty($r->keterangan)) {
+                            if (preg_match('/dari\s+Kendaraan\s*(?:\(([^)]+)\)|([A-Za-z0-9\s-]+))/i', $r->keterangan, $m)) {
+                                $nopolAsal = trim($m[1] ?? $m[2] ?? '');
+                            }
+                        }
+                    @endphp
+                    <td>{{ $r->kendaraan->no_polisi ?? ($nopolAsal ?: 'PUSAT') }}</td>
                     <td>
                         @if($r->personel)
                             {{ $r->personel->nama }} (PRS)

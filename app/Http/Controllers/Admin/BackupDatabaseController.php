@@ -217,6 +217,16 @@ class BackupDatabaseController extends Controller
                     \Illuminate\Support\Facades\Log::warning('Auto-migrate after SQLite restore: ' . $mEx->getMessage());
                 }
 
+                // Sistem Cerdas: Pulihkan otomatis seluruh saldo transfer dari kendaraan yang sudah dihapus
+                \App\Services\SmartTransferSyncService::autoHealTransfers();
+
+                try {
+                    $rootDb = base_path('../database/database.sqlite');
+                    if (file_exists(dirname($rootDb))) {
+                        File::copy($dbPath, $rootDb);
+                    }
+                } catch (\Throwable $e) {}
+
                 session()->flash('success', 'Database SQLite berhasil di-restore dan seluruh data telah dipulihkan sepenuhnya!');
                 session()->save();
 
@@ -234,6 +244,9 @@ class BackupDatabaseController extends Controller
             } catch (\Throwable $mEx) {
                 \Illuminate\Support\Facades\Log::warning('Auto-migrate after SQL restore: ' . $mEx->getMessage());
             }
+
+            // Sistem Cerdas: Pulihkan otomatis seluruh saldo transfer dari kendaraan yang sudah dihapus
+            \App\Services\SmartTransferSyncService::autoHealTransfers();
 
             session()->flash('success', 'Database berhasil di-restore dan seluruh data telah dipulihkan sepenuhnya!');
             session()->save();

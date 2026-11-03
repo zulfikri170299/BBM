@@ -118,8 +118,18 @@
                                     </span>
                                 </td>
                                 <td class="px-4 py-3">
+                                    @php
+                                        $nopolAsal = null;
+                                        if (!$r->kendaraan_id && !empty($r->keterangan)) {
+                                            if (preg_match('/dari\s+Kendaraan\s*(?:\(([^)]+)\)|([A-Za-z0-9\s-]+))/i', $r->keterangan, $matches)) {
+                                                $nopolAsal = trim($matches[1] ?? $matches[2] ?? '');
+                                            }
+                                        }
+                                    @endphp
                                     @if($r->personel_id && !$r->tujuan_kendaraan_id)
                                         <span class="px-2 py-1 bg-blue-500/20 text-blue-600 dark:text-blue-400 text-[10px] uppercase font-bold rounded-full">KE PERSONEL</span>
+                                    @elseif($nopolAsal && $r->tujuan_kendaraan_id)
+                                        <span class="px-2 py-1 bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[10px] uppercase font-bold rounded-full">ANTAR KENDARAAN</span>
                                     @elseif(!$r->kendaraan_id && $r->tujuan_kendaraan_id)
                                         <span class="px-2 py-1 bg-amber-500/20 text-amber-600 dark:text-amber-400 text-[10px] uppercase font-bold rounded-full">PUSAT -> KENDARAAN</span>
                                     @else
@@ -130,7 +140,7 @@
                                     @if($r->kendaraan)
                                         <span class="text-xs font-semibold text-slate-800 dark:text-slate-200">{{ $r->kendaraan->no_polisi }}</span>
                                     @else
-                                        <span class="text-xs text-slate-500 italic">Pusat</span>
+                                        @if($nopolAsal)<span class="text-xs font-semibold text-slate-800 dark:text-slate-200">{{ $nopolAsal }}</span>@else<span class="text-xs text-slate-500 italic">Pusat</span>@endif
                                     @endif
                                 </td>
                                 <td class="px-4 py-3">

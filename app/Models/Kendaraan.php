@@ -74,6 +74,18 @@ class Kendaraan extends Model
             \App\Models\RiwayatTopup::where('kendaraan_id', $kendaraan->id)->update([
                 'kendaraan_id' => null,
             ]);
+
+            // Pertahankan riwayat transfer saldo keluar agar saldo penerima tetap permanen
+            \App\Models\RiwayatTransferSaldoPersonel::where('kendaraan_id', $kendaraan->id)->each(function ($tf) use ($kendaraan) {
+                $ket = $tf->keterangan ?: "Transfer saldo BBM dari Kendaraan ({$kendaraan->no_polisi})";
+                if (!str_contains($ket, $kendaraan->no_polisi)) {
+                    $ket .= " ({$kendaraan->no_polisi})";
+                }
+                $tf->update([
+                    'kendaraan_id' => null,
+                    'keterangan' => $ket,
+                ]);
+            });
         });
     }
 

@@ -414,7 +414,15 @@
 
                                     {{-- Sumber --}}
                                     <td class="px-4 py-3.5 align-middle">
-                                        @if($item->kendaraan_id)
+                                        @php
+                                            $nopolAsal = null;
+                                            if (!$item->kendaraan_id && !empty($item->keterangan)) {
+                                                if (preg_match('/dari\s+Kendaraan\s*(?:\(([^)]+)\)|([A-Za-z0-9\s-]+))/i', $item->keterangan, $matches)) {
+                                                    $nopolAsal = trim($matches[1] ?? $matches[2] ?? '');
+                                                }
+                                            }
+                                        @endphp
+                                        @if($item->kendaraan_id || $nopolAsal)
                                             <div class="flex items-center gap-2">
                                                 <div class="w-8 h-8 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center justify-center shrink-0">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -422,8 +430,8 @@
                                                     </svg>
                                                 </div>
                                                 <div class="min-w-0">
-                                                    <p class="text-xs font-black text-slate-800 dark:text-slate-100 truncate" title="{{ $item->kendaraan->no_polisi ?? '-' }}">
-                                                        {{ $item->kendaraan->no_polisi ?? '-' }}
+                                                    <p class="text-xs font-black text-slate-800 dark:text-slate-100 truncate" title="{{ $item->kendaraan->no_polisi ?? $nopolAsal }}">
+                                                        {{ $item->kendaraan->no_polisi ?? $nopolAsal }}
                                                     </p>
                                                     <span class="inline-block px-1.5 py-0.2 rounded text-[9px] font-bold uppercase tracking-wider bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
                                                         KENDARAAN

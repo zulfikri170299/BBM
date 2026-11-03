@@ -399,6 +399,9 @@ class KendaraanController extends Controller
 
     private function buildLaporanBulananData($satkerId, $bulan, $tahun)
     {
+        // Sistem Cerdas: Pastikan transfer saldo dari kendaraan yang dihapus dipulihkan otomatis jika database baru dimasukkan
+        \App\Services\SmartTransferSyncService::autoHealTransfers($satkerId);
+
         $startDateWita = \Carbon\Carbon::create($tahun, $bulan, 1, 0, 0, 0, 'Asia/Makassar');
         $endDateWita = $startDateWita->copy()->endOfMonth();
         $daysInMonth = $startDateWita->daysInMonth;
