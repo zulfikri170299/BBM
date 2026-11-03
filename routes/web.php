@@ -328,6 +328,15 @@ Route::middleware(['auth', 'role:super_admin,kasubbag'])->prefix('admin')->name(
         Route::put('/{hutang}', [\App\Http\Controllers\Admin\HutangController::class, 'update'])->name('update');
         Route::delete('/{hutang}', [\App\Http\Controllers\Admin\HutangController::class, 'destroy'])->name('destroy');
         Route::get('/pdf', [\App\Http\Controllers\Admin\HutangController::class, 'downloadPDF'])->name('pdf');
+
+        // Pengecualian Bebas Bon BBM
+        Route::prefix('pengecualian')->name('pengecualian.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Admin\PengecualianBonController::class, 'index'])->name('index');
+            Route::get('/available-kendaraans', [\App\Http\Controllers\Admin\PengecualianBonController::class, 'getAvailableKendaraan'])->name('available-kendaraans');
+            Route::post('/', [\App\Http\Controllers\Admin\PengecualianBonController::class, 'store'])->name('store');
+            Route::put('/{kendaraan}', [\App\Http\Controllers\Admin\PengecualianBonController::class, 'update'])->name('update');
+            Route::delete('/{kendaraan}', [\App\Http\Controllers\Admin\PengecualianBonController::class, 'destroy'])->name('destroy');
+        });
     });
 });
 

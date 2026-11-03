@@ -115,9 +115,24 @@
                             Transaksi BBM
                         </a>
                         <a href="{{ route('admin.hutang.index') }}"
-                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.hutang.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
-                            <div class="submenu-dot {{ request()->routeIs('admin.hutang.*') ? 'active-dot' : '' }}"></div>
+                            class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ (request()->routeIs('admin.hutang.index') || (request()->routeIs('admin.hutang.*') && !request()->routeIs('admin.hutang.pengecualian.*'))) ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                            <div class="submenu-dot {{ (request()->routeIs('admin.hutang.index') || (request()->routeIs('admin.hutang.*') && !request()->routeIs('admin.hutang.pengecualian.*'))) ? 'active-dot' : '' }}"></div>
                             Hutang BBM
+                        </a>
+                        <a href="{{ route('admin.hutang.pengecualian.index') }}"
+                            class="group flex items-center justify-between py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.hutang.pengecualian.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
+                            <div class="flex items-center">
+                                <div class="submenu-dot {{ request()->routeIs('admin.hutang.pengecualian.*') ? 'active-dot' : '' }}"></div>
+                                Pengecualian Bon
+                            </div>
+                            @php
+                                $bebasBonBadge = \App\Models\Kendaraan::where('bebas_bon', true)->count();
+                            @endphp
+                            @if($bebasBonBadge > 0)
+                                <span class="px-1.5 py-0.5 rounded-full text-[9px] font-black bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                                    {{ $bebasBonBadge }}
+                                </span>
+                            @endif
                         </a>
                         <a href="{{ route('admin.transfer-saldo.index') }}"
                             class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.transfer-saldo.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">

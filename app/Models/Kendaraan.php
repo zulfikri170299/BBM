@@ -15,7 +15,24 @@ class Kendaraan extends Model
         'saldo' => 'integer',
         'pending_changes' => 'array',
         'disetujui_pada' => 'datetime',
+        'bebas_bon' => 'boolean',
+        'bebas_bon_updated_at' => 'datetime',
     ];
+
+    public function bebasBonBy()
+    {
+        return $this->belongsTo(User::class, 'bebas_bon_by');
+    }
+
+    public function isBebasBon(): bool
+    {
+        return (bool) ($this->bebas_bon ?? false);
+    }
+
+    public function scopeBebasBon($query)
+    {
+        return $query->where('bebas_bon', true);
+    }
 
     public function diajukanOleh()
     {

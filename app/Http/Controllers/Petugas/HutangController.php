@@ -82,11 +82,18 @@ class HutangController extends Controller
     {
         $satkerId = $request->satker_id;
         $kendaraans = \App\Models\Kendaraan::where('satker_id', $satkerId)
-            ->where('saldo', '<=', 0)
-            ->select('id', 'no_polisi', 'jenis_kendaraan', 'jenis_bbm')
+            ->where(function ($q) {
+                $q->where('saldo', '<=', 0)
+                  ->orWhere('bebas_bon', 1)
+                  ->orWhere('bebas_bon', true);
+            })
+            ->select('id', 'no_polisi', 'jenis_kendaraan', 'jenis_bbm', 'bebas_bon')
             ->get();
 
         $kendaraans = $kendaraans->filter(function($k) {
+            if ($k->isBebasBon()) {
+                return true;
+            }
             return !$k->hasUnpaidBon();
         })->values();
             
@@ -110,13 +117,13 @@ class HutangController extends Controller
             ->where('no_polisi', $request->nopol)
             ->first();
             
-        if ($kendaraan && $kendaraan->saldo > 0) {
+        if ($kendaraan && $kendaraan->saldo > 0 && !$kendaraan->isBebasBon()) {
             return back()
                 ->withInput()
                 ->withErrors(['nopol' => "Kendaraan dengan No. Polisi {$request->nopol} masih memiliki saldo BBM ({$kendaraan->saldo} L), tidak diizinkan untuk hutang."]);
         }
 
-        if ($kendaraan && $kendaraan->hasUnpaidBon()) {
+        if ($kendaraan && $kendaraan->hasUnpaidBon() && !$kendaraan->isBebasBon()) {
             return back()
                 ->withInput()
                 ->withErrors(['nopol' => "Kendaraan dengan No. Polisi {$request->nopol} tidak diizinkan BON lagi karena masih memiliki tanggungan bon hutang sebesar " . number_format($kendaraan->totalUnpaidBon(), 0, ',', '.') . " L yang belum lunas (saldo masih terkunci). Harap lunasi hutang terlebih dahulu."]);

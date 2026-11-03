@@ -67,8 +67,8 @@ class TransaksiController extends Controller
                 // Coba lunasi otomatis jika saldo saat ini sudah mencukupi
                 $target->autoSettleBon();
 
-                // Validasi Saldo Dikunci jika Kendaraan memiliki BON yang belum dibayar
-                if ($target->hasUnpaidBon()) {
+                // Validasi Saldo Dikunci jika Kendaraan memiliki BON yang belum dibayar (kecuali kendaraan bebas bon)
+                if ($target->hasUnpaidBon() && !$target->isBebasBon()) {
                     $totalBon = $target->totalUnpaidBon();
                     $message = "Saldo kendaraan {$target->no_polisi} sedang DIKUNCI karena memiliki BON/Hutang BBM yang belum dibayar sebesar {$totalBon} Liter. Harap lunasi BON terlebih dahulu sebelum menggunakan saldo.";
                     if ($request->wantsJson()) {

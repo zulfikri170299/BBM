@@ -1,5 +1,31 @@
 <x-app-layout>
     <div class="max-w-7xl mx-auto p-3 sm:p-6 lg:p-8 space-y-6" x-data="hutangComponent()">
+        @php
+            $countBebasBon = \App\Models\Kendaraan::where('bebas_bon', true)->count();
+        @endphp
+        <!-- Sub-Navigation Tabs (Menu Hutang) -->
+        <div class="flex items-center gap-2 border-b border-slate-200 dark:border-white/10 pb-3">
+            <a href="{{ route('admin.hutang.index') }}"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-brand-primary text-white shadow-md shadow-brand-primary/20 transition-all">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span>Monitoring Hutang BBM</span>
+            </a>
+
+            <a href="{{ route('admin.hutang.pengecualian.index') }}"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-all">
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                <span>Pengecualian Bebas Bon</span>
+                @if($countBebasBon > 0)
+                    <span class="ml-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                        {{ $countBebasBon }}
+                    </span>
+                @endif
+            </a>
+        </div>
         <!-- Page Title & Header Card -->
         <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
             <div class="flex items-center gap-3.5 min-w-0">
@@ -537,7 +563,7 @@
                                         class="block w-full px-4 py-2.5 pr-10 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 focus:bg-white dark:focus:bg-slate-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 rounded-xl transition-all shadow-sm font-semibold text-xs text-slate-800 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed appearance-none cursor-pointer">
                                         <option value="" disabled selected x-text="!editData.satker_id ? '-- Pilih Satker Terlebih Dahulu --' : (loadingFormKendaraan ? 'Sedang memuat data kendaraan...' : (formKendaraans.length ? '-- Pilih Kendaraan --' : 'Tidak ada kendaraan pada satker ini'))"></option>
                                         <template x-for="kend in formKendaraans" :key="kend.id">
-                                            <option :value="kend.id" x-text="`${kend.no_polisi} - ${kend.jenis_kendaraan} (${kend.jenis_bbm})`" class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white py-1.5"></option>
+                                            <option :value="kend.id" x-text="`${kend.no_polisi} - ${kend.jenis_kendaraan} (${kend.jenis_bbm}) ${kend.bebas_bon ? '[✨ BEBAS BON]' : ''}`" class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white py-1.5"></option>
                                         </template>
                                     </select>
                                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400">
@@ -703,9 +729,9 @@
                                     <select name="kendaraan_id" id="create_kendaraan_id" x-model="createData.kendaraan_id" required
                                         :disabled="loadingFormKendaraan || !createData.satker_id || createKendaraans.length === 0"
                                         class="block w-full px-4 py-2.5 pr-10 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 focus:bg-white dark:focus:bg-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 rounded-xl transition-all shadow-sm font-semibold text-xs text-slate-800 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed appearance-none cursor-pointer">
-                                        <option value="" disabled selected x-text="!createData.satker_id ? '-- Pilih Satker Terlebih Dahulu --' : (loadingFormKendaraan ? 'Sedang memuat data kendaraan...' : (createKendaraans.length ? '-- Pilih Kendaraan (Saldo 0 L) --' : 'Tidak ada kendaraan bersaldo 0 L pada satker ini'))"></option>
+                                        <option value="" disabled selected x-text="!createData.satker_id ? '-- Pilih Satker Terlebih Dahulu --' : (loadingFormKendaraan ? 'Sedang memuat data kendaraan...' : (createKendaraans.length ? '-- Pilih Kendaraan --' : 'Tidak ada kendaraan bersaldo 0 L atau Bebas Bon pada satker ini'))"></option>
                                         <template x-for="kend in createKendaraans" :key="kend.id">
-                                            <option :value="kend.id" x-text="`${kend.no_polisi} - ${kend.jenis_kendaraan} (${kend.jenis_bbm})`" class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white py-1.5"></option>
+                                            <option :value="kend.id" x-text="`${kend.no_polisi} - ${kend.jenis_kendaraan} (${kend.jenis_bbm}) ${kend.bebas_bon ? '[✨ BEBAS BON]' : ''}`" class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white py-1.5"></option>
                                         </template>
                                     </select>
                                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400">
@@ -736,7 +762,12 @@
                                             </div>
                                             <div>
                                                 <span class="font-bold text-emerald-200 block text-xs" x-text="`${createSelectedKendaraan?.no_polisi} - ${createSelectedKendaraan?.jenis_kendaraan}`"></span>
-                                                <span class="text-[10px] text-emerald-300/80">Saldo: 0 Liter • Siap mengajukan bon hutang</span>
+                                                <span class="text-[10px] text-emerald-300/80" x-text="createSelectedKendaraan?.bebas_bon ? ('Saldo: ' + formatLiter(createSelectedSaldo) + ' Liter • Bebas Bon Tanpa Limit Aktif') : 'Saldo: 0 Liter • Siap mengajukan bon hutang'"></span>
+                                                <template x-if="createSelectedKendaraan?.bebas_bon">
+                                                    <span class="inline-flex items-center gap-1 text-[10px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20 mt-1">
+                                                        ✨ Bebas Limit Bon (Pengecualian Super Admin)
+                                                    </span>
+                                                </template>
                                             </div>
                                         </div>
                                         <div class="text-right pl-3 border-l border-emerald-500/20">
@@ -859,7 +890,7 @@
                     return new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(number);
                 },
                 get createKendaraans() {
-                    return this.formKendaraans.filter(k => Number(k.saldo || 0) <= 0);
+                    return this.formKendaraans.filter(k => k.bebas_bon || Number(k.saldo || 0) <= 0);
                 },
                 get createSelectedKendaraan() {
                     if (!this.createData.kendaraan_id || !this.formKendaraans.length) return null;
@@ -869,7 +900,7 @@
                     return this.createSelectedKendaraan ? Number(this.createSelectedKendaraan.saldo || 0) : 0;
                 },
                 get createVehicleHasSaldo() {
-                    return this.createSelectedKendaraan && this.createSelectedSaldo > 0;
+                    return this.createSelectedKendaraan && !this.createSelectedKendaraan.bebas_bon && this.createSelectedSaldo > 0;
                 },
                 get createSubmitDisabled() {
                     if (!this.createData.kendaraan_id) return true;

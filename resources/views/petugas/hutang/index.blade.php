@@ -512,7 +512,7 @@
                                         data.forEach(function(kendaraan) {
                                             ts.addOption({
                                                 value: kendaraan.id,
-                                                text: kendaraan.no_polisi + ' - ' + kendaraan.jenis_kendaraan,
+                                                text: kendaraan.no_polisi + ' - ' + kendaraan.jenis_kendaraan + (kendaraan.bebas_bon ? ' [✨ BEBAS LIMIT BON]' : ''),
                                                 nopol: kendaraan.no_polisi,
                                                 jenis: kendaraan.jenis_kendaraan,
                                                 bbm: kendaraan.jenis_bbm

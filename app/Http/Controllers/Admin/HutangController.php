@@ -25,13 +25,13 @@ class HutangController extends Controller
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $startDate = $request->start_date;
             $endDate = $request->end_date;
-            
-            $query->where(function($q) use ($startDate, $endDate) {
+
+            $query->where(function ($q) use ($startDate, $endDate) {
                 $q->whereBetween('tanggal_bon', [$startDate, $endDate])
-                  ->orWhere(function($subq) use ($startDate, $endDate) {
-                      $subq->whereNull('tanggal_bon')
-                           ->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
-                  });
+                    ->orWhere(function ($subq) use ($startDate, $endDate) {
+                        $subq->whereNull('tanggal_bon')
+                            ->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+                    });
             });
         }
 
@@ -47,12 +47,12 @@ class HutangController extends Controller
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $startDate = $request->start_date;
             $endDate = $request->end_date;
-            $summaryQuery->where(function($q) use ($startDate, $endDate) {
+            $summaryQuery->where(function ($q) use ($startDate, $endDate) {
                 $q->whereBetween('tanggal_bon', [$startDate, $endDate])
-                  ->orWhere(function($subq) use ($startDate, $endDate) {
-                      $subq->whereNull('tanggal_bon')
-                           ->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
-                  });
+                    ->orWhere(function ($subq) use ($startDate, $endDate) {
+                        $subq->whereNull('tanggal_bon')
+                            ->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+                    });
             });
         }
         $summaryHutang = $summaryQuery->selectRaw('jenis_bbm, SUM(jumlah_bon) as total')
@@ -62,16 +62,20 @@ class HutangController extends Controller
         // Hitung Real Physical Tank Stock
         $latestSync = \App\Models\SinkronisasiBbm::orderBy('created_at', 'desc')->first();
         $tankStock = ['Pertamax' => 0, 'Pertamina Dex' => 0];
-        
+
         if ($latestSync) {
-            $pemakaianPertamax = \App\Models\TransaksiBbm::where(function($q) { $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })
+            $pemakaianPertamax = \App\Models\TransaksiBbm::where(function ($q) {
+                $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })
                 ->where('created_at', '>=', $latestSync->created_at)->sum('liter');
-            $pemakaianPertamax += \App\Models\Hutang::where(function($q) { $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })
+            $pemakaianPertamax += \App\Models\Hutang::where(function ($q) {
+                $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX'); })
                 ->where('created_at', '>=', $latestSync->created_at)->sum('jumlah_bon');
-                
-            $pemakaianDex = \App\Models\TransaksiBbm::where(function($q) { $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })
+
+            $pemakaianDex = \App\Models\TransaksiBbm::where(function ($q) {
+                $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })
                 ->where('created_at', '>=', $latestSync->created_at)->sum('liter');
-            $pemakaianDex += \App\Models\Hutang::where(function($q) { $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })
+            $pemakaianDex += \App\Models\Hutang::where(function ($q) {
+                $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX'); })
                 ->where('created_at', '>=', $latestSync->created_at)->sum('jumlah_bon');
 
             $tankStock['Pertamax'] = max(0, $latestSync->stok_awal_pertamax - $pemakaianPertamax);
@@ -98,11 +102,11 @@ class HutangController extends Controller
             return back()->with('error', 'Kendaraan tidak sesuai dengan Satker yang dipilih.');
         }
 
-        if ((float) $kendaraan->saldo > 0) {
+        if ((float) $kendaraan->saldo > 0 && !$kendaraan->isBebasBon()) {
             return back()->with('error', 'Kendaraan ' . $kendaraan->no_polisi . ' masih memiliki saldo ' . number_format($kendaraan->saldo, 0, ',', '.') . ' L. Hutang BBM hanya dapat dibuat jika saldo kendaraan kosong atau 0.');
         }
 
-        if ($kendaraan->hasUnpaidBon()) {
+        if ($kendaraan->hasUnpaidBon() && !$kendaraan->isBebasBon()) {
             return back()->with('error', "Kendaraan {$kendaraan->no_polisi} tidak dapat melakukan BON lagi karena masih memiliki tanggungan bon hutang sebesar " . number_format($kendaraan->totalUnpaidBon(), 0, ',', '.') . " L yang belum lunas (saldo masih terkunci). Harap lunasi hutang terlebih dahulu.");
         }
 
@@ -111,9 +115,11 @@ class HutangController extends Controller
         $saldoTangki = 0;
         if ($latestSync) {
             $isPertamax = stripos($kendaraan->jenis_bbm, 'Pertamax') !== false;
-            $pemakaian = \App\Models\TransaksiBbm::where(function($q) use ($kendaraan) { $q->where('jenis_bbm', $kendaraan->jenis_bbm)->orWhere('jenis_bbm', strtoupper($kendaraan->jenis_bbm)); })
+            $pemakaian = \App\Models\TransaksiBbm::where(function ($q) use ($kendaraan) {
+                $q->where('jenis_bbm', $kendaraan->jenis_bbm)->orWhere('jenis_bbm', strtoupper($kendaraan->jenis_bbm)); })
                 ->where('created_at', '>=', $latestSync->created_at)->sum('liter');
-            $pemakaian += \App\Models\Hutang::where(function($q) use ($kendaraan) { $q->where('jenis_bbm', $kendaraan->jenis_bbm)->orWhere('jenis_bbm', strtoupper($kendaraan->jenis_bbm)); })
+            $pemakaian += \App\Models\Hutang::where(function ($q) use ($kendaraan) {
+                $q->where('jenis_bbm', $kendaraan->jenis_bbm)->orWhere('jenis_bbm', strtoupper($kendaraan->jenis_bbm)); })
                 ->where('created_at', '>=', $latestSync->created_at)->sum('jumlah_bon');
             $saldoTangki = $isPertamax ? ($latestSync->stok_awal_pertamax - $pemakaian) : ($latestSync->stok_awal_dex - $pemakaian);
         }
@@ -164,13 +170,13 @@ class HutangController extends Controller
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $startDate = $request->start_date;
             $endDate = $request->end_date;
-            
-            $query->where(function($q) use ($startDate, $endDate) {
+
+            $query->where(function ($q) use ($startDate, $endDate) {
                 $q->whereBetween('tanggal_bon', [$startDate, $endDate])
-                  ->orWhere(function($subq) use ($startDate, $endDate) {
-                      $subq->whereNull('tanggal_bon')
-                           ->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
-                  });
+                    ->orWhere(function ($subq) use ($startDate, $endDate) {
+                        $subq->whereNull('tanggal_bon')
+                            ->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+                    });
             });
         }
 
@@ -210,9 +216,11 @@ class HutangController extends Controller
                 $saldoTangki = 0;
                 if ($latestSync) {
                     $isPertamax = stripos($kendaraan->jenis_bbm, 'Pertamax') !== false;
-                    $pemakaian = \App\Models\TransaksiBbm::where(function($q) use ($kendaraan) { $q->where('jenis_bbm', $kendaraan->jenis_bbm)->orWhere('jenis_bbm', strtoupper($kendaraan->jenis_bbm)); })
+                    $pemakaian = \App\Models\TransaksiBbm::where(function ($q) use ($kendaraan) {
+                        $q->where('jenis_bbm', $kendaraan->jenis_bbm)->orWhere('jenis_bbm', strtoupper($kendaraan->jenis_bbm)); })
                         ->where('created_at', '>=', $latestSync->created_at)->sum('liter');
-                    $pemakaian += \App\Models\Hutang::where(function($q) use ($kendaraan) { $q->where('jenis_bbm', $kendaraan->jenis_bbm)->orWhere('jenis_bbm', strtoupper($kendaraan->jenis_bbm)); })
+                    $pemakaian += \App\Models\Hutang::where(function ($q) use ($kendaraan) {
+                        $q->where('jenis_bbm', $kendaraan->jenis_bbm)->orWhere('jenis_bbm', strtoupper($kendaraan->jenis_bbm)); })
                         ->where('created_at', '>=', $latestSync->created_at)->sum('jumlah_bon');
                     $saldoTangki = $isPertamax ? ($latestSync->stok_awal_pertamax - $pemakaian) : ($latestSync->stok_awal_dex - $pemakaian);
                 }
@@ -245,7 +253,7 @@ class HutangController extends Controller
     {
         $id = $hutang->id;
         $satker = $hutang->satker->nama_satker;
-        
+
         $hutang->delete();
 
         \App\Models\LogAktivitas::create([
@@ -261,16 +269,23 @@ class HutangController extends Controller
         $request->validate(['satker_id' => 'required|exists:satkers,id']);
 
         $query = \App\Models\Kendaraan::where('satker_id', $request->satker_id)
-            ->select('id', 'no_polisi', 'jenis_kendaraan', 'jenis_bbm', 'saldo');
+            ->select('id', 'no_polisi', 'jenis_kendaraan', 'jenis_bbm', 'saldo', 'bebas_bon');
 
         if (!$request->boolean('include_all')) {
-            $query->where('saldo', '<=', 0);
+            $query->where(function ($q) {
+                $q->where('saldo', '<=', 0)
+                  ->orWhere('bebas_bon', 1)
+                  ->orWhere('bebas_bon', true);
+            });
         }
 
         $kendaraans = $query->get();
 
         if (!$request->boolean('include_all')) {
-            $kendaraans = $kendaraans->filter(function($k) {
+            $kendaraans = $kendaraans->filter(function ($k) {
+                if ($k->isBebasBon()) {
+                    return true;
+                }
                 return !$k->hasUnpaidBon();
             })->values();
         }
@@ -287,9 +302,9 @@ class HutangController extends Controller
         }
 
         $kendaraan = \App\Models\Kendaraan::where('satker_id', $hutang->satker_id)
-            ->where(function($q) use ($hutang) {
+            ->where(function ($q) use ($hutang) {
                 $q->where('no_polisi', $hutang->nopol)
-                  ->orWhereRaw("TRIM(UPPER(no_polisi)) = ?", [trim(strtoupper($hutang->nopol))]);
+                    ->orWhereRaw("TRIM(UPPER(no_polisi)) = ?", [trim(strtoupper($hutang->nopol))]);
             })
             ->first();
 
@@ -333,7 +348,7 @@ class HutangController extends Controller
         });
 
         $isFullyPaid = !$kendaraan->fresh()->hasUnpaidBon();
-        $msg = $isFullyPaid 
+        $msg = $isFullyPaid
             ? "Hutang berhasil dibayar. Semua BON kendaraan {$kendaraan->no_polisi} telah lunas dan saldo kini dapat digunakan kembali."
             : "Hutang berhasil dibayar. Kendaraan {$kendaraan->no_polisi} masih memiliki sisa BON lain sebesar {$kendaraan->totalUnpaidBon()} L (saldo tetap dikunci hingga lunas).";
 
