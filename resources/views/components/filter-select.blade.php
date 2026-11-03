@@ -12,6 +12,7 @@
 @php
     // Normalisasi options ke format [['value' => ..., 'label' => ...]]
     $normalizedOptions = [];
+    $isList = is_array($options) ? array_is_list($options) : false;
     foreach ($options as $k => $v) {
         if (is_array($v)) {
             $normalizedOptions[] = [
@@ -25,7 +26,7 @@
             ];
         } else {
             // Assoc or sequential array
-            $optVal = is_numeric($k) ? $v : $k;
+            $optVal = $isList ? $v : $k;
             $normalizedOptions[] = [
                 'value' => (string)$optVal,
                 'label' => (string)$v,
