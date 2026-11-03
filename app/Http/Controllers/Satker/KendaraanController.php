@@ -437,31 +437,41 @@ class KendaraanController extends Controller
         $summaryByBbm = [];
 
         foreach ($kendaraans as $kendaraan) {
-            // Top Up bulan ini (Masuk - Keluar di Satker ini)
-            $topupMasuk = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
+            // Top Up bulan ini (Masuk di Satker ini)
+            $topupMasuk = \App\Models\RiwayatTopup::withoutGlobalScopes()->where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
                 ->where('tipe', 'masuk')
                 ->whereBetween('created_at', [$startUtc, $endUtc])
                 ->sum('jumlah');
             
-            $topupKeluarAll = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
+            $topupKeluarAll = \App\Models\RiwayatTopup::withoutGlobalScopes()->where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
                 ->where('tipe', 'keluar')
                 ->whereBetween('created_at', [$startUtc, $endUtc])
                 ->get();
             $topupKeluar = $topupKeluarAll->whereNotIn('metode', ['potong_saldo_hangus', 'POTONG_SALDO_MASAL_HANGUS'])->sum('jumlah');
-            $hangusKeluar = $topupKeluarAll->whereIn('metode', ['potong_saldo_hangus', 'POTONG_SALDO_MASAL_HANGUS'])->sum('jumlah');
 
-            $topupBulanIni = $topupMasuk; // Hanya saldo MASUK yang dihitung sebagai Top Up di laporan
+            // Total hangus kumulatif sampai akhir bulan ini (meniadakan saldo lebih di laporan agar tidak rancu dan tidak minus)
+            $hangusKumulatif = \App\Models\RiwayatTopup::withoutGlobalScopes()->where('satker_id', $satkerId)
+                ->where('kendaraan_id', $kendaraan->id)
+                ->where('tipe', 'keluar')
+                ->whereIn('metode', ['potong_saldo_hangus', 'POTONG_SALDO_MASAL_HANGUS'])
+                ->where('created_at', '<=', $endUtc)
+                ->sum('jumlah');
 
             // Total top up sampai akhir bulan lalu di Satker ini
-            $totalTopupSampaiSebelumnyaMasuk = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
+            $totalTopupSampaiSebelumnyaMasuk = \App\Models\RiwayatTopup::withoutGlobalScopes()->where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
                 ->where('tipe', 'masuk')
                 ->where('created_at', '<=', $prevMonthEndUtc)
                 ->sum('jumlah');
+
+            // Hangus meniadakan saldo lebih di top up masuk kumulatif
+            $topupMasukSebelumnyaBersih = max(0, $totalTopupSampaiSebelumnyaMasuk - $hangusKumulatif);
+            $sisaHangus = max(0, $hangusKumulatif - $totalTopupSampaiSebelumnyaMasuk);
+            $topupBulanIni = max(0, $topupMasuk - $sisaHangus); // Hanya saldo MASUK riil yang dihitung sebagai Top Up
             
-            $totalTopupSampaiSebelumnyaKeluar = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
+            $totalTopupSampaiSebelumnyaKeluar = \App\Models\RiwayatTopup::withoutGlobalScopes()->where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
                 ->where('tipe', 'keluar')
                 ->whereNotIn('metode', ['potong_saldo_hangus', 'POTONG_SALDO_MASAL_HANGUS'])
@@ -471,14 +481,14 @@ class KendaraanController extends Controller
             $totalTopupSampaiSebelumnya = $totalTopupSampaiSebelumnyaMasuk - $totalTopupSampaiSebelumnyaKeluar;
 
             // Total pemakaian (transaksi) sampai akhir bulan lalu di Satker ini
-            $totalPemakaianSampaiSebelumnya = \App\Models\TransaksiBbm::where('satker_id', $satkerId)
+            $totalPemakaianSampaiSebelumnya = \App\Models\TransaksiBbm::withoutGlobalScopes()->where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
                 ->where('tanggal', '<=', $prevMonthEndUtc)
                 ->sum('liter');
 
             // Total hutang (bon) sampai akhir bulan lalu yang MASIH BELUM dibayar
             // (Hutang yang dibayar di bulan ini akan dicatat keluar di kolom TK bulan ini)
-            $totalHutangSampaiSebelumnya = \App\Models\Hutang::where('satker_id', $satkerId)
+            $totalHutangSampaiSebelumnya = \App\Models\Hutang::withoutGlobalScopes()->where('satker_id', $satkerId)
                 ->where('nopol', $kendaraan->no_polisi)
                 ->where('jenis_bbm', $kendaraan->jenis_bbm)
                 ->where('tanggal_bon', '<', $startDateWita->format('Y-m-d'))
@@ -486,34 +496,34 @@ class KendaraanController extends Controller
                 ->sum('jumlah_bon');
 
             // Total transfer keluar (saldo personil) sampai akhir bulan lalu di Satker ini
-            $totalTransferKeluarSebelumnya = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
+            $totalTransferKeluarSebelumnya = \App\Models\RiwayatTransferSaldoPersonel::withoutGlobalScopes()->where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
                 ->where('created_at', '<=', $prevMonthEndUtc)
                 ->sum('jumlah');
 
             // Total transfer masuk (TM) sampai akhir bulan lalu di Satker ini
-            $totalTmSampaiSebelumnya1 = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
+            $totalTmSampaiSebelumnya1 = \App\Models\RiwayatTransferSaldoPersonel::withoutGlobalScopes()->where('satker_id', $satkerId)
                 ->where('tujuan_kendaraan_id', $kendaraan->id)
                 ->where('created_at', '<=', $prevMonthEndUtc)
                 ->sum('jumlah');
             
-            $totalTmSampaiSebelumnya2 = \App\Models\RiwayatTransferAntarPersonel::where('satker_id', $satkerId)
+            $totalTmSampaiSebelumnya2 = \App\Models\RiwayatTransferAntarPersonel::withoutGlobalScopes()->where('satker_id', $satkerId)
                 ->where('target_kendaraan_id', $kendaraan->id)
                 ->where('created_at', '<=', $prevMonthEndUtc)
                 ->sum('jumlah');
             
             $totalTmSampaiSebelumnya = $totalTmSampaiSebelumnya1 + $totalTmSampaiSebelumnya2;
 
-            // Sisa BBM bulan lalu = (total top up masuk + total TM) - (total top up keluar + total pemakaian + total hutang + total transfer keluar)
-            $sisaBulanLalu = ($totalTopupSampaiSebelumnyaMasuk + $totalTmSampaiSebelumnya) - ($totalTopupSampaiSebelumnyaKeluar + $totalPemakaianSampaiSebelumnya + $totalHutangSampaiSebelumnya + $totalTransferKeluarSebelumnya);
+            // Sisa BBM bulan lalu = (total top up masuk bersih + total TM) - (total top up keluar + total pemakaian + total hutang + total transfer keluar)
+            $sisaBulanLalu = max(0, ($topupMasukSebelumnyaBersih + $totalTmSampaiSebelumnya) - ($totalTopupSampaiSebelumnyaKeluar + $totalPemakaianSampaiSebelumnya + $totalHutangSampaiSebelumnya + $totalTransferKeluarSebelumnya));
 
             // Transfer Masuk (TM) bulan ini
-            $tmBulanIni1 = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
+            $tmBulanIni1 = \App\Models\RiwayatTransferSaldoPersonel::withoutGlobalScopes()->where('satker_id', $satkerId)
                 ->where('tujuan_kendaraan_id', $kendaraan->id)
                 ->whereBetween('created_at', [$startUtc, $endUtc])
                 ->sum('jumlah');
             
-            $tmBulanIni2 = \App\Models\RiwayatTransferAntarPersonel::where('satker_id', $satkerId)
+            $tmBulanIni2 = \App\Models\RiwayatTransferAntarPersonel::withoutGlobalScopes()->where('satker_id', $satkerId)
                 ->where('target_kendaraan_id', $kendaraan->id)
                 ->whereBetween('created_at', [$startUtc, $endUtc])
                 ->sum('jumlah');
@@ -521,7 +531,7 @@ class KendaraanController extends Controller
             $tmBulanIni = $tmBulanIni1 + $tmBulanIni2;
 
             // Transfer Keluar (TK) bulan ini (ke personil ATAU kendaraan lain ATAU potong saldo central)
-            $tkBulanIni = \App\Models\RiwayatTransferSaldoPersonel::where('satker_id', $satkerId)
+            $tkBulanIni = \App\Models\RiwayatTransferSaldoPersonel::withoutGlobalScopes()->where('satker_id', $satkerId)
                 ->where('kendaraan_id', $kendaraan->id)
                 ->whereBetween('created_at', [$startUtc, $endUtc])
                 ->sum('jumlah');
@@ -540,13 +550,13 @@ class KendaraanController extends Controller
                 $dayStartUtc = $dateStartWita->setTimezone('UTC')->format('Y-m-d H:i:s');
                 $dayEndUtc = $dateEndWita->setTimezone('UTC')->format('Y-m-d H:i:s');
 
-                $usage = \App\Models\TransaksiBbm::where('satker_id', $satkerId)
+                $usage = \App\Models\TransaksiBbm::withoutGlobalScopes()->where('satker_id', $satkerId)
                     ->where('kendaraan_id', $kendaraan->id)
                     ->whereBetween('tanggal', [$dayStartUtc, $dayEndUtc])
                     ->sum('liter');
 
                 // Tambahkan hutang (bon) pada tanggal ini
-                $usageHutang = \App\Models\Hutang::where('satker_id', $satkerId)
+                $usageHutang = \App\Models\Hutang::withoutGlobalScopes()->where('satker_id', $satkerId)
                     ->where('nopol', $kendaraan->no_polisi)
                     ->where('jenis_bbm', $kendaraan->jenis_bbm)
                     ->where('tanggal_bon', $dateStartWita->format('Y-m-d'))
@@ -559,8 +569,8 @@ class KendaraanController extends Controller
 
             // Total Pemakaian = Total Harian (Tanpa Hangus)
 
-            // Sisa BBM = Total BBM - Total Pemakaian - Hangus (Agar sisa riil tetap benar meski tidak masuk TK/Total Pakai)
-            $sisaBbm = $totalBbm - $totalPemakaian - $hangusKeluar;
+            // Sisa BBM = Total BBM - Total Pemakaian (Metode hangus tidak dimunculkan/dikurangkan di laporan agar tidak rancu dan tidak minus)
+            $sisaBbm = max(0, $totalBbm - $totalPemakaian);
 
             $row = [
                 'kode_kendaraan' => $kendaraan->kode_kendaraan ?? '-',
