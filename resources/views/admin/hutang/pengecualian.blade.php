@@ -2,9 +2,9 @@
     <div class="max-w-7xl mx-auto p-3 sm:p-6 lg:p-8 space-y-6" x-data="pengecualianBonComponent()">
         
         <!-- Sub-Navigation Tabs (Menu Hutang) -->
-        <div class="flex items-center gap-2 border-b border-slate-200 dark:border-white/10 pb-3">
+        <div class="flex items-center gap-2 border-b border-slate-200 dark:border-white/10 pb-3 overflow-x-auto no-scrollbar">
             <a href="{{ route('admin.hutang.index') }}"
-                class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5">
+                class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 whitespace-nowrap shrink-0">
                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
@@ -12,7 +12,7 @@
             </a>
 
             <a href="{{ route('admin.hutang.pengecualian.index') }}"
-                class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-brand-primary text-white shadow-md shadow-brand-primary/20 transition-all">
+                class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs font-bold bg-brand-primary text-white shadow-md shadow-brand-primary/20 transition-all whitespace-nowrap shrink-0">
                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
@@ -24,24 +24,24 @@
         </div>
 
         <!-- Page Title & Header Card -->
-        <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
-            <div class="flex items-center gap-3.5 min-w-0">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500/20 to-emerald-600/10 text-amber-500 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-sm">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
+            <div class="flex items-center gap-3 sm:gap-3.5 min-w-0">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-amber-500/20 to-emerald-600/10 text-amber-500 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-sm">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
                     </svg>
                 </div>
                 <div class="min-w-0">
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <h1 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+                    <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                        <h1 class="text-lg sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
                             Pengecualian BON BBM (Bebas Limit)
                         </h1>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                             Khusus Super Admin
                         </span>
                     </div>
-                    <p class="mt-0.5 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                    <p class="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400 line-clamp-2 sm:line-clamp-none">
                         Kelola armada kendaraan yang memiliki izin khusus pengisian BON BBM tanpa batas limit walaupun masih memiliki tanggungan bon hutang aktif.
                     </p>
                 </div>
@@ -82,68 +82,68 @@
             </div>
         @endif
 
-        <!-- KPI / Stats Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- KPI / Stats Cards (Grid 2 Cols on mobile, 4 Cols on lg) -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
             <!-- Card 1: Total Bebas Bon -->
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 p-5 rounded-2xl shadow-sm flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center shrink-0">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 p-3.5 sm:p-5 rounded-2xl shadow-sm flex items-center gap-3 sm:gap-4">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
                 </div>
-                <div>
-                    <div class="text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">Armada Bebas Bon</div>
-                    <div class="text-2xl font-black text-slate-900 dark:text-white tabular-nums">
+                <div class="min-w-0">
+                    <div class="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 truncate">Armada Bebas</div>
+                    <div class="text-lg sm:text-2xl font-black text-slate-900 dark:text-white tabular-nums leading-tight mt-0.5">
                         {{ $totalBebasBon }}
-                        <span class="text-xs font-bold text-slate-400">Unit</span>
+                        <span class="text-[10px] sm:text-xs font-bold text-slate-400">Unit</span>
                     </div>
                 </div>
             </div>
 
             <!-- Card 2: Satker Terlibat -->
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 p-5 rounded-2xl shadow-sm flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-500 border border-blue-500/20 flex items-center justify-center shrink-0">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 p-3.5 sm:p-5 rounded-2xl shadow-sm flex items-center gap-3 sm:gap-4">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-blue-500/10 text-blue-500 border border-blue-500/20 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
                 </div>
-                <div>
-                    <div class="text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">Satuan Kerja</div>
-                    <div class="text-2xl font-black text-slate-900 dark:text-white tabular-nums">
+                <div class="min-w-0">
+                    <div class="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 truncate">Satuan Kerja</div>
+                    <div class="text-lg sm:text-2xl font-black text-slate-900 dark:text-white tabular-nums leading-tight mt-0.5">
                         {{ $totalSatkerBebas }}
-                        <span class="text-xs font-bold text-slate-400">Satker</span>
+                        <span class="text-[10px] sm:text-xs font-bold text-slate-400">Satker</span>
                     </div>
                 </div>
             </div>
 
             <!-- Card 3: Bon Aktif pada Armada Bebas Limit -->
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 p-5 rounded-2xl shadow-sm flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-500 border border-rose-500/20 flex items-center justify-center shrink-0">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 p-3.5 sm:p-5 rounded-2xl shadow-sm flex items-center gap-3 sm:gap-4">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-rose-500/10 text-rose-500 border border-rose-500/20 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
-                <div>
-                    <div class="text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">Bon Aktif Armada Bebas</div>
-                    <div class="text-2xl font-black text-rose-600 dark:text-rose-400 tabular-nums">
+                <div class="min-w-0">
+                    <div class="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 truncate">Bon Aktif Bebas</div>
+                    <div class="text-lg sm:text-2xl font-black text-rose-600 dark:text-rose-400 tabular-nums leading-tight mt-0.5">
                         {{ number_format($totalBonLitersBebas, 0, ',', '.') }}
-                        <span class="text-xs font-bold text-slate-400">Liter</span>
+                        <span class="text-[10px] sm:text-xs font-bold text-slate-400">L</span>
                     </div>
                 </div>
             </div>
 
             <!-- Card 4: Kebijakan Sistem -->
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 p-5 rounded-2xl shadow-sm flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-500 border border-purple-500/20 flex items-center justify-center shrink-0">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 p-3.5 sm:p-5 rounded-2xl shadow-sm flex items-center gap-3 sm:gap-4">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-purple-500/10 text-purple-500 border border-purple-500/20 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
                 </div>
-                <div>
-                    <div class="text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">Aturan Bon</div>
-                    <div class="text-sm font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 mt-1">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        Bypass Limit Aktif
+                <div class="min-w-0">
+                    <div class="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 truncate">Aturan Bon</div>
+                    <div class="text-xs sm:text-sm font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 mt-1 truncate">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+                        <span class="truncate">Bypass Aktif</span>
                     </div>
                 </div>
             </div>
@@ -219,8 +219,8 @@
                 </div>
             </div>
 
-            <!-- Table -->
-            <div class="overflow-x-auto">
+            <!-- Desktop Table View (Visible on tablet & desktop) -->
+            <div class="hidden md:block overflow-x-auto">
                 <table class="w-full text-left text-xs border-collapse">
                     <thead>
                         <tr class="border-b border-slate-200/80 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/30 text-slate-500 dark:text-slate-400 uppercase tracking-wider font-extrabold text-[10px]">
@@ -355,6 +355,68 @@
                 </table>
             </div>
 
+            <!-- Mobile 1-Line Table View (Visible on mobile screens) -->
+            <div class="block md:hidden w-full overflow-hidden">
+                <table class="w-full text-left text-xs border-collapse table-fixed">
+                    <thead>
+                        <tr class="bg-slate-50/80 dark:bg-slate-800/50 border-b border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[10px] font-black">
+                            <th class="py-2.5 px-3 w-[38%]">Satker</th>
+                            <th class="py-2.5 px-2">Kendaraan</th>
+                            <th class="py-2.5 px-2 text-center w-12">Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 dark:divide-white/5">
+                        @forelse($kendaraans as $knd)
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-white/[0.02] transition-colors">
+                                <td class="py-2.5 px-3 overflow-hidden">
+                                    <span class="font-bold text-slate-800 dark:text-white truncate block leading-tight text-xs" title="{{ $knd->satker->nama_satker ?? '-' }}">
+                                        {{ $knd->satker->nama_satker ?? '-' }}
+                                    </span>
+                                    <div class="mt-0.5">
+                                        <span class="inline-flex items-center gap-1 text-[9px] font-extrabold text-emerald-600 dark:text-emerald-400 uppercase">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                            Bebas Limit
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="py-2.5 px-2 overflow-hidden">
+                                    <div class="flex flex-col min-w-0">
+                                        <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 truncate block leading-tight uppercase" title="{{ $knd->jenis_kendaraan }}">
+                                            {{ $knd->jenis_kendaraan }}
+                                        </span>
+                                        <div class="flex items-center gap-1.5 mt-0.5 whitespace-nowrap overflow-hidden">
+                                            <span class="font-black text-slate-900 dark:text-white tracking-wide font-mono text-xs">{{ $knd->no_polisi }}</span>
+                                            @if($knd->unpaid_bon_liters > 0)
+                                                <span class="px-1.5 py-0.2 rounded text-[9px] font-black bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20" title="Bon Aktif: {{ $knd->unpaid_bon_liters }} L">
+                                                    {{ $knd->unpaid_bon_liters }}L
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-2.5 px-2 text-center whitespace-nowrap">
+                                    <button type="button"
+                                        @click="openMobileDetail(@js($knd))"
+                                        class="inline-flex items-center justify-center w-8 h-8 bg-emerald-500/15 hover:bg-emerald-600 text-emerald-600 dark:text-emerald-400 hover:text-white dark:hover:text-white border border-emerald-500/30 rounded-xl transition active:scale-95 shadow-sm"
+                                        title="Detail Pengecualian">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" class="py-8 text-center text-slate-500">
+                                    <p class="font-bold text-xs">Belum ada armada bebas bon</p>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
             <!-- Pagination -->
             @if($kendaraans->hasPages())
                 <div class="p-4 border-t border-slate-200/80 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/30">
@@ -363,14 +425,134 @@
             @endif
         </div>
 
+        <!-- ================= MODAL DETAIL MOBILE (BOTTOM SHEET DRAWER) ================= -->
+        <template x-teleport="body">
+            <div x-show="showMobileDetail" class="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center p-0 sm:p-4" style="display: none;">
+                <!-- Backdrop -->
+                <div x-show="showMobileDetail" x-transition.opacity @click="closeMobileDetail()" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm"></div>
+
+                <!-- Modal Content -->
+                <div x-show="showMobileDetail" 
+                    x-transition:enter="ease-out duration-300"
+                    x-transition:enter-start="opacity-0 translate-y-8 sm:translate-y-0 sm:scale-95"
+                    x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                    x-transition:leave="ease-in duration-200"
+                    x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                    x-transition:leave-end="opacity-0 translate-y-8 sm:translate-y-0 sm:scale-95"
+                    @click.outside="closeMobileDetail()" 
+                    class="relative w-full max-w-lg bg-white dark:bg-slate-900 border-t sm:border border-slate-200 dark:border-white/10 rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
+                    
+                    <!-- Header -->
+                    <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-white/10 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-2xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center font-bold shrink-0">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                            </div>
+                            <div class="text-left">
+                                <div class="flex items-center gap-2">
+                                    <h3 class="text-slate-900 dark:text-white font-black text-lg font-mono tracking-wide leading-tight" x-text="detailKendaraan.no_polisi"></h3>
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                                        Bebas Limit
+                                    </span>
+                                </div>
+                                <p class="text-slate-500 dark:text-slate-400 text-xs mt-0.5" x-text="detailKendaraan.satker ? detailKendaraan.satker.nama_satker : '-'"></p>
+                            </div>
+                        </div>
+                        <button type="button" @click="closeMobileDetail()" class="p-2 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white rounded-xl border border-slate-200 dark:border-white/5 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="p-4 sm:p-5 overflow-y-auto w-full custom-scrollbar text-left text-xs space-y-4">
+                        <!-- Grid Info -->
+                        <div class="grid grid-cols-2 gap-2.5 sm:gap-3">
+                            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Satuan Kerja</span>
+                                <span class="font-bold text-slate-800 dark:text-white block mt-1 leading-tight" x-text="detailKendaraan.satker ? detailKendaraan.satker.nama_satker : '-'"></span>
+                            </div>
+
+                            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Jenis Kendaraan</span>
+                                <span class="font-bold text-slate-800 dark:text-white block mt-1 leading-tight" x-text="detailKendaraan.jenis_kendaraan || '-'"></span>
+                            </div>
+
+                            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Jenis BBM</span>
+                                <span class="font-black text-brand-primary dark:text-white block mt-1 uppercase" x-text="detailKendaraan.jenis_bbm || '-'"></span>
+                            </div>
+
+                            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Status Aturan</span>
+                                <span class="font-black text-emerald-600 dark:text-emerald-400 block mt-1 flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    Bebas Bon Limit
+                                </span>
+                            </div>
+
+                            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Bon Aktif (Hutang)</span>
+                                <template x-if="detailKendaraan.unpaid_bon_liters > 0">
+                                    <span class="font-black text-rose-600 dark:text-rose-400 block mt-1" x-text="detailKendaraan.unpaid_bon_liters + ' L (' + (detailKendaraan.unpaid_bon_count || 1) + ' Bon)'"></span>
+                                </template>
+                                <template x-if="!detailKendaraan.unpaid_bon_liters || detailKendaraan.unpaid_bon_liters == 0">
+                                    <span class="font-bold text-emerald-600 dark:text-emerald-400 block mt-1">Tidak Ada Bon</span>
+                                </template>
+                            </div>
+
+                            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Ditetapkan Oleh</span>
+                                <span class="font-bold text-slate-800 dark:text-white block mt-1 truncate" x-text="detailKendaraan.bebas_bon_by ? detailKendaraan.bebas_bon_by.name : (detailKendaraan.bebas_bon_by_user ? detailKendaraan.bebas_bon_by_user.name : 'Super Admin')"></span>
+                            </div>
+                        </div>
+
+                        <!-- Keterangan / Alasan Card -->
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-white/5">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Alasan / Keterangan Pengecualian</span>
+                            <p class="text-xs font-medium text-slate-700 dark:text-slate-300 whitespace-pre-line leading-relaxed" x-text="detailKendaraan.alasan_bebas_bon || 'Tidak ada keterangan khusus.'"></p>
+                        </div>
+
+                        <!-- Menu Aksi Mobile -->
+                        <div class="pt-3 border-t border-slate-200 dark:border-white/10 space-y-2">
+                            <span class="text-[11px] font-black uppercase tracking-wider text-slate-400 block mb-2">Tindakan / Menu Aksi:</span>
+
+                            <!-- Edit Alasan -->
+                            <button type="button"
+                                @click="closeMobileDetail(); openEditModal(detailKendaraan);"
+                                class="flex items-center gap-3 w-full p-3 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 font-bold text-xs transition text-left cursor-pointer">
+                                <div class="p-1.5 bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-lg">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                </div>
+                                <span>Edit Keterangan / Alasan</span>
+                            </button>
+
+                            <!-- Cabut Status Bebas Bon -->
+                            <button type="button"
+                                @click="closeMobileDetail(); confirmDelete(detailKendaraan);"
+                                class="flex items-center gap-3 w-full p-3 bg-rose-50/60 dark:bg-rose-950/20 hover:bg-rose-600 hover:text-white dark:hover:bg-rose-600 border border-rose-200/60 dark:border-rose-900/30 rounded-xl text-rose-600 dark:text-rose-400 font-bold text-xs transition text-left group cursor-pointer">
+                                <div class="p-1.5 bg-rose-500/15 group-hover:bg-white/20 rounded-lg text-rose-600 dark:text-rose-400 group-hover:text-white transition">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                </div>
+                                <span>Cabut Status Bebas Bon</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
         <!-- ================= MODAL TAMBAH PENGECUALIAN ================= -->
-        <div x-show="showAddModal" x-cloak class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title-add" role="dialog" aria-modal="true">
-            <div class="flex items-center justify-center min-h-screen p-4 text-center sm:p-0">
+        <template x-teleport="body">
+            <div x-show="showAddModal" x-cloak class="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 overflow-y-auto" aria-labelledby="modal-title-add" role="dialog" aria-modal="true" style="display: none;">
+                <!-- Backdrop -->
                 <div x-show="showAddModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
                     @click="showAddModal = false" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
 
+                <!-- Modal Dialog -->
                 <div x-show="showAddModal" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                    class="relative bg-white dark:bg-slate-900 rounded-3xl text-left shadow-2xl transform transition-all sm:my-8 sm:max-w-xl sm:w-full border border-slate-200 dark:border-white/10">
+                    class="relative bg-white dark:bg-slate-900 rounded-3xl text-left shadow-2xl transform transition-all w-full max-w-xl border border-slate-200 dark:border-white/10 my-auto">
                     
                     <div class="px-6 py-5 border-b border-slate-200 dark:border-white/10 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50 rounded-t-3xl">
                         <div class="flex items-center gap-3">
@@ -569,15 +751,17 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </template>
 
         <!-- ================= MODAL EDIT ALASAN ================= -->
-        <div x-show="showEditModal" x-cloak class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title-edit" role="dialog" aria-modal="true">
-            <div class="flex items-center justify-center min-h-screen p-4 text-center sm:p-0">
+        <template x-teleport="body">
+            <div x-show="showEditModal" x-cloak class="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 overflow-y-auto" aria-labelledby="modal-title-edit" role="dialog" aria-modal="true" style="display: none;">
+                <!-- Backdrop -->
                 <div x-show="showEditModal" @click="showEditModal = false" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
 
+                <!-- Modal Dialog -->
                 <div x-show="showEditModal"
-                    class="relative bg-white dark:bg-slate-900 rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-md sm:w-full border border-slate-200 dark:border-white/10">
+                    class="relative bg-white dark:bg-slate-900 rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all w-full max-w-md border border-slate-200 dark:border-white/10 my-auto">
                     
                     <div class="px-6 py-5 border-b border-slate-200 dark:border-white/10 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
                         <div class="flex items-center gap-3">
@@ -623,15 +807,17 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </template>
 
         <!-- ================= MODAL KONFIRMASI HAPUS ================= -->
-        <div x-show="showDeleteModal" x-cloak class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title-del" role="dialog" aria-modal="true">
-            <div class="flex items-center justify-center min-h-screen p-4 text-center sm:p-0">
+        <template x-teleport="body">
+            <div x-show="showDeleteModal" x-cloak class="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 overflow-y-auto" aria-labelledby="modal-title-del" role="dialog" aria-modal="true" style="display: none;">
+                <!-- Backdrop -->
                 <div x-show="showDeleteModal" @click="showDeleteModal = false" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
 
+                <!-- Modal Dialog -->
                 <div x-show="showDeleteModal"
-                    class="relative bg-white dark:bg-slate-900 rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-md sm:w-full border border-slate-200 dark:border-white/10 p-6 space-y-4">
+                    class="relative bg-white dark:bg-slate-900 rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all w-full max-w-md border border-slate-200 dark:border-white/10 p-6 space-y-4 my-auto">
                     
                     <div class="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-500 border border-rose-500/20 flex items-center justify-center mx-auto">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -661,7 +847,7 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </template>
 
     </div>
 
@@ -672,6 +858,17 @@
                 showAddModal: false,
                 showEditModal: false,
                 showDeleteModal: false,
+                showMobileDetail: false,
+                detailKendaraan: {},
+
+                openMobileDetail(kendaraan) {
+                    this.detailKendaraan = Object.assign({}, kendaraan);
+                    this.showMobileDetail = true;
+                },
+
+                closeMobileDetail() {
+                    this.showMobileDetail = false;
+                },
 
                 // Satker custom dropdown state
                 satkerList: @json($satkers),

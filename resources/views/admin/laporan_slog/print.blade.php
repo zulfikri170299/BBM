@@ -15,12 +15,12 @@
     <style>
         @page {
             size: a4 landscape;
-            margin: 5mm 10mm 0mm 10mm;
+            margin: 5mm 10mm 5mm 10mm;
         }
         @page Section1 {
             size: 841.9pt 595.3pt;
             mso-page-orientation: landscape;
-            margin: 5mm 10mm 0mm 10mm;
+            margin: 5mm 10mm 5mm 10mm;
         }
         div.Section1 {
             page: Section1;
@@ -28,18 +28,18 @@
 
         body {
             font-family: sans-serif;
-            font-size: 11px;
+            font-size: 9.5px;
             color: #000;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         .header h1 {
             margin: 0;
-            font-size: 16px;
+            font-size: 15px;
             text-transform: uppercase;
         }
 
@@ -48,14 +48,14 @@
             border-collapse: collapse;
             border-spacing: 0;
             empty-cells: show;
-            margin-top: 10px;
-            margin-bottom: 20px;
+            margin-top: 5px;
+            margin-bottom: 10px;
         }
 
         th,
         td {
             border: 0.5pt solid #000;
-            padding: 3px;
+            padding: 2px 3px;
             vertical-align: middle;
         }
 
@@ -63,11 +63,13 @@
             background-color: #fff;
             text-align: center;
             font-weight: bold;
-            font-size: 10px;
+            font-size: 9px;
+            line-height: 1.15;
         }
 
         td {
-            font-size: 10px;
+            font-size: 9px;
+            line-height: 1.2;
         }
 
         .text-center {
@@ -87,8 +89,8 @@
         }
 
         .footer {
-            margin-top: 30px;
-            font-size: 10px;
+            margin-top: 20px;
+            font-size: 9px;
             text-align: right;
             color: #777;
         }
@@ -102,12 +104,12 @@
 <body>
 <div class="Section1">
     @if($jenisLaporan == 'bulanan')
-        @include('components.pdf-header')
+        @include('components.pdf-header', ['logoWidth' => '50px', 'headerMargin' => '6px', 'headerFontSize' => '9pt'])
         
-        <div style="margin-bottom: 5px;">
-            <span style="font-weight: bold; font-size: 12px; border-bottom: 1px solid #000;">LAPORAN BBM BULANAN :</span>
+        <div style="margin-bottom: 4px;">
+            <span style="font-weight: bold; font-size: 11px; border-bottom: 1px solid #000;">LAPORAN BBM BULANAN :</span>
             <br>
-            <span style="font-size: 11px;">BULAN : {{ Carbon\Carbon::create()->month((int)$bulan)->translatedFormat('F') }} {{ $tahun }}</span>
+            <span style="font-size: 10px;">BULAN : {{ Carbon\Carbon::create()->month((int)$bulan)->translatedFormat('F') }} {{ $tahun }}</span>
         </div>
 
         <table>
@@ -139,8 +141,8 @@
                     <tbody style="page-break-inside: avoid;">
                         <!-- Persediaan Awal -->
                         <tr>
-                            <td rowspan="5" class="text-center" style="vertical-align: top;">{{ $i++ }}.</td>
-                            <td rowspan="5" class="text-left font-bold" style="vertical-align: top;">{{ $weekName }}</td>
+                            <td class="text-center" style="vertical-align: top; border-bottom: none;">{{ $i++ }}.</td>
+                            <td class="text-left font-bold" style="vertical-align: top; border-bottom: none;">{{ $weekName }}</td>
                             <td class="text-left">Persediaan awal</td>
                             <td class="text-center">{{ number_format($weekData['awal_pertamax'], 0, ',', '.') ?: '-' }}</td>
                             <td class="text-center">{{ number_format($weekData['awal_dex'], 0, ',', '.') ?: '-' }}</td>
@@ -150,6 +152,8 @@
                         </tr>
                         <!-- Penerimaan -->
                         <tr>
+                            <td style="border-top: none; border-bottom: none;"></td>
+                            <td style="border-top: none; border-bottom: none;"></td>
                             <td class="text-left">Penerimaan</td>
                             <td class="text-center">{{ number_format($weekData['terima_pertamax'], 0, ',', '.') ?: '-' }}</td>
                             <td class="text-center">{{ number_format($weekData['terima_dex'], 0, ',', '.') ?: '-' }}</td>
@@ -159,6 +163,8 @@
                         </tr>
                         <!-- Jumlah -->
                         <tr>
+                            <td style="border-top: none; border-bottom: none;"></td>
+                            <td style="border-top: none; border-bottom: none;"></td>
                             <td class="text-left font-bold">Jumlah</td>
                             <td class="text-center font-bold">{{ number_format($weekData['jumlah_pertamax'], 0, ',', '.') ?: '-' }}</td>
                             <td class="text-center font-bold">{{ number_format($weekData['jumlah_dex'], 0, ',', '.') ?: '-' }}</td>
@@ -168,6 +174,8 @@
                         </tr>
                         <!-- Pengeluaran -->
                         <tr>
+                            <td style="border-top: none; border-bottom: none;"></td>
+                            <td style="border-top: none; border-bottom: none;"></td>
                             <td class="text-left">Pengeluaran</td>
                             <td class="text-center">{{ number_format($weekData['keluar_pertamax'], 0, ',', '.') ?: '-' }}</td>
                             <td class="text-center">{{ number_format($weekData['keluar_dex'], 0, ',', '.') ?: '-' }}</td>
@@ -177,6 +185,8 @@
                         </tr>
                         <!-- Persediaan Akhir -->
                         <tr>
+                            <td style="border-top: none;"></td>
+                            <td style="border-top: none;"></td>
                             <td class="text-left font-bold">Persediaan akhir</td>
                             <td class="text-center font-bold">{{ number_format($weekData['akhir_pertamax'], 0, ',', '.') ?: '-' }}</td>
                             <td class="text-center font-bold">{{ number_format($weekData['akhir_dex'], 0, ',', '.') ?: '-' }}</td>
@@ -237,14 +247,14 @@
                 </tbody>
         </table>
 
-        @include('components.pdf-signature-slog', ['bulan' => $bulan, 'tahun' => $tahun])
+        @include('components.pdf-signature-slog', ['bulan' => $bulan, 'tahun' => $tahun, 'marginTop' => '8px', 'ttdGap' => '30px', 'fontSize' => '9pt'])
     @elseif($jenisLaporan == 'triwulan')
-        @include('components.pdf-header')
+        @include('components.pdf-header', ['logoWidth' => '50px', 'headerMargin' => '6px', 'headerFontSize' => '9pt'])
         
-        <div style="margin-bottom: 5px;">
-            <span style="font-weight: bold; font-size: 12px; border-bottom: 1px solid #000;">LAPORAN BBM TRIWULAN :</span>
+        <div style="margin-bottom: 4px;">
+            <span style="font-weight: bold; font-size: 11px; border-bottom: 1px solid #000;">LAPORAN BBM TRIWULAN :</span>
             <br>
-            <span style="font-size: 11px;">TRIWULAN : {{ $tw }} TAHUN {{ $tahun }}</span>
+            <span style="font-size: 10px;">TRIWULAN : {{ $tw }} TAHUN {{ $tahun }}</span>
         </div>
 
         <table>
@@ -276,8 +286,8 @@
                     <tbody style="page-break-inside: avoid;">
                         <!-- Persediaan Awal -->
                         <tr>
-                            <td rowspan="5" class="text-center" style="vertical-align: top;">{{ $i++ }}.</td>
-                            <td rowspan="5" class="text-left font-bold" style="vertical-align: top;">{{ $monthName }}</td>
+                            <td class="text-center" style="vertical-align: top; border-bottom: none;">{{ $i++ }}.</td>
+                            <td class="text-left font-bold" style="vertical-align: top; border-bottom: none;">{{ $monthName }}</td>
                             <td class="text-left">Persediaan awal</td>
                             <td class="text-center">{{ number_format($monthData['awal_pertamax'], 0, ',', '.') ?: '-' }}</td>
                             <td class="text-center">{{ number_format($monthData['awal_dex'], 0, ',', '.') ?: '-' }}</td>
@@ -287,6 +297,8 @@
                         </tr>
                         <!-- Penerimaan -->
                         <tr>
+                            <td style="border-top: none; border-bottom: none;"></td>
+                            <td style="border-top: none; border-bottom: none;"></td>
                             <td class="text-left">Penerimaan</td>
                             <td class="text-center">{{ number_format($monthData['terima_pertamax'], 0, ',', '.') ?: '-' }}</td>
                             <td class="text-center">{{ number_format($monthData['terima_dex'], 0, ',', '.') ?: '-' }}</td>
@@ -296,6 +308,8 @@
                         </tr>
                         <!-- Jumlah -->
                         <tr>
+                            <td style="border-top: none; border-bottom: none;"></td>
+                            <td style="border-top: none; border-bottom: none;"></td>
                             <td class="text-left font-bold">Jumlah</td>
                             <td class="text-center font-bold">{{ number_format($monthData['jumlah_pertamax'], 0, ',', '.') ?: '-' }}</td>
                             <td class="text-center font-bold">{{ number_format($monthData['jumlah_dex'], 0, ',', '.') ?: '-' }}</td>
@@ -305,6 +319,8 @@
                         </tr>
                         <!-- Pengeluaran -->
                         <tr>
+                            <td style="border-top: none; border-bottom: none;"></td>
+                            <td style="border-top: none; border-bottom: none;"></td>
                             <td class="text-left">Pengeluaran</td>
                             <td class="text-center">{{ number_format($monthData['keluar_pertamax'], 0, ',', '.') ?: '-' }}</td>
                             <td class="text-center">{{ number_format($monthData['keluar_dex'], 0, ',', '.') ?: '-' }}</td>
@@ -314,6 +330,8 @@
                         </tr>
                         <!-- Persediaan Akhir -->
                         <tr>
+                            <td style="border-top: none;"></td>
+                            <td style="border-top: none;"></td>
                             <td class="text-left font-bold">Persediaan akhir</td>
                             <td class="text-center font-bold">{{ number_format($monthData['akhir_pertamax'], 0, ',', '.') ?: '-' }}</td>
                             <td class="text-center font-bold">{{ number_format($monthData['akhir_dex'], 0, ',', '.') ?: '-' }}</td>
@@ -378,16 +396,16 @@
             $signatureMonth = $tw * 3;
             $signatureMonthStr = str_pad($signatureMonth, 2, '0', STR_PAD_LEFT);
         @endphp
-        @include('components.pdf-signature-slog', ['bulan' => $signatureMonthStr, 'tahun' => $tahun])
+        @include('components.pdf-signature-slog', ['bulan' => $signatureMonthStr, 'tahun' => $tahun, 'marginTop' => '8px', 'ttdGap' => '30px', 'fontSize' => '9pt'])
     @else
         @php $loopIndex = 0; $totalWeeks = count($data); @endphp
         @foreach($data as $weekName => $weekData)
-            @include('components.pdf-header')
+            @include('components.pdf-header', ['logoWidth' => '55px', 'headerMargin' => '8px', 'headerFontSize' => '9.5pt'])
             
-            <div style="margin-bottom: 5px;">
-                <span style="font-weight: bold; font-size: 12px; border-bottom: 1px solid #000;">LAPORAN BBM HARIAN ({{ str_replace('MINGGU ', 'MINGGU KE ', $weekName) }}) :</span>
+            <div style="margin-bottom: 4px;">
+                <span style="font-weight: bold; font-size: 11px; border-bottom: 1px solid #000;">LAPORAN BBM HARIAN ({{ str_replace('MINGGU ', 'MINGGU KE ', $weekName) }}) :</span>
                 <br>
-                <span style="font-size: 11px;">BULAN : {{ Carbon\Carbon::create()->month((int)$bulan)->translatedFormat('F') }} {{ $tahun }}</span>
+                <span style="font-size: 10px;">BULAN : {{ Carbon\Carbon::create()->month((int)$bulan)->translatedFormat('F') }} {{ $tahun }}</span>
             </div>
 
             <table>
@@ -478,7 +496,7 @@
                     <tbody style="page-break-inside: avoid;">
                         <!-- Rekapitulasi -->
                         <tr>
-                            <td rowspan="5" colspan="2" class="text-right font-bold" style="vertical-align: top;">Rekapitulasi :</td>
+                            <td colspan="2" class="text-right font-bold" style="vertical-align: top; border-bottom: none;">Rekapitulasi :</td>
                             <td class="text-left">Persediaan awal</td>
                             <td class="text-center">{{ number_format($weekData['rekap']['awal_pertamax'], 0, ',', '.') ?: '-' }}</td>
                             <td class="text-center">{{ number_format($weekData['rekap']['awal_dex'], 0, ',', '.') ?: '-' }}</td>
@@ -487,6 +505,7 @@
                             <td class="text-center"></td>
                         </tr>
                         <tr>
+                            <td colspan="2" style="border-top: none; border-bottom: none;"></td>
                             <td class="text-left">Penerimaan</td>
                             <td class="text-center">{{ number_format($weekData['rekap']['terima_pertamax'], 0, ',', '.') ?: '-' }}</td>
                             <td class="text-center">{{ number_format($weekData['rekap']['terima_dex'], 0, ',', '.') ?: '-' }}</td>
@@ -495,6 +514,7 @@
                             <td class="text-center"></td>
                         </tr>
                         <tr>
+                            <td colspan="2" style="border-top: none; border-bottom: none;"></td>
                             <td class="text-left font-bold">Jumlah</td>
                             <td class="text-center font-bold">{{ number_format($weekData['rekap']['jumlah_pertamax'], 0, ',', '.') ?: '-' }}</td>
                             <td class="text-center font-bold">{{ number_format($weekData['rekap']['jumlah_dex'], 0, ',', '.') ?: '-' }}</td>
@@ -503,6 +523,7 @@
                             <td class="text-center"></td>
                         </tr>
                         <tr>
+                            <td colspan="2" style="border-top: none; border-bottom: none;"></td>
                             <td class="text-left">Pengeluaran</td>
                             <td class="text-center">{{ number_format($weekData['rekap']['keluar_pertamax'], 0, ',', '.') ?: '-' }}</td>
                             <td class="text-center">{{ number_format($weekData['rekap']['keluar_dex'], 0, ',', '.') ?: '-' }}</td>
@@ -511,6 +532,7 @@
                             <td class="text-center"></td>
                         </tr>
                         <tr>
+                            <td colspan="2" style="border-top: none;"></td>
                             <td class="text-left font-bold">Persediaan akhir</td>
                             <td class="text-center font-bold">{{ number_format($weekData['rekap']['akhir_pertamax'], 0, ',', '.') ?: '-' }}</td>
                             <td class="text-center font-bold">{{ number_format($weekData['rekap']['akhir_dex'], 0, ',', '.') ?: '-' }}</td>
@@ -521,7 +543,7 @@
                     </tbody>
             </table>
 
-            @include('components.pdf-signature-slog', ['bulan' => $bulan, 'tahun' => $tahun])
+            @include('components.pdf-signature-slog', ['bulan' => $bulan, 'tahun' => $tahun, 'marginTop' => '10px', 'ttdGap' => '30px', 'fontSize' => '9pt'])
 
             @php $loopIndex++; @endphp
             @if($loopIndex < $totalWeeks)
