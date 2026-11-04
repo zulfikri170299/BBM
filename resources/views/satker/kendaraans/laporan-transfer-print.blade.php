@@ -222,7 +222,7 @@
 
     <div class="footer">
     </div>
-    @include('components.pdf-signature')
+    @include('components.pdf-signature', ['satkerId' => $satkerId ?? ($satker->id ?? null)])
 </body>
 
 </html>

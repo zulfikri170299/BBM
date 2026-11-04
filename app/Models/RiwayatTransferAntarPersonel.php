@@ -40,6 +40,6 @@ class RiwayatTransferAntarPersonel extends Model
 
     public function targetKendaraan()
     {
-        return $this->belongsTo(Kendaraan::class, 'target_kendaraan_id');
+        return $this->belongsTo(Kendaraan::class, 'target_kendaraan_id')->withTrashed();
     }
 }

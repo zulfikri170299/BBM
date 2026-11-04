@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Kendaraan extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $guarded = ['id'];
 
@@ -62,30 +63,42 @@ class Kendaraan extends Model
     protected static function booted()
     {
         static::deleting(function ($kendaraan) {
-            // Pertahankan riwayat transaksi BBM agar tidak ikut terhapus
-            \App\Models\TransaksiBbm::where('kendaraan_id', $kendaraan->id)->each(function ($t) use ($kendaraan) {
-                $t->update([
-                    'nopol' => $t->nopol ?: $kendaraan->no_polisi,
+            // Hanya jika benar-benar hard delete / force delete dari database
+            if (method_exists($kendaraan, 'isForceDeleting') && $kendaraan->isForceDeleting()) {
+                // Pertahankan riwayat transaksi BBM agar tidak ikut terhapus
+                \App\Models\TransaksiBbm::where('kendaraan_id', $kendaraan->id)->each(function ($t) use ($kendaraan) {
+                    $t->update([
+                        'nopol' => $t->nopol ?: $kendaraan->no_polisi,
+                        'kendaraan_id' => null,
+                    ]);
+                });
+
+                // Pertahankan riwayat topup
+                \App\Models\RiwayatTopup::where('kendaraan_id', $kendaraan->id)->update([
                     'kendaraan_id' => null,
                 ]);
-            });
 
-            // Pertahankan riwayat topup
-            \App\Models\RiwayatTopup::where('kendaraan_id', $kendaraan->id)->update([
-                'kendaraan_id' => null,
-            ]);
-
-            // Pertahankan riwayat transfer saldo keluar agar saldo penerima tetap permanen
-            \App\Models\RiwayatTransferSaldoPersonel::where('kendaraan_id', $kendaraan->id)->each(function ($tf) use ($kendaraan) {
-                $ket = $tf->keterangan ?: "Transfer saldo BBM dari Kendaraan ({$kendaraan->no_polisi})";
-                if (!str_contains($ket, $kendaraan->no_polisi)) {
-                    $ket .= " ({$kendaraan->no_polisi})";
-                }
-                $tf->update([
-                    'kendaraan_id' => null,
-                    'keterangan' => $ket,
-                ]);
-            });
+                // Pertahankan riwayat transfer saldo keluar agar saldo penerima tetap permanen
+                \App\Models\RiwayatTransferSaldoPersonel::where('kendaraan_id', $kendaraan->id)->each(function ($tf) use ($kendaraan) {
+                    $ket = $tf->keterangan ?: "Transfer saldo BBM dari Kendaraan ({$kendaraan->no_polisi})";
+                    if (!str_contains($ket, $kendaraan->no_polisi)) {
+                        $ket .= " ({$kendaraan->no_polisi})";
+                    }
+                    $tf->update([
+                        'kendaraan_id' => null,
+                        'keterangan' => $ket,
+                    ]);
+                });
+            } else {
+                // Saat soft delete:
+                // Seluruh riwayat transaksi, topup, transfer, dan laporan masa lalu TETAP UTUH 100%!
+                // Pastikan kolom nopol terisi di transaksi_bbms jika belum terisi sebagai backup
+                \App\Models\TransaksiBbm::where('kendaraan_id', $kendaraan->id)
+                    ->where(function ($q) {
+                        $q->whereNull('nopol')->orWhere('nopol', '');
+                    })
+                    ->update(['nopol' => $kendaraan->no_polisi]);
+            }
         });
     }
 

@@ -30,12 +30,12 @@ class RiwayatTransferSaldoPersonel extends Model
 
     public function kendaraan()
     {
-        return $this->belongsTo(Kendaraan::class);
+        return $this->belongsTo(Kendaraan::class)->withTrashed();
     }
 
     public function tujuanKendaraan()
     {
-        return $this->belongsTo(Kendaraan::class, 'tujuan_kendaraan_id');
+        return $this->belongsTo(Kendaraan::class, 'tujuan_kendaraan_id')->withTrashed();
     }
 
     public function personel()

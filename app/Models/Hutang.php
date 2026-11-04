@@ -29,12 +29,13 @@ class Hutang extends Model
 
     public function kendaraan()
     {
-        return $this->belongsTo(Kendaraan::class, 'satker_id', 'satker_id')->where('no_polisi', $this->nopol);
+        return $this->belongsTo(Kendaraan::class, 'satker_id', 'satker_id')->where('no_polisi', $this->nopol)->withTrashed();
     }
 
     public function getKendaraanAttribute()
     {
-        return Kendaraan::where('satker_id', $this->satker_id)
+        return Kendaraan::withTrashed()
+            ->where('satker_id', $this->satker_id)
             ->where('no_polisi', $this->nopol)
             ->first();
     }

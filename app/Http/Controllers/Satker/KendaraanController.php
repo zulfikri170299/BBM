@@ -442,17 +442,29 @@ class KendaraanController extends Controller
         $kendaraansInSatker = \App\Models\Kendaraan::where('satker_id', $satkerId)->pluck('id')->toArray();
         $kendaraansWithActivity = \App\Models\TransaksiBbm::where('satker_id', $satkerId)
             ->whereBetween('tanggal', [$startUtc, $endUtc])
+            ->whereNotNull('kendaraan_id')
             ->distinct()
             ->pluck('kendaraan_id')
             ->toArray();
         $kendaraansWithTopup = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
             ->whereBetween('created_at', [$startUtc, $endUtc])
+            ->whereNotNull('kendaraan_id')
             ->distinct()
             ->pluck('kendaraan_id')
             ->toArray();
+        $kendaraansTrashedInSatker = \App\Models\Kendaraan::onlyTrashed()
+            ->where('satker_id', $satkerId)
+            ->where('deleted_at', '>=', $startUtc)
+            ->pluck('id')
+            ->toArray();
         
-        $allRelevantIds = array_unique(array_merge($kendaraansInSatker, $kendaraansWithActivity, $kendaraansWithTopup));
-        $kendaraans = \App\Models\Kendaraan::whereIn('id', $allRelevantIds)->orderBy('jenis_bbm')->orderBy('no_polisi')->get();
+        $allRelevantIds = array_unique(array_filter(array_merge(
+            $kendaraansInSatker, 
+            $kendaraansWithActivity, 
+            $kendaraansWithTopup,
+            $kendaraansTrashedInSatker
+        )));
+        $kendaraans = \App\Models\Kendaraan::withTrashed()->whereIn('id', $allRelevantIds)->orderBy('jenis_bbm')->orderBy('no_polisi')->get();
 
         // Bulan sebelumnya dalam WITA lalu konversi ke UTC
         $prevMonthEndWita = $startDateWita->copy()->subDay()->endOfDay();
@@ -599,6 +611,12 @@ class KendaraanController extends Controller
 
             // Sisa BBM = Total BBM - Total Pemakaian (Metode hangus tidak dimunculkan/dikurangkan di laporan agar tidak rancu dan tidak minus)
             $sisaBbm = max(0, $totalBbm - $totalPemakaian);
+
+            // Jika kendaraan sudah dihapus (soft-deleted), tapi di periode bulan ini sama sekali tidak ada data/aktivitas (semua 0),
+            // lewati agar tidak membebani tabel di bulan-bulan baru mendatang.
+            if ($kendaraan->trashed() && $sisaBulanLalu == 0 && $topupBulanIni == 0 && $tmBulanIni == 0 && $totalPemakaian == 0 && $tkBulanIni == 0 && $sisaBbm == 0) {
+                continue;
+            }
 
             $row = [
                 'kode_kendaraan' => $kendaraan->kode_kendaraan ?? '-',
@@ -1165,6 +1183,23 @@ class KendaraanController extends Controller
         ]);
 
         return redirect()->route('satker.kendaraans.index')->with('success', "{$deleted} kendaraan berhasil dihapus.");
+    }
+
+    public function destroy(Kendaraan $kendaraan)
+    {
+        if (auth()->user()->role !== 'super_admin' && $kendaraan->satker_id !== auth()->user()->satker_id) {
+            abort(403);
+        }
+
+        $noPolisi = $kendaraan->no_polisi;
+        $kendaraan->delete();
+
+        LogAktivitas::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => "Menghapus Kendaraan (Admin Satker): {$noPolisi}",
+        ]);
+
+        return redirect()->route('satker.kendaraans.index')->with('success', "Kendaraan {$noPolisi} berhasil dihapus.");
     }
     public function resetPin(Kendaraan $kendaraan)
     {
