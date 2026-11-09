@@ -11,10 +11,10 @@
             </a>
             <div>
                 <h1 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-tight">
-                    Edit Data Pembelian BBM
+                    Edit Data Penerimaan BBM
                 </h1>
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    Perbarui rincian tanggal, jenis, atau kuantum BBM yang masuk.
+                    Perbarui rincian tanggal, jenis, atau kuantum penerimaan BBM.
                 </p>
             </div>
         </div>
@@ -48,7 +48,7 @@
                         Formulir Perubahan Data
                     </h2>
                     <p class="text-[11px] text-slate-500 dark:text-slate-400">
-                        ID Pembelian: #{{ $pembelianBbm->id }}
+                        ID Penerimaan BBM: #{{ $pembelianBbm->id }}
                     </p>
                 </div>
             </div>

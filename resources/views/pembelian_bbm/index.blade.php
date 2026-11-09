@@ -13,10 +13,10 @@
                         SPBP POLDA NTB • LOGISTIK & PENERIMAAN BBM
                     </div>
                     <h1 class="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight">
-                        Penerimaan & Pembelian BBM
+                        Penerimaan BBM
                     </h1>
                     <p class="mt-1 text-xs sm:text-sm text-slate-300 max-w-2xl">
-                        Catat faktur DO dan pasokan BBM Pertamax & Pertamina Dex dari Pertamina. Data ini secara otomatis tersinkronisasi sebagai <span class="text-cyan-300 font-bold">Penerimaan pada Laporan Rutin Slog</span>.
+                        Catat faktur DO dan penerimaan pasokan BBM (Pertamax & Pertamina Dex) dari Pertamina. Data ini secara otomatis tersinkronisasi sebagai <span class="text-cyan-300 font-bold">Penerimaan pada Laporan Rutin Slog</span>.
                     </p>
                 </div>
 
@@ -129,7 +129,7 @@
         <!-- Main Layout: Form (Left) & History Table (Right) -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             
-            <!-- Left Column: Form Pembelian BBM (Col Span 4) -->
+            <!-- Left Column: Form Penerimaan BBM (Col Span 4) -->
             <div class="lg:col-span-4 lg:sticky lg:top-6">
                 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl sm:rounded-3xl shadow-xl shadow-slate-900/5 dark:shadow-indigo-950/20 overflow-hidden">
                     
@@ -142,7 +142,7 @@
                         </div>
                         <div>
                             <h2 class="text-sm sm:text-base font-black text-slate-900 dark:text-white">
-                                Form Pembelian BBM
+                                Form Penerimaan BBM
                             </h2>
                             <p class="text-[11px] text-slate-500 dark:text-slate-400">
                                 Input penerimaan pasokan DO baru
@@ -222,7 +222,7 @@
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
                                 </svg>
-                                <span>Simpan Data Pembelian</span>
+                                <span>Simpan Penerimaan BBM</span>
                             </button>
                         </div>
                     </form>
@@ -239,7 +239,7 @@
                             <div class="flex items-center gap-2">
                                 <div class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></div>
                                 <h2 class="text-sm sm:text-base font-black text-slate-800 dark:text-white uppercase tracking-wider">
-                                    Riwayat Pembelian BBM
+                                    Riwayat Penerimaan BBM
                                 </h2>
                             </div>
                         </div>
@@ -379,9 +379,9 @@
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="button" 
-                                                        data-confirm="Apakah Anda yakin ingin menghapus data pembelian sebesar {{ number_format($item->jumlah, 0, ',', '.') }} L ini?"
+                                                        data-confirm="Apakah Anda yakin ingin menghapus data penerimaan BBM sebesar {{ number_format($item->jumlah, 0, ',', '.') }} L ini?"
                                                         data-confirm-type="danger"
-                                                        data-confirm-title="Hapus Pembelian BBM"
+                                                        data-confirm-title="Hapus Data Penerimaan BBM"
                                                         data-confirm-text="Ya, Hapus!"
                                                         class="p-2 text-slate-600 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-xl transition-all" 
                                                         title="Hapus Data">
@@ -403,7 +403,7 @@
                                                     </svg>
                                                 </div>
                                                 <p class="text-xs font-bold text-slate-600 dark:text-slate-400">
-                                                    Tidak ada data riwayat pembelian yang sesuai filter.
+                                                    Tidak ada data riwayat penerimaan BBM yang sesuai filter.
                                                 </p>
                                             </div>
                                         </td>

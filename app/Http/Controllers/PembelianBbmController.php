@@ -62,7 +62,7 @@ class PembelianBbmController extends Controller
         $pembelians = $query->orderBy('tanggal', 'desc')->orderBy('created_at', 'desc')->get();
 
         $pdf = Pdf::loadView('pembelian_bbm.print', compact('pembelians'))->setPaper('a4', 'portrait');
-        return $pdf->stream('laporan-pembelian-bbm-' . date('Y-m-d') . '.pdf');
+        return $pdf->stream('laporan-penerimaan-bbm-' . date('Y-m-d') . '.pdf');
     }
 
     public function create()
@@ -80,7 +80,7 @@ class PembelianBbmController extends Controller
 
         PembelianBbm::create($request->all());
 
-        return redirect()->route('pembelian-bbm.index')->with('success', 'Data pembelian BBM berhasil disimpan.');
+        return redirect()->route('pembelian-bbm.index')->with('success', 'Data penerimaan BBM berhasil disimpan.');
     }
 
     public function edit(PembelianBbm $pembelianBbm)
@@ -98,13 +98,13 @@ class PembelianBbmController extends Controller
 
         $pembelianBbm->update($request->all());
 
-        return redirect()->route('pembelian-bbm.index')->with('success', 'Data pembelian BBM berhasil diubah.');
+        return redirect()->route('pembelian-bbm.index')->with('success', 'Data penerimaan BBM berhasil diperbarui.');
     }
 
     public function destroy(PembelianBbm $pembelianBbm)
     {
         $pembelianBbm->delete();
 
-        return redirect()->route('pembelian-bbm.index')->with('success', 'Data pembelian BBM berhasil dihapus.');
+        return redirect()->route('pembelian-bbm.index')->with('success', 'Data penerimaan BBM berhasil dihapus.');
     }
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Laporan Pembelian BBM</title>
+    <title>Laporan Penerimaan BBM</title>
     <style>
         body { font-family: sans-serif; font-size: 12px; }
         .header { text-align: center; margin-bottom: 20px; }
@@ -18,7 +18,7 @@
 <body>
     @include('components.pdf-header')
     <div class="header">
-        <h2>Laporan Riwayat Pembelian BBM</h2>
+        <h2>Laporan Riwayat Penerimaan BBM</h2>
         <p>
             @if(request('start_date') && request('end_date'))
                 Periode: {{ \Carbon\Carbon::parse(request('start_date'))->format('d/m/Y') }} s/d {{ \Carbon\Carbon::parse(request('end_date'))->format('d/m/Y') }}
@@ -41,7 +41,7 @@
         <thead>
             <tr>
                 <th style="width: 5%; text-align: center;">No</th>
-                <th style="width: 35%;">Tanggal Pembelian</th>
+                <th style="width: 35%;">Tanggal Penerimaan</th>
                 <th style="width: 30%; text-align: center;">Jenis BBM</th>
                 <th style="width: 30%; text-align: right;">Jumlah (Liter)</th>
             </tr>
@@ -67,7 +67,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="4" style="text-align: center; font-style: italic; color: #666;">Belum ada data pembelian BBM untuk filter ini.</td>
+                <td colspan="4" style="text-align: center; font-style: italic; color: #666;">Belum ada data penerimaan BBM untuk filter ini.</td>
             </tr>
             @endforelse
         </tbody>

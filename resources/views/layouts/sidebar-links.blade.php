@@ -74,7 +74,7 @@
                         <a href="{{ route('pembelian-bbm.index') }}"
                             class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('pembelian-bbm.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
                             <div class="submenu-dot {{ request()->routeIs('pembelian-bbm.*') ? 'active-dot' : '' }}"></div>
-                            Pembelian BBM
+                            Penerimaan BBM
                         </a>
                         <a href="{{ route('admin.rendis.index') }}"
                             class="group  flex items-center py-2 px-4 text-xs font-medium rounded-lg transition-all active:scale-[0.98] {{ request()->routeIs('admin.rendis.*') ? 'text-brand-primary dark:text-white font-semibold bg-brand-primary/10 dark:bg-white/10' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors' }}">
@@ -554,7 +554,7 @@
                         d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
                     </path>
                 </svg>
-                Pembelian BBM
+                Penerimaan BBM
             </a>
 
             <a href="{{ route('petugas.rekapan.index') }}"
