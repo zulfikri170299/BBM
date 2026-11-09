@@ -1101,33 +1101,68 @@
                     if (chev) chev.style.transform = 'rotate(180deg)';
 
                     menu = document.createElement('div');
-                    menu.className = 'custom-select-menu bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col';
+                    menu.className = 'custom-select-menu bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col';
 
-                    const rect = trigger.getBoundingClientRect();
-                    const spaceBelow = window.innerHeight - rect.bottom - 12;
-                    const spaceAbove = rect.top - 12;
-                    const preferredHeight = Math.min(320, select.options.length * 40 + (select.options.length > 5 ? 58 : 16));
+                    const isMobile = window.innerWidth < 768;
 
-                    let left = rect.left;
-                    let width = Math.max(rect.width, 240);
-                    if (left + width > window.innerWidth - 12) {
-                        left = Math.max(12, window.innerWidth - width - 12);
-                    }
-                    menu.style.position = 'fixed';
-                    menu.style.width = width + 'px';
-                    menu.style.left = left + 'px';
-                    menu.style.zIndex = '99999';
-
-                    if (spaceBelow < 200 && spaceAbove > spaceBelow) {
-                        const actualMaxHeight = Math.min(preferredHeight, Math.max(160, spaceAbove));
-                        menu.style.bottom = (window.innerHeight - rect.top + 6) + 'px';
+                    if (isMobile) {
+                        // Modal / Bottom Sheet Style di Perangkat Mobile
+                        menu.style.position = 'fixed';
+                        menu.style.left = '12px';
+                        menu.style.right = '12px';
+                        menu.style.bottom = '16px';
                         menu.style.top = 'auto';
-                        menu.style.maxHeight = actualMaxHeight + 'px';
+                        menu.style.width = 'auto';
+                        menu.style.maxWidth = '460px';
+                        menu.style.margin = '0 auto';
+                        menu.style.maxHeight = '72vh';
+                        menu.style.zIndex = '99999';
+                        menu.style.borderRadius = '1.25rem';
+                        menu.style.boxShadow = '0 -10px 30px -5px rgba(0, 0, 0, 0.4)';
+                        menu.style.touchAction = 'pan-y';
+
+                        // Header dengan Judul & Tombol Tutup (X)
+                        const header = document.createElement('div');
+                        header.className = 'flex items-center justify-between px-4 py-3 border-b border-slate-200 dark:border-white/10 shrink-0 bg-slate-50/90 dark:bg-slate-800/80';
+                        header.innerHTML = `
+                            <div class="flex items-center gap-2">
+                                ${iconHtml}
+                                <span class="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">${placeholderText.replace('Cari ', 'Pilih ')}</span>
+                            </div>
+                            <button type="button" class="close-mobile-select p-1 text-slate-400 hover:text-slate-600 dark:hover:text-white rounded-lg">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                            </button>
+                        `;
+                        menu.appendChild(header);
+                        header.querySelector('.close-mobile-select').addEventListener('click', closeMenu);
                     } else {
-                        const actualMaxHeight = Math.min(preferredHeight, Math.max(160, spaceBelow));
-                        menu.style.top = (rect.bottom + 6) + 'px';
-                        menu.style.bottom = 'auto';
-                        menu.style.maxHeight = actualMaxHeight + 'px';
+                        // Desktop Floating Menu
+                        const rect = trigger.getBoundingClientRect();
+                        const spaceBelow = window.innerHeight - rect.bottom - 12;
+                        const spaceAbove = rect.top - 12;
+                        const preferredHeight = Math.min(320, select.options.length * 40 + (select.options.length > 5 ? 58 : 16));
+
+                        let left = rect.left;
+                        let width = Math.max(rect.width, 240);
+                        if (left + width > window.innerWidth - 12) {
+                            left = Math.max(12, window.innerWidth - width - 12);
+                        }
+                        menu.style.position = 'fixed';
+                        menu.style.width = width + 'px';
+                        menu.style.left = left + 'px';
+                        menu.style.zIndex = '99999';
+
+                        if (spaceBelow < 200 && spaceAbove > spaceBelow) {
+                            const actualMaxHeight = Math.min(preferredHeight, Math.max(160, spaceAbove));
+                            menu.style.bottom = (window.innerHeight - rect.top + 6) + 'px';
+                            menu.style.top = 'auto';
+                            menu.style.maxHeight = actualMaxHeight + 'px';
+                        } else {
+                            const actualMaxHeight = Math.min(preferredHeight, Math.max(160, spaceBelow));
+                            menu.style.top = (rect.bottom + 6) + 'px';
+                            menu.style.bottom = 'auto';
+                            menu.style.maxHeight = actualMaxHeight + 'px';
+                        }
                     }
 
                     let searchInput = null;
@@ -1147,7 +1182,7 @@
                     }
 
                     const optionsContainer = document.createElement('div');
-                    optionsContainer.className = 'custom-select-options flex-1 min-h-0 overflow-y-auto divide-y divide-slate-100 dark:divide-white/5 custom-scrollbar p-1';
+                    optionsContainer.className = 'custom-select-options flex-1 min-h-0 overflow-y-auto divide-y divide-slate-100 dark:divide-white/5 custom-scrollbar p-1 overscroll-contain';
                     optionsContainer.addEventListener('wheel', (e) => {
                         e.stopPropagation();
                     }, { passive: true });
@@ -1165,10 +1200,10 @@
                             const isSelected = opt.value === select.value;
                             const item = document.createElement('button');
                             item.type = 'button';
-                            item.className = 'w-full text-left px-3 py-2 rounded-lg text-xs flex items-center justify-between transition-colors ' +
+                            item.className = 'w-full text-left px-3 py-2.5 sm:py-2 rounded-lg text-xs flex items-center justify-between transition-colors min-h-[40px] select-none ' +
                                 (isSelected
                                     ? 'bg-blue-600/10 text-blue-600 dark:bg-blue-500/20 dark:text-white font-bold'
-                                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800');
+                                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 active:bg-blue-50 dark:active:bg-slate-800');
 
                             item.innerHTML = `
                                 <span class="flex items-center gap-2 truncate pr-2">
@@ -1178,7 +1213,8 @@
                                 ${isSelected ? '<svg class="w-4 h-4 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>' : ''}
                             `;
 
-                            item.addEventListener('click', () => {
+                            const handleSelect = (e) => {
+                                if (e) e.preventDefault();
                                 select.value = opt.value;
                                 updateTrigger();
                                 closeMenu();
@@ -1190,11 +1226,13 @@
                                         } else {
                                             eval(select.getAttribute('onchange'));
                                         }
-                                    } catch (e) {
-                                        console.warn('onchange eval error:', e);
+                                    } catch (err) {
+                                        console.warn('onchange eval error:', err);
                                     }
                                 }
-                            });
+                            };
+
+                            item.addEventListener('click', handleSelect);
                             optionsContainer.appendChild(item);
                         });
 
@@ -1210,14 +1248,26 @@
                     backdrop.className = 'custom-select-backdrop';
                     backdrop.style.position = 'fixed';
                     backdrop.style.inset = '0';
+                    backdrop.style.backgroundColor = isMobile ? 'rgba(0, 0, 0, 0.5)' : 'transparent';
+                    if (isMobile) {
+                        backdrop.style.backdropFilter = 'blur(2px)';
+                        backdrop.style.webkitBackdropFilter = 'blur(2px)';
+                    }
                     backdrop.style.zIndex = '99998';
                     backdrop.addEventListener('click', closeMenu);
+                    backdrop.addEventListener('touchstart', (e) => {
+                        e.preventDefault();
+                        closeMenu();
+                    }, { passive: false });
 
                     document.body.appendChild(backdrop);
                     document.body.appendChild(menu);
 
-                    if (searchInput) {
+                    // Hanya fokus otomatis pada desktop agar keyboard ponsel tidak muncul tiba-tiba
+                    if (searchInput && window.innerWidth >= 768) {
                         setTimeout(() => searchInput.focus(), 25);
+                        searchInput.addEventListener('input', (e) => renderOptions(e.target.value));
+                    } else if (searchInput) {
                         searchInput.addEventListener('input', (e) => renderOptions(e.target.value));
                     }
                 };
@@ -1235,6 +1285,29 @@
                         closeMenu();
                     }
                 });
+
+                // Sinkronisasi status disabled secara real-time
+                const syncDisabled = () => {
+                    if (select.disabled) {
+                        trigger.disabled = true;
+                        trigger.classList.add('opacity-50', 'cursor-not-allowed');
+                    } else {
+                        trigger.disabled = false;
+                        trigger.classList.remove('opacity-50', 'cursor-not-allowed');
+                    }
+                };
+                syncDisabled();
+
+                // Observer untuk memantau perubahan options atau disabled jika diubah secara dinamis oleh JS/Alpine
+                const selectObserver = new MutationObserver(() => {
+                    updateTrigger();
+                    syncDisabled();
+                });
+                selectObserver.observe(select, { childList: true, subtree: true, attributes: true, attributeFilter: ['disabled'] });
+                select.addEventListener('custom-select:refresh', () => {
+                    updateTrigger();
+                    syncDisabled();
+                });
             });
         });
 
@@ -1244,6 +1317,7 @@
             document.addEventListener('turbo:load', window.initCustomSelects);
             document.addEventListener('turbo:render', window.initCustomSelects);
             window.addEventListener('resize', () => {
+                if (window.innerWidth < 768) return;
                 document.querySelectorAll('.custom-select-menu').forEach(m => m.remove());
                 document.querySelectorAll('.custom-select-backdrop').forEach(b => b.remove());
                 document.querySelectorAll('.custom-select-trigger.active, button.active').forEach(t => {
@@ -1253,6 +1327,7 @@
                 });
             }, { passive: true });
             window.addEventListener('scroll', (e) => {
+                if (window.innerWidth < 768) return;
                 if (e && e.target) {
                     if (e.target.closest && e.target.closest('.custom-select-menu')) return;
                     if (e.target.classList && (e.target.classList.contains('custom-select-menu') || e.target.classList.contains('custom-select-options'))) return;

@@ -72,7 +72,7 @@
     <input type="hidden" name="{{ $name }}" :value="selectedVal">
 
     <!-- Trigger Button -->
-    <button type="button" @click="open = !open; $nextTick(() => { if(open && $refs.searchInput) $refs.searchInput.focus() })"
+    <button type="button" @click="open = !open; $nextTick(() => { if(open && $refs.searchInput && window.innerWidth >= 768) $refs.searchInput.focus() })"
         class="w-full h-11 px-3 bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-white/10 rounded-xl text-xs font-medium text-left flex items-center justify-between transition-all hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
         :class="{ 'ring-2 ring-blue-500 border-transparent': open, 'border-blue-500/50 text-blue-600 dark:text-blue-400': selectedVal !== '' }">
         <div class="flex items-center gap-2 truncate pr-2">

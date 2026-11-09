@@ -49,7 +49,7 @@
                         </div>
                     </div>
 
-                    <form action="{{ route('petugas.hutang.store') }}" method="POST" class="space-y-6" id="debtForm">
+                    <form action="{{ route('petugas.hutang.store') }}" method="POST" class="space-y-6" id="debtForm" x-data="petugasHutangForm()">
                         @csrf
 
                         <!-- Satker Selection -->
@@ -58,7 +58,9 @@
                                 class="text-slate-700 dark:text-slate-300 font-bold ml-1" />
                             <div class="relative">
                                 <select id="satker_id" name="satker_id"
-                                    class="tom-select w-full duration-300"
+                                    x-model="satkerId"
+                                    @change="onSatkerChange($event.target.value)"
+                                    class="tom-select block w-full py-3 px-3.5 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 focus:bg-white dark:focus:bg-slate-900 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl transition-all shadow-sm font-bold text-xs sm:text-sm text-slate-800 dark:text-white cursor-pointer"
                                     required>
                                     <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">-- Pilih Satker --</option>
                                     @foreach($satkers as $sat)
@@ -70,31 +72,32 @@
 
                         <!-- Vehicle Selection -->
                         <div class="space-y-2">
-                            <x-input-label for="kendaraan_select" value="Pilih Kendaraan"
-                                class="text-slate-700 dark:text-slate-300 font-bold ml-1" />
+                            <div class="flex items-center justify-between">
+                                <x-input-label for="kendaraan_select" value="Pilih Kendaraan"
+                                    class="text-slate-700 dark:text-slate-300 font-bold ml-1" />
+                                <span x-show="loadingKendaraan" x-cloak class="text-[10px] text-amber-500 flex items-center gap-1 font-semibold">
+                                    <svg class="animate-spin h-3.5 w-3.5 text-amber-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+                                    Memuat kendaraan...
+                                </span>
+                            </div>
                             <div class="relative">
                                 <select id="kendaraan_select"
-                                    class="tom-select w-full duration-300 disabled:bg-slate-50 dark:bg-slate-800 disabled:cursor-not-allowed"
-                                    required disabled>
-                                    <option class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white" value="">-- Pilih Satker Dahulu --</option>
+                                    x-model="kendaraanId"
+                                    @change="onKendaraanChange($event.target.value)"
+                                    :disabled="loadingKendaraan || !satkerId || kendaraans.length === 0"
+                                    class="tom-select block w-full py-3 px-3.5 pr-10 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 focus:bg-white dark:focus:bg-slate-900 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl transition-all shadow-sm font-bold text-xs sm:text-sm text-slate-800 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                                    required>
+                                    <option value="" disabled selected x-text="!satkerId ? '-- Pilih Satker Dahulu --' : (loadingKendaraan ? 'Sedang memuat data kendaraan...' : (kendaraans.length ? '-- Pilih Kendaraan --' : 'Tidak ada kendaraan tersedia'))"></option>
+                                    <template x-for="kend in kendaraans" :key="kend.id">
+                                        <option :value="kend.id" x-text="`${kend.no_polisi} - ${kend.jenis_kendaraan} (${kend.jenis_bbm}) ${kend.bebas_bon ? '[✨ BEBAS LIMIT BON]' : ''}`" class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white py-1.5"></option>
+                                    </template>
                                 </select>
-                                <div id="vehicle_loader"
-                                    class="absolute inset-y-0 right-0 pr-10 flex items-center pointer-events-none hidden z-10">
-                                    <svg class="animate-spin h-5 w-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg"
-                                        fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                            stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor"
-                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                        </path>
-                                    </svg>
-                                </div>
                             </div>
                         </div>
 
                         {{-- Card Info Kendaraan --}}
-                        <div id="vehicle_info_card"
-                            class="bg-gradient-to-br from-slate-100 dark:from-slate-900 to-indigo-900 rounded-2xl p-4 text-slate-800 dark:text-white shadow-lg space-y-3 hidden animate-in fade-in slide-in-from-top-4 duration-300">
+                        <div x-show="selectedKendaraan" x-cloak
+                            class="bg-gradient-to-br from-slate-100 dark:from-slate-900 to-indigo-900 rounded-2xl p-4 text-slate-800 dark:text-white shadow-lg space-y-3 transition-all duration-300">
                             <div class="flex justify-between items-start">
                                 <span
                                     class="px-2 py-0.5 bg-white/20 rounded-md text-[10px] font-bold uppercase tracking-widest text-slate-800 dark:text-white/80">Info
@@ -109,22 +112,31 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <p class="text-[10px] text-indigo-600 dark:text-indigo-300 font-bold uppercase">No. Polisi</p>
-                                    <p id="card_nopol" class="text-sm font-black tracking-tight">-</p>
+                                    <p class="text-sm font-black tracking-tight" x-text="nopol || '-'"></p>
                                 </div>
                                 <div>
                                     <p class="text-[10px] text-indigo-600 dark:text-indigo-300 font-bold uppercase">Jenis BBM</p>
-                                    <p id="card_bbm" class="text-sm font-bold">-</p>
+                                    <p class="text-sm font-bold" x-text="jenisBbm || '-'"></p>
                                 </div>
                             </div>
                         </div>
 
                         {{-- Panel Stok Tangki --}}
-                        <div id="stok_tangki_card" class="hidden rounded-2xl border p-4 space-y-1 transition-all duration-300">
+                        <div x-show="selectedKendaraan && currentStok !== null" x-cloak
+                            :class="{
+                                'border-rose-200 bg-rose-50 text-rose-600': currentStok <= 0,
+                                'border-amber-200 bg-amber-50 text-amber-600': currentStok > 0 && currentStok < 100,
+                                'border-emerald-200 bg-emerald-50 text-emerald-600': currentStok >= 100
+                            }"
+                            class="rounded-2xl border p-4 space-y-1 transition-all duration-300">
                             <p class="text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-400">Stok BBM di Tangki</p>
                             <div class="flex items-end justify-between">
                                 <div>
-                                    <span id="stok_tangki_jenis" class="text-xs font-bold text-slate-600 dark:text-slate-400">-</span>
-                                    <p id="stok_tangki_nilai" class="text-2xl font-black text-slate-800 dark:text-slate-200">0 <span class="text-sm font-bold">L</span></p>
+                                    <span class="text-xs font-bold text-slate-600 dark:text-slate-400" x-text="jenisBbm || '-'"></span>
+                                    <p class="text-2xl font-black">
+                                        <span x-text="Number(currentStok || 0).toLocaleString('id-ID')"></span>
+                                        <span class="text-sm font-bold">L</span>
+                                    </p>
                                 </div>
                                 <svg class="w-8 h-8 text-slate-700 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
@@ -133,9 +145,9 @@
                         </div>
 
                         <!-- Hidden fields -->
-                        <input type="hidden" id="jenis_kendaraan" name="jenis_kendaraan" required>
-                        <input type="hidden" id="nopol" name="nopol" required>
-                        <input type="hidden" id="jenis_bbm" name="jenis_bbm" required>
+                        <input type="hidden" id="jenis_kendaraan" name="jenis_kendaraan" :value="jenisKendaraan" required>
+                        <input type="hidden" id="nopol" name="nopol" :value="nopol" required>
+                        <input type="hidden" id="jenis_bbm" name="jenis_bbm" :value="jenisBbm" required>
 
                         <!-- Tanggal Bon Input -->
                         <div class="space-y-2">
@@ -179,6 +191,8 @@
                                     </svg>
                                 </div>
                                 <x-text-input id="jumlah_bon" type="number" step="1" min="1" name="jumlah_bon"
+                                    x-model="jumlahBon"
+                                    @input="validateJumlah"
                                     class="block w-full pl-11 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-white/10 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-2xl py-3.5 transition-all duration-300 font-bold text-slate-700 dark:text-slate-300 text-lg"
                                     placeholder="0.0" required />
                                 <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
@@ -186,11 +200,11 @@
                                 </div>
                             </div>
                             {{-- Pesan error stok --}}
-                            <div id="stok_error_msg" class="hidden flex items-center gap-2 mt-1 px-3 py-2 bg-rose-50 border border-rose-200 rounded-xl">
+                            <div x-show="stokError" x-cloak class="flex items-center gap-2 mt-1 px-3 py-2 bg-rose-50 border border-rose-200 rounded-xl">
                                 <svg class="w-4 h-4 text-rose-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
                                 </svg>
-                                <span id="stok_error_text" class="text-xs font-bold text-rose-600"></span>
+                                <span class="text-xs font-bold text-rose-600" x-text="stokErrorText"></span>
                             </div>
                             @error('jumlah_bon')
                                 <p class="text-xs text-rose-600 font-bold mt-1 ml-1">{{ $message }}</p>
@@ -199,6 +213,8 @@
 
                         <div class="pt-2">
                             <button type="submit"
+                                :disabled="isSubmitDisabled"
+                                :class="{'opacity-50 cursor-not-allowed': isSubmitDisabled}"
                                 class="w-full inline-flex justify-center items-center px-6 py-4 bg-gradient-to-r from-indigo-600 to-blue-600 border-none rounded-2xl font-black text-white uppercase tracking-widest hover:from-indigo-700 hover:to-blue-700 active:scale-[0.98] transition-all duration-200 shadow-xl shadow-indigo-500/30 group/btn">
                                 <span>Simpan Data Hutang</span>
                                 <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none"
@@ -259,6 +275,7 @@
                                     search-placeholder="Cari nama satker..." 
                                     icon="building" 
                                     :options="$satkers" 
+                                    :auto-submit="true"
                                 />
                             </div>
                             <div>
@@ -271,6 +288,7 @@
                                     icon="shield" 
                                     :searchable="false" 
                                     :options="['belum_dibayar' => 'BELUM BAYAR', 'sudah_dibayar' => 'LUNAS']" 
+                                    :auto-submit="true"
                                 />
                             </div>
                             <div class="flex items-end gap-2 text-xs">
@@ -390,242 +408,104 @@
     </div>
 
     <script>
-        (function() {
-            const stokTangkiData = @json($stokTangki);
+        function petugasHutangForm() {
+            return {
+                satkerId: '',
+                kendaraanId: '',
+                kendaraans: [],
+                loadingKendaraan: false,
+                selectedKendaraan: null,
+                nopol: '',
+                jenisKendaraan: '',
+                jenisBbm: '',
+                jumlahBon: '',
+                currentStok: null,
+                stokError: false,
+                stokErrorText: '',
+                stokTangkiData: @json($stokTangki),
 
-            function initHutangForm() {
-                const satkerSelect = document.getElementById('satker_id');
-                const kendaraanSelect = document.getElementById('kendaraan_select');
-                const inputJenisKendaraan = document.getElementById('jenis_kendaraan');
-                const inputNopol = document.getElementById('nopol');
-                const inputJenisBbm = document.getElementById('jenis_bbm');
-                const jumlahBonInput = document.getElementById('jumlah_bon');
-                const submitBtn = document.querySelector('#debtForm button[type="submit"]');
-
-                if (!satkerSelect || !kendaraanSelect) return;
-
-                const vehicleLoader = document.getElementById('vehicle_loader');
-                const vehicleInfoCard = document.getElementById('vehicle_info_card');
-                const cardNopol = document.getElementById('card_nopol');
-                const cardBbm = document.getElementById('card_bbm');
-                const stokTangkiCard = document.getElementById('stok_tangki_card');
-                const stokTangkiJenis = document.getElementById('stok_tangki_jenis');
-                const stokTangkiNilai = document.getElementById('stok_tangki_nilai');
-                const stokErrorMsg = document.getElementById('stok_error_msg');
-                const stokErrorText = document.getElementById('stok_error_text');
-
-                let currentStok = null;
-
-                function normalizeBbmKey(bbm) {
+                normalizeBbmKey(bbm) {
                     if (!bbm) return '';
                     const upper = bbm.toUpperCase();
                     if (upper.includes('DEX')) return 'Pertamina Dex';
                     if (upper.includes('PERTAMAX')) return 'Pertamax';
                     return bbm;
-                }
+                },
 
-                function updateStokDisplay(jenisBbm) {
-                    const normBbm = normalizeBbmKey(jenisBbm);
-                    if (normBbm && stokTangkiData.hasOwnProperty(normBbm)) {
-                        currentStok = parseFloat(stokTangkiData[normBbm]);
-                    } else {
-                        currentStok = 0;
+                async onSatkerChange(val) {
+                    this.satkerId = val;
+                    this.kendaraanId = '';
+                    this.selectedKendaraan = null;
+                    this.nopol = '';
+                    this.jenisKendaraan = '';
+                    this.jenisBbm = '';
+                    this.currentStok = null;
+                    this.stokError = false;
+                    this.kendaraans = [];
+
+                    if (!val) return;
+
+                    this.loadingKendaraan = true;
+                    try {
+                        const res = await fetch('{{ route("petugas.hutang.get-kendaraan") }}?satker_id=' + val);
+                        const data = await res.json();
+                        this.kendaraans = Array.isArray(data) ? data : [];
+                    } catch (err) {
+                        console.error('Gagal mengambil kendaraan:', err);
+                        this.kendaraans = [];
+                    } finally {
+                        this.loadingKendaraan = false;
+                        this.$nextTick(() => {
+                            const kSelect = document.getElementById('kendaraan_select');
+                            if (kSelect) kSelect.dispatchEvent(new Event('custom-select:refresh'));
+                        });
                     }
-                    if (stokTangkiJenis) stokTangkiJenis.textContent = jenisBbm;
-                    if (stokTangkiNilai) stokTangkiNilai.innerHTML = '<span class="text-2xl font-black">' + currentStok.toLocaleString('id-ID', {minimumFractionDigits:0, maximumFractionDigits:1}) + '</span> <span class="text-sm font-bold">L</span>';
+                },
 
-                    // Warna card berdasarkan stok
-                    if (stokTangkiCard) {
-                        stokTangkiCard.classList.remove('hidden', 'border-rose-200', 'bg-rose-50', 'border-amber-200', 'bg-amber-50', 'border-emerald-200', 'bg-emerald-50');
-                        if (stokTangkiNilai) stokTangkiNilai.classList.remove('text-rose-600', 'text-amber-600', 'text-emerald-600', 'text-slate-800', 'dark:text-slate-200');
-                        if (currentStok <= 0) {
-                            stokTangkiCard.classList.add('border-rose-200', 'bg-rose-50');
-                            if (stokTangkiNilai) stokTangkiNilai.classList.add('text-rose-600');
-                        } else if (currentStok < 100) {
-                            stokTangkiCard.classList.add('border-amber-200', 'bg-amber-50');
-                            if (stokTangkiNilai) stokTangkiNilai.classList.add('text-amber-600');
+                onKendaraanChange(val) {
+                    this.kendaraanId = val;
+                    const kend = this.kendaraans.find(k => k.id == val);
+                    if (kend) {
+                        this.selectedKendaraan = kend;
+                        this.nopol = kend.no_polisi;
+                        this.jenisKendaraan = kend.jenis_kendaraan;
+                        this.jenisBbm = kend.jenis_bbm;
+
+                        const normBbm = this.normalizeBbmKey(kend.jenis_bbm);
+                        if (normBbm && this.stokTangkiData.hasOwnProperty(normBbm)) {
+                            this.currentStok = parseFloat(this.stokTangkiData[normBbm]) || 0;
                         } else {
-                            stokTangkiCard.classList.add('border-emerald-200', 'bg-emerald-50');
-                            if (stokTangkiNilai) stokTangkiNilai.classList.add('text-emerald-600');
-                        }
-                    }
-                    validateJumlah();
-                }
-
-                function validateJumlah() {
-                    const jumlah = parseFloat(jumlahBonInput ? jumlahBonInput.value : 0) || 0;
-                    if (currentStok !== null && jumlah > currentStok) {
-                        if (stokErrorMsg) stokErrorMsg.classList.remove('hidden');
-                        if (stokErrorText) stokErrorText.textContent = 'Melebihi stok tangki! Maks: ' + currentStok.toFixed(0) + ' L';
-                        if (submitBtn) {
-                            submitBtn.disabled = true;
-                            submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                            this.currentStok = 0;
                         }
                     } else {
-                        if (stokErrorMsg) stokErrorMsg.classList.add('hidden');
-                        if (submitBtn) {
-                            submitBtn.disabled = false;
-                            submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                        }
+                        this.selectedKendaraan = null;
+                        this.nopol = '';
+                        this.jenisKendaraan = '';
+                        this.jenisBbm = '';
+                        this.currentStok = null;
                     }
-                }
+                    this.validateJumlah();
+                    this.$nextTick(() => {
+                        const kSelect = document.getElementById('kendaraan_select');
+                        if (kSelect) kSelect.dispatchEvent(new Event('custom-select:refresh'));
+                    });
+                },
 
-                if (jumlahBonInput) {
-                    jumlahBonInput.addEventListener('input', validateJumlah);
-                }
-
-                // === Fetch kendaraan saat satker berubah ===
-                function fetchKendaraanData(satkerId) {
-                    let ts = kendaraanSelect.tomselect;
-                    if (!ts && window.initTomSelect) {
-                        window.initTomSelect();
-                        ts = kendaraanSelect.tomselect;
-                    }
-
-                    // Reset semua field
-                    if (inputJenisKendaraan) inputJenisKendaraan.value = '';
-                    if (inputNopol) inputNopol.value = '';
-                    if (inputJenisBbm) inputJenisBbm.value = '';
-                    if (vehicleInfoCard) vehicleInfoCard.classList.add('hidden');
-                    if (stokTangkiCard) stokTangkiCard.classList.add('hidden');
-                    currentStok = null;
-                    if (stokErrorMsg) stokErrorMsg.classList.add('hidden');
-
-                    if (ts) {
-                        ts.clear();
-                        ts.clearOptions();
-                        ts.disable();
-                        if (vehicleLoader) vehicleLoader.classList.remove('hidden');
-                        ts.addOption({value: '', text: 'Memuat kendaraan...'});
-                        ts.refreshOptions(false);
-                    }
-
-                    if (satkerId) {
-                        fetch('{{ route("petugas.hutang.get-kendaraan") }}?satker_id=' + satkerId)
-                            .then(function(response) { return response.json(); })
-                            .then(function(data) {
-                                if (vehicleLoader) vehicleLoader.classList.add('hidden');
-                                if (ts) {
-                                    ts.clearOptions();
-                                    ts.addOption({value: '', text: '-- Pilih Kendaraan --'});
-                                    if (data.length > 0) {
-                                        data.forEach(function(kendaraan) {
-                                            ts.addOption({
-                                                value: kendaraan.id,
-                                                text: kendaraan.no_polisi + ' - ' + kendaraan.jenis_kendaraan + (kendaraan.bebas_bon ? ' [✨ BEBAS LIMIT BON]' : ''),
-                                                nopol: kendaraan.no_polisi,
-                                                jenis: kendaraan.jenis_kendaraan,
-                                                bbm: kendaraan.jenis_bbm
-                                            });
-                                        });
-                                        ts.enable();
-                                    } else {
-                                        ts.addOption({value: '', text: 'Tidak ada kendaraan tersedia'});
-                                        ts.disable();
-                                    }
-                                    ts.refreshOptions(false);
-                                }
-                            })
-                            .catch(function(error) {
-                                console.error('Error fetching kendaraan:', error);
-                                if (vehicleLoader) vehicleLoader.classList.add('hidden');
-                                if (ts) {
-                                    ts.clearOptions();
-                                    ts.addOption({value: '', text: 'Gagal memuat data'});
-                                    ts.disable();
-                                    ts.refreshOptions(false);
-                                }
-                            });
+                validateJumlah() {
+                    const val = parseFloat(this.jumlahBon) || 0;
+                    if (this.currentStok !== null && val > this.currentStok) {
+                        this.stokError = true;
+                        this.stokErrorText = 'Melebihi stok tangki! Maks: ' + Math.floor(this.currentStok) + ' L';
                     } else {
-                        if (vehicleLoader) vehicleLoader.classList.add('hidden');
-                        if (ts) {
-                            ts.clearOptions();
-                            ts.addOption({value: '', text: '-- Pilih Satker Terlebih Dahulu --'});
-                            ts.disable();
-                            ts.refreshOptions(false);
-                        }
+                        this.stokError = false;
+                        this.stokErrorText = '';
                     }
-                }
+                },
 
-                // === Proses saat kendaraan dipilih ===
-                function processSelectedKendaraan(selectedValue) {
-                    if (stokErrorMsg) stokErrorMsg.classList.add('hidden');
-                    const ts = kendaraanSelect.tomselect;
-                    if (!ts) return;
-                    const optionData = ts.options[selectedValue];
-                    if (selectedValue && optionData) {
-                        if (inputNopol) inputNopol.value = optionData.nopol;
-                        if (inputJenisKendaraan) inputJenisKendaraan.value = optionData.jenis;
-                        if (inputJenisBbm) inputJenisBbm.value = optionData.bbm;
-                        if (cardNopol) cardNopol.textContent = optionData.nopol;
-                        if (cardBbm) cardBbm.textContent = optionData.bbm;
-                        if (vehicleInfoCard) vehicleInfoCard.classList.remove('hidden');
-                        updateStokDisplay(optionData.bbm);
-                    } else {
-                        if (inputNopol) inputNopol.value = '';
-                        if (inputJenisKendaraan) inputJenisKendaraan.value = '';
-                        if (inputJenisBbm) inputJenisBbm.value = '';
-                        if (vehicleInfoCard) vehicleInfoCard.classList.add('hidden');
-                        if (stokTangkiCard) stokTangkiCard.classList.add('hidden');
-                        currentStok = null;
-                    }
+                get isSubmitDisabled() {
+                    return !this.satkerId || !this.kendaraanId || this.stokError || (parseFloat(this.jumlahBon) || 0) <= 0;
                 }
-
-                // === Bind events ===
-                // Pastikan TomSelect sudah terinisialisasi
-                if (!satkerSelect.tomselect && window.initTomSelect) {
-                    window.initTomSelect();
-                }
-
-                // Bind satker change
-                if (satkerSelect.tomselect) {
-                    satkerSelect.tomselect.on('change', function(value) {
-                        fetchKendaraanData(value);
-                    });
-                } else {
-                    satkerSelect.addEventListener('change', function() {
-                        fetchKendaraanData(this.value);
-                    });
-                }
-
-                // Bind kendaraan change
-                if (!kendaraanSelect.tomselect && window.initTomSelect) {
-                    window.initTomSelect();
-                }
-                if (kendaraanSelect.tomselect) {
-                    kendaraanSelect.tomselect.on('change', function(value) {
-                        processSelectedKendaraan(value);
-                    });
-                } else {
-                    kendaraanSelect.addEventListener('change', function() {
-                        processSelectedKendaraan(this.value);
-                    });
-                }
-            }
-
-            // Polling untuk memastikan TomSelect sudah diinisialisasi oleh app.blade.php
-            // Karena ini adalah SPA Turbo Drive, timing sangat krusial.
-            const maxWaitMs = 5000;
-            const intervalMs = 50;
-            let elapsed = 0;
-
-            const waitForTomSelect = setInterval(function() {
-                const satker = document.getElementById('satker_id');
-                elapsed += intervalMs;
-
-                // Jika elemen satker sudah memiliki properti .tomselect, artinya library
-                // sudah dimuat dan di-bind oleh global handler di app.blade.php
-                if (satker && satker.tomselect) {
-                    clearInterval(waitForTomSelect);
-                    initHutangForm();
-                } else if (elapsed > maxWaitMs) {
-                    // Timeout fallback - coba bind secara paksa atau beri fallback
-                    clearInterval(waitForTomSelect);
-                    if (window.initTomSelect) window.initTomSelect();
-                    initHutangForm();
-                    console.warn("Hutang BBM Form: TomSelect initialization timeout, forcing init.");
-                }
-            }, intervalMs);
-        })();
+            };
+        }
     </script>
 </x-app-layout>
