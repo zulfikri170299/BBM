@@ -22,28 +22,62 @@ class NominatifController extends Controller
             'SETUM' => 21, 'SPKT' => 22
         ];
 
-        // Jika rentang tanggal tidak diisi, gunakan awal s/d akhir bulan
-        if (!$startDate || !$endDate) {
-            $startDate = \Carbon\Carbon::createFromDate($tahun, $bulan, 1)->startOfMonth()->toDateTimeString();
-            $endDate = \Carbon\Carbon::createFromDate($tahun, $bulan, 1)->endOfMonth()->toDateTimeString();
+        // 1. Coba ambil dari data resmi Berita Acara (BaLog)
+        $baQuery = \App\Models\BaLog::with('satker');
+        if ($startDate && $endDate) {
+            $baQuery->whereBetween('created_at', [
+                \Carbon\Carbon::parse($startDate)->startOfDay()->toDateTimeString(),
+                \Carbon\Carbon::parse($endDate)->endOfDay()->toDateTimeString()
+            ]);
+        } else {
+            $baQuery->where('tahun', $tahun)->where('bulan', (int)$bulan);
         }
 
-        $transactions = \App\Models\RiwayatTopup::with('satker')
-            ->where('tipe', 'masuk')
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->get();
+        $baLogs = $baQuery->get();
 
-        $logs = $transactions->groupBy(function($item) {
-            return $item->satker_id . '-' . \Carbon\Carbon::parse($item->created_at)->format('Y-m-d');
-        })->map(function ($items) {
-            return (object) [
-                'satker_id' => $items->first()->satker_id,
-                'satker' => $items->first()->satker,
-                'tanggal' => $items->first()->created_at,
-                'total_pertamax' => $items->where('jenis_bbm', 'Pertamax')->sum('jumlah'),
-                'total_dex' => $items->where('jenis_bbm', 'Pertamina Dex')->sum('jumlah'),
-            ];
-        })->values();
+        if ($baLogs->isNotEmpty()) {
+            $logs = $baLogs->groupBy(function($item) {
+                return $item->satker_id . '-' . \Carbon\Carbon::parse($item->created_at)->format('Y-m-d');
+            })->map(function ($items) {
+                return (object) [
+                    'satker_id' => $items->first()->satker_id,
+                    'satker' => $items->first()->satker,
+                    'tanggal' => $items->first()->created_at,
+                    'total_pertamax' => (float) $items->sum('total_pertamax'),
+                    'total_dex' => (float) $items->sum('total_dex'),
+                ];
+            })->values();
+        } else {
+            // 2. Fallback ke RiwayatTopup (non-manual) jika BaLog untuk periode ini belum tersedia
+            if (!$startDate || !$endDate) {
+                $startDate = \Carbon\Carbon::createFromDate($tahun, $bulan, 1)->startOfMonth()->toDateTimeString();
+                $endDate = \Carbon\Carbon::createFromDate($tahun, $bulan, 1)->endOfMonth()->toDateTimeString();
+            } else {
+                $startDate = \Carbon\Carbon::parse($startDate)->startOfDay()->toDateTimeString();
+                $endDate = \Carbon\Carbon::parse($endDate)->endOfDay()->toDateTimeString();
+            }
+
+            $transactions = \App\Models\RiwayatTopup::with('satker')
+                ->where('tipe', 'masuk')
+                ->where(function($q) {
+                    $q->whereNull('metode')
+                      ->orWhereRaw('LOWER(metode) != ?', ['manual']);
+                })
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->get();
+
+            $logs = $transactions->groupBy(function($item) {
+                return $item->satker_id . '-' . \Carbon\Carbon::parse($item->created_at)->format('Y-m-d');
+            })->map(function ($items) {
+                return (object) [
+                    'satker_id' => $items->first()->satker_id,
+                    'satker' => $items->first()->satker,
+                    'tanggal' => $items->first()->created_at,
+                    'total_pertamax' => (float) $items->where('jenis_bbm', 'Pertamax')->sum('jumlah'),
+                    'total_dex' => (float) $items->where('jenis_bbm', 'Pertamina Dex')->sum('jumlah'),
+                ];
+            })->values();
+        }
 
         return $logs->sortBy(function($log) use ($satkerOrder) {
             $nama = strtoupper(trim($log->satker->nama_satker ?? ''));
@@ -152,10 +186,19 @@ class NominatifController extends Controller
 
         try {
             \Illuminate\Support\Facades\DB::transaction(function () use ($satkerId, $tanggal) {
-                // Ambil semua riwayat topup untuk satker ini pada tanggal tersebut
+                // Hapus catatan BaLog jika ada
+                \App\Models\BaLog::where('satker_id', $satkerId)
+                    ->whereDate('created_at', $tanggal)
+                    ->delete();
+
+                // Ambil semua riwayat topup untuk satker ini pada tanggal tersebut (kecuali topup manual)
                 $riwayats = \App\Models\RiwayatTopup::where('satker_id', $satkerId)
                     ->whereDate('created_at', $tanggal)
                     ->where('tipe', 'masuk')
+                    ->where(function($q) {
+                        $q->whereNull('metode')
+                          ->orWhereRaw('LOWER(metode) != ?', ['manual']);
+                    })
                     ->get();
 
                 foreach ($riwayats as $riwayat) {

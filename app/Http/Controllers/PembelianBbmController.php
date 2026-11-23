@@ -30,11 +30,11 @@ class PembelianBbmController extends Controller
         $latestDate = date('Y-m-d');
 
         // Total akumulasi untuk kartu ringkasan
-        $totalPertamax = PembelianBbm::where(function($q) {
+        $totalPertamax = PembelianBbm::where(function ($q) {
             $q->where('jenis_bbm', 'Pertamax')->orWhere('jenis_bbm', 'PERTAMAX');
         })->sum('jumlah');
 
-        $totalDex = PembelianBbm::where(function($q) {
+        $totalDex = PembelianBbm::where(function ($q) {
             $q->where('jenis_bbm', 'Pertamina Dex')->orWhere('jenis_bbm', 'PERTAMINA DEX');
         })->sum('jumlah');
 
