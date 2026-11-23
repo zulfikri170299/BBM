@@ -178,6 +178,24 @@ class HutangController extends Controller
                             ->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
                     });
             });
+        } elseif ($request->filled('start_date')) {
+            $startDate = $request->start_date;
+            $query->where(function ($q) use ($startDate) {
+                $q->where('tanggal_bon', '>=', $startDate)
+                    ->orWhere(function ($subq) use ($startDate) {
+                        $subq->whereNull('tanggal_bon')
+                            ->where('created_at', '>=', $startDate . ' 00:00:00');
+                    });
+            });
+        } elseif ($request->filled('end_date')) {
+            $endDate = $request->end_date;
+            $query->where(function ($q) use ($endDate) {
+                $q->where('tanggal_bon', '<=', $endDate)
+                    ->orWhere(function ($subq) use ($endDate) {
+                        $subq->whereNull('tanggal_bon')
+                            ->where('created_at', '<=', $endDate . ' 23:59:59');
+                    });
+            });
         }
 
         $hutangs = $query->get();
@@ -192,7 +210,13 @@ class HutangController extends Controller
             'filter_status' => $request->status
         ])->setPaper('f4', 'landscape');
 
-        return $pdf->download('Laporan_Monitoring_Hutang_BBM_' . now()->format('YmdHis') . '.pdf');
+        $fileName = 'Laporan_Monitoring_Hutang_BBM_' . now()->format('YmdHis') . '.pdf';
+
+        if ($request->boolean('download')) {
+            return $pdf->download($fileName);
+        }
+
+        return $pdf->stream($fileName);
     }
 
     public function update(Request $request, \App\Models\Hutang $hutang)

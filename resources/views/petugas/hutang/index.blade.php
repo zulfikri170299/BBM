@@ -370,7 +370,7 @@
                                     <td class="px-4 py-3">
                                         <span
                                             class="inline-flex items-center px-2 py-1 bg-amber-50 text-amber-700 border border-amber-200 rounded-lg text-xs font-bold">
-                                            {{ $hutang->jumlah_bon }} L {{ $hutang->jenis_bbm }}
+                                            {{ number_format($hutang->jumlah_bon, 0, ',', '.') }} L {{ $hutang->jenis_bbm }}
                                         </span>
                                     </td>
                                     <td class="px-4 py-3">

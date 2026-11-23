@@ -129,7 +129,7 @@
                     </td>
                     <td class="text-center">{{ $hutang->nama_driver ?? '-' }}</td>
                     <td class="text-center">
-                        <span class="font-bold">{{ number_format($hutang->jumlah_bon, 0) }} L</span><br>
+                        <span class="font-bold">{{ number_format($hutang->jumlah_bon, 0, ',', '.') }} L</span><br>
                         <span style="font-size: 7pt; color: #666;">{{ $hutang->jenis_bbm }}</span>
                     </td>
                     <td class="text-center">
@@ -150,12 +150,12 @@
             <tfoot>
                 <tr style="background-color: #f8f9fa;">
                     <th colspan="5" class="text-right" style="padding-right: 10px;">TOTAL HUTANG PERTAMAX</th>
-                    <th class="text-center">{{ number_format($totalPertamax, 0) }} L</th>
+                    <th class="text-center">{{ number_format($totalPertamax, 0, ',', '.') }} L</th>
                     <th></th>
                 </tr>
                 <tr style="background-color: #f8f9fa;">
                     <th colspan="5" class="text-right" style="padding-right: 10px;">TOTAL HUTANG PERTAMINA DEX</th>
-                    <th class="text-center">{{ number_format($totalDex, 0) }} L</th>
+                    <th class="text-center">{{ number_format($totalDex, 0, ',', '.') }} L</th>
                     <th></th>
                 </tr>
             </tfoot>

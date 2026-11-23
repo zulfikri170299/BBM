@@ -141,7 +141,7 @@
                     </td>
                     <td>{{ $hutang->nama_driver ?? '-' }}</td>
                     <td class="text-center font-bold">
-                        {{ $hutang->jumlah_bon }} L {{ $hutang->jenis_bbm }}
+                        {{ number_format($hutang->jumlah_bon, 0, ',', '.') }} L {{ $hutang->jenis_bbm }}
                     </td>
                     <td class="text-center">
                         @if($hutang->status === 'sudah_dibayar')
@@ -167,20 +167,20 @@
                 @if($totalPertamax > 0)
                 <tr>
                     <th colspan="6" class="text-right">TOTAL PERTAMAX</th>
-                    <th class="text-center">{{ $totalPertamax }} L</th>
+                    <th class="text-center">{{ number_format($totalPertamax, 0, ',', '.') }} L</th>
                     <th></th>
                 </tr>
                 @endif
                 @if($totalDex > 0)
                 <tr>
                     <th colspan="6" class="text-right">TOTAL PERTAMINA DEX</th>
-                    <th class="text-center">{{ $totalDex }} L</th>
+                    <th class="text-center">{{ number_format($totalDex, 0, ',', '.') }} L</th>
                     <th></th>
                 </tr>
                 @endif
                 <tr>
                     <th colspan="6" class="text-right">TOTAL KESELURUHAN</th>
-                    <th class="text-center">{{ $totalPertamax + $totalDex }} L</th>
+                    <th class="text-center">{{ number_format($totalPertamax + $totalDex, 0, ',', '.') }} L</th>
                     <th></th>
                 </tr>
             </tfoot>

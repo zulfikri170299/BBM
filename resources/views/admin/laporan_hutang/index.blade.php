@@ -165,7 +165,7 @@
                                     @endphp
                                     <span
                                         class="inline-flex items-center px-2.5 py-1 border {{ $badgeColor }} rounded-lg text-xs font-black uppercase">
-                                        {{ $hutang->jumlah_bon }} L {{ $hutang->jenis_bbm }}
+                                        {{ number_format($hutang->jumlah_bon, 0, ',', '.') }} L {{ $hutang->jenis_bbm }}
                                     </span>
                                 </td>
                                 <td class="px-4 py-3 text-center">
