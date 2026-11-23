@@ -1,90 +1,94 @@
 <x-app-layout>
-    <div class="max-w-7xl mx-auto p-3 sm:p-6 lg:p-8 space-y-6" x-data="hutangComponent()">
+    <div class="max-w-7xl mx-auto p-3 sm:p-6 lg:p-8 space-y-4 sm:space-y-6" x-data="hutangComponent()">
         @php
             $countBebasBon = \App\Models\Kendaraan::where('bebas_bon', true)->count();
         @endphp
-        <!-- Sub-Navigation Tabs (Menu Hutang) -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-white/10 pb-3">
-            <div class="flex items-center gap-2 overflow-x-auto no-scrollbar">
+        <!-- Sub-Navigation Tabs & Cetak Action (Menu Hutang) -->
+        <div class="flex items-center justify-between gap-2 border-b border-slate-200 dark:border-white/10 pb-3">
+            <div class="flex items-center gap-2">
+                <!-- Monitoring Hutang BBM (Icon only on mobile, text on desktop) -->
                 <a href="{{ route('admin.hutang.index') }}"
-                    class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs font-bold bg-brand-primary text-white shadow-md shadow-brand-primary/20 transition-all whitespace-nowrap shrink-0">
-                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold bg-brand-primary text-white shadow-md shadow-brand-primary/20 transition-all shrink-0"
+                    title="Monitoring Hutang BBM">
+                    <svg class="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    <span>Monitoring Hutang BBM</span>
+                    <span class="hidden sm:inline">Monitoring Hutang BBM</span>
                 </a>
 
+                <!-- Pengecualian Bebas Bon (Icon only on mobile, text on desktop) -->
                 <a href="{{ route('admin.hutang.pengecualian.index') }}"
-                    class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-all whitespace-nowrap shrink-0">
-                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-all shrink-0"
+                    title="Pengecualian Bebas Bon">
+                    <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
-                    <span>Pengecualian Bebas Bon</span>
+                    <span class="hidden sm:inline">Pengecualian Bebas Bon</span>
                     @if($countBebasBon > 0)
-                        <span class="ml-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                        <span class="px-1.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
                             {{ $countBebasBon }}
                         </span>
                     @endif
                 </a>
             </div>
 
-            <!-- Action Cetak PDF Header -->
+            <!-- Action Cetak PDF (Icon only on mobile, text on desktop) -->
             <a href="{{ route('admin.hutang.pdf', request()->all()) }}" target="_blank"
-                class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white text-xs font-black rounded-xl shadow-md shadow-rose-600/20 hover:shadow-rose-600/30 transition-all shrink-0 active:scale-95 border border-white/10"
-                title="Cetak Laporan Monitoring Hutang BBM ke Dokumen PDF">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                class="inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white text-xs font-black rounded-xl shadow-md shadow-rose-600/20 hover:shadow-rose-600/30 transition-all shrink-0 active:scale-95 border border-white/10"
+                title="Cetak Laporan PDF">
+                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                 </svg>
-                <span>Cetak Laporan PDF</span>
+                <span class="hidden sm:inline">Cetak Laporan PDF</span>
             </a>
         </div>
         <!-- Page Title & Header Card -->
-        <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
-            <div class="flex items-center gap-3.5 min-w-0">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-rose-500/20 to-amber-600/10 text-rose-500 border border-rose-500/30 flex items-center justify-center shrink-0 shadow-sm">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-3.5 sm:gap-4 bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
+            <div class="flex items-center gap-3 sm:gap-3.5 min-w-0">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-rose-500/20 to-amber-600/10 text-rose-500 border border-rose-500/30 flex items-center justify-center shrink-0 shadow-sm">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                 </div>
                 <div class="min-w-0">
                     <div class="flex items-center gap-2 flex-wrap">
-                        <h1 class="text-xl sm:text-2xl font-black text-white tracking-tight">
+                        <h1 class="text-lg sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
                             Monitoring Hutang BBM
                         </h1>
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
                             Pengawasan Bon BBM
                         </span>
                     </div>
-                    <p class="mt-0.5 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                    <p class="mt-0.5 text-xs sm:text-sm text-slate-500 dark:text-slate-400 hidden sm:block">
                         Rekapitulasi pencatatan bon pengisian BBM dan status pelunasan transaksi seluruh Satker.
                     </p>
                 </div>
             </div>
 
             <!-- Summary Outstanding per BBM (Dynamic KPI Cards) -->
-            <div class="flex flex-wrap items-center gap-3 shrink-0 w-full xl:w-auto">
+            <div class="grid grid-cols-2 gap-2 sm:gap-3 w-full xl:w-auto xl:flex xl:flex-wrap shrink-0">
                 @forelse($summaryHutang as $bbm => $total)
                     @php
                         $isDex = stripos($bbm, 'Dex') !== false;
                     @endphp
-                    <div class="bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 px-4 py-2.5 rounded-2xl shadow-sm flex items-center gap-3">
-                        <div class="w-2.5 h-9 rounded-full {{ $isDex ? 'bg-emerald-500' : 'bg-blue-500' }}"></div>
-                        <div>
-                            <div class="flex items-center gap-1.5">
-                                <span class="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    <div class="bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl sm:rounded-2xl shadow-sm flex items-center gap-2.5 sm:gap-3">
+                        <div class="w-2 sm:w-2.5 h-8 sm:h-9 rounded-full {{ $isDex ? 'bg-emerald-500' : 'bg-blue-500' }} shrink-0"></div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-1">
+                                <span class="text-[9px] sm:text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-wider truncate">
                                     {{ $bbm }}
                                 </span>
-                                <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" title="Belum Lunas"></span>
+                                <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse shrink-0" title="Belum Lunas"></span>
                             </div>
-                            <div class="text-lg font-black text-rose-600 dark:text-rose-400 tabular-nums leading-tight">
+                            <div class="text-base sm:text-lg font-black text-rose-600 dark:text-rose-400 tabular-nums leading-tight">
                                 {{ rtrim(rtrim(number_format($total, 2, ',', '.'), '0'), ',') }}
-                                <span class="text-xs font-bold text-slate-500 dark:text-slate-400">Liter</span>
+                                <span class="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400">Liter</span>
                             </div>
                         </div>
                     </div>
                 @empty
-                    <div class="bg-emerald-500/10 border border-emerald-500/30 px-4 py-2.5 rounded-2xl flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
+                    <div class="col-span-2 bg-emerald-500/10 border border-emerald-500/30 px-4 py-2.5 rounded-xl sm:rounded-2xl flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
                         </svg>
